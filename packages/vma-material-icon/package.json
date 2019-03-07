@@ -1,0 +1,17 @@
+{
+  "name": "@vma/material-icon",
+  "description": "The Vue Material Adapter for the web material-icon component",
+  "version": "0.1.0",
+  "license": "MIT",
+  "keywords": [
+    "material components",
+    "material design",
+    "vue",
+    "material-icon"
+  ],
+  "main": "dist/vma.material-icon.js",
+  "dependencies": {
+    "@vma/base": "^0.1.0",
+    "@vma/ripple": "^0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "@vma/toolbar",
+  "description": "The Vue Material Adapter for the web toolbar component",
+  "version": "0.1.0",
+  "license": "MIT",
+  "keywords": [
+    "material components",
+    "material design",
+    "vue",
+    "toolbar"
+  ],
+  "main": "dist/vma.toolbar.js",
+  "dependencies": {
+    "@vma/base": "^0.1.0"
+  }
+}

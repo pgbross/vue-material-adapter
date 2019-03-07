@@ -1,0 +1,16 @@
+{
+  "name": "@vma/floating-label",
+  "description": "The Vue Material Adapter for the web floating-label component",
+  "version": "0.1.0",
+  "license": "MIT",
+  "keywords": [
+    "material components",
+    "material design",
+    "vue",
+    "floating-label"
+  ],
+  "main": "dist/vma.floating-label.js",
+  "dependencies": {
+    "@vma/base": "^0.1.0"
+  }
+}

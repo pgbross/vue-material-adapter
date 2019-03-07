@@ -1,0 +1,18 @@
+{
+  "name": "@vma/card",
+  "description": "The Vue Material Adapter for the web card component",
+  "version": "0.1.0",
+  "license": "MIT",
+  "keywords": [
+    "material components",
+    "material design",
+    "vue",
+    "card"
+  ],
+  "main": "dist/vma.card.js",
+  "dependencies": {
+    "@vma/base": "^0.1.0",
+    "@vma/ripple": "^0.1.0",
+    "@vma/button": "^0.1.0"
+  }
+}

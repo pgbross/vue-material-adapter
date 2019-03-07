@@ -1,0 +1,44 @@
+globals:
+  SystemJS: true
+  __moduleName: true
+plugins:
+  - vue
+extends:
+  - eslint:recommended
+  - google
+  - plugin:vue/recommended
+parserOptions:
+  parser: babel-eslint
+  ecmaVersion: 2019
+  sourceType: module
+  ecmaFeatures:
+    jsx: true
+rules:
+  arrow-parens: [error, as-needed]
+  eol-last:
+    - 0
+  indent: 0
+  no-else-return: 1
+  max-len: [error, 120]
+  new-cap: 0
+  no-console: 0
+  no-new: warn
+  no-var: error
+  curly: error
+  no-floating-decimal: error
+  no-unused-vars: error
+  object-curly-spacing: [error, always, { 'objectsInObjects': true }]
+  space-before-function-paren:
+    [error, { 'anonymous': 'never', 'named': 'never', 'asyncArrow': 'always' }]
+  require-jsdoc: off
+  valid-jsdoc: off
+  prefer-const: error
+  vue/name-property-casing: ['error', 'kebab-case']
+  vue/require-default-prop: 'off'
+env:
+  browser: true
+  commonjs: true
+  node: true
+  es6: true
+  jest: true
+  jasmine: true

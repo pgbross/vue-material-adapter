@@ -1,0 +1,16 @@
+{
+  "name": "@vma/snackbar",
+  "description": "The Vue Material Adapter for the web snackbar component",
+  "version": "0.1.0",
+  "license": "MIT",
+  "keywords": [
+    "material components",
+    "material design",
+    "vue",
+    "snackbar"
+  ],
+  "main": "dist/vma.snackbar.js",
+  "dependencies": {
+    "@vma/base": "^0.1.0"
+  }
+}

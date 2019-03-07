@@ -1,0 +1,17 @@
+{
+  "name": "@vma/dialog",
+  "description": "The Vue Material Adapter for the web dialog component",
+  "version": "0.1.0",
+  "license": "MIT",
+  "keywords": [
+    "material components",
+    "material design",
+    "vue",
+    "dialog"
+  ],
+  "main": "dist/vma.dialog.js",
+  "dependencies": {
+    "@vma/base": "^0.1.0",
+    "@vma/button": "^0.1.0"
+  }
+}

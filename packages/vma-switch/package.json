@@ -1,0 +1,17 @@
+{
+  "name": "@vma/switch",
+  "description": "The Vue Material Adapter for the web switch component",
+  "version": "0.1.0",
+  "license": "MIT",
+  "keywords": [
+    "material components",
+    "material design",
+    "vue",
+    "switch"
+  ],
+  "main": "dist/vma.switch.js",
+  "dependencies": {
+    "@vma/base": "^0.1.0",
+    "@vma/ripple": "^0.1.0"
+  }
+}

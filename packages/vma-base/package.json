@@ -1,0 +1,10 @@
+{
+  "name": "@vma/base",
+  "description": "The set of base classes for Vue material componnents",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/vma.base.js",
+  "module": "index.js",
+  "sideEffects": false,
+  "dependencies": {}
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@vma/tabs",
+  "description": "The Vue Material Adapter for the web tabs component",
+  "version": "0.1.0",
+  "license": "MIT",
+  "keywords": [
+    "material components",
+    "material design",
+    "vue",
+    "tabs"
+  ],
+  "main": "dist/vma.tabs.js",
+  "dependencies": {
+    "@vma/base": "^0.1.0",
+    "@vma/ripple": "^0.1.0"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "@vma/layout-grid",
+  "description": "The Vue Material Adapter for the web layout-grid component",
+  "version": "0.1.0",
+  "license": "MIT",
+  "keywords": [
+    "material components",
+    "material design",
+    "vue",
+    "layout-grid"
+  ],
+  "main": "dist/vma.layout-grid.js",
+  "dependencies": {
+    "@vma/base": "^0.1.0"
+  }
+}

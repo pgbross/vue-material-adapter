@@ -1,0 +1,190 @@
+{
+  "name": "vue-mdc-adapter",
+  "version": "0.19.4-beta",
+  "description": "Vue wrapper arround Material Components for the Web",
+  "keywords": [
+    "vue",
+    "vuejs",
+    "plugin",
+    "material",
+    "components",
+    "adapter",
+    "mdc",
+    "design"
+  ],
+  "author": "Sebastien Tasson <sebastien.tasson@gmail.com>",
+  "license": "MIT",
+  "main": "dist/vue-mdc-adapter.js",
+  "style": "dist/vue-mdc-adapter.css",
+  "module": "dist/index.js",
+  "unpkg": "dist/vue-mdc-adapter.umd.min.js",
+  "jsdelivr": "dist/vue-mdc-adapter.umd.min.js",
+  "files": [
+    "dist",
+    "static",
+    "LICENSE",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stasson/vue-mdc-adapter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/stasson/vue-mdc-adapter/issues"
+  },
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development webpack-dev-server",
+    "test": "jest --runInBand",
+    "testnc": "NODE_ENV=test; jest --runInBand --no-cache",
+    "build": "run-s build:demo build:dist:**",
+    "build:demo": "cross-env NODE_ENV=production webpack",
+    "build:dist": "run-s build:dist:**",
+    "build:dist:clean": "rimraf dist",
+    "build:dist:scss": "copyfiles -u 1 \"components/**/*.scss\" dist",
+    "build:dist:lscss": "ls -R dist",
+    "build:dist:rollup": "rollup -c",
+    "lint": "run-s lint:**",
+    "postinstall": "lerna bootstrap",
+    "fix": "run-s fix:**",
+    "format": "prettier --write \"{components,demo}/**/*{js,json,css,scss,vue}\"",
+    "lint:es": "eslint --ext .js,.vue components demo",
+    "fix:es": "eslint --fix --ext .js,.vue components demo",
+    "lint:style": "stylelint \"components/**/*{css,.scss,.vue}\" ",
+    "fix:style": "stylelint --fix \"components/**/*{css,.scss,.vue}\" ",
+    "clean": "run-s clean:**",
+    "clean:demo": "rimraf public/*",
+    "clean:dist": "rimraf dist/*",
+    "reset:modules": "rimraf node_modules/* && npm install",
+    "changelog": "standard-changelog -i CHANGELOG.md -k package.json -w",
+    "release": "standard-version --no-verify",
+    "ci": "run-s ci:*",
+    "ci:lint": "run-s lint:**",
+    "ci:test": "jest --runInBand --ci",
+    "ci:build": "run-s build:demo build:dist:**"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "validate-commit-msg"
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "dependencies": {
+    "@material/tabs": "^1.0.0-0",
+    "eslint-config-google": "^0.12.0",
+    "material-components-web": "^1.0.0-0"
+  },
+  "peerDependencies": {
+    "vue": "^2.5.6"
+  },
+  "resolutions": {
+    "babel-core": "7.0.0-bridge.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.4",
+    "@babel/plugin-external-helpers": "^7.2.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.3.4",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-object-assign": "^7.2.0",
+    "@babel/polyfill": "^7.2.5",
+    "@babel/preset-env": "^7.3.4",
+    "@vue/test-utils": "^1.0.0-beta.29",
+    "autoprefixer": "^9.4.9",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.1.0",
+    "babel-loader": "^8.0.5",
+    "canvas": "^2.3.1",
+    "clean-webpack-plugin": "^1.0.1",
+    "copy-webpack-plugin": "^5.0.0",
+    "copyfiles": "^2.1.0",
+    "cross-env": "^5.2.0",
+    "css-loader": "^2.1.0",
+    "cz-conventional-changelog": "^2.1.0",
+    "eslint": "^5.14.1",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-loader": "^2.1.2",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-vue": "^5.2.2",
+    "file-loader": "^3.0.1",
+    "focus-trap": "^4.0.2",
+    "friendly-errors-webpack-plugin": "^1.7.0",
+    "html-webpack-plugin": "^3.2.0",
+    "husky": "^1.3.1",
+    "jest": "^24.1.0",
+    "jest-cli": "^24.1.0",
+    "lerna": "^3.13.1",
+    "markdown-it": "^8.4.2",
+    "markdown-it-highlightjs": "^3.0.0",
+    "mini-css-extract-plugin": "^0.5.0",
+    "node-sass": "^4.11.0",
+    "npm-run-all": "^4.1.5",
+    "parse5": "^5.1.0",
+    "postcss": "^7.0.14",
+    "postcss-csso": "^3.0.0",
+    "postcss-loader": "^3.0.0",
+    "prettier": "^1.16.4",
+    "regenerator-runtime": "^0.13.1",
+    "rimraf": "^2.6.3",
+    "rollup": "^1.4.0",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-commonjs": "^9.2.1",
+    "rollup-plugin-node-resolve": "^4.0.1",
+    "rollup-plugin-replace": "^2.1.0",
+    "rollup-plugin-sass": "^1.1.0",
+    "rollup-plugin-terser": "^4.0.4",
+    "rollup-plugin-vue": "^4.7.2",
+    "sass-loader": "^7.1.0",
+    "standard-changelog": "^2.0.7",
+    "standard-version": "^5.0.1",
+    "style-loader": "^0.23.1",
+    "stylelint": "^9.10.1",
+    "stylelint-config-recommended-scss": "^3.2.0",
+    "stylelint-processor-html": "^1.0.0",
+    "stylelint-scss": "^3.5.4",
+    "terser-webpack-plugin": "^1.2.3",
+    "url-loader": "^1.1.2",
+    "validate-commit-msg": "^2.14.0",
+    "vue": "^2.6.7",
+    "vue-analytics": "^5.16.2",
+    "vue-eslint-parser": "^6.0.3",
+    "vue-jest": "^3.0.3",
+    "vue-loader": "^15.7.0",
+    "vue-markdown-loader": "^2.4.1",
+    "vue-router": "^3.0.2",
+    "vue-template-compiler": "^2.6.7",
+    "vue-template-validator": "^1.1.5",
+    "webpack": "^4.29.6",
+    "webpack-cdn-plugin": "^3.0.0",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.2.1"
+  },
+  "engines": {
+    "node": ">= 4.0.0",
+    "npm": ">= 3.0.0"
+  },
+  "browserslist": [
+    "defaults",
+    "not ie <= 8"
+  ],
+  "prettier": {
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "bracketSpacing": true,
+    "arrowParens": "avoid",
+    "overrides": [
+      {
+        "files": "*.html",
+        "options": {
+          "printWidth": 100
+        }
+      }
+    ]
+  }
+}
