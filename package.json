@@ -1,6 +1,6 @@
 {
-  "name": "vue-mdc-adapter",
-  "version": "0.19.4-beta",
+  "name": "vue-material-adapter",
+  "version": "0.1.0-1",
   "description": "Vue wrapper arround Material Components for the Web",
   "keywords": [
     "vue",
@@ -12,25 +12,21 @@
     "mdc",
     "design"
   ],
-  "author": "Sebastien Tasson <sebastien.tasson@gmail.com>",
-  "license": "MIT",
-  "main": "dist/vue-mdc-adapter.js",
-  "style": "dist/vue-mdc-adapter.css",
-  "module": "dist/index.js",
-  "unpkg": "dist/vue-mdc-adapter.umd.min.js",
-  "jsdelivr": "dist/vue-mdc-adapter.umd.min.js",
+  "author": "Philip Ross <philip@satchel.scot>",
+  "license": "ISC",
+  "main": "build/vue-material-adapter.js",
   "files": [
-    "dist",
+    "build",
     "static",
     "LICENSE",
     "README.md"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/stasson/vue-mdc-adapter.git"
+    "url": "https://github.com/pgbross/vue-material-adapter.git"
   },
   "bugs": {
-    "url": "https://github.com/stasson/vue-mdc-adapter/issues"
+    "url": "https://github.com/pgbross/vue-material-adapter/issues"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server",
