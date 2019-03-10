@@ -35,7 +35,7 @@ module.exports = [
     entry: resolve('packages/vue-material-adapter/index.js'),
     output: {
       path: resolve('build'),
-      filename: 'vue-material-adapter.js',
+      filename: 'vue-material-adapter.min.js',
       library: 'vma',
       libraryTarget: 'umd',
     },
@@ -101,7 +101,7 @@ module.exports = [
     },
     output: {
       path: resolve('build'),
-      filename: 'mcwv.[name].js',
+      filename: 'mcwv.[name].min.js',
       library: ['wcmv', '[name]'],
       libraryTarget: 'umd',
     },
