@@ -9,7 +9,7 @@
       </mdc-toolbar-section>
       <mdc-toolbar-section shrink-to-fit align-end>
         <mdc-toolbar-icon
-          href="https://github.com/stasson/vue-mdc-adapter"
+          href="https://github.com/pgbross/vue-material-adapter"
           target="_blank"
         >
           <img :src="githubLogo" />

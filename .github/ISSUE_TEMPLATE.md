@@ -1,12 +1,12 @@
 ** PLEASE READ THIS BEFORE FILING AN ISSUE **
 
-vue-mdc-adapter is still under active development. You can see our current progress on [master](https://github.com/stasson/vue-mdc-adapter/tree/master).
+vue-material-adapter is still under active development. You can see our current progress on [master](https://github.com/pgbross/vue-material-adapter/tree/master).
 
 ## Bugs
 
 Follow the template below to ensure the quickest and most accurate response to your issue.
 
-### What vue-mdc-adapter Version are you using?
+### What vue-material-adapter Version are you using?
 
 > Please be specific, e.g. _major.minor.patch_
 

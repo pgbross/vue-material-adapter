@@ -3,7 +3,7 @@
     :src="iframe"
     class="mdc-demo mdc-elevation--z1"
     scrolling="no"
-    title="vue-mdc-adapter App Layout"
+    title="vue-material-adapter App Layout"
     width="400"
     height="350"
     frameborder="no"

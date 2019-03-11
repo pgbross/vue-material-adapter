@@ -3,7 +3,7 @@ import './polyfill.js';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import VueAnalytics from 'vue-analytics';
-import VueMDCAdapter from 'vue-mdc-adapter';
+import VueMDCAdapter from 'vue-material-adapter';
 import index from './index.vue';
 import routes from './routes.js';
 

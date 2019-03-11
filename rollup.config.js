@@ -56,7 +56,7 @@ const BANNER = `/**
 * @license https://opensource.org/licenses/MIT
 * @implements {{dependencies}}
 * @requires {{peerDependencies}}
-* @see https://github.com/stasson/vue-mdc-adapter
+* @see https://github.com/pgbross/vue-material-adapter
 */
 `
   .replace('{{version}}', pkg.version)

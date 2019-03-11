@@ -25,16 +25,16 @@ deploy:
     api_key:
       secure: Mot+1zVEid1MfZh7/HgPRMCjuzvyIlVMCe412AHSkYcnrYm8K/jmYAnLauGciHbsZR9phlrbu5xmdKjWmsMfjf9LYsBwEn9IlNUEWqhZ3DKfi87FN/PfV4lNrq1pgQJhtH1/bi656wFNAOG1JE2wjyEFknMN5I/rh33R7U5VnhubWBG5qdE4R54Z/AT1GTHgHd5NZISjxZsv2oLD35ktTpY/Z2zNXQ+eLdmOhOUN4jKr/0niq298fwdRG64lv2MikihJFM/88FYNQ/qIODnpS5b/vnxpYRHc6bHiWlZsVqzQXnA9xg/61ePm9+dTjSGSRmPkDzB+LFO8+XV7AcTzqoUrfSssU2JXcNqS/ZKlcJQcBPN7X6BAwHb7PXUuofSTIhIXv1xNfIpIh1w8aoLhDiUFIiWKo96B8Dy7Or44LeazM+vxVZCtm4aLpb1oFA0VLG2RffE7EbQmo8ehMeMLk2H/dy6tt0fdR+J0MI+ycS8FG7abKP0KZngvnT9ZbtzNow8rCYmGM+FSqiZVrL8MgBmJlsQifqPb5lUcBIEbIdnvCD/jSFMoKJckJKM/rZMy3untPD73dUQ55IjPyO4bn5cIxYBrdF1sU8oQnclNTT6norTImwCXQgqoHwh7aRVyfgNtPssczngb4DHn9Igi5yUIYOUHq9swU8D26Bi4TYM=
     on:
-      repo: stasson/vue-mdc-adapter
+      repo: pgbross/vue-material-adapter
       tags: true
   - edge:
       branch: v1.8.47
     provider: pages
     skip_cleanup: true
     github_token: $GH_TOKEN
-    local_dir: public/vue-mdc-adapter
+    local_dir: public/vue-material-adapter
     on:
-      repo: stasson/vue-mdc-adapter
+      repo: pgbross/vue-material-adapter
       tags: true
 env:
   global:
