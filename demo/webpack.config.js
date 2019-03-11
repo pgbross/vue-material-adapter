@@ -9,6 +9,7 @@ const WebpackCdnPlugin = require('webpack-cdn-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 // const TerserPlugin = require('terser-webpack-plugin');
+const pkg = require('../package.json');
 
 const isProduction = process.env.NODE_ENV === `production`;
 const isDevelopment = process.env.NODE_ENV === `development`;
@@ -54,20 +55,32 @@ const rules = [
   },
   {
     test: /\.js$/,
+    exclude: /node_modules/,
     loader: 'babel-loader',
-    query: {
-      presets: ['@babel/preset-env'],
+    options: {
+      cacheDirectory: true,
+      presets: [
+        [
+          '@babel/preset-env',
+          {
+            modules: false,
+            useBuiltIns: 'entry',
+            targets: {
+              browsers: Object.values(pkg.browserslist.defaults),
+            },
+          },
+        ],
+      ],
       plugins: [
-        '@babel/transform-object-assign',
-        '@babel/proposal-object-rest-spread',
-        '@babel/syntax-dynamic-import',
+        '@babel/plugin-syntax-dynamic-import',
+        // [
+        //   '@babel/plugin-transform-runtime',
+        //   {
+        //     regenerator: true,
+        //   },
+        // ],
       ],
     },
-    include: [
-      resolve('../components'),
-      resolve('./'),
-      resolve('../node_modules/@material'),
-    ],
   },
   {
     test: /\.md$/,

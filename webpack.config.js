@@ -1,6 +1,6 @@
 const path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
-
+const pkg = require('./package.json');
 const resolve = relativePath => path.resolve(__dirname, relativePath);
 const plugins = [new VueLoaderPlugin()];
 
@@ -55,6 +55,27 @@ module.exports = [
           loader: 'babel-loader',
           options: {
             cacheDirectory: true,
+            presets: [
+              [
+                '@babel/preset-env',
+                {
+                  modules: false,
+                  useBuiltIns: 'entry',
+                  targets: {
+                    browsers: Object.values(pkg.browserslist.defaults),
+                  },
+                },
+              ],
+            ],
+            plugins: [
+              '@babel/plugin-syntax-dynamic-import',
+              // [
+              //   '@babel/plugin-transform-runtime',
+              //   {
+              //     regenerator: true,
+              //   },
+              // ],
+            ],
           },
         },
       ],
