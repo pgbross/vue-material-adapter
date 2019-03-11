@@ -3,11 +3,11 @@
     <mdc-checkbox
       v-model="checked"
       :indeterminate.sync="indeterminate"
-      :label="checked?'checked':'unchecked'"
+      :label="checked ? 'checked' : 'unchecked'"
     />
-    <mdc-button
-      dense
-      @click="indeterminate=true">make indeterminate</mdc-button>
+    <mdc-button dense @click="indeterminate = true"
+      >make indeterminate</mdc-button
+    >
   </div>
 </template>
 
@@ -16,8 +16,8 @@ export default {
   data() {
     return {
       checked: false,
-      indeterminate: false
-    }
-  }
-}
+      indeterminate: false,
+    };
+  },
+};
 </script>

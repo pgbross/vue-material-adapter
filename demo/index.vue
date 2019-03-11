@@ -31,14 +31,14 @@
 </template>
 
 <script>
-import topAppBar from './top-app-bar.vue'
-import links from './links.js'
+import topAppBar from './top-app-bar.vue';
+import links from './links.js';
 export default {
   data() {
-    return { open: false, links }
+    return { open: false, links };
   },
   components: {
-    topAppBar
-  }
-}
+    topAppBar,
+  },
+};
 </script>

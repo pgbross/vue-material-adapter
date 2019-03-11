@@ -1,8 +1,8 @@
-import { BasePlugin } from '@mcwv/base'
-import mdcCheckbox from './mdc-checkbox.vue'
+import { BasePlugin } from '@mcwv/base';
+import mdcCheckbox from './mdc-checkbox.vue';
 
-export { mdcCheckbox }
+export { mdcCheckbox };
 
 export default BasePlugin({
-  mdcCheckbox
-})
+  mdcCheckbox,
+});

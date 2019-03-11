@@ -1,17 +1,26 @@
 ## Usage
 
 ```html
-  <!-- material icons -->
-  <mdc-chip-set>
-    <mdc-chip leadingIcon="face" trailingIcon="more_vert">Jane Smith</mdc-chip>
-    <mdc-chip leadingIcon="face" trailingIcon="more_vert">John Doe</mdc-chip>
-  </mdc-chip-set>
+<!-- material icons -->
+<mdc-chip-set>
+  <mdc-chip leadingIcon="face" trailingIcon="more_vert">Jane Smith</mdc-chip>
+  <mdc-chip leadingIcon="face" trailingIcon="more_vert">John Doe</mdc-chip>
+</mdc-chip-set>
 
-  <!-- font-awesome -->
-  <mdc-chip-set>
-    <mdc-chip :leadingIconClasses="{fa:1,'fa-font-awesome':1 }" :trailingIconClasses="{fa:1,'fa-ellipsis-v':1}">Jane Smith</mdc-chip>
-    <mdc-chip :leadingIconClasses="{fa:1, 'fa-smile-o':1}" :trailingIconClasses="{fa:1, 'fa-ellipsis-v':1}">John Doe</mdc-chip>
-  <mdc-chip-set>
+<!-- font-awesome -->
+<mdc-chip-set>
+  <mdc-chip
+    :leadingIconClasses="{fa:1,'fa-font-awesome':1 }"
+    :trailingIconClasses="{fa:1,'fa-ellipsis-v':1}"
+    >Jane Smith</mdc-chip
+  >
+  <mdc-chip
+    :leadingIconClasses="{fa:1, 'fa-smile-o':1}"
+    :trailingIconClasses="{fa:1, 'fa-ellipsis-v':1}"
+    >John Doe</mdc-chip
+  >
+  <mdc-chip-set></mdc-chip-set
+></mdc-chip-set>
 ```
 
 ### props
@@ -58,4 +67,4 @@ mdc-chip is a compact element that allows a user to enter information or select 
 
 ### reference
 
-* <https://material.io/components/web/catalog/chips>
+- <https://material.io/components/web/catalog/chips>

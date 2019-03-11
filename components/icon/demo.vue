@@ -2,14 +2,10 @@
   <div class="mdc-demo mdc-demo--container">
     <mdc-list class="icon-demo">
       <mdc-list-item>
-        Material Icon <mdc-icon 
-          slot="end-detail" 
-          icon="home"/>
+        Material Icon <mdc-icon slot="end-detail" icon="home" />
       </mdc-list-item>
       <mdc-list-item>
-        Awesome Font<mdc-icon 
-          slot="end-detail" 
-          class="fa fa-font-awesome"/>
+        Awesome Font<mdc-icon slot="end-detail" class="fa fa-font-awesome" />
       </mdc-list-item>
     </mdc-list>
   </div>

@@ -4,13 +4,13 @@ export const CustomElement = {
     return createElement(
       context.props.is || context.props.tag || 'div',
       context.data,
-      context.children
-    )
-  }
-}
+      context.children,
+    );
+  },
+};
 
 export const CustomElementMixin = {
   components: {
-    CustomElement
-  }
-}
+    CustomElement,
+  },
+};

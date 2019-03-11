@@ -3,10 +3,10 @@ export function BasePlugin(components) {
     version: '__VERSION__',
     install: vm => {
       for (let key in components) {
-        let component = components[key]
-        vm.component(component.name, component)
+        let component = components[key];
+        vm.component(component.name, component);
       }
     },
-    components
-  }
+    components,
+  };
 }

@@ -9,12 +9,12 @@
 </template>
 
 <script>
-import MDCSlidingTabIndicatorFoundation from '@material/tab-indicator/sliding-foundation'
+import MDCSlidingTabIndicatorFoundation from '@material/tab-indicator/sliding-foundation';
 
 export default {
   name: 'mdc-tab-indicator',
   data() {
-    return { classes: {}, styles: {} }
+    return { classes: {}, styles: {} };
   },
 
   mounted() {
@@ -24,25 +24,25 @@ export default {
       computeContentClientRect: () =>
         this.$refs.content.getBoundingClientRect(),
       setContentStyleProperty: (prop, value) => {
-        this.$set(this.styles, prop, value)
-      }
-    })
+        this.$set(this.styles, prop, value);
+      },
+    });
 
-    this.foundation.init()
+    this.foundation.init();
   },
   beforeDestroy() {
-    this.foundation.destroy()
+    this.foundation.destroy();
   },
   methods: {
     activate(previousIndicatorClientRect) {
-      this.foundation.activate(previousIndicatorClientRect)
+      this.foundation.activate(previousIndicatorClientRect);
     },
     deactivate() {
-      this.foundation.deactivate()
+      this.foundation.deactivate();
     },
     computeContentClientRect() {
-      return this.foundation.computeContentClientRect()
-    }
-  }
-}
+      return this.foundation.computeContentClientRect();
+    },
+  },
+};
 </script>

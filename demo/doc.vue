@@ -8,21 +8,21 @@
 </template>
 
 <script>
-import { capitalize } from './utils'
+import { capitalize } from './utils';
 
 export default {
   components: {
     'getting-started': () => import('../docs/getting-started.md'),
-    theming: () => import('../docs/theming.md')
+    theming: () => import('../docs/theming.md'),
   },
   computed: {
     title() {
-      return capitalize(this.$route.params.id)
-    }
+      return capitalize(this.$route.params.id);
+    },
   },
   beforeRouteUpdate(to, from, next) {
-    this.$nextTick(() => scrollTo(0, 0))
-    next()
-  }
-}
+    this.$nextTick(() => scrollTo(0, 0));
+    next();
+  },
+};
 </script>

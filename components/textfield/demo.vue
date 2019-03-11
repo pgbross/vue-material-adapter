@@ -83,15 +83,15 @@ export default {
     return {
       textField: '',
       enabled: true,
-      password: ''
-    }
+      password: '',
+    };
   },
   methods: {
     ondelete() {
-      console.log('ondelete')
-    }
-  }
-}
+      console.log('ondelete');
+    },
+  },
+};
 </script>
 
 <style>

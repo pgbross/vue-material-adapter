@@ -8,12 +8,12 @@
 <script>
 export default {
   components: {
-    about: () => import('../docs/about.md')
+    about: () => import('../docs/about.md'),
   },
   data() {
     return {
-      title: 'Material Components for Vue.js'
-    }
-  }
-}
+      title: 'Material Components for Vue.js',
+    };
+  },
+};
 </script>

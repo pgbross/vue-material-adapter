@@ -1,28 +1,28 @@
 <template>
-<div>
-  <mdc-select v-model="selectValue" label="select label">
-    <optgroup label="options">
-      <option>option1</option>
-      <option value="option2">Option2</option>
-    </optgroup>
-  </mdc-select>
-</div>
+  <div>
+    <mdc-select v-model="selectValue" label="select label">
+      <optgroup label="options">
+        <option>option1</option>
+        <option value="option2">Option2</option>
+      </optgroup>
+    </mdc-select>
+  </div>
 </template>
 
 <script>
-import mdcSelect from './mdc-select.vue'
+import mdcSelect from './mdc-select.vue';
 
 const components = {
-  'mdc-select': mdcSelect
-}
+  'mdc-select': mdcSelect,
+};
 
 export default {
   name: 'spec',
   data() {
     return {
-      selectValue: undefined
-    }
+      selectValue: undefined,
+    };
   },
-  components
-}
+  components,
+};
 </script>

@@ -1,11 +1,11 @@
 <template>
   <div class="mdc-drawer-header mdc-drawer__header">
-      <slot />
+    <slot />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'mdc-drawer-header'
-}
+  name: 'mdc-drawer-header',
+};
 </script>

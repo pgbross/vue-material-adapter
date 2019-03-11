@@ -11,16 +11,16 @@
 </template>
 
 <script>
-import { DispatchEventMixin, CustomLinkMixin } from '@mcwv/base'
-import { RippleMixin } from '@mcwv/ripple'
+import { DispatchEventMixin, CustomLinkMixin } from '@mcwv/base';
+import { RippleMixin } from '@mcwv/ripple';
 export default {
   name: 'mdc-card-primary-action',
   mixins: [DispatchEventMixin, CustomLinkMixin, RippleMixin],
   data() {
     return {
       classes: {},
-      styles: {}
-    }
-  }
-}
+      styles: {},
+    };
+  },
+};
 </script>

@@ -2,32 +2,35 @@ export const CustomButton = {
   name: 'custom-button',
   functional: true,
   props: {
-    link: Object
+    link: Object,
   },
   render(h, context) {
-    let element
-    let data = Object.assign({}, context.data)
+    let element;
+    let data = Object.assign({}, context.data);
 
     if (context.props.link && context.parent.$router) {
       // router-link case
-      element = context.parent.$root.$options.components['RouterLink']
-      data.props = Object.assign({ tag: context.props.tag }, context.props.link)
-      data.attrs.role = 'button'
+      element = context.parent.$root.$options.components['RouterLink'];
+      data.props = Object.assign(
+        { tag: context.props.tag },
+        context.props.link,
+      );
+      data.attrs.role = 'button';
       if (data.on.click) {
-        data.nativeOn = { click: data.on.click }
+        data.nativeOn = { click: data.on.click };
       }
     } else if (data.attrs && data.attrs.href) {
       // href case
-      element = 'a'
-      data.attrs.role = 'button'
+      element = 'a';
+      data.attrs.role = 'button';
     } else {
       // button fallback
-      element = 'button'
+      element = 'button';
     }
 
-    return h(element, data, context.children)
-  }
-}
+    return h(element, data, context.children);
+  },
+};
 
 export const CustomButtonMixin = {
   props: {
@@ -38,7 +41,7 @@ export const CustomButtonMixin = {
     append: Boolean,
     replace: Boolean,
     activeClass: String,
-    exactActiveClass: String
+    exactActiveClass: String,
   },
   computed: {
     link() {
@@ -49,12 +52,12 @@ export const CustomButtonMixin = {
           append: this.append,
           replace: this.replace,
           activeClass: this.activeClass,
-          exactActiveClass: this.exactActiveClass
+          exactActiveClass: this.exactActiveClass,
         }
-      )
-    }
+      );
+    },
   },
   components: {
-    CustomButton
-  }
-}
+    CustomButton,
+  },
+};

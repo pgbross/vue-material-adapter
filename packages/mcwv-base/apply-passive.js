@@ -1,4 +1,4 @@
-let supportsPassive_
+let supportsPassive_;
 
 /**
  * Determine whether the current browser supports passive event listeners, and if so, use them.
@@ -8,19 +8,20 @@ let supportsPassive_
  */
 export function applyPassive(globalObj = window, forceRefresh = false) {
   if (supportsPassive_ === undefined || forceRefresh) {
-    let isSupported = false
+    let isSupported = false;
     try {
       globalObj.document.addEventListener('test', null, {
         get passive() {
-          isSupported = { passive: true }
-        }
-      })
+          isSupported = { passive: true };
+          return isSupported;
+        },
+      });
     } catch (e) {
-      //empty
+      // empty
     }
 
-    supportsPassive_ = isSupported
+    supportsPassive_ = isSupported;
   }
 
-  return supportsPassive_
+  return supportsPassive_;
 }

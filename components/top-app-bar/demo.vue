@@ -25,9 +25,9 @@
 <script>
 export default {
   data() {
-    return { buttonText: '' }
-  }
-}
+    return { buttonText: '' };
+  },
+};
 </script>
 
 <style>

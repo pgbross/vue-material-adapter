@@ -17,14 +17,14 @@
 </template>
 
 <script>
-import links from './links.js'
+import links from './links.js';
 
 export default {
   props: { open: Boolean },
   data() {
     return {
-      links
-    }
-  }
-}
+      links,
+    };
+  },
+};
 </script>

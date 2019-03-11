@@ -30,21 +30,21 @@
 
 <script>
 /* global HTMLElement */
-import MDCCheckboxFoundation from '@material/checkbox/foundation'
-import MDCFormFieldFoundation from '@material/form-field/foundation'
-import { getCorrectEventName } from '@material/animation/index'
-import { DispatchFocusMixin, VMAUniqueIdMixin } from '@mcwv/base'
-import { RippleBase } from '@mcwv/ripple'
-import { applyPassive } from '@mcwv/base'
+import MDCCheckboxFoundation from '@material/checkbox/foundation';
+import MDCFormFieldFoundation from '@material/form-field/foundation';
+import { getCorrectEventName } from '@material/animation/index';
+import { DispatchFocusMixin, VMAUniqueIdMixin } from '@mcwv/base';
+import { RippleBase } from '@mcwv/ripple';
+import { applyPassive } from '@mcwv/base';
 
-const CB_PROTO_PROPS = ['checked', 'indeterminate']
+const CB_PROTO_PROPS = ['checked', 'indeterminate'];
 
 export default {
   name: 'mdc-checkbox',
   mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
   model: {
     prop: 'checked',
-    event: 'change'
+    event: 'change',
   },
   props: {
     checked: [Boolean, Array],
@@ -55,46 +55,46 @@ export default {
     value: {
       type: [String, Number],
       default() {
-        return 'on'
-      }
+        return 'on';
+      },
     },
-    name: String
+    name: String,
   },
   data() {
     return {
       styles: {},
-      classes: {}
-    }
+      classes: {},
+    };
   },
   computed: {
     hasLabel() {
-      return this.label || this.$slots.default
+      return this.label || this.$slots.default;
     },
     formFieldClasses() {
       return {
         'mdc-form-field': this.hasLabel,
-        'mdc-form-field--align-end': this.hasLabel && this.alignEnd
-      }
-    }
+        'mdc-form-field--align-end': this.hasLabel && this.alignEnd,
+      };
+    },
   },
   watch: {
     checked: 'setChecked',
     disabled(value) {
-      this.foundation.setDisabled(value)
+      this.foundation.setDisabled(value);
     },
     indeterminate(value) {
-      this.setIndeterminate(value)
-    }
+      this.setIndeterminate(value);
+    },
   },
   mounted() {
     this.foundation = new MDCCheckboxFoundation({
       addClass: className => this.$set(this.classes, className, true),
       removeClass: className => this.$delete(this.classes, className),
       setNativeControlAttr: (attr, value) => {
-        this.$refs.control.setAttribute(attr, value)
+        this.$refs.control.setAttribute(attr, value);
       },
       removeNativeControlAttr: attr => {
-        this.$refs.control.removeAttribute(attr)
+        this.$refs.control.removeAttribute(attr);
       },
       // getNativeControl: () => this.$refs.control,
       isIndeterminate: () => this.$refs.control.indeterminate,
@@ -103,141 +103,141 @@ export default {
       setNativeControlDisabled: disabled =>
         (this.$refs.control.disabled = disabled),
       forceLayout: () => this.$refs.root.offsetWidth,
-      isAttachedToDOM: () => Boolean(this.$el.parentNode)
-    })
+      isAttachedToDOM: () => Boolean(this.$el.parentNode),
+    });
 
-    this.handleAnimationEnd_ = () => this.foundation.handleAnimationEnd()
+    this.handleAnimationEnd_ = () => this.foundation.handleAnimationEnd();
 
     this.$el.addEventListener(
       getCorrectEventName(window, 'animationend'),
-      this.handleAnimationEnd_
-    )
+      this.handleAnimationEnd_,
+    );
 
-    this.installPropertyChangeHooks_()
+    this.installPropertyChangeHooks_();
 
     this.ripple = new RippleBase(this, {
       isUnbounded: () => true,
       isSurfaceActive: () => RippleBase.isSurfaceActive(this.$refs.control),
       registerInteractionHandler: (evt, handler) => {
-        this.$refs.control.addEventListener(evt, handler, applyPassive())
+        this.$refs.control.addEventListener(evt, handler, applyPassive());
       },
       deregisterInteractionHandler: (evt, handler) => {
-        this.$refs.control.removeEventListener(evt, handler, applyPassive())
+        this.$refs.control.removeEventListener(evt, handler, applyPassive());
       },
       computeBoundingRect: () => {
-        return this.$refs.root.getBoundingClientRect()
-      }
-    })
+        return this.$refs.root.getBoundingClientRect();
+      },
+    });
 
     this.formField = new MDCFormFieldFoundation({
       registerInteractionHandler: (type, handler) => {
-        this.$refs.label.addEventListener(type, handler)
+        this.$refs.label.addEventListener(type, handler);
       },
       deregisterInteractionHandler: (type, handler) => {
-        this.$refs.label.removeEventListener(type, handler)
+        this.$refs.label.removeEventListener(type, handler);
       },
       activateInputRipple: () => {
-        this.ripple && this.ripple.activate()
+        this.ripple && this.ripple.activate();
       },
       deactivateInputRipple: () => {
-        this.ripple && this.ripple.deactivate()
-      }
-    })
+        this.ripple && this.ripple.deactivate();
+      },
+    });
 
-    this.foundation.init()
-    this.ripple.init()
-    this.formField.init()
-    this.setChecked(this.checked)
-    this.foundation.setDisabled(this.disabled)
-    this.setIndeterminate(this.indeterminate)
+    this.foundation.init();
+    this.ripple.init();
+    this.formField.init();
+    this.setChecked(this.checked);
+    this.foundation.setDisabled(this.disabled);
+    this.setIndeterminate(this.indeterminate);
   },
   beforeDestroy() {
     this.$el.removeEventListener(
       getCorrectEventName(window, 'animationend'),
-      this.handleAnimationEnd_
-    )
+      this.handleAnimationEnd_,
+    );
 
-    this.formField.destroy()
-    this.ripple.destroy()
+    this.formField.destroy();
+    this.ripple.destroy();
 
-    this.uninstallPropertyChangeHooks_()
-    this.foundation.destroy()
+    this.uninstallPropertyChangeHooks_();
+    this.foundation.destroy();
   },
   methods: {
     setChecked(checked) {
       this.$refs.control.checked = Array.isArray(checked)
         ? checked.indexOf(this.value) > -1
-        : checked
+        : checked;
     },
     setIndeterminate(indeterminate) {
-      this.$refs.control.indeterminate = indeterminate
+      this.$refs.control.indeterminate = indeterminate;
     },
 
     onChange() {
-      this.$emit('update:indeterminate', this.indeterminate)
-      const isChecked = this.$refs.control.checked
+      this.$emit('update:indeterminate', this.indeterminate);
+      const isChecked = this.$refs.control.checked;
 
       if (Array.isArray(this.checked)) {
-        const idx = this.checked.indexOf(this.value)
+        const idx = this.checked.indexOf(this.value);
         if (isChecked) {
-          idx < 0 && this.$emit('change', this.checked.concat(this.value))
+          idx < 0 && this.$emit('change', this.checked.concat(this.value));
         } else {
           idx > -1 &&
             this.$emit(
               'change',
-              this.checked.slice(0, idx).concat(this.checked.slice(idx + 1))
-            )
+              this.checked.slice(0, idx).concat(this.checked.slice(idx + 1)),
+            );
         }
       } else {
-        this.$emit('change', isChecked)
+        this.$emit('change', isChecked);
       }
     },
 
     installPropertyChangeHooks_() {
-      const nativeCb = this.$refs.control
-      const cbProto = Object.getPrototypeOf(nativeCb)
+      const nativeCb = this.$refs.control;
+      const cbProto = Object.getPrototypeOf(nativeCb);
 
       CB_PROTO_PROPS.forEach(controlState => {
-        const desc = Object.getOwnPropertyDescriptor(cbProto, controlState)
+        const desc = Object.getOwnPropertyDescriptor(cbProto, controlState);
         // We have to check for this descriptor, since some browsers (Safari) don't support its return.
         // See: https://bugs.webkit.org/show_bug.cgi?id=49739
         if (validDescriptor(desc)) {
           const nativeCbDesc = /** @type {!ObjectPropertyDescriptor} */ ({
             get: desc.get,
             set: state => {
-              desc.set.call(nativeCb, state)
-              this.foundation.handleChange()
+              desc.set.call(nativeCb, state);
+              this.foundation.handleChange();
             },
             configurable: desc.configurable,
-            enumerable: desc.enumerable
-          })
-          Object.defineProperty(nativeCb, controlState, nativeCbDesc)
+            enumerable: desc.enumerable,
+          });
+          Object.defineProperty(nativeCb, controlState, nativeCbDesc);
         }
-      })
+      });
     },
 
     uninstallPropertyChangeHooks_() {
-      const nativeCb = this.$refs.control
-      const cbProto = Object.getPrototypeOf(nativeCb)
+      const nativeCb = this.$refs.control;
+      const cbProto = Object.getPrototypeOf(nativeCb);
 
       CB_PROTO_PROPS.forEach(controlState => {
         const desc = /** @type {!ObjectPropertyDescriptor} */ (Object.getOwnPropertyDescriptor(
           cbProto,
-          controlState
-        ))
+          controlState,
+        ));
         if (validDescriptor(desc)) {
-          Object.defineProperty(nativeCb, controlState, desc)
+          Object.defineProperty(nativeCb, controlState, desc);
         }
-      })
-    }
-  }
-}
+      });
+    },
+  },
+};
 
 // ===
 // Private functions
 // ===
 
 function validDescriptor(inputPropDesc) {
-  return !!inputPropDesc && typeof inputPropDesc.set === 'function'
+  return !!inputPropDesc && typeof inputPropDesc.set === 'function';
 }
 </script>

@@ -1,8 +1,6 @@
 <template>
-  <section 
-    :class="classes" 
-    class="mdc-toolbar-section mdc-toolbar__section">
-    <slot/>
+  <section :class="classes" class="mdc-toolbar-section mdc-toolbar__section">
+    <slot />
   </section>
 </template>
 
@@ -12,16 +10,16 @@ export default {
   props: {
     'align-start': Boolean,
     'align-end': Boolean,
-    'shrink-to-fit': Boolean
+    'shrink-to-fit': Boolean,
   },
   data() {
     return {
       classes: {
         'mdc-toolbar__section--align-start': this.alignStart,
         'mdc-toolbar__section--align-end': this.alignEnd,
-        'mdc-toolbar__section--shrink-to-fit': this.shrinkToFit
-      }
-    }
-  }
-}
+        'mdc-toolbar__section--shrink-to-fit': this.shrinkToFit,
+      },
+    };
+  },
+};
 </script>

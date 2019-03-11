@@ -41,9 +41,9 @@
 </template>
 applyPassive
 <script>
-import { MDCChipFoundation } from '@material/chips/chip/foundation'
-import { CustomLinkMixin, emitCustomEvent } from '@mcwv/base'
-import { RippleBase } from '@mcwv/ripple'
+import { MDCChipFoundation } from '@material/chips/chip/foundation';
+import { CustomLinkMixin, emitCustomEvent } from '@mcwv/base';
+import { RippleBase } from '@mcwv/ripple';
 
 export default {
   name: 'mdc-chip',
@@ -52,58 +52,58 @@ export default {
     leadingIcon: [String],
     trailingIcon: [String],
     leadingIconClasses: [Object],
-    trailingIconClasses: [Object]
+    trailingIconClasses: [Object],
   },
   inject: ['mdcChipSet'],
   data() {
     return {
       classes: {
-        'mdc-chip': true
+        'mdc-chip': true,
       },
       styles: {},
-      id: ''
-    }
+      id: '',
+    };
   },
   computed: {
     selected: {
       get() {
-        return this.foundation.isSelected()
+        return this.foundation.isSelected();
       },
       set(nv) {
-        this.foundation.setSelected(nv)
-      }
+        this.foundation.setSelected(nv);
+      },
     },
     isFilter() {
-      return this.mdcChipSet && this.mdcChipSet.filter
+      return this.mdcChipSet && this.mdcChipSet.filter;
     },
     haveleadingIcon() {
-      return !!this.leadingIcon || this.leadingIconClasses
+      return !!this.leadingIcon || this.leadingIconClasses;
     },
     havetrailingIcon() {
-      return !!this.trailingIcon || this.trailingIconClasses
+      return !!this.trailingIcon || this.trailingIconClasses;
     },
     leadingClasses() {
       return Object.assign(
         {},
         {
-          'material-icons': !!this.leadingIcon
+          'material-icons': !!this.leadingIcon,
         },
-        this.leadingIconClasses
-      )
+        this.leadingIconClasses,
+      );
     },
     trailingClasses() {
       return Object.assign(
         {},
         {
-          'material-icons': !!this.trailingIcon
+          'material-icons': !!this.trailingIcon,
         },
-        this.trailingIconClasses
-      )
-    }
+        this.trailingIconClasses,
+      );
+    },
   },
 
   created() {
-    this.id = this.mdcChipSet.nextId()
+    this.id = this.mdcChipSet.nextId();
   },
   mounted() {
     this.foundation = new MDCChipFoundation({
@@ -112,12 +112,12 @@ export default {
       hasClass: className => this.$el.classList.contains(className),
       addClassToLeadingIcon: className => {
         if (this.haveleadingIcon) {
-          this.$refs.leadingIcon.classList.add(className)
+          this.$refs.leadingIcon.classList.add(className);
         }
       },
       removeClassFromLeadingIcon: className => {
         if (this.haveleadingIcon) {
-          this.$refs.leadingIcon.classList.remove(className)
+          this.$refs.leadingIcon.classList.remove(className);
         }
       },
       eventTargetHasClass: (target, className) =>
@@ -127,11 +127,11 @@ export default {
           this.$el,
           MDCChipFoundation.strings.INTERACTION_EVENT,
           {
-            chipId: this.id
+            chipId: this.id,
           },
-          true
-        )
-        this.mdcChipSet && this.mdcChipSet.handleInteraction
+          true,
+        );
+        this.mdcChipSet && this.mdcChipSet.handleInteraction;
       },
 
       notifySelection: selected =>
@@ -139,25 +139,25 @@ export default {
           this.$el,
           MDCChipFoundation.strings.SELECTION_EVENT,
           { chipId: this.id, selected: selected },
-          true /* shouldBubble */
+          true /* shouldBubble */,
         ),
       notifyTrailingIconInteraction: () => {
         emitCustomEvent(
           this.$el,
           MDCChipFoundation.strings.TRAILING_ICON_INTERACTION_EVENT,
           {
-            chipId: this.id
+            chipId: this.id,
           },
-          true
-        )
+          true,
+        );
       },
       notifyRemoval: () => {
         emitCustomEvent(
           this.$el,
           MDCChipFoundation.strings.REMOVAL_EVENT,
           { chipId: this.id, root: this.$el },
-          true
-        )
+          true,
+        );
       },
       getComputedStyleValue: propertyName =>
         window.getComputedStyle(this.$el).getPropertyValue(propertyName),
@@ -169,38 +169,38 @@ export default {
       getCheckmarkBoundingClientRect: () =>
         this.$refs.checkmarkEl
           ? this.$refs.checkmarkEl.getBoundingClientRect()
-          : null
-    })
+          : null,
+    });
 
-    this.foundation.init()
+    this.foundation.init();
 
-    this.mdcChipSet.chips.push(this)
+    this.mdcChipSet.chips.push(this);
 
     this.ripple = new RippleBase(this, {
-      computeBoundingRect: () => this.foundation.getDimensions()
-    })
-    this.ripple.init()
+      computeBoundingRect: () => this.foundation.getDimensions(),
+    });
+    this.ripple.init();
   },
   beforeDestroy() {
-    this.ripple.destroy()
-    this.foundation.destroy()
+    this.ripple.destroy();
+    this.foundation.destroy();
   },
   methods: {
     handleInteraction(evt) {
-      this.foundation.handleInteraction(evt)
+      this.foundation.handleInteraction(evt);
     },
     handleTransitionEnd(evt) {
-      this.foundation.handleTransitionEnd(evt)
+      this.foundation.handleTransitionEnd(evt);
     },
     handleTrailingIconInteraction(evt) {
-      this.foundation.handleTrailingIconInteraction(evt)
+      this.foundation.handleTrailingIconInteraction(evt);
     },
     toggleSelected() {
-      this.foundation.toggleSelected()
+      this.foundation.toggleSelected();
     },
     isSelected() {
-      return this.foundation.isSelected()
-    }
-  }
-}
+      return this.foundation.isSelected();
+    },
+  },
+};
 </script>

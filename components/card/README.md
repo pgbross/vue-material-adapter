@@ -23,12 +23,9 @@ The card package provides the building blocks for composing your card components
 ```html
 <mdc-card>
   <mdc-card-primary-action>
-    <mdc-card-media :src="card">
-    </mdc-card-media>
+    <mdc-card-media :src="card"> </mdc-card-media>
   </mdc-card-primary-action>
-  <mdc-card-header
-    title="Title goes here"
-    subtitle="subtitle here" >
+  <mdc-card-header title="Title goes here" subtitle="subtitle here">
   </mdc-card-header>
   <mdc-card-actions>
     <mdc-card-action-buttons>
@@ -57,7 +54,7 @@ Only applicable to cards that have a primary action that the main surface should
 | prop           | Type           | Default   | Description                                 |
 | -------------- | -------------- | --------- | ------------------------------------------- |
 | `event`        | String         | undefined | optional event to emit on click             |
-| `event-target` | Object         | vm.$root  | optional event target, defaults to root bus |
+| `event-target` | Object         | vm.\$root | optional event target, defaults to root bus |
 | `event-args`   | Array          | []        | optional event args                         |
 | `href`         | String         | undefined | link's href                                 |
 | `to`           | String, Object | undefined | router-link property _(\*)_                 |
@@ -147,7 +144,7 @@ container:
 | `accent`             | Boolean        |                          | secondary color theme                                  |
 | `compact`            | Boolean        |                          | reduces the amount of horizontal padding in the button |
 | `event`              | String         | optional                 | optional event to emit on click                        |
-| `event-target`       | Object         | vm.$root                 | optional event target, defaults to root bus            |
+| `event-target`       | Object         | vm.\$root                | optional event target, defaults to root bus            |
 | `event-args`         | Array          | []                       | optional event args                                    |
 | `href`               | String         |                          | link's href, renders anchor (see notes below)          |
 | `to`                 | String, Object | undefined                | router-link property _(\*)_                            |
@@ -204,4 +201,4 @@ you can group Buttons and icons on the same line
 
 ### Reference
 
-* <https://material.io/components/web/catalog/cards>
+- <https://material.io/components/web/catalog/cards>

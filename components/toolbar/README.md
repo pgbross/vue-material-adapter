@@ -3,7 +3,7 @@
 ```html
 <mdc-toolbar>
   <mdc-toolbar-row>
-    <mdc-toolbar-section align-start >
+    <mdc-toolbar-section align-start>
       <mdc-toolbar-menu-icon event="toggle-drawer"></mdc-toolbar-menu-icon>
       <mdc-toolbar-title>Title</mdc-toolbar-title>
     </mdc-toolbar-section>
@@ -83,17 +83,17 @@ a page’s title, or an application name.
 
 ### Icons
 
-* `mdc-toolbar-icon-menu` wraps the left most icon in `mdc-toolbar` usually to
+- `mdc-toolbar-icon-menu` wraps the left most icon in `mdc-toolbar` usually to
   the left of `mdc-toolbar-title`. It renders as material menu icon by default
 
-* `mdc-toolbar-icon` wraps any icons placed on the right side of an
+- `mdc-toolbar-icon` wraps any icons placed on the right side of an
   mdc-toolbar.
 
-| props          | Type   | Default  | Description                                 |
-| -------------- | ------ | -------- | ------------------------------------------- |
-| `icon`         | String |          | the material icon name                      |
-| `event`        | String | optional | optional event to emit on click             |
-| `event-target` | Object | vm.$root | optional event target, defaults to root bus |
+| props          | Type   | Default   | Description                                 |
+| -------------- | ------ | --------- | ------------------------------------------- |
+| `icon`         | String |           | the material icon name                      |
+| `event`        | String | optional  | optional event to emit on click             |
+| `event-target` | Object | vm.\$root | optional event target, defaults to root bus |
 
 > if the `event` property is not specified, use @click to catch click events
 
@@ -102,7 +102,7 @@ a page’s title, or an application name.
 **Font Awsome**
 
 ```html
-  <mdc-icon class="fa fa-star"></mdc-icon>
+<mdc-icon class="fa fa-star"></mdc-icon>
 ```
 
 **SVG Icons**
@@ -169,11 +169,11 @@ With flexible behavior the toolbar height changes as the user scrolls.
 For the most common use case of flexible headers, the default behavior is as
 follow :
 
-* Flexible has a fixed initial height 4 times the default size of `mdc-toolbar-row`.
-* When it has `flexible-default` behavior, it further defines the background and title movement behavior.
+- Flexible has a fixed initial height 4 times the default size of `mdc-toolbar-row`.
+- When it has `flexible-default` behavior, it further defines the background and title movement behavior.
 
 refer to the [MDC Documentation](https://material.io/components/web/catalog/toolbar/#flexible-toolbar-requires-javascript) to learn about customization options.
 
 ### Reference
 
-* <https://material.io/components/web/catalog/toolbar>
+- <https://material.io/components/web/catalog/toolbar>

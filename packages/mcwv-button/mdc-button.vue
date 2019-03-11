@@ -1,5 +1,5 @@
 <script>
-import mdcButtonBase from './mdc-button-base.vue'
+import mdcButtonBase from './mdc-button-base.vue';
 
 export default {
   name: 'mdc-button',
@@ -8,7 +8,7 @@ export default {
     raised: Boolean,
     unelevated: Boolean,
     outlined: Boolean,
-    dense: Boolean
+    dense: Boolean,
   },
   data() {
     return {
@@ -17,23 +17,23 @@ export default {
         'mdc-button--raised': this.raised,
         'mdc-button--unelevated': this.unelevated,
         'mdc-button--outlined': this.outlined,
-        'mdc-button--dense': this.dense
-      }
-    }
+        'mdc-button--dense': this.dense,
+      },
+    };
   },
   watch: {
     raised() {
-      this.$set(this.classes, 'mdc-button--raised', this.raised)
+      this.$set(this.classes, 'mdc-button--raised', this.raised);
     },
     unelevated() {
-      this.$set(this.classes, 'mdc-button--unelevated', this.unelevated)
+      this.$set(this.classes, 'mdc-button--unelevated', this.unelevated);
     },
     outlined() {
-      this.$set(this.classes, 'mdc-button--outlined', this.outlined)
+      this.$set(this.classes, 'mdc-button--outlined', this.outlined);
     },
     dense() {
-      this.$set(this.classes, 'mdc-button--dense', this.dense)
-    }
-  }
-}
+      this.$set(this.classes, 'mdc-button--dense', this.dense);
+    },
+  },
+};
 </script>

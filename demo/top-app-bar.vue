@@ -32,19 +32,19 @@
 </template>
 
 <script>
-import githubLogo from './assets/github-logo.svg'
+import githubLogo from './assets/github-logo.svg';
 
 export default {
   data() {
     return {
-      githubLogo
-    }
+      githubLogo,
+    };
   },
 
   methods: {
-    showGitHub() {}
-  }
-}
+    showGitHub() {},
+  },
+};
 </script>
 
 <style>

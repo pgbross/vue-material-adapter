@@ -1,5 +1,5 @@
 <script>
-import { mdcButtonBase } from '@mcwv/button'
+import { mdcButtonBase } from '@mcwv/button';
 
 export default {
   name: 'mdc-card-action-button',
@@ -9,9 +9,9 @@ export default {
       classes: {
         'mdc-button': true,
         'mdc-card__action': true,
-        'mdc-card-action-button': true
-      }
-    }
-  }
-}
+        'mdc-card-action-button': true,
+      },
+    };
+  },
+};
 </script>

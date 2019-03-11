@@ -9,8 +9,8 @@
 export default {
   data() {
     return {
-      picked: 'Radio2'
-    }
-  }
-}
+      picked: 'Radio2',
+    };
+  },
+};
 </script>

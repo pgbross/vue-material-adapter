@@ -12,31 +12,31 @@
 </template>
 
 <script>
-import MDCDismissibleDrawerFoundation from '@material/drawer/dismissible/foundation'
-import MDCModalDrawerFoundation from '@material/drawer/modal/foundation'
-import { MDCList } from '@material/list/index'
-import MDCListFoundation from '@material/list/foundation'
-import createFocusTrap from 'focus-trap'
+import MDCDismissibleDrawerFoundation from '@material/drawer/dismissible/foundation';
+import MDCModalDrawerFoundation from '@material/drawer/modal/foundation';
+import { MDCList } from '@material/list/index';
+import MDCListFoundation from '@material/list/foundation';
+import createFocusTrap from 'focus-trap';
 
 const media = new class {
   get small() {
     return (
       this._small || (this._small = window.matchMedia('(max-width: 839px)'))
-    )
+    );
   }
 
   get large() {
     return (
       this._large || (this._large = window.matchMedia('(min-width: 1200px)'))
-    )
+    );
   }
-}()
+}();
 
 export default {
   name: 'mdc-drawer',
   model: {
     prop: 'open',
-    event: 'change'
+    event: 'change',
   },
   props: {
     modal: Boolean,
@@ -45,39 +45,39 @@ export default {
     toggleOn: String,
     toggleOnSource: {
       type: Object,
-      required: false
+      required: false,
     },
     openOn: String,
     openOnSource: {
       type: Object,
-      required: false
+      required: false,
     },
     closeOn: String,
     closeOnSource: {
       type: Object,
-      required: false
-    }
+      required: false,
+    },
   },
   provide() {
-    return { mdcDrawer: this }
+    return { mdcDrawer: this };
   },
   data() {
     return {
       // open_: false,
-      classes: {}
-    }
+      classes: {},
+    };
   },
   computed: {
     type() {},
     isModal() {
-      return this.modal
-    }
+      return this.modal;
+    },
   },
   watch: {
-    open: 'onOpen_'
+    open: 'onOpen_',
   },
   mounted() {
-    this.drawer_ = this.$refs.drawer
+    this.drawer_ = this.$refs.drawer;
     const adapter = {
       addClass: className => this.$set(this.classes, className, true),
       removeClass: className => this.$delete(this.classes, className),
@@ -85,125 +85,125 @@ export default {
       elementHasClass: (element, className) =>
         element.classList.contains(className),
       saveFocus: () => {
-        this.previousFocus_ = document.activeElement
+        this.previousFocus_ = document.activeElement;
       },
       restoreFocus: () => {
-        const previousFocus = this.previousFocus_ && this.previousFocus_.focus
+        const previousFocus = this.previousFocus_ && this.previousFocus_.focus;
         if (this.drawer_.contains(document.activeElement) && previousFocus) {
-          this.previousFocus_.focus()
+          this.previousFocus_.focus();
         }
       },
       focusActiveNavigationItem: () => {
         const activeNavItemEl = this.drawer_.querySelector(
-          `.${MDCListFoundation.cssClasses.LIST_ITEM_ACTIVATED_CLASS}`
-        )
+          `.${MDCListFoundation.cssClasses.LIST_ITEM_ACTIVATED_CLASS}`,
+        );
         if (activeNavItemEl) {
-          activeNavItemEl.focus()
+          activeNavItemEl.focus();
         }
       },
       notifyClose: () => {
-        this.$emit('change', false)
-        this.$emit('close')
+        this.$emit('change', false);
+        this.$emit('close');
       },
       notifyOpen: () => {
-        this.$emit('change', true)
-        this.$emit('open')
+        this.$emit('change', true);
+        this.$emit('open');
       },
       trapFocus: () => this.focusTrap_.activate(),
-      releaseFocus: () => this.focusTrap_.deactivate()
-    }
+      releaseFocus: () => this.focusTrap_.deactivate(),
+    };
 
-    const { DISMISSIBLE, MODAL } = MDCDismissibleDrawerFoundation.cssClasses
+    const { DISMISSIBLE, MODAL } = MDCDismissibleDrawerFoundation.cssClasses;
     if (this.drawer_.classList.contains(DISMISSIBLE)) {
-      this.foundation = new MDCDismissibleDrawerFoundation(adapter)
+      this.foundation = new MDCDismissibleDrawerFoundation(adapter);
     } else if (this.drawer_.classList.contains(MODAL)) {
-      this.foundation = new MDCModalDrawerFoundation(adapter)
+      this.foundation = new MDCModalDrawerFoundation(adapter);
     } else {
       throw new Error(
-        `MDCDrawer: Failed to instantiate component. Supported variants are ${DISMISSIBLE} and ${MODAL}.`
-      )
+        `MDCDrawer: Failed to instantiate component. Supported variants are ${DISMISSIBLE} and ${MODAL}.`,
+      );
     }
-    this.foundation && this.foundation.init()
-    this.initialSyncWithDOM()
+    this.foundation && this.foundation.init();
+    this.initialSyncWithDOM();
 
     if (this.toggleOn) {
-      this.toggleOnEventSource = this.toggleOnSource || this.$root
-      this.toggleOnEventSource.$on(this.toggleOn, this.toggle)
+      this.toggleOnEventSource = this.toggleOnSource || this.$root;
+      this.toggleOnEventSource.$on(this.toggleOn, this.toggle);
     }
     if (this.openOn) {
-      this.openOnEventSource = this.openOnSource || this.$root
-      this.openOnEventSource.$on(this.openOn, this.show)
+      this.openOnEventSource = this.openOnSource || this.$root;
+      this.openOnEventSource.$on(this.openOn, this.show);
     }
     if (this.closeOn) {
-      this.closeOnEventSource = this.closeOnSource || this.$root
-      this.closeOnEventSource.$on(this.closeOn, this.close)
+      this.closeOnEventSource = this.closeOnSource || this.$root;
+      this.closeOnEventSource.$on(this.closeOn, this.close);
     }
     // media.small.addListener(this.refreshMedia)
     // media.large.addListener(this.refreshMedia)
     // this.$nextTick(() => this.refreshMedia())
   },
   beforeDestroy() {
-    this.foundation && this.foundation.destroy()
-    this.foundation = null
+    this.foundation && this.foundation.destroy();
+    this.foundation = null;
     // media.small.removeListener(this.refreshMedia)
     // media.large.removeListener(this.refreshMedia)
 
     if (this.toggleOnEventSource) {
-      this.toggleOnEventSource.$off(this.toggleOn, this.toggle)
+      this.toggleOnEventSource.$off(this.toggleOn, this.toggle);
     }
     if (this.openOnEventSource) {
-      this.openOnEventSource.$off(this.openOn, this.show)
+      this.openOnEventSource.$off(this.openOn, this.show);
     }
     if (this.closeOnEventSource) {
-      this.closeOnEventSource.$off(this.closeOn, this.close)
+      this.closeOnEventSource.$off(this.closeOn, this.close);
     }
   },
   methods: {
     initialSyncWithDOM() {
-      const { MODAL } = MDCDismissibleDrawerFoundation.cssClasses
+      const { MODAL } = MDCDismissibleDrawerFoundation.cssClasses;
 
       if (this.drawer_.classList.contains(MODAL)) {
-        const { SCRIM_SELECTOR } = MDCDismissibleDrawerFoundation.strings
-        this.scrim_ = this.drawer_.parentElement.querySelector(SCRIM_SELECTOR)
-        this.handleScrimClick_ = () => this.foundation.handleScrimClick()
-        this.scrim_.addEventListener('click', this.handleScrimClick_)
+        const { SCRIM_SELECTOR } = MDCDismissibleDrawerFoundation.strings;
+        this.scrim_ = this.drawer_.parentElement.querySelector(SCRIM_SELECTOR);
+        this.handleScrimClick_ = () => this.foundation.handleScrimClick();
+        this.scrim_.addEventListener('click', this.handleScrimClick_);
         this.focusTrap_ = createFocusTrapInstance(
           this.drawer_,
-          this.focusTrapFactory_
-        )
+          this.focusTrapFactory_,
+        );
       }
 
-      this.handleKeydown_ = evt => this.foundation.handleKeydown(evt)
+      this.handleKeydown_ = evt => this.foundation.handleKeydown(evt);
       this.handleTransitionEnd_ = evt =>
-        this.foundation.handleTransitionEnd(evt)
+        this.foundation.handleTransitionEnd(evt);
 
-      this.$el.addEventListener('keydown', this.handleKeydown_)
-      this.$el.addEventListener('transitionend', this.handleTransitionEnd_)
+      this.$el.addEventListener('keydown', this.handleKeydown_);
+      this.$el.addEventListener('transitionend', this.handleTransitionEnd_);
     },
     onOpen_(value) {
       if (this.open) {
-        this.foundation && this.foundation.open()
+        this.foundation && this.foundation.open();
       } else {
-        this.foundation && this.foundation.close()
+        this.foundation && this.foundation.close();
       }
     },
     onChange(event) {
-      this.$emit('change', event)
-      this.$root.$emit('vma:layout')
+      this.$emit('change', event);
+      this.$root.$emit('vma:layout');
     },
     show() {
-      this.foundation.open()
+      this.foundation.open();
     },
     close() {
-      this.foundation.close()
+      this.foundation.close();
     },
     toggle() {
       this.foundation.isOpen()
         ? this.foundation.close()
-        : this.foundation.open()
+        : this.foundation.open();
     },
     isOpen() {
-      return this.foundation.isOpen()
+      return this.foundation.isOpen();
     },
     refreshMedia() {
       // this.small = media.small.matches
@@ -215,19 +215,19 @@ export default {
       //     this.close()
       //   }
       // }
-    }
-  }
-}
+    },
+  },
+};
 
 function createFocusTrapInstance(
   surfaceEl,
-  focusTrapFactory = createFocusTrap
+  focusTrapFactory = createFocusTrap,
 ) {
   return focusTrapFactory(surfaceEl, {
     clickOutsideDeactivates: true,
     initialFocus: false, // Navigation drawer handles focusing on active nav item.
     escapeDeactivates: false, // Navigation drawer handles ESC.
-    returnFocusOnDeactivate: false // Navigation drawer handles restore focus.
-  })
+    returnFocusOnDeactivate: false, // Navigation drawer handles restore focus.
+  });
 }
 </script>

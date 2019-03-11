@@ -1,19 +1,19 @@
 ## Usage
 
 ```html
-<mdc-radio v-model="answer" name="radios" label="Yes for sure"  />
+<mdc-radio v-model="answer" name="radios" label="Yes for sure" />
 <mdc-radio v-model="answer" name="radios" label="definitely NO!" />
-<mdc-radio v-model="answer" name="radios" label="I guess"  checked />
+<mdc-radio v-model="answer" name="radios" label="I guess" checked />
 
-<p>Answer:  {{ answer }}</p>
+<p>Answer: {{ answer }}</p>
 ```
 
 ```javascript
 var vm = new Vue({
   data: {
-    answer: null
-  }
-})
+    answer: null,
+  },
+});
 ```
 
 > or use default slot for label
@@ -21,14 +21,14 @@ var vm = new Vue({
 ```html
 <mdc-radio v-model="answer" name="radios">Yes for sure</mdc-radio>
 <mdc-radio v-model="answer" name="radios">definitely NO!</mdc-radio>
-<mdc-radio v-model="answer" name="radios"checked>"I guess"</mdc-radio>
+<mdc-radio v-model="answer" name="radios" checked>"I guess"</mdc-radio>
 ```
 
 ### props
 
 | props       | Type    | Default | Description                                                 |
 | ----------- | ------- | ------- | ----------------------------------------------------------- |
-| `name`      | String  |         | radio group name (__*__)                                    |
+| `name`      | String  |         | radio group name (**\***)                                   |
 | `label`     | String  |         | radio label                                                 |
 | `align-end` | Boolean |         | align the radio after the label                             |
 | `value`     | String  | `label` | radio value, defaults to label value if any                 |
@@ -36,7 +36,7 @@ var vm = new Vue({
 | `:disabled` | Boolean |         | whether the radio is disabled                               |
 | `v-model`   | String  |         | tracks selected radio's value                               |
 
-> (__*__) name prop is required for proper behavior.
+> (**\***) name prop is required for proper behavior.
 
 ### events
 

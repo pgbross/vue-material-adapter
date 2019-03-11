@@ -29,7 +29,7 @@ or the `to` property for router-link behavior. mdc-tab dispatches `@click` event
 | -------------------- | -------------- | ------------------------ | ------------------------------------------- |
 | `active`             | Boolean        | false                    | set the tab active                          |
 | `event`              | String         | optional                 | optional event to emit on click             |
-| `event-target`       | Object         | vm.$root                 | optional event target, defaults to root bus |
+| `event-target`       | Object         | vm.\$root                | optional event target, defaults to root bus |
 | `event-args`         | Array          | []                       | optional event args                         |
 | `to`                 | String, Object | undefined                | router-link property _(\*)_                 |
 | `replace`            | Boolean        | false                    | router-link property _(\*)_                 |
@@ -74,4 +74,4 @@ or the `to` property for router-link behavior. mdc-tab dispatches `@click` event
 
 ### reference
 
-* <https://material.io/components/web/catalog/tabs>
+- <https://material.io/components/web/catalog/tabs>

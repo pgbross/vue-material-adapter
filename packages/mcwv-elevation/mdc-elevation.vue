@@ -1,8 +1,6 @@
 <template>
-  <div
-    :class="classes"
-    class="mdc-elevation">
-    <slot/>
+  <div :class="classes" class="mdc-elevation">
+    <slot />
   </div>
 </template>
 
@@ -13,17 +11,17 @@ export default {
     z: {
       type: [Number, String],
       default() {
-        return 1
-      }
-    }
+        return 1;
+      },
+    },
   },
   data() {
-    let elevationClasses = {}
-    elevationClasses[`mdc-elevation--z${this.z}`] = true
+    let elevationClasses = {};
+    elevationClasses[`mdc-elevation--z${this.z}`] = true;
 
     return {
-      classes: elevationClasses
-    }
-  }
-}
+      classes: elevationClasses,
+    };
+  },
+};
 </script>

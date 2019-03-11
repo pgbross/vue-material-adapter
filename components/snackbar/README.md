@@ -1,8 +1,7 @@
 ## Usage
 
 ```html
-<mdc-snackbar v-model="snack"/>
-<mdc-snackbar ref="snackbar"/>
+<mdc-snackbar v-model="snack" /> <mdc-snackbar ref="snackbar" />
 ```
 
 `mdc-snackbar` will show the snackbar whenever the `snack` property is updated (normal Vue reactivity).
@@ -32,7 +31,7 @@ or using global event bus
 
 ```html
 <mdc-button raised @click="showSnackbar">Show Snackbar</mdc-button>
-<mdc-snackbar ref="snackbar"/>
+<mdc-snackbar ref="snackbar" />
 ```
 
 ```javascript
@@ -52,11 +51,11 @@ Alternatively, you can also use the `show` method to trigger the display of the
 snackbar.
 
 ```html
-<mdc-snackbar ref="snackbar"/>
+<mdc-snackbar ref="snackbar" />
 ```
 
 ```javascript
-vm.$refs.snackbar.show({ message: 'Message' })
+vm.$refs.snackbar.show({ message: 'Message' });
 ```
 
 ### props
@@ -99,4 +98,4 @@ properties and their usage.
 
 ### Reference
 
-* <https://material.io/components/web/catalog/snackbars>
+- <https://material.io/components/web/catalog/snackbars>

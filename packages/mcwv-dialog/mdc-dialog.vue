@@ -47,74 +47,74 @@
 </template>
 
 <script>
-import MDCDialogFoundation from '@material/dialog/foundation'
-import * as util from '@material/dialog/util'
-import { mdcButton } from '@mcwv/button'
-import { VMAUniqueIdMixin } from '@mcwv/base'
-import { closest, matches } from '@material/dom/ponyfill'
-import createFocusTrap from 'focus-trap'
-const strings = MDCDialogFoundation.strings
+import MDCDialogFoundation from '@material/dialog/foundation';
+import * as util from '@material/dialog/util';
+import { mdcButton } from '@mcwv/button';
+import { VMAUniqueIdMixin } from '@mcwv/base';
+import { closest, matches } from '@material/dom/ponyfill';
+import createFocusTrap from 'focus-trap';
+const strings = MDCDialogFoundation.strings;
 
 export default {
   name: 'mdc-dialog',
   components: {
-    mdcButton: mdcButton
+    mdcButton: mdcButton,
   },
   mixins: [VMAUniqueIdMixin],
   model: {
     prop: 'open',
-    event: 'change'
+    event: 'change',
   },
   props: {
     title: {
-      type: String
+      type: String,
     },
     accept: {
       type: String,
-      default: 'Ok'
+      default: 'Ok',
     },
     acceptDisabled: Boolean,
     acceptRaised: {
       type: Boolean,
-      default: false
+      default: false,
     },
     cancel: {
-      type: String
+      type: String,
     },
     cancelRaised: {
       type: Boolean,
-      default: false
+      default: false,
     },
     accent: Boolean,
     scrollable: Boolean,
-    open: Boolean
+    open: Boolean,
   },
   data() {
     return {
       classes: {
-        'mdc-theme--dark': this.dark
+        'mdc-theme--dark': this.dark,
       },
       styles: {},
       surfaceClasses: {},
       bodyClasses: {
-        'mdc-dialog__body--scrollable': this.scrollable
-      }
-    }
+        'mdc-dialog__body--scrollable': this.scrollable,
+      },
+    };
   },
   watch: {
-    open: 'onOpen_'
+    open: 'onOpen_',
   },
   mounted() {
     if (this.accept) {
       this.focusTrap = util.createFocusTrapInstance(
         this.$refs.container,
-        createFocusTrap
-      )
+        createFocusTrap,
+      );
     }
 
     this.buttons_ = [].slice.call(
-      this.$el.querySelectorAll(strings.BUTTON_SELECTOR)
-    )
+      this.$el.querySelectorAll(strings.BUTTON_SELECTOR),
+    );
 
     this.foundation = new MDCDialogFoundation({
       addClass: className => this.$set(this.classes, className, true),
@@ -130,48 +130,48 @@ export default {
       areButtonsStacked: () => util.areTopsMisaligned(this.buttons_),
 
       getActionFromEvent: event => {
-        const element = closest(event.target, `[${strings.ACTION_ATTRIBUTE}]`)
-        return element && element.getAttribute(strings.ACTION_ATTRIBUTE)
+        const element = closest(event.target, `[${strings.ACTION_ATTRIBUTE}]`);
+        return element && element.getAttribute(strings.ACTION_ATTRIBUTE);
       },
       clickDefaultButton: () => {
         if (this.$refs.defaultButton) {
-          this.$refs.defaultButton.click()
+          this.$refs.defaultButton.click();
         }
       },
       reverseButtons: () => {
-        this.buttons_.reverse()
+        this.buttons_.reverse();
         this.buttons_.forEach(button =>
-          button.parentElement.appendChild(button)
-        )
+          button.parentElement.appendChild(button),
+        );
       },
       notifyOpening: () => this.$emit(strings.OPENING_EVENT, {}),
       notifyOpened: () => this.$emit(strings.OPENED_EVENT, {}),
       notifyClosing: action => {
-        this.$emit('change', false)
+        this.$emit('change', false);
         // console.log(action)
-        this.$emit(strings.CLOSING_EVENT, action ? { action } : {})
+        this.$emit(strings.CLOSING_EVENT, action ? { action } : {});
       },
       notifyClosed: action =>
-        this.$emit(strings.CLOSED_EVENT, action ? { action } : {})
-    })
+        this.$emit(strings.CLOSED_EVENT, action ? { action } : {}),
+    });
 
-    this.foundation.init()
-    this.open && this.foundation.open()
+    this.foundation.init();
+    this.open && this.foundation.open();
   },
   beforeDestroy() {
-    this.foundation.destroy()
+    this.foundation.destroy();
   },
   methods: {
     onOpen_(value) {
       if (value) {
-        this.foundation.open()
+        this.foundation.open();
       } else {
-        this.foundation.close()
+        this.foundation.close();
       }
     },
 
     onClick(event) {
-      this.foundation.handleInteraction(event)
+      this.foundation.handleInteraction(event);
     },
     onCancel() {
       if (this.$listeners['validateCancel']) {
@@ -182,13 +182,13 @@ export default {
             // so we need to notify listeners the open state
             // is changing.
             if (!notify) {
-              this.$emit('change', false)
+              this.$emit('change', false);
             }
-            this.foundation.cancel(notify)
-          }
-        })
+            this.foundation.cancel(notify);
+          },
+        });
       } else {
-        this.foundation.cancel(true)
+        this.foundation.cancel(true);
       }
     },
     onAccept() {
@@ -200,21 +200,21 @@ export default {
             // so we need to notify listeners the open state
             // is changing.
             if (!notify) {
-              this.$emit('change', false)
+              this.$emit('change', false);
             }
-            this.foundation.accept(notify)
-          }
-        })
+            this.foundation.accept(notify);
+          },
+        });
       } else {
-        this.foundation.accept(true)
+        this.foundation.accept(true);
       }
     },
     show() {
-      this.foundation.open()
+      this.foundation.open();
     },
     close() {
-      this.foundation.close()
-    }
-  }
-}
+      this.foundation.close();
+    },
+  },
+};
 </script>

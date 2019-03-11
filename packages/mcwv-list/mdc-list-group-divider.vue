@@ -1,9 +1,9 @@
 <template>
-  <hr class="mdc-list-group-divider mdc-list-divider">
+  <hr class="mdc-list-group-divider mdc-list-divider" />
 </template>
 
 <script>
 export default {
-  name: 'mdc-list-group-divider'
-}
+  name: 'mdc-list-group-divider',
+};
 </script>

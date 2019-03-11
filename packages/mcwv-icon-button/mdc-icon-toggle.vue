@@ -6,21 +6,21 @@
 export default {
   name: 'mdc-icon-toggle',
   props: {
-    isOn: Boolean
+    isOn: Boolean,
   },
   data() {
     return {
       classes: {
         'mdc-icon-button__icon': true,
-        'mdc-icon-button__icon--on': this.isOn
-      }
-    }
+        'mdc-icon-button__icon--on': this.isOn,
+      },
+    };
   },
   mounted() {},
 
   beforeDestroy() {},
   methods: {},
 
-  computed: {}
-}
+  computed: {},
+};
 </script>

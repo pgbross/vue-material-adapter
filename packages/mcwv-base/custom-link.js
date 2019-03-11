@@ -3,27 +3,30 @@ export const CustomLink = {
   functional: true,
   props: {
     tag: { type: String, default: 'a' },
-    link: Object
+    link: Object,
   },
   render(h, context) {
-    let element
-    let data = Object.assign({}, context.data)
+    let element;
+    let data = Object.assign({}, context.data);
 
     if (context.props.link && context.parent.$router) {
       // router-link case
-      element = context.parent.$root.$options.components['RouterLink']
-      data.props = Object.assign({ tag: context.props.tag }, context.props.link)
+      element = context.parent.$root.$options.components['RouterLink'];
+      data.props = Object.assign(
+        { tag: context.props.tag },
+        context.props.link,
+      );
       if (data.on.click) {
-        data.nativeOn = { click: data.on.click }
+        data.nativeOn = { click: data.on.click };
       }
     } else {
       // element fallback
-      element = context.props.tag
+      element = context.props.tag;
     }
 
-    return h(element, data, context.children)
-  }
-}
+    return h(element, data, context.children);
+  },
+};
 
 export const CustomLinkMixin = {
   props: {
@@ -32,7 +35,7 @@ export const CustomLinkMixin = {
     append: Boolean,
     replace: Boolean,
     activeClass: String,
-    exactActiveClass: String
+    exactActiveClass: String,
   },
   computed: {
     link() {
@@ -43,12 +46,12 @@ export const CustomLinkMixin = {
           append: this.append,
           replace: this.replace,
           activeClass: this.activeClass,
-          exactActiveClass: this.exactActiveClass
+          exactActiveClass: this.exactActiveClass,
         }
-      )
-    }
+      );
+    },
   },
   components: {
-    CustomLink
-  }
-}
+    CustomLink,
+  },
+};

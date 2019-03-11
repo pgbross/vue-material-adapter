@@ -4,9 +4,7 @@
       <mdc-card-primary-action>
         <mdc-card-media :src="card" />
       </mdc-card-primary-action>
-      <mdc-card-header 
-        title="Title goes here" 
-        subtitle="subtitle here" />
+      <mdc-card-header title="Title goes here" subtitle="subtitle here" />
       <mdc-card-actions>
         <mdc-card-action-buttons>
           <mdc-card-action-button>ACTION</mdc-card-action-button>
@@ -20,17 +18,17 @@
 </template>
 
 <script>
-import card from 'demo/assets/card-16-9.jpg'
+import card from 'demo/assets/card-16-9.jpg';
 
 export default {
   data() {
     return {
-      card
-    }
-  }
-}
+      card,
+    };
+  },
+};
 </script>
-      
+
 <style>
 .mdc-demo .mdc-card {
   background-color: white;

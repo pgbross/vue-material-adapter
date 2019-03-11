@@ -1,46 +1,46 @@
 /* eslint-disable */
 
-;(function() {
-  var MutationObserver
+(function() {
+  var MutationObserver;
 
   if (window.MutationObserver != null) {
-    return
+    return;
   }
 
   MutationObserver = (function() {
     function MutationObserver(callBack) {
-      this.callBack = callBack
+      this.callBack = callBack;
     }
 
     MutationObserver.prototype.observe = function(element, options) {
-      this.element = element
+      this.element = element;
       return (this.interval = setInterval(
         (function(_this) {
           return function() {
-            var html
-            html = _this.element.innerHTML
+            var html;
+            html = _this.element.innerHTML;
             if (html !== _this.oldHtml) {
-              _this.oldHtml = html
-              return _this.callBack.apply(null)
+              _this.oldHtml = html;
+              return _this.callBack.apply(null);
             }
-          }
+          };
         })(this),
-        200
-      ))
-    }
+        200,
+      ));
+    };
 
     MutationObserver.prototype.disconnect = function() {
-      return window.clearInterval(this.interval)
-    }
+      return window.clearInterval(this.interval);
+    };
 
-    return MutationObserver
-  })()
+    return MutationObserver;
+  })();
 
-  window.MutationObserver = MutationObserver
-}.call(this))
-;(function() {
+  window.MutationObserver = MutationObserver;
+}.call(this));
+(function() {
   if (window.matchMedia) {
-    return
+    return;
   }
 
   window.matchMedia = mediaQueryString => {
@@ -48,37 +48,37 @@
       matches: false,
       media: mediaQueryString,
       addListener: f => {},
-      removeListener: f => {}
-    }
-    return mql
-  }
-}.call(this))
-;(function() {
+      removeListener: f => {},
+    };
+    return mql;
+  };
+}.call(this));
+(function() {
   if (window.requestAnimationFrame) {
-    return
+    return;
   }
 
-  window.requestAnimationFrame = () => {}
-}.call(this))
-;(function() {
+  window.requestAnimationFrame = () => {};
+}.call(this));
+(function() {
   if (window.cancelAnimationFrame) {
-    return
+    return;
   }
 
-  window.cancelAnimationFrame = () => {}
-}.call(this))
-;(function() {
+  window.cancelAnimationFrame = () => {};
+}.call(this));
+(function() {
   // global HTMLInputElement
   Object.defineProperty(window.HTMLInputElement.prototype, 'validity', {
     writable: true,
     value: {
       badInput: false,
-      valid: true
-    }
-  })
+      valid: true,
+    },
+  });
 
   // HTMLInputElement.prototype.validity = {
   //   badInput: false,
   //   valid: true
   // }
-}.call(this))
+}.call(this));

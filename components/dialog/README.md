@@ -2,9 +2,15 @@
 
 ```html
 <mdc-button raised @click="open=!open">Show dialog</mdc-button>
-<mdc-dialog v-model="open" accept-raised
-  title="Title" accept="Accept" cancel="Decline"
-  @accept="onAccept" @cancel="onDecline">
+<mdc-dialog
+  v-model="open"
+  accept-raised
+  title="Title"
+  accept="Accept"
+  cancel="Decline"
+  @accept="onAccept"
+  @cancel="onDecline"
+>
   {{ dialogText }}
 </mdc-dialog>
 ```
@@ -28,19 +34,19 @@ var vm = new Vue({
 
 ### props
 
-| props             | Type    | Default    | Description                              |
-| ----------------- | ------- | ---------- | ---------------------------------------- |
-| `open`            | Boolean | false      | optional v-model when true opens dialog  |
-| `title`           | String  | undefined  | the dialog title                         |
-| `accept`          | String  | `'Ok'`     | the dialog accept button text            |
-| `accept-disabled` | Boolean | false      | disable the accept button                |
-| `accept-raised`   | Boolean | false      | display accept button as raised          |
-| `cancel`          | String  | undefined  | the dialog cancel button text            |
-| `cancel-raised`   | Boolean | false      | display cancel button as raised          |
-| `scrollable`      | Boolean | false      | whether the dialog is scrollable         |
-| `accent`          | Boolean | false      | set accented style to the footer buttons |
+| props             | Type    | Default   | Description                              |
+| ----------------- | ------- | --------- | ---------------------------------------- |
+| `open`            | Boolean | false     | optional v-model when true opens dialog  |
+| `title`           | String  | undefined | the dialog title                         |
+| `accept`          | String  | `'Ok'`    | the dialog accept button text            |
+| `accept-disabled` | Boolean | false     | disable the accept button                |
+| `accept-raised`   | Boolean | false     | display accept button as raised          |
+| `cancel`          | String  | undefined | the dialog cancel button text            |
+| `cancel-raised`   | Boolean | false     | display cancel button as raised          |
+| `scrollable`      | Boolean | false     | whether the dialog is scrollable         |
+| `accent`          | Boolean | false     | set accented style to the footer buttons |
 
-> In order to hide the Dialog Footer, force the accept property to `""`  
+> In order to hide the Dialog Footer, force the accept property to `""`
 
 ### events
 
@@ -63,17 +69,27 @@ You can use the `accept-disabled` property to prevent the dialog to close
 when the accept button is clicked.
 
 ```html
-<mdc-dialog ref="dialog" title="Dialog" accept="Accept" cancel="Decline"
+<mdc-dialog
+  ref="dialog"
+  title="Dialog"
+  accept="Accept"
+  cancel="Decline"
   :accept-disabled="isThisNotAcceptable"
->Lorem ipsum dolor sit amet</mdc-dialog>
+  >Lorem ipsum dolor sit amet</mdc-dialog
+>
 ```
 
 Or use the `@validate` event to trigger your own validation logic as follow:
 
 ```html
-<mdc-dialog ref="dialog" title="Dialog" accept="Accept" cancel="Decline"
+<mdc-dialog
+  ref="dialog"
+  title="Dialog"
+  accept="Accept"
+  cancel="Decline"
   @validate="onValidate"
->Lorem ipsum dolor sit amet</mdc-dialog>
+  >Lorem ipsum dolor sit amet</mdc-dialog
+>
 ```
 
 ```javascript
@@ -94,9 +110,14 @@ export default {
 You can use `@validateCancel` to trigger validation logic for the cancel event, as follows:
 
 ```html
-<mdc-dialog ref="dialog" title="Dialog" accept="Accept" cancel="Decline"
+<mdc-dialog
+  ref="dialog"
+  title="Dialog"
+  accept="Accept"
+  cancel="Decline"
   @validateCancel="onValidateCancel"
->Lorem ipsum dolor sit amet</mdc-dialog>
+  >Lorem ipsum dolor sit amet</mdc-dialog
+>
 ```
 
 ```javascript

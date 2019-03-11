@@ -3,16 +3,16 @@
 The switch component is rendered as an input with checkbox type
 
 ```html
-<mdc-switch  :label="label" v-model="checked" />
+<mdc-switch :label="label" v-model="checked" />
 ```
 
 ```javascript
 var vm = new Vue({
   data: {
     label: 'This is a switch',
-    checked: true
-  }
-})
+    checked: true,
+  },
+});
 ```
 
 > or use default slot for label
@@ -23,23 +23,22 @@ var vm = new Vue({
 
 ### props
 
-| props | Type | Default | Description |
-|-------|------|---------|-------------|
-|`checked`|Boolean|| whether the checkbox is checked, bind with `v-model` |
-|`disabled`| Boolean|| whether the checkbox is disabled |
-|`label`| String|| checkbox label |
-|`align-end`| Boolean|| align the checkbox after the label |
-|`value`|String|| input control value |
-|`name`|String|| input name |
-
+| props       | Type    | Default | Description                                          |
+| ----------- | ------- | ------- | ---------------------------------------------------- |
+| `checked`   | Boolean |         | whether the checkbox is checked, bind with `v-model` |
+| `disabled`  | Boolean |         | whether the checkbox is disabled                     |
+| `label`     | String  |         | checkbox label                                       |
+| `align-end` | Boolean |         | align the checkbox after the label                   |
+| `value`     | String  |         | input control value                                  |
+| `name`      | String  |         | input name                                           |
 
 ### events
 
-| event | args | Description |
-|-------|------|-------------|
-|`@focus`| - |emitted on focus gained |
-|`@blur`| - |emitted on focus lost |
-
+| event    | args | Description             |
+| -------- | ---- | ----------------------- |
+| `@focus` | -    | emitted on focus gained |
+| `@blur`  | -    | emitted on focus lost   |
 
 ### Reference
+
 - <https://material.io/components/web/catalog/input-controls/switches>

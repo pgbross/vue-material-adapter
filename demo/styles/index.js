@@ -1,2 +1,2 @@
-import 'highlight.js/styles/googlecode.css'
-import './demo.scss'
+import 'highlight.js/styles/googlecode.css';
+import './demo.scss';

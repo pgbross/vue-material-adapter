@@ -1,5 +1,0 @@
-@import "@material/linear-progress/mdc-linear-progress";
-
-.mdc-linear-progress--accent {
-    @include mdc-linear-progress-bar-color($mdc-theme-secondary);
-}

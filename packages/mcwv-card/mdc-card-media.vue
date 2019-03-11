@@ -1,12 +1,11 @@
 <template>
-  <section 
-    :class="classes" 
-    :style="styles" 
-    class="mdc-card-media mdc-card__media">
-    <div 
-      v-if="$slots.default" 
-      class="mdc-card__media-content">
-      <slot/>
+  <section
+    :class="classes"
+    :style="styles"
+    class="mdc-card-media mdc-card__media"
+  >
+    <div v-if="$slots.default" class="mdc-card__media-content">
+      <slot />
     </div>
   </section>
 </template>
@@ -16,19 +15,19 @@ export default {
   name: 'mdc-card-media',
   props: {
     src: String,
-    square: Boolean
+    square: Boolean,
   },
   computed: {
     styles() {
       var styles = {
-        backgroundImage: `url(${this.src})`
-      }
+        backgroundImage: `url(${this.src})`,
+      };
 
-      return styles
+      return styles;
     },
     classes() {
-      return this.square ? 'mdc-card__media--square' : 'mdc-card__media--16-9'
-    }
-  }
-}
+      return this.square ? 'mdc-card__media--square' : 'mdc-card__media--16-9';
+    },
+  },
+};
 </script>

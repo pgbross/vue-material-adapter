@@ -68,9 +68,19 @@ The distribution comes in two flavors:
 ```html
 <head>
   <!-- import reset and material stylesheets -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" type="text/css">
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/icon?family=Material+Icons"
+  />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+    type="text/css"
+  />
 
   <!-- import vue and then vue-mdc-adapter -->
   <script src="https://unpkg.com/vue"></script>
@@ -78,7 +88,8 @@ The distribution comes in two flavors:
 </head>
 <body>
   <!-- vue mdc markup -->
-<body>
+  <body></body>
+</body>
 ```
 
 > You may want to use the split distribution and freeze the version used:
@@ -86,12 +97,26 @@ The distribution comes in two flavors:
 ```html
 <head>
   <!-- import reset and material stylesheets -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" type="text/css">
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/icon?family=Material+Icons"
+  />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+    type="text/css"
+  />
 
   <!-- import vue-mdc-adapter stylesheet -->
-  <link rel="stylesheet" href="https://unpkg.com/vue-mdc-adapter@^0.6.0/dist/vue-mdc-adapter.min.css" type="text/css">
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/vue-mdc-adapter@^0.6.0/dist/vue-mdc-adapter.min.css"
+    type="text/css"
+  />
 
   <!-- import vue and then vue-mdc-adapter -->
   <script src="https://unpkg.com/vue@^2.5.9/dist/vue.min.js"></script>
@@ -127,31 +152,43 @@ npm install vue-mdc-adapter
 <!-- index.html template -->
 <head>
   <!-- import reset material icons, fonts and vue-mdc-adapter stylesheets -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,500">
-  </head>
-  <body>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/icon?family=Material+Icons"
+  />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+  />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,500"
+  />
+</head>
+<body>
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
+</body>
 ```
 
 #### import _standalone_ plugin
 
 ```javascript
-import Vue from 'vue'
-import VueMDCAdapter from 'vue-mdc-adapter'
-Vue.use(VueMDCAdapter)
+import Vue from 'vue';
+import VueMDCAdapter from 'vue-mdc-adapter';
+Vue.use(VueMDCAdapter);
 ```
 
 #### import _a la carte_ plugins
 
 ```javascript
-import Vue from 'vue'
-import VueMDCButton from 'vue-mdc-adapter/button'
-Vue.use(VueMDCButton)
+import Vue from 'vue';
+import VueMDCButton from 'vue-mdc-adapter/button';
+Vue.use(VueMDCButton);
 ```
 
 #### import _a la carte_ SFC mixins
@@ -159,20 +196,20 @@ Vue.use(VueMDCButton)
 ```html
 <!-- my-component.vue -->
 <template>
-    <div class="my-own-component">
-        <mdc-headline>Headline</mdc-headline>
-        <mdc-title>Title <mdc-caption>Caption</mdc-caption></mdc-title>
-        <mdc-subheading >Subheading</mdc-subheading>
-        <mdc-body >Body</mdc-body>
-    </div>
+  <div class="my-own-component">
+    <mdc-headline>Headline</mdc-headline>
+    <mdc-title>Title <mdc-caption>Caption</mdc-caption></mdc-title>
+    <mdc-subheading>Subheading</mdc-subheading>
+    <mdc-body>Body</mdc-body>
+  </div>
 </template>
 
 <script>
-    import VueMDCTypography from 'vue-mdc-adapter/typography'
+  import VueMDCTypography from 'vue-mdc-adapter/typography';
 
-    export default {
-        mixins: [VueMDCTypography]
-    }
+  export default {
+    mixins: [VueMDCTypography],
+  };
 </script>
 ```
 
@@ -213,11 +250,11 @@ module.exports = {
   css: {
     loaderOptions: {
       sass: {
-        includePaths: [path.resolve(__dirname, 'node_modules')]
-      }
-    }
-  }
-}
+        includePaths: [path.resolve(__dirname, 'node_modules')],
+      },
+    },
+  },
+};
 ```
 
 import styles

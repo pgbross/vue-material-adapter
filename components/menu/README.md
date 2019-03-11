@@ -62,14 +62,14 @@ var vm = new Vue({
 
 ### Methods
 
-* `show({focusIndex: number} = {}) => void`  
+- `show({focusIndex: number} = {}) => void`  
   Shows the menu. Takes an options object containing a `focusIndex` property that
   specifies the index of the menu item to be focused.
   If the options object or `focusIndex` is omitted, no menu item will be focused.
 
-* `hide() => void`  
+- `hide() => void`  
   Closes the menu.
 
 ### Reference
 
-* <https://material.io/components/web/catalog/menus>
+- <https://material.io/components/web/catalog/menus>

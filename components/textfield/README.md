@@ -10,15 +10,19 @@
 ```javascript
 var vm = new Vue({
   data: {
-    text: ""
-  }
-})
+    text: '',
+  },
+});
 ```
 
 ### Help text
 
 ```html
-<mdc-textfield v-model="text" label="Hint text"  helptext="Help text...">
+<mdc-textfield
+  v-model="text"
+  label="Hint text"
+  helptext="Help text..."
+></mdc-textfield>
 ```
 
 ### Multiline
@@ -28,6 +32,7 @@ var vm = new Vue({
 ```
 
 ### Full width
+
 ```html
 <mdc-textfield v-model="text" fullwidth label="Hint text" />
 <mdc-textfield v-model="text" fullwidth multiline rows="10" label="Hint text" />
@@ -36,20 +41,26 @@ var vm = new Vue({
 ### box and outline style
 
 ```html
-<mdc-textfield v-model="text" label="Hint text" box/>
-<mdc-textfield v-model="text" label="Hint text" outline/>
+<mdc-textfield v-model="text" label="Hint text" box />
+<mdc-textfield v-model="text" label="Hint text" outline />
 ```
 
-> use props to set  trailing  or leading icon
+> use props to set trailing or leading icon
 
 ```html
-<mdc-textfield v-model="text" label="Hint text" box leading-icon="event"/>
-<mdc-textfield v-model="text" label="Hint text" outline trailing-icon="event"/>
+<mdc-textfield v-model="text" label="Hint text" box leading-icon="event" />
+<mdc-textfield v-model="text" label="Hint text" outline trailing-icon="event" />
 ```
 
 > custom icon
+
 ```html
-<mdc-textfield v-model="text" label="Hint text" box :leading-icon="{className: 'fa fa-font-awesome'}" />
+<mdc-textfield
+  v-model="text"
+  label="Hint text"
+  box
+  :leading-icon="{className: 'fa fa-font-awesome'}"
+/>
 ```
 
 ```html
@@ -63,11 +74,17 @@ var vm = new Vue({
 - Native validation: use `type`, `required`, `minlength` and `maxlength` properties
 
 ```html
-<mdc-textfield type="password" label="Password"
-  required minlength=8 maxlength=10
+<mdc-textfield
+  type="password"
+  label="Password"
+  required
+  minlength="8"
+  maxlength="10"
   helptext="passord must be 8 to 10 characters"
-  helptext-persistent helptext-validation
-  v-model="password" />
+  helptext-persistent
+  helptext-validation
+  v-model="password"
+/>
 ```
 
 - Custom Validation: use `:valid` property:
@@ -76,8 +93,10 @@ var vm = new Vue({
 <mdc-textfield
   :valid="isValid"
   helptext="custom check"
-  helptext-persistent helptext-validation
-  v-model="value" />
+  helptext-persistent
+  helptext-validation
+  v-model="value"
+/>
 ```
 
 ```javascript
@@ -118,12 +137,12 @@ var vm = new Vue({
 | `multiline`           | Boolean                  |         | whether the textfield is multiline                   |
 | `rows`                | [Number, String]         | 8       | multiline: number of rows                            |
 | `cols`                | [Number, String]         | 40      | multiline: number of columns                         |
-| `trailing-icon`       | [String, Array, Object ] |         | trailing icon _*_                                    |
-| `leading-icon`        | [String, Array, Object ] |         | leading icon _*_                                     |
+| `trailing-icon`       | [String, Array, Object ] |         | trailing icon _\*_                                   |
+| `leading-icon`        | [String, Array, Object ] |         | leading icon _\*_                                    |
 
 > other input attributes (`name`, `readonly`, ... ) are being passed down to the rendered input element.
 
-> (*) icon prop usage: use `String` for material icons, `Array` to specify icon classList,  `{className: String, textContent: String}` for custom class and/or content, or use `trailing-icon` or `leading-icon` slots for  custom icon markup (svg, ...).
+> (\*) icon prop usage: use `String` for material icons, `Array` to specify icon classList, `{className: String, textContent: String}` for custom class and/or content, or use `trailing-icon` or `leading-icon` slots for custom icon markup (svg, ...).
 
 ### events
 
@@ -137,10 +156,12 @@ var vm = new Vue({
 > Other bound listeners are being passsed down to the rendered input element
 
 ```html
-<mdc-textfield v-model="text" label="Hint text" 
-  @keypress.enter="handleEnterKey"/>
+<mdc-textfield
+  v-model="text"
+  label="Hint text"
+  @keypress.enter="handleEnterKey"
+/>
 ```
-
 
 ### methods
 
@@ -150,4 +171,5 @@ var vm = new Vue({
 | `blur()`  | -    | blur the input element  |
 
 ### Reference
+
 - <https://material.io/components/web/catalog/input-controls/text-fields>

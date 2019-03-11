@@ -13,10 +13,10 @@
 var vm = new Vue({
   data() {
     return {
-      selected: ''
-    }
-  }
-})
+      selected: '',
+    };
+  },
+});
 ```
 
 ### mdc-select
@@ -39,7 +39,7 @@ var vm = new Vue({
     <option value="steak">Steak</option>
     <option value="hamburger">Hamburger</option>
   </optgroup>
-    <optgroup label="Vegetables">
+  <optgroup label="Vegetables">
     <option value="beet">Beet</option>
     <option value="carrot">Carrot</option>
   </optgroup>

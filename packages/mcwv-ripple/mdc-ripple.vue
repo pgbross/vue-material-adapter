@@ -10,14 +10,14 @@
 </template>
 
 <script>
-import { CustomElementMixin } from '@mcwv/base'
-import { RippleMixin } from './mdc-ripple-base'
+import { CustomElementMixin } from '@mcwv/base';
+import { RippleMixin } from './mdc-ripple-base';
 
 export default {
   name: 'mdc-ripple',
   mixins: [CustomElementMixin, RippleMixin],
   props: {
-    tag: String
-  }
-}
+    tag: String,
+  },
+};
 </script>

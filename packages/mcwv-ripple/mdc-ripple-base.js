@@ -1,6 +1,6 @@
-import { MDCRippleFoundation } from '@material/ripple/index'
-import { supportsCssVariables, applyPassive } from '@material/ripple/util'
-import { matches } from '@material/dom/ponyfill'
+import { MDCRippleFoundation } from '@material/ripple/index';
+import { supportsCssVariables, applyPassive } from '@material/ripple/util';
+import { matches } from '@material/dom/ponyfill';
 
 export class RippleBase extends MDCRippleFoundation {
   static get MATCHES() {
@@ -8,11 +8,11 @@ export class RippleBase extends MDCRippleFoundation {
     return (
       RippleBase._matches ||
       (RippleBase._matches = matches(HTMLElement.prototype))
-    )
+    );
   }
 
   static isSurfaceActive(ref) {
-    return ref[RippleBase.MATCHES](':active')
+    return ref[RippleBase.MATCHES](':active');
   }
 
   constructor(vm, options) {
@@ -20,61 +20,61 @@ export class RippleBase extends MDCRippleFoundation {
       Object.assign(
         {
           browserSupportsCssVars: () => {
-            return supportsCssVariables(window)
+            return supportsCssVariables(window);
           },
           isUnbounded: () => {
-            return false
+            return false;
           },
           isSurfaceActive: () => {
-            return vm.$el[RippleBase.MATCHES](':active')
+            return vm.$el[RippleBase.MATCHES](':active');
           },
           isSurfaceDisabled: () => {
-            return vm.disabled
+            return vm.disabled;
           },
           addClass(className) {
-            vm.$set(vm.classes, className, true)
+            vm.$set(vm.classes, className, true);
           },
           removeClass(className) {
-            vm.$delete(vm.classes, className)
+            vm.$delete(vm.classes, className);
           },
           containsEventTarget: target => vm.$el.contains(target),
           registerInteractionHandler: (evt, handler) => {
-            vm.$el.addEventListener(evt, handler, applyPassive())
+            vm.$el.addEventListener(evt, handler, applyPassive());
           },
           deregisterInteractionHandler: (evt, handler) => {
-            vm.$el.removeEventListener(evt, handler, applyPassive())
+            vm.$el.removeEventListener(evt, handler, applyPassive());
           },
           registerDocumentInteractionHandler: (evtType, handler) =>
             document.documentElement.addEventListener(
               evtType,
               handler,
-              applyPassive()
+              applyPassive(),
             ),
           deregisterDocumentInteractionHandler: (evtType, handler) =>
             document.documentElement.removeEventListener(
               evtType,
               handler,
-              applyPassive()
+              applyPassive(),
             ),
           registerResizeHandler: handler => {
-            return window.addEventListener('resize', handler)
+            return window.addEventListener('resize', handler);
           },
           deregisterResizeHandler: handler => {
-            return window.removeEventListener('resize', handler)
+            return window.removeEventListener('resize', handler);
           },
           updateCssVariable: (varName, value) => {
-            vm.$set(vm.styles, varName, value)
+            vm.$set(vm.styles, varName, value);
           },
           computeBoundingRect: () => {
-            return vm.$el.getBoundingClientRect()
+            return vm.$el.getBoundingClientRect();
           },
           getWindowPageOffset: () => {
-            return { x: window.pageXOffset, y: window.pageYOffset }
-          }
+            return { x: window.pageXOffset, y: window.pageYOffset };
+          },
         },
-        options
-      )
-    )
+        options,
+      ),
+    );
   }
 }
 
@@ -82,14 +82,14 @@ export const RippleMixin = {
   data() {
     return {
       classes: {},
-      styles: {}
-    }
+      styles: {},
+    };
   },
   mounted() {
-    this.ripple = new RippleBase(this)
-    this.ripple.init()
+    this.ripple = new RippleBase(this);
+    this.ripple.init();
   },
   beforeDestroy() {
-    this.ripple.destroy()
-  }
-}
+    this.ripple.destroy();
+  },
+};

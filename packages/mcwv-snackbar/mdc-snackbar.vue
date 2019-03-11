@@ -38,15 +38,15 @@
 </template>
 
 <script>
-import MDCSnackbarFoundation from '@material/snackbar/foundation'
-import { getCorrectEventName } from '@material/animation/index'
-import * as ponyfill from '@material/dom/ponyfill'
+import MDCSnackbarFoundation from '@material/snackbar/foundation';
+import { getCorrectEventName } from '@material/animation/index';
+import * as ponyfill from '@material/dom/ponyfill';
 
 export default {
   name: 'mdc-snackbar',
   model: {
     prop: 'open',
-    event: 'change'
+    event: 'change',
   },
   props: {
     open: Boolean,
@@ -56,27 +56,27 @@ export default {
     actionText: String,
     timeoutMs: [String, Number],
 
-    dismissAction: { type: [String, Boolean], default: true }
+    dismissAction: { type: [String, Boolean], default: true },
   },
   data() {
     return {
       classes: {
         'mdc-snackbar--leading': this.leading,
 
-        'mdc-snackbar--stacked': this.stacked
+        'mdc-snackbar--stacked': this.stacked,
       },
       hidden: false,
       actionHidden: false,
-      showLabelText: true
-    }
+      showLabelText: true,
+    };
   },
   watch: {
     open: 'onOpen_',
 
-    timeoutMs: 'onTimeoutMs_'
+    timeoutMs: 'onTimeoutMs_',
   },
   mounted() {
-    window.addEventListener('keydown', this.handleKeydownEvent)
+    window.addEventListener('keydown', this.handleKeydownEvent);
 
     this.foundation = new MDCSnackbarFoundation({
       addClass: className => this.$set(this.classes, className, true),
@@ -85,88 +85,91 @@ export default {
       notifyOpening: () =>
         this.$emit(MDCSnackbarFoundation.strings.OPENING_EVENT, {}),
       notifyOpened: () => {
-        this.$emit(MDCSnackbarFoundation.strings.OPENED_EVENT, {})
-        this.$emit('change', true)
-        this.$emit('show', {})
+        this.$emit(MDCSnackbarFoundation.strings.OPENED_EVENT, {});
+        this.$emit('change', true);
+        this.$emit('show', {});
       },
       notifyClosing: reason =>
         this.$emit(
           MDCSnackbarFoundation.strings.CLOSING_EVENT,
-          reason ? { reason } : {}
+          reason ? { reason } : {},
         ),
       notifyClosed: reason => {
         this.$emit(
           MDCSnackbarFoundation.strings.CLOSED_EVENT,
-          reason ? { reason } : {}
-        )
-        this.$emit('change', false)
-        this.$emit('hide')
-      }
-    })
-    this.foundation.init()
+          reason ? { reason } : {},
+        );
+        this.$emit('change', false);
+        this.$emit('hide');
+      },
+    });
+    this.foundation.init();
 
     if (this.timeoutMs !== void 0) {
-      this.foundation.setTimeoutMs(this.timeoutMs)
+      this.foundation.setTimeoutMs(this.timeoutMs);
     }
   },
   computed: {
     showDismissAction() {
       return typeof this.dismissAction === 'string'
         ? this.dismissAction != 'false'
-        : this.dismissAction
-    }
+        : this.dismissAction;
+    },
   },
   beforeDestroy() {
-    window.removeEventListener('keydown', this.handleKeydownEvent)
-    this.foundation.destroy()
+    window.removeEventListener('keydown', this.handleKeydownEvent);
+    this.foundation.destroy();
   },
   methods: {
     onTimeoutMs_(value) {
       if (value !== void 0) {
-        this.foundation.setTimeoutMs(value)
+        this.foundation.setTimeoutMs(value);
       }
     },
     onOpen_(value) {
       if (value) {
-        this.foundation.open()
+        this.foundation.open();
       } else {
-        this.foundation.close()
+        this.foundation.close();
       }
     },
     surfaceClickHandler(evt) {
       if (this.isActionButton_(evt.target)) {
-        this.foundation.handleActionButtonClick(evt)
+        this.foundation.handleActionButtonClick(evt);
       } else if (this.isActionIcon_(evt.target)) {
-        this.foundation.handleActionIconClick(evt)
+        this.foundation.handleActionIconClick(evt);
       }
     },
 
     handleKeydownEvent(evt) {
-      this.foundation.handleKeyDown(evt)
+      this.foundation.handleKeyDown(evt);
     },
 
     isActionButton_(target) {
       return Boolean(
-        ponyfill.closest(target, MDCSnackbarFoundation.strings.ACTION_SELECTOR)
-      )
+        ponyfill.closest(target, MDCSnackbarFoundation.strings.ACTION_SELECTOR),
+      );
     },
 
     isActionIcon_(target) {
       return Boolean(
-        ponyfill.closest(target, MDCSnackbarFoundation.strings.DISMISS_SELECTOR)
-      )
+        ponyfill.closest(
+          target,
+          MDCSnackbarFoundation.strings.DISMISS_SELECTOR,
+        ),
+      );
     },
 
     announce(ariaEl, labelEl = ariaEl) {
-      const priority = ariaEl.getAttribute('aria-live')
+      const priority = ariaEl.getAttribute('aria-live');
 
-      const text = this.labelText
+      const text = this.labelText;
       if (!text) {
-        return
+        return;
       }
 
       // Temporarily disable `aria-live` to prevent JAWS+Firefox from announcing the message twice.
-      ariaEl.setAttribute('aria-live', 'off')
+      ariaEl.setAttribute('aria-live', 'off');
 
       // Temporarily clear `textContent` to force a DOM mutation event that will be detected by screen readers.
       // `aria-live` elements are only announced when the element's `textContent` *changes*, so snackbars
@@ -195,7 +198,7 @@ export default {
       //       - Firefox 60 (ESR)
       //       - IE 11
       //   * ChromeVox 53
-      this.showLabelText = false
+      this.showLabelText = false;
 
       // Prevent visual jank by temporarily displaying the label text in the ::before pseudo-element.
       // CSS generated content is normally announced by screen readers
@@ -203,22 +206,22 @@ export default {
       // however, `aria-live` is turned off, so this DOM update will be ignored by screen readers.
       labelEl.setAttribute(
         MDCSnackbarFoundation.strings.ARIA_LIVE_LABEL_TEXT_ATTR,
-        this.labelText
-      )
+        this.labelText,
+      );
 
       setTimeout(() => {
         // Allow screen readers to announce changes to the DOM again.
-        ariaEl.setAttribute('aria-live', priority)
+        ariaEl.setAttribute('aria-live', priority);
 
         // Remove the message from the ::before pseudo-element.
         labelEl.removeAttribute(
-          MDCSnackbarFoundation.strings.ARIA_LIVE_LABEL_TEXT_ATTR
-        )
+          MDCSnackbarFoundation.strings.ARIA_LIVE_LABEL_TEXT_ATTR,
+        );
 
         // Restore the original label text, which will be announced by screen readers.
-        this.showLabelText = true
-      }, MDCSnackbarFoundation.numbers.ARIA_LIVE_DELAY_MS)
-    }
-  }
-}
+        this.showLabelText = true;
+      }, MDCSnackbarFoundation.numbers.ARIA_LIVE_DELAY_MS);
+    },
+  },
+};
 </script>

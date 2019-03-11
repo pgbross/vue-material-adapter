@@ -19,7 +19,7 @@ By default the drawer component is responsive and will switch from temporary to 
 <mdc-layout-app>
   <mdc-toolbar slot="toolbar" fixed>
     <mdc-toolbar-row>
-      <mdc-toolbar-section align-start >
+      <mdc-toolbar-section align-start>
         <mdc-toolbar-menu-icon event="toggle-drawer"></mdc-toolbar-menu-icon>
         <mdc-toolbar-title>Drawer Example</mdc-toolbar-title>
       </mdc-toolbar-section>
@@ -27,13 +27,12 @@ By default the drawer component is responsive and will switch from temporary to 
   </mdc-toolbar>
   <mdc-drawer slot="drawer" toggle-on="toggle-drawer">
     <mdc-drawer-list>
-        <mdc-drawer-item start-icon="inbox">Inbox</mdc-drawer-item>
-        <mdc-drawer-item start-icon="send">Sent Mail</mdc-drawer-item>
-        <mdc-drawer-item start-icon="drafts">Drafts</mdc-drawer-item>
+      <mdc-drawer-item start-icon="inbox">Inbox</mdc-drawer-item>
+      <mdc-drawer-item start-icon="send">Sent Mail</mdc-drawer-item>
+      <mdc-drawer-item start-icon="drafts">Drafts</mdc-drawer-item>
     </mdc-drawer-list>
   </mdc-drawer>
-  <main class="content" >
-  </main>
+  <main class="content"></main>
 </mdc-layout-app>
 ```
 
@@ -48,11 +47,11 @@ By default the drawer component is responsive and will switch from temporary to 
 | `toolbar-spacer`   | Boolean | undefined | add a toolbar spacer                               |
 | `open`             | Boolean | false     | optional v-model when true opens drawer            |
 | `toggle-on`        | String  | undefined | optional toggle event to listen on                 |
-| `toggle-on-source` | Object  | vm.$root  | optional toggle event source, defaults to root bus |
+| `toggle-on-source` | Object  | vm.\$root | optional toggle event source, defaults to root bus |
 | `open-on`          | String  | undefined | optional open event to listen on                   |
-| `open-on-source`   | Object  | vm.$root  | optional open event source, defaults to root bus   |
+| `open-on-source`   | Object  | vm.\$root | optional open event source, defaults to root bus   |
 | `close-on`         | String  | undefined | optional close event to listen on                  |
-| `close-on-source`  | Object  | vm.$root  | optional close event source, defaults to root bus  |
+| `close-on-source`  | Object  | vm.\$root | optional close event source, defaults to root bus  |
 
 > (\*) drawer is responsive if `drawer-type` undefined: temporary on mobile breakpoint and persistent otherwise.
 
@@ -80,7 +79,7 @@ By default the drawer component is responsive and will switch from temporary to 
 | `start-icon`         | String         | undefined                | material start icon                                                    |
 | `temporary-close`    | Boolean        | true                     | whether temporary drawer closes on click                               |
 | `event`              | String         | undefined                | optional event to emit on click                                        |
-| `event-target`       | Object         | vm.$root                 | optional event target, defaults to root bus                            |
+| `event-target`       | Object         | vm.\$root                | optional event target, defaults to root bus                            |
 | `event-args`         | Array          | []                       | optional event args                                                    |
 | `to`                 | String, Object | undefined                | router-link property _(\*)_                                            |
 | `replace`            | Boolean        | false                    | router-link property _(\*)_                                            |
@@ -96,17 +95,17 @@ By default the drawer component is responsive and will switch from temporary to 
 
 ### Item usage
 
-* A simple link
+- A simple link
 
 ```html
-  <mdc-drawer-item href="#">Inbox</mdc-drawer-item>
+<mdc-drawer-item href="#">Inbox</mdc-drawer-item>
 ```
 
-* With vue-router
+- With vue-router
 
 ```html
-  <mdc-drawer-item  to="/path">Inbox</mdc-drawer-item>
-  <mdc-drawer-item  :to='folder' append >Inbox</mdc-drawer-item>
+<mdc-drawer-item to="/path">Inbox</mdc-drawer-item>
+<mdc-drawer-item :to="folder" append>Inbox</mdc-drawer-item>
 ```
 
 > Customize the active links style with vue-router active or exact-active classes:
@@ -117,16 +116,16 @@ By default the drawer component is responsive and will switch from temporary to 
 }
 ```
 
-* Trigger an event
+- Trigger an event
 
 ```html
-  <mdc-drawer-item event='my-event'>Inbox</mdc-drawer-item>
+<mdc-drawer-item event="my-event">Inbox</mdc-drawer-item>
 ```
 
-* Click handler
+- Click handler
 
 ```html
-  <mdc-drawer-item @click='handler'>Inbox</mdc-drawer-item>
+<mdc-drawer-item @click="handler">Inbox</mdc-drawer-item>
 ```
 
 #### Start Detail
@@ -149,11 +148,11 @@ By default the drawer component is responsive and will switch from temporary to 
 
 ```html
 <mdc-drawer-item>
-  <mdc-icon slot='start-detail' class="fa fa-home"></mdc-icon>
+  <mdc-icon slot="start-detail" class="fa fa-home"></mdc-icon>
   {{ Text }}
 </mdc-drawer-item>
 ```
 
 ### Reference
 
-* <https://material.io/components/web/catalog/drawers>
+- <https://material.io/components/web/catalog/drawers>

@@ -18,22 +18,22 @@ export default {
   data() {
     return {
       open: false,
-      n: 0
-    }
+      n: 0,
+    };
   },
   methods: {
     doalert() {
-      alert('clicked')
+      alert('clicked');
     },
     showSnackbar() {
-      this.open = !this.open
-      this.n += 1
+      this.open = !this.open;
+      this.n += 1;
       // this.snack = {
       //   message: `This is a snackbar: ${n++}`,
       //   actionText: 'action',
       //   actionHandler() {}
       // }
-    }
-  }
-}
+    },
+  },
+};
 </script>

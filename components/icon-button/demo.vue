@@ -29,7 +29,7 @@
 <script>
 export default {
   data() {
-    return { isOn: false }
-  }
-}
+    return { isOn: false };
+  },
+};
 </script>

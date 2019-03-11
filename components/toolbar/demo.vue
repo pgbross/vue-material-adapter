@@ -1,17 +1,14 @@
 <template>
   <div class="mdc-demo--appbar">
     <section class="mdc-demo">
-      <mdc-toolbar
-        slot="toolbar">
+      <mdc-toolbar slot="toolbar">
         <mdc-toolbar-row>
-          <mdc-toolbar-section align-start >
-            <mdc-toolbar-menu-icon/>
+          <mdc-toolbar-section align-start>
+            <mdc-toolbar-menu-icon />
             <mdc-toolbar-title>Title</mdc-toolbar-title>
           </mdc-toolbar-section>
           <mdc-toolbar-section align-end>
-            <mdc-toolbar-icon
-              event="show-help"
-              icon="help"/>
+            <mdc-toolbar-icon event="show-help" icon="help" />
           </mdc-toolbar-section>
         </mdc-toolbar-row>
       </mdc-toolbar>
@@ -22,9 +19,9 @@
 <script>
 export default {
   data() {
-    return { buttonText: '' }
-  }
-}
+    return { buttonText: '' };
+  },
+};
 </script>
 
 <style>

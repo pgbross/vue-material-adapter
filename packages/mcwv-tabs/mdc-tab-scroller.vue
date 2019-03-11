@@ -24,21 +24,21 @@
 </template>
 
 <script>
-import MDCTabScrollerFoundation from '@material/tab-scroller/foundation'
-import * as util from '@material/tab-scroller/util'
-import { matches } from '@material/dom/ponyfill'
+import MDCTabScrollerFoundation from '@material/tab-scroller/foundation';
+import * as util from '@material/tab-scroller/util';
+import { matches } from '@material/dom/ponyfill';
 
 export default {
   name: 'mdc-tab-scroller',
   data() {
-    return { classes: {}, areaClasses: {}, areaStyles: {}, contentStyles: {} }
+    return { classes: {}, areaClasses: {}, areaStyles: {}, contentStyles: {} };
   },
 
   mounted() {
     this.foundation = new MDCTabScrollerFoundation({
       eventTargetMatchesSelector: (evtTarget, selector) => {
-        const MATCHES = matches(HTMLElement.prototype)
-        return evtTarget[MATCHES](selector)
+        const MATCHES = matches(HTMLElement.prototype);
+        return evtTarget[MATCHES](selector);
       },
       addClass: className => this.$set(this.classes, className, true),
 
@@ -61,32 +61,32 @@ export default {
       computeScrollContentClientRect: () =>
         this.$refs.content.getBoundingClientRect(),
       computeHorizontalScrollbarHeight: () =>
-        util.computeHorizontalScrollbarHeight(document)
-    })
-    this.foundation.init()
+        util.computeHorizontalScrollbarHeight(document),
+    });
+    this.foundation.init();
   },
   beforeDestroy() {
-    this.foundation.destroy()
+    this.foundation.destroy();
   },
   methods: {
     handleTransitionEnd(evt) {
-      this.foundation.handleTransitionEnd(evt)
+      this.foundation.handleTransitionEnd(evt);
     },
     handleInteraction(evt) {
-      this.foundation.handleInteraction(evt)
+      this.foundation.handleInteraction(evt);
     },
     getScrollPosition() {
-      return this.foundation.getScrollPosition()
+      return this.foundation.getScrollPosition();
     },
     getScrollContentWidth() {
-      return this.$refs.content.offsetWidth
+      return this.$refs.content.offsetWidth;
     },
     incrementScroll(scrollXIncrement) {
-      this.foundation.incrementScroll(scrollXIncrement)
+      this.foundation.incrementScroll(scrollXIncrement);
     },
     scrollTo(scrollX) {
-      this.foundation.scrollTo(scrollX)
-    }
-  }
-}
+      this.foundation.scrollTo(scrollX);
+    },
+  },
+};
 </script>

@@ -1,18 +1,18 @@
 export function mdcTypoMixin(
   defaultTag,
   defaultClassModifier,
-  name = `mdc-${defaultTag}`
+  name = `mdc-${defaultTag}`,
 ) {
   return {
     props: {
       tag: {
         type: String,
-        default: defaultTag
+        default: defaultTag,
       },
       classModifier: {
         type: String,
-        default: defaultClassModifier
-      }
+        default: defaultClassModifier,
+      },
     },
     render(createElement) {
       return createElement(
@@ -21,13 +21,13 @@ export function mdcTypoMixin(
           class: {
             [name]: true,
             'mdc-typography': true,
-            [`mdc-typography--${this.classModifier}`]: true
+            [`mdc-typography--${this.classModifier}`]: true,
           },
           attrs: this.$attrs,
-          on: this.$listeners
+          on: this.$listeners,
         },
-        this.$slots.default
-      )
-    }
-  }
+        this.$slots.default,
+      );
+    },
+  };
 }

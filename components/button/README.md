@@ -31,7 +31,7 @@ var vm = new Vue({
 | `outlined`           | Boolean        |                          | a contained button that is flush with the surface and has a visible border(\*) |
 | `dense`              | String         |                          | compresses the button text to make it slightly smaller                         |
 | `event`              | String         | optional                 | optional event to emit on click                                                |
-| `event-target`       | Object         | vm.$root                 | optional event target, defaults to root bus                                    |
+| `event-target`       | Object         | vm.\$root                | optional event target, defaults to root bus                                    |
 | `event-args`         | Array          | []                       | optional event args                                                            |
 | `href`               | String         |                          | link's href, renders anchor (see notes below)                                  |
 | `to`                 | String, Object | undefined                | router-link property _(\*)_                                                    |
@@ -46,8 +46,7 @@ var vm = new Vue({
 ### text buttons
 
 ```html
-<mdc-button>Baseline</mdc-button>
-<mdc-button dense>Dense</mdc-button>
+<mdc-button>Baseline</mdc-button> <mdc-button dense>Dense</mdc-button>
 ```
 
 ### Raised Button
@@ -67,14 +66,21 @@ var vm = new Vue({
 ### Icon buttons
 
 ```html
-<mdc-button ><i class="material-icons mdc-button__icon">favorite</i>like</mdc-button>
+<mdc-button
+  ><i class="material-icons mdc-button__icon">favorite</i>like</mdc-button
+>
 ```
 
 or an SVG button
 
 ```html
-<mdc-button >  <svg class="mdc-button__icon" xmlns="http://www.w3.org/2000/svg" viewBox="...">
-  ...
+<mdc-button>
+  <svg
+    class="mdc-button__icon"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="..."
+  >
+    ...
   </svg>
   like
 </mdc-button>
@@ -118,14 +124,14 @@ You might want to keep button behaviour and do the navigation programatically:
 ### Triggering events
 
 ```html
- <mdc-button event='my-event'>Do Something</mdc-button>
+<mdc-button event="my-event">Do Something</mdc-button>
 ```
 
 ```javascript
 // register event from some component context
-this.$root.$on('my-event', () => doSomething())
+this.$root.$on('my-event', () => doSomething());
 ```
 
 ### Reference
 
-* <https://material.io/guidelines/components/buttons.html>
+- <https://material.io/guidelines/components/buttons.html>

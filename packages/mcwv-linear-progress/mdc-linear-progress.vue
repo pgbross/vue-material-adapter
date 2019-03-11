@@ -1,33 +1,33 @@
 <template>
-  <div 
-    :class="classes" 
-    :style="styles" 
-    role="progressbar" 
-    class="mdc-linear-progress">
-    <div class="mdc-linear-progress__buffering-dots"/>
-    <div 
-      ref="buffer" 
-      class="mdc-linear-progress__buffer"/>
-    <div 
-      ref="primary" 
-      class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">
-      <span class="mdc-linear-progress__bar-inner"/>
+  <div
+    :class="classes"
+    :style="styles"
+    role="progressbar"
+    class="mdc-linear-progress"
+  >
+    <div class="mdc-linear-progress__buffering-dots" />
+    <div ref="buffer" class="mdc-linear-progress__buffer" />
+    <div
+      ref="primary"
+      class="mdc-linear-progress__bar mdc-linear-progress__primary-bar"
+    >
+      <span class="mdc-linear-progress__bar-inner" />
     </div>
     <div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
-      <span class="mdc-linear-progress__bar-inner"/>
+      <span class="mdc-linear-progress__bar-inner" />
     </div>
-  </div>  
+  </div>
 </template>
 
 <script>
-import MDCLinearProgressFoundation from '@material/linear-progress/foundation'
+import MDCLinearProgressFoundation from '@material/linear-progress/foundation';
 
 const ProgressPropType = {
   type: [Number, String],
   validator(value) {
-    return Number(value) >= 0 && Number(value) <= 1
-  }
-}
+    return Number(value) >= 0 && Number(value) <= 1;
+  },
+};
 
 export default {
   name: 'mdc-linear-progress',
@@ -37,70 +37,70 @@ export default {
     reverse: Boolean,
     accent: Boolean,
     progress: ProgressPropType,
-    buffer: ProgressPropType
+    buffer: ProgressPropType,
   },
   data() {
     return {
       classes: { 'mdc-linear-progress--accent': this.accent },
-      styles: {}
-    }
+      styles: {},
+    };
   },
   watch: {
     open() {
       if (this.open) {
-        this.foundation.open()
+        this.foundation.open();
       } else {
-        this.foundation.close()
+        this.foundation.close();
       }
     },
     progress() {
-      this.foundation.setProgress(Number(this.progress))
+      this.foundation.setProgress(Number(this.progress));
     },
     buffer() {
-      this.foundation.setBuffer(Number(this.buffer))
+      this.foundation.setBuffer(Number(this.buffer));
     },
     indeterminate() {
-      this.foundation.setDeterminate(!this.indeterminate)
+      this.foundation.setDeterminate(!this.indeterminate);
     },
     reverse() {
-      this.foundation.setReverse(this.reverse)
-    }
+      this.foundation.setReverse(this.reverse);
+    },
   },
   mounted() {
     this.foundation = new MDCLinearProgressFoundation({
       addClass: className => {
-        this.$set(this.classes, className, true)
+        this.$set(this.classes, className, true);
       },
       getPrimaryBar: () => /* el: Element */ {
-        return this.$refs.primary
+        return this.$refs.primary;
       },
       getBuffer: () => /* el: Element */ {
-        return this.$refs.buffer
+        return this.$refs.buffer;
       },
       hasClass: className => {
-        this.$el.classList.contains(className)
+        this.$el.classList.contains(className);
       },
       removeClass: className => {
-        this.$delete(this.classes, className)
+        this.$delete(this.classes, className);
       },
       setStyle: (el, styleProperty, value) => {
-        el.style[styleProperty] = value
-      }
-    })
-    this.foundation.init()
+        el.style[styleProperty] = value;
+      },
+    });
+    this.foundation.init();
 
-    this.foundation.setReverse(this.reverse)
-    this.foundation.setProgress(Number(this.progress))
-    this.foundation.setBuffer(Number(this.buffer))
-    this.foundation.setDeterminate(!this.indeterminate)
+    this.foundation.setReverse(this.reverse);
+    this.foundation.setProgress(Number(this.progress));
+    this.foundation.setBuffer(Number(this.buffer));
+    this.foundation.setDeterminate(!this.indeterminate);
     if (this.open) {
-      this.foundation.open()
+      this.foundation.open();
     } else {
-      this.foundation.close()
+      this.foundation.close();
     }
   },
   beforeDestroy() {
-    this.foundation.destroy()
-  }
-}
+    this.foundation.destroy();
+  },
+};
 </script>

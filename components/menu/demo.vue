@@ -17,14 +17,14 @@
 export default {
   data() {
     return {
-      open: false
-    }
+      open: false,
+    };
   },
 
   methods: {
     onSelect(data) {
-      console.dir(data)
-    }
-  }
-}
+      console.dir(data);
+    },
+  },
+};
 </script>

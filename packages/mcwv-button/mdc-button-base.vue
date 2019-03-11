@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import { DispatchEventMixin, CustomButtonMixin } from '@mcwv/base'
-import { RippleMixin } from '@mcwv/ripple'
+import { DispatchEventMixin, CustomButtonMixin } from '@mcwv/base';
+import { RippleMixin } from '@mcwv/ripple';
 
 export default {
   name: 'mdc-button-base',
@@ -22,8 +22,8 @@ export default {
   data() {
     return {
       classes: {},
-      styles: {}
-    }
-  }
-}
+      styles: {},
+    };
+  },
+};
 </script>
