@@ -2,14 +2,14 @@ import './styles';
 import './polyfill.js';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import VueAnalytics from 'vue-analytics';
-import VueMDCAdapter from 'vue-material-adapter';
+// import VueAnalytics from 'vue-analytics';
+import VueMaterialAdapter from 'vue-material-adapter';
 import index from './index.vue';
 import routes from './routes.js';
 
 Vue.config.productionTip = true;
 Vue.use(VueRouter);
-Vue.use(VueMDCAdapter);
+Vue.use(VueMaterialAdapter);
 const router = new VueRouter({
   routes,
   scrollBehavior() {
@@ -17,10 +17,10 @@ const router = new VueRouter({
   },
 });
 
-Vue.use(VueAnalytics, {
-  id: 'UA-110490450-1',
-  router,
-});
+// Vue.use(VueAnalytics, {
+//   id: 'UA-110490450-1',
+//   router,
+// });
 
 // mount app
 const App = Vue.extend({
