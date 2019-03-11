@@ -165,12 +165,6 @@ export default {
           element.setAttribute(attr, value);
         }
       },
-      removeAttributeForElementIndex: (index, attr) => {
-        const element = this.listElements[index];
-        if (element) {
-          element.removeAttribute(attr);
-        }
-      },
       addClassForElementIndex: (index, className) => {
         const element = this.listElements[index];
         if (element) {
