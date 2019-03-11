@@ -32,41 +32,46 @@
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config=demo/webpack.config.js --progress --inline --hot --host 0.0.0.0",
     "test": "jest --runInBand",
     "testnc": "NODE_ENV=test; jest --runInBand --no-cache",
-    "build": "run-s build:demo build:dist:**",
     "build": "webpack --progress --colors --mode production",
-    "build:demo": "cross-env NODE_ENV=production webpack",
-    "build:dist": "run-s build:dist:**",
-    "build:dist:clean": "rimraf dist",
-    "build:dist:scss": "copyfiles -u 1 \"components/**/*.scss\" dist",
-    "build:dist:lscss": "ls -R dist",
-    "build:dist:rollup": "rollup -c",
-    "lint": "run-s lint:**",
+    "build:demo": "cross-env NODE_ENV=development webpack --config=demo/webpack.config.js --progress",
     "postinstall": "lerna bootstrap",
-    "fix": "run-s fix:**",
-    "format": "prettier --write \"{components,demo}/**/*{js,json,css,scss,vue}\"",
-    "lint:es": "eslint --ext .js,.vue components demo",
-    "fix:es": "eslint --fix --ext .js,.vue components demo",
-    "lint:style": "stylelint \"components/**/*{css,.scss,.vue}\" ",
-    "fix:style": "stylelint --fix \"components/**/*{css,.scss,.vue}\" ",
-    "clean": "run-s clean:**",
-    "clean:demo": "rimraf public/*",
-    "clean:dist": "rimraf dist/*",
-    "reset:modules": "rimraf node_modules/* && npm install",
+    "format": "prettier --write \"{packages,components,demo}/**/*{js,json,css,scss,vue}\"",
+    "clean": "concurrently --raw clean:**",
+    "clean:demo": "del-cli public/*",
+    "clean:dist": "del-cli dist/*",
     "changelog": "standard-changelog -i CHANGELOG.md -k package.json -w",
-    "release": "standard-version --no-verify",
-    "ci": "run-s ci:*",
-    "ci:lint": "run-s lint:**",
-    "ci:test": "jest --runInBand --ci",
-    "ci:build": "run-s build:demo build:dist:**"
+    "release": "standard-version --no-verify"
   },
   "husky": {
     "hooks": {
-      "commit-msg": "validate-commit-msg"
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
   "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
+    "validate-commit-msg": {
+      "helpMessage": "\nNOTE: Please see angular's commit message guidelines (https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#commit) for information on how to format commit messages.\n\nAs an example, here is a valid commit message: 'docs(slider): Document slider public api'\n\nIf this commit is on a development / WIP branch, you can disable this by running `git commit --no-verify`.",
+      "scope": {
+        "allowed": [
+          "api",
+          "infrastructure",
+          "package",
+          "app",
+          "session",
+          "db",
+          "unit-test",
+          "unit-questionnaire",
+          "unit-text-only",
+          "data",
+          "ui",
+          "auth"
+        ],
+        "validate": true
+      }
     }
   },
   "dependencies": {
@@ -89,6 +94,7 @@
     "@babel/plugin-transform-object-assign": "^7.2.0",
     "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.3.4",
+    "@commitlint/config-conventional": "^7.5.0",
     "@vue/test-utils": "^1.0.0-beta.29",
     "autoprefixer": "^9.4.9",
     "babel-core": "^7.0.0-bridge.0",
@@ -97,12 +103,13 @@
     "babel-loader": "^8.0.5",
     "canvas": "^2.3.1",
     "clean-webpack-plugin": "^1.0.1",
+    "commitlint": "^7.5.2",
+    "concurrently": "^4.1.0",
     "copy-webpack-plugin": "^5.0.0",
-    "copyfiles": "^2.1.0",
     "cp-file": "^6.1.0",
     "cross-env": "^5.2.0",
     "css-loader": "^2.1.0",
-    "cz-conventional-changelog": "^2.1.0",
+    "del-cli": "^1.1.0",
     "eslint": "^5.14.1",
     "eslint-config-prettier": "^4.1.0",
     "eslint-loader": "^2.1.2",
@@ -128,27 +135,13 @@
     "postcss-loader": "^3.0.0",
     "prettier": "^1.16.4",
     "regenerator-runtime": "^0.13.1",
-    "rimraf": "^2.6.3",
-    "rollup": "^1.4.0",
-    "rollup-plugin-babel": "^4.3.2",
-    "rollup-plugin-commonjs": "^9.2.1",
-    "rollup-plugin-node-resolve": "^4.0.1",
-    "rollup-plugin-replace": "^2.1.0",
-    "rollup-plugin-sass": "^1.1.0",
-    "rollup-plugin-terser": "^4.0.4",
-    "rollup-plugin-vue": "^4.7.2",
     "sass-loader": "^7.1.0",
     "standard-changelog": "^2.0.7",
     "standard-version": "^5.0.1",
     "style-loader": "^0.23.1",
-    "stylelint": "^9.10.1",
-    "stylelint-config-recommended-scss": "^3.2.0",
-    "stylelint-processor-html": "^1.0.0",
-    "stylelint-scss": "^3.5.4",
     "terser-webpack-plugin": "^1.2.3",
     "to-slug-case": "^1.0.0",
     "url-loader": "^1.1.2",
-    "validate-commit-msg": "^2.14.0",
     "vue": "^2.6.7",
     "vue-analytics": "^5.16.2",
     "vue-eslint-parser": "^6.0.3",
