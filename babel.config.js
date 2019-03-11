@@ -3,25 +3,25 @@ var config = {
   plugins: [
     '@babel/transform-object-assign',
     '@babel/proposal-object-rest-spread',
-    '@babel/syntax-dynamic-import'
+    '@babel/syntax-dynamic-import',
   ],
   presets: [['@babel/preset-env', { modules: false }]],
   env: {
     test: {
       plugins: [
         '@babel/proposal-object-rest-spread',
-        '@babel/syntax-dynamic-import'
+        '@babel/syntax-dynamic-import',
       ],
       presets: [
         [
           '@babel/preset-env',
           {
-            targets: { node: 'current' }
-          }
-        ]
-      ]
-    }
-  }
-}
+            targets: { node: 'current' },
+          },
+        ],
+      ],
+    },
+  },
+};
 
-module.exports = config
+module.exports = config;

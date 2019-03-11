@@ -3,6 +3,6 @@ module.exports = {
   processors: ['stylelint-processor-html'],
   plugins: ['stylelint-scss'],
   rules: {
-    'no-empty-source': null
-  }
-}
+    'no-empty-source': null,
+  },
+};
