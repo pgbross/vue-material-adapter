@@ -1,5 +1,6 @@
 const path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const pkg = require('./package.json');
 const resolve = relativePath => path.resolve(__dirname, relativePath);
 const plugins = [new VueLoaderPlugin()];
@@ -81,7 +82,7 @@ module.exports = [
         },
       ],
     },
-    plugins: [...plugins],
+    plugins: [new CleanWebpackPlugin({ verbose: true }), ...plugins],
   },
 
   {
