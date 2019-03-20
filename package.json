@@ -35,7 +35,7 @@
     "build": "webpack --progress --colors --mode production",
     "build:demo": "cross-env NODE_ENV=development webpack --config=demo/webpack.config.js --progress",
     "ci": "run-s ci:*",
-    "ci:build": "run-s build build:*",
+    "ci:build": "run-s build",
     "postinstall": "lerna bootstrap",
     "format": "prettier --write \"{packages,components,demo}/**/*{js,json,css,scss,vue}\"",
     "clean": "concurrently --raw clean:**",
