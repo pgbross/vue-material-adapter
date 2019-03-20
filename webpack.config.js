@@ -61,21 +61,22 @@ module.exports = [
                 {
                   modules: false,
                   useBuiltIns: 'entry',
+                  corejs: 3,
                   targets: {
                     browsers: Object.values(pkg.browserslist.defaults),
                   },
                 },
               ],
             ],
-            plugins: [
-              '@babel/plugin-syntax-dynamic-import',
-              // [
-              //   '@babel/plugin-transform-runtime',
-              //   {
-              //     regenerator: true,
-              //   },
-              // ],
-            ],
+            // plugins: [
+            //   '@babel/plugin-syntax-dynamic-import',
+            //   // [
+            //   //   '@babel/plugin-transform-runtime',
+            //   //   {
+            //   //     regenerator: true,
+            //   //   },
+            //   // ],
+            // ],
           },
         },
       ],
