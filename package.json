@@ -30,8 +30,8 @@
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config=demo/webpack.config.js --progress --inline --hot --host 0.0.0.0",
-    "test": "jest --runInBand",
-    "testnc": "NODE_ENV=test; jest --runInBand --no-cache",
+    "Xtest": "jest --runInBand",
+    "Xtestnc": "NODE_ENV=test; jest --runInBand --no-cache",
     "build": "webpack --progress --colors --mode production",
     "build:demo": "cross-env NODE_ENV=development webpack --config=demo/webpack.config.js --progress",
     "ci": "concurrently --raw ci:*",
