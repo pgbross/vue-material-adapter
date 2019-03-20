@@ -34,6 +34,8 @@
     "testnc": "NODE_ENV=test; jest --runInBand --no-cache",
     "build": "webpack --progress --colors --mode production",
     "build:demo": "cross-env NODE_ENV=development webpack --config=demo/webpack.config.js --progress",
+    "ci": "concurrently --raw ci:*",
+    "ci:build": "concurrently --raw build",
     "postinstall": "lerna bootstrap",
     "format": "prettier --write \"{packages,components,demo}/**/*{js,json,css,scss,vue}\"",
     "clean": "concurrently --raw clean:**",
