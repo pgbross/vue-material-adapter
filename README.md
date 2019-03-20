@@ -1,5 +1,7 @@
 # Material Components for Vue
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/pgbross/vue-material-adapter.svg)](https://greenkeeper.io/)
+
 `vue-material-adapter` is an integration of
 [Material Components](https://material.io/components/web/)
 for [Vue.js](https://vuejs.org) which follows the best practices
