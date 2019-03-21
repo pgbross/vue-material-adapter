@@ -1,6 +1,7 @@
 # Material Components for Vue
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/pgbross/vue-material-adapter.svg)](https://greenkeeper.io/)
+[![Build Status](https://travis-ci.com/pgbross/vue-material-adapter.svg?branch=master)](https://travis-ci.com/pgbross/vue-material-adapter)
 
 `vue-material-adapter` is an integration of
 [Material Components](https://material.io/components/web/)
