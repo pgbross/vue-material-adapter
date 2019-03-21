@@ -1,10 +1,10 @@
 import { mount, createLocalVue, checkValidMdcAdapter } from '../unit-test';
-import plugin from './index.js';
+import plugin from '../../packages/mcwv-drawer/index.js';
 import Spec from './test.spec.vue';
-import mdcDrawer from './mdc-drawer.vue';
-import mdcDrawerHeader from './mdc-drawer-header.vue';
-import mdcDrawerList from './mdc-drawer-list.vue';
-import mdcDrawerItem from './mdc-drawer-item.vue';
+import mdcDrawer from '../../packages/mcwv-drawer/mdc-drawer.vue';
+import mdcDrawerHeader from '../../packages/mcwv-drawer/mdc-drawer-header.vue';
+import mdcDrawerList from '../../packages/mcwv-drawer/mdc-drawer-list.vue';
+import mdcDrawerItem from '../../packages/mcwv-drawer/mdc-drawer-item.vue';
 
 // describe(__dirname, () => {
 //   const localVue = createLocalVue()

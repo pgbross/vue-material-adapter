@@ -1,7 +1,10 @@
 import { mount, createLocalVue, checkValidMdcAdapter } from '../unit-test';
-import plugin from './index.js';
+import plugin from '../../packages/mcwv-grid-list/index.js';
 import Spec from './test.spec.vue';
-import { mdcGridList, mdcGridTile } from './index.js';
+import {
+  mdcGridList,
+  mdcGridTile,
+} from '../../packages/mcwv-grid-list/index.js';
 
 describe(__dirname, () => {
   const localVue = createLocalVue();

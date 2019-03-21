@@ -19,6 +19,7 @@ export default {
       this.tag,
       {
         class: {
+          'mdc-fixed-adjust': true,
           [base + '--short' + suffix]: this.short,
           [base + '--dense' + suffix]: this.dense && !this.prominent,
           [base + '--dense-prominent' + suffix]: this.dense && this.prominent,

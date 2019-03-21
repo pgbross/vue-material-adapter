@@ -1,9 +1,9 @@
-import { BasePlugin } from '@mcwv/base'
-import mdcButton from './mdc-button.vue'
-import mdcButtonBase from './mdc-button-base.vue'
+import { BasePlugin } from '@mcwv/base';
+import mdcButton from './mdc-button.vue';
+import mdcButtonBase from './mdc-button-base.vue';
 
-export { mdcButtonBase, mdcButton }
+export { mdcButtonBase, mdcButton };
 
 export default BasePlugin({
-  mdcButton
-})
+  mdcButton,
+});

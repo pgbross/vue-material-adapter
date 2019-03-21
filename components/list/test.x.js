@@ -1,5 +1,5 @@
 import { mount, createLocalVue, checkValidMdcAdapter } from '../unit-test';
-import plugin from './index.js';
+import plugin from '../../packages/mcwv-list/index.js';
 import Spec from './test.spec.vue';
 import {
   mdcList,
@@ -8,7 +8,7 @@ import {
   mdcListGroup,
   mdcListGroupHeader,
   mdcListGroupDivider,
-} from './index.js';
+} from '../../packages/mcwv-list/index.js';
 
 describe(__dirname, () => {
   const localVue = createLocalVue();

@@ -1,5 +1,5 @@
 import { mount, createLocalVue, checkValidMdcAdapter } from '../unit-test';
-import { mdcSelect } from './index.js';
+import { mdcSelect } from '../../packages/mcwv-select/index.js';
 import Spec from './test.spec.vue';
 
 describe(__dirname, () => {

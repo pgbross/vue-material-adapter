@@ -1,6 +1,6 @@
 import { pluginSanityCheck, mount, checkValidFoundation } from '../unit-test';
-import plugin from './index.js';
-import { mdcTextField } from './index.js';
+import plugin from '../../packages/mcwv-textfield/index.js';
+import { mdcTextField } from '../../packages/mcwv-textfield/index.js';
 
 pluginSanityCheck(__dirname, plugin);
 

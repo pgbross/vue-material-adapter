@@ -1,7 +1,7 @@
 import { mount, createLocalVue, checkValidMdcAdapter } from '../unit-test';
-import plugin from './index.js';
+import plugin from '../../packages/mcwv-chips/index.js';
 import Spec from './test.spec.vue';
-import { mdcChip, mdcChipSet } from './index.js';
+import { mdcChip, mdcChipSet } from '../../packages/mcwv-chips/index.js';
 
 describe(__dirname, () => {
   const localVue = createLocalVue();

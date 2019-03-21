@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import mdcSelect from './mdc-select.vue';
+import mdcSelect from '../../packages/mcwv-select/mdc-select.vue';
 
 const components = {
   'mdc-select': mdcSelect,

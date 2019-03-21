@@ -1,5 +1,5 @@
 <template>
-  <div :class="classes"><slot /></div>
+  <div :class="classes" class="mdc-icon-toggle"><slot /></div>
 </template>
 
 <script>
