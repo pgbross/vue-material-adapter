@@ -33,7 +33,7 @@ const toSlugCase = require('to-slug-case');
 const { spawnSync } = require('child_process');
 const { sync: globSync } = require('glob');
 
-const PKG_RE = /(?:vue\-material\-adapter)|(?:mcwv\.[a-zA-Z\-]+)/;
+const PKG_RE = /(?:vue-material-adapter)|(?:mcwv\.[a-zA-Z-]+)/;
 
 const isValidCwd =
   path.basename(process.cwd()) === 'vue-material-adapter' &&
@@ -72,7 +72,7 @@ function getAssetEntry(asset) {
 
 function cpAsset(asset) {
   const assetPkg = path.join('packages', getAssetEntry(asset));
-  console.dir(assetPkg);
+  // console.dir(assetPkg);
   if (!fs.existsSync(assetPkg)) {
     Promise.reject(
       new Error(`Non-existent asset package path ${assetPkg} for ${asset}`),

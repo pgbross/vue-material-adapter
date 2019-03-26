@@ -46,7 +46,7 @@ export default [
   link('icon', icComponent),
   link('icon-button', icComponent),
   // link('icon-toggle', icComponent),
-  link('layout-app', icSideNavigation, 'App Layout'),
+  // link('layout-app', icSideNavigation, 'App Layout'),
   link('layout-grid', icResponsiveLayout, 'Grid Layout'),
   link('linear-progress', icProgressActivity),
   link('line-ripple', icComponent),

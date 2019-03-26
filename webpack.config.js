@@ -4,6 +4,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const pkg = require('./package.json');
 const resolve = relativePath => path.resolve(__dirname, relativePath);
 const plugins = [new VueLoaderPlugin()];
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const cssLoaders = [
   {
@@ -90,7 +91,10 @@ module.exports = [
     mode: 'development',
     entry: {
       base: resolve('packages/mcwv-base/index.js'),
-      button: resolve('packages/mcwv-button/index.js'),
+      button: [
+        resolve('packages/mcwv-button/index.js'),
+        resolve('packages/mcwv-button/styles.scss'),
+      ],
       card: resolve('packages/mcwv-card/index.js'),
       checkbox: resolve('packages/mcwv-checkbox/index.js'),
       chips: resolve('packages/mcwv-chips/index.js'),
@@ -118,14 +122,14 @@ module.exports = [
       tabs: resolve('packages/mcwv-tabs/index.js'),
       textfield: resolve('packages/mcwv-textfield/index.js'),
       theme: resolve('packages/mcwv-theme/index.js'),
-      toolbar: resolve('packages/mcwv-toolbar/index.js'),
+      // toolbar: resolve('packages/mcwv-toolbar/index.js'),
       topAppBar: resolve('packages/mcwv-top-app-bar/index.js'),
       typography: resolve('packages/mcwv-typography/index.js'),
     },
     output: {
       path: resolve('build'),
       filename: 'mcwv.[name].min.js',
-      library: ['wcmv', '[name]'],
+      library: ['mcwv', '[name]'],
       libraryTarget: 'umd',
     },
     devtool: 'source-map',
@@ -146,8 +150,89 @@ module.exports = [
             cacheDirectory: true,
           },
         },
+        {
+          test: /\.scss$/,
+          exclude: /\.module.(s(a|c)ss)$/,
+          use: [
+            MiniCssExtractPlugin.loader,
+            {
+              loader: 'css-loader?-url',
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                plugins: () => [
+                  require('autoprefixer')({
+                    browsers: Object.values(pkg.browserslist.modernBrowsers),
+                  }),
+                  require('cssnano')({
+                    preset: 'default',
+                  }),
+                ],
+              },
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                includePaths: ['node_modules'],
+                implementation: require('dart-sass'),
+              },
+            },
+          ],
+        },
+        {
+          test: /\.scssX$/,
+          exclude: /\.module.(s(a|c)ss)$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name: resourcepath => {
+                  const name = path
+                    .basename(path.dirname(resourcepath))
+                    .replace('-', '.');
+                  return `${name}.min.css`;
+                },
+              },
+            },
+            {
+              loader: 'extract-loader',
+            },
+            {
+              loader: 'css-loader?-url',
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                plugins: () => [
+                  require('autoprefixer')({
+                    browsers: Object.values(pkg.browserslist.modernBrowsers),
+                  }),
+                  require('cssnano')({
+                    preset: 'default',
+                  }),
+                ],
+              },
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                includePaths: ['node_modules'],
+                implementation: require('dart-sass'),
+              },
+            },
+          ],
+        },
       ],
     },
-    plugins: [...plugins],
+    plugins: [
+      ...plugins,
+      new MiniCssExtractPlugin({
+        // Options similar to the same options in webpackOptions.output
+        // both options are optional
+        filename: 'mcwv.[name].min.css',
+        chunkFilename: '[id].min.css',
+      }),
+    ],
   },
 ];
