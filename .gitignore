@@ -1,4 +1,5 @@
 .DS_Store
+dev/
 build
 node_modules/
 public/
