@@ -12,7 +12,7 @@ export default {
   },
   data() {
     return {
-      title: 'Material Components for Vue.js',
+      title: 'Material Web Components for Vue.js',
     };
   },
 };
