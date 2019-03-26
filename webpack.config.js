@@ -95,36 +95,120 @@ module.exports = [
         resolve('packages/mcwv-button/index.js'),
         resolve('packages/mcwv-button/styles.scss'),
       ],
-      card: resolve('packages/mcwv-card/index.js'),
-      checkbox: resolve('packages/mcwv-checkbox/index.js'),
-      chips: resolve('packages/mcwv-chips/index.js'),
-      dialog: resolve('packages/mcwv-dialog/index.js'),
-      drawer: resolve('packages/mcwv-drawer/index.js'),
-      elevation: resolve('packages/mcwv-elevation/index.js'),
-      fab: resolve('packages/mcwv-fab/index.js'),
-      floatingLabel: resolve('packages/mcwv-floating-label/index.js'),
-      gridList: resolve('packages/mcwv-grid-list/index.js'),
+      card: [
+        resolve('packages/mcwv-card/index.js'),
+        resolve('packages/mcwv-card/styles.scss'),
+      ],
+      checkbox: [
+        resolve('packages/mcwv-checkbox/index.js'),
+        resolve('packages/mcwv-checkbox/styles.scss'),
+      ],
+      chips: [
+        resolve('packages/mcwv-chips/index.js'),
+        resolve('packages/mcwv-chips/styles.scss'),
+      ],
+      dialog: [
+        resolve('packages/mcwv-dialog/index.js'),
+        resolve('packages/mcwv-dialog/styles.scss'),
+      ],
+      drawer: [
+        resolve('packages/mcwv-drawer/index.js'),
+        resolve('packages/mcwv-drawer/styles.scss'),
+      ],
+      elevation: [
+        resolve('packages/mcwv-elevation/index.js'),
+        resolve('packages/mcwv-elevation/styles.scss'),
+      ],
+      fab: [
+        resolve('packages/mcwv-fab/index.js'),
+        resolve('packages/mcwv-fab/styles.scss'),
+      ],
+      floatingLabel: [
+        resolve('packages/mcwv-floating-label/index.js'),
+        resolve('packages/mcwv-floating-label/styles.scss'),
+      ],
+      gridList: [
+        resolve('packages/mcwv-grid-list/index.js'),
+        resolve('packages/mcwv-grid-list/styles.scss'),
+      ],
       icon: resolve('packages/mcwv-icon/index.js'),
-      iconButton: resolve('packages/mcwv-icon-button/index.js'),
-      layoutGrid: resolve('packages/mcwv-layout-grid/index.js'),
-      lineRipple: resolve('packages/mcwv-line-ripple/index.js'),
-      linearProgress: resolve('packages/mcwv-linear-progress/index.js'),
-      list: resolve('packages/mcwv-list/index.js'),
-      materialIcon: resolve('packages/mcwv-material-icon/index.js'),
-      menu: resolve('packages/mcwv-menu/index.js'),
-      notchedOutline: resolve('packages/mcwv-notched-outline/index.js'),
-      radio: resolve('packages/mcwv-radio/index.js'),
-      ripple: resolve('packages/mcwv-ripple/index.js'),
-      select: resolve('packages/mcwv-select/index.js'),
-      slider: resolve('packages/mcwv-slider/index.js'),
-      snackbar: resolve('packages/mcwv-snackbar/index.js'),
-      switch: resolve('packages/mcwv-switch/index.js'),
-      tabs: resolve('packages/mcwv-tabs/index.js'),
-      textfield: resolve('packages/mcwv-textfield/index.js'),
-      theme: resolve('packages/mcwv-theme/index.js'),
+      iconButton: [
+        resolve('packages/mcwv-icon-button/index.js'),
+        resolve('packages/mcwv-icon-button/styles.scss'),
+      ],
+      layoutGrid: [
+        resolve('packages/mcwv-layout-grid/index.js'),
+        resolve('packages/mcwv-layout-grid/styles.scss'),
+      ],
+      lineRipple: [
+        resolve('packages/mcwv-line-ripple/index.js'),
+        resolve('packages/mcwv-line-ripple/styles.scss'),
+      ],
+      linearProgress: [
+        resolve('packages/mcwv-linear-progress/index.js'),
+        resolve('packages/mcwv-linear-progress/styles.scss'),
+      ],
+      list: [
+        resolve('packages/mcwv-list/index.js'),
+        resolve('packages/mcwv-list/styles.scss'),
+      ],
+      materialIcon: [
+        resolve('packages/mcwv-material-icon/index.js'),
+        resolve('packages/mcwv-material-icon/styles.scss'),
+      ],
+      menu: [
+        resolve('packages/mcwv-menu/index.js'),
+        resolve('packages/mcwv-menu/styles.scss'),
+      ],
+      notchedOutline: [
+        resolve('packages/mcwv-notched-outline/index.js'),
+        resolve('packages/mcwv-notched-outline/styles.scss'),
+      ],
+      radio: [
+        resolve('packages/mcwv-radio/index.js'),
+        resolve('packages/mcwv-radio/styles.scss'),
+      ],
+      ripple: [
+        resolve('packages/mcwv-ripple/index.js'),
+        resolve('packages/mcwv-ripple/styles.scss'),
+      ],
+      select: [
+        resolve('packages/mcwv-select/index.js'),
+        resolve('packages/mcwv-select/styles.scss'),
+      ],
+      slider: [
+        resolve('packages/mcwv-slider/index.js'),
+        resolve('packages/mcwv-slider/styles.scss'),
+      ],
+      snackbar: [
+        resolve('packages/mcwv-snackbar/index.js'),
+        resolve('packages/mcwv-snackbar/styles.scss'),
+      ],
+      switch: [
+        resolve('packages/mcwv-switch/index.js'),
+        resolve('packages/mcwv-switch/styles.scss'),
+      ],
+      tabs: [
+        resolve('packages/mcwv-tabs/index.js'),
+        resolve('packages/mcwv-tabs/styles.scss'),
+      ],
+      textfield: [
+        resolve('packages/mcwv-textfield/index.js'),
+        resolve('packages/mcwv-textfield/styles.scss'),
+      ],
+      theme: [
+        resolve('packages/mcwv-theme/index.js'),
+        resolve('packages/mcwv-theme/styles.scss'),
+      ],
       // toolbar: resolve('packages/mcwv-toolbar/index.js'),
-      topAppBar: resolve('packages/mcwv-top-app-bar/index.js'),
-      typography: resolve('packages/mcwv-typography/index.js'),
+      topAppBar: [
+        resolve('packages/mcwv-top-app-bar/index.js'),
+        resolve('packages/mcwv-top-app-bar/styles.scss'),
+      ],
+      typography: [
+        resolve('packages/mcwv-typography/index.js'),
+        resolve('packages/mcwv-typography/styles.scss'),
+      ],
     },
     output: {
       path: resolve('build'),
