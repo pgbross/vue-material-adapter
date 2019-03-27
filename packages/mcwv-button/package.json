@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@material/button": "^1.1.0",
-    "@mcwv/base": "^0.1.4",
+  "@mcwv/base": "^0.1.5",
     "@mcwv/ripple": "^0.1.5"
   }
 }

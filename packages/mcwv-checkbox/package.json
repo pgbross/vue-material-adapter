@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@material/checkbox": "^1.1.0",
-    "@mcwv/base": "^0.1.4",
+  "@mcwv/base": "^0.1.5",
     "@mcwv/ripple": "^0.1.5"
   },
   "gitHead": "de1cb1bfcbbd52d174c797fc832b10c1c9074854"

@@ -16,7 +16,7 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "@mcwv/base": "^0.1.4",
+  "@mcwv/base": "^0.1.5",
     "@mcwv/button": "^0.1.5",
     "@mcwv/card": "^0.1.5",
     "@mcwv/checkbox": "^0.1.5",
