@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/top-app-bar",
   "description": "The Vue Material Adapter for the web top-app-bar component",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "license": "MIT",
   "keywords": [
     "material components",
@@ -15,8 +15,8 @@
   },
   "dependencies": {
     "@material/top-app-bar": "^1.1.0",
-  "@mcwv/base": "^0.1.5",
-    "@mcwv/ripple": "^0.1.5"
+    "@mcwv/base": "^0.1.6",
+    "@mcwv/ripple": "^0.1.6"
   },
   "gitHead": "de1cb1bfcbbd52d174c797fc832b10c1c9074854"
 }
