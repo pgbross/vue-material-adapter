@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/notched-outline",
   "description": "The Vue Material Adapter for the web notched-outline component",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "license": "MIT",
   "keywords": [
     "material components",
