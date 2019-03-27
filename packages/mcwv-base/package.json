@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/base",
   "description": "The set of base classes for Vue material componnents",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "license": "MIT",
   "repository": {
     "type": "git",
