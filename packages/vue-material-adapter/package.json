@@ -1,7 +1,7 @@
 {
   "name": "vue-material-adapter",
   "description": "Modular and customizable Material Design UI components for the web for Vue",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "license": "ISC",
   "keywords": [
     "material components",
@@ -29,7 +29,7 @@
     "@mcwv/grid-list": "^0.1.6",
     "@mcwv/icon": "^0.1.6",
     "@mcwv/icon-button": "^0.1.6",
-    "@mcwv/layout-grid": "^0.1.6",
+    "@mcwv/layout-grid": "^0.1.7",
     "@mcwv/line-ripple": "^0.1.6",
     "@mcwv/linear-progress": "^0.1.6",
     "@mcwv/list": "^0.1.6",
