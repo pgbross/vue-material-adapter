@@ -78,11 +78,11 @@
     }
   },
   "dependencies": {
-    "eslint-config-google": "^0.12.0"
+    "eslint-config-google": "^0.12.0",
+    "material-components-web": "^1.1.0"
   },
   "peerDependencies": {
-    "vue": "^2.5.6",
-    "material-components-web": "^1.0.1"
+    "vue": "^2.5.6"
   },
   "resolutions": {
     "babel-core": "7.0.0-bridge.0"
