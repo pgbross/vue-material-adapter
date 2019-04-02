@@ -65,6 +65,7 @@ const rules = [
           {
             modules: false,
             useBuiltIns: 'entry',
+            corejs: 3,
             targets: {
               browsers: Object.values(pkg.browserslist.defaults),
             },
