@@ -1,9 +1,5 @@
 <template>
-  <div
-    :style="{ width: fullwidth ? '100%' : undefined }"
-    :id="id"
-    class="mdc-textfield-wrapper"
-  >
+  <div :style="{ width: fullwidth ? '100%' : undefined }" :id="id" class="mdc-textfield-wrapper">
     <div ref="root" :class="rootClasses">
       <textfield-icon ref="leadingIconEl" v-if="$slots.leadingIcon">
         <slot name="leadingIcon"></slot>
@@ -43,21 +39,25 @@
         :aria-controls="inputAriaControls"
         v-on="$listeners"
         @input="updateValue($event.target.value)"
-      />
+      >
 
-      <mdc-floating-label v-if="hasLabel" ref="labelEl" :for="vma_uid_">{{
+      <mdc-floating-label v-if="hasLabel" ref="labelEl" :for="vma_uid_">
+        {{
         label
-      }}</mdc-floating-label>
+        }}
+      </mdc-floating-label>
 
       <textfield-icon ref="trailingIconEl" v-if="$slots.trailingIcon">
         <slot name="trailingIcon"></slot>
       </textfield-icon>
 
-      <mdc-notched-outline v-if="hasOutline" ref="labelEl">{{
+      <mdc-notched-outline v-if="hasOutline" ref="labelEl">
+        {{
         label
-      }}</mdc-notched-outline>
+        }}
+      </mdc-notched-outline>
 
-      <mdc-line-ripple v-if="hasLineRipple" ref="lineRippleEl" />
+      <mdc-line-ripple v-if="hasLineRipple" ref="lineRippleEl"/>
     </div>
 
     <textfield-helper-text

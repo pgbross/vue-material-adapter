@@ -3,11 +3,13 @@
     <aside ref="drawer" :class="classes" class="mdc-drawer mdc-drawer--modal">
       <slot v-if="$slots['header']" name="header"></slot>
       <!-- <div v-if="$slots['header']" class="mdc-drawer__header"><</div> -->
-      <div class="mdc-drawer__content"><slot></slot></div>
+      <div class="mdc-drawer__content">
+        <slot></slot>
+      </div>
     </aside>
     <div class="mdc-drawer-scrim"></div>
 
-    <div v-if="toolbarSpacer" class="mdc-top-app-bar--fixed-adjust" />
+    <div v-if="toolbarSpacer" class="mdc-top-app-bar--fixed-adjust"/>
   </div>
 </template>
 

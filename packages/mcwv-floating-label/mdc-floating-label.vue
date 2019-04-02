@@ -1,5 +1,7 @@
 <template>
-  <label :class="labelClasses"> <slot /> </label>
+  <label :class="labelClasses">
+    <slot/>
+  </label>
 </template>
 
 <script>

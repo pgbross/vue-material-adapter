@@ -1,5 +1,7 @@
 <template>
-  <div class="mdc-list-group"><slot /></div>
+  <div class="mdc-list-group">
+    <slot/>
+  </div>
 </template>
 
 <script>

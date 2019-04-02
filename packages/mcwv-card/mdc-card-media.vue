@@ -1,11 +1,7 @@
 <template>
-  <section
-    :class="classes"
-    :style="styles"
-    class="mdc-card-media mdc-card__media"
-  >
+  <section :class="classes" :style="styles" class="mdc-card-media mdc-card__media">
     <div v-if="$slots.default" class="mdc-card__media-content">
-      <slot />
+      <slot/>
     </div>
   </section>
 </template>

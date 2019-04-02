@@ -8,16 +8,16 @@
         type="radio"
         class="mdc-radio__native-control"
         @change="sync"
-      />
+      >
 
       <div class="mdc-radio__background">
-        <div class="mdc-radio__outer-circle" />
-        <div class="mdc-radio__inner-circle" />
+        <div class="mdc-radio__outer-circle"/>
+        <div class="mdc-radio__inner-circle"/>
       </div>
     </div>
-    <label ref="label" :for="vma_uid_"
-      ><slot>{{ label }}</slot></label
-    >
+    <label ref="label" :for="vma_uid_">
+      <slot>{{ label }}</slot>
+    </label>
   </div>
 </template>
 

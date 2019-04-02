@@ -1,6 +1,8 @@
 <template>
   <div :class="classes" class="mdc-tab-bar" v-on="listeners" role="tablist">
-    <mdc-tab-scroller ref="scroller"> <slot></slot> </mdc-tab-scroller>
+    <mdc-tab-scroller ref="scroller">
+      <slot></slot>
+    </mdc-tab-scroller>
   </div>
 </template>
 

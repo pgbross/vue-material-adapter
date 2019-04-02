@@ -1,5 +1,7 @@
 <template>
-  <div :class="classes" class="mdc-icon-toggle"><slot /></div>
+  <div :class="classes" class="mdc-icon-toggle">
+    <slot/>
+  </div>
 </template>
 
 <script>

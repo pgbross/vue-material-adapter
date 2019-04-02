@@ -6,7 +6,7 @@ export const CustomButton = {
   },
   render(h, context) {
     let element;
-    let data = Object.assign({}, context.data);
+    const data = Object.assign({}, context.data);
 
     if (context.props.link && context.parent.$router) {
       // router-link case

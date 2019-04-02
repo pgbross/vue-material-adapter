@@ -1,6 +1,6 @@
-import { MDCRippleFoundation } from '@material/ripple/index';
-import { supportsCssVariables, applyPassive } from '@material/ripple/util';
 import { matches } from '@material/dom/ponyfill';
+import { MDCRippleFoundation } from '@material/ripple/index';
+import { applyPassive, supportsCssVariables } from '@material/ripple/util';
 
 export class RippleBase extends MDCRippleFoundation {
   static get MATCHES() {

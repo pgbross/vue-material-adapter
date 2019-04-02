@@ -19,7 +19,7 @@ export const DispatchFocusMixin = {
       this._active || setTimeout(() => this.dispatchFocusEvent(), 0);
     },
     dispatchFocusEvent() {
-      let hasFocus =
+      const hasFocus =
         this.$el === document.activeElement ||
         this.$el.contains(document.activeElement);
       if (hasFocus != this.hasFocus) {

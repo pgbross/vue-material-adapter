@@ -1,11 +1,13 @@
 <template>
   <section>
-    <div :style="'background-image: url(' + icon + ')'" class="demo-icon" />
+    <div :style="'background-image: url(' + icon + ')'" class="demo-icon"/>
 
-    <mdc-headline4 v-if="title" ref="title">{{ title }} </mdc-headline4>
-    <article v-if="demo" class="demo-article"><component :is="demo" /></article>
+    <mdc-headline4 v-if="title" ref="title">{{ title }}</mdc-headline4>
+    <article v-if="demo" class="demo-article">
+      <component :is="demo"/>
+    </article>
     <article v-if="readme" class="doc-article markdown">
-      <component :is="readme" />
+      <component :is="readme"/>
     </article>
   </section>
 </template>

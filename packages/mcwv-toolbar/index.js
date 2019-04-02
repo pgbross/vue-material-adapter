@@ -1,10 +1,10 @@
 import { BasePlugin } from '@mcwv/base';
-import mdcToolbar from './mdc-toolbar.vue';
+import mdcToolbarIcon from './mdc-toolbar-icon.vue';
+import mdcToolbarMenuIcon from './mdc-toolbar-menu-icon.vue';
 import mdcToolbarRow from './mdc-toolbar-row.vue';
 import mdcToolbarSection from './mdc-toolbar-section.vue';
-import mdcToolbarMenuIcon from './mdc-toolbar-menu-icon.vue';
 import mdcToolbarTitle from './mdc-toolbar-title.vue';
-import mdcToolbarIcon from './mdc-toolbar-icon.vue';
+import mdcToolbar from './mdc-toolbar.vue';
 
 export {
   mdcToolbar,

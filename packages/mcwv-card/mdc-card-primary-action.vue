@@ -6,7 +6,7 @@
     class="mdc-card-primary-action mdc-card__primary-action"
     v-on="listeners"
   >
-    <slot />
+    <slot/>
   </custom-link>
 </template>
 

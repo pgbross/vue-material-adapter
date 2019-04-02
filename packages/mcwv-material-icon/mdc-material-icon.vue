@@ -1,12 +1,5 @@
 <template>
-  <i
-    :class="classes"
-    class="mdc-material-icon"
-    v-on="$listeners"
-    :style="styles"
-  >
-    {{ icon }}
-  </i>
+  <i :class="classes" class="mdc-material-icon" v-on="$listeners" :style="styles">{{ icon }}</i>
 </template>
 
 <script>

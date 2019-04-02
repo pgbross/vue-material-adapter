@@ -11,7 +11,7 @@
         <i class="material-icons" aria-hidden="true">{{ startIcon }}</i>
       </slot>
     </span>
-    <slot />
+    <slot/>
   </custom-link>
 </template>
 

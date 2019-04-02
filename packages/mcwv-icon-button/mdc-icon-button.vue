@@ -8,7 +8,7 @@
     v-bind="$attrs"
     aria-pressed="false"
   >
-    <slot />
+    <slot/>
   </a>
   <button
     :class="classes"
@@ -19,7 +19,7 @@
     aria-pressed="false"
     v-else
   >
-    <slot />
+    <slot/>
   </button>
 </template>
 

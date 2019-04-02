@@ -15,11 +15,13 @@
       <div ref="surface" :class="surfaceClasses" class="mdc-dialog__surface">
         <h2 v-if="title" class="mdc-dialog__title" :id="'label' + vma_uid_">
           <!--
-          -->{{ title
-          }}<!---->
+          -->
+          {{ title
+          }}
+          <!---->
         </h2>
         <div ref="content" class="mdc-dialog__content" :id="'desc' + vma_uid_">
-          <slot />
+          <slot/>
         </div>
         <footer v-if="accept || cancel" class="mdc-dialog__actions">
           <button
@@ -27,22 +29,18 @@
             v-if="cancel"
             class="mdc-button mdc-dialog__button"
             data-mdc-dialog-action="no"
-          >
-            {{ cancel }}
-          </button>
+          >{{ cancel }}</button>
           <button
             type="button"
             ref="defaultButton"
             :disabled="acceptDisabled"
-            class="mdc-button mdc-dialog__button "
+            class="mdc-button mdc-dialog__button"
             data-mdc-dialog-action="yes"
-          >
-            {{ accept }}
-          </button>
+          >{{ accept }}</button>
         </footer>
       </div>
     </div>
-    <div class="mdc-dialog__scrim" />
+    <div class="mdc-dialog__scrim"/>
   </div>
 </template>
 

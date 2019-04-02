@@ -1,6 +1,6 @@
 <template>
   <nav :class="classes" class="mdc-drawer-list mdc-list">
-    <slot />
+    <slot/>
   </nav>
 </template>
 

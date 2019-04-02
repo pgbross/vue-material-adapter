@@ -1,6 +1,6 @@
 <template>
   <div :class="{ 'mdc-card--outlined': outlined }" class="mdc-card">
-    <slot />
+    <slot/>
   </div>
 </template>
 

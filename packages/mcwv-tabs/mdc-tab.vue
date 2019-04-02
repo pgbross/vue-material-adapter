@@ -21,7 +21,9 @@
         <slot name="icon">{{ hasIcon.content }}</slot>
       </i>
 
-      <span v-if="hasText" class="mdc-tab__text-label"> <slot /> </span>
+      <span v-if="hasText" class="mdc-tab__text-label">
+        <slot/>
+      </span>
     </span>
 
     <mdc-tab-indicator ref="tabIndicator"></mdc-tab-indicator>

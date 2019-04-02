@@ -7,7 +7,7 @@
     @keydown="handleKeydown"
   >
     <mdc-list ref="list" @MDCList:action.native="handleAction">
-      <slot />
+      <slot/>
     </mdc-list>
   </mdc-menu-surface>
 </template>

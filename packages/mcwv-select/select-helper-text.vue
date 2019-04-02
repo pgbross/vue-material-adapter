@@ -1,5 +1,7 @@
 <template>
-  <p ref="helptextEl" :class="classes" aria-hidden="true"><slot /></p>
+  <p ref="helptextEl" :class="classes" aria-hidden="true">
+    <slot/>
+  </p>
 </template>
 
 <script>

@@ -2,9 +2,9 @@
   <div ref="outlined" :class="outlinedClasses">
     <div class="mdc-notched-outline__leading"></div>
     <div ref="notchEl" class="mdc-notched-outline__notch">
-      <mdc-floating-label v-if="$slots.default" ref="labelEl"
-        ><slot
-      /></mdc-floating-label>
+      <mdc-floating-label v-if="$slots.default" ref="labelEl">
+        <slot/>
+      </mdc-floating-label>
     </div>
     <div class="mdc-notched-outline__trailing"></div>
   </div>

@@ -2,17 +2,16 @@
   <mdc-toolbar waterfall class="main-toolbar">
     <mdc-toolbar-row>
       <mdc-toolbar-section align-start>
-        <mdc-toolbar-menu-icon event="toggle-drawer" />
-        <mdc-toolbar-title @click="$router.push('/')">{{
+        <mdc-toolbar-menu-icon event="toggle-drawer"/>
+        <mdc-toolbar-title @click="$router.push('/')">
+          {{
           'vue\u2022mdc\u2022adapter'
-        }}</mdc-toolbar-title>
+          }}
+        </mdc-toolbar-title>
       </mdc-toolbar-section>
       <mdc-toolbar-section shrink-to-fit align-end>
-        <mdc-toolbar-icon
-          href="https://github.com/pgbross/vue-material-adapter"
-          target="_blank"
-        >
-          <img :src="githubLogo" />
+        <mdc-toolbar-icon href="https://github.com/pgbross/vue-material-adapter" target="_blank">
+          <img :src="githubLogo">
         </mdc-toolbar-icon>
       </mdc-toolbar-section>
     </mdc-toolbar-row>

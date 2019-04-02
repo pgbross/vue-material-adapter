@@ -1,5 +1,5 @@
 <template>
-  <div :class="lineClasses" :style="lineStyles" class="mdc-line-ripple" />
+  <div :class="lineClasses" :style="lineStyles" class="mdc-line-ripple"/>
 </template>
 
 <script>

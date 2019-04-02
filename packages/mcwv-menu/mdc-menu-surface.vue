@@ -6,7 +6,7 @@
     @MDCMenuSurface:opened="registerBodyClickListener"
     @MDCMenuSurface:closed="deregisterBodyClickListener"
   >
-    <slot />
+    <slot/>
   </div>
 </template>
 

@@ -7,20 +7,19 @@
     v-on="isInteractive ? listeners : clickListener"
   >
     <div v-if="cover" class="mdc-grid-tile__primary">
-      <div
-        :style="{ backgroundImage: 'url(' + src + ')' }"
-        class="mdc-grid-tile__primary-content"
-      />
+      <div :style="{ backgroundImage: 'url(' + src + ')' }" class="mdc-grid-tile__primary-content"/>
     </div>
     <div v-else class="mdc-grid-tile__primary">
-      <img :src="src" class="mdc-grid-tile__primary-content" />
+      <img :src="src" class="mdc-grid-tile__primary-content">
     </div>
     <span v-if="title || supportText" class="mdc-grid-tile__secondary">
       <i v-if="icon" class="mdc-grid-tile__icon material-icons">{{ icon }}</i>
       <span v-if="title" class="mdc-grid-tile__title">{{ title }}</span>
-      <span v-if="supportText" class="mdc-grid-tile__support-text">{{
+      <span v-if="supportText" class="mdc-grid-tile__support-text">
+        {{
         supportText
-      }}</span>
+        }}
+      </span>
     </span>
   </li>
 </template>

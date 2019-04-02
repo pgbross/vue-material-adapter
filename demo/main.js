@@ -1,11 +1,11 @@
-import './styles';
-import './polyfill.js';
 import Vue from 'vue';
-import VueRouter from 'vue-router';
 // import VueAnalytics from 'vue-analytics';
 import VueMaterialAdapter from 'vue-material-adapter';
+import VueRouter from 'vue-router';
 import index from './index.vue';
+import './polyfill.js';
 import routes from './routes.js';
+import './styles';
 
 Vue.config.productionTip = true;
 Vue.use(VueRouter);

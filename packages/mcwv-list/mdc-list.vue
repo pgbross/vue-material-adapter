@@ -8,7 +8,7 @@
     @focusin="handleFocusInEvent"
     @focusout="handleFocusOutEvent"
   >
-    <slot />
+    <slot/>
   </ul>
 </template>
 

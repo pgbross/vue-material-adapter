@@ -17,7 +17,7 @@
         :style="contentStyles"
         @transitionend="handleTransitionEnd"
       >
-        <slot />
+        <slot/>
       </div>
     </div>
   </div>

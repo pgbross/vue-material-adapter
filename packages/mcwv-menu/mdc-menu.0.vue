@@ -1,18 +1,7 @@
 <template>
-  <div
-    ref="root"
-    :class="classes"
-    :style="styles"
-    class="mdc-menu mdc-simple-menu"
-    tabindex="-1"
-  >
-    <ul
-      ref="items"
-      class="mdc-simple-menu__items mdc-list"
-      role="menu"
-      aria-hidden="true"
-    >
-      <slot />
+  <div ref="root" :class="classes" :style="styles" class="mdc-menu mdc-simple-menu" tabindex="-1">
+    <ul ref="items" class="mdc-simple-menu__items mdc-list" role="menu" aria-hidden="true">
+      <slot/>
     </ul>
   </div>
 </template>

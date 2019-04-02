@@ -1,6 +1,6 @@
 <template>
   <section :class="classes" class="mdc-card-actions mdc-card__actions">
-    <slot />
+    <slot/>
   </section>
 </template>
 

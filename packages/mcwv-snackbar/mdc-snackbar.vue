@@ -1,18 +1,9 @@
 <template>
   <div ref="root" :class="classes" class="mdc-snackbar">
     <div class="mdc-snackbar__surface" @click="surfaceClickHandler">
-      <div
-        ref="labelEl"
-        class="mdc-snackbar__label"
-        role="status"
-        aria-live="polite"
-      >
-        <template v-if="showLabelText">
-          {{ labelText }}
-        </template>
-        <span style="display: inline-block; width: 0; height: 1px;" v-else
-          >&nbsp;</span
-        >
+      <div ref="labelEl" class="mdc-snackbar__label" role="status" aria-live="polite">
+        <template v-if="showLabelText">{{ labelText }}</template>
+        <span style="display: inline-block; width: 0; height: 1px;" v-else>&nbsp;</span>
       </div>
       <div class="mdc-snackbar__actions" v-if="showDismissAction || actionText">
         <button
@@ -21,17 +12,13 @@
           type="button"
           class="mdc-button mdc-snackbar__action"
           v-on="$listeners"
-        >
-          {{ actionText }}
-        </button>
+        >{{ actionText }}</button>
 
         <button
           class="mdc-icon-button mdc-snackbar__dismiss material-icons"
           title="Dismiss"
           v-if="showDismissAction"
-        >
-          close
-        </button>
+        >close</button>
       </div>
     </div>
   </div>

@@ -13,8 +13,7 @@
       ref="leadingIcon"
       :class="leadingClasses"
       class="mdc-chip__icon mdc-chip__icon--leading"
-      >{{ leadingIcon }}</i
-    >
+    >{{ leadingIcon }}</i>
     <div v-if="isFilter" ref="checkmarkEl" class="mdc-chip__checkmark">
       <svg class="mdc-chip__checkmark-svg" viewBox="-2 -3 30 30">
         <path
@@ -22,10 +21,12 @@
           fill="none"
           stroke="black"
           d="M1.73,12.91 8.1,19.28 22.79,4.59"
-        />
+        ></path>
       </svg>
     </div>
-    <div class="mdc-chip__text"><slot /></div>
+    <div class="mdc-chip__text">
+      <slot/>
+    </div>
     <i
       v-if="havetrailingIcon"
       ref="trailingIcon"
@@ -35,8 +36,7 @@
       role="button"
       @click="handleTrailingIconInteraction"
       @keydown="handleTrailingIconInteraction"
-      >{{ trailingIcon }}</i
-    >
+    >{{ trailingIcon }}</i>
   </div>
 </template>
 applyPassive

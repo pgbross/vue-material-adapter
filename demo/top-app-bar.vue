@@ -1,10 +1,5 @@
 <template>
-  <mdc-top-app-bar
-    class="main-toolbar"
-    title="vue mdc adapter"
-    icon="menu"
-    @nav="$emit('nav')"
-  >
+  <mdc-top-app-bar class="main-toolbar" title="vue mdc adapter" icon="menu" @nav="$emit('nav')">
     <!-- <mdc-toolbar-section align-start> -->
     <!-- <mdc-toolbar-menu-icon event="toggle-drawer"/> -->
     <!--
@@ -12,10 +7,7 @@
     -->
     <!-- </mdc-toolbar-section> -->
 
-    <mdc-top-app-bar-action
-      @click="showGitHub"
-      icon="help"
-    ></mdc-top-app-bar-action>
+    <mdc-top-app-bar-action @click="showGitHub" icon="help"></mdc-top-app-bar-action>
 
     <!--
       <mdc-toolbar-section

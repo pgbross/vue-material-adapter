@@ -1,7 +1,5 @@
 <template>
-  <i :class="classes" v-on="$listeners" :style="styles" v-bind="$attrs">
-    {{ icon }}
-  </i>
+  <i :class="classes" v-on="$listeners" :style="styles" v-bind="$attrs">{{ icon }}</i>
 </template>
 
 <script>

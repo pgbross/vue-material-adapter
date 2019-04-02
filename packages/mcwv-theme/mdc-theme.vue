@@ -1,6 +1,6 @@
 <template>
   <custom-element :tag="tag" :class="classes" class="mdc-theme">
-    <slot />
+    <slot/>
   </custom-element>
 </template>
 

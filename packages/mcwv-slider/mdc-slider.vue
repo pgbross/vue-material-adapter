@@ -1,7 +1,7 @@
 <template>
   <div :class="classes" class="mdc-slider" tabindex="0" role="slider">
     <div class="mdc-slider__track-container">
-      <div :style="trackStyles" class="mdc-slider__track" />
+      <div :style="trackStyles" class="mdc-slider__track"/>
       <div v-if="hasMarkers" class="mdc-slider__track-marker-container">
         <div
           v-for="markerNum in numMarkers"
@@ -11,18 +11,14 @@
         />
       </div>
     </div>
-    <div
-      ref="thumbContainer"
-      :style="thumbStyles"
-      class="mdc-slider__thumb-container"
-    >
+    <div ref="thumbContainer" :style="thumbStyles" class="mdc-slider__thumb-container">
       <div v-if="isDiscrete" class="mdc-slider__pin">
         <span class="mdc-slider__pin-value-marker">{{ markerValue }}</span>
       </div>
       <svg class="mdc-slider__thumb" width="21" height="21">
-        <circle cx="10.5" cy="10.5" r="7.875" />
+        <circle cx="10.5" cy="10.5" r="7.875"></circle>
       </svg>
-      <div class="mdc-slider__focus-ring" />
+      <div class="mdc-slider__focus-ring"/>
     </div>
   </div>
 </template>

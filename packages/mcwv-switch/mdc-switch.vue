@@ -7,7 +7,7 @@
     class="mdc-switch-wrapper"
   >
     <div :class="classes" :styles="styles" class="mdc-switch">
-      <div class="mdc-switch__track" />
+      <div class="mdc-switch__track"/>
       <div class="mdc-switch__thumb-underlay">
         <div class="mdc-switch__thumb">
           <input
@@ -19,7 +19,7 @@
             role="switch"
             class="mdc-switch__native-control"
             @change="onChanged"
-          />
+          >
         </div>
       </div>
     </div>

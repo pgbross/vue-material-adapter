@@ -1,6 +1,6 @@
 <template>
   <div class="mdc-drawer-header mdc-drawer__header">
-    <slot />
+    <slot/>
   </div>
 </template>
 

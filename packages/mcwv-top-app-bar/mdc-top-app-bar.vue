@@ -1,27 +1,23 @@
 <template>
   <header ref="root" :class="rootClasses" :style="rootStyles" v-on="$listeners">
     <div class="mdc-top-app-bar__row">
-      <section
-        class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start"
-      >
+      <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
         <button
           v-if="haveNavigationIcon"
           ref="navigationIcon"
           :class="naviconClasses"
           v-on="listeners"
-        >
-          {{ icon }}
-        </button>
+        >{{ icon }}</button>
         <span v-if="!!title" class="mdc-top-app-bar__title">{{ title }}</span>
       </section>
       <section
         v-if="$slots.default"
         class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end"
       >
-        <slot />
+        <slot/>
       </section>
     </div>
-    <slot name="tabs" />
+    <slot name="tabs"/>
   </header>
 </template>
 

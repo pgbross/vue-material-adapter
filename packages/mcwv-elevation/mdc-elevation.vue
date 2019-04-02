@@ -1,6 +1,6 @@
 <template>
   <div :class="classes" class="mdc-elevation">
-    <slot />
+    <slot/>
   </div>
 </template>
 

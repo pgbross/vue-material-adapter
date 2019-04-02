@@ -17,16 +17,20 @@
         :aria-controls="selectAriaControls"
         v-on="listeners"
       >
-        <option v-if="!value" class="mdc-option" value="" disabled selected />
-        <slot />
+        <option v-if="!value" class="mdc-option" value disabled selected/>
+        <slot/>
       </select>
-      <mdc-floating-label v-if="!outlined" ref="labelEl">{{
+      <mdc-floating-label v-if="!outlined" ref="labelEl">
+        {{
         label
-      }}</mdc-floating-label>
-      <mdc-line-ripple v-if="!outlined" ref="lineRippleEl" />
-      <mdc-notched-outline v-if="outlined" ref="outlineEl">{{
+        }}
+      </mdc-floating-label>
+      <mdc-line-ripple v-if="!outlined" ref="lineRippleEl"/>
+      <mdc-notched-outline v-if="outlined" ref="outlineEl">
+        {{
         label
-      }}</mdc-notched-outline>
+        }}
+      </mdc-notched-outline>
     </div>
 
     <select-helper-text
@@ -35,9 +39,7 @@
       ref="helpertextEl"
       v-if="helptext"
       :id="'help-' + vma_uid_"
-    >
-      {{ helptext }}
-    </select-helper-text>
+    >{{ helptext }}</select-helper-text>
   </div>
 </template>
 
