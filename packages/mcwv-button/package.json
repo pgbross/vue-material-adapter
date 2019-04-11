@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/button",
   "description": "The Vue Material Adapter for the web button component",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "license": "MIT",
   "main": "dist/mcwv.button.min.js",
   "module": "index.js",
@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@material/button": "^1.1.1",
-    "@mcwv/base": "^0.1.11",
-    "@mcwv/ripple": "^0.1.11"
+    "@mcwv/base": "^0.1.12",
+    "@mcwv/ripple": "^0.1.12"
   }
 }
