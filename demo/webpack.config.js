@@ -155,7 +155,7 @@ const config = {
   resolve: {
     alias: {
       'vue-material-adapter': resolve(
-        '../packages/vue-material-adapter/dist/vue-material-adapter.min.js',
+        '../packages/vue-material-adapter/index.js',
       ),
       demo: resolve('./'),
     },

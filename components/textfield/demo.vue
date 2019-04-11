@@ -17,38 +17,31 @@
             maxlength="10"
             autocomplete
           >
-            <p slot="helpText" :persistent="true" :validation="true">
-              password must be 8 to 10 characters.
-            </p></mdc-textfield
-          >
+            <div class="mdc-text-field-helper-line" slot="helpText">
+              <p
+                class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg"
+              >password must be 8 to 10 characters.</p>
+            </div>
+          </mdc-textfield>
         </form>
 
         <p></p>
-        <mdc-textfield
-          :disabled="!enabled"
-          v-model="textField"
-          label="outlined"
-          outline
-        >
-          <p slot="helpText">Help text 2...</p>
+        <mdc-textfield :disabled="!enabled" v-model="textField" label="outlined" outline>
+          <div class="mdc-text-field-helper-line" slot="helpText">
+            <p class="mdc-text-field-helper-text">Help text 2...</p>
+          </div>
           <i
             slot="leadingIcon"
             class="material-icons"
             @click="ondelete"
             role="button"
             tabindex="0"
-            >delete</i
-          >
+          >delete</i>
           <i slot="trailingIcon" class="material-icons">favorite</i>
         </mdc-textfield>
-        <mdc-textfield :disabled="!enabled" v-model="textField" label="in a box"
-          ><i
-            slot="leadingIcon"
-            class="fa fa-font-awesome"
-            role="button"
-            tabindex="0"
-          ></i
-        ></mdc-textfield>
+        <mdc-textfield :disabled="!enabled" v-model="textField" label="in a box">
+          <i slot="leadingIcon" class="fa fa-font-awesome" role="button" tabindex="0"></i>
+        </mdc-textfield>
 
         <mdc-textfield v-model="textField"></mdc-textfield>
       </mdc-layout-cell>
@@ -65,12 +58,7 @@
       </mdc-layout-cell>
       <mdc-layout-cell span="12">
         <p>
-          <mdc-textfield
-            :disabled="!enabled"
-            v-model="textField"
-            fullwidth
-            label="full width"
-          />
+          <mdc-textfield :disabled="!enabled" v-model="textField" fullwidth label="full width"/>
         </p>
       </mdc-layout-cell>
     </mdc-layout-grid>
