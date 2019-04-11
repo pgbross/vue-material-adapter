@@ -3,6 +3,8 @@
   "description": "The Vue Material Adapter for the web notched-outline component",
   "version": "0.1.10",
   "license": "MIT",
+  "main": "dist/mcwv.notchedOutline.min.js",
+  "module": "index.js",
   "keywords": [
     "material components",
     "material design",
@@ -14,7 +16,7 @@
     "url": "https://github.com/pgbross/vue-material-adapter"
   },
   "dependencies": {
-    "@material/notched-outline": "^1.1.0",
+    "@material/notched-outline": "^1.1.1",
     "@mcwv/base": "^0.1.10"
   },
   "gitHead": "de1cb1bfcbbd52d174c797fc832b10c1c9074854"

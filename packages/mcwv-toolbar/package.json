@@ -3,6 +3,8 @@
   "description": "The Vue Material Adapter for the web toolbar component",
   "version": "0.1.10",
   "license": "MIT",
+  "main": "dist/mcwv.toolbar.min.js",
+  "module": "index.js",
   "keywords": [
     "material components",
     "material design",

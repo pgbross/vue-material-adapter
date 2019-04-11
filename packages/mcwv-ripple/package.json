@@ -3,6 +3,8 @@
   "description": "The Vue Material Adapter for the ripple component",
   "version": "0.1.10",
   "license": "MIT",
+  "main": "dist/mcwv.ripple.min.js",
+  "module": "index.js",
   "keywords": [
     "material components",
     "material design",
