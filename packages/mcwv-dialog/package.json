@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/dialog",
   "description": "The Vue Material Adapter for the web dialog component",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "license": "MIT",
   "main": "dist/mcwv.dialog.min.js",
   "module": "index.js",
@@ -17,8 +17,8 @@
   },
   "dependencies": {
     "@material/dialog": "^1.1.1",
-    "@mcwv/base": "^0.1.10",
-    "@mcwv/button": "^0.1.10"
+    "@mcwv/base": "^0.1.11",
+    "@mcwv/button": "^0.1.11"
   },
   "gitHead": "de1cb1bfcbbd52d174c797fc832b10c1c9074854"
 }
