@@ -1,28 +1,23 @@
 export default {
-  name: 'mdc-elevation',
+  name: 'mdc-drawer-list',
   functional: true,
   props: {
-    z: {
-      type: [Number, String],
-      default() {
-        return 1;
-      },
-    },
+    dense: Boolean,
   },
-
   render(
     createElement,
     {
-      props: { z },
+      props: { dense },
       slots,
     },
   ) {
     return createElement(
-      'div',
+      'nav',
       {
         class: {
-          'mdc-elevation': 1,
-          [`mdc-elevation--z${z}`]: 1,
+          'mdc-drawer-list': 1,
+          'mdc-list': 1,
+          'mdc-list--dense': dense,
         },
       },
       slots().default,

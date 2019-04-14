@@ -1,5 +1,12 @@
-<template>
-  <div
+import MDCDialogFoundation from '@material/dialog/foundation';
+import * as util from '@material/dialog/util';
+import { mdcButton } from '@mcwv/button';
+import { VMAUniqueIdMixin } from '@mcwv/base';
+import { closest, matches } from '@material/dom/ponyfill';
+import createFocusTrap from 'focus-trap';
+const strings = MDCDialogFoundation.strings;
+
+const template = `<div
     ref="root"
     :class="classes"
     :style="styles"
@@ -41,20 +48,11 @@
       </div>
     </div>
     <div class="mdc-dialog__scrim"/>
-  </div>
-</template>
-
-<script>
-import MDCDialogFoundation from '@material/dialog/foundation';
-import * as util from '@material/dialog/util';
-import { mdcButton } from '@mcwv/button';
-import { VMAUniqueIdMixin } from '@mcwv/base';
-import { closest, matches } from '@material/dom/ponyfill';
-import createFocusTrap from 'focus-trap';
-const strings = MDCDialogFoundation.strings;
+  </div>`;
 
 export default {
   name: 'mdc-dialog',
+  template,
   components: {
     mdcButton: mdcButton,
   },
@@ -215,4 +213,3 @@ export default {
     },
   },
 };
-</script>

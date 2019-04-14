@@ -1,5 +1,8 @@
-<template>
-  <div
+import { MDCChipFoundation } from '@material/chips/chip/foundation';
+import { CustomLinkMixin, emitCustomEvent } from '@mcwv/base';
+import { RippleBase } from '@mcwv/ripple';
+
+const template = `  <div
     :id="id"
     :class="classes"
     :style="styles"
@@ -37,16 +40,11 @@
       @click="handleTrailingIconInteraction"
       @keydown="handleTrailingIconInteraction"
     >{{ trailingIcon }}</i>
-  </div>
-</template>
-applyPassive
-<script>
-import { MDCChipFoundation } from '@material/chips/chip/foundation';
-import { CustomLinkMixin, emitCustomEvent } from '@mcwv/base';
-import { RippleBase } from '@mcwv/ripple';
+  </div>`;
 
 export default {
   name: 'mdc-chip',
+  template,
   mixins: [CustomLinkMixin],
   props: {
     leadingIcon: [String],
@@ -203,4 +201,3 @@ export default {
     },
   },
 };
-</script>

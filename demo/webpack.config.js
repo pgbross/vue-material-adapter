@@ -128,11 +128,11 @@ const plugins = [
   // add vue dependencies
   new WebpackCdnPlugin({
     modules: [
-      {
-        name: 'vue',
-        var: 'Vue',
-        path: isProduction ? 'dist/vue.runtime.min.js' : 'dist/vue.runtime.js',
-      },
+      // {
+      //   name: 'vue',
+      //   var: 'Vue',
+      //   path: isProduction ? 'dist/vue.esm.min.js' : 'dist/vue.esm.js',
+      // },
       {
         name: 'vue-router',
         var: 'VueRouter',
@@ -154,6 +154,7 @@ const config = {
   },
   resolve: {
     alias: {
+      vue$: 'vue/dist/vue.esm.js',
       'vue-material-adapter': resolve(
         '../packages/vue-material-adapter/index.js',
       ),

@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import mdcDialog from './mdc-dialog.vue';
+import mdcDialog from './mdc-dialog.js';
 
 export { mdcDialog };
 

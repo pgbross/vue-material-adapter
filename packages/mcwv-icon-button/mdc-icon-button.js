@@ -1,5 +1,6 @@
-<template>
-  <a
+import MDCIconButtonToggleFoundation from '@material/icon-button/foundation';
+import { RippleBase } from '@mcwv/ripple';
+const template = `  <a
     :class="classes"
     :style="styles"
     class="mdc-icon-button material-icons"
@@ -20,15 +21,11 @@
     v-else
   >
     <slot/>
-  </button>
-</template>
-
-<script>
-import MDCIconButtonToggleFoundation from '@material/icon-button/foundation';
-import { RippleBase } from '@mcwv/ripple';
+  </button>`;
 
 export default {
   name: 'mdc-icon-button',
+  template,
   model: {
     prop: 'isOn',
     event: 'change',
@@ -91,4 +88,3 @@ export default {
     },
   },
 };
-</script>

@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import mdcFAB from './mdc-fab.vue';
+import mdcFAB from './mdc-fab.js';
 
 export { mdcFAB };
 

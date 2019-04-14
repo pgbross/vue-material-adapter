@@ -1,16 +1,14 @@
-<template>
-  <div class="mdc-grid-list">
+/* eslint-disable quote-props */
+import MDCGridListFoundation from '@material/grid-list/foundation';
+const template = `  <div class="mdc-grid-list">
     <ul :class="classes" :style="styles" class="mdc-grid-list__tiles">
       <slot/>
     </ul>
-  </div>
-</template>
-
-<script>
-import MDCGridListFoundation from '@material/grid-list/foundation';
+  </div>`;
 
 export default {
   name: 'mdc-grid-list',
+  template,
   props: {
     width: [String, Number],
     ratio: String,
@@ -26,7 +24,7 @@ export default {
   },
   computed: {
     classes() {
-      let classes = {};
+      const classes = {};
 
       classes['mdc-grid-list--tile-gutter-1'] = this.narrowGutter;
       classes['mdc-grid-list--header-caption'] = this.headerCaption;
@@ -39,7 +37,7 @@ export default {
       return classes;
     },
     styles() {
-      var defaultWidth = 200;
+      const defaultWidth = 200;
       return {
         '--mdc-grid-list-tile-width': `${this.width || defaultWidth}px`,
       };
@@ -78,4 +76,3 @@ export default {
     this.foundation.destroy();
   },
 };
-</script>

@@ -1,21 +1,15 @@
 <template>
   <div class="mdc-demo mdc-demo--fluid">
     <mdc-layout-grid class="grid">
-      <mdc-layout-cell class="cell cell1" desktop="3" tablet="3" />
+      <mdc-layout-cell class="cell cell1" desktop="3" tablet="3"/>
       <mdc-layout-cell class="cell cell2" desktop="3" tablet="5" align="top">
-        <mdc-body>
-          align="top"
-        </mdc-body>
+        <mdc-body1>align="top"</mdc-body1>
       </mdc-layout-cell>
       <mdc-layout-cell class="cell cell3" desktop="3" tablet="5" align="middle">
-        <mdc-body>
-          align="middle"
-        </mdc-body>
+        <mdc-body1>align="middle"</mdc-body1>
       </mdc-layout-cell>
       <mdc-layout-cell class="cell cell4" desktop="3" tablet="3" align="bottom">
-        <mdc-body>
-          align="bottom"
-        </mdc-body>
+        <mdc-body1>align="bottom"</mdc-body1>
       </mdc-layout-cell>
     </mdc-layout-grid>
   </div>

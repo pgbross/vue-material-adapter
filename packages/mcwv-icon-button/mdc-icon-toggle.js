@@ -1,19 +1,14 @@
 export default {
-  name: 'mdc-elevation',
+  name: 'mdc-icon-toggle',
   functional: true,
   props: {
-    z: {
-      type: [Number, String],
-      default() {
-        return 1;
-      },
-    },
+    isOn: Boolean,
   },
 
   render(
     createElement,
     {
-      props: { z },
+      props: { isOn },
       slots,
     },
   ) {
@@ -21,8 +16,9 @@ export default {
       'div',
       {
         class: {
-          'mdc-elevation': 1,
-          [`mdc-elevation--z${z}`]: 1,
+          'mdc-icon-toggle': 1,
+          'mdc-icon-button__icon': true,
+          'mdc-icon-button__icon--on': isOn,
         },
       },
       slots().default,

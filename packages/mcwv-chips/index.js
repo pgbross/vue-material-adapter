@@ -1,6 +1,6 @@
 import { BasePlugin } from '@mcwv/base';
-import mdcChip from './mdc-chip.vue';
-import mdcChipSet from './mdc-chip-set.vue';
+import mdcChip from './mdc-chip.js';
+import mdcChipSet from './mdc-chip-set.js';
 
 export { mdcChip, mdcChipSet };
 

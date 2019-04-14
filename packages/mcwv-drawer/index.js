@@ -1,9 +1,9 @@
 import { BasePlugin } from '@mcwv/base';
-import mdcDrawerDivider from './mdc-drawer-divider.vue';
-import mdcDrawerHeader from './mdc-drawer-header.vue';
-import mdcDrawerItem from './mdc-drawer-item.vue';
-import mdcDrawerList from './mdc-drawer-list.vue';
-import mdcDrawer from './mdc-drawer.vue';
+import mdcDrawerDivider from './mdc-drawer-divider.js';
+import mdcDrawerHeader from './mdc-drawer-header.js';
+import mdcDrawerItem from './mdc-drawer-item.js';
+import mdcDrawerList from './mdc-drawer-list.js';
+import mdcDrawer from './mdc-drawer.js';
 
 export {
   mdcDrawer,

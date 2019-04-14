@@ -1,5 +1,7 @@
-<template>
-  <custom-link
+import { DispatchEventMixin, CustomLinkMixin } from '@mcwv/base';
+import { RippleBase } from '@mcwv/ripple';
+
+const template = `  <custom-link
     :link="link"
     :class="[classes, itemClasses]"
     :style="styles"
@@ -12,15 +14,11 @@
       </slot>
     </span>
     <slot/>
-  </custom-link>
-</template>
-
-<script>
-import { DispatchEventMixin, CustomLinkMixin } from '@mcwv/base';
-import { RippleBase } from '@mcwv/ripple';
+  </custom-link>`;
 
 export default {
   name: 'mdc-drawer-item',
+  template,
   inject: ['mdcDrawer'],
   mixins: [DispatchEventMixin, CustomLinkMixin],
   props: {
@@ -69,4 +67,3 @@ export default {
     this.ripple = null;
   },
 };
-</script>

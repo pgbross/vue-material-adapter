@@ -1,5 +1,15 @@
-<template>
-  <div :class="formFieldClasses" class="mdc-checkbox-wrapper">
+/* eslint-disable quote-props */
+import MDCCheckboxFoundation from '@material/checkbox/foundation';
+import MDCFormFieldFoundation from '@material/form-field/foundation';
+import { getCorrectEventName } from '@material/animation/index';
+import { DispatchFocusMixin, VMAUniqueIdMixin } from '@mcwv/base';
+import { RippleBase } from '@mcwv/ripple';
+import { applyPassive } from '@mcwv/base';
+
+const CB_PROTO_PROPS = ['checked', 'indeterminate'];
+
+export default {
+  template: `<div :class="formFieldClasses" class="mdc-checkbox-wrapper">
     <div ref="root" :class="classes" :style="styles" class="mdc-checkbox">
       <input
         ref="control"
@@ -25,21 +35,7 @@
     <label ref="label" :for="vma_uid_">
       <slot>{{ label }}</slot>
     </label>
-  </div>
-</template>
-
-<script>
-/* global HTMLElement */
-import MDCCheckboxFoundation from '@material/checkbox/foundation';
-import MDCFormFieldFoundation from '@material/form-field/foundation';
-import { getCorrectEventName } from '@material/animation/index';
-import { DispatchFocusMixin, VMAUniqueIdMixin } from '@mcwv/base';
-import { RippleBase } from '@mcwv/ripple';
-import { applyPassive } from '@mcwv/base';
-
-const CB_PROTO_PROPS = ['checked', 'indeterminate'];
-
-export default {
+  </div>`,
   name: 'mdc-checkbox',
   mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
   model: {
@@ -240,4 +236,3 @@ export default {
 function validDescriptor(inputPropDesc) {
   return !!inputPropDesc && typeof inputPropDesc.set === 'function';
 }
-</script>

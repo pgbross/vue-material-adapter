@@ -1,5 +1,9 @@
-<template>
-  <div>
+import MDCDismissibleDrawerFoundation from '@material/drawer/dismissible/foundation';
+import MDCModalDrawerFoundation from '@material/drawer/modal/foundation';
+import MDCListFoundation from '@material/list/foundation';
+import createFocusTrap from 'focus-trap';
+
+const template = `  <div>
     <aside ref="drawer" :class="classes" class="mdc-drawer mdc-drawer--modal">
       <slot v-if="$slots['header']" name="header"></slot>
       <!-- <div v-if="$slots['header']" class="mdc-drawer__header"><</div> -->
@@ -10,32 +14,11 @@
     <div class="mdc-drawer-scrim"></div>
 
     <div v-if="toolbarSpacer" class="mdc-top-app-bar--fixed-adjust"/>
-  </div>
-</template>
-
-<script>
-import MDCDismissibleDrawerFoundation from '@material/drawer/dismissible/foundation';
-import MDCModalDrawerFoundation from '@material/drawer/modal/foundation';
-import { MDCList } from '@material/list/index';
-import MDCListFoundation from '@material/list/foundation';
-import createFocusTrap from 'focus-trap';
-
-const media = new class {
-  get small() {
-    return (
-      this._small || (this._small = window.matchMedia('(max-width: 839px)'))
-    );
-  }
-
-  get large() {
-    return (
-      this._large || (this._large = window.matchMedia('(min-width: 1200px)'))
-    );
-  }
-}();
+  </div>`;
 
 export default {
   name: 'mdc-drawer',
+  template,
   model: {
     prop: 'open',
     event: 'change',
@@ -232,4 +215,3 @@ function createFocusTrapInstance(
     returnFocusOnDeactivate: false, // Navigation drawer handles restore focus.
   });
 }
-</script>

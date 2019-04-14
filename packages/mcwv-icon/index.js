@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import mdcIcon from './mdc-icon.vue';
+import mdcIcon from './mdc-icon.js';
 
 export { mdcIcon };
 

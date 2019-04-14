@@ -1,4 +1,3 @@
-<script>
 import MDCChipSetFoundation from '@material/chips/chip-set/foundation';
 import { MDCChipFoundation } from '@material/chips/chip/foundation';
 
@@ -94,4 +93,3 @@ export default {
     );
   },
 };
-</script>

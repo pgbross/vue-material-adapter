@@ -1,5 +1,7 @@
-<template>
-  <custom-button
+import { DispatchEventMixin, CustomButtonMixin } from '@mcwv/base';
+import { RippleMixin } from '@mcwv/ripple';
+
+const template = `  <custom-button
     :class="classes"
     :style="styles"
     :href="href"
@@ -10,15 +12,11 @@
     <span class="mdc-fab__icon">
       <slot>{{ icon }}</slot>
     </span>
-  </custom-button>
-</template>
-
-<script>
-import { DispatchEventMixin, CustomButtonMixin } from '@mcwv/base';
-import { RippleMixin } from '@mcwv/ripple';
+  </custom-button>`;
 
 export default {
   name: 'mdc-fab',
+  template,
   mixins: [DispatchEventMixin, CustomButtonMixin, RippleMixin],
   props: {
     icon: String,
@@ -46,4 +44,3 @@ export default {
     },
   },
 };
-</script>

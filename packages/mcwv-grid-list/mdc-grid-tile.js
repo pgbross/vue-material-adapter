@@ -1,5 +1,9 @@
-<template>
-  <li
+/* eslint-disable quote-props */
+
+import { DispatchEventMixin } from '@mcwv/base';
+import { RippleBase } from '@mcwv/ripple';
+
+const template = `  <li
     :class="[classes, itemClasses]"
     :style="styles"
     :tabindex="isInteractive ? '0' : undefined"
@@ -21,15 +25,11 @@
         }}
       </span>
     </span>
-  </li>
-</template>
-
-<script>
-import { DispatchEventMixin } from '@mcwv/base';
-import { RippleBase } from '@mcwv/ripple';
+  </li>`;
 
 export default {
   name: 'mdc-grid-tile',
+  template,
   inject: ['mdcGrid'],
   mixins: [DispatchEventMixin],
   props: {
@@ -85,18 +85,17 @@ export default {
   methods: {
     addRipple() {
       if (!this.ripple) {
-        let ripple = new RippleBase(this);
+        const ripple = new RippleBase(this);
         ripple.init();
         this.ripple = ripple;
       }
     },
     removeRipple() {
       if (this.ripple) {
-        let ripple = this.ripple;
+        const ripple = this.ripple;
         this.ripple = null;
         ripple.destroy();
       }
     },
   },
 };
-</script>
