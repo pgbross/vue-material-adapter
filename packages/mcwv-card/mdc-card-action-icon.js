@@ -1,10 +1,3 @@
-<template>
-  <span :class="classes" :style="styles" v-on="listeners">
-    <slot>{{ icon }}</slot>
-  </span>
-</template>
-
-<script>
 import { DispatchEventMixin } from '@mcwv/base';
 import { RippleBase } from '@mcwv/ripple';
 
@@ -31,6 +24,17 @@ export default {
       this.$set(this.classes, 'material-icons', !!this.icon);
     },
   },
+  render(createElement) {
+    return createElement(
+      'span',
+      {
+        class: this.classes,
+        style: this.styles,
+        on: this.listeners,
+      },
+      this.$slots.default || this.icon,
+    );
+  },
   mounted() {
     this.ripple = new RippleBase(this, {
       isUnbounded: () => true,
@@ -41,4 +45,3 @@ export default {
     this.ripple.destroy();
   },
 };
-</script>

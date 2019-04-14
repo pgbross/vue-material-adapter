@@ -1,4 +1,3 @@
-<script>
 import { mdcButtonBase } from '@mcwv/button';
 
 export default {
@@ -14,4 +13,3 @@ export default {
     };
   },
 };
-</script>

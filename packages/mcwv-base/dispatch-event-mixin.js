@@ -1,3 +1,4 @@
+/* eslint-disable quote-props */
 export const DispatchEventMixin = {
   props: {
     event: String,
@@ -8,8 +9,8 @@ export const DispatchEventMixin = {
     dispatchEvent(evt) {
       evt && this.$emit(evt.type, evt);
       if (this.event) {
-        let target = this.eventTarget || this.$root;
-        let args = this.eventArgs || [];
+        const target = this.eventTarget || this.$root;
+        const args = this.eventArgs || [];
         target.$emit(this.event, ...args);
       }
     },

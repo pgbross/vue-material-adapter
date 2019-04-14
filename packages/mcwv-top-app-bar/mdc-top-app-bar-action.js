@@ -1,4 +1,3 @@
-<script>
 import { DispatchEventMixin } from '@mcwv/base';
 import { RippleMixin } from '@mcwv/ripple';
 
@@ -28,4 +27,3 @@ export default {
     );
   },
 };
-</script>

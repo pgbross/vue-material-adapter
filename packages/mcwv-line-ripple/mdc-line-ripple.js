@@ -1,8 +1,3 @@
-<template>
-  <div :class="lineClasses" :style="lineStyles" class="mdc-line-ripple"/>
-</template>
-
-<script>
 import MDCLineRippleFoundation from '@material/line-ripple/foundation';
 
 export default {
@@ -14,9 +9,15 @@ export default {
   },
   data() {
     return {
-      lineClasses: {},
+      lineClasses: { 'mdc-line-ripple': 1 },
       lineStyles: {},
     };
+  },
+  render(createElement) {
+    return createElement('div', {
+      class: this.lineClasses,
+      style: this.lineStyles,
+    });
   },
   mounted() {
     this.foundation = new MDCLineRippleFoundation(
@@ -44,7 +45,7 @@ export default {
     this.foundation.init();
   },
   beforeDestroy() {
-    let foundation = this.foundation;
+    const foundation = this.foundation;
     this.foundation = null;
     foundation.destroy();
   },
@@ -62,4 +63,3 @@ export default {
     },
   },
 };
-</script>

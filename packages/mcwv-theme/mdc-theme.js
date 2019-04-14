@@ -1,10 +1,3 @@
-<template>
-  <custom-element :tag="tag" :class="classes" class="mdc-theme">
-    <slot/>
-  </custom-element>
-</template>
-
-<script>
 import { CustomElement } from '@mcwv/base';
 
 const THEME_COLORS = [
@@ -35,9 +28,19 @@ export default {
     color: String,
     background: String,
   },
+  render(createElement) {
+    return createElement(
+      'custom-element',
+      {
+        class: this.classes,
+        props: { tag: this.tag },
+      },
+      this.$slots.default,
+    );
+  },
   computed: {
     classes() {
-      let classes = {};
+      const classes = { 'mdc-theme': 1 };
 
       if (this.color && THEME_COLORS.indexOf(this.color) !== -1) {
         classes[`mdc-theme--${this.color}`] = true;
@@ -54,4 +57,3 @@ export default {
     },
   },
 };
-</script>

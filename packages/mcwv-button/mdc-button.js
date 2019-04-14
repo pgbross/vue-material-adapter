@@ -1,5 +1,4 @@
-<script>
-import mdcButtonBase from './mdc-button-base.vue';
+import mdcButtonBase from './mdc-button-base.js';
 
 export default {
   name: 'mdc-button',
@@ -36,4 +35,3 @@ export default {
     },
   },
 };
-</script>

@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import mdcFloatingLabel from './mdc-floating-label.vue';
+import mdcFloatingLabel from './mdc-floating-label.js';
 
 export { mdcFloatingLabel };
 

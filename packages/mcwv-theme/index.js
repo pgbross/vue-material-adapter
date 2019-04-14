@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import mdcTheme from './mdc-theme.vue';
+import mdcTheme from './mdc-theme.js';
 
 export { mdcTheme };
 

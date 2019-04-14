@@ -1,10 +1,3 @@
-<template>
-  <label :class="labelClasses">
-    <slot/>
-  </label>
-</template>
-
-<script>
 import MDCFloatingLabelFoundation from '@material/floating-label/foundation';
 
 export default {
@@ -13,6 +6,13 @@ export default {
     return {
       labelClasses: { 'mdc-floating-label': true },
     };
+  },
+  render(createElement) {
+    return createElement(
+      'label',
+      { class: this.labelClasses },
+      this.$slots.default,
+    );
   },
   mounted() {
     this.foundation = new MDCFloatingLabelFoundation({
@@ -33,7 +33,7 @@ export default {
     this.foundation.init();
   },
   beforeDestroy() {
-    let foundation = this.foundation;
+    const foundation = this.foundation;
     this.foundation = null;
     foundation.destroy();
   },
@@ -52,4 +52,3 @@ export default {
     },
   },
 };
-</script>
