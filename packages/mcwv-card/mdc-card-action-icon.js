@@ -1,5 +1,5 @@
 import { DispatchEventMixin } from '@mcwv/base';
-import { RippleBase } from '@mcwv/ripple';
+import { RippleBase } from '@mcwv/ripple/index';
 
 export default {
   name: 'mdc-card-action-icon',

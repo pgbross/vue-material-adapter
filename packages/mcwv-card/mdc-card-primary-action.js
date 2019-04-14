@@ -1,9 +1,9 @@
 import { DispatchEventMixin, CustomLinkMixin } from '@mcwv/base';
-import { RippleMixin } from '@mcwv/ripple';
+// import { RippleMixin } from '@mcwv/ripple';
 
 export default {
   name: 'mdc-card-primary-action',
-  mixins: [DispatchEventMixin, CustomLinkMixin, RippleMixin],
+  mixins: [DispatchEventMixin, CustomLinkMixin], //  RippleMixin],
   data() {
     return {
       classes: {},

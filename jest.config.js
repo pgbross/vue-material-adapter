@@ -1,5 +1,5 @@
 module.exports = {
-  testPathIgnorePatterns: ['/.c9/', '/node_modules/'],
+  testPathIgnorePatterns: ['/.c9/', '/node_modules/', '/demo/'],
   moduleDirectories: ['node_modules'],
   moduleFileExtensions: ['js', 'json', 'vue'],
   transform: {
@@ -7,4 +7,7 @@ module.exports = {
     '.*\\.(vue)$': '<rootDir>/node_modules/vue-jest',
   },
   transformIgnorePatterns: ['/node_modules/(?!@material/)'],
+  moduleNameMapper: {
+    '^@mcwv\\/([^\\/]+)': '<rootDir>/packages/mcwv-$1/index',
+  },
 };

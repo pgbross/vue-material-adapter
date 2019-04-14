@@ -1,6 +1,7 @@
 <template>
   <mdc-menu-surface
     ref="root"
+    class="mdc-menu"
     :quick-open="quickOpen"
     :open="open"
     @change="onChange"

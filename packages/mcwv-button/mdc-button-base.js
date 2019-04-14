@@ -1,8 +1,4 @@
-import {
-  DispatchEventMixin,
-  CustomButton,
-  CustomButtonMixin,
-} from '@mcwv/base';
+import { DispatchEventMixin, CustomButtonMixin } from '@mcwv/base';
 import { RippleMixin } from '@mcwv/ripple';
 
 export default {
@@ -16,7 +12,7 @@ export default {
   },
   render(createElement) {
     return createElement(
-      CustomButton,
+      'custom-button',
       {
         class: this.classes,
         style: this.styles,

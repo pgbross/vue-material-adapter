@@ -10,6 +10,7 @@ export default {
         'mdc-card__action': true,
         'mdc-card-action-button': true,
       },
+      styles: {},
     };
   },
 };

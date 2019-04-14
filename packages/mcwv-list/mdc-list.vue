@@ -183,6 +183,7 @@ export default {
           element.focus();
         }
       },
+      getAttributeForElementIndex: () => null,
       setTabIndexForListItemChildren: (listItemIndex, tabIndexValue) => {
         const element = this.listElements[listItemIndex];
         const listItemChildren = [].slice.call(
@@ -193,12 +194,6 @@ export default {
         listItemChildren.forEach(ele =>
           ele.setAttribute('tabindex', tabIndexValue),
         );
-      },
-      followHref: index => {
-        const listItem = this.listElements[index];
-        if (listItem && listItem.href) {
-          listItem.click();
-        }
       },
       hasCheckboxAtIndex: index => {
         const listItem = this.listElements[index];
