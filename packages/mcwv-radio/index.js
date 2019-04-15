@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import mdcRadio from './mdc-radio.vue';
+import mdcRadio from './mdc-radio.js';
 
 export { mdcRadio };
 

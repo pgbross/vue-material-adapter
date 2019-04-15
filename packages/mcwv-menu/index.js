@@ -1,8 +1,8 @@
 import { BasePlugin } from '@mcwv/base';
-import mdcMenuAnchor from './mdc-menu-anchor.vue';
-import mdcMenuDivider from './mdc-menu-divider.vue';
-import mdcMenuItem from './mdc-menu-item.vue';
-import mdcMenuSurface from './mdc-menu-surface.vue';
+import mdcMenuAnchor from './mdc-menu-anchor.js';
+import mdcMenuDivider from './mdc-menu-divider.js';
+import mdcMenuItem from './mdc-menu-item.js';
+import mdcMenuSurface from './mdc-menu-surface.js';
 import mdcMenu from './mdc-menu.vue';
 
 export { mdcMenu, mdcMenuItem, mdcMenuDivider, mdcMenuAnchor, mdcMenuSurface };

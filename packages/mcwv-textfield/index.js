@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import mdcTextField from './mdc-textfield.vue';
+import mdcTextField from './mdc-textfield.js';
 
 export { mdcTextField };
 

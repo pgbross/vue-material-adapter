@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import mdcSlider from './mdc-slider.vue';
+import mdcSlider from './mdc-slider.js';
 
 export { mdcSlider };
 

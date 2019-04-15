@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import mdcSnackbar from './mdc-snackbar.vue';
+import mdcSnackbar from './mdc-snackbar.js';
 
 export { mdcSnackbar };
 

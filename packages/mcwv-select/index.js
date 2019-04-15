@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import mdcSelect from './mdc-select.vue';
+import mdcSelect from './mdc-select.js';
 
 export { mdcSelect };
 

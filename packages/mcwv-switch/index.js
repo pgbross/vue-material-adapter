@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import mdcSwitch from './mdc-switch.vue';
+import mdcSwitch from './mdc-switch.js';
 
 export { mdcSwitch };
 

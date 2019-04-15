@@ -236,11 +236,7 @@ module.exports = [
         resolve('packages/mcwv-textfield/index.js'),
         resolve('packages/mcwv-textfield/index.scss'),
       ],
-      theme: [
-        resolve('packages/mcwv-theme/index.js'),
-        resolve('packages/mcwv-theme/index.scss'),
-      ],
-      // toolbar: resolve('packages/mcwv-toolbar/index.js'),
+
       topAppBar: [
         resolve('packages/mcwv-top-app-bar/index.js'),
         resolve('packages/mcwv-top-app-bar/index.scss'),
