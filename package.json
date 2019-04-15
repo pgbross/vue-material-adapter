@@ -42,7 +42,7 @@
     "clean": "concurrently --raw clean:**",
     "clean:demo": "del-cli public/*",
     "clean:dist": "del-cli dist/*",
-    "changelog": "standard-changelog -i CHANGELOG.md -k package.json -w",
+    "changelog": "standard-changelog -i CHANGELOG.md -k packages/material-components-web/package.json -w",
     "release": "standard-version --no-verify"
   },
   "husky": {
