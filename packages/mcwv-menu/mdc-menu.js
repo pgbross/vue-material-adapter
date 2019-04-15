@@ -1,5 +1,8 @@
-<template>
-  <mdc-menu-surface
+/* eslint-disable quote-props */
+import { MDCMenuFoundation } from '@material/menu/foundation';
+import { emitCustomEvent } from '@mcwv/base';
+
+const template = `  <mdc-menu-surface
     ref="root"
     class="mdc-menu"
     :quick-open="quickOpen"
@@ -10,15 +13,11 @@
     <mdc-list ref="list" @MDCList:action.native="handleAction">
       <slot/>
     </mdc-list>
-  </mdc-menu-surface>
-</template>
-
-<script>
-import { MDCMenuFoundation } from '@material/menu/foundation';
-import { emitCustomEvent } from '@mcwv/base';
+  </mdc-menu-surface>`;
 
 export default {
   name: 'mdc-menu',
+  template,
   model: {
     prop: 'open',
     event: 'change',
@@ -138,4 +137,3 @@ export default {
     // }
   },
 };
-</script>
