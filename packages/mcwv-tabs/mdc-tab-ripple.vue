@@ -1,5 +1,5 @@
 <template>
-  <span class="mdc-tab__ripple" :class="classes" :style="styles"></span>
+  <span class="mdc-tab__ripple mdc-tab-ripple" :class="classes" :style="styles"></span>
 </template>
 
 <script>

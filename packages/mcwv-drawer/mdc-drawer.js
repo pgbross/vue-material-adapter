@@ -3,7 +3,7 @@ import MDCModalDrawerFoundation from '@material/drawer/modal/foundation';
 import MDCListFoundation from '@material/list/foundation';
 import createFocusTrap from 'focus-trap';
 
-const template = `  <div>
+const template = `<div class="mdc-drawer-wrapper">
     <aside ref="drawer" :class="classes" class="mdc-drawer mdc-drawer--modal">
       <slot v-if="$slots['header']" name="header"></slot>
       <!-- <div v-if="$slots['header']" class="mdc-drawer__header"><</div> -->

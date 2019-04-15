@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mdc-select-wrapper">
     <div ref="root" :id="id" :class="rootClasses" :style="styles">
       <select-icon
         ref="leadingIconEl"

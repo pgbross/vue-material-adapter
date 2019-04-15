@@ -234,10 +234,6 @@ export default {
           isFocused: () => {
             return document.activeElement === this.$refs.input;
           },
-          isRtl: () =>
-            window
-              .getComputedStyle(this.$refs.root)
-              .getPropertyValue('direction') === 'rtl',
 
           registerValidationAttributeChangeHandler: handler => {
             const getAttributesList = mutationsList =>

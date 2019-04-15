@@ -14,8 +14,9 @@
     />
     <link
       rel="stylesheet prefetch"
-      href="https://unpkg.com/vue-material-adapter/dist/vue-material-adapter.min.css"
+      href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"
     />
+
     <script src="https://unpkg.com/vue/dist/vue.min.js"></script>
     <script src="https://unpkg.com/vue-material-adapter/dist/vue-material-adapter.min.js"></script>
     <style>
@@ -42,9 +43,22 @@
           </mdc-toolbar-row>
         </mdc-toolbar>
 
-        <mdc-drawer
+        <mdc-drawer modal ref="drawer" class="primary-drawer" v-model="open">
+          <div class="mdc-drawer__header" slot="header">
+            <!-- <h3 class="mdc-drawer__title">Mail</h3> -->
+          </div>
+          <mdc-drawer-list dense>
+            <a href=""></a>
+            <mdc-drawer-item activated start-icon="inbox">Inbox</mdc-drawer-item>
+            <mdc-drawer-item start-icon="send">Sent Mail</mdc-drawer-item>
+            <mdc-drawer-item start-icon="drafts">Drafts</mdc-drawer-item>
+          </mdc-drawer-list>
+        </mdc-drawer>
+
+        <!-- <mdc-drawer
           ref="drawer"
           slot="drawer"
+          :open="open"
           toggle-on="toggle-drawer"
           :temporary="drawerType == 'temporary'"
           :persistent="drawerType =='persistent'"
@@ -55,23 +69,26 @@
             <mdc-drawer-item start-icon="send">Sent Mail</mdc-drawer-item>
             <mdc-drawer-item start-icon="drafts">Drafts</mdc-drawer-item>
           </mdc-drawer-list>
-        </mdc-drawer>
+        </mdc-drawer> -->
 
         <main class="content" style="display:flex;justify-content:center">
-          <div>
+          <mdc-button @click="open=!open">Toggle drawer</mdc-button>
+          <!-- <div>
             <mdc-radio name="drawer" v-model="drawerType" label="temporary" checked></mdc-radio>
             <mdc-radio name="drawer" v-model="drawerType" label="persistent"></mdc-radio>
             <mdc-radio name="drawer" v-model="drawerType" label="permanent"></mdc-radio>
-          </div>
+          </div> -->
         </main>
       </mdc-layout-app>
     </div>
 
     <script>
+      Vue.use(vma.default);
       var app = new Vue({
         el: '#layout-app-demo',
         data: function() {
           return {
+            open: false,
             drawerType: 'temporary',
           };
         },
@@ -83,7 +100,9 @@
         mounted: function() {
           var vm = this;
           vm.$nextTick(function() {
-            vm.$refs.drawer.show();
+            // this.open = true;
+            // console.dir(vm.$refs.drawer);
+            // vm.$refs.drawer.show();
           });
         },
       });

@@ -19,17 +19,19 @@ const Spec = {
       selectValue: undefined,
     };
   },
-  components: {
-    'mdc-select': mdcSelect,
-    'mdc-floating-label': mdcFloatingLabel,
-    'mdc-line-ripple': mdcLineRipple,
-  },
+  components: { mdcSelect },
 };
 
 describe(__dirname, () => {
   const localVue = createLocalVue();
   describe('mdcSelect', () => {
-    const spec = mount(Spec, localVue);
+    const spec = mount(Spec, {
+      localVue,
+      stubs: {
+        'mdc-floating-label': mdcFloatingLabel,
+        'mdc-line-ripple': mdcLineRipple,
+      },
+    });
     test('is a Vue instance', () => {
       expect(spec.isVueInstance()).toBeTruthy();
     });
