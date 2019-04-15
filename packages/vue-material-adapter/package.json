@@ -45,7 +45,6 @@
     "@mcwv/switch": "^0.2.1",
     "@mcwv/tabs": "^0.2.1",
     "@mcwv/textfield": "^0.2.1",
-    "@mcwv/theme": "^0.1.12",
     "@mcwv/top-app-bar": "^0.2.1",
     "@mcwv/typography": "^0.2.1"
   }
