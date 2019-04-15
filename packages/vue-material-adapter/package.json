@@ -9,7 +9,7 @@
     "vue"
   ],
   "author": "Philip Ross <philip@satchel.scot>",
-  "main": "dist/vue-material-adapter.js",
+  "main": "dist/vue-material-adapter.min.js",
   "module": "index.js",
   "repository": {
     "type": "git",
