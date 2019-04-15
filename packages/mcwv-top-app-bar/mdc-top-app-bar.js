@@ -1,5 +1,9 @@
-<template>
-  <header ref="root" :class="rootClasses" :style="rootStyles" v-on="$listeners">
+import MDCTopAppBarFoundation from '@material/top-app-bar/standard/foundation';
+import MDCShortTopAppBarFoundation from '@material/top-app-bar/short/foundation';
+import MDCFixedTopAppBarFoundation from '@material/top-app-bar/fixed/foundation';
+import { DispatchEventMixin } from '@mcwv/base';
+
+const template = `  <header ref="root" :class="rootClasses" :style="rootStyles" v-on="$listeners">
     <div class="mdc-top-app-bar__row">
       <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
         <button
@@ -18,17 +22,11 @@
       </section>
     </div>
     <slot name="tabs"/>
-  </header>
-</template>
-
-<script>
-import MDCTopAppBarFoundation from '@material/top-app-bar/standard/foundation';
-import MDCShortTopAppBarFoundation from '@material/top-app-bar/short/foundation';
-import MDCFixedTopAppBarFoundation from '@material/top-app-bar/fixed/foundation';
-import { DispatchEventMixin } from '@mcwv/base';
+  </header>`;
 
 export default {
   name: 'mdc-top-app-bar',
+  template,
   mixins: [DispatchEventMixin],
   props: {
     short: Boolean,
@@ -129,4 +127,3 @@ export default {
     this.foundation.destroy();
   },
 };
-</script>

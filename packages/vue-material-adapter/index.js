@@ -27,7 +27,6 @@ import switchControl from '@mcwv/switch/index';
 import tabs from '@mcwv/tabs/index';
 import textfield from '@mcwv/textfield/index';
 import theme from '@mcwv/theme/index';
-// import * as toolbar from '@mcwv/toolbar/index';
 import topAppBar from '@mcwv/top-app-bar/index';
 import typography from '@mcwv/typography/index';
 
@@ -94,7 +93,6 @@ export {
   tabs,
   textfield,
   theme,
-  // toolbar,
   topAppBar,
   typography,
 };

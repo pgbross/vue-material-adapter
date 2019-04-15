@@ -5,6 +5,7 @@ const pkg = require('./package.json');
 const resolve = relativePath => path.resolve(__dirname, relativePath);
 const plugins = [new VueLoaderPlugin()];
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { importer } = require('./webpack.util');
 
 const cssLoaders = [
   {
@@ -34,7 +35,10 @@ module.exports = [
   {
     name: 'main-js-combined',
     mode: 'development',
-    entry: resolve('packages/vue-material-adapter/index.js'),
+    entry: [
+      resolve('packages/vue-material-adapter/index.js'),
+      resolve('packages/vue-material-adapter/index.scss'),
+    ],
     output: {
       path: resolve('build'),
       filename: 'vue-material-adapter.min.js',
@@ -81,9 +85,45 @@ module.exports = [
             // ],
           },
         },
+        {
+          test: /\.scss$/,
+          exclude: /\.module.(s(a|c)ss)$/,
+          use: [
+            MiniCssExtractPlugin.loader,
+            {
+              loader: 'css-loader?-url',
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                plugins: () => [
+                  require('autoprefixer')({
+                    browsers: Object.values(pkg.browserslist.modernBrowsers),
+                  }),
+                  require('cssnano')({
+                    preset: 'default',
+                  }),
+                ],
+              },
+            },
+            {
+              loader: 'sass-loader',
+              options: { includePaths: ['node_modules'], importer },
+            },
+          ],
+        },
       ],
     },
-    plugins: [new CleanWebpackPlugin({ verbose: true }), ...plugins],
+    plugins: [
+      new CleanWebpackPlugin({ verbose: true }),
+      ...plugins,
+      new MiniCssExtractPlugin({
+        // Options similar to the same options in webpackOptions.output
+        // both options are optional
+        filename: 'vue-material-adapter.min.css',
+        chunkFilename: '[id].min.css',
+      }),
+    ],
   },
 
   {
