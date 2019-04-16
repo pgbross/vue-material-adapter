@@ -1,3 +1,4 @@
+/* eslint-disable quote-props */
 import MDCSelectFoundation from '@material/select/foundation';
 import { RippleBase } from '@mcwv/ripple';
 import SelectHelperText from './select-helper-text.js';
@@ -5,52 +6,8 @@ import SelectHelperText from './select-helper-text.js';
 import SelectIcon from './select-icon.js';
 import { emitCustomEvent, VMAUniqueIdMixin } from '@mcwv/base';
 
-const template = `  <div class="mdc-select-wrapper">
-    <div ref="root" :id="id" :class="rootClasses" :style="styles">
-      <select-icon
-        ref="leadingIconEl"
-        v-if="leadingIcon"
-        :icon="leadingIcon"
-        tab-index="0"
-        role="button"
-      ></select-icon>
-      <i class="mdc-select__dropdown-icon"></i>
-      <select
-        ref="native_control"
-        :disabled="disabled"
-        v-bind="$attrs"
-        class="mdc-select__native-control"
-        :aria-controls="selectAriaControls"
-        v-on="listeners"
-      >
-        <option v-if="!value" class="mdc-option" value disabled selected/>
-        <slot/>
-      </select>
-      <mdc-floating-label v-if="!outlined" ref="labelEl">
-        {{
-        label
-        }}
-      </mdc-floating-label>
-      <mdc-line-ripple v-if="!outlined" ref="lineRippleEl"/>
-      <mdc-notched-outline v-if="outlined" ref="outlineEl">
-        {{
-        label
-        }}
-      </mdc-notched-outline>
-    </div>
-
-    <select-helper-text
-      :helptextPersistent="helptextPersistent"
-      :helptextValidation="helptextValidation"
-      ref="helpertextEl"
-      v-if="helptext"
-      :id="'help-' + vma_uid_"
-    >{{ helptext }}</select-helper-text>
-  </div>`;
-
 export default {
   name: 'mdc-select',
-  template,
   inheritAttrs: false,
   model: {
     prop: 'value',
@@ -75,6 +32,83 @@ export default {
       styles: {},
       classes: {},
     };
+  },
+  render(createElement) {
+    const selectNodes = [this.$slots.default];
+    if (!this.value) {
+      selectNodes.unshift(
+        createElement('option', {
+          class: { 'mdc-option': 1 },
+          attrs: { value: '', disabled: 1, selected: 1 },
+        }),
+      );
+    }
+    const rootNodes = [
+      createElement('i', { class: { 'mdc-select__dropdown-icon': 1 } }),
+      createElement(
+        'select',
+        {
+          class: { 'mdc-select__native-control': 1 },
+          attrs: {
+            ...this.$attrs,
+            disabled: this.disabled,
+            'aria-controls': this.selectAriaControls,
+          },
+          ref: 'native_control',
+          on: this.listeners,
+        },
+        selectNodes,
+      ),
+    ];
+    if (this.leadingIcon) {
+      rootNodes.unshift(
+        createElement('select-icon', {
+          attrs: { icon: this.leadingIcon, 'tab-index': '0', role: 'button' },
+          ref: 'leadingIconEl',
+        }),
+      );
+    }
+
+    if (this.outlined) {
+      rootNodes.push(
+        createElement('mdc-notched-outline', { ref: 'outlineEl' }, this.label),
+      );
+    } else {
+      rootNodes.push(
+        createElement('mdc-floating-label', { ref: 'labelEl' }, this.label),
+        createElement('mdc-line-ripple', { ref: 'lineRippleEl' }, this.label),
+      );
+    }
+
+    const rootEl = createElement(
+      'div',
+      {
+        class: this.rootClasses,
+        style: this.style,
+        attrs: { id: this.id },
+        ref: 'root',
+      },
+      rootNodes,
+    );
+
+    const nodes = [rootEl];
+    if (this.helptext) {
+      nodes.push(
+        createElement(
+          'select-helper-text',
+          {
+            attrs: {
+              helptextPersistent: this.helptextPersistent,
+              helptextValidation: this.helptextValidation,
+              id: `help-${this.vma_uid_}`,
+            },
+            ref: 'helperTextEl',
+          },
+          this.helperText,
+        ),
+      );
+    }
+    return createElement('div', { class: { 'mdc-select-wrapper': 1 } }, nodes);
   },
 
   components: { SelectHelperText, SelectIcon },
