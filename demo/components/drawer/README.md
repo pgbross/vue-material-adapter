@@ -148,7 +148,6 @@ By default the drawer component is responsive and will switch from temporary to 
 
 ```html
 <mdc-drawer-item>
-  <mdc-icon slot="start-detail" class="fa fa-home"></mdc-icon>
   {{ Text }}
 </mdc-drawer-item>
 ```

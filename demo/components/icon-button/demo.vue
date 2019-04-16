@@ -3,7 +3,7 @@
     <section class="mdc-demo">
       <mdc-headline4>Icon Button</mdc-headline4>
       <div class="mdc-demo mdc-demo--container">
-        <mdc-icon-button>
+        <mdc-icon-button href="#">
           <mdc-material-icon icon="menu"/>
         </mdc-icon-button>
       </div>

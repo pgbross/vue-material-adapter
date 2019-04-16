@@ -44,9 +44,7 @@
         </mdc-toolbar>
 
         <mdc-drawer modal ref="drawer" class="primary-drawer" v-model="open">
-          <div class="mdc-drawer__header" slot="header">
-            <!-- <h3 class="mdc-drawer__title">Mail</h3> -->
-          </div>
+          <div class="mdc-drawer__header" slot="header"></div>
           <mdc-drawer-list dense>
             <a href=""></a>
             <mdc-drawer-item activated start-icon="inbox">Inbox</mdc-drawer-item>
@@ -55,29 +53,8 @@
           </mdc-drawer-list>
         </mdc-drawer>
 
-        <!-- <mdc-drawer
-          ref="drawer"
-          slot="drawer"
-          :open="open"
-          toggle-on="toggle-drawer"
-          :temporary="drawerType == 'temporary'"
-          :persistent="drawerType =='persistent'"
-          :permanent="drawerType == 'permanent'"
-        >
-          <mdc-drawer-list>
-            <mdc-drawer-item start-icon="inbox">Inbox</mdc-drawer-item>
-            <mdc-drawer-item start-icon="send">Sent Mail</mdc-drawer-item>
-            <mdc-drawer-item start-icon="drafts">Drafts</mdc-drawer-item>
-          </mdc-drawer-list>
-        </mdc-drawer> -->
-
         <main class="content" style="display:flex;justify-content:center">
           <mdc-button @click="open=!open">Toggle drawer</mdc-button>
-          <!-- <div>
-            <mdc-radio name="drawer" v-model="drawerType" label="temporary" checked></mdc-radio>
-            <mdc-radio name="drawer" v-model="drawerType" label="persistent"></mdc-radio>
-            <mdc-radio name="drawer" v-model="drawerType" label="permanent"></mdc-radio>
-          </div> -->
         </main>
       </mdc-layout-app>
     </div>

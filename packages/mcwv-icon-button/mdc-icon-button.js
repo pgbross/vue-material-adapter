@@ -1,31 +1,8 @@
 import MDCIconButtonToggleFoundation from '@material/icon-button/foundation';
 import { RippleBase } from '@mcwv/ripple';
-const template = `  <a
-    :class="classes"
-    :style="styles"
-    class="mdc-icon-button material-icons"
-    @click="onClick"
-    v-if="isLink"
-    v-bind="$attrs"
-    aria-pressed="false"
-  >
-    <slot/>
-  </a>
-  <button
-    :class="classes"
-    :style="styles"
-    class="mdc-icon-button material-icons"
-    @click="onClick"
-    v-bind="$attrs"
-    aria-pressed="false"
-    v-else
-  >
-    <slot/>
-  </button>`;
 
 export default {
   name: 'mdc-icon-button',
-  template,
   model: {
     prop: 'isOn',
     event: 'change',
@@ -35,13 +12,30 @@ export default {
   },
   data() {
     return {
-      classes: {},
+      classes: {
+        'mdc-icon-button': 1,
+        'material-icons': 1,
+      },
       styles: {},
     };
   },
 
   watch: {
     isOn: 'onOn_',
+  },
+  render(createElement) {
+    const isLink = Boolean(this.$attrs.href);
+    const tag = isLink ? 'a' : 'button';
+    return createElement(
+      tag,
+      {
+        class: this.classes,
+        style: this.styles,
+        on: { click: evt => this.foundation.handleClick(evt) },
+        attrs: { ...this.$attrs, 'aria-pressed': 'false' },
+      },
+      this.$slots.default,
+    );
   },
   mounted() {
     this.foundation = new MDCIconButtonToggleFoundation({
@@ -75,16 +69,6 @@ export default {
       if (this.isOn !== isOn) {
         this.foundation.toggle(isOn);
       }
-    },
-
-    onClick(evt) {
-      this.foundation.handleClick(evt);
-    },
-  },
-
-  computed: {
-    isLink() {
-      return this.$el && Boolean(this.$el.getAttribute('href'));
     },
   },
 };
