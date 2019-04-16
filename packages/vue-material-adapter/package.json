@@ -24,7 +24,6 @@
     "@mcwv/chips": "^0.2.2",
     "@mcwv/dialog": "^0.2.2",
     "@mcwv/drawer": "^0.2.2",
-    "@mcwv/elevation": "^0.2.2",
     "@mcwv/fab": "^0.2.2",
     "@mcwv/floating-label": "^0.2.2",
     "@mcwv/grid-list": "^0.2.2",

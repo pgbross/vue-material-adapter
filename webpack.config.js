@@ -114,10 +114,6 @@ module.exports = [
         resolve('packages/mcwv-drawer/index.js'),
         resolve('packages/mcwv-drawer/index.scss'),
       ],
-      elevation: [
-        resolve('packages/mcwv-elevation/index.js'),
-        resolve('packages/mcwv-elevation/index.scss'),
-      ],
       fab: [
         resolve('packages/mcwv-fab/index.js'),
         resolve('packages/mcwv-fab/index.scss'),

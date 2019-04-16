@@ -7,7 +7,6 @@ import VueMDCCheckbox from './checkbox';
 import VueMDCChips from './chips';
 import VueMDCDialog from './dialog';
 import VueMDCDrawer from './drawer';
-import VueMDCElevation from './elevation';
 import VueMDCFab from './fab';
 import VueMDCFloatingLabel from './floating-label';
 import VueMDCGridList from './grid-list';
@@ -23,7 +22,6 @@ import VueMDCMaterialIcon from './material-icon';
 import VueMDCMenu from './menu';
 import VueMDCNotchedOutline from './notched-outline';
 import VueMDCRadio from './radio';
-import VueMDCRipple from './ripple';
 import VueMDCSelect from './select';
 import VueMDCSlider from './slider';
 import VueMDCSnackbar from './snackbar';
@@ -31,7 +29,6 @@ import VueMDCSwitch from './switch';
 import VueMDCTabs from './tabs';
 import VueMDCTextfield from './textfield';
 import VueMDCTheme from './theme';
-import VueMDCToolbar from './toolbar';
 import VueMDCTopAppBar from './top-app-bar';
 import VueMDCTypography from './typography';
 
@@ -42,10 +39,8 @@ export default {
     vm.use(VueMDCCard);
     vm.use(VueMDCCheckbox);
     vm.use(VueMDCChips);
-    vm.use(VueMDCElevation);
     vm.use(VueMDCDialog);
     vm.use(VueMDCDrawer);
-    vm.use(VueMDCElevation);
     vm.use(VueMDCFab);
     vm.use(VueMDCFloatingLabel);
     vm.use(VueMDCGridList);
@@ -61,7 +56,6 @@ export default {
     vm.use(VueMDCMaterialIcon);
     vm.use(VueMDCNotchedOutline);
     vm.use(VueMDCRadio);
-    vm.use(VueMDCRipple);
     vm.use(VueMDCSelect);
     vm.use(VueMDCSlider);
     vm.use(VueMDCSnackbar);
@@ -69,7 +63,6 @@ export default {
     vm.use(VueMDCTabs);
     vm.use(VueMDCTextfield);
     vm.use(VueMDCTheme);
-    vm.use(VueMDCToolbar);
     vm.use(VueMDCTopAppBar);
     vm.use(VueMDCTypography);
   },

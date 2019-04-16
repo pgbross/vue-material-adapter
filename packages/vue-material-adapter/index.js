@@ -5,7 +5,6 @@ import checkbox from '@mcwv/checkbox/index';
 import chips from '@mcwv/chips/index';
 import dialog from '@mcwv/dialog/index';
 import drawer from '@mcwv/drawer/index';
-import elevation from '@mcwv/elevation/index';
 import fab from '@mcwv/fab/index';
 import floatingLabel from '@mcwv/floating-label/index';
 import gridList from '@mcwv/grid-list/index';
@@ -36,7 +35,6 @@ export default {
     vm.use(chips);
     vm.use(dialog);
     vm.use(drawer);
-    vm.use(elevation);
     vm.use(fab);
     vm.use(floatingLabel);
     vm.use(gridList);
@@ -69,7 +67,6 @@ export {
   chips,
   dialog,
   drawer,
-  elevation,
   fab,
   floatingLabel,
   gridList,

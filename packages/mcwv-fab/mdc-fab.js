@@ -1,36 +1,26 @@
 import { DispatchEventMixin, CustomButtonMixin } from '@mcwv/base';
 import { RippleMixin } from '@mcwv/ripple';
 
-const template = `  <custom-button
-    :class="classes"
-    :style="styles"
-    :href="href"
-    :link="link"
-    class="mdc-fab"
-    v-on="listeners"
-  >
-    <span class="mdc-fab__icon">
-      <slot>{{ icon }}</slot>
-    </span>
-  </custom-button>`;
-
 export default {
   name: 'mdc-fab',
-  template,
   mixins: [DispatchEventMixin, CustomButtonMixin, RippleMixin],
   props: {
     icon: String,
     mini: Boolean,
-    absolute: Boolean,
-    fixed: Boolean,
+    exited: Boolean,
+    label: String,
   },
   data() {
     return {
-      classes: {
+      iconClasses: {
+        'mdc-fab__icon': 1,
         'material-icons': this.icon,
+      },
+      classes: {
+        'mdc-fab': 1,
         'mdc-fab--mini': this.mini,
-        'mdc-fab--absolute': this.absolute,
-        'mdc-fab--fixed': this.fixed,
+        'mdc-fab--extended': this.label,
+        'mdc-fab--exited': this.exited,
       },
       styles: {},
     };
@@ -42,5 +32,33 @@ export default {
     mini() {
       this.$set(this.classes, 'mdc-fab--mini', this.mini);
     },
+    exited() {
+      this.$set(this.classes, 'mdc-fab--exited', this.exited);
+    },
+  },
+  render(createElement) {
+    const nodes = [
+      createElement(
+        'span',
+        { class: this.iconClasses },
+        this.$slots.default || this.icon,
+      ),
+    ];
+    if (this.label) {
+      nodes.push(
+        createElement('span', { class: { 'mdc-fab__label': 1 } }, this.label),
+      );
+    }
+
+    return createElement(
+      'custom-button',
+      {
+        class: this.classes,
+        styles: this.styles,
+        attrs: { href: this.href, link: this.link },
+        on: this.listeners,
+      },
+      nodes,
+    );
   },
 };

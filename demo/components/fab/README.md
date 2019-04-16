@@ -3,7 +3,8 @@
 ```html
 <mdc-fab icon="favorite"></mdc-fab>
 <mdc-fab mini icon="favorite"></mdc-fab>
-<mdc-fab fixed icon="home" @click="scrollToTop"></mdc-fab>
+<mdc-fab icon="favorite" label="wiffle" />
+<mdc-fab icon="home" @click="scrollToTop"></mdc-fab>
 ```
 
 > refer to [Material Design Icon Font](https://material.io/icons/) for the list of icons
