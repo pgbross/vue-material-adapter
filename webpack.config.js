@@ -126,7 +126,6 @@ module.exports = [
         resolve('packages/mcwv-grid-list/index.js'),
         resolve('packages/mcwv-grid-list/index.scss'),
       ],
-      icon: resolve('packages/mcwv-icon/index.js'),
       iconButton: [
         resolve('packages/mcwv-icon-button/index.js'),
         resolve('packages/mcwv-icon-button/index.scss'),
