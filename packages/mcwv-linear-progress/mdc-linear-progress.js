@@ -7,31 +7,20 @@ const ProgressPropType = {
   },
 };
 
-const template = `  <div :class="classes" :style="styles" role="progressbar" class="mdc-linear-progress">
-    <div class="mdc-linear-progress__buffering-dots"/>
-    <div ref="buffer" class="mdc-linear-progress__buffer"/>
-    <div ref="primary" class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">
-      <span class="mdc-linear-progress__bar-inner"/>
-    </div>
-    <div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
-      <span class="mdc-linear-progress__bar-inner"/>
-    </div>
-  </div>`;
-
 export default {
   name: 'mdc-linear-progress',
-  template,
   props: {
     open: { type: Boolean, default: true },
     indeterminate: Boolean,
     reverse: Boolean,
-    accent: Boolean,
     progress: ProgressPropType,
     buffer: ProgressPropType,
   },
   data() {
     return {
-      classes: { 'mdc-linear-progress--accent': this.accent },
+      classes: {
+        'mdc-linear-progress': 1,
+      },
       styles: {},
     };
   },
@@ -56,6 +45,58 @@ export default {
       this.foundation.setReverse(this.reverse);
     },
   },
+  render(createElement) {
+    const nodes = [
+      createElement('div', {
+        class: { 'mdc-linear-progress__buffering-dots': 1 },
+      }),
+      createElement('div', {
+        ref: 'buffer',
+        class: { 'mdc-linear-progress__buffer': 1 },
+      }),
+      createElement(
+        'div',
+        {
+          ref: 'primary',
+          class: {
+            'mdc-linear-progress__bar': 1,
+            'mdc-linear-progress__primary-bar': 1,
+          },
+        },
+        [
+          createElement('span', {
+            class: { 'mdc-linear-progress__bar-inner': 1 },
+          }),
+        ],
+      ),
+      createElement(
+        'div',
+        {
+          ref: 'secondary',
+          class: {
+            'mdc-linear-progress__bar': 1,
+            'mdc-linear-progress__secondary-bar': 1,
+          },
+        },
+        [
+          createElement('span', {
+            class: { 'mdc-linear-progress__bar-inner': 1 },
+          }),
+        ],
+      ),
+    ];
+
+    return createElement(
+      'div',
+      {
+        class: this.classes,
+        style: this.styles,
+        attrs: { role: 'progressbar' },
+      },
+      nodes,
+    );
+  },
+
   mounted() {
     this.foundation = new MDCLinearProgressFoundation({
       addClass: className => {
