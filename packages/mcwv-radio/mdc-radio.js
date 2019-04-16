@@ -5,30 +5,8 @@ import { DispatchFocusMixin, VMAUniqueIdMixin } from '@mcwv/base';
 import { RippleBase } from '@mcwv/ripple';
 import { applyPassive } from '@mcwv/base';
 
-const template = `  <div :class="formFieldClasses" class="mdc-radio-wrapper">
-    <div ref="root" :class="classes" :style="styles" class="mdc-radio">
-      <input
-        ref="control"
-        :id="vma_uid_"
-        :name="name"
-        type="radio"
-        class="mdc-radio__native-control"
-        @change="sync"
-      >
-
-      <div class="mdc-radio__background">
-        <div class="mdc-radio__outer-circle"/>
-        <div class="mdc-radio__inner-circle"/>
-      </div>
-    </div>
-    <label ref="label" :for="vma_uid_">
-      <slot>{{ label }}</slot>
-    </label>
-  </div>`;
-
 export default {
   name: 'mdc-radio',
-  template,
   mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
   model: {
     prop: 'picked',
@@ -45,9 +23,10 @@ export default {
   },
   data() {
     return {
-      classes: {},
+      classes: { 'mdc-radio': 1 },
       styles: {},
       formFieldClasses: {
+        'mdc-radio-wrapper': 1,
         'mdc-form-field': this.label,
         'mdc-form-field--align-end': this.label && this.alignEnd,
       },
@@ -59,6 +38,43 @@ export default {
     disabled(value) {
       this.foundation.setDisabled(value);
     },
+  },
+  render(createElement) {
+    const inputEl = createElement('input', {
+      class: { 'mdc-radio__native-control': 1 },
+      attrs: { type: 'radio', name: this.name, id: this.vma_uid_ },
+      on: { change: evt => this.sync(evt) },
+      ref: 'control',
+    });
+
+    const backgroundEl = createElement(
+      'div',
+      {
+        class: { 'mdc-radio__background': 1 },
+      },
+      [
+        createElement('div', { class: { 'mdc-radio__outer-circle': 1 } }),
+        createElement('div', { class: { 'mdc-radio__inner-circle': 1 } }),
+      ],
+    );
+    const radioEl = createElement(
+      'div',
+      {
+        class: this.classes,
+        style: this.styles,
+        ref: 'root',
+      },
+      [inputEl, backgroundEl],
+    );
+
+    return createElement('div', { class: this.formFieldClasses }, [
+      radioEl,
+      createElement(
+        'label',
+        { ref: 'label', attrs: { for: this.vma_uid_ } },
+        this.$slots.default || this.label,
+      ),
+    ]);
   },
   mounted() {
     // add foundation

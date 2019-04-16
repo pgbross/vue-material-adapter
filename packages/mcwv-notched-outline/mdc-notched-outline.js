@@ -1,22 +1,38 @@
 import MDCnotchedOutlineFoundation from '@material/notched-outline/foundation';
 
-const template = `  <div ref="outlined" :class="outlinedClasses">
-    <div class="mdc-notched-outline__leading"></div>
-    <div ref="notchEl" class="mdc-notched-outline__notch">
-      <mdc-floating-label v-if="$slots.default" ref="labelEl">
-        <slot/>
-      </mdc-floating-label>
-    </div>
-    <div class="mdc-notched-outline__trailing"></div>
-  </div>`;
-
 export default {
   name: 'mdc-notched-outline',
-  template,
+
   data() {
     return {
       outlinedClasses: { 'mdc-notched-outline': true },
     };
+  },
+  render(createElement) {
+    const labelNode = this.$slots.default
+      ? [
+          createElement(
+            'mdc-floating-label',
+            { ref: 'labelEl' },
+            this.$slots.default,
+          ),
+        ]
+      : [];
+
+    const notchEl = createElement(
+      'div',
+      {
+        class: { 'mdc-notched-outline__notch': 1 },
+        ref: 'notchEl',
+      },
+      labelNode,
+    );
+
+    return createElement('div', { class: this.outlinedClasses }, [
+      createElement('div', { class: { 'mdc-notched-outline__leading': 1 } }),
+      notchEl,
+      createElement('div', { class: { 'mdc-notched-outline__trailing': 1 } }),
+    ]);
   },
   mounted() {
     this.foundation = new MDCnotchedOutlineFoundation({
@@ -35,16 +51,11 @@ export default {
     this.foundation.init();
 
     if (this.$slots.default) {
-      // this.$refs.labelEl.style.transitionDuration = '0s'
-
       this.$set(
         this.outlinedClasses,
         MDCnotchedOutlineFoundation.cssClasses.OUTLINE_UPGRADED,
         true,
       );
-      // requestAnimationFrame(() => {
-      //   this.$refs.labelEl.style.transitionDuration = ''
-      // })
     } else {
       this.$set(
         this.outlinedClasses,
