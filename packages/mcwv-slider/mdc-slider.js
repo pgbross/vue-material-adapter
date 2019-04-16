@@ -1,32 +1,8 @@
 import MDCSliderFoundation from '@material/slider/foundation';
 import { DispatchFocusMixin, applyPassive } from '@mcwv/base';
 
-const template = `  <div :class="classes" class="mdc-slider" tabindex="0" role="slider">
-    <div class="mdc-slider__track-container">
-      <div :style="trackStyles" class="mdc-slider__track"/>
-      <div v-if="hasMarkers" class="mdc-slider__track-marker-container">
-        <div
-          v-for="markerNum in numMarkers"
-          :key="markerNum"
-          :style="markerNum == numMarkers ? lastTrackMarkersStyles : {}"
-          class="mdc-slider__track-marker"
-        />
-      </div>
-    </div>
-    <div ref="thumbContainer" :style="thumbStyles" class="mdc-slider__thumb-container">
-      <div v-if="isDiscrete" class="mdc-slider__pin">
-        <span class="mdc-slider__pin-value-marker">{{ markerValue }}</span>
-      </div>
-      <svg class="mdc-slider__thumb" width="21" height="21">
-        <circle cx="10.5" cy="10.5" r="7.875"></circle>
-      </svg>
-      <div class="mdc-slider__focus-ring"/>
-    </div>
-  </div>`;
-
 export default {
   name: 'mdc-slider',
-  template,
   mixins: [DispatchFocusMixin],
   model: {
     prop: 'value',
@@ -45,6 +21,7 @@ export default {
   data() {
     return {
       classes: {
+        'mdc-slider': 1,
         'mdc-slider--discrete': !!this.step,
         'mdc-slider--display-markers': this.displayMarkers,
       },
@@ -54,6 +31,86 @@ export default {
       markerValue: '',
       numMarkers: 0,
     };
+  },
+  render(createElement) {
+    const containerNodes = [
+      createElement('div', {
+        style: this.trackStyles,
+        class: { 'mdc-slider__track': 1 },
+      }),
+    ];
+    if (this.hasMarkers) {
+      const markers = [];
+      for (let markerNum = 0; markerNum < this.numMarkers; markerNum++) {
+        markers.push(
+          createElement('div', {
+            class: { 'mdc-slider__track-marker': 1 },
+            style:
+              markerNum == this.numMarkers - 1
+                ? this.lastTrackMarkersStyles
+                : {},
+            attrs: { key: markerNum },
+          }),
+        );
+      }
+      containerNodes.push(
+        createElement(
+          'div',
+          {
+            class: { 'mdc-slider__track-marker-container': 1 },
+          },
+          markers,
+        ),
+      );
+    }
+
+    const trackContainer = createElement(
+      'div',
+      {
+        class: { 'mdc-slider__track-container': 1 },
+      },
+      containerNodes,
+    );
+
+    const thumbNodes = [
+      createElement(
+        'svg',
+        { class: { 'mdc-slider__thumb': 1 }, attrs: { width: 21, height: 21 } },
+        [
+          createElement('circle', {
+            attrs: { cx: 10.5, cy: 10.5, r: 7.875 },
+          }),
+        ],
+      ),
+      createElement('div', { class: { 'mdc-slider__focus-ring': 1 } }),
+    ];
+
+    if (this.isDiscrete) {
+      thumbNodes.unshift(
+        createElement('div', { class: { 'mdc-slider__pin': 1 } }, [
+          createElement(
+            'span',
+            { class: { 'mdc-slider__pin-value-marker': 1 } },
+            this.markerValue,
+          ),
+        ]),
+      );
+    }
+    const thumbContainer = createElement(
+      'div',
+      {
+        class: { 'mdc-slider__thumb-container': 1 },
+        style: this.thumbStyles,
+        ref: 'thumbContainer',
+      },
+      thumbNodes,
+    );
+
+    return createElement(
+      'div',
+      { class: this.classes, attrs: { tabindex: '0', role: 'slider' } },
+      [trackContainer, thumbContainer],
+    );
   },
   computed: {
     isDiscrete() {
