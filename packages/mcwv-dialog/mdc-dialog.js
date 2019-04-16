@@ -1,3 +1,4 @@
+/* eslint-disable quote-props */
 import MDCDialogFoundation from '@material/dialog/foundation';
 import * as util from '@material/dialog/util';
 import { mdcButton } from '@mcwv/button';
@@ -6,53 +7,8 @@ import { closest, matches } from '@material/dom/ponyfill';
 import createFocusTrap from 'focus-trap';
 const strings = MDCDialogFoundation.strings;
 
-const template = `<div
-    ref="root"
-    :class="classes"
-    :style="styles"
-    aria-modal="true"
-    :aria-labelledby="'label' + vma_uid_"
-    :aria-describedby="'desc' + vma_uid_"
-    class="mdc-dialog"
-    role="alertdialog"
-    @click="onClick"
-    @keydown="onClick"
-  >
-    <div ref="container" class="mdc-dialog__container">
-      <div ref="surface" :class="surfaceClasses" class="mdc-dialog__surface">
-        <h2 v-if="title" class="mdc-dialog__title" :id="'label' + vma_uid_">
-          <!--
-          -->
-          {{ title
-          }}
-          <!---->
-        </h2>
-        <div ref="content" class="mdc-dialog__content" :id="'desc' + vma_uid_">
-          <slot/>
-        </div>
-        <footer v-if="accept || cancel" class="mdc-dialog__actions">
-          <button
-            type="button"
-            v-if="cancel"
-            class="mdc-button mdc-dialog__button"
-            data-mdc-dialog-action="no"
-          >{{ cancel }}</button>
-          <button
-            type="button"
-            ref="defaultButton"
-            :disabled="acceptDisabled"
-            class="mdc-button mdc-dialog__button"
-            data-mdc-dialog-action="yes"
-          >{{ accept }}</button>
-        </footer>
-      </div>
-    </div>
-    <div class="mdc-dialog__scrim"/>
-  </div>`;
-
 export default {
   name: 'mdc-dialog',
-  template,
   components: {
     mdcButton: mdcButton,
   },
@@ -87,11 +43,9 @@ export default {
   },
   data() {
     return {
-      classes: {
-        'mdc-theme--dark': this.dark,
-      },
+      classes: { 'mdc-dialog': 1 },
       styles: {},
-      surfaceClasses: {},
+      surfaceClasses: { 'mdc-dialog__surface': 1 },
       bodyClasses: {
         'mdc-dialog__body--scrollable': this.scrollable,
       },
@@ -99,6 +53,112 @@ export default {
   },
   watch: {
     open: 'onOpen_',
+  },
+  render(createElement) {
+    const surfaceNodes = [
+      createElement(
+        'div',
+        {
+          class: { 'mdc-dialog__content': 1 },
+          attrs: { id: `desc${this.vma_uid_}` },
+          ref: 'content',
+        },
+        this.$slots.default,
+      ),
+    ];
+
+    if (this.title) {
+      surfaceNodes.unshift(
+        createElement(
+          'h2',
+          {
+            class: { 'mdc-dialog__title': 1 },
+            attrs: { id: `label${this.vma_uid_}` },
+          },
+          this.title,
+        ),
+      );
+    }
+
+    if (this.accept || this.cancel) {
+      const buttons = [
+        createElement(
+          'button',
+          {
+            class: {
+              'mdc-button': 1,
+              'mdc-dialog__button': 1,
+            },
+            attrs: {
+              'data-mdc-dialog-action': 'yes',
+              disabled: this.acceptDisabled,
+              type: 'button',
+            },
+            ref: 'defaultButton',
+          },
+          this.accept,
+        ),
+      ];
+
+      if (this.cancel) {
+        buttons.unshift(
+          createElement(
+            'button',
+            {
+              class: {
+                'mdc-button': 1,
+                'mdc-dialog__button': 1,
+              },
+              attrs: {
+                'data-mdc-dialog-action': 'no',
+                type: 'button',
+              },
+            },
+            this.cancel,
+          ),
+        );
+      }
+      surfaceNodes.push(
+        createElement(
+          'footer',
+          { class: { 'mdc-dialog__actions': 1 } },
+          buttons,
+        ),
+      );
+    }
+
+    const surfaceElement = createElement(
+      'div',
+      { class: this.surfaceClasses, ref: 'surface' },
+      surfaceNodes,
+    );
+
+    return createElement(
+      'div',
+      {
+        class: this.classes,
+        style: this.styles,
+        attrs: {
+          'aria-modal': 'true',
+          'aria-labelledby': `label${this.vma_uid_}`,
+          'aria-describedby': `desc${this.vma_uid_}`,
+          role: 'alertdialog',
+        },
+        ref: 'root',
+        on: {
+          click: evt => this.foundation.handleInteraction(evt),
+          keydown: evt => this.foundation.handleInteraction(evt),
+        },
+      },
+      [
+        createElement(
+          'div',
+          { class: { 'mdc-dialog__container': 1 }, ref: 'container' },
+          [surfaceElement],
+        ),
+        createElement('div', { class: { 'mdc-dialog__scrim': 1 } }),
+      ],
+    );
   },
   mounted() {
     if (this.accept) {
@@ -166,9 +226,6 @@ export default {
       }
     },
 
-    onClick(event) {
-      this.foundation.handleInteraction(event);
-    },
     onCancel() {
       if (this.$listeners['validateCancel']) {
         this.$emit('validateCancel', {
