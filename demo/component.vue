@@ -33,7 +33,6 @@ export default {
     'drawer-readme': () => import('./components/drawer/README.md'),
     'fab-readme': () => import('./components/fab/README.md'),
     'grid-list-readme': () => import('./components/grid-list/README.md'),
-    'icon-readme': () => import('./components/icon/README.md'),
     'icon-button-readme': () => import('./components/icon-button/README.md'),
     // 'icon-toggle-readme': () => import('./components/icon-toggle/README.md'),
     // 'layout-app-readme': () => import('./components/layout-app/README.md'),
