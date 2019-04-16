@@ -3,33 +3,8 @@
 import { DispatchEventMixin } from '@mcwv/base';
 import { RippleBase } from '@mcwv/ripple';
 
-const template = `  <li
-    :class="[classes, itemClasses]"
-    :style="styles"
-    :tabindex="isInteractive ? '0' : undefined"
-    class="mdc-grid-tile"
-    v-on="isInteractive ? listeners : clickListener"
-  >
-    <div v-if="cover" class="mdc-grid-tile__primary">
-      <div :style="{ backgroundImage: 'url(' + src + ')' }" class="mdc-grid-tile__primary-content"/>
-    </div>
-    <div v-else class="mdc-grid-tile__primary">
-      <img :src="src" class="mdc-grid-tile__primary-content">
-    </div>
-    <span v-if="title || supportText" class="mdc-grid-tile__secondary">
-      <i v-if="icon" class="mdc-grid-tile__icon material-icons">{{ icon }}</i>
-      <span v-if="title" class="mdc-grid-tile__title">{{ title }}</span>
-      <span v-if="supportText" class="mdc-grid-tile__support-text">
-        {{
-        supportText
-        }}
-      </span>
-    </span>
-  </li>`;
-
 export default {
   name: 'mdc-grid-tile',
-  template,
   inject: ['mdcGrid'],
   mixins: [DispatchEventMixin],
   props: {
@@ -43,9 +18,92 @@ export default {
   },
   data() {
     return {
-      classes: {},
+      classes: { 'mdc-grid-tile': 1 },
       styles: {},
     };
+  },
+  render(createElement) {
+    const nodes = [];
+
+    const tileChild = this.cover
+      ? createElement('div', {
+          class: { 'mdc-grid-tile__primary-content': 1 },
+          style: { backgroundImage: `url(${this.src})` },
+        })
+      : createElement('img', {
+          class: { 'mdc-grid-tile__primary-content': 1 },
+          attrs: { src: this.src },
+        });
+
+    nodes.push(
+      createElement('div', { class: { 'mdc-grid-tile__primary': 1 } }, [
+        tileChild,
+      ]),
+    );
+
+    if (this.title || this.supportText) {
+      const children = [];
+
+      if (this.icon) {
+        children.push(
+          createElement(
+            'i',
+            {
+              class: {
+                'mdc-grid-tile__icon': 1,
+                'material-icons': 1,
+              },
+            },
+            this.icon,
+          ),
+        );
+      }
+      if (this.title) {
+        children.push(
+          createElement(
+            'span',
+            {
+              class: {
+                'mdc-grid-tile__title': 1,
+              },
+            },
+            this.title,
+          ),
+        );
+      }
+      if (this.supportText) {
+        children.push(
+          createElement(
+            'span',
+            {
+              class: {
+                'mdc-grid-tile__support-text': 1,
+              },
+            },
+            this.supportText,
+          ),
+        );
+      }
+
+      nodes.push(
+        createElement(
+          'span',
+          { class: { 'mdc-grid-tile__secondary': 1 } },
+          children,
+        ),
+      );
+    }
+
+    return createElement(
+      'li',
+      {
+        class: { ...this.classes, ...this.itemClasses },
+        style: this.styles,
+        attrs: { tabindex: this.isInteractive ? '0' : void 0 },
+        on: this.isInteractive ? this.listeners : this.clickListener,
+      },
+      nodes,
+    );
   },
   computed: {
     clickListener() {

@@ -1,14 +1,8 @@
 /* eslint-disable quote-props */
 import MDCGridListFoundation from '@material/grid-list/foundation';
-const template = `  <div class="mdc-grid-list">
-    <ul :class="classes" :style="styles" class="mdc-grid-list__tiles">
-      <slot/>
-    </ul>
-  </div>`;
 
 export default {
   name: 'mdc-grid-list',
-  template,
   props: {
     width: [String, Number],
     ratio: String,
@@ -22,9 +16,18 @@ export default {
   provide() {
     return { mdcGrid: this };
   },
+  render(createElement) {
+    return createElement('div', { class: { 'mdc-grid-list': 1 } }, [
+      createElement(
+        'ul',
+        { class: this.classes, style: this.styles },
+        this.$slots.default,
+      ),
+    ]);
+  },
   computed: {
     classes() {
-      const classes = {};
+      const classes = { 'mdc-grid-list__tiles': 1 };
 
       classes['mdc-grid-list--tile-gutter-1'] = this.narrowGutter;
       classes['mdc-grid-list--header-caption'] = this.headerCaption;
