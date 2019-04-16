@@ -3,22 +3,8 @@ import MDCModalDrawerFoundation from '@material/drawer/modal/foundation';
 import MDCListFoundation from '@material/list/foundation';
 import createFocusTrap from 'focus-trap';
 
-const template = `<div class="mdc-drawer-wrapper">
-    <aside ref="drawer" :class="classes" class="mdc-drawer mdc-drawer--modal">
-      <slot v-if="$slots['header']" name="header"></slot>
-      <!-- <div v-if="$slots['header']" class="mdc-drawer__header"><</div> -->
-      <div class="mdc-drawer__content">
-        <slot></slot>
-      </div>
-    </aside>
-    <div class="mdc-drawer-scrim"></div>
-
-    <div v-if="toolbarSpacer" class="mdc-top-app-bar--fixed-adjust"/>
-  </div>`;
-
 export default {
   name: 'mdc-drawer',
-  template,
   model: {
     prop: 'open',
     event: 'change',
@@ -48,9 +34,44 @@ export default {
   },
   data() {
     return {
-      // open_: false,
-      classes: {},
+      classes: {
+        'mdc-drawer': 1,
+        'mdc-drawer--modal': 1,
+      },
     };
+  },
+  render(createElement) {
+    const asideNodes = [
+      createElement(
+        'div',
+        { class: { 'mdc-drawer__content': 1 } },
+        this.$slots.default,
+      ),
+    ];
+
+    if (this.$slots.header) {
+      asideNodes.unshift(this.$slots.header);
+    }
+    const asideElement = createElement(
+      'aside',
+      {
+        class: this.classes,
+        ref: 'drawer',
+      },
+      asideNodes,
+    );
+
+    const nodes = [
+      asideElement,
+      createElement('div', { class: { 'mdc-drawer-scrim': 1 } }),
+    ];
+
+    if (this.toolbarSpacer) {
+      nodes.push(
+        createElement('div', { class: { 'mdc-top-app-bar--fixed-adjust': 1 } }),
+      );
+    }
+    return createElement('div', { class: { 'mdc-drawer-wrapper': 1 } }, nodes);
   },
   computed: {
     type() {},
@@ -123,15 +144,10 @@ export default {
       this.closeOnEventSource = this.closeOnSource || this.$root;
       this.closeOnEventSource.$on(this.closeOn, this.close);
     }
-    // media.small.addListener(this.refreshMedia)
-    // media.large.addListener(this.refreshMedia)
-    // this.$nextTick(() => this.refreshMedia())
   },
   beforeDestroy() {
     this.foundation && this.foundation.destroy();
     this.foundation = null;
-    // media.small.removeListener(this.refreshMedia)
-    // media.large.removeListener(this.refreshMedia)
 
     if (this.toggleOnEventSource) {
       this.toggleOnEventSource.$off(this.toggleOn, this.toggle);
