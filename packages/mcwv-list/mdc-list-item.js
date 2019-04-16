@@ -1,37 +1,7 @@
 import { RippleBase } from '@mcwv/ripple';
 
-const template = `  <li
-    :class="[classes, itemClasses]"
-    :style="styles"
-    :tabindex="isInteractive ? '0' : undefined"
-    class="mdc-list-item"
-    v-on="isInteractive ? $listeners : {}"
-  >
-    <!-- <span v-if="hasStartDetail" class="mdc-list-item__graphic"> -->
-    <slot name="start-detail"/>
-    <!-- </span> -->
-
-    <span class="mdc-list-item__text" v-if="hasSecondary">
-      <span class="mdc-list-item__primary-text">
-        <slot/>
-      </span>
-      <span class="mdc-list-item__secondary-text" v-if="hasSecondary">
-        <slot name="secondary"/>
-      </span>
-    </span>
-
-    <span class="mdc-list-item__text" v-else>
-      <slot/>
-    </span>
-
-    <!-- <span v-if="hasEndDetail" class="mdc-list-item__meta"> -->
-    <slot name="end-detail"/>
-    <!-- </span> -->
-  </li>`;
-
 export default {
   name: 'mdc-list-item',
-  template,
   inject: ['mdcList'],
   props: {
     selected: Boolean,
@@ -39,9 +9,54 @@ export default {
   },
   data() {
     return {
-      classes: {},
+      classes: { 'mdc-list-item': 1 },
       styles: {},
     };
+  },
+  render(createElement) {
+    const textNodes = [];
+    if (this.hasSecondary) {
+      textNodes.push(
+        createElement(
+          'span',
+          { class: { 'mdc-list-item__primary-text': 1 } },
+          this.$slots.default,
+        ),
+      );
+
+      textNodes.push(
+        createElement(
+          'span',
+          { class: { 'mdc-list-item__secondary-text': 1 } },
+          this.$slots.secondary,
+        ),
+      );
+    } else {
+      textNodes.push(this.$slots.default);
+    }
+    const itemTextElement = createElement(
+      'span',
+      {
+        class: { 'mdc-list-item__text': 1 },
+      },
+      textNodes,
+    );
+
+    const nodes = [
+      this.$slots['start-detail'],
+      itemTextElement,
+      this.$slots['end-detail'],
+    ];
+    return createElement(
+      'li',
+      {
+        class: { ...this.classes, ...this.itemClasses },
+        style: this.styles,
+        attrs: { tabindex: this.isInteractive ? '0' : void 0 },
+        on: this.isInteractive ? this.$listeners : {},
+      },
+      nodes,
+    );
   },
   computed: {
     itemClasses() {
