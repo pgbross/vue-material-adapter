@@ -9,7 +9,6 @@ import fab from '@mcwv/fab/index';
 import floatingLabel from '@mcwv/floating-label/index';
 import gridList from '@mcwv/grid-list/index';
 import iconButton from '@mcwv/icon-button/index';
-import icon from '@mcwv/icon/index';
 import layoutGrid from '@mcwv/layout-grid/index';
 import lineRipple from '@mcwv/line-ripple/index';
 import linearProgress from '@mcwv/linear-progress/index';
@@ -38,7 +37,6 @@ export default {
     vm.use(fab);
     vm.use(floatingLabel);
     vm.use(gridList);
-    vm.use(icon);
     vm.use(iconButton);
     vm.use(layoutGrid);
     vm.use(lineRipple);
@@ -70,7 +68,6 @@ export {
   fab,
   floatingLabel,
   gridList,
-  icon,
   iconButton,
   layoutGrid,
   lineRipple,

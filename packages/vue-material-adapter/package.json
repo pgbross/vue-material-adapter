@@ -27,7 +27,6 @@
     "@mcwv/fab": "^0.2.2",
     "@mcwv/floating-label": "^0.2.2",
     "@mcwv/grid-list": "^0.2.2",
-    "@mcwv/icon": "^0.2.2",
     "@mcwv/icon-button": "^0.2.2",
     "@mcwv/layout-grid": "^0.2.2",
     "@mcwv/line-ripple": "^0.2.2",

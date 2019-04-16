@@ -10,7 +10,6 @@ import VueMDCDrawer from './drawer';
 import VueMDCFab from './fab';
 import VueMDCFloatingLabel from './floating-label';
 import VueMDCGridList from './grid-list';
-import VueMDCIcon from './icon';
 import VueMDCIconButton from './icon-button';
 // import VueMDCIconToggle from './icon-toggle'
 import VueMDCLayoutApp from './layout-app';
@@ -44,7 +43,6 @@ export default {
     vm.use(VueMDCFab);
     vm.use(VueMDCFloatingLabel);
     vm.use(VueMDCGridList);
-    vm.use(VueMDCIcon);
     vm.use(VueMDCIconButton);
     // vm.use(VueMDCIconToggle)
     vm.use(VueMDCLayoutApp);
