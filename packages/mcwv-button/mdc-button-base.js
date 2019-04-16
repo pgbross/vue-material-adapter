@@ -6,7 +6,6 @@ export default {
   mixins: [DispatchEventMixin, CustomButtonMixin, RippleMixin],
   data() {
     return {
-      classes: {},
       styles: {},
     };
   },

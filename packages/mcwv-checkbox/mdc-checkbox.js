@@ -9,33 +9,6 @@ import { applyPassive } from '@mcwv/base';
 const CB_PROTO_PROPS = ['checked', 'indeterminate'];
 
 export default {
-  template: `<div :class="formFieldClasses" class="mdc-checkbox-wrapper">
-    <div ref="root" :class="classes" :style="styles" class="mdc-checkbox">
-      <input
-        ref="control"
-        :id="vma_uid_"
-        :name="name"
-        :value="value"
-        type="checkbox"
-        class="mdc-checkbox__native-control"
-        @change="onChange"
-      >
-      <div class="mdc-checkbox__background">
-        <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-          <path
-            class="mdc-checkbox__checkmark-path"
-            fill="none"
-            stroke="white"
-            d="M1.73,12.91 8.1,19.28 22.79,4.59"
-          ></path>
-        </svg>
-        <div class="mdc-checkbox__mixedmark"/>
-      </div>
-    </div>
-    <label ref="label" :for="vma_uid_">
-      <slot>{{ label }}</slot>
-    </label>
-  </div>`,
   name: 'mdc-checkbox',
   mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
   model: {
@@ -59,7 +32,7 @@ export default {
   data() {
     return {
       styles: {},
-      classes: {},
+      classes: { 'mdc-checkbox': 1 },
     };
   },
   computed: {
@@ -68,6 +41,7 @@ export default {
     },
     formFieldClasses() {
       return {
+        'mdc-checkbox-wrapper': 1,
         'mdc-form-field': this.hasLabel,
         'mdc-form-field--align-end': this.hasLabel && this.alignEnd,
       };
@@ -82,6 +56,60 @@ export default {
       this.setIndeterminate(value);
     },
   },
+  render(createElement) {
+    const inputElement = createElement('input', {
+      attrs: {
+        name: this.name,
+        value: this.value,
+        type: 'checkbox',
+        id: this.vma_uid_,
+      },
+      class: { 'mdc-checkbox__native-control': 1 },
+      on: { change: evt => this.onChange(evt) },
+      ref: 'control',
+    });
+
+    const background = createElement(
+      'div',
+      { class: { 'mdc-checkbox__background': 1 } },
+      [
+        createElement(
+          'svg',
+          {
+            class: { 'mdc-checkbox__checkmark': 1 },
+            attrs: { viewBox: '0 0 24 24' },
+          },
+          [
+            createElement('path', {
+              class: { 'mdc-checkbox__checkmark-path': 1 },
+              attrs: {
+                fill: 'none',
+                stroke: 'white',
+                d: 'M1.73,12.91 8.1,19.28 22.79,4.59',
+              },
+            }),
+          ],
+        ),
+        createElement('div', { class: { 'mdc-checkbox__mixedmark': 1 } }),
+      ],
+    );
+
+    const checkboxElement = createElement(
+      'div',
+      { class: this.classes, style: this.styles, ref: 'root' },
+      [inputElement, background],
+    );
+    const labelElement = createElement(
+      'label',
+      { attrs: { for: this.vma_uid_ }, ref: 'label' },
+      this.$slots.default || this.label,
+    );
+
+    return createElement('div', { class: this.formFieldClasses }, [
+      checkboxElement,
+      labelElement,
+    ]);
+  },
   mounted() {
     this.foundation = new MDCCheckboxFoundation({
       addClass: className => this.$set(this.classes, className, true),
@@ -92,7 +120,6 @@ export default {
       removeNativeControlAttr: attr => {
         this.$refs.control.removeAttribute(attr);
       },
-      // getNativeControl: () => this.$refs.control,
       isIndeterminate: () => this.$refs.control.indeterminate,
       isChecked: () => this.checked,
       hasNativeControl: () => !!this.$refs.control,

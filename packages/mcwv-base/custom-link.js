@@ -5,26 +5,30 @@ export const CustomLink = {
     tag: { type: String, default: 'a' },
     link: Object,
   },
-  render(h, context) {
+  render(
+    createElement,
+    {
+      data,
+      children,
+      props: { link, tag },
+      parent: { $router, $root },
+    },
+  ) {
     let element;
-    const data = Object.assign({}, context.data);
 
-    if (context.props.link && context.parent.$router) {
+    if (link && $router) {
       // router-link case
-      element = context.parent.$root.$options.components['RouterLink'];
-      data.props = Object.assign(
-        { tag: context.props.tag },
-        context.props.link,
-      );
+      element = $root.$options.components['RouterLink'];
+      data.props = { tag, ...link };
       if (data.on.click) {
         data.nativeOn = { click: data.on.click };
       }
     } else {
       // element fallback
-      element = context.props.tag;
+      element = tag;
     }
 
-    return h(element, data, context.children);
+    return createElement(element, data, children);
   },
 };
 

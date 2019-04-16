@@ -75,8 +75,8 @@ export default {
       );
     },
   },
-  render(h) {
-    return h(
+  render(createElement) {
+    return createElement(
       'div',
       {
         class: this.classes,

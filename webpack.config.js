@@ -1,35 +1,10 @@
 const path = require('path');
-// const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const pkg = require('./package.json');
 const resolve = relativePath => path.resolve(__dirname, relativePath);
 const plugins = [];
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { importer } = require('./webpack.util');
-
-// const cssLoaders = [
-//   {
-//     loader: 'css-loader',
-//     options: {
-//       sourceMap: false,
-//       import: false,
-//     },
-//   },
-//   {
-//     loader: 'postcss-loader',
-//     options: {
-//       sourceMap: false,
-//       plugins: () => [require('autoprefixer')({ grid: false })],
-//     },
-//   },
-//   {
-//     loader: 'sass-loader',
-//     options: {
-//       sourceMap: false,
-//       includePaths: [path.resolve(__dirname, './node_modules')],
-//     },
-//   },
-// ];
 
 module.exports = [
   {
@@ -48,13 +23,6 @@ module.exports = [
     devtool: 'source-map',
     module: {
       rules: [
-        // {
-        //   test: /\.vue$/,
-        //   loader: 'vue-loader',
-        //   options: {
-        //     loaders: ['vue-style-loader'].concat(cssLoaders),
-        //   },
-        // },
         {
           test: /\.js$/,
           exclude: /node_modules/,
@@ -74,15 +42,6 @@ module.exports = [
                 },
               ],
             ],
-            // plugins: [
-            //   '@babel/plugin-syntax-dynamic-import',
-            //   // [
-            //   //   '@babel/plugin-transform-runtime',
-            //   //   {
-            //   //     regenerator: true,
-            //   //   },
-            //   // ],
-            // ],
           },
         },
         {
@@ -255,13 +214,6 @@ module.exports = [
     devtool: 'source-map',
     module: {
       rules: [
-        // {
-        //   test: /\.vue$/,
-        //   loader: 'vue-loader',
-        //   options: {
-        //     loaders: ['vue-style-loader'].concat(cssLoaders),
-        //   },
-        // },
         {
           test: /\.js$/,
           exclude: /node_modules/,

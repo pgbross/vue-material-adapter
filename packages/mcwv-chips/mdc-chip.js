@@ -2,49 +2,8 @@ import { MDCChipFoundation } from '@material/chips/chip/foundation';
 import { CustomLinkMixin, emitCustomEvent } from '@mcwv/base';
 import { RippleBase } from '@mcwv/ripple';
 
-const template = `  <div
-    :id="id"
-    :class="classes"
-    :style="styles"
-    tabindex="0"
-    @click="handleInteraction"
-    @keydown="handleInteraction"
-    @transitionend="handleTransitionEnd"
-  >
-    <i
-      v-if="haveleadingIcon"
-      ref="leadingIcon"
-      :class="leadingClasses"
-      class="mdc-chip__icon mdc-chip__icon--leading"
-    >{{ leadingIcon }}</i>
-    <div v-if="isFilter" ref="checkmarkEl" class="mdc-chip__checkmark">
-      <svg class="mdc-chip__checkmark-svg" viewBox="-2 -3 30 30">
-        <path
-          class="mdc-chip__checkmark-path"
-          fill="none"
-          stroke="black"
-          d="M1.73,12.91 8.1,19.28 22.79,4.59"
-        ></path>
-      </svg>
-    </div>
-    <div class="mdc-chip__text">
-      <slot/>
-    </div>
-    <i
-      v-if="havetrailingIcon"
-      ref="trailingIcon"
-      :class="trailingClasses"
-      class="mdc-chip__icon mdc-chip__icon--trailing"
-      tabindex="0"
-      role="button"
-      @click="handleTrailingIconInteraction"
-      @keydown="handleTrailingIconInteraction"
-    >{{ trailingIcon }}</i>
-  </div>`;
-
 export default {
   name: 'mdc-chip',
-  template,
   mixins: [CustomLinkMixin],
   props: {
     leadingIcon: [String],
@@ -84,6 +43,8 @@ export default {
       return Object.assign(
         {},
         {
+          'mdc-chip__icon': 1,
+          'mdc-chip__icon--leading': 1,
           'material-icons': !!this.leadingIcon,
         },
         this.leadingIconClasses,
@@ -93,6 +54,8 @@ export default {
       return Object.assign(
         {},
         {
+          'mdc-chip__icon': 1,
+          'mdc-chip__icon--trailing': 1,
           'material-icons': !!this.trailingIcon,
         },
         this.trailingIconClasses,
@@ -100,6 +63,87 @@ export default {
     },
   },
 
+  render(createElement) {
+    const nodes = [];
+    if (this.haveleadingIcon) {
+      nodes.push(
+        createElement(
+          'i',
+          { class: this.leadingClasses, ref: 'leadingIcon' },
+          this.leadingIcon,
+        ),
+      );
+    }
+
+    if (this.isFilter) {
+      nodes.push(
+        createElement(
+          'div',
+          { class: { 'mdc-chip__checkmark': 1 }, ref: 'checkmarkEl' },
+          [
+            createElement(
+              'svg',
+              {
+                class: { 'mdc-chip__checkmark-svg': 1 },
+                attrs: { viewBox: '-2 -3 30 30' },
+              },
+              [
+                createElement('path', {
+                  class: { 'mdc-chip__checkmark-path': 1 },
+                  attrs: {
+                    fill: 'none',
+                    stroke: 'black',
+                    d: 'M1.73,12.91 8.1,19.28 22.79,4.59',
+                  },
+                }),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+
+    nodes.push(
+      createElement(
+        'div',
+        { class: { 'mdc-chip__text': 1 } },
+        this.$slots.default,
+      ),
+    );
+
+    if (this.havetrailingIcon) {
+      nodes.push(
+        createElement(
+          'i',
+          {
+            class: this.trailingClasses,
+            ref: 'trailingIcon',
+            attrs: { tabindex: '0', role: 'button' },
+            on: {
+              click: evt => this.handleTrailingIconInteraction(evt),
+              keydown: evt => this.handleTrailingIconInteraction(evt),
+            },
+          },
+          this.trailingIcon,
+        ),
+      );
+    }
+
+    return createElement(
+      'div',
+      {
+        class: this.classes,
+        style: this.styles,
+        attrs: { tabindex: '0' },
+        on: {
+          click: evt => this.handleInteraction,
+          keydown: evt => this.handleInteraction(evt),
+          transitionend: evt => this.handleTransitionEnd,
+        },
+      },
+      nodes,
+    );
+  },
   created() {
     this.id = this.mdcChipSet.nextId();
   },

@@ -4,17 +4,21 @@ export const CustomButton = {
   props: {
     link: Object,
   },
-  render(h, context) {
+  render(
+    createElement,
+    {
+      children,
+      data,
+      props: { link, tag },
+      parent: { $router, $root },
+    },
+  ) {
     let element;
-    const data = Object.assign({}, context.data);
 
-    if (context.props.link && context.parent.$router) {
+    if (link && $router) {
       // router-link case
-      element = context.parent.$root.$options.components['RouterLink'];
-      data.props = Object.assign(
-        { tag: context.props.tag },
-        context.props.link,
-      );
+      element = $root.$options.components['RouterLink'];
+      data.props = { tag, ...link };
       data.attrs.role = 'button';
       if (data.on.click) {
         data.nativeOn = { click: data.on.click };
@@ -28,7 +32,7 @@ export const CustomButton = {
       element = 'button';
     }
 
-    return h(element, data, context.children);
+    return createElement(element, data, children);
   },
 };
 

@@ -2,12 +2,7 @@ import MDCTextfieldFoundation from '@material/textfield/foundation';
 import TextfieldHelperText from './textfield-helper-text.js';
 import TextfieldIcon from './textfield-icon.js';
 
-import {
-  DispatchFocusMixin,
-  CustomElementMixin,
-  VMAUniqueIdMixin,
-  applyPassive,
-} from '@mcwv/base';
+import { DispatchFocusMixin, VMAUniqueIdMixin, applyPassive } from '@mcwv/base';
 import { RippleBase } from '@mcwv/ripple';
 
 const template = `  <div :style="{ width: fullwidth ? '100%' : undefined }" :id="id" class="mdc-textfield-wrapper">
@@ -83,7 +78,7 @@ const template = `  <div :style="{ width: fullwidth ? '100%' : undefined }" :id=
 export default {
   name: 'mdc-textfield',
   template,
-  mixins: [CustomElementMixin, DispatchFocusMixin, VMAUniqueIdMixin],
+  mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
   inheritAttrs: false,
   model: {
     prop: 'value',

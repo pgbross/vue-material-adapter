@@ -19,7 +19,6 @@ import materialIcon from '@mcwv/material-icon/index';
 import menu from '@mcwv/menu/index';
 import notchedOutline from '@mcwv/notched-outline/index';
 import radio from '@mcwv/radio/index';
-import ripple from '@mcwv/ripple/index';
 import select from '@mcwv/select/index';
 import slider from '@mcwv/slider/index';
 import snackbar from '@mcwv/snackbar/index';
@@ -65,7 +64,6 @@ export default {
 export {
   base,
   button,
-  ripple,
   card,
   checkbox,
   chips,
