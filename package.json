@@ -155,7 +155,7 @@
     "vue-jest": "^3.0.4",
     "vue-loader": "^15.7.0",
     "vue-markdown-loader": "^2.4.1",
-    "vue-router": "^3.0.4",
+    "vue-router": "^3.0.5",
     "vue-template-compiler": "^2.6.10",
     "vue-template-validator": "^1.1.5",
     "webpack": "^4.30.0",
