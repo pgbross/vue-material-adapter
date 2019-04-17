@@ -2,22 +2,8 @@
 import { MDCMenuFoundation } from '@material/menu/foundation';
 import { emitCustomEvent } from '@mcwv/base';
 
-const template = `  <mdc-menu-surface
-    ref="root"
-    class="mdc-menu"
-    :quick-open="quickOpen"
-    :open="open"
-    @change="onChange"
-    @keydown="handleKeydown"
-  >
-    <mdc-list ref="list" @MDCList:action.native="handleAction">
-      <slot/>
-    </mdc-list>
-  </mdc-menu-surface>`;
-
 export default {
   name: 'mdc-menu',
-  template,
   model: {
     prop: 'open',
     event: 'change',
@@ -44,6 +30,30 @@ export default {
     // anchorMargin(nv) {
     //   this.foundation.setAnchorMargin(nv)
     // }
+  },
+  render(createElement) {
+    return createElement(
+      'mdc-menu-surface',
+      {
+        class: { 'mdc-menu': 1 },
+        ref: 'root',
+        attrs: { 'quick-open': this.quickOpen, open: this.open },
+        on: {
+          change: evt => this.onChange(evt),
+          keydown: evt => this.handleKeydown(evt),
+        },
+      },
+      [
+        createElement(
+          'mdc-list',
+          {
+            ref: 'list',
+            nativeOn: { 'MDCList:action': evt => this.handleAction(evt) },
+          },
+          this.$slots.default,
+        ),
+      ],
+    );
   },
   mounted() {
     this._previousFocus = undefined;
