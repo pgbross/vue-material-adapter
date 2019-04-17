@@ -48,8 +48,7 @@ export default {
   mounted() {
     this.foundation = new MDCTabScrollerFoundation({
       eventTargetMatchesSelector: (evtTarget, selector) => {
-        const MATCHES = matches(HTMLElement.prototype);
-        return evtTarget[MATCHES](selector);
+        return matches(evtTarget, selector);
       },
       addClass: className => this.$set(this.classes, className, true),
 
