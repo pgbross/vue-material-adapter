@@ -1,3 +1,4 @@
+/* eslint-disable quote-props */
 import MDCTabFoundation from '@material/tab/foundation';
 import {
   CustomLinkMixin,
@@ -6,40 +7,8 @@ import {
   VMAUniqueIdMixin,
 } from '@mcwv/base';
 
-const template = `  <custom-link
-    :class="classes"
-    :style="styles"
-    :link="link"
-    class="mdc-tab"
-    @click="handleClick"
-    role="tab"
-    aria-selected="false"
-    tabindex="-1"
-  >
-    <span ref="content" class="mdc-tab__content">
-      <i
-        v-if="!!hasIcon"
-        ref="icon"
-        :class="hasIcon.classes"
-        tabindex="0"
-        class="mdc-tab__icon"
-        aria-hidden="true"
-      >
-        <slot name="icon">{{ hasIcon.content }}</slot>
-      </i>
-
-      <span v-if="hasText" class="mdc-tab__text-label">
-        <slot/>
-      </span>
-    </span>
-
-    <mdc-tab-indicator ref="tabIndicator"></mdc-tab-indicator>
-    <mdc-tab-ripple></mdc-tab-ripple>
-  </custom-link>`;
-
 export default {
   name: 'mdc-tab',
-  template,
   mixins: [CustomLinkMixin, DispatchEventMixin, VMAUniqueIdMixin],
   props: {
     active: Boolean,
@@ -50,6 +19,7 @@ export default {
   data() {
     return {
       classes: {
+        'mdc-tab': 1,
         'mdc-tab--stacked': this.stacked,
         'mdc-tab--min-width': this.minWidth,
       },
@@ -71,6 +41,63 @@ export default {
   },
   watch: {
     active(value) {},
+  },
+  render(createElement) {
+    const contentNodes = [];
+
+    if (this.hasIcon) {
+      contentNodes.push(
+        createElement(
+          'i',
+          {
+            class: { ...this.hasIcon.classes, 'mdc-tab__icon': 1 },
+            attrs: { tabindex: '0', 'aria-hidden': 'true' },
+            ref: 'icon',
+          },
+          this.$slots.icon || this.hasIcon.content,
+        ),
+      );
+    }
+    if (this.hasText) {
+      contentNodes.push(
+        createElement(
+          'span',
+          { class: { 'mdc-tab__text-label': 1 } },
+          this.$slots.default,
+        ),
+      );
+    }
+
+    const spanEl = createElement(
+      'span',
+      {
+        class: { 'mdc-tab__content': 1 },
+        ref: 'content',
+      },
+      contentNodes,
+    );
+
+    const nodes = [
+      spanEl,
+      createElement('mdc-tab-indicator', { ref: 'tabIndicator' }),
+      createElement('mdc-tab-ripple'),
+    ];
+
+    return createElement(
+      'custom-link',
+      {
+        class: this.classes,
+        style: this.styles,
+        attrs: {
+          link: this.link,
+          role: 'tab',
+          'aria-selected': 'false',
+          tabindex: '-1',
+        },
+        on: { click: evt => this.foundation.handleClick(evt) },
+      },
+      nodes,
+    );
   },
   mounted() {
     this.id = this.vma_uid_;
@@ -117,9 +144,7 @@ export default {
     deactivate() {
       this.foundation.deactivate();
     },
-    handleClick(evt) {
-      this.foundation.handleClick(evt);
-    },
+
     isActive() {
       return this.foundation.isActive();
     },

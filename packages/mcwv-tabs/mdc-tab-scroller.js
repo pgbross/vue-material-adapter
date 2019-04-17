@@ -2,36 +2,49 @@ import MDCTabScrollerFoundation from '@material/tab-scroller/foundation';
 import * as util from '@material/tab-scroller/util';
 import { matches } from '@material/dom/ponyfill';
 
-const template = `  <div class="mdc-tab-scroller" :class="classes">
-    <div
-      ref="area"
-      class="mdc-tab-scroller__scroll-area"
-      @mousedown="handleInteraction"
-      @wheel="handleInteraction"
-      @pointerdown="handleInteraction"
-      @touchstart="handleInteraction"
-      @keydown="handleInteraction"
-      :class="areaClasses"
-      :style="areaStyles"
-    >
-      <div
-        ref="content"
-        class="mdc-tab-scroller__scroll-content"
-        :style="contentStyles"
-        @transitionend="handleTransitionEnd"
-      >
-        <slot/>
-      </div>
-    </div>
-  </div>`;
-
 export default {
   name: 'mdc-tab-scroller',
-  template,
   data() {
-    return { classes: {}, areaClasses: {}, areaStyles: {}, contentStyles: {} };
+    return {
+      classes: { 'mdc-tab-scroller': 1 },
+      areaClasses: { 'mdc-tab-scroller__scroll-area': 1 },
+      areaStyles: {},
+      contentStyles: {},
+    };
   },
+  render(createElement) {
+    const areaEl = createElement(
+      'div',
+      {
+        class: this.areaClasses,
+        style: this.areaStyles,
+        ref: 'area',
+        on: {
+          mousedown: evt => this.foundation.handleInteraction(evt),
+          wheel: evt => this.foundation.handleInteraction(evt),
+          pointerdown: evt => this.foundation.handleInteraction(evt),
+          touchstart: evt => this.foundation.handleInteraction(evt),
+          keydown: evt => this.foundation.handleInteraction(evt),
+        },
+      },
+      [
+        createElement(
+          'div',
+          {
+            class: { 'mdc-tab-scroller__scroll-content': 1 },
+            style: this.contentStyles,
+            ref: 'content',
+            on: {
+              transitionend: evt => this.foundation.handleTransitionEnd(evt),
+            },
+          },
+          this.$slots.default,
+        ),
+      ],
+    );
 
+    return createElement('div', { class: this.classes }, [areaEl]);
+  },
   mounted() {
     this.foundation = new MDCTabScrollerFoundation({
       eventTargetMatchesSelector: (evtTarget, selector) => {
@@ -67,12 +80,6 @@ export default {
     this.foundation.destroy();
   },
   methods: {
-    handleTransitionEnd(evt) {
-      this.foundation.handleTransitionEnd(evt);
-    },
-    handleInteraction(evt) {
-      this.foundation.handleInteraction(evt);
-    },
     getScrollPosition() {
       return this.foundation.getScrollPosition();
     },
