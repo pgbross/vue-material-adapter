@@ -2,39 +2,8 @@ import { DispatchFocusMixin, VMAUniqueIdMixin } from '@mcwv/base';
 import { RippleBase } from '@mcwv/ripple';
 import MDCSwitchFoundation from '@material/switch/foundation';
 
-const template = `  <div
-    :class="{
-      'mdc-form-field': hasLabel,
-      'mdc-form-field--align-end': hasLabel && alignEnd,
-    }"
-    class="mdc-switch-wrapper"
-  >
-    <div :class="classes" :styles="styles" class="mdc-switch">
-      <div class="mdc-switch__track"/>
-      <div class="mdc-switch__thumb-underlay">
-        <div class="mdc-switch__thumb">
-          <input
-            ref="control"
-            :name="name"
-            :id="vma_uid_"
-            :value="value"
-            type="checkbox"
-            role="switch"
-            class="mdc-switch__native-control"
-            @change="onChanged"
-          >
-        </div>
-      </div>
-    </div>
-
-    <label v-if="hasLabel" :for="vma_uid_" class="mdc-switch-label">
-      <slot>{{ label }}</slot>
-    </label>
-  </div>`;
-
 export default {
   name: 'mdc-switch',
-  template,
   mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
   model: {
     prop: 'checked',
@@ -50,7 +19,7 @@ export default {
   },
   data() {
     return {
-      classes: {},
+      classes: { 'mdc-switch': 1 },
       styles: {},
     };
   },
@@ -67,7 +36,53 @@ export default {
       this.foundation && this.foundation.setDisabled(value);
     },
   },
+  render(createElement) {
+    const nodes = [
+      createElement('div', { class: this.classes, style: this.styles }, [
+        createElement('div', { class: { 'mdc-switch__track': 1 } }),
+        createElement('div', { class: { 'mdc-switch__thumb-underlay': 1 } }, [
+          createElement('div', { class: { 'mdc-switch__thumb': 1 } }, [
+            createElement('input', {
+              class: { 'mdc-switch__native-control': 1 },
+              attrs: {
+                name: this.name,
+                id: this.vma_uid_,
+                value: this.value,
+                type: 'checkbox',
+                role: 'switch',
+              },
+              ref: 'control',
+              on: { change: evt => this.onChanged(evt) },
+            }),
+          ]),
+        ]),
+      ]),
+    ];
 
+    if (this.hasLabel) {
+      const labelEl = createElement(
+        'label',
+        {
+          class: { 'mdc-switch-label': 1 },
+          attrs: { for: this.vma_uid_ },
+        },
+        this.$slots.default || this.label,
+      );
+      nodes.push(labelEl);
+    }
+
+    return createElement(
+      'div',
+      {
+        class: {
+          'mdc-switch-wrapper': 1,
+          'mdc-form-field': this.hasLabel,
+          'mdc-form-field--align-end': this.hasLabel && this.alignEnd,
+        },
+      },
+      nodes,
+    );
+  },
   mounted() {
     this.foundation = new MDCSwitchFoundation({
       addClass: className => this.$set(this.classes, className, true),

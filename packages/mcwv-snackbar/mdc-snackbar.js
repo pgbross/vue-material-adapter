@@ -2,11 +2,8 @@
 import MDCSnackbarFoundation from '@material/snackbar/foundation';
 import * as ponyfill from '@material/dom/ponyfill';
 
-const template = `  `;
-
 export default {
   name: 'mdc-snackbar',
-  template,
   model: {
     prop: 'open',
     event: 'change',
