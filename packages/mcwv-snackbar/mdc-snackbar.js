@@ -1,29 +1,8 @@
+/* eslint-disable quote-props */
 import MDCSnackbarFoundation from '@material/snackbar/foundation';
 import * as ponyfill from '@material/dom/ponyfill';
 
-const template = `  <div ref="root" :class="classes" class="mdc-snackbar">
-    <div class="mdc-snackbar__surface" @click="surfaceClickHandler">
-      <div ref="labelEl" class="mdc-snackbar__label" role="status" aria-live="polite">
-        <template v-if="showLabelText">{{ labelText }}</template>
-        <span style="display: inline-block; width: 0; height: 1px;" v-else>&nbsp;</span>
-      </div>
-      <div class="mdc-snackbar__actions" v-if="showDismissAction || actionText">
-        <button
-          v-if="actionText"
-          ref="actionEl"
-          type="button"
-          class="mdc-button mdc-snackbar__action"
-          v-on="$listeners"
-        >{{ actionText }}</button>
-
-        <button
-          class="mdc-icon-button mdc-snackbar__dismiss material-icons"
-          title="Dismiss"
-          v-if="showDismissAction"
-        >close</button>
-      </div>
-    </div>
-  </div>`;
+const template = `  `;
 
 export default {
   name: 'mdc-snackbar',
@@ -45,8 +24,8 @@ export default {
   data() {
     return {
       classes: {
+        'mdc-snackbar': 1,
         'mdc-snackbar--leading': this.leading,
-
         'mdc-snackbar--stacked': this.stacked,
       },
       hidden: false,
@@ -58,6 +37,86 @@ export default {
     open: 'onOpen_',
 
     timeoutMs: 'onTimeoutMs_',
+  },
+  render(createElement) {
+    const labelNode = this.showLabelText
+      ? this.labelText
+      : createElement('span', {
+          style: { display: 'inline-block', width: 0, height: '1px' },
+          domProps: {
+            innerHTML: '&nbsp;',
+          },
+        });
+    const surfaceNodes = [
+      createElement(
+        'div',
+        {
+          class: { 'mdc-snackbar__label': 1 },
+          attrs: { role: 'status', 'aria-live': 'polite' },
+          ref: 'labelEl',
+        },
+        [labelNode],
+      ),
+    ];
+
+    if (this.showDismissAction || this.actionText) {
+      const buttonNodes = [];
+
+      if (this.actionText) {
+        buttonNodes.push(
+          createElement(
+            'button',
+            {
+              class: {
+                'mdc-button': 1,
+                'mdc-snackbar__action': 1,
+              },
+              attrs: { type: 'button' },
+              ref: 'actionEl',
+              on: this.$listeners,
+            },
+            this.actionText,
+          ),
+        );
+      }
+
+      if (this.showDismissAction) {
+        buttonNodes.push(
+          createElement(
+            'button',
+            {
+              class: {
+                'mdc-icon-button': 1,
+                'mdc-snackbar__dismiss': 1,
+                'material-icons': 1,
+              },
+              attrs: { title: 'Dismiss' },
+            },
+            ['close'],
+          ),
+        );
+      }
+      surfaceNodes.push(
+        createElement(
+          'div',
+          { class: { 'mdc-snackbar__actions': 1 } },
+          buttonNodes,
+        ),
+      );
+    }
+
+    const surfaceEl = createElement(
+      'div',
+      {
+        class: { 'mdc-snackbar__surface': 1 },
+        on: { click: evt => this.surfaceClickHandler(evt) },
+      },
+      surfaceNodes,
+    );
+
+    return createElement('div', { class: this.classes, ref: 'root' }, [
+      surfaceEl,
+    ]);
   },
   mounted() {
     window.addEventListener('keydown', this.handleKeydownEvent);
