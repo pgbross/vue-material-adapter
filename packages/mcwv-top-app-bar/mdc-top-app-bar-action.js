@@ -10,8 +10,8 @@ export default {
     iconClasses: Object,
   },
 
-  render(h) {
-    return h(
+  render(createElement) {
+    return createElement(
       this.tag,
       {
         class: {

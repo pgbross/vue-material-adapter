@@ -9,7 +9,7 @@ export default {
   },
 
   render(
-    h,
+    createElement,
     {
       props: { short, dense, prominent, tag },
       slots,
@@ -18,7 +18,7 @@ export default {
   ) {
     const base = 'mdc-top-app-bar';
     const suffix = '-fixed-adjust';
-    return h(
+    return createElement(
       tag,
       {
         class: {

@@ -3,30 +3,8 @@ import MDCShortTopAppBarFoundation from '@material/top-app-bar/short/foundation'
 import MDCFixedTopAppBarFoundation from '@material/top-app-bar/fixed/foundation';
 import { DispatchEventMixin } from '@mcwv/base';
 
-const template = `  <header ref="root" :class="rootClasses" :style="rootStyles" v-on="$listeners">
-    <div class="mdc-top-app-bar__row">
-      <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
-        <button
-          v-if="haveNavigationIcon"
-          ref="navigationIcon"
-          :class="naviconClasses"
-          v-on="listeners"
-        >{{ icon }}</button>
-        <span v-if="!!title" class="mdc-top-app-bar__title">{{ title }}</span>
-      </section>
-      <section
-        v-if="$slots.default"
-        class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end"
-      >
-        <slot/>
-      </section>
-    </div>
-    <slot name="tabs"/>
-  </header>`;
-
 export default {
   name: 'mdc-top-app-bar',
-  template,
   mixins: [DispatchEventMixin],
   props: {
     short: Boolean,
@@ -54,6 +32,81 @@ export default {
       },
       foundation: null,
     };
+  },
+  render(createElement) {
+    const startNodes = [];
+    if (this.haveNavigationIcon) {
+      startNodes.push(
+        createElement(
+          'button',
+          {
+            class: this.naviconClasses,
+            ref: 'navigationIcon',
+            on: this.listeners,
+          },
+          this.icon,
+        ),
+      );
+    }
+
+    if (this.title) {
+      startNodes.push(
+        createElement(
+          'span',
+          {
+            class: { 'mdc-top-app-bar__title': 1 },
+          },
+          this.title,
+        ),
+      );
+    }
+
+    const rowNodes = [
+      // start section
+      createElement(
+        'section',
+        {
+          class: {
+            'mdc-top-app-bar__section': 1,
+            'mdc-top-app-bar__section--align-start': 1,
+          },
+        },
+        startNodes,
+      ),
+    ];
+
+    if (this.$slots.default) {
+      // end section
+      rowNodes.push(
+        createElement(
+          'section',
+          {
+            'mdc-top-app-bar__section': 1,
+            'mdc-top-app-bar__section--align-end': 1,
+          },
+          this.$slots.default,
+        ),
+      );
+    }
+
+    const rowEl = createElement(
+      'div',
+      {
+        class: { 'mdc-top-app-bar__row': 1 },
+      },
+      rowNodes,
+    );
+
+    return createElement(
+      'header',
+      {
+        class: this.rootClasses,
+        style: this.rootStyles,
+        ref: 'root',
+        on: this.$listeners,
+      },
+      [rowEl, this.$slots.tabs],
+    );
   },
   computed: {
     haveNavigationIcon() {
