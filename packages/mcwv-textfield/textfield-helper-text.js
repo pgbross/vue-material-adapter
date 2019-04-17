@@ -17,13 +17,17 @@ export default {
     };
   },
 
-  render(h) {
+  render(createElement) {
     const classes = classNames(this.classes);
     if (this.$slots.default) {
       return this.$slots.default[0];
     }
-    return h('div', { class: 'mdc-text-field-helper-line' }, [
-      h('div', { class: classes, attrs: this.$attrs }, this.helptext),
+    return createElement('div', { class: 'mdc-text-field-helper-line' }, [
+      createElement(
+        'div',
+        { class: classes, attrs: this.$attrs },
+        this.helptext,
+      ),
     ]);
   },
   watch: {

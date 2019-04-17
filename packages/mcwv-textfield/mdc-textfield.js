@@ -1,3 +1,4 @@
+/* eslint-disable quote-props */
 import MDCTextfieldFoundation from '@material/textfield/foundation';
 import TextfieldHelperText from './textfield-helper-text.js';
 import TextfieldIcon from './textfield-icon.js';
@@ -5,79 +6,8 @@ import TextfieldIcon from './textfield-icon.js';
 import { DispatchFocusMixin, VMAUniqueIdMixin, applyPassive } from '@mcwv/base';
 import { RippleBase } from '@mcwv/ripple';
 
-const template = `  <div :style="{ width: fullwidth ? '100%' : undefined }" :id="id" class="mdc-textfield-wrapper">
-    <div ref="root" :class="rootClasses">
-      <textfield-icon ref="leadingIconEl" v-if="$slots.leadingIcon">
-        <slot name="leadingIcon"></slot>
-      </textfield-icon>
-
-      <textarea
-        v-if="multiline"
-        ref="input"
-        v-bind="$attrs"
-        :id="vma_uid_"
-        :class="inputClasses"
-        :minlength="minlength"
-        :maxlength="maxlength"
-        :placeholder="inputPlaceHolder"
-        :aria-label="inputPlaceHolder"
-        :aria-controls="inputAriaControls"
-        :rows="rows"
-        :cols="cols"
-        v-on="$listeners"
-        @input="updateValue($event.target.value)"
-      ></textarea>
-
-      <input
-        v-else
-        ref="input"
-        v-bind="$attrs"
-        :id="vma_uid_"
-        :class="inputClasses"
-        :type="type"
-        :minlength="minlength"
-        :maxlength="maxlength"
-        :placeholder="inputPlaceHolder"
-        :aria-label="inputPlaceHolder"
-        :aria-controls="inputAriaControls"
-        v-on="$listeners"
-        @input="updateValue($event.target.value)"
-      >
-
-      <mdc-floating-label v-if="hasLabel" ref="labelEl" :for="vma_uid_">
-        {{
-        label
-        }}
-      </mdc-floating-label>
-
-      <textfield-icon ref="trailingIconEl" v-if="$slots.trailingIcon">
-        <slot name="trailingIcon"></slot>
-      </textfield-icon>
-
-      <mdc-notched-outline v-if="hasOutline" ref="labelEl">
-        {{
-        label
-        }}
-      </mdc-notched-outline>
-
-      <mdc-line-ripple v-if="hasLineRipple" ref="lineRippleEl"/>
-    </div>
-
-    <textfield-helper-text
-      ref="helpertextEl"
-      v-if="hasHelptext"
-      :id="'help-' + vma_uid_"
-      :helptext="helptext"
-      :persistent="helptextPersistent"
-      :validation="helptextValidation"
-    >
-      <slot name="helpText"></slot>
-    </textfield-helper-text>
-  </div>`;
-
 export default {
   name: 'mdc-textfield',
-  template,
   mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
   inheritAttrs: false,
   model: {
@@ -151,6 +81,145 @@ export default {
       outlineClasses: {},
       notchStyles: {},
     };
+  },
+  render(createElement) {
+    const rootNodes = [];
+
+    if (this.$slots.leadingIcon) {
+      rootNodes.push(
+        createElement(
+          'textfield-icon',
+          { ref: 'leadingIconEl' },
+          this.$slots.leadingIcon,
+        ),
+      );
+    }
+
+    if (this.multiline) {
+      rootNodes.push(
+        createElement('textarea', {
+          class: this.inputClasses,
+          attrs: {
+            ...this.$attrs,
+            id: this.vma_uid_,
+            minlength: this.minlength,
+            maxlength: this.maxlength,
+            placeholder: this.inputPlaceHolder,
+            'aria-label': this.inputPlaceHolder,
+            'aria-controls': this.inputAriaControls,
+            rows: this.rows,
+            cols: this.cols,
+          },
+          ref: 'input',
+          on: {
+            ...this.$listeners,
+            input: evt => this.updateValue(evt.target.value),
+          },
+        }),
+      );
+    } else {
+      rootNodes.push(
+        createElement('input', {
+          class: this.inputClasses,
+          attrs: {
+            ...this.$attrs,
+            id: this.vma_uid_,
+            type: this.type,
+            minlength: this.minlength,
+            maxlength: this.maxlength,
+            placeholder: this.inputPlaceHolder,
+            'aria-label': this.inputPlaceHolder,
+            'aria-controls': this.inputAriaControls,
+          },
+          ref: 'input',
+          on: {
+            ...this.$listeners,
+            input: evt => this.updateValue(evt.target.value),
+          },
+        }),
+      );
+    }
+
+    if (this.hasLabel) {
+      rootNodes.push(
+        createElement(
+          'mdc-floating-label',
+          {
+            attrs: { for: this.vma_uid_ },
+            ref: 'labelEl',
+          },
+          this.label,
+        ),
+      );
+    }
+
+    if (this.$slots.trailingIcon) {
+      rootNodes.push(
+        createElement(
+          'textfield-icon',
+          { ref: 'trailingIconEl' },
+          this.$slots.trailingIcon,
+        ),
+      );
+    }
+
+    if (this.hasOutline) {
+      rootNodes.push(
+        createElement(
+          'mdc-notched-outline',
+          {
+            ref: 'labelEl',
+          },
+          this.label,
+        ),
+      );
+    }
+
+    if (this.hasLineRipple) {
+      rootNodes.push(
+        createElement('mdc-line-ripple', {
+          ref: 'lineRippleEl',
+        }),
+      );
+    }
+
+    const rootEl = createElement(
+      'div',
+      {
+        class: this.rootClasses,
+        ref: 'root',
+      },
+      rootNodes,
+    );
+
+    const nodes = [rootEl];
+    if (this.hasHelptext) {
+      nodes.push(
+        createElement(
+          'textfield-helper-text',
+          {
+            attrs: {
+              id: `help${this.vma_uid_}`,
+              helptext: this.helpText,
+              persistent: this.helptextPersistent,
+              validation: this.helptextValidation,
+            },
+            ref: 'helpertextEl',
+          },
+          this.$slots.helpText,
+        ),
+      );
+    }
+
+    return createElement(
+      'div',
+      {
+        class: { 'mdc-textfield-wrapper': 1 },
+        style: { width: this.fullwidth ? '100%' : void 0 },
+        attrs: { id: this.id },
+      },
+      nodes,
+    );
   },
   components: { TextfieldHelperText, TextfieldIcon },
   computed: {

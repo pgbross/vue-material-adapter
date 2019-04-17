@@ -36,7 +36,7 @@ export default {
     this.foundation.init();
   },
 
-  render(h, context) {
+  render(createElement, context) {
     const node = context.children[0];
     node.data.class = 'mdc-text-field__icon';
     return node;
