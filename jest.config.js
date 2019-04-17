@@ -11,6 +11,5 @@ module.exports = {
   transformIgnorePatterns: ['/node_modules/(?!@material/)'],
   moduleNameMapper: {
     '^@mcwv\\/([^\\/]+)': '<rootDir>/packages/mcwv-$1/index',
-    '^vue$': '<rootDir>/node_modules/vue/dist/vue.common.dev.js',
   },
 };

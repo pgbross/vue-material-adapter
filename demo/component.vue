@@ -34,20 +34,13 @@ export default {
     'fab-readme': () => import('./components/fab/README.md'),
     'grid-list-readme': () => import('./components/grid-list/README.md'),
     'icon-button-readme': () => import('./components/icon-button/README.md'),
-    // 'icon-toggle-readme': () => import('./components/icon-toggle/README.md'),
-    // 'layout-app-readme': () => import('./components/layout-app/README.md'),
     'layout-grid-readme': () => import('./components/layout-grid/README.md'),
     'linear-progress-readme': () =>
       import('./components/linear-progress/README.md'),
-    'line-ripple': () => import('./components/line-ripple/README.md'),
-
     'list-readme': () => import('./components/list/README.md'),
     'material-icon-readme': () =>
       import('./components/material-icon/README.md'),
     'menu-readme': () => import('./components/menu/README.md'),
-
-    'notched-outline-readme': () =>
-      import('./components/notched-outline/README.md'),
     'radio-readme': () => import('./components/radio/README.md'),
     'select-readme': () => import('./components/select/README.md'),
     'slider-readme': () => import('./components/slider/README.md'),
@@ -55,7 +48,6 @@ export default {
     'switch-readme': () => import('./components/switch/README.md'),
     'tabs-readme': () => import('./components/tabs/README.md'),
     'textfield-readme': () => import('./components/textfield/README.md'),
-    // 'toolbar-readme': () => import('./components/toolbar/README.md'),
     'top-app-bar-readme': () => import('./components/top-app-bar/README.md'),
     'typography-readme': () => import('./components/typography/README.md'),
 
@@ -68,19 +60,12 @@ export default {
     'fab-demo': () => import('./components/fab/demo.vue'),
     'grid-list-demo': () => import('./components/grid-list/demo.vue'),
     'icon-button-demo': () => import('./components/icon-button/demo.vue'),
-    // 'icon-toggle-demo': () => import('./components/icon-toggle/demo.vue'),
-    // 'layout-app-demo': () => import('./components/layout-app/demo.vue'),
     'layout-grid-demo': () => import('./components/layout-grid/demo.vue'),
     'linear-progress-demo': () =>
       import('./components/linear-progress/demo.vue'),
-
-    'line-ripple-demo': () => import('./components/line-ripple/demo.vue'),
     'list-demo': () => import('./components/list/demo.vue'),
     'material-icon-demo': () => import('./components/material-icon/demo.vue'),
     'menu-demo': () => import('./components/menu/demo.vue'),
-
-    'notched-outline-demo': () =>
-      import('./components/notched-outline/demo.vue'),
     'radio-demo': () => import('./components/radio/demo.vue'),
     'select-demo': () => import('./components/select/demo.vue'),
     'slider-demo': () => import('./components/slider/demo.vue'),
@@ -88,7 +73,6 @@ export default {
     'switch-demo': () => import('./components/switch/demo.vue'),
     'tabs-demo': () => import('./components/tabs/demo.vue'),
     'textfield-demo': () => import('./components/textfield/demo.vue'),
-    // 'toolbar-demo': () => import('./components/toolbar/demo.vue'),
     'top-app-bar-demo': () => import('./components/top-app-bar/demo.vue'),
     'typography-demo': () => import('./components/typography/demo.vue'),
   },

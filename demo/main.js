@@ -1,5 +1,4 @@
 import Vue from 'vue';
-// import VueAnalytics from 'vue-analytics';
 import VueMaterialAdapter from 'vue-material-adapter';
 import VueRouter from 'vue-router';
 import index from './index.vue';
@@ -16,11 +15,6 @@ const router = new VueRouter({
     return { x: 0, y: 0 };
   },
 });
-
-// Vue.use(VueAnalytics, {
-//   id: 'UA-110490450-1',
-//   router,
-// });
 
 // mount app
 const App = Vue.extend({
