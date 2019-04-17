@@ -36,6 +36,7 @@
     "@mcwv/menu": "^0.2.2",
     "@mcwv/notched-outline": "^0.2.2",
     "@mcwv/radio": "^0.2.2",
+    "@mcwv/ripple": "^0.2.2",
     "@mcwv/select": "^0.2.2",
     "@mcwv/slider": "^0.2.2",
     "@mcwv/snackbar": "^0.2.2",
