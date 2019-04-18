@@ -1,13 +1,17 @@
 <template>
   <div class="mdc-demo mdc-demo--container">
-    <mdc-checkbox
-      v-model="checked"
-      :indeterminate.sync="indeterminate"
-      :label="checked ? 'checked' : 'unchecked'"
-    />
-    <mdc-button dense @click="indeterminate = true"
-      >make indeterminate</mdc-button
-    >
+    <div>
+      <mdc-checkbox
+        v-model="checked"
+        :disabled="disabled"
+        :indeterminate.sync="indeterminate"
+        :label="checked ? 'checked' : 'unchecked'"
+      />
+      <div>
+        <mdc-button dense @click="indeterminate = true" outlined>make indeterminate</mdc-button>
+        <mdc-button dense @click="disabled = !disabled" outlined>toggle disabled</mdc-button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -17,6 +21,7 @@ export default {
     return {
       checked: false,
       indeterminate: false,
+      disabled: false,
     };
   },
 };

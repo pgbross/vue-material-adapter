@@ -41,7 +41,6 @@ export default {
     },
     formFieldClasses() {
       return {
-        'mdc-checkbox-wrapper': 1,
         'mdc-form-field': this.hasLabel,
         'mdc-form-field--align-end': this.hasLabel && this.alignEnd,
       };
@@ -52,9 +51,7 @@ export default {
     disabled(value) {
       this.foundation.setDisabled(value);
     },
-    indeterminate(value) {
-      this.setIndeterminate(value);
-    },
+    indeterminate: 'setIndeterminate',
   },
   render(createElement) {
     const inputElement = createElement('input', {
@@ -63,9 +60,13 @@ export default {
         value: this.value,
         type: 'checkbox',
         id: this.vma_uid_,
+        disabled: this.disabled,
       },
       class: { 'mdc-checkbox__native-control': 1 },
-      on: { change: evt => this.onChange(evt) },
+      on: {
+        change: ({ target: { indeterminate, checked } }) =>
+          this.onChange(checked, indeterminate),
+      },
       ref: 'control',
     });
 
@@ -121,12 +122,12 @@ export default {
         this.$refs.control.removeAttribute(attr);
       },
       isIndeterminate: () => this.$refs.control.indeterminate,
-      isChecked: () => this.checked,
-      hasNativeControl: () => !!this.$refs.control,
+      isChecked: () => this.$refs.control.checked,
+      hasNativeControl: () => true,
       setNativeControlDisabled: disabled =>
         (this.$refs.control.disabled = disabled),
       forceLayout: () => this.$refs.root.offsetWidth,
-      isAttachedToDOM: () => Boolean(this.$el.parentNode),
+      isAttachedToDOM: () => true,
     });
 
     this.handleAnimationEnd_ = () => this.foundation.handleAnimationEnd();
@@ -196,13 +197,13 @@ export default {
       this.$refs.control.indeterminate = indeterminate;
     },
 
-    onChange() {
-      this.$emit('update:indeterminate', this.indeterminate);
-      const isChecked = this.$refs.control.checked;
+    onChange(checked, indeterminate) {
+      // note indeterminate will not currently work with the array model
+      this.$emit('update:indeterminate', indeterminate);
 
       if (Array.isArray(this.checked)) {
         const idx = this.checked.indexOf(this.value);
-        if (isChecked) {
+        if (checked) {
           idx < 0 && this.$emit('change', this.checked.concat(this.value));
         } else {
           idx > -1 &&
@@ -212,7 +213,7 @@ export default {
             );
         }
       } else {
-        this.$emit('change', isChecked);
+        this.$emit('change', checked);
       }
     },
 
