@@ -34,6 +34,8 @@ var vm = new Vue({
 | `unelevated`         | Boolean        |                          | a contained button that is flush with the surface                              |
 | `outlined`           | Boolean        |                          | a contained button that is flush with the surface and has a visible border(\*) |
 | `dense`              | String         |                          | compresses the button text to make it slightly smaller                         |
+| `icon`               | String         | optional                 | leading material icon                                                          |
+| `trailingIcon`       | String         | optional                 | trailing material icon                                                         |
 | `event`              | String         | optional                 | optional event to emit on click                                                |
 | `event-target`       | Object         | vm.\$root                | optional event target, defaults to root bus                                    |
 | `event-args`         | Array          | []                       | optional event args                                                            |
@@ -70,8 +72,14 @@ var vm = new Vue({
 ### Icon buttons
 
 ```html
+<mdc-button icon="favorite">like</mdc-button>
 <mdc-button
-  ><i class="material-icons mdc-button__icon">favorite</i>like</mdc-button
+  ><mdc-material-icon slot="icon" icon="add"></mdc-material-icon
+  >like</mdc-button
+>
+<mdc-button
+  ><mdc-material-icon slot="trailingIcon" icon="done"></mdc-material-icon
+  >like</mdc-button
 >
 ```
 
@@ -83,14 +91,13 @@ or an SVG button
     class="mdc-button__icon"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="..."
+    slot="icon"
   >
     ...
   </svg>
   like
 </mdc-button>
 ```
-
-> Note: `mdc-icon` is not suitable for rendering in an `mdc-button` as it does not set the required `mdc-button__icon` class.
 
 ### Link buttons
 
