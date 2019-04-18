@@ -9,7 +9,7 @@
         <h4>subtitle here</h4>
       </section>
       <mdc-card-actions>
-        <mdc-card-action-buttons class="wiffle test" data-card="test">
+        <mdc-card-action-buttons>
           <mdc-button outlined>ACTION</mdc-button>
         </mdc-card-action-buttons>
         <mdc-card-action-icons>
