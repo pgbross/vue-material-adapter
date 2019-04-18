@@ -136,14 +136,15 @@ export default {
         style: this.styles,
         attrs: { tabindex: '0' },
         on: {
-          click: evt => this.handleInteraction,
+          click: evt => this.handleInteraction(evt),
           keydown: evt => this.handleInteraction(evt),
-          transitionend: evt => this.handleTransitionEnd,
+          transitionend: evt => this.handleTransitionEnd(evt),
         },
       },
       nodes,
     );
   },
+
   created() {
     this.id = this.mdcChipSet.nextId();
   },
