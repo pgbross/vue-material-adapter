@@ -8,8 +8,13 @@ export default {
   props: {
     leadingIcon: [String],
     trailingIcon: [String],
-    leadingIconClasses: [Object],
-    trailingIconClasses: [Object],
+    shouldRemoveOnTrailingIconClick: {
+      type: Boolean,
+      default() {
+        return true;
+      },
+    },
+    id: {},
   },
   inject: ['mdcChipSet'],
   data() {
@@ -18,10 +23,12 @@ export default {
         'mdc-chip': true,
       },
       styles: {},
-      id: '',
     };
   },
   computed: {
+    myId() {
+      return this.id || this._uid;
+    },
     selected: {
       get() {
         return this.foundation.isSelected();
@@ -34,101 +41,16 @@ export default {
       return this.mdcChipSet && this.mdcChipSet.filter;
     },
     haveleadingIcon() {
-      return !!this.leadingIcon || this.leadingIconClasses;
+      const slot = this.$slots['leading-icon'];
+      return (slot && slot[0]) || !!this.leadingIcon;
     },
     havetrailingIcon() {
-      return !!this.trailingIcon || this.trailingIconClasses;
-    },
-    leadingClasses() {
-      return Object.assign(
-        {},
-        {
-          'mdc-chip__icon': 1,
-          'mdc-chip__icon--leading': 1,
-          'material-icons': !!this.leadingIcon,
-        },
-        this.leadingIconClasses,
-      );
-    },
-    trailingClasses() {
-      return Object.assign(
-        {},
-        {
-          'mdc-chip__icon': 1,
-          'mdc-chip__icon--trailing': 1,
-          'material-icons': !!this.trailingIcon,
-        },
-        this.trailingIconClasses,
-      );
+      const slot = this.$slots['trailing-icon'];
+      return (slot && slot[0]) || !!this.trailingIcon;
     },
   },
 
   render(createElement) {
-    const nodes = [];
-    if (this.haveleadingIcon) {
-      nodes.push(
-        createElement(
-          'i',
-          { class: this.leadingClasses, ref: 'leadingIcon' },
-          this.leadingIcon,
-        ),
-      );
-    }
-
-    if (this.isFilter) {
-      nodes.push(
-        createElement(
-          'div',
-          { class: { 'mdc-chip__checkmark': 1 }, ref: 'checkmarkEl' },
-          [
-            createElement(
-              'svg',
-              {
-                class: { 'mdc-chip__checkmark-svg': 1 },
-                attrs: { viewBox: '-2 -3 30 30' },
-              },
-              [
-                createElement('path', {
-                  class: { 'mdc-chip__checkmark-path': 1 },
-                  attrs: {
-                    fill: 'none',
-                    stroke: 'black',
-                    d: 'M1.73,12.91 8.1,19.28 22.79,4.59',
-                  },
-                }),
-              ],
-            ),
-          ],
-        ),
-      );
-    }
-
-    nodes.push(
-      createElement(
-        'div',
-        { class: { 'mdc-chip__text': 1 } },
-        this.$slots.default,
-      ),
-    );
-
-    if (this.havetrailingIcon) {
-      nodes.push(
-        createElement(
-          'i',
-          {
-            class: this.trailingClasses,
-            ref: 'trailingIcon',
-            attrs: { tabindex: '0', role: 'button' },
-            on: {
-              click: evt => this.handleTrailingIconInteraction(evt),
-              keydown: evt => this.handleTrailingIconInteraction(evt),
-            },
-          },
-          this.trailingIcon,
-        ),
-      );
-    }
-
     return createElement(
       'div',
       {
@@ -136,17 +58,23 @@ export default {
         style: this.styles,
         attrs: { tabindex: '0' },
         on: {
-          click: evt => this.handleInteraction(evt),
-          keydown: evt => this.handleInteraction(evt),
-          transitionend: evt => this.handleTransitionEnd(evt),
+          click: evt => this.foundation.handleInteraction(evt),
+          keydown: evt => this.foundation.handleInteraction(evt),
+          transitionend: evt => this.foundation.handleTransitionEnd(evt),
         },
       },
-      nodes,
+      [
+        this.haveleadingIcon && this.renderLeadingIcon(createElement),
+        this.isFilter &&
+          createElement('mdc-chip-checkmark', { ref: 'checkmarkEl' }),
+        createElement(
+          'div',
+          { class: { 'mdc-chip__text': 1 } },
+          this.$slots.default,
+        ),
+        this.havetrailingIcon && this.renderTrailingIcon(createElement),
+      ],
     );
-  },
-
-  created() {
-    this.id = this.mdcChipSet.nextId();
   },
   mounted() {
     this.foundation = new MDCChipFoundation({
@@ -155,12 +83,16 @@ export default {
       hasClass: className => this.$el.classList.contains(className),
       addClassToLeadingIcon: className => {
         if (this.haveleadingIcon) {
-          this.$refs.leadingIcon.classList.add(className);
+          const item =
+            this.$refs['leading-icon'] || this.$slots['leading-icon'][0];
+          (item.elm || item).classList.add(className);
         }
       },
       removeClassFromLeadingIcon: className => {
         if (this.haveleadingIcon) {
-          this.$refs.leadingIcon.classList.remove(className);
+          const item =
+            this.$refs['leading-icon'] || this.$slots['leading-icon'][0];
+          (item.elm || item).classList.remove(className);
         }
       },
       eventTargetHasClass: (target, className) =>
@@ -170,18 +102,17 @@ export default {
           this.$el,
           MDCChipFoundation.strings.INTERACTION_EVENT,
           {
-            chipId: this.id,
+            chipId: this.myId,
           },
           true,
         );
-        this.mdcChipSet && this.mdcChipSet.handleInteraction;
       },
 
       notifySelection: selected =>
         emitCustomEvent(
           this.$el,
           MDCChipFoundation.strings.SELECTION_EVENT,
-          { chipId: this.id, selected: selected },
+          { chipId: this.myId, selected: selected },
           true /* shouldBubble */,
         ),
       notifyTrailingIconInteraction: () => {
@@ -189,7 +120,7 @@ export default {
           this.$el,
           MDCChipFoundation.strings.TRAILING_ICON_INTERACTION_EVENT,
           {
-            chipId: this.id,
+            chipId: this.myId,
           },
           true,
         );
@@ -198,7 +129,7 @@ export default {
         emitCustomEvent(
           this.$el,
           MDCChipFoundation.strings.REMOVAL_EVENT,
-          { chipId: this.id, root: this.$el },
+          { chipId: this.myId, root: this.$el },
           true,
         );
       },
@@ -209,15 +140,21 @@ export default {
 
       hasLeadingIcon: () => !!this.haveleadingIcon,
       getRootBoundingClientRect: () => this.$el.getBoundingClientRect(),
-      getCheckmarkBoundingClientRect: () =>
-        this.$refs.checkmarkEl
-          ? this.$refs.checkmarkEl.getBoundingClientRect()
-          : null,
+      getCheckmarkBoundingClientRect: () => {
+        return this.$refs.checkmarkEl ? this.$refs.checkmarkEl.width : null;
+      },
     });
 
     this.foundation.init();
 
-    this.mdcChipSet.chips.push(this);
+    if (
+      this.shouldRemoveOnTrailingIconClick !==
+      this.foundation.getShouldRemoveOnTrailingIconClick()
+    ) {
+      this.foundation.setShouldRemoveOnTrailingIconClick(
+        this.shouldRemoveOnTrailingIconClick,
+      );
+    }
 
     this.ripple = new RippleBase(this, {
       computeBoundingRect: () => this.foundation.getDimensions(),
@@ -229,20 +166,78 @@ export default {
     this.foundation.destroy();
   },
   methods: {
-    handleInteraction(evt) {
-      this.foundation.handleInteraction(evt);
-    },
-    handleTransitionEnd(evt) {
-      this.foundation.handleTransitionEnd(evt);
-    },
-    handleTrailingIconInteraction(evt) {
-      this.foundation.handleTrailingIconInteraction(evt);
-    },
     toggleSelected() {
       this.foundation.toggleSelected();
     },
     isSelected() {
       return this.foundation.isSelected();
+    },
+
+    renderLeadingIcon(createElement) {
+      const {
+        $slots: { ['leading-icon']: slot },
+      } = this;
+      const v0 = slot && slot[0];
+      if (v0) {
+        const { staticClass = '' } = v0.data;
+        const haveClasses =
+          staticClass && staticClass.indexOf('mdc-chip-icon') > -1;
+        if (!haveClasses) {
+          v0.data.staticClass = `mdc-chip__icon mdc-chip__icon--leading ${staticClass}`;
+        }
+        return slot;
+      }
+      return createElement(
+        'i',
+        {
+          class: {
+            'mdc-chip__icon': 1,
+            'mdc-chip__icon--leading': 1,
+            'material-icons': 1,
+          },
+          ref: 'leading-icon',
+        },
+        this.leadingIcon,
+      );
+    },
+
+    renderTrailingIcon(createElement) {
+      const {
+        $slots: { ['trailing-icon']: slot },
+      } = this;
+      const v0 = slot && slot[0];
+      if (v0) {
+        const { staticClass = '' } = v0.data;
+        const haveClasses =
+          staticClass && staticClass.indexOf('mdc-chip-icon') > -1;
+        if (!haveClasses) {
+          v0.data.staticClass = `mdc-chip__icon mdc-chip__icon--trailing ${staticClass}`;
+          v0.data.on = {
+            ...v0.data.on,
+            click: evt => {
+              this.foundation.handleTrailingIconInteraction(evt);
+            },
+            keydown: evt => this.foundation.handleTrailingIconInteraction(evt),
+          };
+        }
+        return slot;
+      }
+      return createElement(
+        'i',
+        {
+          class: {
+            'mdc-chip__icon': 1,
+            'mdc-chip__icon--trailing': 1,
+            'material-icons': 1,
+          },
+          ref: 'trailing-icon',
+          on: {
+            click: evt => this.foundation.handleTrailingIconInteraction(evt),
+            keydown: evt => this.foundation.handleTrailingIconInteraction(evt),
+          },
+        },
+        this.trailingIcon,
+      );
     },
   },
 };

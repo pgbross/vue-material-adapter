@@ -1,8 +1,6 @@
 import MDCChipSetFoundation from '@material/chips/chip-set/foundation';
 import { MDCChipFoundation } from '@material/chips/chip/foundation';
 
-let idCounter = 0;
-
 export default {
   name: 'mdc-chip-set',
   props: {
@@ -31,16 +29,21 @@ export default {
       removeChip: chipId => {
         const index = this.findChipIndex(chipId);
 
-        if (index > 0) {
-          this.$nextTick(() => {
-            this.chips.splice(index, 1);
-          });
+        if (index >= 0) {
+          this.$slots.default.splice(index, 1);
         }
+
+        // if (index > 0) {
+        //   this.$nextTick(() => {
+        //     this.chips.splice(index, 1);
+        //   });
+        // }
       },
       setSelected: (chipId, selected) => {
         const index = this.findChipIndex(chipId);
         if (index >= 0) {
-          this.chips[index].selected = selected;
+          this.$slots.default[index].componentInstance.selected = selected;
+          // this.chips[index].selected = selected;
         }
       },
     });
@@ -51,16 +54,22 @@ export default {
     this.foundation.destroy();
   },
   methods: {
-    nextId() {
-      return `mdc-chip-${++idCounter}`;
-    },
     findChipIndex(chipId) {
-      for (let i = 0; i < this.chips.length; i++) {
-        if (this.chips[i].id === chipId) {
-          return i;
-        }
-      }
-      return -1;
+      const vindex = this.$slots.default.findIndex(({ componentInstance }) => {
+        return (
+          componentInstance &&
+          (componentInstance.id == chipId || componentInstance._uid == chipId)
+        );
+      });
+
+      return vindex;
+
+      // for (let i = 0; i < this.chips.length; i++) {
+      //   if (this.chips[i].id === chipId) {
+      //     return i;
+      //   }
+      // }
+      // return -1;
     },
     handleChipInteraction(evt) {
       this.foundation.handleChipInteraction(evt.detail.chipId);
