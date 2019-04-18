@@ -52,7 +52,9 @@ export function checkValidFunctionalComponent(component) {
 export function checkValidMdcAdapter(vm) {
   checkValidOptions(vm.$options);
 
-  checkValidClass(vm, vm.$options.name);
+  // it is not always true that a component has a class of the same name
+  // and it is polluting the class names to force one for the sake of testing
+  // checkValidClass(vm, vm.$options.name);
 
   vm.ripple && checkValidFoundation(vm.ripple);
 
@@ -77,16 +79,16 @@ export function checkValidOptions(options) {
     });
 }
 
-export function checkValidClass(vm, name) {
-  test('has a valid class', () => {
-    const hasVallidClass =
-      vm.$el.classList.contains(name) ||
-      (vm.$el.classList.contains(name + '-wrapper') &&
-        vm.$el.querySelector('.' + name) !== null);
+// export function checkValidClass(vm, name) {
+//   test('has a valid class', () => {
+//     const hasVallidClass =
+//       vm.$el.classList.contains(name) ||
+//       (vm.$el.classList.contains(name + '-wrapper') &&
+//         vm.$el.querySelector('.' + name) !== null);
 
-    expect(hasVallidClass).toBeTruthy();
-  });
-}
+//     expect(hasVallidClass).toBeTruthy();
+//   });
+// }
 
 export function checkValidFoundation(foundation) {
   const adapter = foundation.adapter_;

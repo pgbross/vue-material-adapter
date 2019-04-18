@@ -8,17 +8,21 @@ export default {
     createElement,
     {
       props: { fullBleed },
+      data: { staticClass, attrs },
       slots,
     },
   ) {
     return createElement(
       'section',
       {
-        class: {
-          'mdc-card-actions': 1,
-          'mdc-card__actions': 1,
-          'mdc-card__actions--full-bleed': fullBleed,
-        },
+        class: [
+          {
+            'mdc-card__actions': 1,
+            'mdc-card__actions--full-bleed': fullBleed,
+          },
+          staticClass,
+        ],
+        attrs,
       },
       slots().default,
     );
