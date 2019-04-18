@@ -2,6 +2,10 @@
 
 ```html
 <mdc-button @click="onClick" :disabled="buttonDisabled">click me</mdc-button>
+<mdc-button raised>
+  <mdc-material-icon slot="icon" icon="alarm"></mdc-material-icon>Button
+</mdc-button>
+<mdc-button outlined icon="add">Button</mdc-button>
 ```
 
 ```javascript

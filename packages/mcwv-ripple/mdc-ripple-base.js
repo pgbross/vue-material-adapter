@@ -3,78 +3,62 @@ import { MDCRippleFoundation } from '@material/ripple/index';
 import { applyPassive, supportsCssVariables } from '@material/ripple/util';
 
 export class RippleBase extends MDCRippleFoundation {
-  static get MATCHES() {
-    /* global HTMLElement */
-    return (
-      RippleBase._matches ||
-      (RippleBase._matches = matches(HTMLElement.prototype))
-    );
-  }
-
-  static isSurfaceActive(ref) {
-    return ref[RippleBase.MATCHES](':active');
-  }
-
   constructor(vm, options) {
-    super(
-      Object.assign(
-        {
-          browserSupportsCssVars: () => {
-            return supportsCssVariables(window);
-          },
-          isUnbounded: () => {
-            return false;
-          },
-          isSurfaceActive: () => {
-            return vm.$el[RippleBase.MATCHES](':active');
-          },
-          isSurfaceDisabled: () => {
-            return vm.disabled;
-          },
-          addClass(className) {
-            vm.$set(vm.classes, className, true);
-          },
-          removeClass(className) {
-            vm.$delete(vm.classes, className);
-          },
-          containsEventTarget: target => vm.$el.contains(target),
-          registerInteractionHandler: (evt, handler) => {
-            vm.$el.addEventListener(evt, handler, applyPassive());
-          },
-          deregisterInteractionHandler: (evt, handler) => {
-            vm.$el.removeEventListener(evt, handler, applyPassive());
-          },
-          registerDocumentInteractionHandler: (evtType, handler) =>
-            document.documentElement.addEventListener(
-              evtType,
-              handler,
-              applyPassive(),
-            ),
-          deregisterDocumentInteractionHandler: (evtType, handler) =>
-            document.documentElement.removeEventListener(
-              evtType,
-              handler,
-              applyPassive(),
-            ),
-          registerResizeHandler: handler => {
-            return window.addEventListener('resize', handler);
-          },
-          deregisterResizeHandler: handler => {
-            return window.removeEventListener('resize', handler);
-          },
-          updateCssVariable: (varName, value) => {
-            vm.$set(vm.styles, varName, value);
-          },
-          computeBoundingRect: () => {
-            return vm.$el.getBoundingClientRect();
-          },
-          getWindowPageOffset: () => {
-            return { x: window.pageXOffset, y: window.pageYOffset };
-          },
-        },
-        options,
-      ),
-    );
+    super({
+      addClass(className) {
+        vm.$set(vm.classes, className, true);
+      },
+      browserSupportsCssVars: () => {
+        return supportsCssVariables(window);
+      },
+      computeBoundingRect: () => {
+        return vm.$el.getBoundingClientRect();
+      },
+      containsEventTarget: target => vm.$el.contains(target),
+      deregisterDocumentInteractionHandler: (evtType, handler) =>
+        document.documentElement.removeEventListener(
+          evtType,
+          handler,
+          applyPassive(),
+        ),
+      deregisterInteractionHandler: (evt, handler) => {
+        vm.$el.removeEventListener(evt, handler, applyPassive());
+      },
+      deregisterResizeHandler: handler => {
+        return window.removeEventListener('resize', handler);
+      },
+      getWindowPageOffset: () => {
+        return { x: window.pageXOffset, y: window.pageYOffset };
+      },
+      isSurfaceActive: () => {
+        return matches(vm.$el, ':active');
+      },
+      isSurfaceDisabled: () => {
+        return vm.disabled;
+      },
+      isUnbounded: () => {
+        return false;
+      },
+      registerDocumentInteractionHandler: (evtType, handler) =>
+        document.documentElement.addEventListener(
+          evtType,
+          handler,
+          applyPassive(),
+        ),
+      registerInteractionHandler: (evt, handler) => {
+        vm.$el.addEventListener(evt, handler, applyPassive());
+      },
+      registerResizeHandler: handler => {
+        return window.addEventListener('resize', handler);
+      },
+      removeClass(className) {
+        vm.$delete(vm.classes, className);
+      },
+      updateCssVariable: (varName, value) => {
+        vm.$set(vm.styles, varName, value);
+      },
+      ...options,
+    });
   }
 }
 

@@ -1,6 +1,6 @@
 /* eslint-disable quote-props */
 import MDCSnackbarFoundation from '@material/snackbar/foundation';
-import * as ponyfill from '@material/dom/ponyfill';
+import { closest } from '@material/dom/ponyfill';
 
 export default {
   name: 'mdc-snackbar',
@@ -187,16 +187,13 @@ export default {
 
     isActionButton_(target) {
       return Boolean(
-        ponyfill.closest(target, MDCSnackbarFoundation.strings.ACTION_SELECTOR),
+        closest(target, MDCSnackbarFoundation.strings.ACTION_SELECTOR),
       );
     },
 
     isActionIcon_(target) {
       return Boolean(
-        ponyfill.closest(
-          target,
-          MDCSnackbarFoundation.strings.DISMISS_SELECTOR,
-        ),
+        closest(target, MDCSnackbarFoundation.strings.DISMISS_SELECTOR),
       );
     },
 

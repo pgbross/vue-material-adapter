@@ -8,13 +8,15 @@ export default {
     unelevated: Boolean,
     outlined: Boolean,
     dense: Boolean,
+    icon: String,
+    trailingIcon: String,
   },
   data() {
     return {
       classes: {
         'mdc-button': true,
         'mdc-button--raised': this.raised,
-        'mdc-button--unelevated': this.unelevated,
+        'mdc-button--unelevated': this.unelevated && !this.raised,
         'mdc-button--outlined': this.outlined,
         'mdc-button--dense': this.dense,
       },
