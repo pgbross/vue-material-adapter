@@ -3,7 +3,7 @@
     <mdc-headline6>Simple</mdc-headline6>
     <section class="mdc-demo mdc-demo--container">
       <mdc-tab-bar @change="onSelected" activeTabIndex="1">
-        <mdc-tab v-for="item in items" :key="item.label">{{ item }}</mdc-tab>
+        <mdc-tab v-for="item in filteredItems" :key="item.label">{{ item }}</mdc-tab>
       </mdc-tab-bar>
     </section>
     <br>
@@ -21,17 +21,36 @@
         <mdc-tab icon="personal_pin">Nearby</mdc-tab>
       </mdc-tab-bar>
     </section>
+    <mdc-headline6>Scrollable</mdc-headline6>
+    <section class="mdc-demo mdc-demo--container mdc-demo--container-narrow">
+      <mdc-tab-bar @change="onSelected" activeTabIndex="1">
+        <mdc-tab v-for="item in items" :key="item.label">{{ item }}</mdc-tab>
+      </mdc-tab-bar>
+    </section>
   </div>
 </template>
 
 <script>
 export default {
   data() {
-    const items = ['item one', 'item two', 'item three'];
+    const items = [
+      'item one',
+      'item two',
+      'item three',
+      'item four',
+      'item five',
+      'item six',
+      'item seven',
+    ];
     return {
       selectedItem: items[0],
       items,
     };
+  },
+  computed: {
+    filteredItems() {
+      return this.items.slice(0, 3);
+    },
   },
   methods: {
     onSelected(idx) {

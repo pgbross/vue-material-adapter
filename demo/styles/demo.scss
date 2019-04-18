@@ -82,6 +82,10 @@ $mdc-theme-background: #fff;
         display: flex;
         justify-content: center;
         align-items: center;
+
+        &-narrow {
+            max-width: 485px;
+        }
     }
 }
 
