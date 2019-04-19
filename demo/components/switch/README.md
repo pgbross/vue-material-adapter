@@ -3,7 +3,9 @@
 The switch component is rendered as an input with checkbox type
 
 ```html
-<mdc-switch :label="label" v-model="checked" />
+<mdc-switch v-model="checked" :label="label" />
+<mdc-switch v-model="checked">{{label}}</mdc-switch>
+<mdc-switch disabled label="Disabled" />
 ```
 
 ```javascript
@@ -15,20 +17,14 @@ var vm = new Vue({
 });
 ```
 
-> or use default slot for label
-
-```html
-<mdc-switch v-model="checked">{{Label}}</mdc-switch>
-```
-
 ### props
 
 | props       | Type    | Default | Description                                          |
 | ----------- | ------- | ------- | ---------------------------------------------------- |
 | `checked`   | Boolean |         | whether the checkbox is checked, bind with `v-model` |
-| `disabled`  | Boolean |         | whether the checkbox is disabled                     |
+| `disabled`  | Boolean | false   | whether the checkbox is disabled                     |
 | `label`     | String  |         | checkbox label                                       |
-| `align-end` | Boolean |         | align the checkbox after the label                   |
+| `align-end` | Boolean | false   | align the checkbox after the label                   |
 | `value`     | String  |         | input control value                                  |
 | `name`      | String  |         | input name                                           |
 

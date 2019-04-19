@@ -21,6 +21,8 @@ export default {
     return {
       classes: { 'mdc-switch': 1 },
       styles: {},
+      nativeControlChecked: this.checked,
+      nativeControlDisabled: this.disabled,
     };
   },
   computed: {
@@ -50,32 +52,30 @@ export default {
                 value: this.value,
                 type: 'checkbox',
                 role: 'switch',
+                checked: this.nativeControlChecked,
+                disabled: this.nativeControlDisabled,
               },
-              ref: 'control',
               on: { change: evt => this.onChanged(evt) },
             }),
           ]),
         ]),
       ]),
-    ];
 
-    if (this.hasLabel) {
-      const labelEl = createElement(
-        'label',
-        {
-          class: { 'mdc-switch-label': 1 },
-          attrs: { for: this.vma_uid_ },
-        },
-        this.$slots.default || this.label,
-      );
-      nodes.push(labelEl);
-    }
+      this.hasLabel &&
+        createElement(
+          'label',
+          {
+            class: { 'mdc-switch-label': 1 },
+            attrs: { for: this.vma_uid_ },
+          },
+          this.$slots.default || this.label,
+        ),
+    ];
 
     return createElement(
       'div',
       {
         class: {
-          'mdc-switch-wrapper': 1,
           'mdc-form-field': this.hasLabel,
           'mdc-form-field--align-end': this.hasLabel && this.alignEnd,
         },
@@ -87,10 +87,9 @@ export default {
     this.foundation = new MDCSwitchFoundation({
       addClass: className => this.$set(this.classes, className, true),
       removeClass: className => this.$delete(this.classes, className),
-      setNativeControlChecked: checked =>
-        (this.$refs.control.checked = checked),
+      setNativeControlChecked: checked => (this.nativeControlChecked = checked),
       setNativeControlDisabled: disabled =>
-        (this.$refs.control.disabled = disabled),
+        (this.nativeControlDisabled = disabled),
     });
     this.foundation.init();
     this.foundation.setChecked(this.checked);
