@@ -1,6 +1,19 @@
 <template>
-  <mdc-top-app-bar class="main-toolbar" title="vue mdc adapter" icon="menu" @nav="$emit('nav')">
-    <mdc-top-app-bar-action @click="showGitHub" icon="help"></mdc-top-app-bar-action>
+  <mdc-top-app-bar class="main-toolbar">
+    <mdc-top-app-bar-row>
+      <mdc-top-app-bar-section align="start">
+        <mdc-top-app-bar-icon navIcon>
+          <mdc-material-icon @click="$emit('nav')" icon="menu"></mdc-material-icon>
+        </mdc-top-app-bar-icon>
+        <mdc-top-app-bar-title>vue mdc adapter</mdc-top-app-bar-title>
+      </mdc-top-app-bar-section>
+
+      <mdc-top-app-bar-section align="end">
+        <mdc-top-app-bar-icon actionItem aria-label="Help">
+          <mdc-material-icon @click="showGitHub" icon="help"></mdc-material-icon>
+        </mdc-top-app-bar-icon>
+      </mdc-top-app-bar-section>
+    </mdc-top-app-bar-row>
   </mdc-top-app-bar>
 </template>
 
@@ -15,7 +28,9 @@ export default {
   },
 
   methods: {
-    showGitHub() {},
+    showGitHub() {
+      alert('Show help');
+    },
   },
 };
 </script>

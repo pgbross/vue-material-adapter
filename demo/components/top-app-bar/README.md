@@ -1,13 +1,28 @@
 ## Usage
 
 ```html
-<mdc-top-app-bar title="Title2" event="nav">
-  <mdc-top-app-bar-action
-    @click="showHelp"
-    icon="help"
-  ></mdc-top-app-bar-action>
+<mdc-top-app-bar class="main-toolbar">
+  <mdc-top-app-bar-row>
+    <mdc-top-app-bar-section align="start">
+      <mdc-top-app-bar-icon navIcon>
+        <mdc-material-icon icon="menu"></mdc-material-icon>
+      </mdc-top-app-bar-icon>
+      <mdc-top-app-bar-title>vue mdc adapter</mdc-top-app-bar-title>
+    </mdc-top-app-bar-section>
+
+    <mdc-top-app-bar-section align="end">
+      <mdc-top-app-bar-icon actionItem aria-label="Help">
+        <mdc-material-icon @click="showHelp" icon="help"></mdc-material-icon>
+      </mdc-top-app-bar-icon>
+      <mdc-top-app-bar-icon actionItem aria-label="Info">
+        <mdc-material-icon
+          @click="showInfo"
+          icon="info_outline"
+        ></mdc-material-icon>
+      </mdc-top-app-bar-icon>
+    </mdc-top-app-bar-section>
+  </mdc-top-app-bar-row>
 </mdc-top-app-bar>
-<mdc-drawer toggle-on="nav" temporary />
 ```
 
 ```javascript
@@ -16,94 +31,91 @@ var vm = new Vue({
     showHelp() {
       console.log('show help');
     },
+    showInfo() {
+      console.log('show info');
+    },
   },
 });
 ```
 
-### top-app-bars
+### MdcTopAppBar
 
-`mdc-top-app-bar` acts as a container for multiple rows containing items such as
-application title, navigation menu, and tabs, among other things.
-top-app-bars scroll with content by default.
+| Prop Name      | Type        | Description                                                    |
+| -------------- | ----------- | -------------------------------------------------------------- |
+| short          | Boolean     | Enables short variant.                                         |
+| shortCollapsed | Boolean     | Enables short collapsed variant.                               |
+| prominent      | Boolean     | Enables prominent variant.                                     |
+| fixed          | Boolean     | Enables fixed variant.                                         |
+| dense          | Boolean     | Enables dense variant.                                         |
+| scrollTarget   | HTMLElement | Sets scroll target to different DOM node (default is `window`) |
+| tag            | String      | Customizes the `mdcTopAppBar` HTML tag. (default: `<header>`)  |
 
-| Props          | Type    | Default   | Description                                                     |
-| -------------- | ------- | --------- | --------------------------------------------------------------- |
-| `fixed`        | Boolean | false     | fixed at the top of the page                                    |
-| `short`        | Boolean | false     | Short top app bars should only be used with one action item     |
-| `collapsed`    | String  | false     | Short top app bars can be configured to always appear collapsed |
-| `dense`        | Boolean | false     | optional changes top app bar to be dense                        |
-| `prominent`    | Boolean | false     | optional changes too app bar style to be prominent              |
-| `event`        | String  | optional  | optional event to emit on navigation click                      |
-| `event-target` | Object  | vm.\$root | optional event target, defaults to root bus                     |
+> NOTES: As per design guidelines, prominent and dense variants should not be used with short or short collapsed. Additionally, dense variants should only be used on desktop. Additionally short top-app-bars should be used with no more than 1 action item.
 
-Short top app bars should only be used with one action item.
-Short top app bars can be configured to always appear collapsed by applying the `collapsed` attribute.
+### MdcTopAppBarRow
 
-### events
+| Prop Name | Type   | Description                                           |
+| --------- | ------ | ----------------------------------------------------- |
+| tag       | String | Customizes the `TopAppBarRow` tag. (default: `<div>`) |
 
-| Name  | Args | Description                                  |
-| ----- | ---- | -------------------------------------------- |
-| `nav` |      | emitted when the navigation icon is clicked. |
+### MdcTopAppBarSection
 
-### Action icons
+| Prop Name | Type                     | Description                                                                     |
+| --------- | ------------------------ | ------------------------------------------------------------------------------- |
+| align     | Sring ('start' or 'end') | optional property that aligns section content to either start or end of section |
+| tag       | String                   | Customizes the `TopAppBarSection` tag. (default: `<section>`)                   |
 
-- `mdc-top-app-bar-action` wraps any icons placed on the right side of an
-  mdc-top-app-bar.
+> Note: if section contains action items it is recommended to add property role='toolbar' for a11y purposes
 
-  | props          | Type   | Default   | Description                                 |
-  | -------------- | ------ | --------- | ------------------------------------------- |
-  | `icon`         | String |           | the material icon name                      |
-  | `event`        | String | optional  | optional event to emit on action click      |
-  | `event-target` | Object | vm.\$root | optional event target, defaults to root bus |
+### MdcTopAppBarTitle
+
+| Prop Name | Type   | Description                                              |
+| --------- | ------ | -------------------------------------------------------- |
+| tag       | String | Customizes the `TopAppBarTitle` tag. (default: `<span>`) |
+
+### MdcTopAppBarIcon
+
+| Prop Name  | Type    | Description                                     |
+| ---------- | ------- | ----------------------------------------------- |
+| actionItem | Boolean | applies action-item class to icon               |
+| navIcon    | Boolean | applies nav-icon class to icon                  |
+| children   |         | can be any icon. Material Icons are recommended |
+
+> Notes: (1) consider adding `aria-label` to actionItem's. (2) you may need to manually add ripple or tabindex to icon. (3) Short top-app-bars should be used with no more than 1 action item.
+
+### MdcFixedAdjust
+
+| Prop Name | Type    | Description                                                    |
+| --------- | ------- | -------------------------------------------------------------- |
+| dense     | Boolean | Enables dense variant.                                         |
+| prominent | Boolean | Enables prominent variant.                                     |
+| short     | Boolean | Enables short variant.                                         |
+| tag       | String  | Customizes the TopAppBarFixedAdjust tag (defaults to `<main>`) |
+
+> NOTE: if not dense, prominent, or short will apply `mdc-top-app-bar--fixed-adjust`
+
+## Icons
+
+Use of [Material Icon's](../material-icon/README.md) for Action Items and Navigation Icons are recommended, since the Ripple is included with the Component. Using custom Components will require you to wrap the Component with your own ripple handling.
+
+### Navigation Icon
+
+The navigation icon can be a `<a>`, `<i>`, `<svg>`, `<image>`, `<span>`, etc., but again must be wrapped with ripple handling.
 
 ```html
-<mdc-top-app-bar title="Title" event="nav">
-  <mdc-top-app-bar-action
-    @click="show-help"
-    icon="help"
-  ></mdc-top-app-bar-action>
-  <mdc-top-app-bar-action
-    @click="do-download"
-    icon="file_download"
-  ></mdc-top-app-bar-action>
-</mdc-top-app-bar>
+<mdc-top-app-bar-icon navIcon>
+  <i class="material-icons">menu</i>
+</mdc-top-app-bar-icon>
 ```
 
-> if the `event` property is not specified, use @click to catch click events.
+### Action Items
 
-> leave the icon prop not set to render custom icons.
-
-**Font Awsome**
+Similar to the [navigation icon](#navigation-icon), it can be `<a>`, `<i>`, `<svg>`, `<image>`, `<span>`, etc., and must be wrapped with the `withRipple HOC`.
 
 ```html
-<mdc-top-app-bar-action
-  event="show-help"
-  iconClasses="fa fa-star"
-></mdc-top-app-bar-action>
-```
-
-refer to the [MDC Documentation](https://material.io/components/web/catalog/toolbar/#flexible-toolbar-requires-javascript) to learn about customization options.
-
-### Tab Bar Row
-
-- `mdc-top-app-bar` has an additional available slot for use when creating a
-  top bar combined w/ top tabs, named `tabs`.
-
-```html
-<mdc-top-app-bar title="Title" event="nav" dense>
-  <mdc-top-app-bar-action
-    @click="show-help"
-    icon="help"
-  ></mdc-top-app-bar-action>
-  <mdc-top-app-bar-action
-    @click="do-download"
-    icon="file_download"
-  ></mdc-top-app-bar-action>
-  <mdc-tab-bar slot="tabs">
-    <mdc-tab to="/dogs">Dogs</mdc-tab>
-    <mdc-tab to="/cats">Cats</mdc-tab>
-  </mdc-tab-bar>
-</mdc-top-app-bar>
+<mdc-top-app-bar-icon actionItem>
+  <i class="material-icons">bookmark</i>
+</mdc-top-app-bar-icon>
 ```
 
 ### Reference

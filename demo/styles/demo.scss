@@ -7,8 +7,8 @@ $mdc-theme-background: #fff;
 // @import "./jazzy";
 @import './markdown';
 
-.primary-drawer.mdc-drawer {
-    .mdc-drawer-header {
+.primary-drawer .mdc-drawer {
+    .mdc-drawer__header {
         background-color: $grey-900;
         background-image: url(../assets/logo.svg);
         background-size: 33.333%;
@@ -16,15 +16,15 @@ $mdc-theme-background: #fff;
         background-position: center;
     }
 
-    .mdc-drawer-item {
-        font-family: 'Roboto Mono', Monaco, courier, monospace;
-        font-weight: 400;
-        font-size: 0.875rem;
-    }
+    // .mdc-drawer-item {
+    //     font-family: 'Roboto Mono', Monaco, courier, monospace;
+    //     font-weight: 400;
+    //     font-size: 0.875rem;
+    // }
 }
 
 .main-toolbar {
-    .mdc-toolbar-title {
+    .mdc-top-app-bar__title {
         padding: 2px 0 2px 50px;
         background: no-repeat 0/32px 32px url(../assets/logo.svg);
         font-family: 'Roboto Mono', monospace;

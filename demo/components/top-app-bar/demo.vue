@@ -1,22 +1,30 @@
 <template>
   <div class="mdc-demo--appbar">
     <section class="mdc-demo">
-      <mdc-top-app-bar title="Title2">
-        <mdc-top-app-bar-action
-          class="material-icons"
-          @click="buttonText = 'show help'"
-          >help</mdc-top-app-bar-action
-        >
-        <mdc-top-app-bar-action
-          icon="info_outline"
-          @click="buttonText = 'show information'"
-        />
+      <mdc-top-app-bar class="main-toolbar" :scrollTarget="scrollTarget">
+        <mdc-top-app-bar-row>
+          <mdc-top-app-bar-section align="start">
+            <mdc-top-app-bar-icon navIcon>
+              <mdc-material-icon icon="menu"></mdc-material-icon>
+            </mdc-top-app-bar-icon>
+            <mdc-top-app-bar-title>vue mdc adapter</mdc-top-app-bar-title>
+          </mdc-top-app-bar-section>
+
+          <mdc-top-app-bar-section align="end">
+            <mdc-top-app-bar-icon actionItem aria-label="Help">
+              <mdc-material-icon @click="buttonText = 'show help'" icon="help"></mdc-material-icon>
+            </mdc-top-app-bar-icon>
+            <mdc-top-app-bar-icon actionItem aria-label="Help">
+              <mdc-material-icon @click="buttonText = 'show information'" icon="info_outline"></mdc-material-icon>
+            </mdc-top-app-bar-icon>
+          </mdc-top-app-bar-section>
+        </mdc-top-app-bar-row>
       </mdc-top-app-bar>
 
-      <!-- <mdc-fixed-adjust>Adjusted</mdc-fixed-adjust> -->
-      <br />
+      <br>
       <div v-if="buttonText">
-        Button: <span class="demo-button-info">{{ buttonText }}</span>
+        Button:
+        <span class="demo-button-info">{{ buttonText }}</span>
       </div>
     </section>
   </div>
@@ -25,7 +33,11 @@
 <script>
 export default {
   data() {
-    return { buttonText: '' };
+    return { buttonText: '', scrollTarget: null };
+  },
+  mounted() {
+    const demoEl = this.$el.querySelector('.mdc-demo');
+    this.scrollTarget = demoEl;
   },
 };
 </script>

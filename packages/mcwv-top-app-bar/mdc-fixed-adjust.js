@@ -13,7 +13,7 @@ export default {
     {
       props: { short, dense, prominent, tag },
       slots,
-      data: { attrs },
+      data: { attrs, staticStyle, staticClass },
     },
   ) {
     const base = 'mdc-top-app-bar';
@@ -21,14 +21,17 @@ export default {
     return createElement(
       tag,
       {
-        class: {
-          'mdc-fixed-adjust': true,
-          [base + '--short' + suffix]: short,
-          [base + '--dense' + suffix]: dense && !prominent,
-          [base + '--dense-prominent' + suffix]: dense && prominent,
-          [base + '--prominent' + suffix]: !dense && prominent,
-          [base + '-' + suffix]: !short && !dense && !prominent,
-        },
+        class: [
+          {
+            [base + '--short' + suffix]: short,
+            [base + '--dense' + suffix]: dense && !prominent,
+            [base + '--dense-prominent' + suffix]: dense && prominent,
+            [base + '--prominent' + suffix]: !dense && prominent,
+            [base + '-' + suffix]: !short && !dense && !prominent,
+          },
+          staticClass,
+        ],
+        style: staticStyle,
         attrs,
       },
       slots().default,
