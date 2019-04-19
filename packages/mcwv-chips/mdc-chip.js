@@ -77,6 +77,13 @@ export default {
     );
   },
   mounted() {
+    const {
+      INTERACTION_EVENT,
+      SELECTION_EVENT,
+      REMOVAL_EVENT,
+      TRAILING_ICON_INTERACTION_EVENT,
+    } = MDCChipFoundation.strings;
+
     this.foundation = new MDCChipFoundation({
       addClass: className => this.$set(this.classes, className, true),
       removeClass: className => this.$delete(this.classes, className),
@@ -100,7 +107,7 @@ export default {
       notifyInteraction: () => {
         emitCustomEvent(
           this.$el,
-          MDCChipFoundation.strings.INTERACTION_EVENT,
+          INTERACTION_EVENT,
           {
             chipId: this.myId,
           },
@@ -111,14 +118,14 @@ export default {
       notifySelection: selected =>
         emitCustomEvent(
           this.$el,
-          MDCChipFoundation.strings.SELECTION_EVENT,
+          SELECTION_EVENT,
           { chipId: this.myId, selected: selected },
           true /* shouldBubble */,
         ),
       notifyTrailingIconInteraction: () => {
         emitCustomEvent(
           this.$el,
-          MDCChipFoundation.strings.TRAILING_ICON_INTERACTION_EVENT,
+          TRAILING_ICON_INTERACTION_EVENT,
           {
             chipId: this.myId,
           },
@@ -128,7 +135,7 @@ export default {
       notifyRemoval: () => {
         emitCustomEvent(
           this.$el,
-          MDCChipFoundation.strings.REMOVAL_EVENT,
+          REMOVAL_EVENT,
           { chipId: this.myId, root: this.$el },
           true,
         );

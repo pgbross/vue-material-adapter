@@ -168,9 +168,10 @@ export default {
   },
 };
 
-//
-// private functions
-//
+// ===
+// Private functions
+// ===
+
 function extractIconProp(iconProp) {
   if (typeof iconProp === 'string') {
     return {
