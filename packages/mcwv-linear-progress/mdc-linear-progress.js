@@ -12,60 +12,59 @@ export default {
   props: {
     open: { type: Boolean, default: true },
     indeterminate: Boolean,
-    reverse: Boolean,
+    reversed: Boolean,
     progress: ProgressPropType,
     buffer: ProgressPropType,
+    bufferingDots: { type: Boolean, default: true },
+    tag: { type: String, default: 'div' },
   },
   data() {
     return {
       classes: {
         'mdc-linear-progress': 1,
       },
-      styles: {},
     };
   },
   watch: {
-    open() {
-      if (this.open) {
+    open(nv) {
+      if (nv) {
         this.foundation.open();
       } else {
         this.foundation.close();
       }
     },
-    progress() {
-      this.foundation.setProgress(Number(this.progress));
+    progress(nv) {
+      this.foundation.setProgress(Number(nv));
     },
-    buffer() {
-      this.foundation.setBuffer(Number(this.buffer));
+    buffer(nv) {
+      this.foundation.setBuffer(Number(nv));
     },
-    indeterminate() {
-      this.foundation.setDeterminate(!this.indeterminate);
+    indeterminate(nv) {
+      this.foundation.setDeterminate(!nv);
     },
-    reverse() {
-      this.foundation.setReverse(this.reverse);
+    reversed(nv) {
+      this.foundation.setReverse(nv);
     },
   },
   render(createElement) {
     const nodes = [
-      createElement('div', {
-        class: { 'mdc-linear-progress__buffering-dots': 1 },
-      }),
+      this.bufferingDots &&
+        createElement('div', {
+          class: 'mdc-linear-progress__buffering-dots',
+        }),
       createElement('div', {
         ref: 'buffer',
-        class: { 'mdc-linear-progress__buffer': 1 },
+        class: 'mdc-linear-progress__buffer',
       }),
       createElement(
         'div',
         {
           ref: 'primary',
-          class: {
-            'mdc-linear-progress__bar': 1,
-            'mdc-linear-progress__primary-bar': 1,
-          },
+          class: 'mdc-linear-progress__bar mdc-linear-progress__primary-bar',
         },
         [
           createElement('span', {
-            class: { 'mdc-linear-progress__bar-inner': 1 },
+            class: 'mdc-linear-progress__bar-inner',
           }),
         ],
       ),
@@ -73,24 +72,20 @@ export default {
         'div',
         {
           ref: 'secondary',
-          class: {
-            'mdc-linear-progress__bar': 1,
-            'mdc-linear-progress__secondary-bar': 1,
-          },
+          class: 'mdc-linear-progress__bar  mdc-linear-progress__secondary-bar',
         },
         [
           createElement('span', {
-            class: { 'mdc-linear-progress__bar-inner': 1 },
+            class: 'mdc-linear-progress__bar-inner',
           }),
         ],
       ),
     ];
 
     return createElement(
-      'div',
+      this.tag,
       {
         class: this.classes,
-        style: this.styles,
         attrs: { role: 'progressbar' },
       },
       nodes,
@@ -98,32 +93,25 @@ export default {
   },
 
   mounted() {
-    this.foundation = new MDCLinearProgressFoundation({
+    const adapter = {
       addClass: className => {
         this.$set(this.classes, className, true);
       },
-      getPrimaryBar: () => /* el: Element */ {
-        return this.$refs.primary;
-      },
-      getBuffer: () => /* el: Element */ {
-        return this.$refs.buffer;
-      },
-      hasClass: className => {
-        this.$el.classList.contains(className);
-      },
-      removeClass: className => {
-        this.$delete(this.classes, className);
-      },
-      setStyle: (el, styleProperty, value) => {
-        el.style[styleProperty] = value;
-      },
-    });
+      getPrimaryBar: () => this.$refs.primary,
+      getBuffer: () => this.$refs.buffer,
+      hasClass: className => this.$el.classList.contains(className),
+      removeClass: className => this.$delete(this.classes, className),
+      setStyle: (el, styleProperty, value) => (el.style[styleProperty] = value),
+    };
+
+    this.foundation = new MDCLinearProgressFoundation(adapter);
     this.foundation.init();
 
-    this.foundation.setReverse(this.reverse);
+    this.foundation.setReverse(this.reversed);
     this.foundation.setProgress(Number(this.progress));
     this.foundation.setBuffer(Number(this.buffer));
     this.foundation.setDeterminate(!this.indeterminate);
+
     if (this.open) {
       this.foundation.open();
     } else {

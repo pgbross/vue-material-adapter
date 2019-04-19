@@ -16,6 +16,10 @@
         <mdc-caption>Buffer</mdc-caption>
       </p>
       <br>
+      <mdc-linear-progress reversed progress="0.5"/>
+      <p>
+        <mdc-caption>Reversed</mdc-caption>
+      </p>
     </div>
   </div>
 </template>
