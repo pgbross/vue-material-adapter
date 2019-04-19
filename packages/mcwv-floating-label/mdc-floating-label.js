@@ -32,9 +32,10 @@ export default {
     });
     this.foundation.init();
   },
-
   beforeDestroy() {
-    this.foundation.destroy();
+    const foundation = this.foundation;
+    this.foundation = null;
+    foundation.destroy();
   },
 
   methods: {
