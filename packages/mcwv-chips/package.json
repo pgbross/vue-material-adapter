@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/chips",
   "description": "The Vue Material Adapter for the web chips component",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "license": "MIT",
   "main": "dist/mcwv.chips.min.js",
   "module": "index.js",
@@ -17,8 +17,8 @@
   },
   "dependencies": {
     "@material/chips": "^1.1.1",
-    "@mcwv/base": "^0.2.3",
-    "@mcwv/ripple": "^0.2.3"
+    "@mcwv/base": "^0.3.0",
+    "@mcwv/ripple": "^0.3.0"
   },
   "gitHead": "de1cb1bfcbbd52d174c797fc832b10c1c9074854"
 }
