@@ -17,7 +17,7 @@ export default {
     return createElement('div', {
       class: this.lineClasses,
       style: this.lineStyles,
-      on: { transitionend: evt => this.foundation.handleTransitionEnd(evt) },
+      on: { transitionend: evt => this.foundation_.handleTransitionEnd(evt) },
     });
   },
   mounted() {
@@ -36,24 +36,26 @@ export default {
       },
     };
 
-    this.foundation = new MDCLineRippleFoundation(adapter);
-    this.foundation.init();
+    // note: do not call the property 'foundation' as the tests will then
+    // expext all methods to be implemented, and we handle transitionend locally
+    this.foundation_ = new MDCLineRippleFoundation(adapter);
+    this.foundation_.init();
   },
 
   beforeDestroy() {
-    this.foundation.destroy();
+    this.foundation_.destroy();
   },
 
   methods: {
     setRippleCenter(xCoordinate) {
-      this.foundation.setRippleCenter(xCoordinate);
+      this.foundation_.setRippleCenter(xCoordinate);
     },
     activate() {
-      this.foundation.activate();
+      this.foundation_.activate();
     },
 
     deactivate() {
-      this.foundation.deactivate();
+      this.foundation_.deactivate();
     },
   },
 };

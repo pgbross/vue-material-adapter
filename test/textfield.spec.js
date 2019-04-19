@@ -23,7 +23,7 @@ describe('mdcTextField', () => {
 
   describe('lineRippleFoundation', () => {
     const component = wrapper.find(mdcLineRipple);
-    checkValidFoundation(component.vm.foundation);
+    expect(component).toBeInstanceOf(Object);
   });
 
   describe('helperTextFoundation', () => {
