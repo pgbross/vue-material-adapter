@@ -1,9 +1,22 @@
 <template>
   <div class="mdc-demo mdc-demo--container">
     <div class="slider-demo">
-      <mdc-slider v-model="sliderValue" max="10"/>
-      <mdc-slider v-model="sliderValue" step="1" max="10"/>
-      <mdc-slider v-model="sliderValue" step="1" max="10" display-markers/>
+      <p>
+        <mdc-caption>Continuous</mdc-caption>
+      </p>
+      <mdc-slider v-model="sliderValue1" max="10"/>
+      <p>
+        <mdc-caption>Continuous Rtl</mdc-caption>
+      </p>
+      <mdc-slider v-model="sliderValue1" max="10" dir="rtl"/>
+      <p>
+        <mdc-caption>Discrete</mdc-caption>
+      </p>
+      <mdc-slider v-model="sliderValue1" discrete max="10"/>
+      <p>
+        <mdc-caption>Discreete with markers</mdc-caption>
+      </p>
+      <mdc-slider v-model="sliderValue2" discrete step="2" max="10" display-markers/>
     </div>
   </div>
 </template>
@@ -12,7 +25,8 @@
 export default {
   data() {
     return {
-      sliderValue: 5,
+      sliderValue1: 5,
+      sliderValue2: 5,
     };
   },
 };

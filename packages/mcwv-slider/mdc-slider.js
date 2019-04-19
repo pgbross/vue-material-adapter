@@ -1,3 +1,4 @@
+/* eslint-disable quote-props */
 import MDCSliderFoundation from '@material/slider/foundation';
 import { DispatchFocusMixin, applyPassive } from '@mcwv/base';
 
@@ -13,30 +14,37 @@ export default {
     min: { type: [Number, String], default: 0 },
     max: { type: [Number, String], default: 100 },
     step: { type: [Number, String], default: 0 },
+    discrete: Boolean,
     displayMarkers: Boolean,
     disabled: Boolean,
     layoutOn: String,
     layoutOnSource: { type: Object, required: false },
   },
   data() {
+    let stepSize = this.step;
+    if (this.discrete && !stepSize) {
+      stepSize = 1;
+    }
     return {
       classes: {
         'mdc-slider': 1,
-        'mdc-slider--discrete': !!this.step,
-        'mdc-slider--display-markers': this.displayMarkers,
+        'mdc-slider--discrete': this.discrete,
+        'mdc-slider--display-markers': this.discrete && this.displayMarkers,
       },
+      sliderAttrs: {},
       trackStyles: {},
       lastTrackMarkersStyles: {},
       thumbStyles: {},
       markerValue: '',
       numMarkers: 0,
+      stepSize,
     };
   },
   render(createElement) {
     const containerNodes = [
       createElement('div', {
         style: this.trackStyles,
-        class: { 'mdc-slider__track': 1 },
+        class: 'mdc-slider__track',
       }),
     ];
     if (this.hasMarkers) {
@@ -67,80 +75,80 @@ export default {
     const trackContainer = createElement(
       'div',
       {
-        class: { 'mdc-slider__track-container': 1 },
+        class: 'mdc-slider__track-container',
       },
       containerNodes,
     );
 
-    const thumbNodes = [
-      createElement(
-        'svg',
-        { class: { 'mdc-slider__thumb': 1 }, attrs: { width: 21, height: 21 } },
-        [
-          createElement('circle', {
-            attrs: { cx: 10.5, cy: 10.5, r: 7.875 },
-          }),
-        ],
-      ),
-      createElement('div', { class: { 'mdc-slider__focus-ring': 1 } }),
-    ];
-
-    if (this.isDiscrete) {
-      thumbNodes.unshift(
-        createElement('div', { class: { 'mdc-slider__pin': 1 } }, [
-          createElement(
-            'span',
-            { class: { 'mdc-slider__pin-value-marker': 1 } },
-            this.markerValue,
-          ),
-        ]),
-      );
-    }
     const thumbContainer = createElement(
       'div',
       {
-        class: { 'mdc-slider__thumb-container': 1 },
+        class: 'mdc-slider__thumb-container',
         style: this.thumbStyles,
         ref: 'thumbContainer',
       },
-      thumbNodes,
+      [
+        this.discrete &&
+          createElement('div', { class: 'mdc-slider__pin' }, [
+            createElement(
+              'span',
+              { class: 'mdc-slider__pin-value-marker' },
+              this.markerValue,
+            ),
+          ]),
+        createElement(
+          'svg',
+          { class: 'mdc-slider__thumb', attrs: { width: 21, height: 21 } },
+          [
+            createElement('circle', {
+              attrs: { cx: 10.5, cy: 10.5, r: 7.875 },
+            }),
+          ],
+        ),
+        createElement('div', { class: 'mdc-slider__focus-ring' }),
+      ],
     );
 
     return createElement(
       'div',
-      { class: this.classes, attrs: { tabindex: '0', role: 'slider' } },
+      {
+        class: this.classes,
+        attrs: {
+          tabindex: '0',
+          role: 'slider',
+          'aria-label': 'Select value',
+          ...this.sliderAttrs,
+        },
+      },
       [trackContainer, thumbContainer],
     );
   },
   computed: {
-    isDiscrete() {
-      return !!this.step;
-    },
     hasMarkers() {
-      return !!this.step && this.displayMarkers && this.numMarkers;
+      return this.discrete && this.displayMarkers && this.numMarkers;
     },
   },
   watch: {
-    value() {
-      if (this.foundation.getValue() !== Number(this.value)) {
-        this.foundation.setValue(this.value);
+    value(nv) {
+      if (this.foundation.getValue() !== Number(nv)) {
+        this.foundation.setValue(nv);
       }
     },
-    min() {
-      this.foundation.setMin(Number(this.min));
+    min(nv) {
+      this.foundation.setMin(Number(nv));
     },
-    max() {
-      this.foundation.setMax(Number(this.max));
+    max(nv) {
+      this.foundation.setMax(Number(nv));
     },
-    step() {
-      this.foundation.setStep(Number(this.step));
+    step(nv) {
+      this.foundation.setStep(Number(nv));
     },
-    disabled() {
-      this.foundation.setDisabled(this.disabled);
+    disabled(nv) {
+      this.foundation.setDisabled(nv);
     },
   },
   mounted() {
-    this.foundation = new MDCSliderFoundation({
+    const adapter = {
       hasClass: className => this.$el.classList.contains(className),
       addClass: className => {
         this.$set(this.classes, className, true);
@@ -149,8 +157,9 @@ export default {
         this.$delete(this.classes, className, true);
       },
       getAttribute: name => this.$el.getAttribute(name),
-      setAttribute: (name, value) => this.$el.setAttribute(name, value),
-      removeAttribute: name => this.$el.removeAttribute(name),
+      setAttribute: (name, value) => this.$set(this.sliderAttrs, name, value),
+      removeAttribute: name => this.$delete(this.sliderAttrs, name),
+
       computeBoundingRect: () => this.$el.getBoundingClientRect(),
       getTabIndex: () => this.$el.tabIndex,
       registerInteractionHandler: (type, handler) => {
@@ -209,11 +218,14 @@ export default {
       setLastTrackMarkersStyleProperty: (propertyName, value) => {
         this.$set(this.lastTrackMarkersStyles, propertyName, value);
       },
-      isRTL: () => false,
-    });
+      isRTL: () => getComputedStyle(this.$el).direction === 'rtl',
+    };
 
+    this.foundation = new MDCSliderFoundation(adapter);
     this.foundation.init();
+
     this.foundation.setDisabled(this.disabled);
+
     if (Number(this.min) <= this.foundation.getMax()) {
       this.foundation.setMin(Number(this.min));
       this.foundation.setMax(Number(this.max));
@@ -221,8 +233,9 @@ export default {
       this.foundation.setMax(Number(this.max));
       this.foundation.setMin(Number(this.min));
     }
-    this.foundation.setStep(Number(this.step));
+    this.foundation.setStep(Number(this.stepSize));
     this.foundation.setValue(Number(this.value));
+
     if (this.hasMarkers) {
       this.foundation.setupTrackMarker();
     }
