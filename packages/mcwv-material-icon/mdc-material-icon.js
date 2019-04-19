@@ -12,7 +12,7 @@ export default {
         'material-icons': true,
         'material-icons--ripple-surface': this.hasRipple,
       },
-      styles: {},
+      styles: {}, // for ripple support
     };
   },
   render(createElement) {

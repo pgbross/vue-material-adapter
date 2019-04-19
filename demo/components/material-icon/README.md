@@ -1,34 +1,18 @@
 ## Usage
 
-````html
-<mdc-material-icon />
-
-```javascript
-````
-
-```javascript
-// ...
-}
+```html
+<mdc-material-icon icon="favorite" />
+<br />
+<mdc-material-icon icon="aspect_ratio" />
 ```
 
 ### props
 
-| props | Type | Default | Description |
-| ----- | ---- | ------- | ----------- |
+| props       | Type    | Default | Description                                                   |
+| ----------- | ------- | ------- | ------------------------------------------------------------- |
+| `icon`      | String  |         | Type of icon to be displayed                                  |
+| `hasRipple` | Boolean | false   | If present on element, it will enable the ripple on the icon. |
 
+### Reference -
 
-### methods
-
-| method | Description |
-| ------ | ----------- |
-
-
-### events
-
-| Name | Description |
-| ---- | ----------- |
-
-
-### Reference
-
-- <https://material.io/components/web/catalog/snackbars>
+[Material Icons Documentation](https://google.github.io/material-design-icons/#icon-font-for-the-web)
