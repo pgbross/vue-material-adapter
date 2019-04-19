@@ -16,7 +16,6 @@ export default {
       'div',
       {
         class: {
-          'mdc-icon-toggle': 1,
           'mdc-icon-button__icon': true,
           'mdc-icon-button__icon--on': isOn,
         },

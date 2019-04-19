@@ -1,18 +1,12 @@
 <template>
   <div class>
     <section class="mdc-demo">
-      <mdc-headline4>Icon Button</mdc-headline4>
       <div class="mdc-demo mdc-demo--container">
         <mdc-icon-button href="#">
           <mdc-material-icon icon="menu"/>
         </mdc-icon-button>
-      </div>
-    </section>
 
-    <section class="mdc-demo">
-      <mdc-headline4>Icon Toggle Button</mdc-headline4>
-      <div class="mdc-demo mdc-demo--container">
-        <mdc-icon-button v-model="isOn">
+        <mdc-icon-button v-model="isOn" :disabled="disabled">
           <mdc-icon-toggle isOn>
             <mdc-material-icon icon="favorite"/>
           </mdc-icon-toggle>
@@ -21,7 +15,9 @@
           </mdc-icon-toggle>
         </mdc-icon-button>
       </div>
-
+      <div class="button-style-select">
+        <mdc-checkbox v-model="disabled" label="disabled"/>
+      </div>
       <mdc-caption>
         isOn:
         <span class>{{ isOn }}</span>
@@ -33,7 +29,7 @@
 <script>
 export default {
   data() {
-    return { isOn: false };
+    return { isOn: false, disabled: false };
   },
 };
 </script>

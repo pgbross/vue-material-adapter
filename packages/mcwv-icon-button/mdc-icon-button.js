@@ -1,3 +1,4 @@
+/* eslint-disable quote-props */
 import MDCIconButtonToggleFoundation from '@material/icon-button/foundation';
 import { RippleBase } from '@mcwv/ripple';
 
@@ -9,6 +10,7 @@ export default {
   },
   props: {
     isOn: Boolean,
+    disabled: Boolean,
   },
   data() {
     return {
@@ -32,31 +34,36 @@ export default {
         class: this.classes,
         style: this.styles,
         on: { click: evt => this.foundation.handleClick(evt) },
-        attrs: { ...this.$attrs, 'aria-pressed': 'false' },
+        attrs: {
+          ...this.$attrs,
+          'aria-pressed': 'false',
+          disabled: this.disabled,
+        },
       },
       this.$slots.default,
     );
   },
   mounted() {
-    this.foundation = new MDCIconButtonToggleFoundation({
+    const { CHANGE_EVENT } = MDCIconButtonToggleFoundation.strings;
+    const adapter = {
       addClass: className => this.$set(this.classes, className, true),
       removeClass: className => this.$delete(this.classes, className),
       hasClass: className => Boolean(this.classes[className]),
       setAttr: (attrName, attrValue) =>
         this.$el.setAttribute(attrName, attrValue),
       notifyChange: evtData => {
-        this.$emit(MDCIconButtonToggleFoundation.strings.CHANGE_EVENT, evtData);
-
+        this.$emit(CHANGE_EVENT, evtData);
         this.$emit('change', evtData.isOn);
       },
-    });
+    };
+
+    this.foundation = new MDCIconButtonToggleFoundation(adapter);
     this.foundation.init();
 
     this.ripple = new RippleBase(this, {
       isUnbounded: () => true,
     });
     this.ripple.init();
-
     this.foundation.toggle(this.isOn);
   },
 
