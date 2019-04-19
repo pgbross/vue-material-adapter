@@ -110,7 +110,7 @@
     "commitlint": "^7.5.2",
     "concurrently": "^4.1.0",
     "copy-webpack-plugin": "^5.0.2",
-    "cp-file": "^6.2.0",
+    "cp-file": "^7.0.0",
     "cross-env": "^5.2.0",
     "css-loader": "^2.1.1",
     "cssnano": "^4.1.10",
