@@ -17,37 +17,31 @@ export default {
     return createElement('div', {
       class: this.lineClasses,
       style: this.lineStyles,
+      on: { transitionend: evt => this.foundation.handleTransitionEnd(evt) },
     });
   },
   mounted() {
-    this.foundation = new MDCLineRippleFoundation(
-      Object.assign({
-        addClass: className => {
-          this.$set(this.lineClasses, className, true);
-        },
-        removeClass: className => {
-          this.$delete(this.lineClasses, className);
-        },
-        hasClass: className => {
-          return Boolean(this.lineClasses[className]);
-        },
-        setStyle: (name, value) => {
-          this.$set(this.lineStyles, name, value);
-        },
-        registerEventHandler: (evtType, handler) => {
-          this.$el.addEventListener(evtType, handler);
-        },
-        deregisterEventHandler: (evtType, handler) => {
-          this.$el.removeEventListener(evtType, handler);
-        },
-      }),
-    );
+    const adapter = {
+      addClass: className => {
+        this.$set(this.lineClasses, className, true);
+      },
+      removeClass: className => {
+        this.$delete(this.lineClasses, className);
+      },
+      hasClass: className => {
+        return Boolean(this.lineClasses[className]);
+      },
+      setStyle: (name, value) => {
+        this.$set(this.lineStyles, name, value);
+      },
+    };
+
+    this.foundation = new MDCLineRippleFoundation(adapter);
     this.foundation.init();
   },
+
   beforeDestroy() {
-    const foundation = this.foundation;
-    this.foundation = null;
-    foundation.destroy();
+    this.foundation.destroy();
   },
 
   methods: {
