@@ -5,11 +5,12 @@
 <mdc-fab mini icon="favorite"></mdc-fab>
 <mdc-fab icon="favorite" label="wiffle" />
 <mdc-fab icon="home" @click="scrollToTop"></mdc-fab>
+<mdc-fab>
+  <mdc-material-icon icon="add" slot="icon"></mdc-material-icon>
+</mdc-fab>
 ```
 
 > refer to [Material Design Icon Font](https://material.io/icons/) for the list of icons
-
-> FAB can't be disabled
 
 > add an `href` attribute for link
 
@@ -25,12 +26,9 @@
 | -------------------- | -------------- | ------------------------ | --------------------------------------------- |
 | `icon`               | String         |                          | material-icon content (\*)                    |
 | `mini`               | Boolean        |                          | mini style (40x40 pixels) (\*)                |
-| `absolute`           | Boolean        |                          | set bottom right absolute position (\*)       |
-| `fixed`              | Boolean        |                          | set bottom right fixed position (\*)          |
 | `event`              | String         | optional                 | optional event to emit on click               |
 | `event-target`       | Object         | vm.\$root                | optional event target, defaults to root bus   |
 | `event-args`         | Array          | []                       | optional event args                           |
-| `href`               | String         |                          | link's href, renders anchor (see notes below) |
 | `href`               | String         |                          | link's href, renders anchor (see notes below) |
 | `to`                 | String, Object | undefined                | router-link property _(\*)_                   |
 | `replace`            | Boolean        | false                    | router-link property _(\*)_                   |
@@ -49,7 +47,7 @@
 
 ```html
 <mdc-fab>
-  <mdc-icon class="fa fa-star"></mdc-icon>
+  <span class="fa fa-star" slot="icon"></span>
 </mdc-fab>
 ```
 
@@ -57,7 +55,7 @@
 
 ```html
   <mdc-fab>
-    <svg ...>
+    <svg ... slot="icon">
   </mdc-fab>
 ```
 

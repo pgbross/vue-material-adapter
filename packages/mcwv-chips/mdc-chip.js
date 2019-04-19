@@ -188,7 +188,7 @@ export default {
       if (v0) {
         const { staticClass = '' } = v0.data;
         const haveClasses =
-          staticClass && staticClass.indexOf('mdc-chip-icon') > -1;
+          staticClass && staticClass.indexOf('mdc-chip__icon') > -1;
         if (!haveClasses) {
           v0.data.staticClass = `mdc-chip__icon mdc-chip__icon--leading ${staticClass}`;
         }
@@ -216,7 +216,7 @@ export default {
       if (v0) {
         const { staticClass = '' } = v0.data;
         const haveClasses =
-          staticClass && staticClass.indexOf('mdc-chip-icon') > -1;
+          staticClass && staticClass.indexOf('mdc-chip__icon') > -1;
         if (!haveClasses) {
           v0.data.staticClass = `mdc-chip__icon mdc-chip__icon--trailing ${staticClass}`;
           v0.data.on = {

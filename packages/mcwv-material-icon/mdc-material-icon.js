@@ -9,7 +9,6 @@ export default {
   data() {
     return {
       classes: {
-        'mdc-material-icon': 1,
         'material-icons': true,
         'material-icons--ripple-surface': this.hasRipple,
       },
@@ -41,7 +40,4 @@ export default {
       this.ripple.destroy();
     }
   },
-  methods: {},
-
-  computed: {},
 };
