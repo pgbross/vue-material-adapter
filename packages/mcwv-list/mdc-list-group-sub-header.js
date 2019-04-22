@@ -1,19 +1,19 @@
 export default {
-  name: 'mdc-list-group',
+  name: 'mdc-list-group-sub-header',
   functional: true,
   props: {
     tag: {
       type: String,
       default() {
-        return 'div';
+        return 'h3';
       },
     },
   },
   render(
     createElement,
     {
-      props: { tag },
       scopedSlots,
+      props: { tag },
       staticClass,
       attrs,
     },
@@ -21,7 +21,7 @@ export default {
     return createElement(
       tag,
       {
-        class: ['mdc-list-group', staticClass],
+        class: ['mdc-list-group__subheader', staticClass],
         attrs,
       },
       scopedSlots.default && scopedSlots.default(),

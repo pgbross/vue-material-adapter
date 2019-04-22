@@ -3,21 +3,36 @@ export default {
   props: {
     inset: Boolean,
     padded: Boolean,
+    role: {
+      type: String,
+      default() {
+        return 'separator';
+      },
+    },
+    tag: {
+      type: String,
+      default() {
+        return 'li';
+      },
+    },
   },
   functional: true,
   render(
     createElement,
     {
-      props: { inset, padded },
+      props: { tag, inset, padded, role, staticClass, attrs },
     },
   ) {
-    return createElement('li', {
-      class: {
-        'mdc-list-divider': 1,
-        'mdc-list-divider--inset': inset,
-        'mdc-list-divider--padded': padded,
-      },
-      attrs: { role: 'separator' },
+    return createElement(tag, {
+      class: [
+        'mdc-list-divider',
+        staticClass,
+        {
+          'mdc-list-divider--inset': inset,
+          'mdc-list-divider--padded': padded,
+        },
+      ],
+      attrs: { ...attrs, role },
     });
   },
 };
