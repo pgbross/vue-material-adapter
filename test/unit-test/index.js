@@ -28,11 +28,14 @@ export function pluginSanityCheck(pluginName, plugin, options) {
           (options && options[key]) || undefined,
         );
         if (component.functional) {
-          test('is a functional component', () => {
-            expect(
-              wrapper.isFunctionalComponent && wrapper.is(component),
-            ).toBeTruthy();
-          });
+          if (!options || !options[key]) {
+            // if there are stubs then the wrapper doesnt match the component so ignore
+            test('is a functional component', () => {
+              expect(
+                wrapper.isFunctionalComponent && wrapper.is(component),
+              ).toBeTruthy();
+            });
+          }
           checkValidFunctionalComponent(component);
         } else {
           test('is a Vue instance', () => {

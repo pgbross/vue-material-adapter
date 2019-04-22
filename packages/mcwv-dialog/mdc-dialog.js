@@ -5,7 +5,8 @@ import { mdcButton } from '@mcwv/button';
 import { VMAUniqueIdMixin } from '@mcwv/base';
 import { closest, matches } from '@material/dom/ponyfill';
 import createFocusTrap from 'focus-trap';
-const strings = MDCDialogFoundation.strings;
+
+import { cssClasses, LAYOUT_EVENTS } from './constants';
 
 export default {
   name: 'mdc-dialog',
@@ -18,119 +19,61 @@ export default {
     event: 'change',
   },
   props: {
-    title: {
-      type: String,
-    },
-    accept: {
-      type: String,
-      default: 'Ok',
-    },
-    acceptDisabled: Boolean,
-    acceptRaised: {
-      type: Boolean,
-      default: false,
-    },
-    cancel: {
-      type: String,
-    },
-    cancelRaised: {
-      type: Boolean,
-      default: false,
-    },
-    accent: Boolean,
+    autoStackButtons: Boolean,
+    escapeKeyAction: String,
     scrollable: Boolean,
     open: Boolean,
+    role: String,
+    scrimClickAction: { type: String, default: 'close' },
+    tag: { type: String, default: 'div' },
+    id: { type: String, default: 'mdc-dialog' },
   },
   data() {
     return {
+      labelledBy: null,
+      describedBy: null,
       classes: { 'mdc-dialog': 1 },
       styles: {},
-      surfaceClasses: { 'mdc-dialog__surface': 1 },
-      bodyClasses: {
-        'mdc-dialog__body--scrollable': this.scrollable,
-      },
     };
   },
   watch: {
     open: 'onOpen_',
   },
   render(createElement) {
-    const surfaceNodes = [
-      createElement(
-        'div',
-        {
-          class: { 'mdc-dialog__content': 1 },
-          attrs: { id: `desc${this.vma_uid_}` },
-          ref: 'content',
-        },
-        this.$slots.default,
-      ),
-    ];
+    const mdt =
+      (this.$scopedSlots.default && this.$scopedSlots.default()) || [];
 
-    if (this.title) {
-      surfaceNodes.unshift(
-        createElement(
-          'h2',
-          {
-            class: { 'mdc-dialog__title': 1 },
-            attrs: { id: `label${this.vma_uid_}` },
-          },
-          this.title,
-        ),
-      );
-    }
+    mdt.forEach(
+      ({ tag: childTag, data: { props, class: classes, attrs } = {} }, i) => {
+        if (childTag === 'template' && props.tag) {
+          const kind = props.tag.split('-').pop();
 
-    if (this.accept || this.cancel) {
-      const buttons = [
-        createElement(
-          'button',
-          {
-            class: {
-              'mdc-button': 1,
-              'mdc-dialog__button': 1,
-            },
-            attrs: {
-              'data-mdc-dialog-action': 'yes',
-              disabled: this.acceptDisabled,
-              type: 'button',
-            },
-            ref: 'defaultButton',
-          },
-          this.accept,
-        ),
-      ];
-
-      if (this.cancel) {
-        buttons.unshift(
-          createElement(
-            'button',
+          mdt[i] = createElement(
+            props.tag,
             {
-              class: {
-                'mdc-button': 1,
-                'mdc-dialog__button': 1,
-              },
-              attrs: {
-                'data-mdc-dialog-action': 'no',
-                type: 'button',
+              class: classes,
+              attrs,
+              scopedSlots: {
+                [kind]: ({ id, content }) => {
+                  if (kind === 'title' || kind === 'content') {
+                    const cdata = content.data || (content.data = {});
+                    const cattrs = cdata.attrs || (cdata.attrs = {});
+                    cattrs.id = id || `${this.id}-${kind}`;
+                    this[kind === 'title' ? 'labelledBy' : 'describedBy'] =
+                      cattrs.id;
+                  }
+                  if (kind === 'content') {
+                    const cdata = content.data || (content.data = {});
+                    cdata.ref = 'contentEl';
+                  }
+                  return content;
+                },
               },
             },
-            this.cancel,
-          ),
-        );
-      }
-      surfaceNodes.push(
-        createElement(
-          'footer',
-          { class: { 'mdc-dialog__actions': 1 } },
-          buttons,
-        ),
-      );
-    }
-
-    const surfaceElement = createElement(
-      'div',
-      { class: this.surfaceClasses, ref: 'surface' },
-      surfaceNodes,
+            mdt[i].children,
+          );
+        }
+      },
     );
 
     return createElement(
@@ -139,9 +82,10 @@ export default {
         class: this.classes,
         style: this.styles,
         attrs: {
+          id: this.id,
           'aria-modal': 'true',
-          'aria-labelledby': `label${this.vma_uid_}`,
-          'aria-describedby': `desc${this.vma_uid_}`,
+          'aria-labelledby': this.labelledBy,
+          'aria-describedby': this.describedBy,
           role: 'alertdialog',
         },
         ref: 'root',
@@ -153,26 +97,34 @@ export default {
       [
         createElement(
           'div',
-          { class: { 'mdc-dialog__container': 1 }, ref: 'container' },
-          [surfaceElement],
+          {
+            class: cssClasses.CONTAINER,
+            ref: 'container',
+          },
+          [
+            createElement(
+              'div',
+              { class: cssClasses.SURFACE },
+              this.$scopedSlots.default && this.$scopedSlots.default(),
+            ),
+          ],
         ),
-        createElement('div', { class: { 'mdc-dialog__scrim': 1 } }),
+
+        createElement('div', { class: 'mdc-dialog__scrim' }),
       ],
     );
   },
   mounted() {
-    if (this.accept) {
-      this.focusTrap = util.createFocusTrapInstance(
-        this.$refs.container,
-        createFocusTrap,
-      );
-    }
+    const strings = MDCDialogFoundation.strings;
 
-    this.buttons_ = [].slice.call(
-      this.$el.querySelectorAll(strings.BUTTON_SELECTOR),
+    const { open, autoStackButtons, escapeKeyAction, scrimClickAction } = this;
+
+    this.buttons_ = [].slice.call(this.$el.querySelectorAll(cssClasses.BUTTON));
+    this.defaultButton = this.$el.querySelector(
+      `.${cssClasses.DEFAULT_BUTTON}`,
     );
 
-    this.foundation = new MDCDialogFoundation({
+    const adapter = {
       addClass: className => this.$set(this.classes, className, true),
       removeClass: className => this.$delete(this.classes, className),
       hasClass: className => this.$el.classList.contains(className),
@@ -182,44 +134,91 @@ export default {
       trapFocus: () => this.focusTrap && this.focusTrap.activate(),
       releaseFocus: () => this.focusTrap && this.focusTrap.deactivate(),
       isContentScrollable: () =>
-        !!this.$refs.content && util.isScrollable(this.$refs.content),
+        !!this.$refs.contentEl && util.isScrollable(this.$refs.contentEl),
       areButtonsStacked: () => util.areTopsMisaligned(this.buttons_),
 
       getActionFromEvent: event => {
-        const element = closest(event.target, `[${strings.ACTION_ATTRIBUTE}]`);
-        return element && element.getAttribute(strings.ACTION_ATTRIBUTE);
+        const elem = closest(event.target, `[${strings.ACTION_ATTRIBUTE}]`);
+        return elem && elem.getAttribute(strings.ACTION_ATTRIBUTE);
       },
       clickDefaultButton: () => {
-        if (this.$refs.defaultButton) {
-          this.$refs.defaultButton.click();
+        const defaultButton = this.defaultButton;
+        if (defaultButton) {
+          defaultButton.click();
         }
       },
       reverseButtons: () => {
-        this.buttons_.reverse();
-        this.buttons_.forEach(button =>
-          button.parentElement.appendChild(button),
+        const buttons = this.buttons_;
+        return (
+          buttons &&
+          buttons
+            .reverse()
+            .forEach(
+              button =>
+                button.parentElement &&
+                button.parentElement.appendChild(button),
+            )
         );
       },
-      notifyOpening: () => this.$emit(strings.OPENING_EVENT, {}),
+      notifyOpening: () => {
+        this.$emit(strings.OPENING_EVENT, {});
+        LAYOUT_EVENTS.forEach(evt =>
+          window.addEventListener(evt, this.handleLayout),
+        );
+        document.addEventListener('keydown', this.handleDocumentKeyDown);
+      },
       notifyOpened: () => this.$emit(strings.OPENED_EVENT, {}),
       notifyClosing: action => {
         this.$emit('change', false);
         // console.log(action)
         this.$emit(strings.CLOSING_EVENT, action ? { action } : {});
+        LAYOUT_EVENTS.forEach(evt =>
+          window.removeEventListener(evt, this.handleLayout),
+        );
+        document.removeEventListener('keydown', this.handleDocumentKeyDown);
       },
-      notifyClosed: action =>
-        this.$emit(strings.CLOSED_EVENT, action ? { action } : {}),
-    });
+      notifyClosed: action => {
+        this.$emit(strings.CLOSED_EVENT, action ? { action } : {});
+      },
+    };
+
+    this.foundation = new MDCDialogFoundation(adapter);
 
     this.foundation.init();
-    this.open && this.foundation.open();
+
+    if (!autoStackButtons) {
+      this.foundation.setAutoStackButtons(autoStackButtons);
+    }
+
+    if (typeof escapeKeyAction === 'string') {
+      // set even if empty string
+      this.foundation.setEscapeKeyAction(escapeKeyAction);
+    }
+
+    if (typeof scrimClickAction === 'string') {
+      // set even if empty string
+      this.foundation.setScrimClickAction(scrimClickAction);
+    }
+    this.onOpen_(open);
   },
   beforeDestroy() {
     this.foundation.destroy();
   },
   methods: {
+    handleLayout() {
+      this.foundation.layout();
+    },
+    handleDocumentKeyDown(e) {
+      this.foundation.handleDocumentKeydown(e);
+    },
     onOpen_(value) {
       if (value) {
+        if (this.$refs.container) {
+          this.focusTrap = util.createFocusTrapInstance(
+            this.$el,
+            createFocusTrap,
+          );
+        }
         this.foundation.open();
       } else {
         this.foundation.close();
@@ -262,11 +261,11 @@ export default {
         this.foundation.accept(true);
       }
     },
-    show() {
-      this.foundation.open();
-    },
-    close() {
-      this.foundation.close();
-    },
+    // show() {
+    //   this.foundation.open();
+    // },
+    // close() {
+    //   this.foundation.close();
+    // },
   },
 };
