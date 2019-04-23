@@ -96,13 +96,15 @@
           <mdc-list singleSelection>
             <mdc-list-item v-for="(choice,i) in choices" :key="i">
               <span class="mdc-list-item__graphic">
-                <mdc-radio
-                  name="ringtone"
-                  :value="choice"
-                  label
-                  :id="choice | clean"
-                  v-model="picked"
-                ></mdc-radio>
+                <mdc-radio>
+                  <mdc-radio-input
+                    name="ringtone"
+                    :value="choice"
+                    label
+                    :id="choice | clean"
+                    v-model="picked"
+                  ></mdc-radio-input>
+                </mdc-radio>
               </span>
               <label :for="choice | clean">
                 <span class="mdc-list-item__text">

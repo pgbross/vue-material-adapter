@@ -1,10 +1,27 @@
-import { pluginSanityCheck } from './unit-test';
-import plugin from '../packages/mcwv-radio/index.js';
+import { mount, createLocalVue, checkValidMdcAdapter } from './unit-test';
+import plugin, {
+  mdcRadioInput,
+  mdcRadio,
+} from '../packages/mcwv-radio/index.js';
 
-pluginSanityCheck(__dirname, plugin, {
-  mdcRadio: {
-    propsData: {
-      name: 'test',
-    },
-  },
+const Spec = {
+  template: `<mdc-radio>
+<mdc-radio-input></mdc-radio-input>
+</mdc-radio>`,
+};
+
+describe(__dirname, () => {
+  const localVue = createLocalVue();
+  localVue.use(plugin);
+  const spec = mount(Spec, { localVue });
+
+  describe('mdcRadio', () => {
+    const wrapper = spec.find(mdcRadio);
+    checkValidMdcAdapter(wrapper.vm);
+  });
+
+  describe('mdcRadioInput', () => {
+    const wrapper = spec.find(mdcRadioInput);
+    checkValidMdcAdapter(wrapper.vm);
+  });
 });

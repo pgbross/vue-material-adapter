@@ -13,7 +13,7 @@ export default {
     {
       props: { action, isDefault },
       data: { staticClass, attrs },
-      slots,
+      scopedSlots,
     },
   ) {
     return createElement(
@@ -26,7 +26,7 @@ export default {
         ],
         attrs: { ...attrs, 'data-mdc-dialog-action': action },
       },
-      slots.default && slots.default(),
+      scopedSlots.default && scopedSlots.default(),
     );
   },
 };

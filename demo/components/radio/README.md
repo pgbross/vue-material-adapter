@@ -1,49 +1,51 @@
 ## Usage
 
 ```html
-<mdc-radio v-model="answer" name="radios" label="Yes for sure" />
-<mdc-radio v-model="answer" name="radios" label="definitely NO!" />
-<mdc-radio v-model="answer" name="radios" label="I guess" checked />
+<mdc-radio label="Dog" radioClasses="my-radio">
+  <mdc-radio-input
+    v-model="picked"
+    id="dog"
+    name="pets"
+    value="dog"
+  ></mdc-radio-input>
+</mdc-radio>
+<mdc-radio label="Cat">
+  <mdc-radio-input
+    v-model="picked"
+    id="cat"
+    name="pets"
+    value="cat"
+  ></mdc-radio-input>
+</mdc-radio>
 
-<p>Answer: {{ answer }}</p>
+<p>Answer: {{ picked }}</p>
 ```
 
 ```javascript
 var vm = new Vue({
   data: {
-    answer: null,
+    picked: null,
   },
 });
 ```
 
-> or use default slot for label
+> NOTE: The `.mdc-radio` element and the associated label are wrapped around an `.mdc-form-field` element for styling.
 
-```html
-<mdc-radio v-model="answer" name="radios">Yes for sure</mdc-radio>
-<mdc-radio v-model="answer" name="radios">definitely NO!</mdc-radio>
-<mdc-radio v-model="answer" name="radios" checked>"I guess"</mdc-radio>
-```
+### mdc-radio props
 
-### props
+| Prop Name    | Type   | Description                                        |
+| ------------ | ------ | -------------------------------------------------- |
+| radioClasses | String | Classes to be applied to the `.mdc-radio` element. |
+| label        | String | Label associated with radio input control.         |
 
-| props       | Type    | Default | Description                                                 |
-| ----------- | ------- | ------- | ----------------------------------------------------------- |
-| `name`      | String  |         | radio group name (**\***)                                   |
-| `label`     | String  |         | radio label                                                 |
-| `align-end` | Boolean |         | align the radio after the label                             |
-| `value`     | String  | `label` | radio value, defaults to label value if any                 |
-| `checked`   | Boolean |         | forces this radio to be selected. follows v-model otherwise |
-| `:disabled` | Boolean |         | whether the radio is disabled                               |
-| `v-model`   | String  |         | tracks selected radio's value                               |
+### mdc-radio-input props
 
-> (**\***) name prop is required for proper behavior.
-
-### events
-
-| event    | args | Description             |
-| -------- | ---- | ----------------------- |
-| `@focus` | -    | emitted on focus gained |
-| `@blur`  | -    | emitted on focus lost   |
+| Prop Name | Type    | Description                                                        |
+| --------- | ------- | ------------------------------------------------------------------ |
+| checked   | Boolean | Default `false`. When true will switch radio to the checked state. |
+| value     | String  | The associated value with the radio element.                       |
+| v-model   | String  | Tracks the selected value                                          |
+| disabled  | Boolean | Default `false`. When true will disable the radio element.         |
 
 ### Reference
 
