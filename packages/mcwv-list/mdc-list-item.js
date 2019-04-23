@@ -1,12 +1,15 @@
 export default {
   name: 'mdc-list-item',
   props: {
-    classNamesFromList: Array,
-    attributesFromList: Array,
+    classNamesFromList: {
+      type: Array,
+    },
+    attributesFromList: Object,
     shouldFocus: Boolean,
     shouldFollowHref: Boolean,
     shouldToggleCheckbox: Boolean,
-    childrenTabIndex: Number,
+    childrenTabIndex: Number | String,
+    counter: { type: Number, default: 0 },
     tag: {
       type: String,
       default() {
@@ -19,7 +22,7 @@ export default {
     const {
       tag,
       $scopedSlots: slots,
-      classNamesFromList = [],
+      classNamesFromList,
       attributesFromList,
       childrenTabIndex,
     } = this;
@@ -35,51 +38,17 @@ export default {
       }
     });
 
+    if (slots.listItem) {
+      return slots.listItem({
+        tag,
+        classNamesFromList,
+        children: slots.default && slots.default(),
+      });
+    }
     return createElement(
       tag,
-      { class: classes, attrs: attributesFromList },
+      { class: classes, attrs: attributesFromList, on: this.$listeners },
       slots.default && slots.default(),
     );
-    // const textNodes = [];
-    // if (this.hasSecondary) {
-    //   textNodes.push(
-    //     createElement(
-    //       'span',
-    //       { class: { 'mdc-list-item__primary-text': 1 } },
-    //       this.$slots.default,
-    //     ),
-    //   );
-    //   textNodes.push(
-    //     createElement(
-    //       'span',
-    //       { class: { 'mdc-list-item__secondary-text': 1 } },
-    //       this.$slots.secondary,
-    //     ),
-    //   );
-    // } else {
-    //   textNodes.push(this.$slots.default);
-    // }
-    // const itemTextElement = createElement(
-    //   'span',
-    //   {
-    //     class: { 'mdc-list-item__text': 1 },
-    //   },
-    //   textNodes,
-    // );
-    // const nodes = [
-    //   this.$slots['start-detail'],
-    //   itemTextElement,
-    //   this.$slots['end-detail'],
-    // ];
-    // return createElement(
-    //   'li',
-    //   {
-    //     class: { ...this.classes, ...this.itemClasses },
-    //     style: this.styles,
-    //     attrs: { tabindex: this.isInteractive ? '0' : void 0 },
-    //     on: this.isInteractive ? this.$listeners : {},
-    //   },
-    //   nodes,
-    // );
   },
 };
