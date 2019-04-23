@@ -53,7 +53,11 @@ export default {
     } = this.state;
 
     mdt.forEach(vn => {
-      if (!vn.tag || vn.componentOptions.tag !== 'mdc-list-item') {
+      if (
+        !vn.tag ||
+        !vn.componentOptions ||
+        vn.componentOptions.tag !== 'mdc-list-item'
+      ) {
         return;
       }
       const index = this.listItemCount++;
@@ -171,27 +175,27 @@ export default {
         .forEach(ele => ele.setAttribute('tabindex', -1));
     },
 
-    initializeListType() {
-      // Automatically set single selection if selected/activated classes are present.
-      const preselectedElement = this.$el.querySelector(
-        `.${MDCListFoundation.cssClasses.LIST_ITEM_ACTIVATED_CLASS}, .${
-          MDCListFoundation.cssClasses.LIST_ITEM_SELECTED_CLASS
-        }`,
-      );
+    // initializeListType() {
+    //   // Automatically set single selection if selected/activated classes are present.
+    //   const preselectedElement = this.$el.querySelector(
+    //     `.${MDCListFoundation.cssClasses.LIST_ITEM_ACTIVATED_CLASS}, .${
+    //       MDCListFoundation.cssClasses.LIST_ITEM_SELECTED_CLASS
+    //     }`,
+    //   );
 
-      if (preselectedElement) {
-        if (
-          preselectedElement.classList.contains(
-            MDCListFoundation.cssClasses.LIST_ITEM_ACTIVATED_CLASS,
-          )
-        ) {
-          this.foundation.setUseActivatedClass(true);
-        }
+    //   if (preselectedElement) {
+    //     if (
+    //       preselectedElement.classList.contains(
+    //         MDCListFoundation.cssClasses.LIST_ITEM_ACTIVATED_CLASS,
+    //       )
+    //     ) {
+    //       this.foundation.setUseActivatedClass(true);
+    //     }
 
-        this.singleSelection = true;
-        this.selectedIndex = this.listElements.indexOf(preselectedElement);
-      }
-    },
+    //     this.singleSelection = true;
+    //     this.selectedIndex = this.listElements.indexOf(preselectedElement);
+    //   }
+    // },
 
     getListItemIndex(evt) {
       let eventTarget = evt.target;
