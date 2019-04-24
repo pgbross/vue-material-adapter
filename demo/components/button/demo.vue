@@ -13,10 +13,18 @@
 
     <div class="mdc-demo--container">
       <div class="button-type-select">
-        <mdc-radio v-model="type" label="baseline" name="button-type" checked/>
-        <mdc-radio v-model="type" label="raised" name="button-type"/>
-        <mdc-radio v-model="type" label="unelevated" name="button-type"/>
-        <mdc-radio v-model="type" label="outlined" name="button-type"/>
+        <mdc-radio label="baseline">
+          <mdc-radio-input id="baseline" value="baseline" v-model="type" name="button-type" checked></mdc-radio-input>
+        </mdc-radio>
+        <mdc-radio label="raised">
+          <mdc-radio-input id="raised" value="raised" v-model="type" name="button-type"></mdc-radio-input>
+        </mdc-radio>
+        <mdc-radio label="unelevated">
+          <mdc-radio-input id="unelevated" value="unelevated" v-model="type" name="button-type"></mdc-radio-input>
+        </mdc-radio>
+        <mdc-radio label="outlined">
+          <mdc-radio-input id="outlined" value="outlined" v-model="type" name="button-type"></mdc-radio-input>
+        </mdc-radio>
       </div>
 
       <div class="button-style-select">
