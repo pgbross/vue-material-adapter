@@ -1,4 +1,4 @@
-import { DispatchEventMixin, CustomButtonMixin } from '@mcwv/base';
+import { CustomButtonMixin, DispatchEventMixin } from '@mcwv/base';
 import { RippleMixin } from '@mcwv/ripple';
 
 export default {

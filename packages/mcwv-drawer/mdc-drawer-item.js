@@ -1,4 +1,4 @@
-import { DispatchEventMixin, CustomLinkMixin } from '@mcwv/base';
+import { CustomLinkMixin, DispatchEventMixin } from '@mcwv/base';
 import { RippleBase } from '@mcwv/ripple';
 
 export default {
