@@ -3,9 +3,9 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackCdnPlugin = require('webpack-cdn-plugin');
-// const CleanWebpackPlugin = require('clean-webpack-plugin');
-// const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-// const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 // const TerserPlugin = require('terser-webpack-plugin');
@@ -160,52 +160,88 @@ const config = {
 };
 
 // Optimize for prod
-// if (isProduction) {
-//   config.mode = 'production';
-//   config.optimization = {
-//     minimizer: [new TerserPlugin()],
-//   };
-//
-//   config.output.publicPath = '/vue-mdc-adapter/';
-//
-//   // extract css rule
-//   config.module.rules.push({
-//     test: /\.(css|scss)$/,
-//     use: [MiniCssExtractPlugin.loader].concat(cssLoaders),
-//   });
-//
-//   // laod css rule
-//   config.module.rules.push({
-//     test: /\.(css|scss)$/,
-//     use: ['style-loader'].concat(cssLoaders),
-//   });
-//
-//   config.plugins.push(
-//     // clean output path
-//     new CleanWebpackPlugin(config.output.path),
-//
-//     // split css
-//     new MiniCssExtractPlugin({
-//       filename: '[name].[chunkhash].css',
-//       allChunks: true,
-//     }),
-//
-//     // copy assets
-//     new CopyWebpackPlugin([
-//       {
-//         from: path.resolve(__dirname, 'static'),
-//         to: config.output.path,
-//         ignore: ['.*'],
-//       },
-//     ]),
-//   );
-// }
+if (isProduction) {
+  config.mode = 'production';
+
+  (config.optimization = {
+    runtimeChunk: 'single',
+    splitChunks: {
+      chunks: 'all',
+      maxInitialRequests: Infinity,
+      minSize: 0,
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name(module) {
+            // get the name. E.g. node_modules/packageName/not/this/part.js
+            // or node_modules/packageName
+            const packageName = module.context.match(
+              /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
+            )[1];
+
+            // npm package names are URL-safe, but some servers don't like @ symbols
+            return `npm.${packageName.replace('@', '')}`;
+          },
+        },
+        styles: {
+          name: 'style',
+          test: /\.css$/,
+          chunks: 'all',
+          enforce: true,
+        },
+        // extra: {
+        //   name: 'extra',
+        //   test: /\.scss$/,
+        //   chunks: 'all',
+        //   enforce: true,
+        // },
+      },
+    },
+  }),
+    (config.output.publicPath = '/vue-mdc-adapter/');
+
+  // extract css rule
+  config.module.rules.push({
+    test: /\.(css|scss)$/,
+    use: [
+      {
+        loader: MiniCssExtractPlugin.loader,
+        options: {},
+      },
+    ].concat(cssLoaders),
+  });
+
+  // // load css rule
+  // config.module.rules.push({
+  //   test: /\.(css|scss)$/,
+  //   use: ['style-loader'].concat(cssLoaders),
+  // });
+
+  config.plugins.push(
+    // clean output path
+    new CleanWebpackPlugin(),
+
+    // split css
+    new MiniCssExtractPlugin({
+      filename: '[name].[chunkhash].css',
+    }),
+
+    // copy assets
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, '../static'),
+        to: config.output.path,
+        ignore: ['.*'],
+      },
+    ]),
+  );
+}
 
 // Enable dev server
 if (isDevelopment) {
   config.mode = 'development';
 
-  // laod css rule
+  // load css rule
   config.module.rules.push({
     test: /\.(css|scss)$/,
     use: ['style-loader'].concat(cssLoaders),
