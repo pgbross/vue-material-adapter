@@ -7,13 +7,7 @@ export default {
       labelClasses: { 'mdc-floating-label': true },
     };
   },
-  render(createElement) {
-    return createElement(
-      'label',
-      { class: this.labelClasses },
-      this.$slots.default,
-    );
-  },
+
   mounted() {
     this.foundation = new MDCFloatingLabelFoundation({
       addClass: className => {
@@ -48,5 +42,14 @@ export default {
     shake(shouldShake) {
       this.foundation.shake(shouldShake);
     },
+  },
+  render(createElement) {
+    const { $scopedSlots: scopedSlots } = this;
+
+    return createElement(
+      'label',
+      { class: this.labelClasses },
+      scopedSlots.default && scopedSlots.default(),
+    );
   },
 };

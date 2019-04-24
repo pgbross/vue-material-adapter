@@ -26,12 +26,42 @@ export default {
       styles: {},
     };
   },
+
+  computed: {
+    mylisteners() {
+      return {
+        ...this.$listeners,
+        click: e => {
+          this.mdcDrawer.isModal && this.modalClose && this.mdcDrawer.close();
+          this.dispatchEvent(e);
+        },
+      };
+    },
+    itemClasses() {
+      return {
+        'mdc-list-item--activated': this.activated,
+      };
+    },
+    hasStartDetail() {
+      return this.startIcon || this.$slots['start-detail'];
+    },
+  },
+  mounted() {
+    this.ripple = new RippleBase(this);
+    this.ripple.init();
+  },
+  beforeDestroy() {
+    this.ripple && this.ripple.destroy();
+    this.ripple = null;
+  },
   render(createElement) {
+    const { $scopedSlots: scopedSlots } = this;
+
     const nodes = [
       createElement(
         'span',
         { class: { 'mdc-list-item__text': 1 } },
-        this.$slots.default,
+        scopedSlots.default && scopedSlots.default(),
       ),
     ];
 
@@ -61,32 +91,5 @@ export default {
       },
       nodes,
     );
-  },
-  computed: {
-    mylisteners() {
-      return {
-        ...this.$listeners,
-        click: e => {
-          this.mdcDrawer.isModal && this.modalClose && this.mdcDrawer.close();
-          this.dispatchEvent(e);
-        },
-      };
-    },
-    itemClasses() {
-      return {
-        'mdc-list-item--activated': this.activated,
-      };
-    },
-    hasStartDetail() {
-      return this.startIcon || this.$slots['start-detail'];
-    },
-  },
-  mounted() {
-    this.ripple = new RippleBase(this);
-    this.ripple.init();
-  },
-  beforeDestroy() {
-    this.ripple && this.ripple.destroy();
-    this.ripple = null;
   },
 };

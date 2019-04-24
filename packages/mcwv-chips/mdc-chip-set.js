@@ -55,6 +55,7 @@ export default {
   },
 
   render(createElement) {
+    const { $scopedSlots: scopedSlots } = this;
     return createElement(
       'div',
       {
@@ -68,7 +69,7 @@ export default {
             this.foundation.handleChipRemoval(chipId),
         },
       },
-      this.$slots.default,
+      scopedSlots.default && scopedSlots.default(),
     );
   },
 };

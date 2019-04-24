@@ -1,7 +1,7 @@
 export default {
   name: 'mdc-menu-anchor',
   functional: true,
-  render(createElement, { slots }) {
+  render(createElement, { scopedSlots }) {
     return createElement(
       'div',
       {
@@ -10,7 +10,7 @@ export default {
           'mdc-menu-surface--anchor': 1,
         },
       },
-      slots().default,
+      scopedSlots.default && scopedSlots.default(),
     );
   },
 };

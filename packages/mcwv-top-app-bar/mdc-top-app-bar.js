@@ -28,18 +28,7 @@ export default {
       myScrollTarget: this.scrollTarget,
     };
   },
-  render(createElement) {
-    return createElement(
-      this.tag,
-      {
-        class: this.rootClasses,
-        style: this.rootStyles,
-        ref: 'root',
-        on: this.$listeners,
-      },
-      this.$slots.default,
-    );
-  },
+
   watch: {
     scrollTarget(nv, ov) {
       if (nv !== ov) {
@@ -91,5 +80,18 @@ export default {
   },
   beforeDestroy() {
     this.foundation_.destroy();
+  },
+  render(createElement) {
+    const { $scopedSlots: scopedSlots } = this;
+    return createElement(
+      this.tag,
+      {
+        class: this.rootClasses,
+        style: this.rootStyles,
+        ref: 'root',
+        on: this.$listeners,
+      },
+      scopedSlots.default && scopedSlots.default(),
+    );
   },
 };

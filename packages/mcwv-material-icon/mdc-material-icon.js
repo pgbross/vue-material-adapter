@@ -15,17 +15,7 @@ export default {
       styles: {}, // for ripple support
     };
   },
-  render(createElement) {
-    return createElement(
-      'i',
-      {
-        class: this.classes,
-        on: this.$listeners,
-        style: this.styles,
-      },
-      this.icon,
-    );
-  },
+
   mounted() {
     if (this.hasRipple) {
       this.ripple = new RippleBase(this, {
@@ -39,5 +29,16 @@ export default {
     if (this.ripple) {
       this.ripple.destroy();
     }
+  },
+  render(createElement) {
+    return createElement(
+      'i',
+      {
+        class: this.classes,
+        on: this.$listeners,
+        style: this.styles,
+      },
+      this.icon,
+    );
   },
 };

@@ -11,6 +11,7 @@ export default {
   },
 
   render(createElement) {
+    const { $scopedSlots: scopedSlots } = this;
     return createElement(
       this.tag,
       {
@@ -23,7 +24,7 @@ export default {
         attrs: this.$attrs,
         on: this.$listeners,
       },
-      this.$slots.default || [this.icon],
+      (scopedSlots.default && scopedSlots.default()) || [this.icon],
     );
   },
 };

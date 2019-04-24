@@ -12,39 +12,7 @@ export default {
       contentStyles: {},
     };
   },
-  render(createElement) {
-    const areaEl = createElement(
-      'div',
-      {
-        class: this.areaClasses,
-        style: this.areaStyles,
-        ref: 'area',
-        on: {
-          mousedown: evt => this.foundation.handleInteraction(evt),
-          wheel: evt => this.foundation.handleInteraction(evt),
-          pointerdown: evt => this.foundation.handleInteraction(evt),
-          touchstart: evt => this.foundation.handleInteraction(evt),
-          keydown: evt => this.foundation.handleInteraction(evt),
-        },
-      },
-      [
-        createElement(
-          'div',
-          {
-            class: { 'mdc-tab-scroller__scroll-content': 1 },
-            style: this.contentStyles,
-            ref: 'content',
-            on: {
-              transitionend: evt => this.foundation.handleTransitionEnd(evt),
-            },
-          },
-          this.$slots.default,
-        ),
-      ],
-    );
 
-    return createElement('div', { class: this.classes }, [areaEl]);
-  },
   mounted() {
     this.foundation = new MDCTabScrollerFoundation({
       eventTargetMatchesSelector: (evtTarget, selector) => {
@@ -91,5 +59,39 @@ export default {
     scrollTo(scrollX) {
       this.foundation.scrollTo(scrollX);
     },
+  },
+  render(createElement) {
+    const { $scopedSlots: scopedSlots } = this;
+    const areaEl = createElement(
+      'div',
+      {
+        class: this.areaClasses,
+        style: this.areaStyles,
+        ref: 'area',
+        on: {
+          mousedown: evt => this.foundation.handleInteraction(evt),
+          wheel: evt => this.foundation.handleInteraction(evt),
+          pointerdown: evt => this.foundation.handleInteraction(evt),
+          touchstart: evt => this.foundation.handleInteraction(evt),
+          keydown: evt => this.foundation.handleInteraction(evt),
+        },
+      },
+      [
+        createElement(
+          'div',
+          {
+            class: { 'mdc-tab-scroller__scroll-content': 1 },
+            style: this.contentStyles,
+            ref: 'content',
+            on: {
+              transitionend: evt => this.foundation.handleTransitionEnd(evt),
+            },
+          },
+          scopedSlots.default && scopedSlots.default(),
+        ),
+      ],
+    );
+
+    return createElement('div', { class: this.classes }, [areaEl]);
   },
 };

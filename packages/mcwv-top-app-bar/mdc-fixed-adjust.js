@@ -12,7 +12,7 @@ export default {
     createElement,
     {
       props: { short, dense, prominent, tag },
-      slots,
+      scopedSlots,
       data: { attrs, staticStyle, staticClass },
     },
   ) {
@@ -34,7 +34,7 @@ export default {
         style: staticStyle,
         attrs,
       },
-      slots().default,
+      scopedSlots.default && scopedSlots.default(),
     );
   },
 };

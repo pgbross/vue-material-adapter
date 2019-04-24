@@ -82,145 +82,7 @@ export default {
       notchStyles: {},
     };
   },
-  render(createElement) {
-    const rootNodes = [];
 
-    if (this.$slots.leadingIcon) {
-      rootNodes.push(
-        createElement(
-          'textfield-icon',
-          { ref: 'leadingIconEl' },
-          this.$slots.leadingIcon,
-        ),
-      );
-    }
-
-    if (this.multiline) {
-      rootNodes.push(
-        createElement('textarea', {
-          class: this.inputClasses,
-          attrs: {
-            ...this.$attrs,
-            id: this.vma_uid_,
-            minlength: this.minlength,
-            maxlength: this.maxlength,
-            placeholder: this.inputPlaceHolder,
-            'aria-label': this.inputPlaceHolder,
-            'aria-controls': this.inputAriaControls,
-            rows: this.rows,
-            cols: this.cols,
-          },
-          ref: 'input',
-          on: {
-            ...this.$listeners,
-            input: evt => this.updateValue(evt.target.value),
-          },
-        }),
-      );
-    } else {
-      rootNodes.push(
-        createElement('input', {
-          class: this.inputClasses,
-          attrs: {
-            ...this.$attrs,
-            id: this.vma_uid_,
-            type: this.type,
-            minlength: this.minlength,
-            maxlength: this.maxlength,
-            placeholder: this.inputPlaceHolder,
-            'aria-label': this.inputPlaceHolder,
-            'aria-controls': this.inputAriaControls,
-          },
-          ref: 'input',
-          on: {
-            ...this.$listeners,
-            input: evt => this.updateValue(evt.target.value),
-          },
-        }),
-      );
-    }
-
-    if (this.hasLabel) {
-      rootNodes.push(
-        createElement(
-          'mdc-floating-label',
-          {
-            attrs: { for: this.vma_uid_ },
-            ref: 'labelEl',
-          },
-          this.label,
-        ),
-      );
-    }
-
-    if (this.$slots.trailingIcon) {
-      rootNodes.push(
-        createElement(
-          'textfield-icon',
-          { ref: 'trailingIconEl' },
-          this.$slots.trailingIcon,
-        ),
-      );
-    }
-
-    if (this.hasOutline) {
-      rootNodes.push(
-        createElement(
-          'mdc-notched-outline',
-          {
-            ref: 'labelEl',
-          },
-          this.label,
-        ),
-      );
-    }
-
-    if (this.hasLineRipple) {
-      rootNodes.push(
-        createElement('mdc-line-ripple', {
-          ref: 'lineRippleEl',
-        }),
-      );
-    }
-
-    const rootEl = createElement(
-      'div',
-      {
-        class: this.rootClasses,
-        ref: 'root',
-      },
-      rootNodes,
-    );
-
-    const nodes = [rootEl];
-    if (this.hasHelptext) {
-      nodes.push(
-        createElement(
-          'textfield-helper-text',
-          {
-            attrs: {
-              id: `help${this.vma_uid_}`,
-              helptext: this.helpText,
-              persistent: this.helptextPersistent,
-              validation: this.helptextValidation,
-            },
-            ref: 'helpertextEl',
-          },
-          this.$slots.helpText,
-        ),
-      );
-    }
-
-    return createElement(
-      'div',
-      {
-        class: { 'mdc-textfield-wrapper': 1 },
-        style: { width: this.fullwidth ? '100%' : void 0 },
-        attrs: { id: this.id },
-      },
-      nodes,
-    );
-  },
   components: { TextfieldHelperText, TextfieldIcon },
   computed: {
     inputPlaceHolder() {
@@ -244,7 +106,9 @@ export default {
     },
 
     hasHelptext() {
-      return this.$slots.helpText || this.helptext;
+      const { $scopedSlots: scopedSlots } = this;
+
+      return (scopedSlots.helpText && scopedSlots.helpText()) || this.helptext;
     },
   },
   watch: {
@@ -412,5 +276,154 @@ export default {
     blur() {
       this.$refs.input && this.$refs.input.blur();
     },
+  },
+  render(createElement) {
+    const { $scopedSlots: scopedSlots } = this;
+
+    const rootNodes = [];
+
+    const leadingIconSlot =
+      scopedSlots.leadingIcon && scopedSlots.leadingIcon();
+    if (leadingIconSlot) {
+      rootNodes.push(
+        createElement(
+          'textfield-icon',
+          { ref: 'leadingIconEl' },
+          leadingIconSlot,
+        ),
+      );
+    }
+
+    if (this.multiline) {
+      rootNodes.push(
+        createElement('textarea', {
+          class: this.inputClasses,
+          attrs: {
+            ...this.$attrs,
+            id: this.vma_uid_,
+            minlength: this.minlength,
+            maxlength: this.maxlength,
+            placeholder: this.inputPlaceHolder,
+            'aria-label': this.inputPlaceHolder,
+            'aria-controls': this.inputAriaControls,
+            rows: this.rows,
+            cols: this.cols,
+          },
+          ref: 'input',
+          on: {
+            ...this.$listeners,
+            input: evt => this.updateValue(evt.target.value),
+          },
+        }),
+      );
+    } else {
+      rootNodes.push(
+        createElement('input', {
+          class: this.inputClasses,
+          attrs: {
+            ...this.$attrs,
+            id: this.vma_uid_,
+            type: this.type,
+            minlength: this.minlength,
+            maxlength: this.maxlength,
+            placeholder: this.inputPlaceHolder,
+            'aria-label': this.inputPlaceHolder,
+            'aria-controls': this.inputAriaControls,
+          },
+          ref: 'input',
+          on: {
+            ...this.$listeners,
+            input: evt => this.updateValue(evt.target.value),
+          },
+        }),
+      );
+    }
+
+    if (this.hasLabel) {
+      rootNodes.push(
+        createElement(
+          'mdc-floating-label',
+          {
+            attrs: { for: this.vma_uid_ },
+            ref: 'labelEl',
+          },
+          this.label,
+        ),
+      );
+    }
+
+    const trailingIconSlot =
+      scopedSlots.trailingIcon && scopedSlots.trailingIcon();
+
+    if (trailingIconSlot) {
+      rootNodes.push(
+        createElement(
+          'textfield-icon',
+          { ref: 'trailingIconEl' },
+          trailingIconSlot,
+        ),
+      );
+    }
+
+    if (this.hasOutline) {
+      rootNodes.push(
+        createElement(
+          'mdc-notched-outline',
+          {
+            ref: 'labelEl',
+          },
+          this.label,
+        ),
+      );
+    }
+
+    if (this.hasLineRipple) {
+      rootNodes.push(
+        createElement('mdc-line-ripple', {
+          ref: 'lineRippleEl',
+        }),
+      );
+    }
+
+    const rootEl = createElement(
+      'div',
+      {
+        class: this.rootClasses,
+        ref: 'root',
+      },
+      rootNodes,
+    );
+
+    const nodes = [rootEl];
+
+    const helpTextSlot = scopedSlots.helpText && scopedSlots.helpText();
+
+    if (this.hasHelptext) {
+      nodes.push(
+        createElement(
+          'textfield-helper-text',
+          {
+            attrs: {
+              id: `help${this.vma_uid_}`,
+              helptext: this.helpText,
+              persistent: this.helptextPersistent,
+              validation: this.helptextValidation,
+            },
+            ref: 'helpertextEl',
+          },
+          helpTextSlot,
+        ),
+      );
+    }
+
+    return createElement(
+      'div',
+      {
+        class: { 'mdc-textfield-wrapper': 1 },
+        style: { width: this.fullwidth ? '100%' : void 0 },
+        attrs: { id: this.id },
+      },
+      nodes,
+    );
   },
 };

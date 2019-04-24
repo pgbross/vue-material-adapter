@@ -19,7 +19,7 @@ export function mdcTypoMixin(
       createElement,
       {
         props: { tag, classModifier },
-        slots,
+        scopedSlots,
         listeners,
         data: { attrs },
       },
@@ -35,7 +35,7 @@ export function mdcTypoMixin(
           attrs,
           on: listeners,
         },
-        slots().default,
+        scopedSlots.default && scopedSlots.default(),
       );
     },
   };

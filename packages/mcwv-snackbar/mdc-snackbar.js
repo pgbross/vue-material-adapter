@@ -35,86 +35,7 @@ export default {
 
     timeoutMs: 'onTimeoutMs_',
   },
-  render(createElement) {
-    const labelNode = this.showLabelText
-      ? this.labelText
-      : createElement('span', {
-          style: { display: 'inline-block', width: 0, height: '1px' },
-          domProps: {
-            innerHTML: '&nbsp;',
-          },
-        });
-    const surfaceNodes = [
-      createElement(
-        'div',
-        {
-          class: { 'mdc-snackbar__label': 1 },
-          attrs: { role: 'status', 'aria-live': 'polite' },
-          ref: 'labelEl',
-        },
-        [labelNode],
-      ),
-    ];
 
-    if (this.showDismissAction || this.actionText) {
-      const buttonNodes = [];
-
-      if (this.actionText) {
-        buttonNodes.push(
-          createElement(
-            'button',
-            {
-              class: {
-                'mdc-button': 1,
-                'mdc-snackbar__action': 1,
-              },
-              attrs: { type: 'button' },
-              ref: 'actionEl',
-              on: this.$listeners,
-            },
-            this.actionText,
-          ),
-        );
-      }
-
-      if (this.showDismissAction) {
-        buttonNodes.push(
-          createElement(
-            'button',
-            {
-              class: {
-                'mdc-icon-button': 1,
-                'mdc-snackbar__dismiss': 1,
-                'material-icons': 1,
-              },
-              attrs: { title: 'Dismiss' },
-            },
-            ['close'],
-          ),
-        );
-      }
-      surfaceNodes.push(
-        createElement(
-          'div',
-          { class: { 'mdc-snackbar__actions': 1 } },
-          buttonNodes,
-        ),
-      );
-    }
-
-    const surfaceEl = createElement(
-      'div',
-      {
-        class: { 'mdc-snackbar__surface': 1 },
-        on: { click: evt => this.surfaceClickHandler(evt) },
-      },
-      surfaceNodes,
-    );
-
-    return createElement('div', { class: this.classes, ref: 'root' }, [
-      surfaceEl,
-    ]);
-  },
   mounted() {
     window.addEventListener('keydown', this.handleKeydownEvent);
 
@@ -260,5 +181,85 @@ export default {
         this.showLabelText = true;
       }, MDCSnackbarFoundation.numbers.ARIA_LIVE_DELAY_MS);
     },
+  },
+  render(createElement) {
+    const labelNode = this.showLabelText
+      ? this.labelText
+      : createElement('span', {
+          style: { display: 'inline-block', width: 0, height: '1px' },
+          domProps: {
+            innerHTML: '&nbsp;',
+          },
+        });
+    const surfaceNodes = [
+      createElement(
+        'div',
+        {
+          class: { 'mdc-snackbar__label': 1 },
+          attrs: { role: 'status', 'aria-live': 'polite' },
+          ref: 'labelEl',
+        },
+        [labelNode],
+      ),
+    ];
+
+    if (this.showDismissAction || this.actionText) {
+      const buttonNodes = [];
+
+      if (this.actionText) {
+        buttonNodes.push(
+          createElement(
+            'button',
+            {
+              class: {
+                'mdc-button': 1,
+                'mdc-snackbar__action': 1,
+              },
+              attrs: { type: 'button' },
+              ref: 'actionEl',
+              on: this.$listeners,
+            },
+            this.actionText,
+          ),
+        );
+      }
+
+      if (this.showDismissAction) {
+        buttonNodes.push(
+          createElement(
+            'button',
+            {
+              class: {
+                'mdc-icon-button': 1,
+                'mdc-snackbar__dismiss': 1,
+                'material-icons': 1,
+              },
+              attrs: { title: 'Dismiss' },
+            },
+            ['close'],
+          ),
+        );
+      }
+      surfaceNodes.push(
+        createElement(
+          'div',
+          { class: { 'mdc-snackbar__actions': 1 } },
+          buttonNodes,
+        ),
+      );
+    }
+
+    const surfaceEl = createElement(
+      'div',
+      {
+        class: { 'mdc-snackbar__surface': 1 },
+        on: { click: evt => this.surfaceClickHandler(evt) },
+      },
+      surfaceNodes,
+    );
+
+    return createElement('div', { class: this.classes, ref: 'root' }, [
+      surfaceEl,
+    ]);
   },
 };

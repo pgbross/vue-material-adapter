@@ -22,7 +22,7 @@ export default {
     createElement,
     {
       props: { tag, align },
-      slots,
+      scopedSlots,
       data: { attrs, staticClass },
     },
   ) {
@@ -31,6 +31,10 @@ export default {
     align == 'start' && classes.push(cssClasses.SECTION_START);
     align == 'end' && classes.push(cssClasses.SECTION_END);
 
-    return createElement(tag, { class: classes, attrs }, slots().default);
+    return createElement(
+      tag,
+      { class: classes, attrs },
+      scopedSlots.default && scopedSlots.default(),
+    );
   },
 };

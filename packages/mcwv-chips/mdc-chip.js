@@ -50,32 +50,6 @@ export default {
     },
   },
 
-  render(createElement) {
-    return createElement(
-      'div',
-      {
-        class: this.classes,
-        style: this.styles,
-        attrs: { tabindex: '0' },
-        on: {
-          click: evt => this.foundation.handleInteraction(evt),
-          keydown: evt => this.foundation.handleInteraction(evt),
-          transitionend: evt => this.foundation.handleTransitionEnd(evt),
-        },
-      },
-      [
-        this.haveleadingIcon && this.renderLeadingIcon(createElement),
-        this.isFilter &&
-          createElement('mdc-chip-checkmark', { ref: 'checkmarkEl' }),
-        createElement(
-          'div',
-          { class: { 'mdc-chip__text': 1 } },
-          this.$slots.default,
-        ),
-        this.havetrailingIcon && this.renderTrailingIcon(createElement),
-      ],
-    );
-  },
   mounted() {
     const {
       INTERACTION_EVENT,
@@ -246,5 +220,32 @@ export default {
         this.trailingIcon,
       );
     },
+  },
+  render(createElement) {
+    const { $scopedSlots: scopedSlots } = this;
+    return createElement(
+      'div',
+      {
+        class: this.classes,
+        style: this.styles,
+        attrs: { tabindex: '0' },
+        on: {
+          click: evt => this.foundation.handleInteraction(evt),
+          keydown: evt => this.foundation.handleInteraction(evt),
+          transitionend: evt => this.foundation.handleTransitionEnd(evt),
+        },
+      },
+      [
+        this.haveleadingIcon && this.renderLeadingIcon(createElement),
+        this.isFilter &&
+          createElement('mdc-chip-checkmark', { ref: 'checkmarkEl' }),
+        createElement(
+          'div',
+          { class: { 'mdc-chip__text': 1 } },
+          scopedSlots.default && scopedSlots.default(),
+        ),
+        this.havetrailingIcon && this.renderTrailingIcon(createElement),
+      ],
+    );
   },
 };

@@ -23,17 +23,7 @@ export default {
       this.foundation.setValidation(this.helptextValidation);
     },
   },
-  render(createElement) {
-    return createElement(
-      'p',
-      {
-        class: this.classes,
-        attrs: { 'aria-hidden': 'true' },
-        ref: 'helptextEl',
-      },
-      this.$slots.default,
-    );
-  },
+
   mounted() {
     this.foundation = new MDCSelectHelperTextFoundation({
       addClass: className => this.$set(this.classes, className, true),
@@ -59,5 +49,17 @@ export default {
 
   beforeDestroy() {
     this.foundation.destroy();
+  },
+  render(createElement) {
+    const { $scopedSlots: scopedSlots } = this;
+    return createElement(
+      'p',
+      {
+        class: this.classes,
+        attrs: { 'aria-hidden': 'true' },
+        ref: 'helptextEl',
+      },
+      scopedSlots.default && scopedSlots.default(),
+    );
   },
 };

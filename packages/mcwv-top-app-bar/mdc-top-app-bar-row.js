@@ -16,14 +16,14 @@ export default {
     createElement,
     {
       props: { tag },
-      slots,
+      scopedSlots,
       data: { attrs, staticClass },
     },
   ) {
     return createElement(
       tag,
       { class: [cssClasses.ROW, staticClass], attrs },
-      slots().default,
+      scopedSlots.default && scopedSlots.default(),
     );
   },
 };

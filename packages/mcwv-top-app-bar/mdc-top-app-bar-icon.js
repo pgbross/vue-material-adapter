@@ -9,11 +9,11 @@ export default {
     createElement,
     {
       props: { actionItem, navIcon },
-      slots,
+      scopedSlots,
       data: { attrs },
     },
   ) {
-    const slot = slots().default;
+    const slot = scopedSlots.default && scopedSlots.default();
 
     if (slot) {
       const [v0] = slot;

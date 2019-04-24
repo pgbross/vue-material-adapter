@@ -9,7 +9,7 @@ export default {
     createElement,
     {
       props: { disabled },
-      slots,
+      scopedSlots,
     },
   ) {
     return createElement(
@@ -25,7 +25,7 @@ export default {
           role: 'menuitem',
         },
       },
-      slots().default,
+      scopedSlots.default && scopedSlots.default(),
     );
   },
 };

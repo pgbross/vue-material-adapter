@@ -53,66 +53,9 @@ export default {
     },
     indeterminate: 'setIndeterminate',
   },
-  render(createElement) {
-    const inputElement = createElement('input', {
-      attrs: {
-        name: this.name,
-        value: this.value,
-        type: 'checkbox',
-        id: this.vma_uid_,
-        disabled: this.disabled,
-      },
-      class: { 'mdc-checkbox__native-control': 1 },
-      on: {
-        change: ({ target: { indeterminate, checked } }) =>
-          this.onChange(checked, indeterminate),
-      },
-      ref: 'control',
-    });
 
-    const background = createElement(
-      'div',
-      { class: { 'mdc-checkbox__background': 1 } },
-      [
-        createElement(
-          'svg',
-          {
-            class: { 'mdc-checkbox__checkmark': 1 },
-            attrs: { viewBox: '0 0 24 24' },
-          },
-          [
-            createElement('path', {
-              class: { 'mdc-checkbox__checkmark-path': 1 },
-              attrs: {
-                fill: 'none',
-                stroke: 'white',
-                d: 'M1.73,12.91 8.1,19.28 22.79,4.59',
-              },
-            }),
-          ],
-        ),
-        createElement('div', { class: { 'mdc-checkbox__mixedmark': 1 } }),
-      ],
-    );
-
-    const checkboxElement = createElement(
-      'div',
-      { class: this.classes, style: this.styles, ref: 'root' },
-      [inputElement, background],
-    );
-    const labelElement = createElement(
-      'label',
-      { attrs: { for: this.vma_uid_ }, ref: 'label' },
-      this.$slots.default || this.label,
-    );
-
-    return createElement('div', { class: this.formFieldClasses }, [
-      checkboxElement,
-      labelElement,
-    ]);
-  },
   mounted() {
-    this.foundation = new MDCCheckboxFoundation({
+    const adapter = {
       addClass: className => this.$set(this.classes, className, true),
       removeClass: className => this.$delete(this.classes, className),
       setNativeControlAttr: (attr, value) => {
@@ -128,7 +71,9 @@ export default {
         (this.$refs.control.disabled = disabled),
       forceLayout: () => this.$refs.root.offsetWidth,
       isAttachedToDOM: () => true,
-    });
+    };
+
+    this.foundation = new MDCCheckboxFoundation(adapter);
 
     this.handleAnimationEnd_ = () => this.foundation.handleAnimationEnd();
 
@@ -254,6 +199,65 @@ export default {
         }
       });
     },
+  },
+  render(createElement) {
+    const { $scopedSlots: scopedSlots } = this;
+    const inputElement = createElement('input', {
+      attrs: {
+        name: this.name,
+        value: this.value,
+        type: 'checkbox',
+        id: this.vma_uid_,
+        disabled: this.disabled,
+      },
+      class: { 'mdc-checkbox__native-control': 1 },
+      on: {
+        change: ({ target: { indeterminate, checked } }) =>
+          this.onChange(checked, indeterminate),
+      },
+      ref: 'control',
+    });
+
+    const background = createElement(
+      'div',
+      { class: { 'mdc-checkbox__background': 1 } },
+      [
+        createElement(
+          'svg',
+          {
+            class: { 'mdc-checkbox__checkmark': 1 },
+            attrs: { viewBox: '0 0 24 24' },
+          },
+          [
+            createElement('path', {
+              class: { 'mdc-checkbox__checkmark-path': 1 },
+              attrs: {
+                fill: 'none',
+                stroke: 'white',
+                d: 'M1.73,12.91 8.1,19.28 22.79,4.59',
+              },
+            }),
+          ],
+        ),
+        createElement('div', { class: { 'mdc-checkbox__mixedmark': 1 } }),
+      ],
+    );
+
+    const checkboxElement = createElement(
+      'div',
+      { class: this.classes, style: this.styles, ref: 'root' },
+      [inputElement, background],
+    );
+    const labelElement = createElement(
+      'label',
+      { attrs: { for: this.vma_uid_ }, ref: 'label' },
+      (scopedSlots.default && scopedSlots.default()) || this.label,
+    );
+
+    return createElement('div', { class: this.formFieldClasses }, [
+      checkboxElement,
+      labelElement,
+    ]);
   },
 };
 

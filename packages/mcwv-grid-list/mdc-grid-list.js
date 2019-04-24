@@ -16,15 +16,7 @@ export default {
   provide() {
     return { mdcGrid: this };
   },
-  render(createElement) {
-    return createElement('div', { class: { 'mdc-grid-list': 1 } }, [
-      createElement(
-        'ul',
-        { class: this.classes, style: this.styles },
-        this.$slots.default,
-      ),
-    ]);
-  },
+
   computed: {
     classes() {
       const classes = { 'mdc-grid-list__tiles': 1 };
@@ -77,5 +69,15 @@ export default {
   },
   beforeDestroy() {
     this.foundation.destroy();
+  },
+  render(createElement) {
+    const { $scopedSlots: scopedSlots } = this;
+    return createElement('div', { class: { 'mdc-grid-list': 1 } }, [
+      createElement(
+        'ul',
+        { class: this.classes, style: this.styles },
+        scopedSlots.default && scopedSlots.default(),
+      ),
+    ]);
   },
 };

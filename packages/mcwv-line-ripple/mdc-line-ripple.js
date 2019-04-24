@@ -13,13 +13,7 @@ export default {
       lineStyles: {},
     };
   },
-  render(createElement) {
-    return createElement('div', {
-      class: this.lineClasses,
-      style: this.lineStyles,
-      on: { transitionend: evt => this.foundation_.handleTransitionEnd(evt) },
-    });
-  },
+
   mounted() {
     const adapter = {
       addClass: className => {
@@ -57,5 +51,12 @@ export default {
     deactivate() {
       this.foundation_.deactivate();
     },
+  },
+  render(createElement) {
+    return createElement('div', {
+      class: this.lineClasses,
+      style: this.lineStyles,
+      on: { transitionend: evt => this.foundation_.handleTransitionEnd(evt) },
+    });
   },
 };

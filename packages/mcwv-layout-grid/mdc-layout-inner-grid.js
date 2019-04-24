@@ -1,7 +1,7 @@
 export default {
   name: 'mdc-layout-inner-grid',
   functional: true,
-  render(createElement, { slots }) {
+  render(createElement, { scopedSlots }) {
     return createElement(
       'div',
       {
@@ -10,7 +10,7 @@ export default {
           'mdc-layout-grid__inner': 1,
         },
       },
-      slots().default,
+      scopedSlots.default && scopedSlots.default(),
     );
   },
 };

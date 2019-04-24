@@ -17,19 +17,6 @@ export default {
     };
   },
 
-  render(createElement) {
-    const classes = classNames(this.classes);
-    if (this.$slots.default) {
-      return this.$slots.default[0];
-    }
-    return createElement('div', { class: 'mdc-text-field-helper-line' }, [
-      createElement(
-        'div',
-        { class: classes, attrs: this.$attrs },
-        this.helptext,
-      ),
-    ]);
-  },
   watch: {
     persistent() {
       this.foundation.setPersistent(this.persistent);
@@ -62,6 +49,22 @@ export default {
 
   beforeDestroy() {
     this.foundation.destroy();
+  },
+  render(createElement) {
+    const { $scopedSlots: scopedSlots } = this;
+    const defaultSlot = scopedSlots.default && scopedSlots.default();
+
+    const classes = classNames(this.classes);
+    if (defaultSlot) {
+      return defaultSlot[0];
+    }
+    return createElement('div', { class: 'mdc-text-field-helper-line' }, [
+      createElement(
+        'div',
+        { class: classes, attrs: this.$attrs },
+        this.helptext,
+      ),
+    ]);
   },
 };
 

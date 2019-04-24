@@ -32,10 +32,13 @@ export default {
     },
   },
   render(createElement) {
+    const { $scopedSlots: scopedSlots } = this;
+
     const nodes = [];
 
-    if (this.$slots.icon) {
-      const v0 = this.$slots.icon[0];
+    const iconSlot = scopedSlots.icon && scopedSlots.icon();
+    if (iconSlot) {
+      const v0 = iconSlot[0];
       if (v0) {
         const { staticClass = '' } = v0.data;
         const haveClasses =
@@ -44,7 +47,7 @@ export default {
           v0.data.staticClass = `mdc-fab__icon ${staticClass}`;
         }
       }
-      nodes.push(this.$slots.icon);
+      nodes.push(iconSlot);
     } else {
       nodes.push(
         createElement(
@@ -55,13 +58,11 @@ export default {
       );
     }
 
-    if (this.label || this.$slots.default) {
+    const labelOrSlot =
+      this.label || (scopedSlots.default && scopedSlots.default());
+    if (labelOrSlot) {
       nodes.push(
-        createElement(
-          'span',
-          { class: { 'mdc-fab__label': 1 } },
-          this.label || this.$slots.default,
-        ),
+        createElement('span', { class: { 'mdc-fab__label': 1 } }, labelOrSlot),
       );
     }
 

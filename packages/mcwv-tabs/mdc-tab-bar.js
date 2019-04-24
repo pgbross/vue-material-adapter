@@ -14,21 +14,7 @@ export default {
   provide() {
     return { mdcTabBar: this };
   },
-  render(createElement) {
-    return createElement(
-      'div',
-      { class: this.classes, on: this.listeners, attrs: { role: 'tablist' } },
-      [
-        createElement(
-          'mdc-tab-scroller',
-          {
-            ref: 'scroller',
-          },
-          this.$slots.default,
-        ),
-      ],
-    );
-  },
+
   mounted() {
     this.foundation = new MDCTabBarFoundation({
       scrollTo: scrollX => this.$refs.scroller.scrollTo(scrollX),
@@ -117,5 +103,21 @@ export default {
     handleKeyDown(evt) {
       this.foundation.handleKeyDown(evt);
     },
+  },
+  render(createElement) {
+    const { $scopedSlots: scopedSlots } = this;
+    return createElement(
+      'div',
+      { class: this.classes, on: this.listeners, attrs: { role: 'tablist' } },
+      [
+        createElement(
+          'mdc-tab-scroller',
+          {
+            ref: 'scroller',
+          },
+          scopedSlots.default && scopedSlots.default(),
+        ),
+      ],
+    );
   },
 };

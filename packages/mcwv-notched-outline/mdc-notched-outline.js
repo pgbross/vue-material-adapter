@@ -9,29 +9,7 @@ export default {
       notchStyles: {},
     };
   },
-  render(createElement) {
-    const notchEl = createElement(
-      'div',
-      {
-        class: 'mdc-notched-outline__notch',
-        style: this.notchStyles,
-      },
-      [
-        this.$slots.default &&
-          createElement(
-            'mdc-floating-label',
-            { ref: 'labelEl' },
-            this.$slots.default,
-          ),
-      ],
-    );
 
-    return createElement('div', { class: this.outlinedClasses }, [
-      createElement('div', { class: 'mdc-notched-outline__leading' }),
-      notchEl,
-      createElement('div', { class: 'mdc-notched-outline__trailing' }),
-    ]);
-  },
   mounted() {
     const {
       OUTLINE_UPGRADED,
@@ -81,5 +59,29 @@ export default {
     getWidth() {
       return this.$refs.labelEl.getWidth();
     },
+  },
+  render(createElement) {
+    const { $scopedSlots: scopedSlots } = this;
+    const notchEl = createElement(
+      'div',
+      {
+        class: 'mdc-notched-outline__notch',
+        style: this.notchStyles,
+      },
+      [
+        scopedSlots.default &&
+          createElement(
+            'mdc-floating-label',
+            { ref: 'labelEl' },
+            scopedSlots.default(),
+          ),
+      ],
+    );
+
+    return createElement('div', { class: this.outlinedClasses }, [
+      createElement('div', { class: 'mdc-notched-outline__leading' }),
+      notchEl,
+      createElement('div', { class: 'mdc-notched-outline__trailing' }),
+    ]);
   },
 };

@@ -33,83 +33,6 @@ export default {
       classes: {},
     };
   },
-  render(createElement) {
-    const selectNodes = [this.$slots.default];
-    if (!this.value) {
-      selectNodes.unshift(
-        createElement('option', {
-          class: { 'mdc-option': 1 },
-          attrs: { value: '', disabled: 1, selected: 1 },
-        }),
-      );
-    }
-    const rootNodes = [
-      createElement('i', { class: { 'mdc-select__dropdown-icon': 1 } }),
-      createElement(
-        'select',
-        {
-          class: { 'mdc-select__native-control': 1 },
-          attrs: {
-            ...this.$attrs,
-            disabled: this.disabled,
-            'aria-controls': this.selectAriaControls,
-          },
-          ref: 'native_control',
-          on: this.listeners,
-        },
-        selectNodes,
-      ),
-    ];
-    if (this.leadingIcon) {
-      rootNodes.unshift(
-        createElement('select-icon', {
-          attrs: { icon: this.leadingIcon, 'tab-index': '0', role: 'button' },
-          ref: 'leadingIconEl',
-        }),
-      );
-    }
-
-    if (this.outlined) {
-      rootNodes.push(
-        createElement('mdc-notched-outline', { ref: 'outlineEl' }, this.label),
-      );
-    } else {
-      rootNodes.push(
-        createElement('mdc-floating-label', { ref: 'labelEl' }, this.label),
-        createElement('mdc-line-ripple', { ref: 'lineRippleEl' }, this.label),
-      );
-    }
-
-    const rootEl = createElement(
-      'div',
-      {
-        class: this.rootClasses,
-        style: this.style,
-        attrs: { id: this.id },
-        ref: 'root',
-      },
-      rootNodes,
-    );
-
-    const nodes = [rootEl];
-    if (this.helptext) {
-      nodes.push(
-        createElement(
-          'select-helper-text',
-          {
-            attrs: {
-              helptextPersistent: this.helptextPersistent,
-              helptextValidation: this.helptextValidation,
-              id: `help-${this.vma_uid_}`,
-            },
-            ref: 'helperTextEl',
-          },
-          this.helperText,
-        ),
-      );
-    }
-    return createElement('div', { class: { 'mdc-select-wrapper': 1 } }, nodes);
-  },
 
   components: { SelectHelperText, SelectIcon },
   computed: {
@@ -294,5 +217,84 @@ export default {
       const xCoordinate = evt.clientX;
       return xCoordinate - targetClientRect.left;
     },
+  },
+  render(createElement) {
+    const { $scopedSlots: scopedSlots } = this;
+
+    const selectNodes = [scopedSlots.default && scopedSlots.default()];
+    if (!this.value) {
+      selectNodes.unshift(
+        createElement('option', {
+          class: { 'mdc-option': 1 },
+          attrs: { value: '', disabled: 1, selected: 1 },
+        }),
+      );
+    }
+    const rootNodes = [
+      createElement('i', { class: { 'mdc-select__dropdown-icon': 1 } }),
+      createElement(
+        'select',
+        {
+          class: { 'mdc-select__native-control': 1 },
+          attrs: {
+            ...this.$attrs,
+            disabled: this.disabled,
+            'aria-controls': this.selectAriaControls,
+          },
+          ref: 'native_control',
+          on: this.listeners,
+        },
+        selectNodes,
+      ),
+    ];
+    if (this.leadingIcon) {
+      rootNodes.unshift(
+        createElement('select-icon', {
+          attrs: { icon: this.leadingIcon, 'tab-index': '0', role: 'button' },
+          ref: 'leadingIconEl',
+        }),
+      );
+    }
+
+    if (this.outlined) {
+      rootNodes.push(
+        createElement('mdc-notched-outline', { ref: 'outlineEl' }, this.label),
+      );
+    } else {
+      rootNodes.push(
+        createElement('mdc-floating-label', { ref: 'labelEl' }, this.label),
+        createElement('mdc-line-ripple', { ref: 'lineRippleEl' }, this.label),
+      );
+    }
+
+    const rootEl = createElement(
+      'div',
+      {
+        class: this.rootClasses,
+        style: this.style,
+        attrs: { id: this.id },
+        ref: 'root',
+      },
+      rootNodes,
+    );
+
+    const nodes = [rootEl];
+    if (this.helptext) {
+      nodes.push(
+        createElement(
+          'select-helper-text',
+          {
+            attrs: {
+              helptextPersistent: this.helptextPersistent,
+              helptextValidation: this.helptextValidation,
+              id: `help-${this.vma_uid_}`,
+            },
+            ref: 'helperTextEl',
+          },
+          this.helperText,
+        ),
+      );
+    }
+    return createElement('div', { class: { 'mdc-select-wrapper': 1 } }, nodes);
   },
 };

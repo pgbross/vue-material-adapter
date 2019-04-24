@@ -36,13 +36,12 @@ export default {
     this.foundation.init();
   },
 
+  beforeDestroy() {
+    this.foundation.destroy();
+  },
   render(createElement, context) {
     const node = context.children[0];
     node.data.class = 'mdc-text-field__icon';
     return node;
-  },
-
-  beforeDestroy() {
-    this.foundation.destroy();
   },
 };

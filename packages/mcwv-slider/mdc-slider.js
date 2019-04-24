@@ -40,89 +40,7 @@ export default {
       stepSize,
     };
   },
-  render(createElement) {
-    const containerNodes = [
-      createElement('div', {
-        style: this.trackStyles,
-        class: 'mdc-slider__track',
-      }),
-    ];
-    if (this.hasMarkers) {
-      const markers = [];
-      for (let markerNum = 0; markerNum < this.numMarkers; markerNum++) {
-        markers.push(
-          createElement('div', {
-            class: { 'mdc-slider__track-marker': 1 },
-            style:
-              markerNum == this.numMarkers - 1
-                ? this.lastTrackMarkersStyles
-                : {},
-            attrs: { key: markerNum },
-          }),
-        );
-      }
-      containerNodes.push(
-        createElement(
-          'div',
-          {
-            class: { 'mdc-slider__track-marker-container': 1 },
-          },
-          markers,
-        ),
-      );
-    }
 
-    const trackContainer = createElement(
-      'div',
-      {
-        class: 'mdc-slider__track-container',
-      },
-      containerNodes,
-    );
-
-    const thumbContainer = createElement(
-      'div',
-      {
-        class: 'mdc-slider__thumb-container',
-        style: this.thumbStyles,
-        ref: 'thumbContainer',
-      },
-      [
-        this.discrete &&
-          createElement('div', { class: 'mdc-slider__pin' }, [
-            createElement(
-              'span',
-              { class: 'mdc-slider__pin-value-marker' },
-              this.markerValue,
-            ),
-          ]),
-        createElement(
-          'svg',
-          { class: 'mdc-slider__thumb', attrs: { width: 21, height: 21 } },
-          [
-            createElement('circle', {
-              attrs: { cx: 10.5, cy: 10.5, r: 7.875 },
-            }),
-          ],
-        ),
-        createElement('div', { class: 'mdc-slider__focus-ring' }),
-      ],
-    );
-
-    return createElement(
-      'div',
-      {
-        class: this.classes,
-        attrs: {
-          tabindex: '0',
-          role: 'slider',
-          'aria-label': 'Select value',
-          ...this.sliderAttrs,
-        },
-      },
-      [trackContainer, thumbContainer],
-    );
-  },
   computed: {
     hasMarkers() {
       return this.discrete && this.displayMarkers && this.numMarkers;
@@ -260,5 +178,88 @@ export default {
         this.foundation && this.foundation.layout();
       });
     },
+  },
+  render(createElement) {
+    const containerNodes = [
+      createElement('div', {
+        style: this.trackStyles,
+        class: 'mdc-slider__track',
+      }),
+    ];
+    if (this.hasMarkers) {
+      const markers = [];
+      for (let markerNum = 0; markerNum < this.numMarkers; markerNum++) {
+        markers.push(
+          createElement('div', {
+            class: { 'mdc-slider__track-marker': 1 },
+            style:
+              markerNum == this.numMarkers - 1
+                ? this.lastTrackMarkersStyles
+                : {},
+            attrs: { key: markerNum },
+          }),
+        );
+      }
+      containerNodes.push(
+        createElement(
+          'div',
+          {
+            class: { 'mdc-slider__track-marker-container': 1 },
+          },
+          markers,
+        ),
+      );
+    }
+
+    const trackContainer = createElement(
+      'div',
+      {
+        class: 'mdc-slider__track-container',
+      },
+      containerNodes,
+    );
+
+    const thumbContainer = createElement(
+      'div',
+      {
+        class: 'mdc-slider__thumb-container',
+        style: this.thumbStyles,
+        ref: 'thumbContainer',
+      },
+      [
+        this.discrete &&
+          createElement('div', { class: 'mdc-slider__pin' }, [
+            createElement(
+              'span',
+              { class: 'mdc-slider__pin-value-marker' },
+              this.markerValue,
+            ),
+          ]),
+        createElement(
+          'svg',
+          { class: 'mdc-slider__thumb', attrs: { width: 21, height: 21 } },
+          [
+            createElement('circle', {
+              attrs: { cx: 10.5, cy: 10.5, r: 7.875 },
+            }),
+          ],
+        ),
+        createElement('div', { class: 'mdc-slider__focus-ring' }),
+      ],
+    );
+
+    return createElement(
+      'div',
+      {
+        class: this.classes,
+        attrs: {
+          tabindex: '0',
+          role: 'slider',
+          'aria-label': 'Select value',
+          ...this.sliderAttrs,
+        },
+      },
+      [trackContainer, thumbContainer],
+    );
   },
 };

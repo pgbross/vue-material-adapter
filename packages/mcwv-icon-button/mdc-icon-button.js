@@ -25,24 +25,7 @@ export default {
   watch: {
     isOn: 'onOn_',
   },
-  render(createElement) {
-    const isLink = Boolean(this.$attrs.href);
-    const tag = isLink ? 'a' : 'button';
-    return createElement(
-      tag,
-      {
-        class: this.classes,
-        style: this.styles,
-        on: { click: evt => this.foundation.handleClick(evt) },
-        attrs: {
-          ...this.$attrs,
-          'aria-pressed': 'false',
-          disabled: this.disabled,
-        },
-      },
-      this.$slots.default,
-    );
-  },
+
   mounted() {
     const { CHANGE_EVENT } = MDCIconButtonToggleFoundation.strings;
     const adapter = {
@@ -77,5 +60,24 @@ export default {
         this.foundation.toggle(isOn);
       }
     },
+  },
+  render(createElement) {
+    const { $scopedSlots: scopedSlots } = this;
+    const isLink = Boolean(this.$attrs.href);
+    const tag = isLink ? 'a' : 'button';
+    return createElement(
+      tag,
+      {
+        class: this.classes,
+        style: this.styles,
+        on: { click: evt => this.foundation.handleClick(evt) },
+        attrs: {
+          ...this.$attrs,
+          'aria-pressed': 'false',
+          disabled: this.disabled,
+        },
+      },
+      scopedSlots.default && scopedSlots.default(),
+    );
   },
 };

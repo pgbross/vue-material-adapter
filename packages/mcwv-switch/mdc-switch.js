@@ -38,7 +38,34 @@ export default {
       this.foundation && this.foundation.setDisabled(value);
     },
   },
+
+  mounted() {
+    this.foundation = new MDCSwitchFoundation({
+      addClass: className => this.$set(this.classes, className, true),
+      removeClass: className => this.$delete(this.classes, className),
+      setNativeControlChecked: checked => (this.nativeControlChecked = checked),
+      setNativeControlDisabled: disabled =>
+        (this.nativeControlDisabled = disabled),
+    });
+    this.foundation.init();
+    this.foundation.setChecked(this.checked);
+    this.foundation.setDisabled(this.disabled);
+
+    this.ripple = new RippleBase(this);
+    this.ripple.init();
+  },
+  beforeDestroy() {
+    this.foundation && this.foundation.destroy();
+    this.ripple && this.ripple.destroy();
+  },
+  methods: {
+    onChanged(event) {
+      this.foundation && this.foundation.handleChange(event);
+      this.$emit('change', event.target.checked);
+    },
+  },
   render(createElement) {
+    const { $scopedSlots: scopedSlots } = this;
     const nodes = [
       createElement('div', { class: this.classes, style: this.styles }, [
         createElement('div', { class: { 'mdc-switch__track': 1 } }),
@@ -68,7 +95,7 @@ export default {
             class: { 'mdc-switch-label': 1 },
             attrs: { for: this.vma_uid_ },
           },
-          this.$slots.default || this.label,
+          (scopedSlots.default && scopedSlots.default()) || this.label,
         ),
     ];
 
@@ -82,30 +109,5 @@ export default {
       },
       nodes,
     );
-  },
-  mounted() {
-    this.foundation = new MDCSwitchFoundation({
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      setNativeControlChecked: checked => (this.nativeControlChecked = checked),
-      setNativeControlDisabled: disabled =>
-        (this.nativeControlDisabled = disabled),
-    });
-    this.foundation.init();
-    this.foundation.setChecked(this.checked);
-    this.foundation.setDisabled(this.disabled);
-
-    this.ripple = new RippleBase(this);
-    this.ripple.init();
-  },
-  beforeDestroy() {
-    this.foundation && this.foundation.destroy();
-    this.ripple && this.ripple.destroy();
-  },
-  methods: {
-    onChanged(event) {
-      this.foundation && this.foundation.handleChange(event);
-      this.$emit('change', event.target.checked);
-    },
   },
 };

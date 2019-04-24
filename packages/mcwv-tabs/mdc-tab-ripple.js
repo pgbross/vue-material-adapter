@@ -12,9 +12,7 @@ export default {
       styles: {},
     };
   },
-  render(createElement) {
-    return createElement('span', { class: this.classes, style: this.styles });
-  },
+
   mounted() {
     this.ripple = new RippleBase(this);
     this.ripple.init();
@@ -22,5 +20,8 @@ export default {
 
   beforeDestroy() {
     this.ripple.destroy();
+  },
+  render(createElement) {
+    return createElement('span', { class: this.classes, style: this.styles });
   },
 };

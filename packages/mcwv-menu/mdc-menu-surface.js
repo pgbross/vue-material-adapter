@@ -34,20 +34,6 @@ export default {
     },
   },
 
-  render(createElement) {
-    return createElement(
-      'div',
-      {
-        class: this.classes,
-        on: {
-          keydown: evt => this.handleKeydown(evt),
-          'MDCMenuSurface:opened': evt => this.registerBodyClickListener(evt),
-          'MDCMenuSurface:closed': evt => this.deregisterBodyClickListener(evt),
-        },
-      },
-      this.$slots.default,
-    );
-  },
   mounted() {
     this._previousFocus = undefined;
 
@@ -238,5 +224,20 @@ export default {
     isOpen() {
       return this.foundation ? this.foundation.isOpen() : false;
     },
+  },
+  render(createElement) {
+    const { $scopedSlots: scopedSlots } = this;
+    return createElement(
+      'div',
+      {
+        class: this.classes,
+        on: {
+          keydown: evt => this.handleKeydown(evt),
+          'MDCMenuSurface:opened': evt => this.registerBodyClickListener(evt),
+          'MDCMenuSurface:closed': evt => this.deregisterBodyClickListener(evt),
+        },
+      },
+      scopedSlots.default && scopedSlots.default(),
+    );
   },
 };

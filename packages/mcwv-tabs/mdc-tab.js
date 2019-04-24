@@ -30,75 +30,21 @@ export default {
   inject: ['mdcTabBar'],
   computed: {
     hasIcon() {
-      if (this.icon || this.$slots.icon) {
+      const { $scopedSlots: scopedSlots } = this;
+      if (this.icon || (scopedSlots.icon && scopedSlots.icon())) {
         return this.icon ? extractIconProp(this.icon) : {};
       }
       return false;
     },
     hasText() {
-      return !!this.$slots.default;
+      const { $scopedSlots: scopedSlots } = this;
+      return !!(scopedSlots.default && scopedSlots.default());
     },
   },
   watch: {
     active(value) {},
   },
-  render(createElement) {
-    const contentNodes = [];
 
-    if (this.hasIcon) {
-      contentNodes.push(
-        createElement(
-          'i',
-          {
-            class: { ...this.hasIcon.classes, 'mdc-tab__icon': 1 },
-            attrs: { tabindex: '0', 'aria-hidden': 'true' },
-            ref: 'icon',
-          },
-          this.$slots.icon || this.hasIcon.content,
-        ),
-      );
-    }
-    if (this.hasText) {
-      contentNodes.push(
-        createElement(
-          'span',
-          { class: { 'mdc-tab__text-label': 1 } },
-          this.$slots.default,
-        ),
-      );
-    }
-
-    const spanEl = createElement(
-      'span',
-      {
-        class: { 'mdc-tab__content': 1 },
-        ref: 'content',
-      },
-      contentNodes,
-    );
-
-    const nodes = [
-      spanEl,
-      createElement('mdc-tab-indicator', { ref: 'tabIndicator' }),
-      createElement('mdc-tab-ripple'),
-    ];
-
-    return createElement(
-      'custom-link',
-      {
-        class: this.classes,
-        style: this.styles,
-        attrs: {
-          link: this.link,
-          role: 'tab',
-          'aria-selected': 'false',
-          tabindex: '-1',
-        },
-        on: { click: evt => this.foundation.handleClick(evt) },
-      },
-      nodes,
-    );
-  },
   mounted() {
     this.id = this.vma_uid_;
     this.foundation = new MDCTabFoundation({
@@ -165,6 +111,66 @@ export default {
     focus() {
       this.$el.focus();
     },
+  },
+  render(createElement) {
+    const { $scopedSlots: scopedSlots } = this;
+
+    const contentNodes = [];
+
+    if (this.hasIcon) {
+      contentNodes.push(
+        createElement(
+          'i',
+          {
+            class: { ...this.hasIcon.classes, 'mdc-tab__icon': 1 },
+            attrs: { tabindex: '0', 'aria-hidden': 'true' },
+            ref: 'icon',
+          },
+          (scopedSlots.default && scopedSlots.default()) ||
+            this.hasIcon.content,
+        ),
+      );
+    }
+    if (this.hasText) {
+      contentNodes.push(
+        createElement(
+          'span',
+          { class: { 'mdc-tab__text-label': 1 } },
+          scopedSlots.default && scopedSlots.default(),
+        ),
+      );
+    }
+
+    const spanEl = createElement(
+      'span',
+      {
+        class: { 'mdc-tab__content': 1 },
+        ref: 'content',
+      },
+      contentNodes,
+    );
+
+    const nodes = [
+      spanEl,
+      createElement('mdc-tab-indicator', { ref: 'tabIndicator' }),
+      createElement('mdc-tab-ripple'),
+    ];
+
+    return createElement(
+      'custom-link',
+      {
+        class: this.classes,
+        style: this.styles,
+        attrs: {
+          link: this.link,
+          role: 'tab',
+          'aria-selected': 'false',
+          tabindex: '-1',
+        },
+        on: { click: evt => this.foundation.handleClick(evt) },
+      },
+      nodes,
+    );
   },
 };
 

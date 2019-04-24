@@ -40,39 +40,7 @@ export default {
       },
     };
   },
-  render(createElement) {
-    const asideNodes = [
-      createElement(
-        'div',
-        { class: { 'mdc-drawer__content': 1 } },
-        this.$slots.default,
-      ),
-    ];
 
-    if (this.$slots.header) {
-      asideNodes.unshift(this.$slots.header);
-    }
-    const asideElement = createElement(
-      'aside',
-      {
-        class: this.classes,
-        ref: 'drawer',
-      },
-      asideNodes,
-    );
-
-    const nodes = [
-      asideElement,
-      createElement('div', { class: { 'mdc-drawer-scrim': 1 } }),
-    ];
-
-    if (this.toolbarSpacer) {
-      nodes.push(
-        createElement('div', { class: { 'mdc-top-app-bar--fixed-adjust': 1 } }),
-      );
-    }
-    return createElement('div', { class: { 'mdc-drawer-wrapper': 1 } }, nodes);
-  },
   computed: {
     type() {},
     isModal() {
@@ -217,6 +185,41 @@ export default {
       //   }
       // }
     },
+  },
+  render(createElement) {
+    const { $scopedSlots: scopedSlots } = this;
+    const asideNodes = [
+      createElement(
+        'div',
+        { class: { 'mdc-drawer__content': 1 } },
+        scopedSlots.default && scopedSlots.default(),
+      ),
+    ];
+
+    const headerSlot = scopedSlots.header && scopedSlots.header();
+    if (headerSlot) {
+      asideNodes.unshift(headerSlot);
+    }
+    const asideElement = createElement(
+      'aside',
+      {
+        class: this.classes,
+        ref: 'drawer',
+      },
+      asideNodes,
+    );
+
+    const nodes = [
+      asideElement,
+      createElement('div', { class: { 'mdc-drawer-scrim': 1 } }),
+    ];
+
+    if (this.toolbarSpacer) {
+      nodes.push(
+        createElement('div', { class: { 'mdc-top-app-bar--fixed-adjust': 1 } }),
+      );
+    }
+    return createElement('div', { class: { 'mdc-drawer-wrapper': 1 } }, nodes);
   },
 };
 

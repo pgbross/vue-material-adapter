@@ -8,7 +8,7 @@ export default {
     createElement,
     {
       props: { dense },
-      slots,
+      scopedSlots,
     },
   ) {
     return createElement(
@@ -20,7 +20,7 @@ export default {
           'mdc-list--dense': dense,
         },
       },
-      slots().default,
+      scopedSlots.default && scopedSlots.default(),
     );
   },
 };

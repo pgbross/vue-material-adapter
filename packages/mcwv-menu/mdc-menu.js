@@ -31,30 +31,7 @@ export default {
     //   this.foundation.setAnchorMargin(nv)
     // }
   },
-  render(createElement) {
-    return createElement(
-      'mdc-menu-surface',
-      {
-        class: { 'mdc-menu': 1 },
-        ref: 'root',
-        attrs: { 'quick-open': this.quickOpen, open: this.open },
-        on: {
-          change: evt => this.onChange(evt),
-          keydown: evt => this.handleKeydown(evt),
-        },
-      },
-      [
-        createElement(
-          'mdc-list',
-          {
-            ref: 'list',
-            nativeOn: { 'MDCList:action': evt => this.handleAction(evt) },
-          },
-          this.$slots.default,
-        ),
-      ],
-    );
-  },
+
   mounted() {
     this._previousFocus = undefined;
 
@@ -145,5 +122,30 @@ export default {
     // isOpen() {
     //   return this.foundation ? this.foundation.isOpen() : false
     // }
+  },
+  render(createElement) {
+    const { $scopedSlots: scopedSlots } = this;
+    return createElement(
+      'mdc-menu-surface',
+      {
+        class: { 'mdc-menu': 1 },
+        ref: 'root',
+        attrs: { 'quick-open': this.quickOpen, open: this.open },
+        on: {
+          change: evt => this.onChange(evt),
+          keydown: evt => this.handleKeydown(evt),
+        },
+      },
+      [
+        createElement(
+          'mdc-list',
+          {
+            ref: 'list',
+            nativeOn: { 'MDCList:action': evt => this.handleAction(evt) },
+          },
+          scopedSlots.default && scopedSlots.default(),
+        ),
+      ],
+    );
   },
 };

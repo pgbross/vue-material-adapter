@@ -1,7 +1,7 @@
 export default {
   name: 'mdc-drawer-header',
   functional: true,
-  render(createElement, { slots }) {
+  render(createElement, { scopedSlots }) {
     return createElement(
       'div',
       {
@@ -10,7 +10,7 @@ export default {
           'mdc-drawer__header': 1,
         },
       },
-      slots().default,
+      scopedSlots.default && scopedSlots.default(),
     );
   },
 };

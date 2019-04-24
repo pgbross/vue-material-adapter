@@ -9,7 +9,7 @@ export default {
     createElement,
     {
       props: { isOn },
-      slots,
+      scopedSlots,
     },
   ) {
     return createElement(
@@ -20,7 +20,7 @@ export default {
           'mdc-icon-button__icon--on': isOn,
         },
       },
-      slots().default,
+      scopedSlots.default && scopedSlots.default(),
     );
   },
 };

@@ -7,18 +7,7 @@ export default {
   data() {
     return { classes: { 'mdc-tab-indicator': 1 }, styles: {} };
   },
-  render(createElement) {
-    return createElement('span', { class: this.classes }, [
-      createElement('span', {
-        class: {
-          'mdc-tab-indicator__content': 1,
-          'mdc-tab-indicator__content--underline': 1,
-        },
-        style: this.styles,
-        ref: 'content',
-      }),
-    ]);
-  },
+
   mounted() {
     this.adapter_ = {
       addClass: className => this.$set(this.classes, className, true),
@@ -68,5 +57,17 @@ export default {
         this.adapter_.setContentStyleProperty('transform', '');
       });
     },
+  },
+  render(createElement) {
+    return createElement('span', { class: this.classes }, [
+      createElement('span', {
+        class: {
+          'mdc-tab-indicator__content': 1,
+          'mdc-tab-indicator__content--underline': 1,
+        },
+        style: this.styles,
+        ref: 'content',
+      }),
+    ]);
   },
 };

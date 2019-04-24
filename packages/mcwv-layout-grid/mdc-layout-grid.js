@@ -10,7 +10,7 @@ export default {
     createElement,
     {
       props: { fixedColumnWidth, alignLeft, alignRight },
-      slots,
+      scopedSlots,
     },
   ) {
     return createElement(
@@ -27,7 +27,7 @@ export default {
         createElement(
           'div',
           { class: { 'mdc-layout-grid__inner': 1 } },
-          slots().default,
+          scopedSlots.default && scopedSlots.default(),
         ),
       ],
     );

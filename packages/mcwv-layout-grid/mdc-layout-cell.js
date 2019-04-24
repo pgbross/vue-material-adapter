@@ -28,7 +28,7 @@ export default {
     createElement,
     {
       props: { span, order, phone, tablet, desktop, align },
-      slots,
+      scopedSlots,
       data: { staticClass = '' },
     },
   ) {
@@ -67,7 +67,7 @@ export default {
       {
         class: classes,
       },
-      slots().default,
+      scopedSlots.default && scopedSlots.default(),
     );
   },
 };

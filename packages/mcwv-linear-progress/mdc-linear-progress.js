@@ -46,6 +46,36 @@ export default {
       this.foundation.setReverse(nv);
     },
   },
+
+  mounted() {
+    const adapter = {
+      addClass: className => {
+        this.$set(this.classes, className, true);
+      },
+      getPrimaryBar: () => this.$refs.primary,
+      getBuffer: () => this.$refs.buffer,
+      hasClass: className => this.$el.classList.contains(className),
+      removeClass: className => this.$delete(this.classes, className),
+      setStyle: (el, styleProperty, value) => (el.style[styleProperty] = value),
+    };
+
+    this.foundation = new MDCLinearProgressFoundation(adapter);
+    this.foundation.init();
+
+    this.foundation.setReverse(this.reversed);
+    this.foundation.setProgress(Number(this.progress));
+    this.foundation.setBuffer(Number(this.buffer));
+    this.foundation.setDeterminate(!this.indeterminate);
+
+    if (this.open) {
+      this.foundation.open();
+    } else {
+      this.foundation.close();
+    }
+  },
+  beforeDestroy() {
+    this.foundation.destroy();
+  },
   render(createElement) {
     const nodes = [
       this.bufferingDots &&
@@ -90,35 +120,5 @@ export default {
       },
       nodes,
     );
-  },
-
-  mounted() {
-    const adapter = {
-      addClass: className => {
-        this.$set(this.classes, className, true);
-      },
-      getPrimaryBar: () => this.$refs.primary,
-      getBuffer: () => this.$refs.buffer,
-      hasClass: className => this.$el.classList.contains(className),
-      removeClass: className => this.$delete(this.classes, className),
-      setStyle: (el, styleProperty, value) => (el.style[styleProperty] = value),
-    };
-
-    this.foundation = new MDCLinearProgressFoundation(adapter);
-    this.foundation.init();
-
-    this.foundation.setReverse(this.reversed);
-    this.foundation.setProgress(Number(this.progress));
-    this.foundation.setBuffer(Number(this.buffer));
-    this.foundation.setDeterminate(!this.indeterminate);
-
-    if (this.open) {
-      this.foundation.open();
-    } else {
-      this.foundation.close();
-    }
-  },
-  beforeDestroy() {
-    this.foundation.destroy();
   },
 };

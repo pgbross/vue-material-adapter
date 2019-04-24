@@ -15,18 +15,7 @@ export default {
       styles: {},
     };
   },
-  render(createElement) {
-    return createElement(
-      'i',
-      {
-        class: this.classes,
-        style: this.styles,
-        attrs: this.$attrs,
-        on: this.$listeners,
-      },
-      this.icon,
-    );
-  },
+
   mounted() {
     this.foundation = new MDCSelectIconFoundation(
       Object.assign({
@@ -58,5 +47,17 @@ export default {
 
   beforeDestroy() {
     this.foundation.destroy();
+  },
+  render(createElement) {
+    return createElement(
+      'i',
+      {
+        class: this.classes,
+        style: this.styles,
+        attrs: this.$attrs,
+        on: this.$listeners,
+      },
+      this.icon,
+    );
   },
 };
