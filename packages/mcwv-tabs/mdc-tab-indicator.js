@@ -1,4 +1,6 @@
-import MDCSlidingTabIndicatorFoundation from '@material/tab-indicator/sliding-foundation';
+import MDCTabIndicatorFoundation from '@material/tab-indicator/foundation';
+
+const { cssClasses } = MDCTabIndicatorFoundation;
 
 export default {
   name: 'mdc-tab-indicator',
@@ -18,7 +20,7 @@ export default {
     ]);
   },
   mounted() {
-    this.foundation = new MDCSlidingTabIndicatorFoundation({
+    this.adapter_ = {
       addClass: className => this.$set(this.classes, className, true),
       removeClass: className => this.$delete(this.classes, className),
       computeContentClientRect: () =>
@@ -26,22 +28,45 @@ export default {
       setContentStyleProperty: (prop, value) => {
         this.$set(this.styles, prop, value);
       },
-    });
+    };
 
+    this.foundation = new MDCTabIndicatorFoundation(this.adapter_);
     this.foundation.init();
   },
   beforeDestroy() {
     this.foundation.destroy();
   },
   methods: {
-    activate(previousIndicatorClientRect) {
-      this.foundation.activate(previousIndicatorClientRect);
-    },
     deactivate() {
-      this.foundation.deactivate();
+      this.adapter_.removeClass(cssClasses.ACTIVE);
     },
     computeContentClientRect() {
       return this.foundation.computeContentClientRect();
+    },
+    activate(previousIndicatorClientRect) {
+      // Early exit if no indicator is present to handle cases where an indicator
+      // may be activated without a prior indicator state
+      if (!previousIndicatorClientRect) {
+        this.adapter_.addClass(cssClasses.ACTIVE);
+        return;
+      }
+
+      const currentClientRect = this.computeContentClientRect();
+      const widthDelta =
+        previousIndicatorClientRect.width / currentClientRect.width;
+      const xPosition =
+        previousIndicatorClientRect.left - currentClientRect.left;
+      this.foundation.adapter_.addClass(cssClasses.NO_TRANSITION);
+      this.adapter_.setContentStyleProperty(
+        'transform',
+        `translateX(${xPosition}px) scaleX(${widthDelta})`,
+      );
+      // THE FIX
+      requestAnimationFrame(() => {
+        this.adapter_.removeClass(cssClasses.NO_TRANSITION);
+        this.adapter_.addClass(cssClasses.ACTIVE);
+        this.adapter_.setContentStyleProperty('transform', '');
+      });
     },
   },
 };
