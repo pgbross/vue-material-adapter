@@ -79,12 +79,12 @@ export default {
           this.$refs.lineRippleEl.setRippleCenter(normalizedX),
         activateBottomLine: () => {
           if (this.$refs.lineRippleEl) {
-            this.$refs.lineRippleEl.foundation.activate();
+            this.$refs.lineRippleEl.foundation_.activate();
           }
         },
         deactivateBottomLine: () => {
           if (this.$refs.lineRippleEl) {
-            this.$refs.lineRippleEl.foundation.deactivate();
+            this.$refs.lineRippleEl.foundation_.deactivate();
           }
         },
 
@@ -218,6 +218,7 @@ export default {
       return xCoordinate - targetClientRect.left;
     },
   },
+
   render(createElement) {
     const { $scopedSlots: scopedSlots } = this;
 
@@ -291,7 +292,7 @@ export default {
             },
             ref: 'helperTextEl',
           },
-          this.helperText,
+          this.helptext,
         ),
       );
     }

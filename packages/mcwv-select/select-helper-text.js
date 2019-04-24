@@ -57,7 +57,6 @@ export default {
       {
         class: this.classes,
         attrs: { 'aria-hidden': 'true' },
-        ref: 'helptextEl',
       },
       scopedSlots.default && scopedSlots.default(),
     );
