@@ -22,17 +22,18 @@ export default {
     {
       props: { src, square, wide, contentClass },
       data: { staticStyle },
-      slots,
+      scopedSlots,
     },
   ) {
     const nodes = [];
 
-    if (slots().default) {
+    const content = scopedSlots.default && scopedSlots.default();
+    if (content) {
       nodes.push(
         createElement(
           'div',
           { class: ['mdc-card__media-content', contentClass] },
-          slots().default,
+          content,
         ),
       );
     }

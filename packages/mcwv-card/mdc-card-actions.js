@@ -9,7 +9,7 @@ export default {
     {
       props: { fullBleed },
       data: { staticClass, attrs },
-      slots,
+      scopedSlots,
     },
   ) {
     return createElement(
@@ -24,7 +24,7 @@ export default {
         ],
         attrs,
       },
-      slots().default,
+      scopedSlots.default && scopedSlots.default(),
     );
   },
 };

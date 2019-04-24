@@ -4,11 +4,11 @@ export default {
   render(
     createElement,
     {
-      slots,
+      scopedSlots,
       data: { attrs, staticClass, staticStyle },
     },
   ) {
-    const vNodes = slots().default;
+    const vNodes = (scopedSlots.default && scopedSlots.default()) || [];
 
     if (vNodes) {
       // add icon class to children

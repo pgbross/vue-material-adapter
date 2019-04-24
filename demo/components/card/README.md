@@ -3,14 +3,14 @@
 Cards are composed of different content blocks which are typically laid out in vertical succession.
 The card package provides the building blocks for composing your card components.
 
-| Component                 | Usage                                                                                                                                                                                                 |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `mdc-card`                | Mandatory, for the card component                                                                                                                                                                     |
-| `mdc-card-media`          | This component is a container for an image on the card                                                                                                                                                |
-| `mdc-card-primary-action` | This component is used as the container for primary tappable content                                                                                                                                  |
-| `mdc-card-actions`        | Acts as a container for <CardActionButtons> and/or <CardActionIcons>. It should be used as the last child of the <Card> component.                                                                    |
-| `mdc-card-action-buttons` | It acts as a container for buttons of the card. This component is a child of a <CardActions> component.                                                                                               |
-| `mdc-card-action-icons`   | It acts as a container for icons of the card. This component is a child of a <CardActions> component. It can be used by itself or used as a sibling directly after the <CardActionButtons> component. |
+| Component                 | Usage                                                                                                                                                                                                            |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `mdc-card`                | Mandatory, for the card component                                                                                                                                                                                |
+| `mdc-card-media`          | This component is a container for an image on the card                                                                                                                                                           |
+| `mdc-card-primary-action` | This component is used as the container for primary tappable content                                                                                                                                             |
+| `mdc-card-actions`        | Acts as a container for `mdc-card-action-buttons` and/or `mdc-card-action-icons`. It should be used as the last child of the `mdc-card` component.                                                               |
+| `mdc-card-action-buttons` | It acts as a container for buttons of the card. This component is a child of a `mdc-card-actions` component.                                                                                                     |
+| `mdc-card-action-icons`   | It acts as a container for icons of the card. This component is a child of a `mdc-card-actions` component. It can be used by itself or used as a sibling directly after the `mdc-card-action-buttons` component. |
 
 ### Card
 

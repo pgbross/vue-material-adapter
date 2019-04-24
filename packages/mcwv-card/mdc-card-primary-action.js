@@ -10,6 +10,7 @@ export default {
     };
   },
   render(createElement) {
+    const { $scopedSlots: slots } = this;
     return createElement(
       'custom-link',
       {
@@ -18,7 +19,7 @@ export default {
         props: { link: this.link },
         on: this.listeners,
       },
-      this.$slots.default,
+      slots.default && slots.default(),
     );
   },
 };
