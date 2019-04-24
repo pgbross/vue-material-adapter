@@ -10,7 +10,13 @@
 
       <mdc-top-app-bar-section align="end">
         <mdc-top-app-bar-icon actionItem aria-label="Help">
-          <mdc-material-icon @click="showGitHub" icon="help"></mdc-material-icon>
+          <a
+            href="https://github.com/pgbross/vue-material-adapter"
+            target="_blank"
+            title="Vue-material-adapter"
+          >
+            <img :src="githubLogo">
+          </a>
         </mdc-top-app-bar-icon>
       </mdc-top-app-bar-section>
     </mdc-top-app-bar-row>
@@ -25,12 +31,6 @@ export default {
     return {
       githubLogo,
     };
-  },
-
-  methods: {
-    showGitHub() {
-      alert('Show help');
-    },
   },
 };
 </script>

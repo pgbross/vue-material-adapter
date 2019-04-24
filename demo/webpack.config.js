@@ -142,7 +142,7 @@ const config = {
   output: {
     filename: isProduction ? '[name].[chunkhash].js' : '[name].js',
     chunkFilename: isProduction ? '[name].[chunkhash].js' : '[name].js',
-    path: resolve(isProduction ? '../public/vue-mdc-adapter' : '../dev'),
+    path: resolve(isProduction ? '../public/vue-material-adapter' : '../dev'),
   },
   resolve: {
     alias: {
@@ -198,7 +198,7 @@ if (isProduction) {
       },
     },
   }),
-    (config.output.publicPath = '/vue-mdc-adapter/');
+    (config.output.publicPath = '/vue-material-adapter/');
 
   // extract css rule
   config.module.rules.push({

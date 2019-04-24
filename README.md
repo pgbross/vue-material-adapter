@@ -14,6 +14,8 @@ customization while sticking to the _Vue Spirit_ (approachable, versatile, and p
 
 ## Quick Links
 
+- [Documentation & Demo](https://pgbross.github.io/vue-material-adapter)
+
 ## Project Status
 
 This project is under active development.
