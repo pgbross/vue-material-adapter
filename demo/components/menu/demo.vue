@@ -5,8 +5,8 @@
       <mdc-menu v-model="open" @select="onSelect">
         <mdc-list-item>A Menu Item</mdc-list-item>
         <mdc-list-item>Another Menu Item</mdc-list-item>
-        <mdc-list-item disabled>Disabled Menu Item</mdc-list-item>
-        <mdc-menu-divider>Another Menu Item</mdc-menu-divider>
+        <mdc-list-item>Next Menu Item</mdc-list-item>
+        <mdc-list-divider></mdc-list-divider>
         <mdc-list-item>Parted Menu Item</mdc-list-item>
       </mdc-menu>
     </mdc-menu-anchor>

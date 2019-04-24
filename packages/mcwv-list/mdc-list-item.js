@@ -62,6 +62,11 @@ export default {
 
     const nodes = mdt.map(vn => {
       if (!vn.tag || !vn.componentOptions) {
+        if (!vn.tag && vn.text) {
+          return createElement('mdc-list-item-text', {
+            props: { primaryText: vn.text },
+          });
+        }
         return vn;
       }
 

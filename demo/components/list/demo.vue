@@ -10,15 +10,9 @@
 
       <mdc-layout-cell>
         <mdc-list @action="onAction">
-          <mdc-list-item>
-            <mdc-list-item-text primaryText="Photos"></mdc-list-item-text>
-          </mdc-list-item>
-          <mdc-list-item>
-            <mdc-list-item-text primaryText="Recipes"></mdc-list-item-text>
-          </mdc-list-item>
-          <mdc-list-item>
-            <mdc-list-item-text primaryText="Work"></mdc-list-item-text>
-          </mdc-list-item>
+          <mdc-list-item>Photos</mdc-list-item>
+          <mdc-list-item>Recipes</mdc-list-item>
+          <mdc-list-item>Work</mdc-list-item>
         </mdc-list>
       </mdc-layout-cell>
 

@@ -3,11 +3,21 @@
 ### Basic List
 
 ```html
-<mdc-list>
-  <mdc-list-item>Single-line item</mdc-list-item>
-  <mdc-list-item>Single-line item</mdc-list-item>
-  <mdc-list-item>Single-line item</mdc-list-item>
+<mdc-list @action="onAction">
+  <mdc-list-item>Photos</mdc-list-item>
+  <mdc-list-item>Recipes</mdc-list-item>
+  <mdc-list-item>Work</mdc-list-item>
 </mdc-list>
+```
+
+```javascript
+export default {
+  methods: {
+    onAction({ index }) {
+      console.log(index);
+    },
+  },
+};
 ```
 
 ### Props
