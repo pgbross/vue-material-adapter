@@ -1,3 +1,5 @@
+import { RippleBase } from '@mcwv/ripple';
+
 export default {
   name: 'mdc-list-item',
   props: {
@@ -10,11 +12,38 @@ export default {
     shouldToggleCheckbox: Boolean,
     childrenTabIndex: Number | String,
     counter: { type: Number, default: 0 },
+    nonInteractive: Boolean,
     tag: {
       type: String,
       default() {
         return 'li';
       },
+    },
+  },
+  data() {
+    return { classes: {}, styles: {} };
+  },
+
+  mounted() {
+    !this.nonInteractive && this.addRipple();
+  },
+  beforeDestroy() {
+    this.removeRipple();
+  },
+  methods: {
+    addRipple() {
+      if (!this.ripple) {
+        const ripple = new RippleBase(this);
+        ripple.init();
+        this.ripple = ripple;
+      }
+    },
+    removeRipple() {
+      if (this.ripple) {
+        const ripple = this.ripple;
+        this.ripple = null;
+        ripple.destroy();
+      }
     },
   },
 
@@ -26,29 +55,42 @@ export default {
       attributesFromList,
       childrenTabIndex,
     } = this;
-    const classes = ['mdc-list-item'].concat(classNamesFromList);
+
+    const classes = ['mdc-list-item', this.classes].concat(classNamesFromList);
 
     const mdt = (slots.default && slots.default()) || [];
 
-    mdt.forEach(vn => {
-      if (vn.tag) {
-        const data = vn.data || (vn.data = {});
-        const props = data.props || (data.props = {});
-        props.tabIndex = childrenTabIndex;
+    const nodes = mdt.map(vn => {
+      if (!vn.tag || !vn.componentOptions) {
+        return vn;
       }
+
+      const data = vn.data || {};
+      return createElement(
+        vn.componentOptions.tag,
+        {
+          props: {
+            ...vn.componentOptions.propsData,
+            tabIndex: childrenTabIndex,
+          },
+          attrs: {
+            ...data.attrs,
+          },
+          on: {},
+        },
+        vn.componentOptions.children,
+      );
     });
 
-    if (slots.listItem) {
-      return slots.listItem({
-        tag,
-        classNamesFromList,
-        children: slots.default && slots.default(),
-      });
-    }
     return createElement(
       tag,
-      { class: classes, attrs: attributesFromList, on: this.$listeners },
-      slots.default && slots.default(),
+      {
+        class: classes,
+        style: this.styles,
+        attrs: attributesFromList,
+        on: this.$listeners,
+      },
+      nodes, // slots.default && slots.default(),
     );
   },
 };

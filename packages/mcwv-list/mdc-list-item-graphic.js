@@ -3,23 +3,21 @@ export default {
   props: {
     tabbableOnListItemFocus: Boolean,
     tabIndex: {
-      type: Number,
+      type: String,
       default() {
-        return -1;
+        return '-1';
       },
     },
     childrenTabIndex: Number,
     graphic: {},
   },
-  functional: true,
-  render(
-    createElement,
-    {
-      data: { staticClass, attrs },
-      props: { tabbableOnListItemFocus, tabIndex },
-      scopedSlots: slots,
-    },
-  ) {
+  render(createElement) {
+    const {
+      $attrs: attrs,
+      tabbableOnListItemFocus,
+      tabIndex,
+      $scopedSlots: slots,
+    } = this;
     const slot = (slots.default && slots.default()) || [];
     const nodes = slot.filter(({ tag }) => tag);
     if (nodes.length !== 1) {

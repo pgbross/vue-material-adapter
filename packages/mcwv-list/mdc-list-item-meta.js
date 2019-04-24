@@ -1,19 +1,17 @@
 export default {
   name: 'mdc-list-item-meta',
-  functional: true,
   props: {
     tabbableOnListItemFocus: Boolean,
     tabIndex: Number,
     childrenTabIndex: Number,
   },
-  render(
-    createElement,
-    {
-      data: { staticClass, attrs },
-      props: { tabbableOnListItemFocus, tabIndex },
-      scopedSlots: slots,
-    },
-  ) {
+  render(createElement) {
+    const {
+      $attrs: attrs,
+      tabbableOnListItemFocus,
+      tabIndex,
+      $scopedSlots: slots,
+    } = this;
     const slot = (slots.default && slots.default()) || [];
     const nodes = slot;
     if (nodes.length !== 1) {
@@ -25,7 +23,7 @@ export default {
       return createElement(
         'span',
         {
-          class: ['mdc-list-item__meta', staticClass],
+          class: ['mdc-list-item__meta'],
           attrs: {
             ...attrs,
             tabIndex: tabbableOnListItemFocus ? tabIndex : -1,
@@ -36,7 +34,7 @@ export default {
     }
     const data = v0.data || (v0.data = {});
     const props = data.props || (data.props = {});
-    data.staticClass = `mdc-list-item__meta ${staticClass}`;
+    data.staticClass = `mdc-list-item__meta`;
     props.tabIndex = tabbableOnListItemFocus ? tabIndex : -1;
 
     data.attrs = {

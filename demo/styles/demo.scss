@@ -7,6 +7,11 @@ $mdc-theme-background: #fff;
 // @import "./jazzy";
 @import './markdown';
 
+.mdc-list-item__text,
+.mdc-list-item__primary-text,
+.mdc-list-item__secondary-text {
+    outline: none;
+}
 .primary-drawer .mdc-drawer {
     .mdc-drawer__header {
         background-color: $grey-900;

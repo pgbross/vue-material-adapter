@@ -2,6 +2,13 @@
   <div>
     <mdc-layout-grid class="mdc-demo mdc-demo--container mdc-list-demo">
       <mdc-layout-cell>
+        <mdc-list avatarList @action="onAction">
+          <mdc-list-item data-mdc-dialog-action="test">test</mdc-list-item>
+          <mdc-list-item data-mdc-dialog-action="help">help</mdc-list-item>
+        </mdc-list>
+      </mdc-layout-cell>
+
+      <mdc-layout-cell>
         <mdc-list @action="onAction">
           <mdc-list-item>
             <mdc-list-item-text primaryText="Photos"></mdc-list-item-text>
@@ -11,6 +18,20 @@
           </mdc-list-item>
           <mdc-list-item>
             <mdc-list-item-text primaryText="Work"></mdc-list-item-text>
+          </mdc-list-item>
+        </mdc-list>
+      </mdc-layout-cell>
+
+      <mdc-layout-cell>
+        <mdc-list twoLine @action="onAction">
+          <mdc-list-item>
+            <mdc-list-item-text primaryText="Photos" secondaryText="Jan 9, 2018"></mdc-list-item-text>
+          </mdc-list-item>
+          <mdc-list-item>
+            <mdc-list-item-text primaryText="Recipes" secondaryText="Jan 17, 2018"></mdc-list-item-text>
+          </mdc-list-item>
+          <mdc-list-item>
+            <mdc-list-item-text primaryText="Work" secondaryText="Jan 28, 2018"></mdc-list-item-text>
           </mdc-list-item>
         </mdc-list>
       </mdc-layout-cell>

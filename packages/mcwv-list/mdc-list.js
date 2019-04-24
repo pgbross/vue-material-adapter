@@ -73,7 +73,7 @@ export default {
         'mdc-list--dense': this.dense,
         'mdc-list--avatar-list': this.avatarList,
         'mdc-list--two-line': this.twoLine,
-        'mdc-list--non-interactive': !this.interactive,
+        'mdc-list--non-interactive': this.nonInteractive,
       };
     },
 
@@ -152,7 +152,7 @@ export default {
     },
   },
   mounted() {
-    const { singleSelection, wrapFocus, selectedIndex } = this;
+    const { wrapFocus } = this;
 
     const adapter = {
       getListItemCount: () => this.listItemCount,
@@ -186,8 +186,13 @@ export default {
       },
       getAttributeForElementIndex: () => null,
       setTabIndexForListItemChildren: (listItemIndex, tabIndexValue) => {
-        const { listItemChildrenTabIndex } = this;
-        listItemChildrenTabIndex[listItemIndex] = tabIndexValue;
+        // const { listItemChildrenTabIndex } = this;
+        this.$set(
+          this.listItemChildrenTabIndex,
+          `${listItemIndex}`,
+          tabIndexValue,
+        );
+        // listItemChildrenTabIndex[listItemIndex] = tabIndexValue;
       },
       hasCheckboxAtIndex: index => {
         const listItems = this.$refs.listItem || [];
@@ -239,14 +244,14 @@ export default {
     this.foundation.layout();
     this.initializeListType();
 
-    this.foundation.setSingleSelection(singleSelection);
+    this.foundation.setSingleSelection(this.singleSelection);
 
     if (
-      singleSelection &&
-      typeof selectedIndex === 'number' &&
-      !isNaN(selectedIndex)
+      this.singleSelection &&
+      typeof this.selectedIndex === 'number' &&
+      !isNaN(this.selectedIndex)
     ) {
-      this.foundation.setSelectedIndex(selectedIndex);
+      this.foundation.setSelectedIndex(this.selectedIndex);
     }
 
     this.foundation.setWrapFocus(wrapFocus);
@@ -293,6 +298,7 @@ export default {
             shouldFollowHref: followHrefAtIndex === index,
             shouldFocus: focusListItemAtIndex === index,
             childrenTabIndex: listItemChildrenTabIndex[index],
+            nonInteractive: this.nonInteractive,
           },
           attrs: {
             ...data.attrs,

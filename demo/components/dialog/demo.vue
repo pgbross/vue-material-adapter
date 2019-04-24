@@ -70,7 +70,7 @@
         <mdc-dialog-title>Select user</mdc-dialog-title>
         <mdc-dialog-content>
           <mdc-list avatarList>
-            <mdc-list-item data-mdc-dialog-action="test">test</mdc-list-item>
+            <mdc-list-item data-mdc-dialog-action="test" tabindex="0">test</mdc-list-item>
             <mdc-list-item data-mdc-dialog-action="help">help</mdc-list-item>
           </mdc-list>
         </mdc-dialog-content>

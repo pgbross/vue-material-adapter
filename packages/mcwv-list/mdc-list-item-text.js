@@ -3,22 +3,24 @@ export default {
   props: {
     tabbableOnListItemFocus: Boolean,
     tabIndex: {
-      type: Number,
+      type: String,
       default() {
-        return -1;
+        return '-1';
       },
     },
     primaryText: String,
     secondaryText: String,
   },
-  functional: true,
-  render(
-    createElement,
-    {
-      data: { staticClass, attrs },
-      props: { tabbableOnListItemFocus, tabIndex, primaryText, secondaryText },
-    },
-  ) {
+  // functional: true,
+  render(createElement) {
+    const {
+      $attrs: attrs,
+      tabbableOnListItemFocus,
+      tabIndex,
+      primaryText,
+      secondaryText,
+    } = this;
+
     const renderText = (text, className) => {
       if (text === undefined) {
         return null;
@@ -38,13 +40,13 @@ export default {
     };
 
     if (!secondaryText) {
-      return renderText(primaryText, ['mdc-list-item__text', staticClass]);
+      return renderText(primaryText, ['mdc-list-item__text']);
     }
 
     return createElement(
       'span',
       {
-        class: ['mdc-list-item-text', staticClass],
+        class: ['mdc-list-item-text'],
         attrs: { ...attrs, tabIndex: tabbableOnListItemFocus ? tabIndex : -1 },
       },
       [
