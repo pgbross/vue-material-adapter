@@ -1,7 +1,11 @@
 /* eslint-disable quote-props */
 import { closest } from '@material/dom/ponyfill';
 import MDCSnackbarFoundation from '@material/snackbar/foundation';
+import mdcSnackbarQueue from './mdc-snackbar-queue.js';
+
 import { BasePlugin } from '@mcwv/base';
+
+const { strings, numbers } = MDCSnackbarFoundation;
 
 const mdcSnackbar = {
   name: 'mdc-snackbar',
@@ -13,28 +17,24 @@ const mdcSnackbar = {
     open: Boolean,
     stacked: Boolean,
     leading: Boolean,
-    labelText: String,
+    message: String,
     actionText: String,
     timeoutMs: [String, Number],
-
+    closeOnEscape: { type: Boolean, default: true },
     dismissAction: { type: [String, Boolean], default: true },
   },
   data() {
     return {
-      classes: {
-        'mdc-snackbar': 1,
-        'mdc-snackbar--leading': this.leading,
-        'mdc-snackbar--stacked': this.stacked,
-      },
+      classes: {},
       hidden: false,
       actionHidden: false,
-      showLabelText: true,
+      showMessage: true,
     };
   },
   watch: {
     open: 'onOpen_',
-
     timeoutMs: 'onTimeoutMs_',
+    closeOnEscape: 'onCloseOnEscape_',
   },
 
   mounted() {
@@ -43,36 +43,39 @@ const mdcSnackbar = {
       addClass: className => this.$set(this.classes, className, true),
       removeClass: className => this.$delete(this.classes, className),
       announce: () => this.announce(this.$refs.labelEl),
-      notifyOpening: () =>
-        this.$emit(MDCSnackbarFoundation.strings.OPENING_EVENT, {}),
+      notifyOpening: () => this.$emit(strings.OPENING_EVENT, {}),
       notifyOpened: () => {
-        this.$emit(MDCSnackbarFoundation.strings.OPENED_EVENT, {});
+        this.$emit(strings.OPENED_EVENT, {});
         this.$emit('change', true);
         this.$emit('show', {});
       },
       notifyClosing: reason =>
-        this.$emit(
-          MDCSnackbarFoundation.strings.CLOSING_EVENT,
-          reason ? { reason } : {},
-        ),
+        this.$emit(strings.CLOSING_EVENT, reason ? { reason } : {}),
       notifyClosed: reason => {
-        this.$emit(
-          MDCSnackbarFoundation.strings.CLOSED_EVENT,
-          reason ? { reason } : {},
-        );
+        this.$emit(strings.CLOSED_EVENT, reason ? { reason } : {});
         this.$emit('change', false);
         this.$emit('hide');
       },
     };
 
+    const { closeOnEscape, timeoutMs } = this;
     this.foundation = new MDCSnackbarFoundation(adapter);
     this.foundation.init();
 
-    if (this.timeoutMs !== void 0) {
-      this.foundation.setTimeoutMs(this.timeoutMs);
+    if (timeoutMs !== void 0) {
+      this.foundation.setTimeoutMs(timeoutMs);
     }
+
+    this.foundation.setCloseOnEscape(closeOnEscape);
   },
   computed: {
+    rootClasses() {
+      return {
+        'mdc-snackbar': 1,
+        'mdc-snackbar--leading': this.leading,
+        'mdc-snackbar--stacked': this.stacked,
+      };
+    },
     showDismissAction() {
       return typeof this.dismissAction === 'string'
         ? this.dismissAction != 'false'
@@ -89,11 +92,15 @@ const mdcSnackbar = {
         this.foundation.setTimeoutMs(value);
       }
     },
+    onCloseOnEscape_(nv) {
+      this.foundation.setCloseOnEscape(nv);
+    },
     onOpen_(value) {
       if (value) {
         this.foundation.open();
       } else {
-        this.foundation.close();
+        const { reason } = this.reason;
+        this.foundation.close(reason ? reason : '');
       }
     },
     surfaceClickHandler(evt) {
@@ -109,21 +116,17 @@ const mdcSnackbar = {
     },
 
     isActionButton_(target) {
-      return Boolean(
-        closest(target, MDCSnackbarFoundation.strings.ACTION_SELECTOR),
-      );
+      return Boolean(closest(target, strings.ACTION_SELECTOR));
     },
 
     isActionIcon_(target) {
-      return Boolean(
-        closest(target, MDCSnackbarFoundation.strings.DISMISS_SELECTOR),
-      );
+      return Boolean(closest(target, strings.DISMISS_SELECTOR));
     },
 
     announce(ariaEl, labelEl = ariaEl) {
       const priority = ariaEl.getAttribute('aria-live');
 
-      const text = this.labelText;
+      const text = this.message;
       if (!text) {
         return;
       }
@@ -159,40 +162,27 @@ const mdcSnackbar = {
       //       - Firefox 60 (ESR)
       //       - IE 11
       //   * ChromeVox 53
-      this.showLabelText = false;
+      this.showMessage = false;
 
       // Prevent visual jank by temporarily displaying the label text in the ::before pseudo-element.
       // CSS generated content is normally announced by screen readers
       // (except in IE 11; see https://tink.uk/accessibility-support-for-css-generated-content/);
       // however, `aria-live` is turned off, so this DOM update will be ignored by screen readers.
-      labelEl.setAttribute(
-        MDCSnackbarFoundation.strings.ARIA_LIVE_LABEL_TEXT_ATTR,
-        this.labelText,
-      );
+      labelEl.setAttribute(strings.ARIA_LIVE_LABEL_TEXT_ATTR, this.message);
 
       setTimeout(() => {
         // Allow screen readers to announce changes to the DOM again.
         ariaEl.setAttribute('aria-live', priority);
 
         // Remove the message from the ::before pseudo-element.
-        labelEl.removeAttribute(
-          MDCSnackbarFoundation.strings.ARIA_LIVE_LABEL_TEXT_ATTR,
-        );
+        labelEl.removeAttribute(strings.ARIA_LIVE_LABEL_TEXT_ATTR);
 
         // Restore the original label text, which will be announced by screen readers.
-        this.showLabelText = true;
-      }, MDCSnackbarFoundation.numbers.ARIA_LIVE_DELAY_MS);
+        this.showMessage = true;
+      }, numbers.ARIA_LIVE_DELAY_MS);
     },
   },
   render(createElement) {
-    const labelNode = this.showLabelText
-      ? this.labelText
-      : createElement('span', {
-          style: { display: 'inline-block', width: 0, height: '1px' },
-          domProps: {
-            innerHTML: '&nbsp;',
-          },
-        });
     const surfaceNodes = [
       createElement(
         'div',
@@ -201,7 +191,16 @@ const mdcSnackbar = {
           attrs: { role: 'status', 'aria-live': 'polite' },
           ref: 'labelEl',
         },
-        [labelNode],
+        [
+          this.showMessage
+            ? this.message
+            : createElement('span', {
+                style: { display: 'inline-block', width: 0, height: '1px' },
+                domProps: {
+                  innerHTML: '&nbsp;',
+                },
+              }),
+        ],
       ),
     ];
 
@@ -251,23 +250,26 @@ const mdcSnackbar = {
       );
     }
 
-    const surfaceEl = createElement(
+    return createElement(
       'div',
-      {
-        class: { 'mdc-snackbar__surface': 1 },
-        on: { click: evt => this.surfaceClickHandler(evt) },
-      },
-      surfaceNodes,
+      { class: { ...this.rootClasses, ...this.classes }, ref: 'root' },
+      [
+        createElement(
+          'div',
+          {
+            class: { 'mdc-snackbar__surface': 1 },
+            on: { click: evt => this.surfaceClickHandler(evt) },
+          },
+          surfaceNodes,
+        ),
+      ],
     );
-
-    return createElement('div', { class: this.classes, ref: 'root' }, [
-      surfaceEl,
-    ]);
   },
 };
 
-export { mdcSnackbar };
+export { mdcSnackbar, mdcSnackbarQueue };
 
 export default BasePlugin({
   mdcSnackbar,
+  mdcSnackbarQueue,
 });
