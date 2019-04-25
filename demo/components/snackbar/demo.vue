@@ -1,15 +1,14 @@
 <template>
   <div class="mdc-demo mdc-demo--container">
-    <mdc-button raised @click="showSnackbar">Show Snackbar</mdc-button>
-    <mdc-snackbar
-      ref="bar"
-      v-model="open"
-      :labelText="'This is a snackbar: ' + this.n"
-      actionText="action"
-      leading
-      timeoutMs="10000"
-      @click="doalert"
-    />
+    <div class="mdc-demo mdc-demo--container">
+      <mdc-button @click="showSimple">{{open ? 'Close' : 'Simple'}}</mdc-button>
+      <mdc-button @click="showBaseline">Baseline</mdc-button>
+      <mdc-button @click="showLeading">Leading</mdc-button>
+      <mdc-button @click="showStacked">Stacked</mdc-button>
+    </div>
+
+    <mdc-snackbar-queue ref="bar"/>
+    <mdc-snackbar v-model="open" message="Simple message" :dismissAction="false"></mdc-snackbar>
   </div>
 </template>
 
@@ -19,20 +18,43 @@ export default {
     return {
       open: false,
       n: 0,
+      action: '',
     };
   },
   methods: {
     doalert() {
       alert('clicked');
     },
-    showSnackbar() {
+    showSimple() {
       this.open = !this.open;
-      this.n += 1;
-      // this.snack = {
-      //   message: `This is a snackbar: ${n++}`,
-      //   actionText: 'action',
-      //   actionHandler() {}
-      // }
+      this.open && this.n++;
+    },
+    showBaseline() {
+      this.$refs.bar.handleSnack({
+        message: `Can't send photo. Retry in 5 seconds.`,
+        timeoutMs: 5000,
+        actionText: 'Retry',
+        actionHandler: ({ reason }) => {
+          alert(`Action, reason: ${reason}`);
+        },
+        closeOnEscape: false,
+      });
+    },
+    showStacked() {
+      this.$refs.bar.handleSnack({
+        message: `This item already has the label "travel". You can add a new label.`,
+        timeoutMs: 5000,
+        actionText: 'Add a new label',
+        stacked: true,
+      });
+    },
+    showLeading() {
+      this.$refs.bar.handleSnack({
+        message: `Your photo has been archived.`,
+        timeoutMs: 5000,
+        actionText: 'Undo',
+        leading: true,
+      });
     },
   },
 };
