@@ -1,7 +1,7 @@
 {
   "name": "vue-material-adapter",
   "description": "Modular and customizable Material Design UI components for the web for Vue",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "license": "ISC",
   "keywords": [
     "material components",
@@ -43,7 +43,7 @@
     "@mcwv/switch": "^0.4.0",
     "@mcwv/tabs": "^0.4.0",
     "@mcwv/textfield": "^0.4.0",
-    "@mcwv/top-app-bar": "^0.4.0",
+    "@mcwv/top-app-bar": "^0.4.2",
     "@mcwv/typography": "^0.4.0"
   }
 }
