@@ -1,3 +1,18 @@
+# [](https://github.com/pgbross/vue-material-adapter/compare/v0.4.0...v) (2019-04-25)
+
+
+### Bug Fixes
+
+* update for demo build ([fcc6d17](https://github.com/pgbross/vue-material-adapter/commit/fcc6d17))
+* update for demo build ([c40cb4c](https://github.com/pgbross/vue-material-adapter/commit/c40cb4c))
+
+
+### Features
+
+* add demo pages ([216a807](https://github.com/pgbross/vue-material-adapter/commit/216a807))
+
+
+
 # [](https://github.com/pgbross/vue-material-adapter/compare/v0.2.0...v) (2019-04-15)
 
 
