@@ -3,29 +3,28 @@ import { cssClasses } from './constants';
 export default {
   name: 'mdc-top-app-bar-icon',
   props: { actionItem: Boolean, navIcon: Boolean },
-  functional: true,
 
-  render(
-    createElement,
-    {
-      props: { actionItem, navIcon },
-      scopedSlots,
-      data: { attrs },
-    },
-  ) {
-    const slot = scopedSlots.default && scopedSlots.default();
-
-    if (slot) {
-      const [v0] = slot;
-      const sc = [v0.staticClass || ''];
-      actionItem && sc.push(cssClasses.ACTION_ITEM);
-      navIcon && sc.push(cssClasses.NAV_ICON);
-      v0.data.staticClass = sc.join(' ');
-      v0.data.attrs = { ...(v0.data.attrs || {}), ...attrs };
-      return slot;
+  render(createElement) {
+    const {
+      $attrs: attrs,
+      $scopedSlots: scopedSlots,
+      actionItem,
+      navIcon,
+    } = this;
+    const slot = (scopedSlots.default && scopedSlots.default()) || [];
+    const nodes = slot.filter(({ tag }) => tag);
+    if (nodes.length !== 1) {
+      throw new Error('mdc-top-app-bar-icon expects exactly one child element');
     }
 
-    // if no slot just return an empty text node
-    return createElement('');
+    const [v0] = nodes;
+    const data = v0.data || (v0.data = {});
+    const sc = [data.staticClass || ''];
+
+    actionItem && sc.push(cssClasses.ACTION_ITEM);
+    navIcon && sc.push(cssClasses.NAV_ICON);
+    v0.data.staticClass = sc.join(' ');
+    v0.data.attrs = { ...(v0.data.attrs || {}), ...attrs };
+    return slot;
   },
 };
