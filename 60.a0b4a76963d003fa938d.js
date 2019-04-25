@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[60],{265:function(t,a,c){"use strict";c.r(a);var e=c(7),i=Object(e.a)({},function(){var t=this.$createElement,a=this._self._c||t;return a("div",{staticClass:"mdc-demo mdc-demo--container"},[a("mdc-material-icon",{attrs:{icon:"favorite"}}),this._v(" "),a("mdc-material-icon",{attrs:{icon:"aspect_ratio"}})],1)},[],!1,null,null,null);a.default=i.exports}}]);
-//# sourceMappingURL=60.a0b4a76963d003fa938d.js.map
