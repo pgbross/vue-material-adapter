@@ -39,8 +39,7 @@ const mdcSnackbar = {
 
   mounted() {
     window.addEventListener('keydown', this.handleKeydownEvent);
-
-    this.foundation = new MDCSnackbarFoundation({
+    const adapter = {
       addClass: className => this.$set(this.classes, className, true),
       removeClass: className => this.$delete(this.classes, className),
       announce: () => this.announce(this.$refs.labelEl),
@@ -64,7 +63,9 @@ const mdcSnackbar = {
         this.$emit('change', false);
         this.$emit('hide');
       },
-    });
+    };
+
+    this.foundation = new MDCSnackbarFoundation(adapter);
     this.foundation.init();
 
     if (this.timeoutMs !== void 0) {
