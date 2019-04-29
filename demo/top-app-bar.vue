@@ -5,7 +5,7 @@
         <mcw-top-app-bar-icon navIcon>
           <mcw-material-icon @click="$emit('nav')" icon="menu"></mcw-material-icon>
         </mcw-top-app-bar-icon>
-        <mcw-top-app-bar-title>vue mdc adapter</mcw-top-app-bar-title>
+        <mcw-top-app-bar-title>vue material adapter</mcw-top-app-bar-title>
       </mcw-top-app-bar-section>
 
       <mcw-top-app-bar-section align="end">
