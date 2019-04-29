@@ -1,24 +1,24 @@
 <template>
-  <div class="mdc-demo mdc-demo--container">
+  <div class="mcw-demo mcw-demo--container">
     <div class="linear-progress-demo">
-      <mdc-linear-progress progress="0.5"/>
+      <mcw-linear-progress progress="0.5"/>
       <p>
-        <mdc-caption>Determinate</mdc-caption>
+        <mcw-caption>Determinate</mcw-caption>
       </p>
       <br>
-      <mdc-linear-progress indeterminate/>
+      <mcw-linear-progress indeterminate/>
       <p>
-        <mdc-caption>Indeterminate</mdc-caption>
+        <mcw-caption>Indeterminate</mcw-caption>
       </p>
       <br>
-      <mdc-linear-progress progress="0.5" buffer="0.75"/>
+      <mcw-linear-progress progress="0.5" buffer="0.75"/>
       <p>
-        <mdc-caption>Buffer</mdc-caption>
+        <mcw-caption>Buffer</mcw-caption>
       </p>
       <br>
-      <mdc-linear-progress reversed progress="0.5"/>
+      <mcw-linear-progress reversed progress="0.5"/>
       <p>
-        <mdc-caption>Reversed</mdc-caption>
+        <mcw-caption>Reversed</mcw-caption>
       </p>
     </div>
   </div>

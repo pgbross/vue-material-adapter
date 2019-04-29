@@ -1,5 +1,5 @@
 export default {
-  name: 'mdc-card-actions',
+  name: 'mcw-card-actions',
   functional: true,
   props: {
     fullBleed: Boolean,

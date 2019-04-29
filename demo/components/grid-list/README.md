@@ -5,8 +5,8 @@ Each item in a grid list is called a tile. Tiles maintain consistent width,
 height, and padding across screen sizes.
 
 ```html
-<mdc-grid-list with-support-text interactive>
-  <mdc-grid-tile
+<mcw-grid-list with-support-text interactive>
+  <mcw-grid-tile
     ratio="16x9"
     v-for="(item, index) in tiles"
     :key="index"
@@ -14,8 +14,8 @@ height, and padding across screen sizes.
     :title="item.title"
     :support-text="item.desc"
   >
-  </mdc-grid-tile>
-</mdc-grid-list>
+  </mcw-grid-tile>
+</mcw-grid-list>
 ```
 
 ```javascript
@@ -39,7 +39,7 @@ var vm = new Vue({
 
 ### props
 
-#### mdc-grid-list
+#### mcw-grid-list
 
 | prop                | Type    | Default | Description                                                  |
 | ------------------- | ------- | ------- | ------------------------------------------------------------ |
@@ -52,7 +52,7 @@ var vm = new Vue({
 | `with-support-text` | Boolean |         | whether tiles have support text                              |
 | `interactive`       | Boolean |         | set interactive style for hover, focus, and press states     |
 
-#### mdc-grid-tile
+#### mcw-grid-tile
 
 | prop           | Type    | Default | Description                               |
 | -------------- | ------- | ------- | ----------------------------------------- |
@@ -69,31 +69,31 @@ var vm = new Vue({
 - Selected is ephemeral and likely to change soon. E.g., selecting one or more photos to share in Google Photos. Multiple items in a list can be selected at the same time.
 - Activated is more permanent within the page’s lifetime. E.g., the currently highlighted destination in a nav drawer. Only one item in a list can be activated at a time.
 
-> if the list is interactive, `mdc-grid-tile` will dispatch mouse and keyboard listeners (`@click`, ...)
+> if the list is interactive, `mcw-grid-tile` will dispatch mouse and keyboard listeners (`@click`, ...)
 
 ### Image only tiles
 
 ```html
-<mdc-grid-list>
-  <mdc-grid-tile v-for="(item, index) in tiles" :key="index" :src="item.src">
-  </mdc-grid-tile>
-</mdc-grid-list>
+<mcw-grid-list>
+  <mcw-grid-tile v-for="(item, index) in tiles" :key="index" :src="item.src">
+  </mcw-grid-tile>
+</mcw-grid-list>
 ```
 
 ### Image only tiles
 
 ```html
-<mdc-grid-list>
-  <mdc-grid-tile v-for="(item, index) in tiles" :key="index" :src="item.src">
-  </mdc-grid-tile>
-</mdc-grid-list>
+<mcw-grid-list>
+  <mcw-grid-tile v-for="(item, index) in tiles" :key="index" :src="item.src">
+  </mcw-grid-tile>
+</mcw-grid-list>
 ```
 
 ### tiles with icon
 
 ```html
-<mdc-grid-list with-support-text icon-align-start>
-  <mdc-grid-tile
+<mcw-grid-list with-support-text icon-align-start>
+  <mcw-grid-tile
     v-for="(item, index) in tiles"
     :key="index"
     :src="item.src"
@@ -101,8 +101,8 @@ var vm = new Vue({
     :support-text="item.desc"
     :icon="item.icon"
   >
-  </mdc-grid-tile>
-</mdc-grid-list>
+  </mcw-grid-tile>
+</mcw-grid-list>
 ```
 
 ### Reference

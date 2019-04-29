@@ -1,7 +1,7 @@
 import { cssClasses } from './constants';
 
 export default {
-  name: 'mdc-dialog-button',
+  name: 'mcw-dialog-button',
   functional: true,
   props: {
     action: String,
@@ -17,7 +17,7 @@ export default {
     },
   ) {
     return createElement(
-      'mdc-button',
+      'mcw-button',
       {
         class: [
           staticClass,

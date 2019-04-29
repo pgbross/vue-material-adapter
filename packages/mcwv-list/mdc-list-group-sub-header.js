@@ -1,5 +1,5 @@
 export default {
-  name: 'mdc-list-group-sub-header',
+  name: 'mcw-list-group-sub-header',
   functional: true,
   props: {
     tag: {

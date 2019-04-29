@@ -5,10 +5,11 @@ export * from '@vue/test-utils';
 
 export function pluginSanityCheck(pluginName, plugin, options) {
   describe(pluginName, () => {
-    const components = plugin.components;
+    const components = plugin.components || plugin;
     test('is a valid adapter plugin', () => {
-      expect(plugin.install).toBeInstanceOf(Function);
-      expect(components).toBeInstanceOf(Object);
+      //   // expect(plugin.install).toBeInstanceOf(Function);
+      //   expect(components).toBeInstanceOf(Object);
+      expect(Object.keys(components).length > 0).toBeTruthy();
     });
 
     Object.keys(components).forEach(key => {
@@ -41,7 +42,7 @@ export function pluginSanityCheck(pluginName, plugin, options) {
           test('is a Vue instance', () => {
             expect(wrapper.isVueInstance()).toBeTruthy();
           });
-          checkValidMdcAdapter(wrapper.vm);
+          checkValidMcwAdapter(wrapper.vm);
         }
       });
     });
@@ -52,7 +53,7 @@ export function checkValidFunctionalComponent(component) {
   checkValidOptions(component);
 }
 
-export function checkValidMdcAdapter(vm) {
+export function checkValidMcwAdapter(vm) {
   checkValidOptions(vm.$options);
 
   // it is not always true that a component has a class of the same name
@@ -68,7 +69,7 @@ export function checkValidMdcAdapter(vm) {
 
 export function checkValidOptions(options) {
   test('name follows convention', () => {
-    expect(options.name).toMatch(/^mdc-[a-z1-9-]+$/);
+    expect(options.name).toMatch(/^mcw-[a-z1-9-]+$/);
   });
 
   options.data &&
@@ -81,17 +82,6 @@ export function checkValidOptions(options) {
       expect(options.provide).toBeInstanceOf(Function);
     });
 }
-
-// export function checkValidClass(vm, name) {
-//   test('has a valid class', () => {
-//     const hasVallidClass =
-//       vm.$el.classList.contains(name) ||
-//       (vm.$el.classList.contains(name + '-wrapper') &&
-//         vm.$el.querySelector('.' + name) !== null);
-
-//     expect(hasVallidClass).toBeTruthy();
-//   });
-// }
 
 export function checkValidFoundation(foundation) {
   const adapter = foundation.adapter_;
@@ -112,10 +102,6 @@ export function checkValidFoundation(foundation) {
         expect(instance).toBeDefined();
         expect(instance.toString()).not.toBe(api.toString());
       });
-
-      // test(`.${method} has valid arguments`, () => {
-      //   expect(instance.arguments).toEqual(api.arguments);
-      // });
     });
 
     Object.keys(adapter).forEach(method => {

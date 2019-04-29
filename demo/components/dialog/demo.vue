@@ -1,23 +1,23 @@
 <template>
-  <div class="mdc-demo">
-    <div class="mdc-demo mdc-demo--container">
-      <mdc-button @click="openBasic = !openBasic">Basic Dialog</mdc-button>
-      <mdc-button @click="openSimple = !openSimple">Simple Dialog</mdc-button>
-      <mdc-button @click="openAlert = !openAlert">Alert Dialog</mdc-button>
-      <mdc-button @click="openConfirmation = !openConfirmation">Confirmation Dialog</mdc-button>
-      <mdc-button @click="openScrolling = !openScrolling">Scrolling Dialog</mdc-button>
+  <div class="mcw-demo">
+    <div class="mcw-demo mcw-demo--container">
+      <mcw-button @click="openBasic = !openBasic">Basic Dialog</mcw-button>
+      <mcw-button @click="openSimple = !openSimple">Simple Dialog</mcw-button>
+      <mcw-button @click="openAlert = !openAlert">Alert Dialog</mcw-button>
+      <mcw-button @click="openConfirmation = !openConfirmation">Confirmation Dialog</mcw-button>
+      <mcw-button @click="openScrolling = !openScrolling">Scrolling Dialog</mcw-button>
     </div>
 
-    <mdc-caption v-if="hasBeenOpened">
+    <mcw-caption v-if="hasBeenOpened">
       <span class>{{ action }}</span>
-    </mdc-caption>
+    </mcw-caption>
 
-    <mdc-caption v-if="picked">
+    <mcw-caption v-if="picked">
       Picked:
       <span class>{{ picked }}</span>
-    </mdc-caption>
+    </mcw-caption>
 
-    <mdc-dialog
+    <mcw-dialog
       v-model="openBasic"
       id="demo-dialog"
       escapeKeyAction="close"
@@ -28,23 +28,23 @@
       @MDCDialog:closing="onClosed"
       v-if="openBasic"
     >
-      <mdc-dialog-title>Lorem ipsum dolor</mdc-dialog-title>
-      <mdc-dialog-content>
+      <mcw-dialog-title>Lorem ipsum dolor</mcw-dialog-title>
+      <mcw-dialog-content>
         <div>
           Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
           tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
           veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
           commodo consequat.
         </div>
-      </mdc-dialog-content>
+      </mcw-dialog-content>
 
-      <mdc-dialog-footer>
-        <mdc-dialog-button action="dismiss">Dismiss</mdc-dialog-button>
-        <mdc-dialog-button action="accept" isDefault>Accept</mdc-dialog-button>
-      </mdc-dialog-footer>
-    </mdc-dialog>
+      <mcw-dialog-footer>
+        <mcw-dialog-button action="dismiss">Dismiss</mcw-dialog-button>
+        <mcw-dialog-button action="accept" isDefault>Accept</mcw-dialog-button>
+      </mcw-dialog-footer>
+    </mcw-dialog>
 
-    <mdc-dialog
+    <mcw-dialog
       v-model="openSimple"
       id="simple-dialog"
       escapeKeyAction="close"
@@ -55,16 +55,16 @@
       @MDCDialog:closing="onClosed"
       v-if="openSimple"
     >
-      <mdc-dialog-title>Select user</mdc-dialog-title>
-      <mdc-dialog-content>
-        <mdc-list avatarList>
-          <mdc-list-item data-mdc-dialog-action="test" tabindex="0">test</mdc-list-item>
-          <mdc-list-item data-mdc-dialog-action="help">help</mdc-list-item>
-        </mdc-list>
-      </mdc-dialog-content>
-    </mdc-dialog>
+      <mcw-dialog-title>Select user</mcw-dialog-title>
+      <mcw-dialog-content>
+        <mcw-list avatarList>
+          <mcw-list-item data-mcw-dialog-action="test" tabindex="0">test</mcw-list-item>
+          <mcw-list-item data-mcw-dialog-action="help">help</mcw-list-item>
+        </mcw-list>
+      </mcw-dialog-content>
+    </mcw-dialog>
 
-    <mdc-dialog
+    <mcw-dialog
       v-model="openAlert"
       id="alert-dialog"
       escapeKeyAction="close"
@@ -75,16 +75,16 @@
       @MDCDialog:closing="onClosed"
       v-if="openAlert"
     >
-      <mdc-dialog-content>
+      <mcw-dialog-content>
         <p>Discard draft?</p>
-      </mdc-dialog-content>
-      <mdc-dialog-footer>
-        <mdc-dialog-button action="dismiss">Cancel</mdc-dialog-button>
-        <mdc-dialog-button action="discard" isDefault>Discard</mdc-dialog-button>
-      </mdc-dialog-footer>
-    </mdc-dialog>
+      </mcw-dialog-content>
+      <mcw-dialog-footer>
+        <mcw-dialog-button action="dismiss">Cancel</mcw-dialog-button>
+        <mcw-dialog-button action="discard" isDefault>Discard</mcw-dialog-button>
+      </mcw-dialog-footer>
+    </mcw-dialog>
 
-    <mdc-dialog
+    <mcw-dialog
       v-model="openConfirmation"
       id="alert-dialog"
       escapeKeyAction="close"
@@ -95,36 +95,34 @@
       @MDCDialog:closing="onClosed"
       v-if="openConfirmation"
     >
-      <mdc-dialog-title>Chose a Phone Ringtone</mdc-dialog-title>
-      <mdc-dialog-content>
-        <mdc-list singleSelection>
-          <mdc-list-item v-for="(choice,i) in choices" :key="i">
-            <span class="mdc-list-item__graphic">
-              <mdc-radio>
-                <mdc-radio-input
-                  name="ringtone"
-                  :value="choice"
-                  label
-                  :id="choice | clean"
-                  v-model="picked"
-                ></mdc-radio-input>
-              </mdc-radio>
+      <mcw-dialog-title>Chose a Phone Ringtone</mcw-dialog-title>
+      <mcw-dialog-content>
+        <mcw-list singleSelection>
+          <mcw-list-item v-for="(choice,i) in choices" :key="i">
+            <span class="mcw-list-item__graphic">
+              <mcw-radio
+                name="ringtone"
+                :value="choice"
+                label
+                :id="choice | clean"
+                v-model="picked"
+              ></mcw-radio>
             </span>
             <label :for="choice | clean">
-              <span class="mdc-list-item__text">
-                <span class="mdc-list-item__primary-text">{{choice}}</span>
+              <span class="mcw-list-item__text">
+                <span class="mcw-list-item__primary-text">{{choice}}</span>
               </span>
             </label>
-          </mdc-list-item>
-        </mdc-list>
-      </mdc-dialog-content>
-      <mdc-dialog-footer>
-        <mdc-dialog-button action="dismiss">Cancel</mdc-dialog-button>
-        <mdc-dialog-button action="confirm" isDefault>Ok</mdc-dialog-button>
-      </mdc-dialog-footer>
-    </mdc-dialog>
+          </mcw-list-item>
+        </mcw-list>
+      </mcw-dialog-content>
+      <mcw-dialog-footer>
+        <mcw-dialog-button action="dismiss">Cancel</mcw-dialog-button>
+        <mcw-dialog-button action="confirm" isDefault>Ok</mcw-dialog-button>
+      </mcw-dialog-footer>
+    </mcw-dialog>
 
-    <mdc-dialog
+    <mcw-dialog
       v-model="openScrolling"
       id="alert-dialog"
       escapeKeyAction="close"
@@ -135,8 +133,8 @@
       @MDCDialog:closing="onClosed"
       v-if="openScrolling"
     >
-      <mdc-dialog-title>The Wonderful Wizard of Oz</mdc-dialog-title>
-      <mdc-dialog-content>
+      <mcw-dialog-title>The Wonderful Wizard of Oz</mcw-dialog-title>
+      <mcw-dialog-content>
         <p>
           <a
             href="https://www.gutenberg.org/ebooks/55"
@@ -151,12 +149,12 @@
         <p>It was Toto that made Dorothy laugh, and saved her from growing as gray as her other surroundings. Toto was not gray; he was a little black dog, with long silky hair and small black eyes that twinkled merrily on either side of his funny, wee nose. Toto played all day long, and Dorothy played with him, and loved him dearly.</p>
         <p>Today, however, they were not playing. Uncle Henry sat upon the doorstep and looked anxiously at the sky, which was even grayer than usual. Dorothy stood in the door with Toto in her arms, and looked at the sky too. Aunt Em was washing the dishes.</p>
         <p>From the far north they heard a low wail of the wind, and Uncle Henry and Dorothy could see where the long grass bowed in waves before the coming storm. There now came a sharp whistling in the air from the south, and as they turned their eyes that way they saw ripples in the grass coming from that direction also.</p>
-      </mdc-dialog-content>
-      <mdc-dialog-footer>
-        <mdc-dialog-button action="dismiss">Cancel</mdc-dialog-button>
-        <mdc-dialog-button action="confirm" isDefault>Ok</mdc-dialog-button>
-      </mdc-dialog-footer>
-    </mdc-dialog>
+      </mcw-dialog-content>
+      <mcw-dialog-footer>
+        <mcw-dialog-button action="dismiss">Cancel</mcw-dialog-button>
+        <mcw-dialog-button action="confirm" isDefault>Ok</mcw-dialog-button>
+      </mcw-dialog-footer>
+    </mcw-dialog>
   </div>
 </template>
 

@@ -1,7 +1,7 @@
 <template>
-  <div class="mdc-demo mdc-demo--container">
-    <mdc-material-icon icon="favorite"/>
-    <mdc-material-icon icon="aspect_ratio"/>
+  <div class="mcw-demo mcw-demo--container">
+    <mcw-material-icon icon="favorite"/>
+    <mcw-material-icon icon="aspect_ratio"/>
   </div>
 </template>
 

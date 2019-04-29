@@ -1,17 +1,15 @@
 <template>
   <div>
     <top-app-bar @nav="open = true"/>
-    <mdc-drawer modal ref="drawer" class="primary-drawer" toolbar-spacer v-model="open">
-      <div class="mdc-drawer__header" slot="header">
-        <!-- <h3 class="mdc-drawer__title">Mail</h3> -->
-      </div>
-      <mdc-drawer-list dense>
-        <mdc-drawer-item to="/">Home</mdc-drawer-item>
-        <mdc-drawer-item to="/docs/getting-started">Getting Started</mdc-drawer-item>
-        <mdc-drawer-divider/>
-        <mdc-drawer-item v-for="link in links" :to="link.to" :key="link.id">{{ link.name }}</mdc-drawer-item>
-      </mdc-drawer-list>
-    </mdc-drawer>
+    <mcw-drawer modal ref="drawer" class="primary-drawer" toolbar-spacer v-model="open">
+      <mcw-drawer-header></mcw-drawer-header>
+      <mcw-drawer-list dense>
+        <mcw-drawer-item to="/">Home</mcw-drawer-item>
+        <mcw-drawer-item to="/docs/getting-started">Getting Started</mcw-drawer-item>
+        <mcw-drawer-divider/>
+        <mcw-drawer-item v-for="link in links" :to="link.to" :key="link.id">{{ link.name }}</mcw-drawer-item>
+      </mcw-drawer-list>
+    </mcw-drawer>
     <main class="content">
       <router-view/>
     </main>

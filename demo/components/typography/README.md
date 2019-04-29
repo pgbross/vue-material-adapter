@@ -1,34 +1,34 @@
 ## Usage
 
-The `mdc-typography` components defines basic properties for text, such as the
+The `mcw-typography` components defines basic properties for text, such as the
 typeface and antialiasing settings.
 
 ```html
-<mdc-headline1>Headline1</mdc-headline1>
-<mdc-headline2>Headline2</mdc-headline2>
-<mdc-headline3>Headline3</mdc-headline3>
-<mdc-headline4>Headline4</mdc-headline4>
-<mdc-headline5>Headline5</mdc-headline5>
-<mdc-headline6>Headline6</mdc-headline6>
+<mcw-headline1>Headline1</mcw-headline1>
+<mcw-headline2>Headline2</mcw-headline2>
+<mcw-headline3>Headline3</mcw-headline3>
+<mcw-headline4>Headline4</mcw-headline4>
+<mcw-headline5>Headline5</mcw-headline5>
+<mcw-headline6>Headline6</mcw-headline6>
 
-<mdc-subtitle1>Subtitle1</mdc-subtitle1>
-<mdc-subtitle2>Subtitle2</mdc-subtitle2>
+<mcw-subtitle1>Subtitle1</mcw-subtitle1>
+<mcw-subtitle2>Subtitle2</mcw-subtitle2>
 
-<mdc-body1>Body1</mdc-body1>
-<mdc-body2>Body2</mdc-body2>
+<mcw-body1>Body1</mcw-body1>
+<mcw-body2>Body2</mcw-body2>
 
-<div><mdc-button1>Button1</mdc-button1></div>
-<div><mdc-caption>Caption</mdc-caption></div>
-<div><mdc-overline>Overline</mdc-overline></div>
+<div><mcw-button1>Button1</mcw-button1></div>
+<div><mcw-caption>Caption</mcw-caption></div>
+<div><mcw-overline>Overline</mcw-overline></div>
 ```
 
-> Material Design typography uses the Roboto font. mdc-typography only uses
+> Material Design typography uses the Roboto font. mcw-typography only uses
 > 300, 400 and 500.
 
-### mdc-headline1
+### mcw-headline1
 
 ```html
-<mdc-headline1>headline text</mdc-headline1>
+<mcw-headline1>headline text</mcw-headline1>
 ```
 
 | prop  | Type   | Default | Description   |

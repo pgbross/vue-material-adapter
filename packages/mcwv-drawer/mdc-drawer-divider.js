@@ -1,5 +1,5 @@
 export default {
-  name: 'mdc-drawer-divider',
+  name: 'mcw-drawer-divider',
   functional: true,
   render(createElement) {
     return createElement('hr', {

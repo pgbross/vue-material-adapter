@@ -1,11 +1,11 @@
 ## Usage
 
 ```html
-<mdc-select v-model="selected" label=">Please select one">
+<mcw-select v-model="selected" label=">Please select one">
   <option>A</option>
   <option>B</option>
   <option>C</option>
-</mdc-select>
+</mcw-select>
 <span>Selected: {{ selected }}</span>
 ```
 
@@ -19,7 +19,7 @@ var vm = new Vue({
 });
 ```
 
-### mdc-select
+### mcw-select
 
 | props      | Type    | Default | Description                                  |
 | ---------- | ------- | ------- | -------------------------------------------- |
@@ -34,7 +34,7 @@ var vm = new Vue({
 | `@blur`  | emitted on focus lost   |
 
 ```html
-<mdc-select v-model="selected" label=">Please select one">
+<mcw-select v-model="selected" label=">Please select one">
   <optgroup label="Meats">
     <option value="steak">Steak</option>
     <option value="hamburger">Hamburger</option>
@@ -43,7 +43,7 @@ var vm = new Vue({
     <option value="beet">Beet</option>
     <option value="carrot">Carrot</option>
   </optgroup>
-</mdc-select>
+</mcw-select>
 ```
 
 ### Reference

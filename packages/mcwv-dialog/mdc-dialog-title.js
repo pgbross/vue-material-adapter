@@ -1,7 +1,7 @@
 import { cssClasses } from './constants';
 
 export default {
-  name: 'mdc-dialog-title',
+  name: 'mcw-dialog-title',
   functional: true,
   props: {
     tag: {

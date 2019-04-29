@@ -1,5 +1,5 @@
 import * as base from '@mcwv/base/index';
-import button from '@mcwv/button/index';
+import button from '@mcwv/button/index.js';
 import card from '@mcwv/card/index';
 import checkbox from '@mcwv/checkbox/index';
 import chips from '@mcwv/chips/index';

@@ -1,5 +1,5 @@
 export default {
-  name: 'mdc-fixed-adjust',
+  name: 'mcw-fixed-adjust',
   functional: true,
   props: {
     tag: { type: String, default: 'main' },

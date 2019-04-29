@@ -1,5 +1,5 @@
 export default {
-  name: 'mdc-drawer-list',
+  name: 'mcw-drawer-list',
   functional: true,
   props: {
     dense: Boolean,

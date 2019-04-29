@@ -1,5 +1,5 @@
 export default {
-  name: 'mdc-chip-checkmark',
+  name: 'mcw-chip-checkmark',
   data() {
     return { width: 0 };
   },

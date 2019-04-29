@@ -1,6 +1,6 @@
 /* eslint-disable quote-props */
 export default {
-  name: 'mdc-menu-item',
+  name: 'mcw-menu-item',
   props: {
     disabled: Boolean,
   },

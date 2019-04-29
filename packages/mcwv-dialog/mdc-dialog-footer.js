@@ -1,7 +1,7 @@
 import { cssClasses } from './constants';
 
 export default {
-  name: 'mdc-dialog-footer',
+  name: 'mcw-dialog-footer',
   functional: true,
   props: {
     tag: {

@@ -1,14 +1,14 @@
 <template>
-  <div class="mdc-demo mdc-demo--container">
-    <div class="mdc-demo mdc-demo--container">
-      <mdc-button @click="showSimple">{{open ? 'Close' : 'Simple'}}</mdc-button>
-      <mdc-button @click="showBaseline">Baseline</mdc-button>
-      <mdc-button @click="showLeading">Leading</mdc-button>
-      <mdc-button @click="showStacked">Stacked</mdc-button>
+  <div class="mcw-demo mcw-demo--container">
+    <div class="mcw-demo mcw-demo--container">
+      <mcw-button @click="showSimple">{{open ? 'Close' : 'Simple'}}</mcw-button>
+      <mcw-button @click="showBaseline">Baseline</mcw-button>
+      <mcw-button @click="showLeading">Leading</mcw-button>
+      <mcw-button @click="showStacked">Stacked</mcw-button>
     </div>
 
-    <mdc-snackbar-queue ref="bar"/>
-    <mdc-snackbar v-model="open" message="Simple message" :dismissAction="false"></mdc-snackbar>
+    <mcw-snackbar-queue ref="bar"/>
+    <mcw-snackbar v-model="open" message="Simple message" :dismissAction="false"></mcw-snackbar>
   </div>
 </template>
 

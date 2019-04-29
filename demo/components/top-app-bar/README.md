@@ -1,28 +1,28 @@
 ## Usage
 
 ```html
-<mdc-top-app-bar class="main-toolbar">
-  <mdc-top-app-bar-row>
-    <mdc-top-app-bar-section align="start">
-      <mdc-top-app-bar-icon navIcon>
-        <mdc-material-icon icon="menu"></mdc-material-icon>
-      </mdc-top-app-bar-icon>
-      <mdc-top-app-bar-title>vue mdc adapter</mdc-top-app-bar-title>
-    </mdc-top-app-bar-section>
+<mcw-top-app-bar class="main-toolbar">
+  <mcw-top-app-bar-row>
+    <mcw-top-app-bar-section align="start">
+      <mcw-top-app-bar-icon navIcon>
+        <mcw-material-icon icon="menu"></mcw-material-icon>
+      </mcw-top-app-bar-icon>
+      <mcw-top-app-bar-title>vue mdc adapter</mcw-top-app-bar-title>
+    </mcw-top-app-bar-section>
 
-    <mdc-top-app-bar-section align="end">
-      <mdc-top-app-bar-icon actionItem aria-label="Help">
-        <mdc-material-icon @click="showHelp" icon="help"></mdc-material-icon>
-      </mdc-top-app-bar-icon>
-      <mdc-top-app-bar-icon actionItem aria-label="Info">
-        <mdc-material-icon
+    <mcw-top-app-bar-section align="end">
+      <mcw-top-app-bar-icon actionItem aria-label="Help">
+        <mcw-material-icon @click="showHelp" icon="help"></mcw-material-icon>
+      </mcw-top-app-bar-icon>
+      <mcw-top-app-bar-icon actionItem aria-label="Info">
+        <mcw-material-icon
           @click="showInfo"
           icon="info_outline"
-        ></mdc-material-icon>
-      </mdc-top-app-bar-icon>
-    </mdc-top-app-bar-section>
-  </mdc-top-app-bar-row>
-</mdc-top-app-bar>
+        ></mcw-material-icon>
+      </mcw-top-app-bar-icon>
+    </mcw-top-app-bar-section>
+  </mcw-top-app-bar-row>
+</mcw-top-app-bar>
 ```
 
 ```javascript
@@ -92,7 +92,7 @@ var vm = new Vue({
 | short     | Boolean | Enables short variant.                                         |
 | tag       | String  | Customizes the TopAppBarFixedAdjust tag (defaults to `<main>`) |
 
-> NOTE: if not dense, prominent, or short will apply `mdc-top-app-bar--fixed-adjust`
+> NOTE: if not dense, prominent, or short will apply `mcw-top-app-bar--fixed-adjust`
 
 ## Icons
 
@@ -103,9 +103,9 @@ Use of [Material Icon's](../material-icon/README.md) for Action Items and Naviga
 The navigation icon can be a `<a>`, `<i>`, `<svg>`, `<image>`, `<span>`, etc., but again must be wrapped with ripple handling.
 
 ```html
-<mdc-top-app-bar-icon navIcon>
+<mcw-top-app-bar-icon navIcon>
   <i class="material-icons">menu</i>
-</mdc-top-app-bar-icon>
+</mcw-top-app-bar-icon>
 ```
 
 ### Action Items
@@ -113,9 +113,9 @@ The navigation icon can be a `<a>`, `<i>`, `<svg>`, `<image>`, `<span>`, etc., b
 Similar to the [navigation icon](#navigation-icon), it can be `<a>`, `<i>`, `<svg>`, `<image>`, `<span>`, etc., and must be wrapped with the `withRipple HOC`.
 
 ```html
-<mdc-top-app-bar-icon actionItem>
+<mcw-top-app-bar-icon actionItem>
   <i class="material-icons">bookmark</i>
-</mdc-top-app-bar-icon>
+</mcw-top-app-bar-icon>
 ```
 
 ### Reference

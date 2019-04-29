@@ -3,8 +3,8 @@
 ### Single-line
 
 ```html
-<mdc-textfield v-model="text" label="Hint text" />
-<mdc-textfield v-model="text" label="Hint text dense" />
+<mcw-textfield v-model="text" label="Hint text" />
+<mcw-textfield v-model="text" label="Hint text dense" />
 ```
 
 ```javascript
@@ -18,44 +18,44 @@ var vm = new Vue({
 ### Help text
 
 ```html
-<mdc-textfield
+<mcw-textfield
   v-model="text"
   label="Hint text"
   helptext="Help text..."
-></mdc-textfield>
+></mcw-textfield>
 ```
 
 ### Multiline
 
 ```html
-<mdc-textfield v-model="text" label="Hint text" multiline rows="8" cols="40" />
+<mcw-textfield v-model="text" label="Hint text" multiline rows="8" cols="40" />
 ```
 
 ### Full width
 
 ```html
-<mdc-textfield v-model="text" fullwidth label="Hint text" />
-<mdc-textfield v-model="text" fullwidth multiline rows="10" label="Hint text" />
+<mcw-textfield v-model="text" fullwidth label="Hint text" />
+<mcw-textfield v-model="text" fullwidth multiline rows="10" label="Hint text" />
 ```
 
 ### box and outline style
 
 ```html
-<mdc-textfield v-model="text" label="Hint text" box />
-<mdc-textfield v-model="text" label="Hint text" outline />
+<mcw-textfield v-model="text" label="Hint text" box />
+<mcw-textfield v-model="text" label="Hint text" outline />
 ```
 
 > use props to set trailing or leading icon
 
 ```html
-<mdc-textfield v-model="text" label="Hint text" box leading-icon="event" />
-<mdc-textfield v-model="text" label="Hint text" outline trailing-icon="event" />
+<mcw-textfield v-model="text" label="Hint text" box leading-icon="event" />
+<mcw-textfield v-model="text" label="Hint text" outline trailing-icon="event" />
 ```
 
 > custom icon
 
 ```html
-<mdc-textfield
+<mcw-textfield
   v-model="text"
   label="Hint text"
   box
@@ -64,9 +64,9 @@ var vm = new Vue({
 ```
 
 ```html
-<mdc-textfield v-model="text" label="Hint text" outline>
+<mcw-textfield v-model="text" label="Hint text" outline>
   <svg slot="traling-icon">...</svg>
-</mdc-textfield>
+</mcw-textfield>
 ```
 
 ### Validation
@@ -74,7 +74,7 @@ var vm = new Vue({
 - Native validation: use `type`, `required`, `minlength` and `maxlength` properties
 
 ```html
-<mdc-textfield
+<mcw-textfield
   type="password"
   label="Password"
   required
@@ -90,7 +90,7 @@ var vm = new Vue({
 - Custom Validation: use `:valid` property:
 
 ```html
-<mdc-textfield
+<mcw-textfield
   :valid="isValid"
   helptext="custom check"
   helptext-persistent
@@ -156,7 +156,7 @@ var vm = new Vue({
 > Other bound listeners are being passsed down to the rendered input element
 
 ```html
-<mdc-textfield
+<mcw-textfield
   v-model="text"
   label="Hint text"
   @keypress.enter="handleEnterKey"

@@ -3,7 +3,7 @@ import * as util from '@material/tab-scroller/util';
 import { matches } from '@material/dom/ponyfill';
 
 export default {
-  name: 'mdc-tab-scroller',
+  name: 'mcw-tab-scroller',
   data() {
     return {
       classes: { 'mdc-tab-scroller': 1 },

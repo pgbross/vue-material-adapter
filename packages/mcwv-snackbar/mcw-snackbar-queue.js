@@ -1,7 +1,7 @@
 const noop = () => {};
 
 export default {
-  name: 'mdc-snackbar-queue',
+  name: 'mcw-snackbar-queue',
   data() {
     return {
       open: false,
@@ -18,7 +18,7 @@ export default {
     };
   },
   render(createElement) {
-    return createElement('mdc-snackbar', {
+    return createElement('mcw-snackbar', {
       props: {
         open: this.open,
         ...this.snack,

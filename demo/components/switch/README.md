@@ -3,9 +3,9 @@
 The switch component is rendered as an input with checkbox type
 
 ```html
-<mdc-switch v-model="checked" :label="label" />
-<mdc-switch v-model="checked">{{label}}</mdc-switch>
-<mdc-switch disabled label="Disabled" />
+<mcw-switch v-model="checked" :label="label" />
+<mcw-switch v-model="checked">{{label}}</mcw-switch>
+<mcw-switch disabled label="Disabled" />
 ```
 
 ```javascript

@@ -1,8 +1,8 @@
 ## Usage
 
 ```html
-<mdc-button raised @click="open=!open">Show dialog</mdc-button>
-<mdc-dialog
+<mcw-button raised @click="open=!open">Show dialog</mcw-button>
+<mcw-dialog
   v-model="open"
   id="demo-dialog"
   escapeKeyAction="close"
@@ -10,21 +10,21 @@
   :autoStackButtons="true"
   @MDCDialog:closing="onClosed"
 >
-  <mdc-dialog-title>Lorem ipsum dolor</mdc-dialog-title>
-  <mdc-dialog-content>
+  <mcw-dialog-title>Lorem ipsum dolor</mcw-dialog-title>
+  <mcw-dialog-content>
     <div>
       Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
       tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
       veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
       commodo consequat.
     </div>
-  </mdc-dialog-content>
+  </mcw-dialog-content>
 
-  <mdc-dialog-footer>
-    <mdc-dialog-button action="dismiss">Dismiss</mdc-dialog-button>
-    <mdc-dialog-button action="accept" isDefault>Accept</mdc-dialog-button>
-  </mdc-dialog-footer>
-</mdc-dialog>
+  <mcw-dialog-footer>
+    <mcw-dialog-button action="dismiss">Dismiss</mcw-dialog-button>
+    <mcw-dialog-button action="accept" isDefault>Accept</mcw-dialog-button>
+  </mcw-dialog-footer>
+</mcw-dialog>
 ```
 
 ```javascript
@@ -37,13 +37,13 @@ var vm = new Vue({
 
 ### props
 
-### mdc-dialog
+### mcw-dialog
 
 | Prop Name        | Type    | Default       | Description                                                                                                                                                              |
 | ---------------- | ------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | autoStackButtons | Boolean | `true`        | reverses the buttons when applying the stacked layout.                                                                                                                   |
 | escapeKeyAction  | String  | `close`       | the action reflected when the Escape key is pressed. Setting to `''` disables closing via the escape key                                                                 |
-| id               | String  | `mdc-dialog`  | the id attribute placed on the root element                                                                                                                              |
+| id               | String  | `mcw-dialog`  | the id attribute placed on the root element                                                                                                                              |
 | open             | Boolean | `false`       | If true opens the dialog. If false closes the dialog                                                                                                                     |
 | role             | String  | `alertdialog` | [ARIA attribute](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/dialog_role) that specifies the role of dialog. Must be `alertdialog` or `dialog` |
 | scrimClickAction | String  | `close`       | the action reflected when the scrim is clicked. Setting to `''` disables closing via scrim click                                                                         |
@@ -64,39 +64,39 @@ var vm = new Vue({
 > prevent emitting the `accept` event and just close, and `cancel(false)` to prevent emitting
 > the `cancel` event.
 
-### mdc-dialog-title
+### mcw-dialog-title
 
 | Prop Name | Type   | Description                                                  |
 | --------- | ------ | ------------------------------------------------------------ |
 | id        | String | the id attribute placed on the root element.                 |
-| tag       | String | customizes the `mdc-dialog-title` tag type. (defaults: `h2`) |
+| tag       | String | customizes the `mcw-dialog-title` tag type. (defaults: `h2`) |
 
-> NOTE: that `id` is also set to `aria-labelledby` on the `<mdc-dialog/>` element .
-> Additionally, if unset will default to the `id` of `<mdc-dialog/>` with the suffix
+> NOTE: that `id` is also set to `aria-labelledby` on the `<mcw-dialog/>` element .
+> Additionally, if unset will default to the `id` of `<mcw-dialog/>` with the suffix
 > `-title`.
 
-### mdc-dialog-content
+### mcw-dialog-content
 
 | Prop Name | Type   | Description                                                     |
 | --------- | ------ | --------------------------------------------------------------- |
 | id        | String | the id attribute placed on the root element.                    |
-| tag       | String | customizes the `mdc-dialog-content` tag type. (defaults: `div`) |
+| tag       | String | customizes the `mcw-dialog-content` tag type. (defaults: `div`) |
 
-> NOTE: that `id` value is also set to `aria-describedby` on the `<mdc-dialog/>`
-> element. Additionally, if unset will default the to `id` of `<mdc-dialog/>` with the
+> NOTE: that `id` value is also set to `aria-describedby` on the `<mcw-dialog/>`
+> element. Additionally, if unset will default the to `id` of `<mcw-dialog/>` with the
 > suffix `-content`.
 
-### mdc-dialog-footer
+### mcw-dialog-footer
 
 | Prop Name | Type   | Description                                                       |
 | --------- | ------ | ----------------------------------------------------------------- |
-| tag       | String | customizes the `mdc-dialog-footer` tag type. (defaults: `footer`) |
+| tag       | String | customizes the `mcw-dialog-footer` tag type. (defaults: `footer`) |
 
-### mdc-dialog-button
+### mcw-dialog-button
 
 | Prop Name | Type    | Description                                                                            |
 | --------- | ------- | -------------------------------------------------------------------------------------- |
-| action    | String  | required action of the button. Returned `onClose` && `onClosing` in `<mdc-dialog/>`    |
+| action    | String  | required action of the button. Returned `onClose` && `onClosing` in `<mcw-dialog/>`    |
 | isDefault | Boolean | represents the default action, triggered by pressing the Enter key (defaults: `false`) |
 
 ### Reference

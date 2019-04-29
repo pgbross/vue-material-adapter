@@ -1,7 +1,7 @@
 <template>
   <iframe
     :src="iframe"
-    class="mdc-demo mdc-elevation--z1"
+    class="mcw-demo mcw-elevation--z1"
     scrolling="no"
     title="vue-material-adapter App Layout"
     width="400"

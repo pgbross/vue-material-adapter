@@ -1,16 +1,16 @@
 <template>
-  <div class="mdc-demo mdc-demo--container fab-demo">
+  <div class="mcw-demo mcw-demo--container fab-demo">
     <div>
-      <mdc-fab icon="favorite"/>
-      <mdc-fab mini icon="favorite"/>
-      <mdc-fab icon="favorite" label="wiffle"/>
-      <mdc-fab>
-        <mdc-material-icon icon="add" slot="icon"></mdc-material-icon>
-      </mdc-fab>
-      <mdc-fab>
+      <mcw-fab icon="favorite"/>
+      <mcw-fab mini icon="favorite"/>
+      <mcw-fab icon="favorite" label="wiffle"/>
+      <mcw-fab>
+        <mcw-material-icon icon="add" slot="icon"></mcw-material-icon>
+      </mcw-fab>
+      <mcw-fab>
         <span class="fa fa-star" slot="icon"></span>
-      </mdc-fab>
-      <mdc-fab icon="home" href="#">Home</mdc-fab>
+      </mcw-fab>
+      <mcw-fab icon="home" href="#">Home</mcw-fab>
     </div>
   </div>
 </template>

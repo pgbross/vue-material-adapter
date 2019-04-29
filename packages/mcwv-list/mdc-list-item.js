@@ -1,7 +1,7 @@
 import { RippleBase } from '@mcwv/ripple';
 
 export default {
-  name: 'mdc-list-item',
+  name: 'mcw-list-item',
   props: {
     classNamesFromList: {
       type: Array,

@@ -1,5 +1,5 @@
 export default {
-  name: 'mdc-layout-grid',
+  name: 'mcw-layout-grid',
   props: {
     'fixed-column-width': Boolean,
     'align-left': Boolean,

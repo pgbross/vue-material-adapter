@@ -2,7 +2,7 @@ import MDCTabBarFoundation from '@material/tab-bar/foundation';
 import { emitCustomEvent } from '@mcwv/base';
 
 export default {
-  name: 'mdc-tab-bar',
+  name: 'mcw-tab-bar',
   data() {
     return {
       classes: { 'mdc-tab-bar': 1 },
@@ -12,7 +12,7 @@ export default {
   },
   props: { activeTabIndex: [Number, String] },
   provide() {
-    return { mdcTabBar: this };
+    return { mcwTabBar: this };
   },
 
   mounted() {

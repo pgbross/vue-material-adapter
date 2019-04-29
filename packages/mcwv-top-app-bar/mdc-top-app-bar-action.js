@@ -2,7 +2,7 @@ import { DispatchEventMixin } from '@mcwv/base';
 import { RippleMixin } from '@mcwv/ripple';
 
 export default {
-  name: 'mdc-top-app-bar-action',
+  name: 'mcw-top-app-bar-action',
   mixins: [DispatchEventMixin, RippleMixin],
   props: {
     tag: { type: String, default: 'a' },

@@ -1,5 +1,5 @@
 export default {
-  name: 'mdc-list-item-graphic',
+  name: 'mcw-list-item-graphic',
   props: {
     tabbableOnListItemFocus: Boolean,
     tabIndex: {

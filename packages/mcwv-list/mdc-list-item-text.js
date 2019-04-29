@@ -1,5 +1,5 @@
 export default {
-  name: 'mdc-list-item-text',
+  name: 'mcw-list-item-text',
   props: {
     tabbableOnListItemFocus: Boolean,
     tabIndex: {

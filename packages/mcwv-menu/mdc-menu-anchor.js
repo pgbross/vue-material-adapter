@@ -1,5 +1,5 @@
 export default {
-  name: 'mdc-menu-anchor',
+  name: 'mcw-menu-anchor',
   functional: true,
   render(createElement, { scopedSlots }) {
     return createElement(

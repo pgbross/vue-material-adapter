@@ -1,87 +1,87 @@
 <template>
   <div>
-    <mdc-layout-grid class="mdc-demo mdc-demo--container mdc-list-demo">
-      <mdc-layout-cell>
-        <mdc-list avatarList @action="onAction">
-          <mdc-list-item data-mdc-dialog-action="test">test</mdc-list-item>
-          <mdc-list-item data-mdc-dialog-action="help">help</mdc-list-item>
-        </mdc-list>
-      </mdc-layout-cell>
+    <mcw-layout-grid class="mcw-demo mcw-demo--container mcw-list-demo">
+      <mcw-layout-cell>
+        <mcw-list avatarList @action="onAction">
+          <mcw-list-item data-mcw-dialog-action="test">test</mcw-list-item>
+          <mcw-list-item data-mcw-dialog-action="help">help</mcw-list-item>
+        </mcw-list>
+      </mcw-layout-cell>
 
-      <mdc-layout-cell>
-        <mdc-list @action="onAction">
-          <mdc-list-item>Photos</mdc-list-item>
-          <mdc-list-item>Recipes</mdc-list-item>
-          <mdc-list-item>Work</mdc-list-item>
-        </mdc-list>
-      </mdc-layout-cell>
+      <mcw-layout-cell>
+        <mcw-list @action="onAction">
+          <mcw-list-item>Photos</mcw-list-item>
+          <mcw-list-item>Recipes</mcw-list-item>
+          <mcw-list-item>Work</mcw-list-item>
+        </mcw-list>
+      </mcw-layout-cell>
 
-      <mdc-layout-cell>
-        <mdc-list twoLine @action="onAction">
-          <mdc-list-item>
-            <mdc-list-item-text primaryText="Photos" secondaryText="Jan 9, 2018"></mdc-list-item-text>
-          </mdc-list-item>
-          <mdc-list-item>
-            <mdc-list-item-text primaryText="Recipes" secondaryText="Jan 17, 2018"></mdc-list-item-text>
-          </mdc-list-item>
-          <mdc-list-item>
-            <mdc-list-item-text primaryText="Work" secondaryText="Jan 28, 2018"></mdc-list-item-text>
-          </mdc-list-item>
-        </mdc-list>
-      </mdc-layout-cell>
+      <mcw-layout-cell>
+        <mcw-list twoLine @action="onAction">
+          <mcw-list-item>
+            <mcw-list-item-text primaryText="Photos" secondaryText="Jan 9, 2018"></mcw-list-item-text>
+          </mcw-list-item>
+          <mcw-list-item>
+            <mcw-list-item-text primaryText="Recipes" secondaryText="Jan 17, 2018"></mcw-list-item-text>
+          </mcw-list-item>
+          <mcw-list-item>
+            <mcw-list-item-text primaryText="Work" secondaryText="Jan 28, 2018"></mcw-list-item-text>
+          </mcw-list-item>
+        </mcw-list>
+      </mcw-layout-cell>
 
-      <mdc-layout-cell>
-        <mdc-list @action="onAction">
-          <mdc-list-item>
-            <mdc-list-item-graphic>
-              <mdc-material-icon icon="folder"></mdc-material-icon>
-            </mdc-list-item-graphic>
-            <mdc-list-item-text primaryText="Photos"></mdc-list-item-text>
-            <mdc-list-item-meta class="wiffle" test>
+      <mcw-layout-cell>
+        <mcw-list @action="onAction">
+          <mcw-list-item>
+            <mcw-list-item-graphic>
+              <mcw-material-icon icon="folder"></mcw-material-icon>
+            </mcw-list-item-graphic>
+            <mcw-list-item-text primaryText="Photos"></mcw-list-item-text>
+            <mcw-list-item-meta class="wiffle" test>
               <p>oomph</p>
-            </mdc-list-item-meta>
-          </mdc-list-item>
-        </mdc-list>
-      </mdc-layout-cell>
+            </mcw-list-item-meta>
+          </mcw-list-item>
+        </mcw-list>
+      </mcw-layout-cell>
 
-      <mdc-layout-cell>
-        <mdc-list-group>
-          <mdc-list-group-sub-header tag="h2">Folders</mdc-list-group-sub-header>
-          <mdc-list @action="onAction">
-            <mdc-list-item>
-              <mdc-list-item-text primaryText="Photos"></mdc-list-item-text>
-            </mdc-list-item>
-          </mdc-list>
+      <mcw-layout-cell>
+        <mcw-list-group>
+          <mcw-list-group-sub-header tag="h2">Folders</mcw-list-group-sub-header>
+          <mcw-list @action="onAction">
+            <mcw-list-item>
+              <mcw-list-item-text primaryText="Photos"></mcw-list-item-text>
+            </mcw-list-item>
+          </mcw-list>
 
-          <mdc-list-divider tag="div"></mdc-list-divider>
-          <mdc-list-group-sub-header tag="h2">Recent files</mdc-list-group-sub-header>
-          <mdc-list @action="onAction">
-            <mdc-list-item>
-              <mdc-list-item-text primaryText="Vacation"></mdc-list-item-text>
-            </mdc-list-item>
-          </mdc-list>
-        </mdc-list-group>
-      </mdc-layout-cell>
+          <mcw-list-divider tag="div"></mcw-list-divider>
+          <mcw-list-group-sub-header tag="h2">Recent files</mcw-list-group-sub-header>
+          <mcw-list @action="onAction">
+            <mcw-list-item>
+              <mcw-list-item-text primaryText="Vacation"></mcw-list-item-text>
+            </mcw-list-item>
+          </mcw-list>
+        </mcw-list-group>
+      </mcw-layout-cell>
 
-      <mdc-layout-cell>
-        <mdc-list singleSelection @action="onAction">
-          <mdc-list-item>
-            <mdc-list-item-text primaryText="Photos"></mdc-list-item-text>
-          </mdc-list-item>
-          <mdc-list-item>
-            <mdc-list-item-text primaryText="Recipes"></mdc-list-item-text>
-          </mdc-list-item>
-          <mdc-list-item>
-            <mdc-list-item-text primaryText="Work"></mdc-list-item-text>
-          </mdc-list-item>
-        </mdc-list>
-      </mdc-layout-cell>
-    </mdc-layout-grid>
+      <mcw-layout-cell>
+        <mcw-list singleSelection @action="onAction">
+          <mcw-list-item>
+            <mcw-list-item-text primaryText="Photos"></mcw-list-item-text>
+          </mcw-list-item>
+          <mcw-list-item>
+            <mcw-list-item-text primaryText="Recipes"></mcw-list-item-text>
+          </mcw-list-item>
+          <mcw-list-item>
+            <mcw-list-item-text primaryText="Work"></mcw-list-item-text>
+          </mcw-list-item>
+        </mcw-list>
+      </mcw-layout-cell>
+    </mcw-layout-grid>
 
-    <mdc-caption>
+    <mcw-caption>
       selected:
       <span class>{{ selected }}</span>
-    </mdc-caption>
+    </mcw-caption>
   </div>
 </template>
 
@@ -102,7 +102,7 @@ export default {
 
 
 <style>
-.demo-article .mdc-layout-grid {
+.demo-article .mcw-layout-grid {
   width: 100%;
 }
 </style>

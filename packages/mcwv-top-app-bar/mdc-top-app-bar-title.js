@@ -1,7 +1,7 @@
 import { cssClasses } from './constants';
 
 export default {
-  name: 'mdc-top-app-bar-title',
+  name: 'mcw-top-app-bar-title',
   props: {
     tag: {
       type: String,

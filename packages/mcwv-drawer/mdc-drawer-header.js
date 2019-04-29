@@ -1,14 +1,11 @@
 export default {
-  name: 'mdc-drawer-header',
+  name: 'mcw-drawer-header',
   functional: true,
   render(createElement, { scopedSlots }) {
     return createElement(
       'div',
       {
-        class: {
-          'mdc-drawer-header': 1,
-          'mdc-drawer__header': 1,
-        },
+        class: 'mdc-drawer__header',
       },
       scopedSlots.default && scopedSlots.default(),
     );

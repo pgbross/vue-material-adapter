@@ -3,11 +3,11 @@
 ### Basic List
 
 ```html
-<mdc-list @action="onAction">
-  <mdc-list-item>Photos</mdc-list-item>
-  <mdc-list-item>Recipes</mdc-list-item>
-  <mdc-list-item>Work</mdc-list-item>
-</mdc-list>
+<mcw-list @action="onAction">
+  <mcw-list-item>Photos</mcw-list-item>
+  <mcw-list-item>Recipes</mcw-list-item>
+  <mcw-list-item>Work</mcw-list-item>
+</mcw-list>
 ```
 
 ```javascript
@@ -22,7 +22,7 @@ export default {
 
 ### Props
 
-#### mdc-list
+#### mcw-list
 
 | prop          | Type    | Default | Description                                              |
 | ------------- | ------- | ------- | -------------------------------------------------------- |
@@ -32,7 +32,7 @@ export default {
 | `avatar-list` | Boolean |         | set avatar style list                                    |
 | `interactive` | Boolean |         | set interactive style for hover, focus, and press states |
 
-#### mdc-list-item
+#### mcw-list-item
 
 | prop        | Type    | Default | Description                               |
 | ----------- | ------- | ------- | ----------------------------------------- |
@@ -44,26 +44,26 @@ export default {
 - Selected is ephemeral and likely to change soon. E.g., selecting one or more photos to share in Google Photos. Multiple items in a list can be selected at the same time.
 - Activated is more permanent within the page’s lifetime. E.g., the currently highlighted destination in a nav drawer. Only one item in a list can be activated at a time.
 
-> if the list is interactive, `mdc-list-item` will dispatch mouse and keyboard listeners (`@click`, ...)
+> if the list is interactive, `mcw-list-item` will dispatch mouse and keyboard listeners (`@click`, ...)
 
 ### Dense List
 
 ```html
-<mdc-list dense>
-  <mdc-list-item>Dense item</mdc-list-item>
-  <mdc-list-item>Dense item</mdc-list-item>
-  <mdc-list-item>Dense item</mdc-list-item>
-</mdc-list>
+<mcw-list dense>
+  <mcw-list-item>Dense item</mcw-list-item>
+  <mcw-list-item>Dense item</mcw-list-item>
+  <mcw-list-item>Dense item</mcw-list-item>
+</mcw-list>
 ```
 
 ### Bordered List
 
 ```html
-<mdc-list bordered>
-  <mdc-list-item>Bordered item</mdc-list-item>
-  <mdc-list-item>Bordered item</mdc-list-item>
-  <mdc-list-item>Bordered item</mdc-list-item>
-</mdc-list>
+<mcw-list bordered>
+  <mcw-list-item>Bordered item</mcw-list-item>
+  <mcw-list-item>Bordered item</mcw-list-item>
+  <mcw-list-item>Bordered item</mcw-list-item>
+</mcw-list>
 ```
 
 ### Two-line lists
@@ -71,16 +71,16 @@ export default {
 To insert a second line, set the slot attribute to `secondary`
 
 ```html
-<mdc-list two-line>
-  <mdc-list-item>
+<mcw-list two-line>
+  <mcw-list-item>
     <span>First Line</span>
     <span slot="secondary">Second Line</span>
-  </mdc-list-item>
-  <mdc-list-item>
+  </mcw-list-item>
+  <mcw-list-item>
     <span>First Line</span>
     <span slot="secondary">Second Line</span>
-  </mdc-list-item>
-</mdc-list>
+  </mcw-list-item>
+</mcw-list>
 ```
 
 ### List “Detail” Elements
@@ -88,23 +88,23 @@ To insert a second line, set the slot attribute to `secondary`
 To insert a detail, set the slot attribute to `start-detail` or `end-detail`
 
 ```html
-<mdc-list>
-  <mdc-list-item>
+<mcw-list>
+  <mcw-list-item>
     <i slot="start-detail" class="material-icons">favorite_border</i>
     With start details
-  </mdc-list-item>
-  <mdc-list-item>
+  </mcw-list-item>
+  <mcw-list-item>
     With end details
     <i slot="end-detail" class="material-icons">star_border</i>
-  </mdc-list-item>
-</mdc-list>
+  </mcw-list-item>
+</mcw-list>
 ```
 
 ### Avatar start detail
 
 ```html
-<mdc-list avatar-list>
-  <mdc-list-item>
+<mcw-list avatar-list>
+  <mcw-list-item>
     <img
       slot="start-detail"
       src="/users/1/profile_pic.png"
@@ -113,8 +113,8 @@ To insert a detail, set the slot attribute to `start-detail` or `end-detail`
       alt="Picture of Janet Perkins"
     />
     Janet Perkins
-  </mdc-list-item>
-  <mdc-list-item>
+  </mcw-list-item>
+  <mcw-list-item>
     <img
       slot="start-detail"
       src="/users/2/profile_pic.png"
@@ -123,36 +123,36 @@ To insert a detail, set the slot attribute to `start-detail` or `end-detail`
       alt="Picture of Peter Carlsson"
     />
     Peter Carlsson
-  </mdc-list-item>
-</mdc-list>
+  </mcw-list-item>
+</mcw-list>
 ```
 
 ### List Dividers
 
 ```html
-<mdc-list>
-  <mdc-list-item>Single-line item</mdc-list-item>
-  <mdc-list-item>Single-line item</mdc-list-item>
-  <mdc-list-divider />
-  <mdc-list-item>Single-line item</mdc-list-item>
-</mdc-list>
+<mcw-list>
+  <mcw-list-item>Single-line item</mcw-list-item>
+  <mcw-list-item>Single-line item</mcw-list-item>
+  <mcw-list-divider />
+  <mcw-list-item>Single-line item</mcw-list-item>
+</mcw-list>
 ```
 
 > Separators span the entire list width by default, use the `padded` property to add padding
 
 ```html
-<mdc-list>
-  <mdc-list-item>Single-line item</mdc-list-item>
-  <mdc-list-divider padded />
-  <mdc-list-item>Single-line item</mdc-list-item>
-</mdc-list>
+<mcw-list>
+  <mcw-list-item>Single-line item</mcw-list-item>
+  <mcw-list-divider padded />
+  <mcw-list-item>Single-line item</mcw-list-item>
+</mcw-list>
 ```
 
-> for avatar list, add the `inset` attribute to `mdc-list-divider`
+> for avatar list, add the `inset` attribute to `mcw-list-divider`
 
 ```html
-<mdc-list avatar-list>
-  <mdc-list-item>
+<mcw-list avatar-list>
+  <mcw-list-item>
     <img
       slot="start-detail"
       src="/users/1/profile_pic.png"
@@ -161,9 +161,9 @@ To insert a detail, set the slot attribute to `start-detail` or `end-detail`
       alt="Picture of Janet Perkins"
     />
     Janet Perkins
-  </mdc-list-item>
-  <mdc-list-divider inset />
-  <mdc-list-item>
+  </mcw-list-item>
+  <mcw-list-divider inset />
+  <mcw-list-item>
     <img
       slot="start-detail"
       src="/users/2/profile_pic.png"
@@ -172,28 +172,28 @@ To insert a detail, set the slot attribute to `start-detail` or `end-detail`
       alt="Picture of Peter Carlsson"
     />
     Peter Carlsson
-  </mdc-list-item>
-</mdc-list>
+  </mcw-list-item>
+</mcw-list>
 ```
 
 ### List Groups
 
 ```html
-<mdc-list-group>
-  <mdc-list-group-header>Group 1</mdc-list-group-header>
-  <mdc-list>
-    <mdc-list-item>Single-line item</mdc-list-item>
-    <mdc-list-item>Single-line item</mdc-list-item>
-    <mdc-list-item>Single-line item</mdc-list-item>
-  </mdc-list>
-  <mdc-list-group-divider />
-  <mdc-list-group-header>Group 2</mdc-list-group-header>
-  <mdc-list>
-    <mdc-list-item>Single-line item</mdc-list-item>
-    <mdc-list-item>Single-line item</mdc-list-item>
-    <mdc-list-item>Single-line item</mdc-list-item>
-  </mdc-list>
-</mdc-list-group>
+<mcw-list-group>
+  <mcw-list-group-header>Group 1</mcw-list-group-header>
+  <mcw-list>
+    <mcw-list-item>Single-line item</mcw-list-item>
+    <mcw-list-item>Single-line item</mcw-list-item>
+    <mcw-list-item>Single-line item</mcw-list-item>
+  </mcw-list>
+  <mcw-list-group-divider />
+  <mcw-list-group-header>Group 2</mcw-list-group-header>
+  <mcw-list>
+    <mcw-list-item>Single-line item</mcw-list-item>
+    <mcw-list-item>Single-line item</mcw-list-item>
+    <mcw-list-item>Single-line item</mcw-list-item>
+  </mcw-list>
+</mcw-list-group>
 ```
 
 ### Reference

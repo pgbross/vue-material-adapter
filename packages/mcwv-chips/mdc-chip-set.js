@@ -8,14 +8,14 @@ const {
 } = MDCChipFoundation.strings;
 
 export default {
-  name: 'mdc-chip-set',
+  name: 'mcw-chip-set',
   props: {
     choice: [Boolean],
     filter: [Boolean],
     input: [Boolean],
   },
   provide() {
-    return { mdcChipSet: this };
+    return { mcwChipSet: this };
   },
   data() {
     return {

@@ -1,12 +1,12 @@
 import { pluginSanityCheck } from './unit-test';
 import plugin from '../packages/mcwv-dialog/index.js';
-import { mdcButton } from '../packages/mcwv-button/index.js';
+import { mcwButton } from '../packages/mcwv-button/index.js';
 
 pluginSanityCheck(__dirname, plugin, {
-  mdcDialogContent: {
-    stubs: { mdcButton: mdcButton },
+  mcwDialogContent: {
+    stubs: { mcwButton: mcwButton },
   },
-  mdcDialogButton: {
-    stubs: { mdcButton: mdcButton },
+  mcwDialogButton: {
+    stubs: { mcwButton: mcwButton },
   },
 });

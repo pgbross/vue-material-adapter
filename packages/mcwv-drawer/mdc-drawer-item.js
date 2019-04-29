@@ -2,8 +2,8 @@ import { CustomLinkMixin, DispatchEventMixin } from '@mcwv/base';
 import { RippleBase } from '@mcwv/ripple';
 
 export default {
-  name: 'mdc-drawer-item',
-  inject: ['mdcDrawer'],
+  name: 'mcw-drawer-item',
+  inject: ['mcwDrawer'],
   mixins: [DispatchEventMixin, CustomLinkMixin],
   props: {
     startIcon: String,
@@ -32,7 +32,7 @@ export default {
       return {
         ...this.$listeners,
         click: e => {
-          this.mdcDrawer.isModal && this.modalClose && this.mdcDrawer.close();
+          this.mcwDrawer.isModal && this.modalClose && this.mcwDrawer.close();
           this.dispatchEvent(e);
         },
       };

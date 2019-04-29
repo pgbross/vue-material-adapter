@@ -2,16 +2,16 @@ import {
   pluginSanityCheck,
   createLocalVue,
   mount,
-  checkValidMdcAdapter,
+  checkValidMcwAdapter,
 } from './unit-test';
-import plugin, { mdcTabBar, mdcTab } from '../packages/mcwv-tabs/index.js';
+import plugin, { mcwTabBar, mcwTab } from '../packages/mcwv-tabs/index.js';
 
 // pluginSanityCheck(__dirname, plugin);
 
 const Spec = {
-  template: `<mdc-tab-bar ref="tabbar" indicator-accent>
-  <mdc-tab >One</mdc-tab>
-</mdc-tab-bar>`,
+  template: `<mcw-tab-bar ref="tabbar" indicator-accent>
+  <mcw-tab >One</mcw-tab>
+</mcw-tab-bar>`,
 };
 
 describe(__dirname, () => {
@@ -19,18 +19,18 @@ describe(__dirname, () => {
   localVue.use(plugin);
   const spec = mount(Spec, { localVue });
 
-  describe('mdcTabBar', () => {
-    const wrapper = spec.find(mdcTabBar);
-    checkValidMdcAdapter(wrapper.vm);
+  describe('mcwTabBar', () => {
+    const wrapper = spec.find(mcwTabBar);
+    checkValidMcwAdapter(wrapper.vm);
   });
 
-  describe('mdcTab', () => {
-    const wrapper = spec.find(mdcTab);
-    checkValidMdcAdapter(wrapper.vm);
+  describe('mcwTab', () => {
+    const wrapper = spec.find(mcwTab);
+    checkValidMcwAdapter(wrapper.vm);
   });
 
   // eslint-disable-next-line no-unused-vars
-  const { mdcTab: mt, mdcTabBar: mtb, ...rest } = plugin.components;
+  const { mcwTab: mt, mcwTabBar: mtb, ...rest } = plugin.components;
   plugin.components = rest;
 
   pluginSanityCheck(__dirname, plugin);

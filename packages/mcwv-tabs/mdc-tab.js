@@ -8,7 +8,7 @@ import {
 } from '@mcwv/base';
 
 export default {
-  name: 'mdc-tab',
+  name: 'mcw-tab',
   mixins: [CustomLinkMixin, DispatchEventMixin, VMAUniqueIdMixin],
   props: {
     active: Boolean,
@@ -27,7 +27,7 @@ export default {
     };
   },
 
-  inject: ['mdcTabBar'],
+  inject: ['mcwTabBar'],
   computed: {
     hasIcon() {
       const { $scopedSlots: scopedSlots } = this;
@@ -75,7 +75,7 @@ export default {
 
     // console.log('tab mounted')
 
-    this.mdcTabBar.tabList.push(this);
+    this.mcwTabBar.tabList.push(this);
 
     // this.setActive(this.active)
   },

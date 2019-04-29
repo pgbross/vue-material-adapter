@@ -1,7 +1,7 @@
 ## Usage
 
 ```html
-<mdc-checkbox :label="label" v-model="checked" />
+<mcw-checkbox :label="label" v-model="checked" />
 ```
 
 ```javascript
@@ -16,7 +16,7 @@ var vm = new Vue({
 ### Indeterminate checkbox
 
 ```html
-<mdc-checkbox
+<mcw-checkbox
   :label="label"
   v-model="checked"
   :indeterminate.sync="indeterminate"
@@ -36,10 +36,10 @@ var vm = new Vue({
 ### Custom label markup
 
 ```html
-<mdc-checkbox v-model="agreed">
+<mcw-checkbox v-model="agreed">
   <span>I agree with </span>
   <a @click.stop href="...">Terms of Serivce</a>
-</mdc-checkbox>
+</mcw-checkbox>
 ```
 
 > use `@click.stop` to prevent triggering checkbox ripple

@@ -2,11 +2,16 @@
   <section>
     <div :style="'background-image: url(' + icon + ')'" class="demo-icon"/>
 
-    <mdc-headline4 v-if="title" ref="title">{{ title }}</mdc-headline4>
+    <mcw-headline4 v-if="title" ref="title">{{ title }}</mcw-headline4>
     <article v-if="demo" class="demo-article">
       <component :is="demo"/>
     </article>
     <article v-if="readme" class="doc-article markdown">
+      <mcw-headline4>
+        Note: elements can use names prefixed with either
+        <em>mcw-</em> (preferred) or for backwards compatibility
+        <em>mdc-</em>.
+      </mcw-headline4>
       <component :is="readme"/>
     </article>
   </section>

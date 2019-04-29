@@ -2,7 +2,7 @@ import { CustomButtonMixin, DispatchEventMixin } from '@mcwv/base';
 import { RippleMixin } from '@mcwv/ripple';
 
 export default {
-  name: 'mdc-button-base',
+  name: 'mcw-button-base',
   mixins: [DispatchEventMixin, CustomButtonMixin, RippleMixin],
   // note RippleMixin defines data(){ return {classes:{}, styles: {} }; }
   render(createElement) {

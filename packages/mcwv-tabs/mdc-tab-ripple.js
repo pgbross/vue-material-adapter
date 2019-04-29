@@ -1,7 +1,7 @@
 import { RippleBase } from '@mcwv/ripple';
 
 export default {
-  name: 'mdc-tab-ripple',
+  name: 'mcw-tab-ripple',
 
   data() {
     return {

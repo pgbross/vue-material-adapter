@@ -8,17 +8,17 @@ The grid and cells are not styled in any way, serving only for alignment and
 positioning of elements.
 
 ```html
-<mdc-layout-grid>
-  <mdc-layout-cell>
+<mcw-layout-grid>
+  <mcw-layout-cell>
     <p>Cell 1</p>
-  </mdc-layout-cell>
-  <mdc-layout-cell>
+  </mcw-layout-cell>
+  <mcw-layout-cell>
     <p>Cell 2</p>
-  </mdc-layout-cell>
-  <mdc-layout-cell>
+  </mcw-layout-cell>
+  <mcw-layout-cell>
     <p>Cell 3</p>
-  </mdc-layout-cell>
-</mdc-layout-grid>
+  </mcw-layout-cell>
+</mcw-layout-grid>
 ```
 
 Grid can define its own max-width or designate its columns to be a certain width.
@@ -40,20 +40,20 @@ Cells are placed side by side until there is no more room,
 at which point the next cell is placed at the beginning of the next row.
 
 ```html
-<mdc-layout-grid>
-  <mdc-layout-cell desktop="3" tablet="3">
+<mcw-layout-grid>
+  <mcw-layout-cell desktop="3" tablet="3">
     Cell
-  </mdc-layout-cell>
-  <mdc-layout-cell desktop="3" tablet="5" align="top">
+  </mcw-layout-cell>
+  <mcw-layout-cell desktop="3" tablet="5" align="top">
     Top
-  </mdc-layout-cell>
-  <mdc-layout-cell desktop="3" tablet="5" align="middle">
+  </mcw-layout-cell>
+  <mcw-layout-cell desktop="3" tablet="5" align="middle">
     Middle
-  </mdc-layout-cell>
-  <mdc-layout-cell desktop="3" tablet="3" align="bottom">
+  </mcw-layout-cell>
+  <mcw-layout-cell desktop="3" tablet="3" align="bottom">
     Bottom
-  </mdc-layout-cell>
-</mdc-layout-grid>
+  </mcw-layout-cell>
+</mcw-layout-grid>
 ```
 
 | prop      | Type   | Default | Description                                                        |
@@ -68,27 +68,27 @@ at which point the next cell is placed at the beginning of the next row.
 ### Nesting
 
 When your contents need extra structure that cannot be supported by single
-layout grid, you can nest layout grid within each other with `mdc-layout-inner-grid`
+layout grid, you can nest layout grid within each other with `mcw-layout-inner-grid`
 
 ```html
-<mdc-layout-grid>
-  <mdc-layout-cell>
-    <mdc-layout-inner-grid>
-      <mdc-layout-cell>
+<mcw-layout-grid>
+  <mcw-layout-cell>
+    <mcw-layout-inner-grid>
+      <mcw-layout-cell>
         <p>Second Level</p>
-      </mdc-layout-cell>
-      <mdc-layout-cell>
+      </mcw-layout-cell>
+      <mcw-layout-cell>
         <p>Second Level</p>
-      </mdc-layout-cell>
-    </mdc-layout-inner-grid>
-  </mdc-layout-cell>
-  <mdc-layout-cell>
+      </mcw-layout-cell>
+    </mcw-layout-inner-grid>
+  </mcw-layout-cell>
+  <mcw-layout-cell>
     <p>First Level</p>
-  </mdc-layout-cell>
-  <mdc-layout-cell>
+  </mcw-layout-cell>
+  <mcw-layout-cell>
     <p>First Level</p>
-  </mdc-layout-cell>
-</mdc-layout-grid>
+  </mcw-layout-cell>
+</mcw-layout-grid>
 ```
 
 > However, the Material Design guidelines do not recommend a deeply nested grid since
@@ -101,10 +101,10 @@ with CSS custom properties:
 
 ```css
 :root {
-  --mdc-layout-grid-column-width-desktop: 84px;
-  --mdc-layout-grid-margin-desktop: 40px;
-  --mdc-layout-grid-gutter-tablet: 16px;
-  --mdc-layout-grid-gutter-phone: 8px;
+  --mcw-layout-grid-column-width-desktop: 84px;
+  --mcw-layout-grid-margin-desktop: 40px;
+  --mcw-layout-grid-gutter-tablet: 16px;
+  --mcw-layout-grid-gutter-phone: 8px;
 }
 ```
 
@@ -112,11 +112,11 @@ or SASS mixins:
 
 ```scss
 .my-grid {
-  @include mdc-layout-grid-inner(desktop, 16px, 16px);
+  @include mcw-layout-grid-inner(desktop, 16px, 16px);
 }
 
 .my-cell {
-  @include mdc-layout-grid-cell(desktop, 4, 16px);
+  @include mcw-layout-grid-cell(desktop, 4, 16px);
 }
 ```
 

@@ -1,11 +1,11 @@
 ## Usage
 
 ```html
-<mdc-tab-bar @change="onSelected">
-  <mdc-tab>item one</mdc-tab>
-  <mdc-tab>item two</mdc-tab>
-  <mdc-tab>item three</mdc-tab>
-</mdc-tab-bar>
+<mcw-tab-bar @change="onSelected">
+  <mcw-tab>item one</mcw-tab>
+  <mcw-tab>item two</mcw-tab>
+  <mcw-tab>item three</mcw-tab>
+</mcw-tab-bar>
 ```
 
 ```javascript
@@ -20,10 +20,10 @@ var vm = new Vue({
 
 ### props
 
-#### mdc-tab
+#### mcw-tab
 
-mdc-tab behaves as a navigational link. Add an `href` for simple link behavior
-or the `to` property for router-link behavior. mdc-tab dispatches `@click` event.
+mcw-tab behaves as a navigational link. Add an `href` for simple link behavior
+or the `to` property for router-link behavior. mcw-tab dispatches `@click` event.
 
 | prop                 | Type           | Default                  | Description                                 |
 | -------------------- | -------------- | ------------------------ | ------------------------------------------- |
@@ -42,7 +42,7 @@ or the `to` property for router-link behavior. mdc-tab dispatches `@click` event
 > If the `to` property is defined, the item behaves as a
 > [router-link](https://router.vuejs.org/en/api/router-link.html)
 
-#### mdc-tab-bar
+#### mcw-tab-bar
 
 ### events
 
@@ -53,11 +53,11 @@ or the `to` property for router-link behavior. mdc-tab dispatches `@click` event
 ### Tabs with icons
 
 ```html
-<mdc-tab-bar>
-  <mdc-tab icon="phone"></mdc-tab>
-  <mdc-tab icon="{className: 'fa fa-favorite'}"></mdc-tab>
-  <mdc-tab><svg slot="icon">...</svg></mdc-tab>
-</mdc-tab-bar>
+<mcw-tab-bar>
+  <mcw-tab icon="phone"></mcw-tab>
+  <mcw-tab icon="{className: 'fa fa-favorite'}"></mcw-tab>
+  <mcw-tab><svg slot="icon">...</svg></mcw-tab>
+</mcw-tab-bar>
 ```
 
 > use `icon` slot for custom icon markup
@@ -65,11 +65,11 @@ or the `to` property for router-link behavior. mdc-tab dispatches `@click` event
 ### Tabs with icons and text
 
 ```html
-<mdc-tab-bar>
-  <mdc-tab icon="phone">Recents</mdc-tab>
-  <mdc-tab icon="favorite">Favorites</mdc-tab>
-  <mdc-tab icon="personal_pin">Nearby</mdc-tab>
-</mdc-tab-bar>
+<mcw-tab-bar>
+  <mcw-tab icon="phone">Recents</mcw-tab>
+  <mcw-tab icon="favorite">Favorites</mcw-tab>
+  <mcw-tab icon="personal_pin">Nearby</mcw-tab>
+</mcw-tab-bar>
 ```
 
 ### reference

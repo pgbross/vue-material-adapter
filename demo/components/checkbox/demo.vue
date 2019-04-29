@@ -1,15 +1,15 @@
 <template>
-  <div class="mdc-demo mdc-demo--container">
+  <div class="mcw-demo mcw-demo--container">
     <div>
-      <mdc-checkbox
+      <mcw-checkbox
         v-model="checked"
         :disabled="disabled"
         :indeterminate.sync="indeterminate"
         :label="checked ? 'checked' : 'unchecked'"
       />
       <div>
-        <mdc-button dense @click="indeterminate = true" outlined>make indeterminate</mdc-button>
-        <mdc-button dense @click="disabled = !disabled" outlined>toggle disabled</mdc-button>
+        <mcw-button dense @click="indeterminate = true" outlined>make indeterminate</mcw-button>
+        <mcw-button dense @click="disabled = !disabled" outlined>toggle disabled</mcw-button>
       </div>
     </div>
   </div>

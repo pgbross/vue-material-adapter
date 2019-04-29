@@ -8,7 +8,7 @@ const spanOptions = {
 };
 
 export default {
-  name: 'mdc-layout-cell',
+  name: 'mcw-layout-cell',
   functional: true,
   props: {
     span: spanOptions,

@@ -1,7 +1,7 @@
 import { cssClasses } from './constants';
 
 export default {
-  name: 'mdc-top-app-bar-section',
+  name: 'mcw-top-app-bar-section',
   props: {
     align: {
       type: String,

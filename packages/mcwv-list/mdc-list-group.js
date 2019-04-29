@@ -1,5 +1,5 @@
 export default {
-  name: 'mdc-list-group',
+  name: 'mcw-list-group',
   functional: true,
   props: {
     tag: {

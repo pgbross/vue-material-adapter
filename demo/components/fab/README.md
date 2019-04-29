@@ -1,13 +1,13 @@
 ## Usage
 
 ```html
-<mdc-fab icon="favorite"></mdc-fab>
-<mdc-fab mini icon="favorite"></mdc-fab>
-<mdc-fab icon="favorite" label="wiffle" />
-<mdc-fab icon="home" @click="scrollToTop"></mdc-fab>
-<mdc-fab>
-  <mdc-material-icon icon="add" slot="icon"></mdc-material-icon>
-</mdc-fab>
+<mcw-fab icon="favorite"></mcw-fab>
+<mcw-fab mini icon="favorite"></mcw-fab>
+<mcw-fab icon="favorite" label="wiffle" />
+<mcw-fab icon="home" @click="scrollToTop"></mcw-fab>
+<mcw-fab>
+  <mcw-material-icon icon="add" slot="icon"></mcw-material-icon>
+</mcw-fab>
 ```
 
 > refer to [Material Design Icon Font](https://material.io/icons/) for the list of icons
@@ -46,17 +46,17 @@
 **Font Awsome**
 
 ```html
-<mdc-fab>
+<mcw-fab>
   <span class="fa fa-star" slot="icon"></span>
-</mdc-fab>
+</mcw-fab>
 ```
 
 **SVG Icons**
 
 ```html
-  <mdc-fab>
+  <mcw-fab>
     <svg ... slot="icon">
-  </mdc-fab>
+  </mcw-fab>
 ```
 
 ### Link FAB
@@ -66,7 +66,7 @@
 Using the href attribute will render `<a role="button" href="...">`
 
 ```html
-<mdc-fab icon="home" href="#">Home</mdc-fab>
+<mcw-fab icon="home" href="#">Home</mcw-fab>
 ```
 
 #### router-link
@@ -75,7 +75,7 @@ If the `to` property is defined, the item behaves as a
 [router-link](https://router.vuejs.org/en/api/router-link.html)
 
 ```html
-<mdc-fab icon="home" to="/home">Home</mdc-fab>
+<mcw-fab icon="home" to="/home">Home</mcw-fab>
 ```
 
 #### Accessibility Warning:
@@ -88,8 +88,8 @@ If the `to` property is defined, the item behaves as a
 You might want to keep button behavior and do the navigation programatically:
 
 ```html
-<mdc-fab icon="home" @click="location.href='#'">Home</mdc-fab>
-<mdc-fab icon="home" @click="$router.push(...)">Home</mdc-fab>
+<mcw-fab icon="home" @click="location.href='#'">Home</mcw-fab>
+<mcw-fab icon="home" @click="$router.push(...)">Home</mcw-fab>
 ```
 
 ### Reference

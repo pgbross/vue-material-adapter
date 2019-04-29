@@ -1,22 +1,22 @@
 <template>
-  <div class="mdc-demo">
-    <mdc-card>
-      <mdc-card-primary-action>
-        <mdc-card-media :src="card" wide>Media</mdc-card-media>
-      </mdc-card-primary-action>
+  <div class="mcw-demo">
+    <mcw-card>
+      <mcw-card-primary-action>
+        <mcw-card-media :src="card" wide>Media</mcw-card-media>
+      </mcw-card-primary-action>
       <section>
         <h2>Title goes here</h2>
         <h4>subtitle here</h4>
       </section>
-      <mdc-card-actions>
-        <mdc-card-action-buttons>
-          <mdc-button outlined>ACTION</mdc-button>
-        </mdc-card-action-buttons>
-        <mdc-card-action-icons>
-          <mdc-material-icon icon="star"></mdc-material-icon>
-        </mdc-card-action-icons>
-      </mdc-card-actions>
-    </mdc-card>
+      <mcw-card-actions>
+        <mcw-card-action-buttons>
+          <mcw-button outlined>ACTION</mcw-button>
+        </mcw-card-action-buttons>
+        <mcw-card-action-icons>
+          <mcw-material-icon icon="star"></mcw-material-icon>
+        </mcw-card-action-icons>
+      </mcw-card-actions>
+    </mcw-card>
   </div>
 </template>
 
@@ -33,7 +33,7 @@ export default {
 </script>
 
 <style>
-.mdc-demo .mdc-card {
+.mcw-demo .mdc-card {
   background-color: white;
   width: 320px;
   margin: 32px auto;

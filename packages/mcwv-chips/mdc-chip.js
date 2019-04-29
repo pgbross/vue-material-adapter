@@ -1,9 +1,10 @@
 import { MDCChipFoundation } from '@material/chips/chip/foundation';
 import { CustomLinkMixin, emitCustomEvent } from '@mcwv/base';
 import { RippleBase } from '@mcwv/ripple';
+import mcwChipCheckmark from './mdc-chip-checkmark.js';
 
 export default {
-  name: 'mdc-chip',
+  name: 'mcw-chip',
   mixins: [CustomLinkMixin],
   props: {
     leadingIcon: [String],
@@ -16,7 +17,7 @@ export default {
     },
     id: {},
   },
-  inject: ['mdcChipSet'],
+  inject: ['mcwChipSet'],
   data() {
     return {
       classes: {
@@ -38,7 +39,7 @@ export default {
       },
     },
     isFilter() {
-      return this.mdcChipSet && this.mdcChipSet.filter;
+      return this.mcwChipSet && this.mcwChipSet.filter;
     },
     haveleadingIcon() {
       const slot = this.$slots['leading-icon'];
@@ -238,7 +239,7 @@ export default {
       [
         this.haveleadingIcon && this.renderLeadingIcon(createElement),
         this.isFilter &&
-          createElement('mdc-chip-checkmark', { ref: 'checkmarkEl' }),
+          createElement(mcwChipCheckmark, { ref: 'checkmarkEl' }),
         createElement(
           'div',
           { class: { 'mdc-chip__text': 1 } },

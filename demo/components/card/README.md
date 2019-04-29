@@ -5,33 +5,33 @@ The card package provides the building blocks for composing your card components
 
 | Component                 | Usage                                                                                                                                                                                                            |
 | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `mdc-card`                | Mandatory, for the card component                                                                                                                                                                                |
-| `mdc-card-media`          | This component is a container for an image on the card                                                                                                                                                           |
-| `mdc-card-primary-action` | This component is used as the container for primary tappable content                                                                                                                                             |
-| `mdc-card-actions`        | Acts as a container for `mdc-card-action-buttons` and/or `mdc-card-action-icons`. It should be used as the last child of the `mdc-card` component.                                                               |
-| `mdc-card-action-buttons` | It acts as a container for buttons of the card. This component is a child of a `mdc-card-actions` component.                                                                                                     |
-| `mdc-card-action-icons`   | It acts as a container for icons of the card. This component is a child of a `mdc-card-actions` component. It can be used by itself or used as a sibling directly after the `mdc-card-action-buttons` component. |
+| `mcw-card`                | Mandatory, for the card component                                                                                                                                                                                |
+| `mcw-card-media`          | This component is a container for an image on the card                                                                                                                                                           |
+| `mcw-card-primary-action` | This component is used as the container for primary tappable content                                                                                                                                             |
+| `mcw-card-actions`        | Acts as a container for `mcw-card-action-buttons` and/or `mcw-card-action-icons`. It should be used as the last child of the `mcw-card` component.                                                               |
+| `mcw-card-action-buttons` | It acts as a container for buttons of the card. This component is a child of a `mcw-card-actions` component.                                                                                                     |
+| `mcw-card-action-icons`   | It acts as a container for icons of the card. This component is a child of a `mcw-card-actions` component. It can be used by itself or used as a sibling directly after the `mcw-card-action-buttons` component. |
 
 ### Card
 
 ```html
-<mdc-card>
-  <mdc-card-primary-action>
-    <mdc-card-media :src="card" wide>Media</mdc-card-media>
-  </mdc-card-primary-action>
+<mcw-card>
+  <mcw-card-primary-action>
+    <mcw-card-media :src="card" wide>Media</mcw-card-media>
+  </mcw-card-primary-action>
   <section>
     <h2>Title goes here</h2>
     <h4>subtitle here</h4>
   </section>
-  <mdc-card-actions>
-    <mdc-card-action-buttons>
-      <mdc-button outlined>ACTION</mdc-button>
-    </mdc-card-action-buttons>
-    <mdc-card-action-icons>
-      <mdc-material-icon icon="star"></mdc-material-icon>
-    </mdc-card-action-icons>
-  </mdc-card-actions>
-</mdc-card>
+  <mcw-card-actions>
+    <mcw-card-action-buttons>
+      <mcw-button outlined>ACTION</mcw-button>
+    </mcw-card-action-buttons>
+    <mcw-card-action-icons>
+      <mcw-material-icon icon="star"></mcw-material-icon>
+    </mcw-card-action-icons>
+  </mcw-card-actions>
+</mcw-card>
 ```
 
 | props      | Type    | Default | Description                                               |
@@ -61,21 +61,21 @@ The card package provides the building blocks for composing your card components
 This component is used as the container for primary tappable content.
 
 ```html
-<mdc-card>
-  <mdc-card-primary-action>
+<mcw-card>
+  <mcw-card-primary-action>
     <p>Content</p>
-  </mdc-card-primary-action>
-</mdc-card>
+  </mcw-card-primary-action>
+</mcw-card>
 ```
 
 ### Media
 
-This component is a container for an image on the card. Optionally, any children of the `<mdc-media>` component is wrapped with an element with the className `.mdc-card__media-content`. In order for your image to display, `mdc-media` requires that you have an aspect ratio of either `square` or `wide`.
+This component is a container for an image on the card. Optionally, any children of the `<mcw-media>` component is wrapped with an element with the className `.mcw-card__media-content`. In order for your image to display, `mcw-media` requires that you have an aspect ratio of either `square` or `wide`.
 
 ```html
-<mdc-card>
-  <mdc-card-media :src="media.jpg" wide />
-</mdc-card>
+<mcw-card>
+  <mcw-card-media :src="media.jpg" wide />
+</mcw-card>
 ```
 
 | props    | Type    | Default  | Description                                                                                           |
@@ -88,17 +88,17 @@ This component is a container for an image on the card. Optionally, any children
 
 ### Actions
 
-Acts as a container for `<mdc-card-action-buttons>` and/or `<mdc-card-action-icons>`. It should be used as the last child of the `<mdc-card>` component.
+Acts as a container for `<mcw-card-action-buttons>` and/or `<mcw-card-action-icons>`. It should be used as the last child of the `<mcw-card>` component.
 
 ```html
-<mdc-card-actions>
-  <mdc-card-action-buttons>
-    <mdc-button outlined>ACTION</mdc-button>
-  </mdc-card-action-buttons>
-  <mdc-card-action-icons>
-    <mdc-material-icon icon="star"></mdc-material-icon>
-  </mdc-card-action-icons>
-</mdc-card-actions>
+<mcw-card-actions>
+  <mcw-card-action-buttons>
+    <mcw-button outlined>ACTION</mcw-button>
+  </mcw-card-action-buttons>
+  <mcw-card-action-icons>
+    <mcw-material-icon icon="star"></mcw-material-icon>
+  </mcw-card-action-icons>
+</mcw-card-actions>
 ```
 
 | props        | Type    | Default | Description                                                  |
@@ -107,26 +107,26 @@ Acts as a container for `<mdc-card-action-buttons>` and/or `<mdc-card-action-ico
 
 ### Action Buttons
 
-It acts as a container for buttons of the card. This component is a child of a `<mdc-card-actions>` component.
+It acts as a container for buttons of the card. This component is a child of a `<mcw-card-actions>` component.
 
 ```html
-<mdc-card-actions>
-  <mdc-card-action-buttons>
-    <mdc-button outlined>ACTION</mdc-button>
-  </mdc-card-action-buttons>
-</mdc-card-actions>
+<mcw-card-actions>
+  <mcw-card-action-buttons>
+    <mcw-button outlined>ACTION</mcw-button>
+  </mcw-card-action-buttons>
+</mcw-card-actions>
 ```
 
 ### Action Icons
 
-It acts as a container for icons of the card. This component is a child of a `<mdc-card-actions>` component. It can be used by itself or used as a sibling directly after the `<mdc-card-action-buttons>` component.
+It acts as a container for icons of the card. This component is a child of a `<mcw-card-actions>` component. It can be used by itself or used as a sibling directly after the `<mcw-card-action-buttons>` component.
 
 ```html
-<mdc-card-actions>
-  <mdc-card-action-icons>
-    <mdc-material-icon icon="star"></mdc-material-icon>
-  </mdc-card-action-icons>
-</mdc-card-actions>
+<mcw-card-actions>
+  <mcw-card-action-icons>
+    <mcw-material-icon icon="star"></mcw-material-icon>
+  </mcw-card-action-icons>
+</mcw-card-actions>
 ```
 
 ### Reference

@@ -1,12 +1,12 @@
 import { BasePlugin } from '@mcwv/base';
-import mdcChipCheckmark from './mdc-chip-checkmark.js';
-import mdcChipSet from './mdc-chip-set.js';
-import mdcChip from './mdc-chip.js';
+import mcwChipCheckmark from './mdc-chip-checkmark.js';
+import mcwChipSet from './mdc-chip-set.js';
+import mcwChip from './mdc-chip.js';
 
-export { mdcChip, mdcChipSet, mdcChipCheckmark };
+export { mcwChip, mcwChipSet, mcwChipCheckmark };
 
 export default BasePlugin({
-  mdcChip,
-  mdcChipSet,
-  mdcChipCheckmark,
+  mcwChip,
+  mcwChipSet,
+  mcwChipCheckmark,
 });

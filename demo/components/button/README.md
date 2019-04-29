@@ -1,11 +1,11 @@
 ## Usage
 
 ```html
-<mdc-button @click="onClick" :disabled="buttonDisabled">click me</mdc-button>
-<mdc-button raised>
-  <mdc-material-icon slot="icon" icon="alarm"></mdc-material-icon>Button
-</mdc-button>
-<mdc-button outlined icon="add">Button</mdc-button>
+<mcw-button @click="onClick" :disabled="buttonDisabled">click me</mcw-button>
+<mcw-button raised>
+  <mcw-material-icon slot="icon" icon="add"></mcw-material-icon>Button
+</mcw-button>
+<mcw-button outlined trailingIcon="done">Button</mcw-button>
 ```
 
 ```javascript
@@ -52,43 +52,43 @@ var vm = new Vue({
 ### text buttons
 
 ```html
-<mdc-button>Baseline</mdc-button> <mdc-button dense>Dense</mdc-button>
+<mcw-button>Baseline</mcw-button> <mcw-button dense>Dense</mcw-button>
 ```
 
 ### Raised Button
 
 ```html
-<mdc-button raised>Baseline</mdc-button>
-<mdc-button raised dense>Dense</mdc-button>
+<mcw-button raised>Baseline</mcw-button>
+<mcw-button raised dense>Dense</mcw-button>
 ```
 
 ### Unelevated buttons
 
 ```html
-<mdc-button unelevated>Baseline</mdc-button>
-<mdc-button unelevated dense>Dense</mdc-button>
+<mcw-button unelevated>Baseline</mcw-button>
+<mcw-button unelevated dense>Dense</mcw-button>
 ```
 
 ### Icon buttons
 
 ```html
-<mdc-button icon="favorite">like</mdc-button>
-<mdc-button
-  ><mdc-material-icon slot="icon" icon="add"></mdc-material-icon
-  >like</mdc-button
+<mcw-button icon="favorite">like</mcw-button>
+<mcw-button
+  ><mcw-material-icon slot="icon" icon="add"></mcw-material-icon
+  >like</mcw-button
 >
-<mdc-button
-  ><mdc-material-icon slot="trailingIcon" icon="done"></mdc-material-icon
-  >like</mdc-button
+<mcw-button
+  ><mcw-material-icon slot="trailingIcon" icon="done"></mcw-material-icon
+  >like</mcw-button
 >
 ```
 
 or an SVG button
 
 ```html
-<mdc-button>
+<mcw-button>
   <svg
-    class="mdc-button__icon"
+    class="mcw-button__icon"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="..."
     slot="icon"
@@ -96,7 +96,7 @@ or an SVG button
     ...
   </svg>
   like
-</mdc-button>
+</mcw-button>
 ```
 
 ### Link buttons
@@ -106,7 +106,7 @@ or an SVG button
 Using the href attribute will render `<a role="button" href="...">`
 
 ```html
-<mdc-button href="#">Home</mdc-button>
+<mcw-button href="#">Home</mcw-button>
 ```
 
 #### router-link
@@ -115,7 +115,7 @@ If the `to` property is defined, the item behaves as a
 [router-link](https://router.vuejs.org/en/api/router-link.html)
 
 ```html
-<mdc-button to="/home">Home</mdc-button>
+<mcw-button to="/home">Home</mcw-button>
 ```
 
 #### Accessibility Warning:
@@ -128,14 +128,14 @@ If the `to` property is defined, the item behaves as a
 You might want to keep button behaviour and do the navigation programatically:
 
 ```html
-<mdc-button @click="location.href='#'">Home</mdc-button>
-<mdc-button @click="$router.push(...)">Home</mdc-button>
+<mcw-button @click="location.href='#'">Home</mcw-button>
+<mcw-button @click="$router.push(...)">Home</mcw-button>
 ```
 
 ### Triggering events
 
 ```html
-<mdc-button event="my-event">Do Something</mdc-button>
+<mcw-button event="my-event">Do Something</mcw-button>
 ```
 
 ```javascript

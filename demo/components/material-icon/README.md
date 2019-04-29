@@ -1,9 +1,9 @@
 ## Usage
 
 ```html
-<mdc-material-icon icon="favorite" />
+<mcw-material-icon icon="favorite" />
 <br />
-<mdc-material-icon icon="aspect_ratio" />
+<mcw-material-icon icon="aspect_ratio" />
 ```
 
 ### props

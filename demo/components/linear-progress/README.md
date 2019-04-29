@@ -1,11 +1,11 @@
 ## Usage
 
-The [MDC Linear Progress](https://github.com/material-components/material-components-web/tree/master/packages/mdc-linear-progress) component.
+The [MDC Linear Progress](https://github.com/material-components/material-components-web/tree/master/packages/mcw-linear-progress) component.
 
 ```html
-<mdc-linear-progress :progress="progressValue" />
-<mdc-linear-progress indeterminate />
-<mdc-linear-progress progress="0.5" buffer="0.75" />
+<mcw-linear-progress :progress="progressValue" />
+<mcw-linear-progress indeterminate />
+<mcw-linear-progress progress="0.5" buffer="0.75" />
 ```
 
 ```javascript
@@ -31,25 +31,25 @@ var vm = new Vue({
 - Determinate
 
 ```html
-<mdc-linear-progress progress="0.5"></mdc-linear-progress>
+<mcw-linear-progress progress="0.5"></mcw-linear-progress>
 ```
 
 - Buffer
 
 ```html
-<mdc-linear-progress progress="0.5" buffer="0.75"></mdc-linear-progress>
+<mcw-linear-progress progress="0.5" buffer="0.75"></mcw-linear-progress>
 ```
 
 - Indeterminate
 
 ```html
-<mdc-linear-progress indeterminate></mdc-linear-progress>
+<mcw-linear-progress indeterminate></mcw-linear-progress>
 ```
 
 - Reversed
 
 ```html
-<mdc-linear-progress reversed progress="0.5"></mdc-linear-progress>
+<mcw-linear-progress reversed progress="0.5"></mcw-linear-progress>
 ```
 
 ### Reference

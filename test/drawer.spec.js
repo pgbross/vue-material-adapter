@@ -1,56 +1,56 @@
 import {
   mount,
   createLocalVue,
-  checkValidMdcAdapter,
+  checkValidMcwAdapter,
   checkValidFunctionalComponent,
 } from './unit-test';
 import plugin, {
-  mdcDrawer,
-  mdcDrawerHeader,
-  mdcDrawerList,
-  mdcDrawerItem,
-  mdcDrawerDivider,
+  mcwDrawer,
+  mcwDrawerHeader,
+  mcwDrawerList,
+  mcwDrawerItem,
+  mcwDrawerDivider,
 } from '../packages/mcwv-drawer/index.js';
 const Spec = {
-  template: `<mdc-drawer>
-  <mdc-drawer-header slot="header">
-  </mdc-drawer-header>
-  <mdc-drawer-list dense>
-  <mdc-drawer-item to="/">Home</mdc-drawer-item>
-  <mdc-drawer-divider/>
-  </mdc-drawer-list>
-  </mdc-drawer>`,
+  template: `<mcw-drawer>
+  <mcw-drawer-header slot="header">
+  </mcw-drawer-header>
+  <mcw-drawer-list dense>
+  <mcw-drawer-item to="/">Home</mcw-drawer-item>
+  <mcw-drawer-divider/>
+  </mcw-drawer-list>
+  </mcw-drawer>`,
   name: 'spec',
 };
 
 describe(__dirname, () => {
   const localVue = createLocalVue();
   localVue.use(plugin);
-  const spec = mount(Spec, { localVue, stubs: { 'mdc-drawer': mdcDrawer } });
+  const spec = mount(Spec, { localVue, stubs: { 'mcw-drawer': mcwDrawer } });
 
-  describe('mdcDrawer', () => {
-    const drawer = spec.find(mdcDrawer);
+  describe('mcwDrawer', () => {
+    const drawer = spec.find(mcwDrawer);
 
-    checkValidMdcAdapter(drawer.vm);
+    checkValidMcwAdapter(drawer.vm);
 
-    describe('mdcDrawerHeader', () => {
-      const { isFunctionalComponent } = drawer.find(mdcDrawerHeader);
-      isFunctionalComponent && checkValidFunctionalComponent(mdcDrawerHeader);
+    describe('mcwDrawerHeader', () => {
+      const { isFunctionalComponent } = drawer.find(mcwDrawerHeader);
+      isFunctionalComponent && checkValidFunctionalComponent(mcwDrawerHeader);
     });
 
-    describe('mdcDrawerList', () => {
-      const { isFunctionalComponent } = drawer.find(mdcDrawerList);
-      isFunctionalComponent && checkValidFunctionalComponent(mdcDrawerList);
+    describe('mcwDrawerList', () => {
+      const { isFunctionalComponent } = drawer.find(mcwDrawerList);
+      isFunctionalComponent && checkValidFunctionalComponent(mcwDrawerList);
     });
 
-    describe('mdcDrawerItem', () => {
-      const { isFunctionalComponent } = drawer.find(mdcDrawerItem);
-      isFunctionalComponent && checkValidFunctionalComponent(mdcDrawerItem);
+    describe('mcwDrawerItem', () => {
+      const { isFunctionalComponent } = drawer.find(mcwDrawerItem);
+      isFunctionalComponent && checkValidFunctionalComponent(mcwDrawerItem);
     });
 
-    describe('mdcDrawerDivider', () => {
-      const { isFunctionalComponent } = drawer.find(mdcDrawerDivider);
-      isFunctionalComponent && checkValidFunctionalComponent(mdcDrawerDivider);
+    describe('mcwDrawerDivider', () => {
+      const { isFunctionalComponent } = drawer.find(mcwDrawerDivider);
+      isFunctionalComponent && checkValidFunctionalComponent(mcwDrawerDivider);
     });
   });
 });

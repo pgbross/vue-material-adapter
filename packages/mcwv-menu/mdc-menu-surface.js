@@ -4,7 +4,7 @@ import { emitCustomEvent } from '@mcwv/base';
 import * as util from '@material/menu-surface/util';
 
 export default {
-  name: 'mdc-menu-surface',
+  name: 'mcw-menu-surface',
   model: {
     prop: 'open',
     event: 'change',
@@ -24,9 +24,7 @@ export default {
       styles: {},
     };
   },
-  provide() {
-    return { mdcMenu: this };
-  },
+
   watch: {
     open: 'onOpen_',
     quickOpen(nv) {

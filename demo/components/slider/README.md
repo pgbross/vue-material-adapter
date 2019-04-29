@@ -1,10 +1,10 @@
 ## Usage
 
 ```html
-<mdc-slider v-model="sliderValue1" max="10" />
-<mdc-slider v-model="sliderValue1" max="10" dir="rtl" />
-<mdc-slider v-model="sliderValue1" discrete max="10" />
-<mdc-slider v-model="sliderValue2" discrete step="1" max="10" display-markers />
+<mcw-slider v-model="sliderValue1" max="10" />
+<mcw-slider v-model="sliderValue1" max="10" dir="rtl" />
+<mcw-slider v-model="sliderValue1" discrete max="10" />
+<mcw-slider v-model="sliderValue2" discrete step="1" max="10" display-markers />
 ```
 
 ```javascript
@@ -19,19 +19,19 @@ var vm = new Vue({
 - Continuous Slider
 
 ```html
-<mdc-slider max="10" v-model="sliderValue" />
+<mcw-slider max="10" v-model="sliderValue" />
 ```
 
 - Discrete Slider
 
 ```html
-<mdc-slider min="0" max="10" discrete v-model="sliderValue" />
+<mcw-slider min="0" max="10" discrete v-model="sliderValue" />
 ```
 
 - Discrete Slider with Markers
 
 ```html
-<mdc-slider
+<mcw-slider
   min="0"
   max="10"
   step="1"
@@ -80,7 +80,7 @@ The v-model directive is `lazy`, update happens on the `change` event.
 > In order to get update on input, fallback to explicit binding:
 
 ```html
-<mdc-slider :value="sliderValue" @input="value => { sliderValue = value }" />
+<mcw-slider :value="sliderValue" @input="value => { sliderValue = value }" />
 ```
 
 ### Reference

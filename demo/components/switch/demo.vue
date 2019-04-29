@@ -1,17 +1,17 @@
 <template>
-  <div class="mdc-demo mdc-demo--container">
+  <div class="mcw-demo mcw-demo--container">
     <div>
       <p>
-        <mdc-switch v-model="checked" label="Property"/>
+        <mcw-switch v-model="checked" label="Property"/>
       </p>
       <p>
-        <mdc-switch disabled label="Disabled"/>
+        <mcw-switch disabled label="Disabled"/>
       </p>
 
-      <mdc-caption>
+      <mcw-caption>
         Property:
         <span class>{{ checked ? 'on' : 'off' }}</span>
-      </mdc-caption>
+      </mcw-caption>
     </div>
   </div>
 </template>

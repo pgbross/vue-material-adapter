@@ -1,14 +1,14 @@
 ## Usage
 
 ```html
-<mdc-snackbar
+<mcw-snackbar
   v-model="open"
   message="Simple message"
   :dismissAction="false"
-></mdc-snackbar>
+></mcw-snackbar>
 ```
 
-Simple `mdc-snackbar` is does not queue messages.
+Simple `mcw-snackbar` is does not queue messages.
 
 ```javascript
 export default {
@@ -19,11 +19,11 @@ export default {
   },
 ```
 
-or `mdc-snackbar-queue` maintains an internal queue of messages displayed in sequence.
+or `mcw-snackbar-queue` maintains an internal queue of messages displayed in sequence.
 
 ```html
-<mdc-button @click="showLeading">Leading</mdc-button>
-<mdc-snackbar-queue ref="bar" />
+<mcw-button @click="showLeading">Leading</mcw-button>
+<mcw-snackbar-queue ref="bar" />
 ```
 
 ```javascript
@@ -42,7 +42,7 @@ export default {
 
 ### props
 
-### `mdc-snackbar`
+### `mcw-snackbar`
 
 | Prop Name     | Type    | Description                                                     |
 | ------------- | ------- | --------------------------------------------------------------- |
@@ -54,7 +54,7 @@ export default {
 | leading       | Boolean | Shows snackbar on the left if true (or right for rtl languages) |
 | stacked       | Boolean | Shows buttons under text if true                                |
 
-### `mdc-snackbar-queue`
+### `mcw-snackbar-queue`
 
 #### methods
 

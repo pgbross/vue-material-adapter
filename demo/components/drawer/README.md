@@ -1,39 +1,39 @@
 ## Usage
 
-The `mdc-drawer` component implements permanent, persistent, and temporary drawers.
+The `mcw-drawer` component implements permanent, persistent, and temporary drawers.
 By default the drawer component is responsive and will switch from temporary to persistent design according to viewport width.
 
 ```html
-<mdc-drawer v-model="open">
-  <mdc-drawer-list>
-    <mdc-drawer-item start-icon="inbox">Inbox</mdc-drawer-item>
-    <mdc-drawer-item start-icon="send">Sent Mail</mdc-drawer-item>
-    <mdc-drawer-item start-icon="drafts">Drafts</mdc-drawer-item>
-  </mdc-drawer-list>
-</mdc-drawer>
+<mcw-drawer v-model="open">
+  <mcw-drawer-list>
+    <mcw-drawer-item start-icon="inbox">Inbox</mcw-drawer-item>
+    <mcw-drawer-item start-icon="send">Sent Mail</mcw-drawer-item>
+    <mcw-drawer-item start-icon="drafts">Drafts</mcw-drawer-item>
+  </mcw-drawer-list>
+</mcw-drawer>
 ```
 
-> For proper positioning of the drawer, use the `mdc-layout-app` component.
+> For proper positioning of the drawer, use the `mcw-layout-app` component.
 
 ```html
-<mdc-layout-app>
-  <mdc-toolbar slot="toolbar" fixed>
-    <mdc-toolbar-row>
-      <mdc-toolbar-section align-start>
-        <mdc-toolbar-menu-icon event="toggle-drawer"></mdc-toolbar-menu-icon>
-        <mdc-toolbar-title>Drawer Example</mdc-toolbar-title>
-      </mdc-toolbar-section>
-    </mdc-toolbar-row>
-  </mdc-toolbar>
-  <mdc-drawer slot="drawer" toggle-on="toggle-drawer">
-    <mdc-drawer-list>
-      <mdc-drawer-item start-icon="inbox">Inbox</mdc-drawer-item>
-      <mdc-drawer-item start-icon="send">Sent Mail</mdc-drawer-item>
-      <mdc-drawer-item start-icon="drafts">Drafts</mdc-drawer-item>
-    </mdc-drawer-list>
-  </mdc-drawer>
+<mcw-layout-app>
+  <mcw-toolbar slot="toolbar" fixed>
+    <mcw-toolbar-row>
+      <mcw-toolbar-section align-start>
+        <mcw-toolbar-menu-icon event="toggle-drawer"></mcw-toolbar-menu-icon>
+        <mcw-toolbar-title>Drawer Example</mcw-toolbar-title>
+      </mcw-toolbar-section>
+    </mcw-toolbar-row>
+  </mcw-toolbar>
+  <mcw-drawer slot="drawer" toggle-on="toggle-drawer">
+    <mcw-drawer-list>
+      <mcw-drawer-item start-icon="inbox">Inbox</mcw-drawer-item>
+      <mcw-drawer-item start-icon="send">Sent Mail</mcw-drawer-item>
+      <mcw-drawer-item start-icon="drafts">Drafts</mcw-drawer-item>
+    </mcw-drawer-list>
+  </mcw-drawer>
   <main class="content"></main>
-</mdc-layout-app>
+</mcw-layout-app>
 ```
 
 ### Drawer
@@ -98,20 +98,20 @@ By default the drawer component is responsive and will switch from temporary to 
 - A simple link
 
 ```html
-<mdc-drawer-item href="#">Inbox</mdc-drawer-item>
+<mcw-drawer-item href="#">Inbox</mcw-drawer-item>
 ```
 
 - With vue-router
 
 ```html
-<mdc-drawer-item to="/path">Inbox</mdc-drawer-item>
-<mdc-drawer-item :to="folder" append>Inbox</mdc-drawer-item>
+<mcw-drawer-item to="/path">Inbox</mcw-drawer-item>
+<mcw-drawer-item :to="folder" append>Inbox</mcw-drawer-item>
 ```
 
 > Customize the active links style with vue-router active or exact-active classes:
 
 ```css
-.mdc-drawer-item.router-link-exact-active {
+.mcw-drawer-item.router-link-exact-active {
   color: red;
 }
 ```
@@ -119,37 +119,37 @@ By default the drawer component is responsive and will switch from temporary to 
 - Trigger an event
 
 ```html
-<mdc-drawer-item event="my-event">Inbox</mdc-drawer-item>
+<mcw-drawer-item event="my-event">Inbox</mcw-drawer-item>
 ```
 
 - Click handler
 
 ```html
-<mdc-drawer-item @click="handler">Inbox</mdc-drawer-item>
+<mcw-drawer-item @click="handler">Inbox</mcw-drawer-item>
 ```
 
 #### Start Detail
 
 ```html
-<mdc-drawer>
-  <mdc-drawer-list>
-    <mdc-drawer-item start-icon="inbox">Inbox</mdc-drawer-item>
-    <mdc-drawer-item start-icon="send">Sent Mail</mdc-drawer-item>
-    <mdc-drawer-item start-icon="drafts">Drafts</mdc-drawer-item>
-    <mdc-drawer-divider />
-    <mdc-drawer-item start-icon="email">All mail</mdc-drawer-item>
-    <mdc-drawer-item start-icon="delete">Trash</mdc-drawer-item>
-    <mdc-drawer-item start-icon="report">Spam</mdc-drawer-item>
-  </mdc-drawer-list>
-</mdc-drawer>
+<mcw-drawer>
+  <mcw-drawer-list>
+    <mcw-drawer-item start-icon="inbox">Inbox</mcw-drawer-item>
+    <mcw-drawer-item start-icon="send">Sent Mail</mcw-drawer-item>
+    <mcw-drawer-item start-icon="drafts">Drafts</mcw-drawer-item>
+    <mcw-drawer-divider />
+    <mcw-drawer-item start-icon="email">All mail</mcw-drawer-item>
+    <mcw-drawer-item start-icon="delete">Trash</mcw-drawer-item>
+    <mcw-drawer-item start-icon="report">Spam</mcw-drawer-item>
+  </mcw-drawer-list>
+</mcw-drawer>
 ```
 
 > to override start-icon detail, use `start-detail` named slot:
 
 ```html
-<mdc-drawer-item>
+<mcw-drawer-item>
   {{ Text }}
-</mdc-drawer-item>
+</mcw-drawer-item>
 ```
 
 ### Reference

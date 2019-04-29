@@ -1,25 +1,25 @@
 <template>
-  <div class="mdc-demo--appbar">
-    <section class="mdc-demo">
-      <mdc-top-app-bar class="main-toolbar" :scrollTarget="scrollTarget">
-        <mdc-top-app-bar-row>
-          <mdc-top-app-bar-section align="start">
-            <mdc-top-app-bar-icon navIcon>
-              <mdc-material-icon icon="menu"></mdc-material-icon>
-            </mdc-top-app-bar-icon>
-            <mdc-top-app-bar-title>vue mdc adapter</mdc-top-app-bar-title>
-          </mdc-top-app-bar-section>
+  <div class="mcw-demo--appbar">
+    <section class="mcw-demo">
+      <mcw-top-app-bar class="main-toolbar" :scrollTarget="scrollTarget">
+        <mcw-top-app-bar-row>
+          <mcw-top-app-bar-section align="start">
+            <mcw-top-app-bar-icon navIcon>
+              <mcw-material-icon icon="menu"></mcw-material-icon>
+            </mcw-top-app-bar-icon>
+            <mcw-top-app-bar-title>vue mdc adapter</mcw-top-app-bar-title>
+          </mcw-top-app-bar-section>
 
-          <mdc-top-app-bar-section align="end">
-            <mdc-top-app-bar-icon actionItem aria-label="Help">
-              <mdc-material-icon @click="buttonText = 'show help'" icon="help"></mdc-material-icon>
-            </mdc-top-app-bar-icon>
-            <mdc-top-app-bar-icon actionItem aria-label="Help">
-              <mdc-material-icon @click="buttonText = 'show information'" icon="info_outline"></mdc-material-icon>
-            </mdc-top-app-bar-icon>
-          </mdc-top-app-bar-section>
-        </mdc-top-app-bar-row>
-      </mdc-top-app-bar>
+          <mcw-top-app-bar-section align="end">
+            <mcw-top-app-bar-icon actionItem aria-label="Help">
+              <mcw-material-icon @click="buttonText = 'show help'" icon="help"></mcw-material-icon>
+            </mcw-top-app-bar-icon>
+            <mcw-top-app-bar-icon actionItem aria-label="Help">
+              <mcw-material-icon @click="buttonText = 'show information'" icon="info_outline"></mcw-material-icon>
+            </mcw-top-app-bar-icon>
+          </mcw-top-app-bar-section>
+        </mcw-top-app-bar-row>
+      </mcw-top-app-bar>
 
       <br>
       <div v-if="buttonText">
@@ -36,7 +36,7 @@ export default {
     return { buttonText: '', scrollTarget: null };
   },
   mounted() {
-    const demoEl = this.$el.querySelector('.mdc-demo');
+    const demoEl = this.$el.querySelector('.mcw-demo');
     this.scrollTarget = demoEl;
   },
 };
@@ -48,11 +48,11 @@ export default {
 .demo-button-info {
   font-style: italic;
 }
-.mdc-demo--appbar {
+.mcw-demo--appbar {
   width: 100%;
 }
 
-.mdc-demo .mdc-top-app-bar {
+.mcw-demo .mcw-top-app-bar {
   position: relative;
 }
 </style>

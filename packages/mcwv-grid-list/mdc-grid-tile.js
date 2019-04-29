@@ -4,8 +4,8 @@ import { DispatchEventMixin } from '@mcwv/base';
 import { RippleBase } from '@mcwv/ripple';
 
 export default {
-  name: 'mdc-grid-tile',
-  inject: ['mdcGrid'],
+  name: 'mcw-grid-tile',
+  inject: ['mcwGrid'],
   mixins: [DispatchEventMixin],
   props: {
     src: String,
@@ -21,6 +21,58 @@ export default {
       classes: { 'mdc-grid-tile': 1 },
       styles: {},
     };
+  },
+
+  computed: {
+    clickListener() {
+      return { click: e => this.dispatchEvent(e) };
+    },
+    itemClasses() {
+      return {
+        'mdc-grid-tile--selected': this.selected,
+        'mdc-grid-tile--activated': this.activated,
+      };
+    },
+    isInteractive() {
+      return this.mcwGrid && this.mcwGrid.interactive;
+    },
+    hasStartDetail() {
+      return this.startIcon || this.$slots['start-detail'];
+    },
+    hasEndDetail() {
+      return this.endIcon || this.$slots['end-detail'];
+    },
+  },
+  watch: {
+    isInteractive(value) {
+      if (value) {
+        this.addRipple();
+      } else {
+        this.removeRipple();
+      }
+    },
+  },
+  mounted() {
+    this.isInteractive && this.addRipple();
+  },
+  beforeDestroy() {
+    this.removeRipple();
+  },
+  methods: {
+    addRipple() {
+      if (!this.ripple) {
+        const ripple = new RippleBase(this);
+        ripple.init();
+        this.ripple = ripple;
+      }
+    },
+    removeRipple() {
+      if (this.ripple) {
+        const ripple = this.ripple;
+        this.ripple = null;
+        ripple.destroy();
+      }
+    },
   },
   render(createElement) {
     const nodes = [];
@@ -104,56 +156,5 @@ export default {
       },
       nodes,
     );
-  },
-  computed: {
-    clickListener() {
-      return { click: e => this.dispatchEvent(e) };
-    },
-    itemClasses() {
-      return {
-        'mdc-grid-tile--selected': this.selected,
-        'mdc-grid-tile--activated': this.activated,
-      };
-    },
-    isInteractive() {
-      return this.mdcGrid && this.mdcGrid.interactive;
-    },
-    hasStartDetail() {
-      return this.startIcon || this.$slots['start-detail'];
-    },
-    hasEndDetail() {
-      return this.endIcon || this.$slots['end-detail'];
-    },
-  },
-  watch: {
-    isInteractive(value) {
-      if (value) {
-        this.addRipple();
-      } else {
-        this.removeRipple();
-      }
-    },
-  },
-  mounted() {
-    this.isInteractive && this.addRipple();
-  },
-  beforeDestroy() {
-    this.removeRipple();
-  },
-  methods: {
-    addRipple() {
-      if (!this.ripple) {
-        const ripple = new RippleBase(this);
-        ripple.init();
-        this.ripple = ripple;
-      }
-    },
-    removeRipple() {
-      if (this.ripple) {
-        const ripple = this.ripple;
-        this.ripple = null;
-        ripple.destroy();
-      }
-    },
   },
 };

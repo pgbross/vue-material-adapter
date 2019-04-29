@@ -1,35 +1,45 @@
 <template>
-  <div class="mdc-demo">
-    <div class="mdc-demo--container" style="min-height: 40px; padding-bottom: 0">
-      <div ref="buttons" class="mdc-demo-button">
-        <mdc-button v-bind="buttonProps">Button</mdc-button>
-        <mdc-button v-bind="buttonProps">
-          <mdc-material-icon slot="icon" icon="alarm"></mdc-material-icon>Button
-        </mdc-button>
-        <mdc-button v-bind="buttonProps" icon="add">Button</mdc-button>
-        <mdc-button v-bind="buttonProps" trailingIcon="done">Button</mdc-button>
+  <div class="mcw-demo">
+    <div class="mcw-demo--container" style="min-height: 40px; padding-bottom: 0">
+      <div ref="buttons" class="mcw-demo-button">
+        <mcw-button v-bind="buttonProps">Button</mcw-button>
+        <mcw-button v-bind="buttonProps">
+          <mcw-material-icon slot="icon" icon="add"></mcw-material-icon>Button
+        </mcw-button>
+        <mcw-button v-bind="buttonProps" trailingIcon="done">Button</mcw-button>
       </div>
     </div>
 
-    <div class="mdc-demo--container">
+    <div class="mcw-demo--container">
       <div class="button-type-select">
-        <mdc-radio label="baseline">
-          <mdc-radio-input id="baseline" value="baseline" v-model="type" name="button-type" checked></mdc-radio-input>
-        </mdc-radio>
-        <mdc-radio label="raised">
-          <mdc-radio-input id="raised" value="raised" v-model="type" name="button-type"></mdc-radio-input>
-        </mdc-radio>
-        <mdc-radio label="unelevated">
-          <mdc-radio-input id="unelevated" value="unelevated" v-model="type" name="button-type"></mdc-radio-input>
-        </mdc-radio>
-        <mdc-radio label="outlined">
-          <mdc-radio-input id="outlined" value="outlined" v-model="type" name="button-type"></mdc-radio-input>
-        </mdc-radio>
+        <mcw-radio
+          label="baseline"
+          id="baseline"
+          value="baseline"
+          v-model="type"
+          name="button-type"
+          checked
+        ></mcw-radio>
+        <mcw-radio label="raised" id="raised" value="raised" v-model="type" name="button-type"></mcw-radio>
+        <mcw-radio
+          label="unelevated"
+          id="unelevated"
+          value="unelevated"
+          v-model="type"
+          name="button-type"
+        ></mcw-radio>
+        <mcw-radio
+          label="outlined"
+          id="outlined"
+          value="outlined"
+          v-model="type"
+          name="button-type"
+        ></mcw-radio>
       </div>
 
       <div class="button-style-select">
-        <mdc-checkbox v-model="disabled" label="disabled"/>
-        <mdc-checkbox v-model="dense" label="dense"/>
+        <mcw-checkbox v-model="disabled" label="disabled"/>
+        <mcw-checkbox v-model="dense" label="dense"/>
       </div>
     </div>
   </div>
@@ -68,7 +78,7 @@ export default {
 </script>
 
 <style>
-.mdc-demo-button {
+.mcw-demo-button {
   margin: 0 auto;
   text-align: center;
 }

@@ -1,16 +1,16 @@
 ## Usage
 
 ```html
-<mdc-menu-anchor>
-  <mdc-button raised @click="open=true">Open Menu</mdc-button>
-  <mdc-menu v-model="open" @select="onSelect" @cancel="onCancel">
-    <mdc-menu-item>A Menu Item</mdc-menu-item>
-    <mdc-menu-item>Another Menu Item</mdc-menu-item>
-    <mdc-menu-item disabled>Disabled Menu Item</mdc-menu-item>
-    <mdc-menu-divider>Another Menu Item</mdc-menu-divider>
-    <mdc-menu-item>Parted Menu Item</mdc-menu-item>
-  </mdc-menu>
-</mdc-menu-anchor>
+<mcw-menu-anchor>
+  <mcw-button raised @click="open=true">Open Menu</mcw-button>
+  <mcw-menu v-model="open" @select="onSelect" @cancel="onCancel">
+    <mcw-menu-item>A Menu Item</mcw-menu-item>
+    <mcw-menu-item>Another Menu Item</mcw-menu-item>
+    <mcw-menu-item disabled>Disabled Menu Item</mcw-menu-item>
+    <mcw-menu-divider>Another Menu Item</mcw-menu-divider>
+    <mcw-menu-item>Parted Menu Item</mcw-menu-item>
+  </mcw-menu>
+</mcw-menu-anchor>
 ```
 
 ```javascript
@@ -31,7 +31,7 @@ var vm = new Vue({
 
 ### Props
 
-#### mdc-menu
+#### mcw-menu
 
 | props           | Type              | Default   | Description                                                   |
 | --------------- | ----------------- | --------- | ------------------------------------------------------------- |
@@ -40,11 +40,11 @@ var vm = new Vue({
 | `anchor-corner` | Number            | undefined | set anchor corner alignment of menu corner                    |
 | `anchor-margin` | Object            | undefined | set anchor margin of menu (top, right, bottom, left)          |
 
-> if open is an object it should set {focusIndex: number} as per [MDC menu docs](https://github.com/material-components/material-components-web/tree/master/packages/mdc-menu)
+> if open is an object it should set {focusIndex: number} as per [MDC menu docs](https://github.com/material-components/material-components-web/tree/master/packages/mcw-menu)
 
-> for anchor corner and margin see the [MDC docs](https://github.com/material-components/material-components-web/tree/master/packages/mdc-menu#MDCMenu)
+> for anchor corner and margin see the [MDC docs](https://github.com/material-components/material-components-web/tree/master/packages/mcw-menu#MDCMenu)
 
-#### mdc-menu-item
+#### mcw-menu-item
 
 | props      | Type    | Default | Description              |
 | ---------- | ------- | ------- | ------------------------ |

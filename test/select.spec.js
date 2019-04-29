@@ -1,42 +1,42 @@
-import { mount, createLocalVue, checkValidMdcAdapter } from './unit-test';
-import { mdcSelect } from '../packages/mcwv-select/index.js';
-import { mdcFloatingLabel } from '../packages/mcwv-floating-label/index.js';
-import { mdcLineRipple } from '../packages/mcwv-line-ripple/index.js';
+import { mount, createLocalVue, checkValidMcwAdapter } from './unit-test';
+import { mcwSelect } from '../packages/mcwv-select/index.js';
+import { mcwFloatingLabel } from '../packages/mcwv-floating-label/index.js';
+import { mcwLineRipple } from '../packages/mcwv-line-ripple/index.js';
 
 const Spec = {
   name: 'spec',
   template: `
   <div>
-    <mdc-select v-model="selectValue" label="select label">
+    <mcw-select v-model="selectValue" label="select label">
       <optgroup label="options">
         <option>option1</option>
         <option value="option2">Option2</option>
       </optgroup>
-    </mdc-select>
+    </mcw-select>
   </div>`,
   data() {
     return {
       selectValue: undefined,
     };
   },
-  components: { mdcSelect },
+  components: { mcwSelect },
 };
 
 describe(__dirname, () => {
   const localVue = createLocalVue();
-  describe('mdcSelect', () => {
+  describe('mcwSelect', () => {
     const spec = mount(Spec, {
       localVue,
       stubs: {
-        'mdc-floating-label': mdcFloatingLabel,
-        'mdc-line-ripple': mdcLineRipple,
+        'mcw-floating-label': mcwFloatingLabel,
+        'mcw-line-ripple': mcwLineRipple,
       },
     });
     test('is a Vue instance', () => {
       expect(spec.isVueInstance()).toBeTruthy();
     });
-    describe('mdcSelect', () => {
-      checkValidMdcAdapter(spec.find(mdcSelect).vm);
+    describe('mcwSelect', () => {
+      checkValidMcwAdapter(spec.find(mcwSelect).vm);
     });
   });
 });

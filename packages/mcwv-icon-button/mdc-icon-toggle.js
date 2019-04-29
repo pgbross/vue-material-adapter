@@ -1,5 +1,5 @@
 export default {
-  name: 'mdc-icon-toggle',
+  name: 'mcw-icon-toggle',
   functional: true,
   props: {
     isOn: Boolean,

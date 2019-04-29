@@ -1,7 +1,7 @@
 <template>
-  <div class="mdc-demo mdc-demo--container">
-    <mdc-grid-list icon-align-start with-support-text width="150" class="mdc-demo" interactive>
-      <mdc-grid-tile
+  <div class="mcw-demo mcw-demo--container">
+    <mcw-grid-list icon-align-start with-support-text width="150" class="mcw-demo" interactive>
+      <mcw-grid-tile
         v-for="(item, index) in 4"
         :src="tile"
         :title="'Title ' + (index + 1)"
@@ -10,7 +10,7 @@
         cover
         icon="star_border"
       />
-    </mdc-grid-list>
+    </mcw-grid-list>
   </div>
 </template>
 

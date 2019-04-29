@@ -3,7 +3,7 @@ import MDCTabIndicatorFoundation from '@material/tab-indicator/foundation';
 const { cssClasses } = MDCTabIndicatorFoundation;
 
 export default {
-  name: 'mdc-tab-indicator',
+  name: 'mcw-tab-indicator',
   data() {
     return { classes: { 'mdc-tab-indicator': 1 }, styles: {} };
   },

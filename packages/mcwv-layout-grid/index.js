@@ -1,12 +1,12 @@
 import { BasePlugin } from '@mcwv/base';
-import mdcLayoutCell from './mdc-layout-cell.js';
-import mdcLayoutGrid from './mdc-layout-grid.js';
-import mdcLayoutInnerGrid from './mdc-layout-inner-grid.js';
+import mcwLayoutCell from './mdc-layout-cell.js';
+import mcwLayoutGrid from './mdc-layout-grid.js';
+import mcwLayoutInnerGrid from './mdc-layout-inner-grid.js';
 
-export { mdcLayoutGrid, mdcLayoutCell, mdcLayoutInnerGrid };
+export { mcwLayoutGrid, mcwLayoutCell, mcwLayoutInnerGrid };
 
 export default BasePlugin({
-  mdcLayoutGrid,
-  mdcLayoutCell,
-  mdcLayoutInnerGrid,
+  mcwLayoutGrid,
+  mcwLayoutCell,
+  mcwLayoutInnerGrid,
 });

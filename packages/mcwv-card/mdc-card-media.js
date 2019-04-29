@@ -1,5 +1,5 @@
 export default {
-  name: 'mdc-card-media',
+  name: 'mcw-card-media',
   functional: true,
   props: {
     src: String,

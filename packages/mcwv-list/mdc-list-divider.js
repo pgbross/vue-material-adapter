@@ -1,5 +1,5 @@
 export default {
-  name: 'mdc-list-divider',
+  name: 'mcw-list-divider',
   props: {
     inset: Boolean,
     padded: Boolean,

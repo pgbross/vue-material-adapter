@@ -7,9 +7,9 @@ $mdc-theme-background: #fff;
 // @import "./jazzy";
 @import './markdown';
 
-.mdc-list-item__text,
-.mdc-list-item__primary-text,
-.mdc-list-item__secondary-text {
+.mcw-list-item__text,
+.mcw-list-item__primary-text,
+.mcw-list-item__secondary-text {
     outline: none;
 }
 .primary-drawer .mdc-drawer {
@@ -20,12 +20,6 @@ $mdc-theme-background: #fff;
         background-repeat: no-repeat;
         background-position: center;
     }
-
-    // .mdc-drawer-item {
-    //     font-family: 'Roboto Mono', Monaco, courier, monospace;
-    //     font-weight: 400;
-    //     font-size: 0.875rem;
-    // }
 }
 
 .main-toolbar {
@@ -46,7 +40,7 @@ $mdc-theme-background: #fff;
     max-width: 800px;
     min-width: 250px;
 
-    .mdc-display {
+    .mcw-display {
         font-family: 'Roboto Mono', Monaco, courier, monospace;
     }
 }
@@ -74,12 +68,12 @@ $mdc-theme-background: #fff;
     align-content: stretch;
     min-height: 50px;
 
-    .mdc-demo {
+    .mcw-demo {
         flex: 1 1 auto;
         background-color: #f2f2f2;
     }
 
-    .mdc-demo--container {
+    .mcw-demo--container {
         @include mdc-elevation(0);
         min-height: 100px;
         min-width: 200px;

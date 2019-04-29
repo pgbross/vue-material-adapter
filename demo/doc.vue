@@ -1,6 +1,6 @@
 <template>
   <section>
-    <mdc-headline4 v-if="title" ref="title">{{ title }}</mdc-headline4>
+    <mcw-headline4 v-if="title" ref="title">{{ title }}</mcw-headline4>
     <article class="doc-article markdown">
       <component :is="$route.params.id"/>
     </article>

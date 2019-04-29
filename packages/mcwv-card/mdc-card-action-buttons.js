@@ -1,5 +1,5 @@
 export default {
-  name: 'mdc-card-action-buttons',
+  name: 'mcw-card-action-buttons',
   functional: true,
   render(
     createElement,

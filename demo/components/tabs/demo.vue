@@ -1,31 +1,31 @@
 <template>
   <div class>
-    <mdc-headline6>Simple</mdc-headline6>
-    <section class="mdc-demo mdc-demo--container">
-      <mdc-tab-bar @change="onSelected" activeTabIndex="1">
-        <mdc-tab v-for="item in filteredItems" :key="item.label">{{ item }}</mdc-tab>
-      </mdc-tab-bar>
+    <mcw-headline6>Simple</mcw-headline6>
+    <section class="mcw-demo mcw-demo--container">
+      <mcw-tab-bar @change="onSelected" activeTabIndex="1">
+        <mcw-tab v-for="item in filteredItems" :key="item.label">{{ item }}</mcw-tab>
+      </mcw-tab-bar>
     </section>
     <br>
     <div v-if="selectedItem" style="text-align: right">
-      <mdc-caption>
+      <mcw-caption>
         Selected:
         <span class="demo-tabs-selected">{{ selectedItem }}</span>
-      </mdc-caption>
+      </mcw-caption>
     </div>
-    <mdc-headline6>With icons and text</mdc-headline6>
-    <section class="mdc-demo mdc-demo--container">
-      <mdc-tab-bar>
-        <mdc-tab icon="phone">Recents</mdc-tab>
-        <mdc-tab icon="favorite" stacked>Favorites</mdc-tab>
-        <mdc-tab icon="personal_pin">Nearby</mdc-tab>
-      </mdc-tab-bar>
+    <mcw-headline6>With icons and text</mcw-headline6>
+    <section class="mcw-demo mcw-demo--container">
+      <mcw-tab-bar>
+        <mcw-tab icon="phone">Recents</mcw-tab>
+        <mcw-tab icon="favorite" stacked>Favorites</mcw-tab>
+        <mcw-tab icon="personal_pin">Nearby</mcw-tab>
+      </mcw-tab-bar>
     </section>
-    <mdc-headline6>Scrollable</mdc-headline6>
-    <section class="mdc-demo mdc-demo--container mdc-demo--container-narrow">
-      <mdc-tab-bar @change="onSelected" activeTabIndex="1">
-        <mdc-tab v-for="item in items" :key="item.label">{{ item }}</mdc-tab>
-      </mdc-tab-bar>
+    <mcw-headline6>Scrollable</mcw-headline6>
+    <section class="mcw-demo mcw-demo--container mcw-demo--container-narrow">
+      <mcw-tab-bar @change="onSelected" activeTabIndex="1">
+        <mcw-tab v-for="item in items" :key="item.label">{{ item }}</mcw-tab>
+      </mcw-tab-bar>
     </section>
   </div>
 </template>

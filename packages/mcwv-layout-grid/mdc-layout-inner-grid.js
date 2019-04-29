@@ -1,5 +1,5 @@
 export default {
-  name: 'mdc-layout-inner-grid',
+  name: 'mcw-layout-inner-grid',
   functional: true,
   render(createElement, { scopedSlots }) {
     return createElement(

@@ -2,7 +2,7 @@
 import MDCGridListFoundation from '@material/grid-list/foundation';
 
 export default {
-  name: 'mdc-grid-list',
+  name: 'mcw-grid-list',
   props: {
     width: [String, Number],
     ratio: String,
@@ -14,7 +14,7 @@ export default {
     interactive: Boolean,
   },
   provide() {
-    return { mdcGrid: this };
+    return { mcwGrid: this };
   },
 
   computed: {

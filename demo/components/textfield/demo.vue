@@ -1,15 +1,15 @@
 <template>
-  <div class="mdc-demo mdc-demo--container">
-    <mdc-layout-grid>
-      <mdc-layout-cell span="6">
-        <mdc-textfield
+  <div class="mcw-demo mcw-demo--container">
+    <mcw-layout-grid>
+      <mcw-layout-cell span="6">
+        <mcw-textfield
           :disabled="!enabled"
           v-model="textField"
           label="textfield"
           helptext="Help text 1x..."
         />
         <form>
-          <mdc-textfield
+          <mcw-textfield
             v-model="password"
             type="password"
             label="Password"
@@ -17,18 +17,18 @@
             maxlength="10"
             autocomplete
           >
-            <div class="mdc-text-field-helper-line" slot="helpText">
+            <div class="mcw-text-field-helper-line" slot="helpText">
               <p
-                class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent mdc-text-field-helper-text--validation-msg"
+                class="mcw-text-field-helper-text mcw-text-field-helper-text--persistent mcw-text-field-helper-text--validation-msg"
               >password must be 8 to 10 characters.</p>
             </div>
-          </mdc-textfield>
+          </mcw-textfield>
         </form>
 
         <p></p>
-        <mdc-textfield :disabled="!enabled" v-model="textField" label="outlined" outline>
-          <div class="mdc-text-field-helper-line" slot="helpText">
-            <p class="mdc-text-field-helper-text">Help text 2...</p>
+        <mcw-textfield :disabled="!enabled" v-model="textField" label="outlined" outline>
+          <div class="mcw-text-field-helper-line" slot="helpText">
+            <p class="mcw-text-field-helper-text">Help text 2...</p>
           </div>
           <i
             slot="leadingIcon"
@@ -38,16 +38,16 @@
             tabindex="0"
           >delete</i>
           <i slot="trailingIcon" class="material-icons">favorite</i>
-        </mdc-textfield>
-        <mdc-textfield :disabled="!enabled" v-model="textField" label="in a box">
+        </mcw-textfield>
+        <mcw-textfield :disabled="!enabled" v-model="textField" label="in a box">
           <i slot="leadingIcon" class="fa fa-font-awesome" role="button" tabindex="0"></i>
-        </mdc-textfield>
+        </mcw-textfield>
 
-        <mdc-textfield v-model="textField"></mdc-textfield>
-      </mdc-layout-cell>
-      <mdc-layout-cell span="6">
+        <mcw-textfield v-model="textField"></mcw-textfield>
+      </mcw-layout-cell>
+      <mcw-layout-cell span="6">
         <p>
-          <mdc-textfield
+          <mcw-textfield
             :disabled="!enabled"
             v-model="textField"
             multiline
@@ -55,13 +55,13 @@
             label="multiline"
           />
         </p>
-      </mdc-layout-cell>
-      <mdc-layout-cell span="12">
+      </mcw-layout-cell>
+      <mcw-layout-cell span="12">
         <p>
-          <mdc-textfield :disabled="!enabled" v-model="textField" fullwidth label="full width"/>
+          <mcw-textfield :disabled="!enabled" v-model="textField" fullwidth label="full width"/>
         </p>
-      </mdc-layout-cell>
-    </mdc-layout-grid>
+      </mcw-layout-cell>
+    </mcw-layout-grid>
   </div>
 </template>
 

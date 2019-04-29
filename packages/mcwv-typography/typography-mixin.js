@@ -1,4 +1,4 @@
-export function mdcTypoMixin(
+export function mcwTypoMixin(
   defaultTag,
   defaultClassModifier,
   name = `mdc-${defaultTag}`,
