@@ -1,1 +1,1 @@
-export { RippleBase, RippleMixin } from './mdc-ripple-base.js';
+export { RippleBase, RippleMixin } from './ripple-base.js';

@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import { mcwSlider } from './mcw-slider.js';
+import { mcwSlider } from './slider.js';
 
 export { mcwSlider };
 

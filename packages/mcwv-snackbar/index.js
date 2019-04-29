@@ -1,6 +1,6 @@
 import { BasePlugin } from '@mcwv/base';
-import mcwSnackbarQueue from './mcw-snackbar-queue.js';
-import { mcwSnackbar } from './mcw-snackbar.js';
+import mcwSnackbarQueue from './snackbar-queue.js';
+import { mcwSnackbar } from './snackbar.js';
 
 export { mcwSnackbar, mcwSnackbarQueue };
 

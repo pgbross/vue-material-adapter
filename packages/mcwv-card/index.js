@@ -1,10 +1,10 @@
 import { BasePlugin } from '@mcwv/base';
-import { mcwCard } from './mcw-card.js';
-import mcwCardActionButtons from './mdc-card-action-buttons.js';
-import mcwCardActionIcons from './mdc-card-action-icons.js';
-import mcwCardActions from './mdc-card-actions.js';
-import mcwCardMedia from './mdc-card-media.js';
-import mcwCardPrimaryAction from './mdc-card-primary-action.js';
+import { mcwCard } from './card.js';
+import mcwCardActionButtons from './card-action-buttons.js';
+import mcwCardActionIcons from './card-action-icons.js';
+import mcwCardActions from './card-actions.js';
+import mcwCardMedia from './card-media.js';
+import mcwCardPrimaryAction from './card-primary-action.js';
 
 export {
   mcwCard,

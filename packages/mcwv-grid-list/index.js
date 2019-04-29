@@ -1,6 +1,6 @@
 import { BasePlugin } from '@mcwv/base';
-import mcwGridList from './mdc-grid-list.js';
-import mcwGridTile from './mdc-grid-tile.js';
+import mcwGridList from './grid-list.js';
+import mcwGridTile from './grid-tile.js';
 
 export { mcwGridList, mcwGridTile };
 

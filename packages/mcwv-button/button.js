@@ -1,4 +1,5 @@
-import mcwButtonBase from './mdc-button-base.js';
+import mcwButtonBase from './button-base.js';
+
 export const mcwButton = {
   name: 'mcw-button',
   extends: mcwButtonBase,

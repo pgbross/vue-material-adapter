@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import { mcwNotchedOutline } from './mcw-notched-outline.js';
+import { mcwNotchedOutline } from './notched-outline.js';
 
 export { mcwNotchedOutline };
 

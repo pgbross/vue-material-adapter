@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import { mcwFloatingLabel } from './mcw-floating-label.js';
+import { mcwFloatingLabel } from './floating-label.js';
 
 export { mcwFloatingLabel };
 

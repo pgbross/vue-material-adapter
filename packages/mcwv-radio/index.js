@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import { mcwRadio } from './mcw-radio.js';
+import { mcwRadio } from './radio.js';
 
 export { mcwRadio };
 

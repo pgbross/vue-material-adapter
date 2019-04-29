@@ -13,7 +13,7 @@ import {
   mcwOverline,
   mcwSubtitle1,
   mcwSubtitle2,
-} from './mcw-typography.js';
+} from './typography.js';
 
 export default BasePlugin({
   mcwHeadline1,

@@ -1,7 +1,7 @@
 import { MDCChipFoundation } from '@material/chips/chip/foundation';
 import { CustomLinkMixin, emitCustomEvent } from '@mcwv/base';
 import { RippleBase } from '@mcwv/ripple';
-import mcwChipCheckmark from './mdc-chip-checkmark.js';
+import mcwChipCheckmark from './chip-checkmark.js';
 
 export default {
   name: 'mcw-chip',

@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import { mcwSelect } from './mcw-select.js';
+import { mcwSelect } from './select.js';
 
 export { mcwSelect };
 

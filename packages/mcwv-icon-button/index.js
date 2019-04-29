@@ -1,6 +1,6 @@
 import { BasePlugin } from '@mcwv/base';
-import { mcwIconButton } from './mcw-icon-button.js';
-import mcwIconToggle from './mdc-icon-toggle.js';
+import { mcwIconButton } from './icon-button.js';
+import mcwIconToggle from './icon-toggle.js';
 
 export { mcwIconButton, mcwIconToggle };
 

@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import { mcwFAB } from './mcw-fab.js';
+import { mcwFAB } from './fab.js';
 
 export { mcwFAB };
 

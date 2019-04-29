@@ -1,9 +1,9 @@
 import { BasePlugin } from '@mcwv/base';
-import { mcwDrawer } from './mcw-drawer.js';
-import mcwDrawerDivider from './mdc-drawer-divider.js';
-import mcwDrawerHeader from './mdc-drawer-header.js';
-import mcwDrawerItem from './mdc-drawer-item.js';
-import mcwDrawerList from './mdc-drawer-list.js';
+import { mcwDrawer } from './drawer.js';
+import mcwDrawerDivider from './drawer-divider.js';
+import mcwDrawerHeader from './drawer-header.js';
+import mcwDrawerItem from './drawer-item.js';
+import mcwDrawerList from './drawer-list.js';
 
 export {
   mcwDrawer,

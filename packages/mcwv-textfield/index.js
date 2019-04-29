@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import { mcwTextfield } from './mcw-textfield.js';
+import { mcwTextfield } from './textfield.js';
 
 export { mcwTextfield };
 
