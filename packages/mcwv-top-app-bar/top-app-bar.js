@@ -3,7 +3,7 @@ import MDCShortTopAppBarFoundation from '@material/top-app-bar/short/foundation'
 import mcwTopAppBarFoundation from '@material/top-app-bar/standard/foundation';
 import { cssClasses } from './constants';
 
-export const mcwTopAppBar = {
+export default {
   name: 'mcw-top-app-bar',
   props: {
     short: Boolean,

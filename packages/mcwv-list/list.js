@@ -22,7 +22,7 @@ const {
   },
 } = mcwListFoundation;
 
-export const mcwList = {
+export default {
   name: 'mcw-list',
   props: {
     nonInteractive: { type: Boolean, default: false },

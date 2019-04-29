@@ -2,7 +2,7 @@
 import MDCIconButtonToggleFoundation from '@material/icon-button/foundation';
 import { RippleBase } from '@mcwv/ripple';
 
-export const mcwIconButton = {
+export default {
   name: 'mcw-icon-button',
   model: {
     prop: 'isOn',

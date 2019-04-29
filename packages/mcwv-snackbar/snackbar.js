@@ -4,7 +4,7 @@ import MDCSnackbarFoundation from '@material/snackbar/foundation';
 
 const { strings, numbers } = MDCSnackbarFoundation;
 
-export const mcwSnackbar = {
+export default {
   name: 'mcw-snackbar',
   model: {
     prop: 'open',

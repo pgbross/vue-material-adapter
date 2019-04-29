@@ -7,7 +7,7 @@ const ProgressPropType = {
   },
 };
 
-export const mcwLinearProgress = {
+export default {
   name: 'mcw-linear-progress',
   props: {
     open: { type: Boolean, default: true },

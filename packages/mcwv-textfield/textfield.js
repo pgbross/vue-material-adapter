@@ -8,7 +8,7 @@ import { mcwFloatingLabel } from '@mcwv/floating-label/index.js';
 import { mcwNotchedOutline } from '@mcwv/notched-outline/index.js';
 import { mcwLineRipple } from '@mcwv/line-ripple/index.js';
 
-export const mcwTextfield = {
+export default {
   name: 'mcw-textfield',
   mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
   inheritAttrs: false,

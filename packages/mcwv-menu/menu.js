@@ -3,7 +3,7 @@ import { MDCMenuFoundation } from '@material/menu/foundation';
 import { emitCustomEvent } from '@mcwv/base';
 import { mcwList } from '@mcwv/list/index.js';
 
-export const mcwMenu = {
+export default {
   name: 'mcw-menu',
   model: {
     prop: 'open',

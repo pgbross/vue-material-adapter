@@ -1,6 +1,6 @@
 import { RippleBase } from '@mcwv/ripple';
 
-export const mcwMaterialIcon = {
+export default {
   name: 'mcw-material-icon',
   props: {
     hasRipple: Boolean,

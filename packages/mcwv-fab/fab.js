@@ -1,7 +1,7 @@
 import { CustomButtonMixin, DispatchEventMixin } from '@mcwv/base';
 import { RippleMixin } from '@mcwv/ripple';
 
-export const mcwFAB = {
+export default {
   name: 'mcw-fab',
   mixins: [DispatchEventMixin, CustomButtonMixin, RippleMixin],
   props: {

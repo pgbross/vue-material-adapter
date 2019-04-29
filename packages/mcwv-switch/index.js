@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import { mcwSwitch } from './switch.js';
+import mcwSwitch from './switch.js';
 
 export { mcwSwitch };
 

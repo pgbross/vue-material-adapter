@@ -3,7 +3,7 @@ import MDCModalDrawerFoundation from '@material/drawer/modal/foundation';
 import MDCListFoundation from '@material/list/foundation';
 import createFocusTrap from 'focus-trap';
 
-export const mcwDrawer = {
+export default {
   name: 'mcw-drawer',
   model: {
     prop: 'open',

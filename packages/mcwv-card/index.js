@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import { mcwCard } from './card.js';
+import mcwCard from './card.js';
 import mcwCardActionButtons from './card-action-buttons.js';
 import mcwCardActionIcons from './card-action-icons.js';
 import mcwCardActions from './card-actions.js';

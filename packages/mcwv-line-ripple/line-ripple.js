@@ -1,6 +1,6 @@
 import MDCLineRippleFoundation from '@material/line-ripple/foundation';
 
-export const mcwLineRipple = {
+export default {
   name: 'mcw-line-ripple',
 
   props: {

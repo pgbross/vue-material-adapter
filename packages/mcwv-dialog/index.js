@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import { mcwDialog } from './dialog.js';
+import mcwDialog from './dialog.js';
 import mcwDialogButton from './dialog-button.js';
 import mcwDialogContent from './dialog-content.js';
 import mcwDialogFooter from './dialog-footer.js';

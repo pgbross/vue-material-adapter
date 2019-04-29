@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import { mcwList } from './list.js';
+import mcwList from './list.js';
 import mcwListDivider from './list-divider.js';
 import mcwListGroupSubHeader from './list-group-sub-header.js';
 import mcwListGroup from './list-group.js';

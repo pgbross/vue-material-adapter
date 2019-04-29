@@ -2,7 +2,7 @@ import MDCSwitchFoundation from '@material/switch/foundation';
 import { DispatchFocusMixin, VMAUniqueIdMixin } from '@mcwv/base';
 import { RippleBase } from '@mcwv/ripple';
 
-export const mcwSwitch = {
+export default {
   name: 'mcw-switch',
   mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
   model: {

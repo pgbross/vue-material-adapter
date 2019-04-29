@@ -7,7 +7,7 @@ import { RippleBase } from '@mcwv/ripple';
 
 const CB_PROTO_PROPS = ['checked', 'indeterminate'];
 
-export const mcwCheckbox = {
+export default {
   name: 'mcw-checkbox',
   mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
   model: {

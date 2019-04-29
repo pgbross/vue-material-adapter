@@ -1,6 +1,6 @@
 import MDCFloatingLabelFoundation from '@material/floating-label/foundation';
 
-export const mcwFloatingLabel = {
+export default {
   name: 'mcw-floating-label',
   data() {
     return {

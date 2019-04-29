@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import { mcwTopAppBar } from './top-app-bar.js';
+import mcwTopAppBar from './top-app-bar.js';
 import mcwFixedAdjust from './fixed-adjust.js';
 import mcwTopAppBarAction from './top-app-bar-action.js';
 import mcwTopAppBarIcon from './top-app-bar-icon.js';

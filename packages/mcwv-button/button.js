@@ -1,6 +1,6 @@
 import mcwButtonBase from './button-base.js';
 
-export const mcwButton = {
+export default {
   name: 'mcw-button',
   extends: mcwButtonBase,
   props: {

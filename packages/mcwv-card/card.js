@@ -1,4 +1,4 @@
-export const mcwCard = {
+export default {
   name: 'mcw-card',
   props: {
     outlined: Boolean,

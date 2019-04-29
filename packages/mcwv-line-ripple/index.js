@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import { mcwLineRipple } from './line-ripple.js';
+import mcwLineRipple from './line-ripple.js';
 
 export { mcwLineRipple };
 

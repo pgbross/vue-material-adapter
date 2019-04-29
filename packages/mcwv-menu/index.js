@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import { mcwMenu } from './menu.js';
+import mcwMenu from './menu.js';
 import mcwMenuAnchor from './menu-anchor.js';
 import mcwMenuItem from './menu-item.js';
 import mcwMenuSurface from './menu-surface.js';

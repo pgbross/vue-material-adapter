@@ -7,7 +7,7 @@ import { mcwButton } from '@mcwv/button/index.js';
 import createFocusTrap from 'focus-trap';
 import { cssClasses, LAYOUT_EVENTS } from './constants';
 
-export const mcwDialog = {
+export default {
   name: 'mcw-dialog',
   components: {
     mcwButton: mcwButton,

@@ -1,6 +1,6 @@
 import { BasePlugin } from '@mcwv/base';
 import mcwButtonBase from './button-base.js';
-import { mcwButton } from './button.js';
+import mcwButton from './button.js';
 
 export { mcwButtonBase, mcwButton };
 

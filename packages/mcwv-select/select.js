@@ -5,7 +5,7 @@ import { RippleBase } from '@mcwv/ripple';
 import SelectHelperText from './select-helper-text.js';
 import SelectIcon from './select-icon.js';
 
-export const mcwSelect = {
+export default {
   name: 'mcw-select',
   inheritAttrs: false,
   model: {

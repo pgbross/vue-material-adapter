@@ -2,7 +2,7 @@
 import MDCSliderFoundation from '@material/slider/foundation';
 import { applyPassive, DispatchFocusMixin } from '@mcwv/base';
 
-export const mcwSlider = {
+export default {
   name: 'mcw-slider',
   mixins: [DispatchFocusMixin],
   model: {

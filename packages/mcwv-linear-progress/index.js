@@ -1,5 +1,5 @@
 import { BasePlugin } from '@mcwv/base';
-import { mcwLinearProgress } from './linear-progress.js';
+import mcwLinearProgress from './linear-progress.js';
 
 export { mcwLinearProgress };
 
