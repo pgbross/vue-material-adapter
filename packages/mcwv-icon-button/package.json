@@ -16,7 +16,7 @@
     "url": "https://github.com/pgbross/vue-material-adapter"
   },
   "dependencies": {
-    "@material/icon-button": "^1.1.0",
+    "@material/icon-button": "^2.0.0",
     "@mcwv/base": "^0.5.0",
     "@mcwv/ripple": "^0.5.0"
   },

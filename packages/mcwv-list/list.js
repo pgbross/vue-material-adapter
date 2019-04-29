@@ -1,4 +1,4 @@
-import mcwListFoundation from '@material/list/foundation';
+import MDCListFoundation from '@material/list/foundation';
 import { emitCustomEvent } from '@mcwv/base';
 
 const ARIA_ORIENTATION = 'aria-orientation';
@@ -11,7 +11,6 @@ const {
     RADIO_SELECTOR,
     CHECKBOX_RADIO_SELECTOR,
     ACTION_EVENT,
-    ENABLED_ITEMS_SELECTOR,
     FOCUSABLE_CHILD_ELEMENTS,
   },
   cssClasses: {
@@ -20,7 +19,7 @@ const {
     LIST_ITEM_ACTIVATED_CLASS,
     LIST_ITEM_SELECTED_CLASS,
   },
-} = mcwListFoundation;
+} = MDCListFoundation;
 
 export default {
   name: 'mcw-list',
@@ -78,7 +77,7 @@ export default {
     },
 
     listElements() {
-      return [].slice.call(this.$el.querySelectorAll(ENABLED_ITEMS_SELECTOR));
+      return [].slice.call(this.$el.querySelectorAll(`.${LIST_ITEM_CLASS}`));
     },
   },
 
@@ -184,7 +183,11 @@ export default {
       focusItemAtIndex: index => {
         this.focusItemAtIndex = index;
       },
-      getAttributeForElementIndex: () => null,
+      getAttributeForElementIndex: (index, attr) => {
+        const listItems = this.$refs.listItem || [];
+        const listItem = listItems[index];
+        return listItem && listItem.getAttribute(attr);
+      },
       setTabIndexForListItemChildren: (listItemIndex, tabIndexValue) => {
         // const { listItemChildrenTabIndex } = this;
         this.$set(
@@ -236,9 +239,10 @@ export default {
       isFocusInsideList: () => {
         return this.$el.contains(document.activeElement);
       },
+      isRootFocused: () => document.activeElement === this.$el,
     };
 
-    this.foundation = new mcwListFoundation(adapter);
+    this.foundation = new MDCListFoundation(adapter);
 
     this.foundation.init();
     this.foundation.layout();
@@ -279,7 +283,8 @@ export default {
       if (
         !vn.tag ||
         !vn.componentOptions ||
-        vn.componentOptions.tag !== 'mdc-list-item'
+        (vn.componentOptions.tag !== 'mcw-list-item' &&
+          vn.componentOptions.tag !== 'mdc-list-item')
       ) {
         return vn;
       }
@@ -289,7 +294,7 @@ export default {
       const data = vn.data || {};
 
       return createElement(
-        'mdc-list-item',
+        'mcw-list-item',
         {
           props: {
             ...data.props,

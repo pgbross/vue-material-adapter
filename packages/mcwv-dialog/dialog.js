@@ -4,7 +4,6 @@ import * as util from '@material/dialog/util';
 import { closest, matches } from '@material/dom/ponyfill';
 import { VMAUniqueIdMixin } from '@mcwv/base';
 import { mcwButton } from '@mcwv/button/index.js';
-import createFocusTrap from 'focus-trap';
 import { cssClasses, LAYOUT_EVENTS } from './constants';
 
 export default {
@@ -139,10 +138,7 @@ export default {
     onOpen_(value) {
       if (value) {
         if (this.$refs.container) {
-          this.focusTrap = util.createFocusTrapInstance(
-            this.$el,
-            createFocusTrap,
-          );
+          this.focusTrap = util.createFocusTrapInstance(this.$el);
         }
         this.foundation.open();
       } else {

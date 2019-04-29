@@ -96,6 +96,11 @@ export default {
       this.foundation.handleBodyClick(evt);
     },
 
+    handleMenuSurfaceOpened(evt) {
+      this.registerBodyClickListener(evt);
+      this.$emit('MDCMenuSurface:opened', evt);
+    },
+
     registerBodyClickListener() {
       document.body.addEventListener('click', this.handleBodyClick);
     },
@@ -231,7 +236,7 @@ export default {
         class: this.classes,
         on: {
           keydown: evt => this.handleKeydown(evt),
-          'MDCMenuSurface:opened': evt => this.registerBodyClickListener(evt),
+          'MDCMenuSurface:opened': evt => this.handleMenuSurfaceOpened(evt),
           'MDCMenuSurface:closed': evt => this.deregisterBodyClickListener(evt),
         },
       },
