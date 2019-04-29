@@ -16,7 +16,7 @@
     "url": "https://github.com/pgbross/vue-material-adapter"
   },
   "dependencies": {
-    "@material/top-app-bar": "^1.1.1",
+    "@material/top-app-bar": "^2.0.0",
     "@mcwv/base": "^0.5.0",
     "@mcwv/ripple": "^0.5.0"
   },
