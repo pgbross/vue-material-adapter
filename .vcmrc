@@ -29,7 +29,7 @@
       "utils",
       "demo",
       "infra",
-      "mdc",
+      "mcw",
       "package"
     ],
     "validate": false,

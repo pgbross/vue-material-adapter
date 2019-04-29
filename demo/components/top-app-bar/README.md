@@ -7,7 +7,7 @@
       <mcw-top-app-bar-icon navIcon>
         <mcw-material-icon icon="menu"></mcw-material-icon>
       </mcw-top-app-bar-icon>
-      <mcw-top-app-bar-title>vue mdc adapter</mcw-top-app-bar-title>
+      <mcw-top-app-bar-title>vue material adapter</mcw-top-app-bar-title>
     </mcw-top-app-bar-section>
 
     <mcw-top-app-bar-section align="end">
@@ -38,7 +38,7 @@ var vm = new Vue({
 });
 ```
 
-### MdcTopAppBar
+### McwTopAppBar
 
 | Prop Name      | Type        | Description                                                    |
 | -------------- | ----------- | -------------------------------------------------------------- |
@@ -48,17 +48,17 @@ var vm = new Vue({
 | fixed          | Boolean     | Enables fixed variant.                                         |
 | dense          | Boolean     | Enables dense variant.                                         |
 | scrollTarget   | HTMLElement | Sets scroll target to different DOM node (default is `window`) |
-| tag            | String      | Customizes the `mdcTopAppBar` HTML tag. (default: `<header>`)  |
+| tag            | String      | Customizes the `mcwTopAppBar` HTML tag. (default: `<header>`)  |
 
 > NOTES: As per design guidelines, prominent and dense variants should not be used with short or short collapsed. Additionally, dense variants should only be used on desktop. Additionally short top-app-bars should be used with no more than 1 action item.
 
-### MdcTopAppBarRow
+### McwTopAppBarRow
 
 | Prop Name | Type   | Description                                           |
 | --------- | ------ | ----------------------------------------------------- |
 | tag       | String | Customizes the `TopAppBarRow` tag. (default: `<div>`) |
 
-### MdcTopAppBarSection
+### McwTopAppBarSection
 
 | Prop Name | Type                     | Description                                                                     |
 | --------- | ------------------------ | ------------------------------------------------------------------------------- |
@@ -67,13 +67,13 @@ var vm = new Vue({
 
 > Note: if section contains action items it is recommended to add property role='toolbar' for a11y purposes
 
-### MdcTopAppBarTitle
+### McwTopAppBarTitle
 
 | Prop Name | Type   | Description                                              |
 | --------- | ------ | -------------------------------------------------------- |
 | tag       | String | Customizes the `TopAppBarTitle` tag. (default: `<span>`) |
 
-### MdcTopAppBarIcon
+### McwTopAppBarIcon
 
 | Prop Name  | Type    | Description                                     |
 | ---------- | ------- | ----------------------------------------------- |
@@ -83,7 +83,7 @@ var vm = new Vue({
 
 > Notes: (1) consider adding `aria-label` to actionItem's. (2) you may need to manually add ripple or tabindex to icon. (3) Short top-app-bars should be used with no more than 1 action item.
 
-### MdcFixedAdjust
+### McwFixedAdjust
 
 | Prop Name | Type    | Description                                                    |
 | --------- | ------- | -------------------------------------------------------------- |
