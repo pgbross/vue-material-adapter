@@ -4,6 +4,9 @@ import { emitCustomEvent, VMAUniqueIdMixin } from '@mcwv/base';
 import { RippleBase } from '@mcwv/ripple';
 import SelectHelperText from './select-helper-text.js';
 import SelectIcon from './select-icon.js';
+import { mcwFloatingLabel } from '@mcwv/floating-label/index.js';
+import { mcwNotchedOutline } from '@mcwv/notched-outline/index.js';
+import { mcwLineRipple } from '@mcwv/line-ripple/index.js';
 
 export default {
   name: 'mcw-select',
@@ -50,8 +53,7 @@ export default {
         change: event => this.handleChange(event),
         blur: event => this.handleBlur(event),
         focus: event => this.handleFocus(event),
-        mousedown: event => this.handleClick(event),
-        touchstart: event => this.handleClick(event),
+        handleClick: event => this.handleClick(event),
       };
     },
 
@@ -258,12 +260,12 @@ export default {
 
     if (this.outlined) {
       rootNodes.push(
-        createElement('mcw-notched-outline', { ref: 'outlineEl' }, this.label),
+        createElement(mcwNotchedOutline, { ref: 'outlineEl' }, this.label),
       );
     } else {
       rootNodes.push(
-        createElement('mcw-floating-label', { ref: 'labelEl' }, this.label),
-        createElement('mcw-line-ripple', { ref: 'lineRippleEl' }, this.label),
+        createElement(mcwFloatingLabel, { ref: 'labelEl' }, this.label),
+        createElement(mcwLineRipple, { ref: 'lineRippleEl' }, this.label),
       );
     }
 

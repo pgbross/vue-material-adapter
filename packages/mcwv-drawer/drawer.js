@@ -1,7 +1,7 @@
+import * as util from '@material/drawer/util';
 import MDCDismissibleDrawerFoundation from '@material/drawer/dismissible/foundation';
 import MDCModalDrawerFoundation from '@material/drawer/modal/foundation';
 import MDCListFoundation from '@material/list/foundation';
-import createFocusTrap from 'focus-trap';
 
 export default {
   name: 'mcw-drawer',
@@ -52,6 +52,15 @@ export default {
   },
   mounted() {
     this.drawer_ = this.$refs.drawer;
+
+    const listEl = this.$el.querySelector(
+      `.${MDCListFoundation.cssClasses.ROOT}`,
+    );
+    if (listEl) {
+      this.list_ = listEl;
+      this.list_.wrapFocus = true;
+    }
+
     const adapter = {
       addClass: className => this.$set(this.classes, className, true),
       removeClass: className => this.$delete(this.classes, className),
@@ -136,7 +145,7 @@ export default {
         this.scrim_ = this.drawer_.parentElement.querySelector(SCRIM_SELECTOR);
         this.handleScrimClick_ = () => this.foundation.handleScrimClick();
         this.scrim_.addEventListener('click', this.handleScrimClick_);
-        this.focusTrap_ = createFocusTrapInstance(
+        this.focusTrap_ = util.createFocusTrapInstance(
           this.drawer_,
           this.focusTrapFactory_,
         );
@@ -222,15 +231,3 @@ export default {
     return createElement('div', {}, nodes);
   },
 };
-
-function createFocusTrapInstance(
-  surfaceEl,
-  focusTrapFactory = createFocusTrap,
-) {
-  return focusTrapFactory(surfaceEl, {
-    clickOutsideDeactivates: true,
-    initialFocus: false, // Navigation drawer handles focusing on active nav item.
-    escapeDeactivates: false, // Navigation drawer handles ESC.
-    returnFocusOnDeactivate: false, // Navigation drawer handles restore focus.
-  });
-}

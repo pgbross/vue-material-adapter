@@ -20,6 +20,8 @@ export default {
       },
     },
   },
+  inject: ['mcwList'],
+
   data() {
     return { classes: {}, styles: {} };
   },
@@ -45,6 +47,9 @@ export default {
         ripple.destroy();
       }
     },
+    getAttribute(attr) {
+      return this.$el.getAttribute(attr);
+    },
   },
 
   render(createElement) {
@@ -54,6 +59,8 @@ export default {
       classNamesFromList,
       attributesFromList,
       childrenTabIndex,
+      styles,
+      $listeners: listeners,
     } = this;
 
     const classes = ['mdc-list-item', this.classes].concat(classNamesFromList);
@@ -62,8 +69,8 @@ export default {
 
     const nodes = mdt.map(vn => {
       if (!vn.tag || !vn.componentOptions) {
-        if (!vn.tag && vn.text) {
-          return createElement('mdc-list-item-text', {
+        if (!vn.tag && vn.text && vn.text.trim()) {
+          return createElement('mcw-list-item-text', {
             props: { primaryText: vn.text },
           });
         }
@@ -91,9 +98,9 @@ export default {
       tag,
       {
         class: classes,
-        style: this.styles,
+        style: styles,
         attrs: attributesFromList,
-        on: this.$listeners,
+        on: listeners,
       },
       nodes, // slots.default && slots.default(),
     );

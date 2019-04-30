@@ -1,7 +1,6 @@
 /* eslint-disable quote-props */
 import { MDCMenuFoundation } from '@material/menu/foundation';
 import { emitCustomEvent } from '@mcwv/base';
-import { mcwList } from '@mcwv/list/index.js';
 
 export default {
   name: 'mcw-menu',
@@ -21,11 +20,11 @@ export default {
       styles: {},
     };
   },
-  components: { mcwList },
+
   mounted() {
     this._previousFocus = undefined;
 
-    this.foundation = new MDCMenuFoundation({
+    const adapter = {
       addClassToElementAtIndex: (index, className) => {
         const list = this.items;
         list[index].classList.add(className);
@@ -70,7 +69,13 @@ export default {
           item: this.items[evtData.index],
         });
       },
-    });
+      getMenuItemCount: () => this.items.length,
+      focusItemAtIndex: index => this.items[index].focus(),
+      focusListRoot: () =>
+        this.$el.querySelector(MDCMenuFoundation.strings.LIST_SELECTOR).focus(),
+    };
+
+    this.foundation = new MDCMenuFoundation(adapter);
 
     this.foundation.init();
   },
@@ -81,7 +86,7 @@ export default {
 
   computed: {
     items() {
-      return this.$refs.list.listElements;
+      return this.$refs.list ? this.$refs.list.listElements : [];
     },
   },
 
@@ -96,11 +101,48 @@ export default {
     onChange(item) {
       this.$emit('change', item);
     },
+    handleMenuSurfaceOpened() {
+      this.foundation.handleMenuSurfaceOpened();
+    },
+    setDefaultFocusState(focusState) {
+      this.foundation.setDefaultFocusState(focusState);
+    },
+    setAnchorCorner(corner) {
+      this.$refs.root.foundation.setAnchorCorner(corner);
+    },
+
+    setAnchorMargin(margin) {
+      this.$refs.root.foundation.setAnchorMargin(margin);
+    },
+    getOptionByIndex(index) {
+      const items = this.items;
+
+      if (index < items.length) {
+        return this.items[index];
+      }
+      return null;
+    },
+    setFixedPosition(isFixed) {
+      this.$refs.root.foundation.setFixedPosition(isFixed);
+    },
+
+    hoistMenuToBody() {
+      this.$refs.root.foundation.hoistMenuToBody();
+    },
+
+    setIsHoisted(isHoisted) {
+      this.$refs.root.foundation.setIsHoisted(isHoisted);
+    },
+
+    setAbsolutePosition(x, y) {
+      this.$refs.root.foundation.setAbsolutePosition(x, y);
+    },
   },
   render(createElement) {
     const { $scopedSlots: scopedSlots } = this;
+
     return createElement(
-      'mdc-menu-surface',
+      'mcw-menu-surface',
       {
         class: { 'mdc-menu': 1 },
         ref: 'root',
@@ -108,6 +150,7 @@ export default {
         on: {
           change: evt => this.onChange(evt),
           keydown: evt => this.handleKeydown(evt),
+          'MDCMenuSurface:opened': evt => this.handleMenuSurfaceOpened(evt),
         },
       },
       [

@@ -2,7 +2,7 @@ export default {
   name: 'mcw-list-item-meta',
   props: {
     tabbableOnListItemFocus: Boolean,
-    tabIndex: Number,
+    tabIndex: String,
     childrenTabIndex: Number,
   },
   render(createElement) {
