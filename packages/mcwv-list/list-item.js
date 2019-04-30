@@ -20,6 +20,8 @@ export default {
       },
     },
   },
+  inject: ['mcwList'],
+
   data() {
     return { classes: {}, styles: {} };
   },
@@ -67,7 +69,7 @@ export default {
 
     const nodes = mdt.map(vn => {
       if (!vn.tag || !vn.componentOptions) {
-        if (!vn.tag && vn.text) {
+        if (!vn.tag && vn.text && vn.text.trim()) {
           return createElement('mcw-list-item-text', {
             props: { primaryText: vn.text },
           });

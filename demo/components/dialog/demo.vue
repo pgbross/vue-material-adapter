@@ -58,8 +58,8 @@
       <mcw-dialog-title>Select user</mcw-dialog-title>
       <mcw-dialog-content>
         <mcw-list avatarList>
-          <mcw-list-item data-mcw-dialog-action="test" tabindex="0">test</mcw-list-item>
-          <mcw-list-item data-mcw-dialog-action="help">help</mcw-list-item>
+          <mcw-list-item data-mdc-dialog-action="test" tabindex="0">test</mcw-list-item>
+          <mcw-list-item data-mdc-dialog-action="help">help</mcw-list-item>
         </mcw-list>
       </mcw-dialog-content>
     </mcw-dialog>
@@ -99,20 +99,10 @@
       <mcw-dialog-content>
         <mcw-list singleSelection>
           <mcw-list-item v-for="(choice,i) in choices" :key="i">
-            <span class="mcw-list-item__graphic">
-              <mcw-radio
-                name="ringtone"
-                :value="choice"
-                label
-                :id="choice | clean"
-                v-model="picked"
-              ></mcw-radio>
+            <span class="mdc-list-item__graphic">
+              <mcw-radio name="ringtone" :value="choice" :id="choice | clean" v-model="picked"></mcw-radio>
             </span>
-            <label :for="choice | clean">
-              <span class="mcw-list-item__text">
-                <span class="mcw-list-item__primary-text">{{choice}}</span>
-              </span>
-            </label>
+            <label :for="choice | clean">{{choice}}</label>
           </mcw-list-item>
         </mcw-list>
       </mcw-dialog-content>

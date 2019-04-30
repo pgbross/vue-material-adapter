@@ -126,8 +126,7 @@ export default {
             attrs: { tabindex: '0', 'aria-hidden': 'true' },
             ref: 'icon',
           },
-          (scopedSlots.default && scopedSlots.default()) ||
-            this.hasIcon.content,
+          (scopedSlots.icon && scopedSlots.icon()) || this.hasIcon.content,
         ),
       );
     }

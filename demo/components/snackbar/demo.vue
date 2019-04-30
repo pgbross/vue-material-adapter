@@ -1,14 +1,24 @@
 <template>
-  <div class="mcw-demo mcw-demo--container">
-    <div class="mcw-demo mcw-demo--container">
-      <mcw-button @click="showSimple">{{open ? 'Close' : 'Simple'}}</mcw-button>
-      <mcw-button @click="showBaseline">Baseline</mcw-button>
-      <mcw-button @click="showLeading">Leading</mcw-button>
-      <mcw-button @click="showStacked">Stacked</mcw-button>
-    </div>
-
-    <mcw-snackbar-queue ref="bar"/>
-    <mcw-snackbar v-model="open" message="Simple message" :dismissAction="false"></mcw-snackbar>
+  <div class="mcw-demo">
+    <section>
+      <div class="mcw-demo mcw-demo--container">
+        <mcw-button @click="showSimple">{{open ? 'Close' : 'Simple'}}</mcw-button>
+        <mcw-button @click="showBaseline">Baseline</mcw-button>
+        <mcw-button @click="showLeading">Leading</mcw-button>
+        <mcw-button @click="showStacked">Stacked</mcw-button>
+      </div>
+    </section>
+    <mcw-caption v-if="reason">
+      Result:
+      <span class>{{ reason }}</span>
+    </mcw-caption>
+    <mcw-snackbar-queue ref="bar" @update:reason="onReason"/>
+    <mcw-snackbar
+      v-model="open"
+      message="Simple message"
+      :dismissAction="false"
+      @update:reason="onReason"
+    ></mcw-snackbar>
   </div>
 </template>
 
@@ -19,9 +29,13 @@ export default {
       open: false,
       n: 0,
       action: '',
+      reason: '',
     };
   },
   methods: {
+    onReason(reason) {
+      this.reason = reason == 'action' ? 'Took action' : 'Declined action';
+    },
     doalert() {
       alert('clicked');
     },

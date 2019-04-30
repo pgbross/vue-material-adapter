@@ -19,6 +19,7 @@ export default {
     timeoutMs: [String, Number],
     closeOnEscape: { type: Boolean, default: true },
     dismissAction: { type: [String, Boolean], default: true },
+    reason: String,
   },
   data() {
     return {
@@ -46,8 +47,10 @@ export default {
         this.$emit('change', true);
         this.$emit('show', {});
       },
-      notifyClosing: reason =>
-        this.$emit(strings.CLOSING_EVENT, reason ? { reason } : {}),
+      notifyClosing: reason => {
+        this.$emit(strings.CLOSING_EVENT, reason ? { reason } : {});
+        this.$emit('update:reason', reason);
+      },
       notifyClosed: reason => {
         this.$emit(strings.CLOSED_EVENT, reason ? { reason } : {});
         this.$emit('change', false);
@@ -96,7 +99,7 @@ export default {
       if (value) {
         this.foundation.open();
       } else {
-        const { reason } = this.reason;
+        const { reason } = this;
         this.foundation.close(reason ? reason : '');
       }
     },

@@ -1,7 +1,6 @@
 /* eslint-disable quote-props */
 import { MDCMenuFoundation } from '@material/menu/foundation';
 import { emitCustomEvent } from '@mcwv/base';
-// import { mcwList, mcwListItem } from '@mcwv/list/index.js';
 
 export default {
   name: 'mcw-menu',
@@ -21,7 +20,7 @@ export default {
       styles: {},
     };
   },
-  // components: { mcwList, mcwListItem },
+
   mounted() {
     this._previousFocus = undefined;
 

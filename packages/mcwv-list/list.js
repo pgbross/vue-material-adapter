@@ -48,6 +48,9 @@ export default {
       listItemChildrenTabIndex: {},
     };
   },
+  provide() {
+    return { mcwList: this };
+  },
 
   watch: {
     singleSelection(nv) {
