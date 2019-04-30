@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack:///./demo/components/card/demo.vue?c655"],"names":[],"mappings":"AAAA;AACA;AACA;AACA;AACA","file":"17.67e483ef2de42fe1027e.css","sourcesContent":[".mcw-demo .mdc-card {\n  background-color: white;\n  width: 320px;\n  margin: 32px auto;\n}\n"],"sourceRoot":""}

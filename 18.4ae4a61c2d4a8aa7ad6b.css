@@ -1,0 +1,21 @@
+.mcw-demo-button {
+  margin: 0 auto;
+  text-align: center;
+}
+.button-type-select,
+.button-style-select {
+  margin: 0 32px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column nowrap;
+          flex-flow: column nowrap;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+
+
+/*# sourceMappingURL=18.4ae4a61c2d4a8aa7ad6b.css.map*/
