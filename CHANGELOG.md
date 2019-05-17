@@ -1,3 +1,12 @@
+# [](https://github.com/pgbross/vue-material-adapter/compare/v0.6.0...v) (2019-05-17)
+
+
+### Features
+
+* update for material-components-web@2.2.0 ([d53db44](https://github.com/pgbross/vue-material-adapter/commit/d53db44))
+
+
+
 # [](https://github.com/pgbross/vue-material-adapter/compare/v0.4.0...v) (2019-04-25)
 
 
