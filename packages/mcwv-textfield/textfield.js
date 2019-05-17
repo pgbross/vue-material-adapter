@@ -407,7 +407,7 @@ export default {
           {
             attrs: {
               id: `help${this.vma_uid_}`,
-              helptext: this.helpText,
+              helptext: this.helptext,
               persistent: this.helptextPersistent,
               validation: this.helptextValidation,
             },
