@@ -1,0 +1,15 @@
+.mcw-demo .cell {
+  border: 1px dashed;
+  min-height: 50px;
+  text-align: center;
+  padding-top: 4px;
+}
+.mcw-demo .cell.cell1 {
+  min-height: 100px;
+}
+.mcw-demo .cell.cell4 {
+  min-height: 80px;
+}
+
+
+/*# sourceMappingURL=20.bc6bcd1da1138fd18a43.css.map*/
