@@ -16,7 +16,7 @@
     "url": "https://github.com/pgbross/vue-material-adapter"
   },
   "dependencies": {
-    "@material/notched-outline": "^1.1.1",
+    "@material/notched-outline": "^2.3.0",
     "@mcwv/base": "^0.7.0",
     "@mcwv/floating-label": "^0.7.0"
   },
