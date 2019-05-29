@@ -115,7 +115,7 @@
     "css-loader": "^2.1.1",
     "cssnano": "^4.1.10",
     "dart-sass": "^1.19.0",
-    "del-cli": "^1.1.0",
+    "del-cli": "^2.0.0",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.1.0",
     "eslint-loader": "^2.1.2",
