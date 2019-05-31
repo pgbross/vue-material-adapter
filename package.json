@@ -107,7 +107,7 @@
     "babel-loader": "^8.0.5",
     "canvas": "^2.4.1",
     "clean-webpack-plugin": "^2.0.1",
-    "commitlint": "^7.5.2",
+    "commitlint": "^8.0.0",
     "concurrently": "^4.1.0",
     "copy-webpack-plugin": "^5.0.3",
     "cp-file": "^7.0.0",
