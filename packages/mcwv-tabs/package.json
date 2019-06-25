@@ -19,7 +19,7 @@
     "@material/tab": "^2.3.0",
     "@material/tab-bar": "^2.3.0",
     "@material/tab-indicator": "^2.3.0",
-    "@material/tab-scroller": "^2.3.0",
+    "@material/tab-scroller": "^3.0.0",
     "@mcwv/base": "^0.9.0",
     "@mcwv/ripple": "^0.9.0"
   },
