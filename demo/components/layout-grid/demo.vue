@@ -1,6 +1,6 @@
 <template>
   <div class="mcw-demo mcw-demo--fluid">
-    <mcw-layout-grid class="grid">
+    <mcw-layout-grid class="my-grid">
       <mcw-layout-cell class="cell cell1" desktop="3" tablet="3"/>
       <mcw-layout-cell class="cell cell2" desktop="3" tablet="5" align="top">
         <mcw-body1>align="top"</mcw-body1>

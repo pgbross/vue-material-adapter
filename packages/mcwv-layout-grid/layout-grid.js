@@ -10,23 +10,31 @@ export default {
     createElement,
     {
       props: { fixedColumnWidth, alignLeft, alignRight },
+      data: { attrs, staticClass, staticStyle },
       scopedSlots,
     },
   ) {
     return createElement(
       'div',
       {
-        class: {
-          'mdc-layout-grid': true,
-          'mdc-layout-grid--fixed-column-width': fixedColumnWidth,
-          'mdc-layout-grid--align-left': alignLeft,
-          'mdc-layout-grid--align-right': alignRight,
-        },
+        class: [
+          staticClass,
+          {
+            'mdc-layout-grid': true,
+            'mdc-layout-grid--fixed-column-width': fixedColumnWidth,
+            'mdc-layout-grid--align-left': alignLeft,
+            'mdc-layout-grid--align-right': alignRight,
+          },
+        ],
+        style: staticStyle,
+        attrs,
       },
       [
         createElement(
           'div',
-          { class: { 'mdc-layout-grid__inner': 1 } },
+          {
+            class: ['mdc-layout-grid__inner'],
+          },
           scopedSlots.default && scopedSlots.default(),
         ),
       ],
