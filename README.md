@@ -23,6 +23,27 @@ Do not hesitate to open an issue on [GitHub](https://github.com/pgbross/vue-mate
 
 > Each MDCWeb component is mapped to a single vue plugin
 
+### Building and running demo
+
+Install dependencies
+
+```
+npm install
+```
+
+to build everything
+
+```
+npm run build
+npm run build:demo
+```
+
+to run demo
+
+```
+npm run dev
+```
+
 ### Acknowledgements
 
 This project is based on a fork of the successful [vue-mdc-adapter](https://stasson.github.io/vue-mdc-adapter) project.
