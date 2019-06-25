@@ -44,7 +44,7 @@
     "clean:dist": "del-cli dist/*",
     "changelog": "standard-changelog -i CHANGELOG.md -k packages/material-components-web/package.json -w",
     "release": "standard-version --no-verify",
-    "eslint-check": "eslint -c .eslintrc.yaml --print-config . | eslint-config-prettier-check"
+    "eslint-check": "eslint --print-config ./eslintrc.yaml | eslint-config-prettier-check"
   },
   "husky": {
     "hooks": {
