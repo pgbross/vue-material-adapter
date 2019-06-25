@@ -5,6 +5,7 @@ const resolve = relativePath => path.resolve(__dirname, relativePath);
 const plugins = [];
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { importer } = require('./webpack.util');
+const Fiber = require('fibers');
 
 module.exports = [
   {
@@ -37,7 +38,7 @@ module.exports = [
                   useBuiltIns: 'entry',
                   corejs: 3,
                   targets: {
-                    browsers: Object.values(pkg.browserslist.defaults),
+                    browsers: pkg.browserslist,
                   },
                 },
               ],
@@ -55,14 +56,7 @@ module.exports = [
             {
               loader: 'postcss-loader',
               options: {
-                plugins: () => [
-                  require('autoprefixer')({
-                    browsers: Object.values(pkg.browserslist.modernBrowsers),
-                  }),
-                  require('cssnano')({
-                    preset: 'default',
-                  }),
-                ],
+                config: { path: __dirname + '/postss.config.js' },
               },
             },
             {
@@ -228,14 +222,7 @@ module.exports = [
             {
               loader: 'postcss-loader',
               options: {
-                plugins: () => [
-                  require('autoprefixer')({
-                    browsers: Object.values(pkg.browserslist.modernBrowsers),
-                  }),
-                  require('cssnano')({
-                    preset: 'default',
-                  }),
-                ],
+                config: { path: __dirname + '/postss.config.js' },
               },
             },
             {
@@ -243,6 +230,7 @@ module.exports = [
               options: {
                 includePaths: ['node_modules'],
                 implementation: require('dart-sass'),
+                fiber: Fiber,
               },
             },
           ],

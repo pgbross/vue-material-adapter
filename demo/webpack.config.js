@@ -27,8 +27,7 @@ const cssLoaders = [
   {
     loader: 'postcss-loader',
     options: {
-      sourceMap: false,
-      plugins: () => [require('autoprefixer')({ grid: false })],
+      config: { path: __dirname + '/postss.config.js' },
     },
   },
   {
@@ -67,7 +66,7 @@ const rules = [
             useBuiltIns: 'entry',
             corejs: 3,
             targets: {
-              browsers: Object.values(pkg.browserslist.defaults),
+              browsers: pkg.browserslist,
             },
           },
         ],
