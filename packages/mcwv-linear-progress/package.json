@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/linear-progress",
   "description": "The Vue Material Adapter for the web linear-progress component",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "license": "MIT",
   "main": "dist/mcwv.linearProgress.min.js",
   "module": "index.js",
@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@material/linear-progress": "^3.0.0",
-    "@mcwv/base": "^0.9.0"
+    "@mcwv/base": "^0.10.0"
   },
   "gitHead": "de1cb1bfcbbd52d174c797fc832b10c1c9074854"
 }
