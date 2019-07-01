@@ -1,5 +1,5 @@
 /* eslint-disable quote-props */
-import mcwDialogFoundation from '@material/dialog/foundation';
+import MDCDialogFoundation from '@material/dialog/foundation';
 import * as util from '@material/dialog/util';
 import { closest, matches } from '@material/dom/ponyfill';
 import { VMAUniqueIdMixin } from '@mcwv/base';
@@ -39,13 +39,13 @@ export default {
   },
 
   mounted() {
-    const strings = mcwDialogFoundation.strings;
+    const strings = MDCDialogFoundation.strings;
 
     const { open, autoStackButtons, escapeKeyAction, scrimClickAction } = this;
 
     this.buttons_ = [].slice.call(this.$el.querySelectorAll(cssClasses.BUTTON));
     this.defaultButton = this.$el.querySelector(
-      `.${cssClasses.DEFAULT_BUTTON}`,
+      `[${strings.BUTTON_DEFAULT_ATTRIBUTE}]`,
     );
 
     const adapter = {
@@ -55,8 +55,9 @@ export default {
       addBodyClass: className => document.body.classList.add(className),
       removeBodyClass: className => document.body.classList.remove(className),
       eventTargetMatches: (target, selector) => matches(target, selector),
-      trapFocus: () => this.focusTrap && this.focusTrap.activate(),
+      trapFocus: initialFocusEl => this.focusTrap && this.focusTrap.activate(),
       releaseFocus: () => this.focusTrap && this.focusTrap.deactivate(),
+      getInitialFocusEl: () => this.getInitialFocusEl_(),
       isContentScrollable: () =>
         !!this.$refs.contentEl && util.isScrollable(this.$refs.contentEl),
       areButtonsStacked: () => util.areTopsMisaligned(this.buttons_),
@@ -106,7 +107,7 @@ export default {
       },
     };
 
-    this.foundation = new mcwDialogFoundation(adapter);
+    this.foundation = new MDCDialogFoundation(adapter);
 
     this.foundation.init();
 
@@ -135,17 +136,25 @@ export default {
     handleDocumentKeyDown(e) {
       this.foundation.handleDocumentKeydown(e);
     },
+    getInitialFocusEl_() {
+      return document.querySelector(
+        `[${MDCDialogFoundation.strings.INITIAL_FOCUS_ATTRIBUTE}]`,
+      );
+    },
     onOpen_(value) {
       if (value) {
         if (this.$refs.container) {
-          this.focusTrap = util.createFocusTrapInstance(this.$el);
+          this.focusTrap = util.createFocusTrapInstance(
+            this.$el,
+            void 0,
+            this.getInitialFocusEl_() || void 0,
+          );
         }
         this.foundation.open();
       } else {
         this.foundation.close();
       }
     },
-
     onCancel() {
       if (this.$listeners['validateCancel']) {
         this.$emit('validateCancel', {
@@ -235,8 +244,8 @@ export default {
         },
         ref: 'root',
         on: {
-          click: evt => this.foundation.handleInteraction(evt),
-          keydown: evt => this.foundation.handleInteraction(evt),
+          click: evt => this.foundation.handleClick(evt),
+          keydown: evt => this.foundation.handleKeydown(evt),
         },
       },
       [

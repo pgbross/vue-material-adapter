@@ -1,6 +1,7 @@
 /* eslint-disable quote-props */
 import { MDCMenuFoundation } from '@material/menu/foundation';
 import { emitCustomEvent } from '@mcwv/base';
+import { closest } from '@material/dom/ponyfill';
 
 export default {
   name: 'mcw-menu',
@@ -23,6 +24,7 @@ export default {
 
   mounted() {
     this._previousFocus = undefined;
+    const { cssClasses, strings } = MDCMenuFoundation;
 
     const adapter = {
       addClassToElementAtIndex: (index, className) => {
@@ -43,23 +45,29 @@ export default {
       },
       elementContainsClass: (element, className) =>
         element.classList.contains(className),
-      closeSurface: () => {
+      closeSurface: skipRestoreFocus => {
+        this.$refs.root.close(skipRestoreFocus);
         this.$emit('change', false);
       },
+
       getElementIndex: element => {
         return this.items.indexOf(element);
       },
-      getParentElement: element => element.parentElement,
-      getSelectedElementIndex: selectionGroup => {
-        const idx = this.items.indexOf(
-          selectionGroup.querySelector(
-            `.${MDCMenuFoundation.cssClasses.MENU_SELECTED_LIST_ITEM}`,
-          ),
+
+      isSelectableItemAtIndex: index =>
+        !!closest(this.items[index], `.${cssClasses.MENU_SELECTION_GROUP}`),
+      getSelectedSiblingOfItemAtIndex: index => {
+        const selectionGroupEl = closest(
+          this.items[index],
+          `.${cssClasses.MENU_SELECTION_GROUP}`,
         );
-        return idx;
+        const selectedItemEl = selectionGroupEl.querySelector(
+          `.${cssClasses.MENU_SELECTED_LIST_ITEM}`,
+        );
+        return selectedItemEl ? this.items.indexOf(selectedItemEl) : -1;
       },
       notifySelected: evtData => {
-        emitCustomEvent(this.$el, MDCMenuFoundation.strings.SELECTED_EVENT, {
+        emitCustomEvent(this.$el, strings.SELECTED_EVENT, {
           index: evtData.index,
           item: this.items[evtData.index],
         });
@@ -72,7 +80,7 @@ export default {
       getMenuItemCount: () => this.items.length,
       focusItemAtIndex: index => this.items[index].focus(),
       focusListRoot: () =>
-        this.$el.querySelector(MDCMenuFoundation.strings.LIST_SELECTOR).focus(),
+        this.$el.querySelector(strings.LIST_SELECTOR).focus(),
     };
 
     this.foundation = new MDCMenuFoundation(adapter);
@@ -87,6 +95,18 @@ export default {
   computed: {
     items() {
       return this.$refs.list ? this.$refs.list.listElements : [];
+    },
+    surfaceOpen: {
+      get() {
+        return this.$refs.root.isOpen();
+      },
+      set(value) {
+        if (value) {
+          this.$refs.root.open();
+        } else {
+          this.$refs.root.close();
+        }
+      },
     },
   },
 
@@ -110,7 +130,9 @@ export default {
     setAnchorCorner(corner) {
       this.$refs.root.foundation.setAnchorCorner(corner);
     },
-
+    setSelectedIndex(index) {
+      this.foundation.setSelectedIndex(index);
+    },
     setAnchorMargin(margin) {
       this.$refs.root.foundation.setAnchorMargin(margin);
     },

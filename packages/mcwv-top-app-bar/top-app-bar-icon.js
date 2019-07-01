@@ -16,8 +16,8 @@ export default {
       if (!vn.tag || !vn.componentOptions) {
         const data = vn.data || (vn.data = {});
         data.staticClass = `${
-          actionItem ? cssClasses.ACTION_ITEM : cssClasses.navIcon
-        } ${data.staticClass}`;
+          actionItem ? cssClasses.ACTION_ITEM : cssClasses.NAV_ICON
+        } ${data.staticClass || ''} mdc-icon-button`;
         data.attrs = { ...data.attrs, ...attrs };
         return vn;
       }
@@ -27,6 +27,7 @@ export default {
         vn.componentOptions.tag,
         {
           class: {
+            'mdc-icon-button': 1,
             [cssClasses.ACTION_ITEM]: actionItem,
             [cssClasses.NAV_ICON]: navIcon,
           },
@@ -35,6 +36,7 @@ export default {
           },
           attrs: {
             ...data.attrs,
+            tag: 'button',
           },
           on: vn.componentOptions.listeners,
         },

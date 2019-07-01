@@ -5,6 +5,7 @@ export default {
   props: {
     hasRipple: Boolean,
     icon: String,
+    tag: { type: String, default: 'i' },
   },
   data() {
     return {
@@ -31,8 +32,9 @@ export default {
     }
   },
   render(createElement) {
+    const { tag } = this;
     return createElement(
-      'i',
+      tag,
       {
         class: this.classes,
         on: this.$listeners,

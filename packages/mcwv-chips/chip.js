@@ -117,6 +117,7 @@ export default {
       },
       getComputedStyleValue: propertyName =>
         window.getComputedStyle(this.$el).getPropertyValue(propertyName),
+      setAttr: (attr, value) => this.$el.setAttribute(attr, value),
       setStyleProperty: (property, value) =>
         this.$set(this.styles, property, value),
 

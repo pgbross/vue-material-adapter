@@ -1,8 +1,9 @@
 /* eslint-disable quote-props */
 import { getCorrectEventName } from '@material/animation/index';
 import MDCCheckboxFoundation from '@material/checkbox/foundation';
+import { applyPassive } from '@material/dom/events';
 import MDCFormFieldFoundation from '@material/form-field/foundation';
-import { applyPassive, DispatchFocusMixin, VMAUniqueIdMixin } from '@mcwv/base';
+import { DispatchFocusMixin, VMAUniqueIdMixin } from '@mcwv/base';
 import { RippleBase } from '@mcwv/ripple';
 
 const CB_PROTO_PROPS = ['checked', 'indeterminate'];

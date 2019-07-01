@@ -16,6 +16,7 @@ export default {
       this.tag,
       {
         class: {
+          'mdc-icon-button': 1,
           'mdc-top-app-bar-action': true,
           'mdc-top-app-bar--action': true,
           'mdc-top-app-bar__action-item': true,

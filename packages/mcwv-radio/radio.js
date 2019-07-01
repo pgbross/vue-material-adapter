@@ -1,7 +1,8 @@
 /* eslint-disable quote-props */
+import { applyPassive } from '@material/dom/events';
 import MDCFormFieldFoundation from '@material/form-field/foundation';
 import MDCRadioFoundation from '@material/radio/foundation';
-import { applyPassive, DispatchFocusMixin, VMAUniqueIdMixin } from '@mcwv/base';
+import { DispatchFocusMixin, VMAUniqueIdMixin } from '@mcwv/base';
 import { RippleBase } from '@mcwv/ripple';
 
 export default {

@@ -1,6 +1,7 @@
+import { applyPassive } from '@material/dom/events';
 import { matches } from '@material/dom/ponyfill';
 import { MDCRippleFoundation } from '@material/ripple/index';
-import { applyPassive, supportsCssVariables } from '@material/ripple/util';
+import { supportsCssVariables } from '@material/ripple/util';
 
 export class RippleBase extends MDCRippleFoundation {
   constructor(vm, options) {

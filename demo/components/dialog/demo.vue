@@ -40,7 +40,7 @@
 
       <mcw-dialog-footer>
         <mcw-dialog-button action="dismiss">Dismiss</mcw-dialog-button>
-        <mcw-dialog-button action="accept" isDefault>Accept</mcw-dialog-button>
+        <mcw-dialog-button action="accept" isDefault isInitialFocus>Accept</mcw-dialog-button>
       </mcw-dialog-footer>
     </mcw-dialog>
 

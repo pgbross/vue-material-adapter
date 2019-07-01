@@ -1,6 +1,7 @@
 /* eslint-disable quote-props */
 import MDCSliderFoundation from '@material/slider/foundation';
-import { applyPassive, DispatchFocusMixin } from '@mcwv/base';
+import { DispatchFocusMixin } from '@mcwv/base';
+import { applyPassive } from '@material/dom/events';
 
 export default {
   name: 'mcw-slider',

@@ -10,13 +10,13 @@
 
       <mcw-top-app-bar-section align="end">
         <mcw-top-app-bar-icon actionItem aria-label="Help">
-          <a
-            href="https://github.com/pgbross/vue-material-adapter"
+          <button
+            @click="goto('https://github.com/pgbross/vue-material-adapter')"
             target="_blank"
             title="Vue-material-adapter"
           >
-            <img :src="githubLogo">
-          </a>
+            <img :src="githubLogo" />
+          </button>
         </mcw-top-app-bar-icon>
       </mcw-top-app-bar-section>
     </mcw-top-app-bar-row>
@@ -31,6 +31,11 @@ export default {
     return {
       githubLogo,
     };
+  },
+  methods: {
+    goto(href) {
+      window.open(href, '_blank');
+    },
   },
 };
 </script>

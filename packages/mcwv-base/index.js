@@ -1,4 +1,3 @@
-export { applyPassive } from './apply-passive.js';
 export { BasePlugin } from './base-plugin.js';
 export { CustomButton, CustomButtonMixin } from './custom-button.js';
 export { emitCustomEvent } from './custom-event.js';

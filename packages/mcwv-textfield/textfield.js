@@ -1,12 +1,13 @@
 /* eslint-disable quote-props */
+import { applyPassive } from '@material/dom/events';
 import MDCTextfieldFoundation from '@material/textfield/foundation';
-import { applyPassive, DispatchFocusMixin, VMAUniqueIdMixin } from '@mcwv/base';
+import { DispatchFocusMixin, VMAUniqueIdMixin } from '@mcwv/base';
+import { mcwFloatingLabel } from '@mcwv/floating-label/index.js';
+import { mcwLineRipple } from '@mcwv/line-ripple/index.js';
+import { mcwNotchedOutline } from '@mcwv/notched-outline/index.js';
 import { RippleBase } from '@mcwv/ripple';
 import TextfieldHelperText from './textfield-helper-text.js';
 import TextfieldIcon from './textfield-icon.js';
-import { mcwFloatingLabel } from '@mcwv/floating-label/index.js';
-import { mcwNotchedOutline } from '@mcwv/notched-outline/index.js';
-import { mcwLineRipple } from '@mcwv/line-ripple/index.js';
 
 export default {
   name: 'mcw-textfield',

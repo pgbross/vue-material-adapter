@@ -123,20 +123,6 @@ export default {
             }
           }
         },
-        isFirstElementFocused: () =>
-          this.firstFocusableElement_ &&
-          this.firstFocusableElement_ === document.activeElement,
-        isLastElementFocused: () =>
-          this.lastFocusableElement_ &&
-          this.lastFocusableElement_ === document.activeElement,
-        focusFirstElement: () =>
-          this.firstFocusableElement_ &&
-          this.firstFocusableElement_.focus &&
-          this.firstFocusableElement_.focus(),
-        focusLastElement: () =>
-          this.lastFocusableElement_ &&
-          this.lastFocusableElement_.focus &&
-          this.lastFocusableElement_.focus(),
       };
     },
     getDimensionAdapterMethods() {
@@ -222,7 +208,10 @@ export default {
       this.foundation.open(options);
     },
     hide() {
-      this.foundation.close();
+      this.close();
+    },
+    close(skipRestoreFocus = false) {
+      this.foundation.close(skipRestoreFocus);
     },
     isOpen() {
       return this.foundation ? this.foundation.isOpen() : false;

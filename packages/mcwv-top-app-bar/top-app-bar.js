@@ -25,17 +25,23 @@ export default {
         'mdc-top-app-bar--prominent': this.prominent,
         'mdc-top-app-bar--fixed': this.fixed,
       },
-      myScrollTarget: this.scrollTarget,
+      myScrollTarget: null,
     };
   },
 
   watch: {
     scrollTarget(nv, ov) {
       if (nv !== ov) {
-        this.foundation_.destroyScrollHandler();
+        this.myScrollTarget.removeEventListener(
+          'scroll',
+          this.foundation_.handleTargetScroll,
+        );
         this.myScrollTarget = nv;
+        this.myScrollTarget.addEventListener(
+          'scroll',
+          this.foundation_.handleTargetScroll,
+        );
       }
-      this.foundation_.initScrollHandler();
     },
   },
 
@@ -47,21 +53,21 @@ export default {
       setStyle: (property, value) =>
         this.$set(this.rootStyles, property, value),
       getTopAppBarHeight: () => this.$el.clientHeight,
-      registerScrollHandler: handler => {
-        if (this.myScrollTarget) {
-          this.myScrollTarget.addEventListener('scroll', handler);
-        } else {
-          window.addEventListener('scroll', handler);
-        }
-      },
-      deregisterScrollHandler: handler => {
-        if (this.myScrollTarget) {
-          this.myScrollTarget.removeEventListener('scroll', handler);
-        } else {
-          window.removeEventListener('scroll', handler);
-        }
-      },
 
+      //  registerScrollHandler: handler => {
+      //         if (this.myScrollTarget) {
+      //           this.myScrollTarget.addEventListener('scroll', handler);
+      //         } else {
+      //           window.addEventListener('scroll', handler);
+      //         }
+      //       },
+      //       deregisterScrollHandler: handler => {
+      //         if (this.myScrollTarget) {
+      //           this.myScrollTarget.removeEventListener('scroll', handler);
+      //         } else {
+      //           window.removeEventListener('scroll', handler);
+      //         }
+      //       },
       getViewportScrollY: () => window.pageYOffset,
       getTotalActionItems: () =>
         this.$refs.root.querySelectorAll(`.${cssClasses.ACTION_ITEM}`).length,
@@ -76,9 +82,15 @@ export default {
       this.foundation_ = new mcwTopAppBarFoundation(adapter);
     }
 
+    this.myScrollTarget = this.scrollTarget || window;
     this.foundation_.init();
   },
   beforeDestroy() {
+    this.myScrollTarget &&
+      this.myScrollTarget.removeEventListener(
+        'scroll',
+        this.foundation_.handleTargetScroll,
+      );
     this.foundation_.destroy();
   },
   render(createElement) {
