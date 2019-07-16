@@ -1,0 +1,23 @@
+{
+  "name": "@mcwv/data-table",
+  "description": "The Vue Material Adapter for the web data-table component",
+  "version": "0.10.0",
+  "license": "MIT",
+  "main": "dist/mcwv.data-table.min.js",
+  "module": "index.js",
+  "keywords": [
+    "material components",
+    "material design",
+    "vue",
+    "data-table"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pgbross/vue-material-adapter"
+  },
+  "dependencies": {
+    "@material/data-table": "^3.0.0-alpha.0",
+    "@mcwv/base": "^0.10.0"
+  },
+  "gitHead": "de1cb1bfcbbd52d174c797fc832b10c1c9074854"
+}

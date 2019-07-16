@@ -38,6 +38,7 @@ export default [
   link('card', icCard),
   link('checkbox', icSelectionControl),
   link('chips', icChips),
+  link('data-table', icComponent),
   link('dialog', icDialog),
   link('drawer', icSideNavigation),
   link('fab', icButton, 'FAB', 'Floating Action Button'),

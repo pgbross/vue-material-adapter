@@ -1,10 +1,10 @@
 <template>
   <section>
-    <div :style="'background-image: url(' + icon + ')'" class="demo-icon"/>
+    <div :style="'background-image: url(' + icon + ')'" class="demo-icon" />
 
     <mcw-headline4 v-if="title" ref="title">{{ title }}</mcw-headline4>
     <article v-if="demo" class="demo-article">
-      <component :is="demo"/>
+      <component :is="demo" />
     </article>
     <article v-if="readme" class="doc-article markdown">
       <mcw-headline4>
@@ -12,7 +12,7 @@
         <em>mcw-</em> (preferred) or for backwards compatibility
         <em>mdc-</em>.
       </mcw-headline4>
-      <component :is="readme"/>
+      <component :is="readme" />
     </article>
   </section>
 </template>
@@ -34,6 +34,7 @@ export default {
     'card-readme': () => import('./components/card/README.md'),
     'chips-readme': () => import('./components/chips/README.md'),
     'checkbox-readme': () => import('./components/checkbox/README.md'),
+    'data-table-readme': () => import('./components/data-table/README.md'),
     'dialog-readme': () => import('./components/dialog/README.md'),
     'drawer-readme': () => import('./components/drawer/README.md'),
     'fab-readme': () => import('./components/fab/README.md'),
@@ -59,6 +60,7 @@ export default {
     'button-demo': () => import('./components/button/demo.vue'),
     'card-demo': () => import('./components/card/demo.vue'),
     'checkbox-demo': () => import('./components/checkbox/demo.vue'),
+    'data-table-demo': () => import('./components/data-table/demo.vue'),
     'chips-demo': () => import('./components/chips/demo.vue'),
     'dialog-demo': () => import('./components/dialog/demo.vue'),
     'drawer-demo': () => import('./components/drawer/demo.vue'),

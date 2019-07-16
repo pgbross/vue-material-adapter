@@ -3,6 +3,7 @@ import button from '@mcwv/button/index.js';
 import card from '@mcwv/card/index';
 import checkbox from '@mcwv/checkbox/index';
 import chips from '@mcwv/chips/index';
+import dataTable from '@mcwv/data-table/index';
 import dialog from '@mcwv/dialog/index';
 import drawer from '@mcwv/drawer/index';
 import fab from '@mcwv/fab/index';
@@ -32,6 +33,7 @@ export default {
     vm.use(card);
     vm.use(checkbox);
     vm.use(chips);
+    vm.use(dataTable);
     vm.use(dialog);
     vm.use(drawer);
     vm.use(fab);
