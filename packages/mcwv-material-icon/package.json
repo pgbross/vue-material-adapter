@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/material-icon",
   "description": "The Vue Material Adapter for the web material-icon component",
-  "version": "0.11.1",
+  "version": "0.11.2",
   "license": "MIT",
   "main": "dist/mcwv.materialIcon.min.js",
   "module": "index.js",
@@ -16,8 +16,8 @@
     "url": "https://github.com/pgbross/vue-material-adapter"
   },
   "dependencies": {
-    "@mcwv/base": "^0.11.1",
-    "@mcwv/ripple": "^0.11.1"
+    "@mcwv/base": "^0.11.2",
+    "@mcwv/ripple": "^0.11.2"
   },
   "gitHead": "72540375c76776ea5f835a452cca39dcca8f57c8"
 }

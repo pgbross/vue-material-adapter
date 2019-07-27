@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/tabs",
   "description": "The Vue Material Adapter for the web tabs component",
-  "version": "0.11.1",
+  "version": "0.11.2",
   "license": "MIT",
   "main": "dist/mcwv.tabs.min.js",
   "module": "index.js",
@@ -20,8 +20,8 @@
     "@material/tab-bar": "^3.0.0",
     "@material/tab-indicator": "^3.0.0",
     "@material/tab-scroller": "^3.0.0",
-    "@mcwv/base": "^0.11.1",
-    "@mcwv/ripple": "^0.11.1"
+    "@mcwv/base": "^0.11.2",
+    "@mcwv/ripple": "^0.11.2"
   },
   "gitHead": "72540375c76776ea5f835a452cca39dcca8f57c8"
 }
