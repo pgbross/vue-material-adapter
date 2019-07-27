@@ -9,5 +9,6 @@
     "type": "git",
     "url": "https://github.com/pgbross/vue-material-adapter"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "gitHead": "09334df92596a5585cf497402c0899d5031783a9"
 }

@@ -46,5 +46,6 @@
     "@mcwv/textfield": "^0.11.0",
     "@mcwv/top-app-bar": "^0.11.0",
     "@mcwv/typography": "^0.11.0"
-  }
+  },
+  "gitHead": "09334df92596a5585cf497402c0899d5031783a9"
 }

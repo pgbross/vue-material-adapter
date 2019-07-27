@@ -13,7 +13,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/pgbross/vue-material-adapter"
+    "url": "git+https://github.com/pgbross/vue-material-adapter.git"
   },
   "dependencies": {
     "@material/checkbox": "^3.1.0",
@@ -21,5 +21,8 @@
     "@material/dom": "^3.1.0",
     "@mcwv/base": "^0.11.0"
   },
-  "gitHead": "de1cb1bfcbbd52d174c797fc832b10c1c9074854"
+  "bugs": {
+    "url": "https://github.com/pgbross/vue-material-adapter/issues"
+  },
+  "homepage": "https://github.com/pgbross/vue-material-adapter#readme"
 }
