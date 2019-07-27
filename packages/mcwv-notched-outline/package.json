@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/notched-outline",
   "description": "The Vue Material Adapter for the web notched-outline component",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "license": "MIT",
   "main": "dist/mcwv.notchedOutline.min.js",
   "module": "index.js",
@@ -17,8 +17,8 @@
   },
   "dependencies": {
     "@material/notched-outline": "^3.0.0",
-    "@mcwv/base": "^0.11.0",
-    "@mcwv/floating-label": "^0.11.0"
+    "@mcwv/base": "^0.11.1",
+    "@mcwv/floating-label": "^0.11.1"
   },
   "gitHead": "09334df92596a5585cf497402c0899d5031783a9"
 }
