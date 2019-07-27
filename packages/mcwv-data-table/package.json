@@ -24,5 +24,6 @@
   "bugs": {
     "url": "https://github.com/pgbross/vue-material-adapter/issues"
   },
-  "homepage": "https://github.com/pgbross/vue-material-adapter#readme"
+  "homepage": "https://github.com/pgbross/vue-material-adapter#readme",
+  "gitHead": "72540375c76776ea5f835a452cca39dcca8f57c8"
 }
