@@ -22,6 +22,7 @@
     "@mcwv/card": "^0.10.0",
     "@mcwv/checkbox": "^0.10.0",
     "@mcwv/chips": "^0.10.0",
+    "@mcwv/data-table": "^0.10.0",
     "@mcwv/dialog": "^0.10.0",
     "@mcwv/drawer": "^0.10.0",
     "@mcwv/fab": "^0.10.0",

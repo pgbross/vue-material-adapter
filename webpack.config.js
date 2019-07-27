@@ -100,6 +100,10 @@ module.exports = [
         resolve('packages/mcwv-chips/index.js'),
         resolve('packages/mcwv-chips/index.scss'),
       ],
+      dataTable: [
+        resolve('packages/mcwv-data-table/index.js'),
+        resolve('packages/mcwv-data-table/index.scss'),
+      ],
       dialog: [
         resolve('packages/mcwv-dialog/index.js'),
         resolve('packages/mcwv-dialog/index.scss'),
