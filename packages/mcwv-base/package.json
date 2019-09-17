@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/base",
   "description": "The set of base classes for Vue material componnents",
-  "version": "0.11.3",
+  "version": "0.12.0",
   "license": "MIT",
   "main": "dist/mcwv.base.min.js",
   "module": "index.js",
