@@ -16,8 +16,8 @@
     "url": "git+https://github.com/pgbross/vue-material-adapter.git"
   },
   "dependencies": {
-    "@material/checkbox": "^3.1.0",
-    "@material/data-table": "^3.1.0",
+    "@material/checkbox": "^3.2.0",
+    "@material/data-table": "^3.2.0",
     "@material/dom": "^3.1.0",
     "@mcwv/base": "^0.11.3"
   },

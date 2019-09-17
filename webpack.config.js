@@ -5,7 +5,6 @@ const resolve = relativePath => path.resolve(__dirname, relativePath);
 const plugins = [];
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { importer } = require('./webpack.util');
-const Fiber = require('fibers');
 
 module.exports = [
   {
@@ -61,7 +60,13 @@ module.exports = [
             },
             {
               loader: 'sass-loader',
-              options: { includePaths: ['node_modules'], importer },
+              options: {
+                sassOptions: {
+                  includePaths: ['node_modules'],
+                  importer,
+                  fiber: true,
+                },
+              },
             },
           ],
         },
@@ -232,9 +237,11 @@ module.exports = [
             {
               loader: 'sass-loader',
               options: {
-                includePaths: ['node_modules'],
-                implementation: require('dart-sass'),
-                fiber: Fiber,
+                sassOptions: {
+                  includePaths: ['node_modules'],
+
+                  fiber: true,
+                },
               },
             },
           ],
@@ -276,8 +283,11 @@ module.exports = [
             {
               loader: 'sass-loader',
               options: {
-                includePaths: ['node_modules'],
-                implementation: require('dart-sass'),
+                sassOptions: {
+                  includePaths: ['node_modules'],
+
+                  fiber: true,
+                },
               },
             },
           ],

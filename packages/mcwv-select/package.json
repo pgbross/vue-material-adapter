@@ -16,7 +16,7 @@
     "url": "https://github.com/pgbross/vue-material-adapter"
   },
   "dependencies": {
-    "@material/select": "^3.0.0",
+    "@material/select": "^3.2.0",
     "@mcwv/base": "^0.11.3",
     "@mcwv/floating-label": "^0.11.3",
     "@mcwv/line-ripple": "^0.11.3",

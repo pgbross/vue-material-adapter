@@ -1,7 +1,7 @@
 {
   "name": "vue-material-adapter",
   "description": "Modular and customizable Material Design UI components for the web for Vue",
-  "version": "0.11.3",
+  "version": "0.12.0",
   "license": "ISC",
   "keywords": [
     "material components",
