@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[14],{194:function(r,n){r.exports=function(){for(var r={},n=0;n<arguments.length;n++){var t=arguments[n];for(var a in t)o.call(t,a)&&(r[a]=t[a])}return r};var o=Object.prototype.hasOwnProperty},196:function(r,n){r.exports=function(){for(var r={},n=0;n<arguments.length;n++){var t=arguments[n];for(var a in t)o.call(t,a)&&(r[a]=t[a])}return r};var o=Object.prototype.hasOwnProperty}}]);
-//# sourceMappingURL=npm.xtend.7c4aa02ecb860c6d6982.js.map
