@@ -1,3 +1,17 @@
+# [](https://github.com/pgbross/vue-material-adapter/compare/v0.11.3...v) (2019-09-17)
+
+
+### Bug Fixes
+
+* add form-field dependency ([778f3ae](https://github.com/pgbross/vue-material-adapter/commit/778f3ae))
+
+
+### Features
+
+* update for material-components-web@3.2.0 ([ddb12aa](https://github.com/pgbross/vue-material-adapter/commit/ddb12aa))
+
+
+
 # [](https://github.com/pgbross/vue-material-adapter/compare/v0.6.0...v) (2019-05-17)
 
 
