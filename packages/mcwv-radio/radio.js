@@ -127,6 +127,7 @@ export default {
       $listeners: listeners,
       id,
       label,
+      name,
     } = this;
 
     const backgroundEl = createElement(
@@ -144,6 +145,7 @@ export default {
       class: ['mdc-radio__native-control'],
       attrs: {
         ...attrs,
+        name,
         id,
         type: 'radio',
         value,
