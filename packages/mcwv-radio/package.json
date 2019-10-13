@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/radio",
   "description": "The Vue Material Adapter for the web radio component",
-  "version": "0.12.0",
+  "version": "0.12.1",
   "main": "dist/mcwv.radio.min.js",
   "module": "index.js",
   "license": "MIT",
