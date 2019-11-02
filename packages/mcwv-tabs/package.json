@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@material/tab": "^3.2.0",
-    "@material/tab-bar": "^3.2.0",
+    "@material/tab-bar": "^4.0.0",
     "@material/tab-indicator": "^3.1.0",
     "@material/tab-scroller": "^3.2.0",
     "@mcwv/base": "^0.12.0",
