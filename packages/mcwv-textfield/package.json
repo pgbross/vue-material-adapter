@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/textfield",
   "description": "The Vue Material Adapter for the web textfield component",
-  "version": "0.12.0",
+  "version": "0.13.0-alpha.0",
   "license": "MIT",
   "main": "dist/mcwv.textfield.min.js",
   "module": "index.js",
@@ -19,10 +19,10 @@
     "@material/dom": "^4.0.0",
     "@material/textfield": "^4.0.0",
     "@mcwv/base": "^0.12.0",
-    "@mcwv/floating-label": "^0.12.0",
-    "@mcwv/line-ripple": "^0.12.0",
-    "@mcwv/notched-outline": "^0.12.0",
-    "@mcwv/ripple": "^0.12.0"
+    "@mcwv/floating-label": "^0.13.0-alpha.0",
+    "@mcwv/line-ripple": "^0.13.0-alpha.0",
+    "@mcwv/notched-outline": "^0.13.0-alpha.0",
+    "@mcwv/ripple": "^0.13.0-alpha.0"
   },
   "gitHead": "c23f3efa46da6ea87e90591989349b485753c6a3"
 }
