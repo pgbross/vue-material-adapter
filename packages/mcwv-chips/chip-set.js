@@ -5,6 +5,7 @@ const {
   INTERACTION_EVENT,
   SELECTION_EVENT,
   REMOVAL_EVENT,
+  NAVIGATION_EVENT,
 } = MDCChipFoundation.strings;
 
 export default {
@@ -27,22 +28,53 @@ export default {
       },
     };
   },
+  methods: {
+    instantiateChips() {
+      const chips = this.$slots.default
+        .filter(
+          ({ componentInstance }) =>
+            !!componentInstance &&
+            componentInstance.shouldRemoveOnTrailingIconClick,
+        )
+        .map(({ componentInstance }) => componentInstance);
+
+      return chips;
+    },
+  },
   mounted() {
+    this.chips_ = this.instantiateChips();
     this.foundation = new MDCChipSetFoundation({
       hasClass: className => this.$el.classList.contains(className),
-      removeChip: chipId => {
-        const index = findChipIndex(this.$slots.default, chipId);
-
-        if (index >= 0) {
-          this.$nextTick(() => {
-            this.$slots.default.splice(index, 1);
-          });
+      removeChipAtIndex: index => {
+        if (index >= 0 && index < this.chips_.length) {
+          this.chips_[index].remove();
+          this.chips_.splice(index, 1);
         }
       },
-      setSelected: (chipId, selected) => {
-        const index = findChipIndex(this.$slots.default, chipId);
-        if (index >= 0) {
-          this.$slots.default[index].componentInstance.selected = selected;
+
+      focusChipPrimaryActionAtIndex: index => {
+        this.chips_[index].focusPrimaryAction();
+      },
+      focusChipTrailingActionAtIndex: index => {
+        this.chips_[index].focusTrailingAction();
+      },
+      getChipListCount: () => this.chips_.length,
+      getIndexOfChipById: chipId => {
+        return findChipIndex(this.chips_, chipId);
+      },
+      isRTL: () =>
+        window.getComputedStyle(this.$el).getPropertyValue('direction') ===
+        'rtl',
+
+      removeFocusFromChipAtIndex: index => {
+        this.chips_[index].removeFocus();
+      },
+      selectChipAtIndex: (index, selected, shouldNotifyClients) => {
+        if (index >= 0 && index < this.chips_.length) {
+          this.chips_[index].setSelectedFromChipSet(
+            selected,
+            shouldNotifyClients,
+          );
         }
       },
     });
@@ -67,6 +99,8 @@ export default {
             this.foundation.handleChipSelection(chipId, selected),
           [REMOVAL_EVENT]: ({ detail: { chipId } }) =>
             this.foundation.handleChipRemoval(chipId),
+          [NAVIGATION_EVENT]: ({ detail: { chipId, key, source } }) =>
+            this.foundation.handleChipNavigation(chipId, key, source),
         },
       },
       scopedSlots.default && scopedSlots.default(),
@@ -78,13 +112,8 @@ export default {
 // Private functions
 // ===
 
-function findChipIndex(slot, chipId) {
-  const vindex = slot.findIndex(({ componentInstance }) => {
-    return (
-      componentInstance &&
-      (componentInstance.id == chipId || componentInstance._uid == chipId)
-    );
-  });
+function findChipIndex(chips, chipId) {
+  const index = chips.findIndex(({ _uid }) => _uid == chipId);
 
-  return vindex;
+  return index;
 }

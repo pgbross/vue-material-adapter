@@ -19,9 +19,14 @@ export default {
     return {
       classes: {},
       styles: {},
+      menuOpen: false,
     };
   },
-
+  watch: {
+    open(nv) {
+      this.menuOpen = nv;
+    },
+  },
   mounted() {
     this._previousFocus = undefined;
     const { cssClasses, strings } = MDCMenuFoundation;
@@ -83,6 +88,7 @@ export default {
         this.$el.querySelector(strings.LIST_SELECTOR).focus(),
     };
 
+    this.menuOpen = this.open;
     this.foundation = new MDCMenuFoundation(adapter);
 
     this.foundation.init();
@@ -98,19 +104,21 @@ export default {
     },
     surfaceOpen: {
       get() {
-        return this.$refs.root.isOpen();
+        return this.menuOpen;
       },
       set(value) {
-        if (value) {
-          this.$refs.root.open();
-        } else {
-          this.$refs.root.close();
-        }
+        this.menuOpen = value;
       },
     },
   },
 
   methods: {
+    listen(evtType, handler, options) {
+      this.$el.addEventListener(evtType, handler, options);
+    },
+    unlisten(evtType, handler, options) {
+      this.$el.removeEventListener(evtType, handler, options);
+    },
     handleAction({ detail: { index } }) {
       this.foundation.handleItemAction(this.items[index]);
     },
@@ -119,6 +127,7 @@ export default {
       this.foundation.handleKeydown(evt);
     },
     onChange(item) {
+      this.menuOpen = item;
       this.$emit('change', item);
     },
     handleMenuSurfaceOpened() {
@@ -168,7 +177,7 @@ export default {
       {
         class: { 'mdc-menu': 1 },
         ref: 'root',
-        attrs: { 'quick-open': this.quickOpen, open: this.open },
+        attrs: { 'quick-open': this.quickOpen, open: this.menuOpen },
         on: {
           change: evt => this.onChange(evt),
           keydown: evt => this.handleKeydown(evt),

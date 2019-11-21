@@ -34,7 +34,7 @@ export default {
   render(createElement) {
     const { $scopedSlots: scopedSlots } = this;
 
-    const nodes = [];
+    const nodes = [createElement('div', { class: { 'mdc-fab__ripple': 1 } })];
 
     const iconSlot = scopedSlots.icon && scopedSlots.icon();
     if (iconSlot) {

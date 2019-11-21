@@ -7,6 +7,7 @@ export default {
   // note RippleMixin defines data(){ return {classes:{}, styles: {} }; }
   render(createElement) {
     const nodes = [
+      createElement('div', { class: { 'mdc-button__ripple': 1 } }),
       createElement(
         'span',
         { class: { 'mdc-button__label': 1 } },

@@ -57,7 +57,13 @@ export default {
       SELECTION_EVENT,
       REMOVAL_EVENT,
       TRAILING_ICON_INTERACTION_EVENT,
+      PRIMARY_ACTION_SELECTOR,
+      TRAILING_ACTION_SELECTOR,
+      NAVIGATION_EVENT,
     } = MDCChipFoundation.strings;
+
+    this.primaryAction_ = this.$el.querySelector(PRIMARY_ACTION_SELECTOR);
+    this.trailingAction_ = this.$el.querySelector(TRAILING_ACTION_SELECTOR);
 
     this.foundation = new MDCChipFoundation({
       addClass: className => this.$set(this.classes, className, true),
@@ -79,6 +85,17 @@ export default {
       },
       eventTargetHasClass: (target, className) =>
         target.classList.contains(className),
+
+      focusPrimaryAction: () => {
+        if (this.primaryAction_) {
+          this.primaryAction_.focus();
+        }
+      },
+      focusTrailingAction: () => {
+        if (this.trailingAction_) {
+          this.trailingAction_.focus();
+        }
+      },
       notifyInteraction: () => {
         emitCustomEvent(
           this.$el,
@@ -89,6 +106,17 @@ export default {
           true,
         );
       },
+      notifyNavigation: (key, source) =>
+        emitCustomEvent(
+          this.$el,
+          NAVIGATION_EVENT,
+          {
+            chipId: this.myId,
+            key,
+            source,
+          },
+          true,
+        ),
 
       notifySelection: selected =>
         emitCustomEvent(
@@ -122,9 +150,23 @@ export default {
         this.$set(this.styles, property, value),
 
       hasLeadingIcon: () => !!this.haveleadingIcon,
+      hasTrailingIcon: () => !!this.havetrailingIcon,
+      isRTL: () =>
+        window.getComputedStyle(this.$el).getPropertyValue('direction') ===
+        'rtl',
       getRootBoundingClientRect: () => this.$el.getBoundingClientRect(),
       getCheckmarkBoundingClientRect: () => {
         return this.$refs.checkmarkEl ? this.$refs.checkmarkEl.width : null;
+      },
+      setPrimaryActionAttr: (attr, value) => {
+        if (this.primaryAction_) {
+          this.primaryAction_.setAttribute(attr, value);
+        }
+      },
+      setTrailingActionAttr: (attr, value) => {
+        if (this.trailingAction_) {
+          this.trailingAction_.setAttribute(attr, value);
+        }
       },
     });
 
@@ -149,11 +191,32 @@ export default {
     this.foundation.destroy();
   },
   methods: {
+    setSelectedFromChipSet(selected, shouldNotifyClients) {
+      this.foundation.setSelectedFromChipSet(selected, shouldNotifyClients);
+    },
+
+    focusPrimaryAction() {
+      this.foundation.focusPrimaryAction();
+    },
+
+    focusTrailingAction() {
+      this.foundation.focusTrailingAction();
+    },
+    removeFocus() {
+      this.foundation.removeFocus();
+    },
     toggleSelected() {
       this.foundation.toggleSelected();
     },
     isSelected() {
       return this.foundation.isSelected();
+    },
+
+    remove() {
+      const parent = this.$el.parentNode;
+      if (parent != null) {
+        parent.removeChild(this.$el);
+      }
     },
 
     renderLeadingIcon(createElement) {
@@ -238,6 +301,7 @@ export default {
         },
       },
       [
+        createElement('div', { class: { 'mdc-chip__ripple': 1 } }),
         this.haveleadingIcon && this.renderLeadingIcon(createElement),
         this.isFilter &&
           createElement(mcwChipCheckmark, { ref: 'checkmarkEl' }),

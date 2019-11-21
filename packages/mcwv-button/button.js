@@ -7,7 +7,6 @@ export default {
     raised: Boolean,
     unelevated: Boolean,
     outlined: Boolean,
-    dense: Boolean,
     icon: String,
     trailingIcon: String,
   },
@@ -18,7 +17,6 @@ export default {
         'mdc-button--raised': this.raised,
         'mdc-button--unelevated': this.unelevated && !this.raised,
         'mdc-button--outlined': this.outlined,
-        'mdc-button--dense': this.dense,
       },
     };
   },
@@ -31,9 +29,6 @@ export default {
     },
     outlined() {
       this.$set(this.classes, 'mdc-button--outlined', this.outlined);
-    },
-    dense() {
-      this.$set(this.classes, 'mdc-button--dense', this.dense);
     },
   },
 };

@@ -166,7 +166,11 @@ export default {
         style: this.styles,
         ref: 'root',
       },
-      [inputEl, backgroundEl],
+      [
+        inputEl,
+        backgroundEl,
+        createElement('div', { class: { 'mdc-radio__ripple': 1 } }),
+      ],
     );
 
     if (!label) {

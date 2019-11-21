@@ -35,6 +35,7 @@ export default {
       sliderAttrs: {},
       trackStyles: {},
       lastTrackMarkersStyles: {},
+      markerBkgdShorthand: {},
       thumbStyles: {},
       markerValue: '',
       numMarkers: 0,
@@ -44,7 +45,7 @@ export default {
 
   computed: {
     hasMarkers() {
-      return this.discrete && this.displayMarkers && this.numMarkers;
+      return this.discrete && this.displayMarkers;
     },
   },
   watch: {
@@ -128,14 +129,26 @@ export default {
       setMarkerValue: value => {
         this.markerValue = value;
       },
-      appendTrackMarkers: numMarkers => {
-        this.numMarkers = numMarkers;
-      },
-      removeTrackMarkers: () => {
-        this.numMarkers = 0;
-      },
-      setLastTrackMarkersStyleProperty: (propertyName, value) => {
-        this.$set(this.lastTrackMarkersStyles, propertyName, value);
+      // appendTrackMarkers: numMarkers => {
+      //   this.numMarkers = numMarkers;
+      // },
+      // removeTrackMarkers: () => {
+      //   this.numMarkers = 0;
+      // },
+      // setLastTrackMarkersStyleProperty: (propertyName, value) => {
+      //   this.$set(this.lastTrackMarkersStyles, propertyName, value);
+      // },
+      setTrackMarkers: (step, max, min) => {
+        const stepStr = step.toLocaleString();
+        const maxStr = max.toLocaleString();
+        const minStr = min.toLocaleString();
+        // keep calculation in css for better rounding/subpixel behavior
+        const markerAmount = `((${maxStr} - ${minStr}) / ${stepStr})`;
+        const markerWidth = `2px`;
+        const markerBkgdImage = `linear-gradient(to right, currentColor ${markerWidth}, transparent 0)`;
+        const markerBkgdLayout = `0 center / calc((100% - ${markerWidth}) / ${markerAmount}) 100% repeat-x`;
+        const markerBkgdShorthand = `${markerBkgdImage} ${markerBkgdLayout}`;
+        this.$set(this.markerBkgdShorthand, 'background', markerBkgdShorthand);
       },
       isRTL: () => getComputedStyle(this.$el).direction === 'rtl',
     };
@@ -181,43 +194,23 @@ export default {
     },
   },
   render(createElement) {
-    const containerNodes = [
-      createElement('div', {
-        style: this.trackStyles,
-        class: 'mdc-slider__track',
-      }),
-    ];
-    if (this.hasMarkers) {
-      const markers = [];
-      for (let markerNum = 0; markerNum < this.numMarkers; markerNum++) {
-        markers.push(
-          createElement('div', {
-            class: { 'mdc-slider__track-marker': 1 },
-            style:
-              markerNum == this.numMarkers - 1
-                ? this.lastTrackMarkersStyles
-                : {},
-            attrs: { key: markerNum },
-          }),
-        );
-      }
-      containerNodes.push(
-        createElement(
-          'div',
-          {
-            class: { 'mdc-slider__track-marker-container': 1 },
-          },
-          markers,
-        ),
-      );
-    }
-
     const trackContainer = createElement(
       'div',
       {
         class: 'mdc-slider__track-container',
       },
-      containerNodes,
+      [
+        createElement('div', {
+          style: this.trackStyles,
+          class: 'mdc-slider__track',
+        }),
+        this.hasMarkers &&
+          createElement('div', {
+            class: { 'mdc-slider__track-marker-container': 1 },
+            style: this.markerBkgdShorthand,
+            ref: 'trackMarkerContainer',
+          }),
+      ],
     );
 
     const thumbContainer = createElement(
