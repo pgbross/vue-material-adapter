@@ -200,6 +200,11 @@ export default {
         );
         // listItemChildrenTabIndex[listItemIndex] = tabIndexValue;
       },
+      listItemAtIndexHasClass: (index, className) => {
+        return (this.$refs.listItem || [])[index].$el.classList.contains(
+          className,
+        );
+      },
       hasCheckboxAtIndex: index => {
         const listItems = this.$refs.listItem || [];
         const listItem = listItems[index];

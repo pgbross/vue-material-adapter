@@ -33,7 +33,6 @@ var vm = new Vue({
 | `raised`             | Boolean        |                          | a contained button that is elevated upon the surface                           |
 | `unelevated`         | Boolean        |                          | a contained button that is flush with the surface                              |
 | `outlined`           | Boolean        |                          | a contained button that is flush with the surface and has a visible border(\*) |
-| `dense`              | String         |                          | compresses the button text to make it slightly smaller                         |
 | `icon`               | String         | optional                 | leading material icon                                                          |
 | `trailingIcon`       | String         | optional                 | trailing material icon                                                         |
 | `event`              | String         | optional                 | optional event to emit on click                                                |

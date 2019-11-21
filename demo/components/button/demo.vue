@@ -38,8 +38,7 @@
       </div>
 
       <div class="button-style-select">
-        <mcw-checkbox v-model="disabled" label="disabled"/>
-        <mcw-checkbox v-model="dense" label="dense"/>
+        <mcw-checkbox v-model="disabled" label="disabled" />
       </div>
     </div>
   </div>
@@ -50,7 +49,6 @@ export default {
   data() {
     return {
       type: '',
-      dense: false,
       disabled: false,
     };
   },
@@ -66,7 +64,6 @@ export default {
     },
     buttonProps() {
       return {
-        dense: this.dense,
         disabled: this.disabled,
         raised: this.raised,
         outlined: this.outlined,

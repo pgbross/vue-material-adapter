@@ -52,6 +52,7 @@ export default {
       addClass: className => {
         this.$set(this.classes, className, true);
       },
+      forceLayout: () => this.$el.offsetWidth,
       getPrimaryBar: () => this.$refs.primary,
       getBuffer: () => this.$refs.buffer,
       hasClass: className => this.$el.classList.contains(className),
