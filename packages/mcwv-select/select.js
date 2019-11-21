@@ -1,5 +1,7 @@
 /* eslint-disable quote-props */
 import MDCSelectFoundation from '@material/select/foundation';
+import MDCMenuSurfaceFoundation from '@material/menu-surface/foundation';
+import { MDCMenuFoundation } from '@material/menu/foundation';
 import { emitCustomEvent, VMAUniqueIdMixin } from '@mcwv/base';
 import { RippleBase } from '@mcwv/ripple';
 import SelectHelperText from './select-helper-text.js';
@@ -33,6 +35,7 @@ export default {
     return {
       styles: {},
       classes: {},
+      selectedTextContent: '',
     };
   },
 
@@ -40,7 +43,7 @@ export default {
   computed: {
     rootClasses() {
       return {
-        'mdc-select': true,
+        'mdc-select__anchor': true,
         'mdc-select--outlined': this.outlined,
         'mdc-select--with-leading-icon': this.leadingIcon,
         'mdc-select--disabled': this.disabled,
@@ -69,6 +72,31 @@ export default {
   },
 
   mounted() {
+    const {
+      MENU_SELECTOR,
+      SELECTED_ITEM_SELECTOR,
+      SELECT_ANCHOR_SELECTOR,
+      VALUE_ATTR,
+    } = MDCSelectFoundation.strings;
+    this.menuElement = this.$el.querySelector(MENU_SELECTOR);
+
+    this.menu_ = this.menuElement && this.menuElement.__vue__;
+
+    this.menu_.listen(
+      MDCMenuSurfaceFoundation.strings.OPENED_EVENT,
+      this.handleMenuOpened,
+    );
+
+    this.menu_.listen(
+      MDCMenuSurfaceFoundation.strings.CLOSED_EVENT,
+      this.handleMenuClosed,
+    );
+
+    this.menu_.listen(
+      MDCMenuFoundation.strings.SELECTED_EVENT,
+      this.handleMenuItemAction,
+    );
+
     this.foundation = new MDCSelectFoundation(
       Object.assign({
         // common methods
@@ -88,40 +116,62 @@ export default {
             this.$refs.lineRippleEl.foundation_.deactivate();
           }
         },
-
         notifyChange: value => {
           const index = this.selectedIndex;
           emitCustomEvent(
-            this.$refs.root,
+            this.$refs.anchor,
             MDCSelectFoundation.strings.CHANGE_EVENT,
             { value, index },
             true /* shouldBubble  */,
           );
-
           this.$emit('change', value);
         },
 
-        // native methods
-        getValue: () => this.$refs.native_control.value,
-        setValue: value => (this.$refs.native_control.value = value),
-        openMenu: () => {},
-        closeMenu: () => {},
-        isMenuOpen: () => false,
-        setSelectedIndex: index => {
-          this.$refs.native_control.selectedIndex = index;
+        // select methods
+        getSelectedMenuItem: () => {
+          return this.menuElement.querySelector(SELECTED_ITEM_SELECTOR);
         },
-        setDisabled: isDisabled =>
-          (this.$refs.native_control.disabled = isDisabled),
-        setValid: isValid => {
-          isValid
-            ? this.$delete(this.classes, MDCSelectFoundation.cssClasses.INVALID)
-            : this.set(this.classes, MDCSelectFoundation.cssClasses.INVALID);
+        getMenuItemAttr: (menuItem, attr) => menuItem.getAttribute(attr),
+        setSelectedText: text => {
+          this.selectedTextContent = text;
         },
-        checkValidity: () => this.$refs.native_control.checkValidity(),
+        isSelectedTextFocused: () =>
+          document.activeElement === this.$refs.selectedTextEl,
+        getSelectedTextAttr: attr =>
+          this.$refs.selectedTextEl.getAttribute(attr),
+        setSelectedTextAttr: (attr, value) =>
+          this.$refs.selectedTextEl.setAttribute(attr, value),
+        openMenu: () => {
+          this.menu_.surfaceOpen = true;
+        },
+        closeMenu: () => {
+          this.menu_.surfaceOpen = false;
+        },
+
+        getAnchorElement: () => this.$el.querySelector(SELECT_ANCHOR_SELECTOR),
+        // setMenuAnchorElement: anchorEl => this.menu_.setAnchorElement(anchorEl),
+        // setMenuAnchorCorner: anchorCorner =>
+        //   this.menu_.setAnchorCorner(anchorCorner),
+
+        setMenuWrapFocus: wrapFocus => (this.menu_.wrapFocus = wrapFocus),
+        setAttributeAtIndex: (index, attributeName, attributeValue) =>
+          this.menu_.items[index].setAttribute(attributeName, attributeValue),
+        removeAttributeAtIndex: (index, attributeName) =>
+          this.menu_.items[index].removeAttribute(attributeName),
+        focusMenuItemAtIndex: index => this.menu_.items[index].focus(),
+        getMenuItemCount: () => this.menu_.items.length,
+        getMenuItemValues: () =>
+          this.menu_.items.map(el => el.getAttribute(VALUE_ATTR) || ''),
+        getMenuItemTextAtIndex: index => this.menu_.items[index].textContent,
+        addClassAtIndex: (index, className) =>
+          this.menu_.items[index].classList.add(className),
+        removeClassAtIndex: (index, className) =>
+          this.menu_.items[index].classList.remove(className),
 
         // outline methods
-
-        hasOutline: () => this.outlined,
+        hasOutline: () => {
+          return this.outlined;
+        },
         notchOutline: labelWidth => {
           if (this.$refs.outlineEl) {
             this.$refs.outlineEl.notch(labelWidth);
@@ -132,8 +182,8 @@ export default {
             this.$refs.outlineEl.closeNotch();
           }
         },
-
         // label methods
+        hasLabel: () => !!this.label,
         floatLabel: value => {
           if (this.$refs.labelEl) {
             this.$refs.labelEl.float(value);
@@ -141,7 +191,6 @@ export default {
             this.$refs.outlineEl.float(value);
           }
         },
-
         getLabelWidth: () => {
           if (this.$refs.labelEl) {
             return this.$refs.labelEl.getWidth();
@@ -163,12 +212,12 @@ export default {
     this.foundation.handleChange(false);
 
     // initial sync with DOM
-    this.refreshIndex();
-    this.slotObserver = new MutationObserver(() => this.refreshIndex());
-    this.slotObserver.observe(this.$refs.native_control, {
-      childList: true,
-      subtree: true,
-    });
+    // this.refreshIndex();
+    // this.slotObserver = new MutationObserver(() => this.refreshIndex());
+    // this.slotObserver.observe(this.$refs.native_control, {
+    //   childList: true,
+    //   subtree: true,
+    // });
 
     this.ripple = new RippleBase(this);
     this.ripple.init();
@@ -176,6 +225,22 @@ export default {
 
   beforeDestroy() {
     this.slotObserver.disconnect();
+    if (this.menu_) {
+      this.menu_.unlisten(
+        MDCMenuSurfaceFoundation.strings.SELECTED_EVENT,
+        this.handleMenuItemAction,
+      );
+
+      this.menu_.unlisten(
+        MDCMenuSurfaceFoundation.strings.OPENED_EVENT,
+        this.handleMenuOpened,
+      );
+
+      this.menu_.unlisten(
+        MDCMenuSurfaceFoundation.strings.CLOSED_EVENT,
+        this.handleMenuClosed,
+      );
+    }
 
     const foundation = this.foundation;
     this.foundation = null;
@@ -185,6 +250,15 @@ export default {
   },
 
   methods: {
+    handleMenuOpened() {
+      this.foundation.handleMenuOpened();
+    },
+    handleMenuClosed() {
+      this.foundation.handleMenuClosed();
+    },
+    handleMenuItemAction(evt) {
+      this.foundation.handleMenuItemAction(evt.detail.index);
+    },
     handleChange() {
       this.foundation.handleChange(true);
     },
@@ -198,19 +272,18 @@ export default {
     },
 
     handleClick(evt) {
+      this.$refs.selectedTextEl.focus();
       this.foundation.handleClick(this.getNormalizedXCoordinate(evt));
     },
     refreshIndex() {
-      const options = [...this.$refs.native_control.querySelectorAll('option')];
-
-      const idx = options.findIndex(({ value }) => {
-        return this.value === value;
-      });
-
-      if (this.$refs.native_control.selectedIndex !== idx) {
-        this.$refs.native_control.selectedIndex = idx;
-        this.foundation.handleChange(false);
-      }
+      // const options = [...this.$refs.native_control.querySelectorAll('option')];
+      // const idx = options.findIndex(({ value }) => {
+      //   return this.value === value;
+      // });
+      // if (this.$refs.native_control.selectedIndex !== idx) {
+      //   this.$refs.native_control.selectedIndex = idx;
+      //   this.foundation.handleChange(false);
+      // }
     },
 
     getNormalizedXCoordinate(evt) {
@@ -224,63 +297,76 @@ export default {
     const { $scopedSlots: scopedSlots } = this;
 
     const selectNodes = [scopedSlots.default && scopedSlots.default()];
-    if (!this.value) {
-      selectNodes.unshift(
-        createElement('option', {
-          class: { 'mdc-option': 1 },
-          attrs: { value: '', disabled: 1, selected: 1 },
-        }),
-      );
-    }
-    const rootNodes = [
+    // if (!this.value) {
+    //   selectNodes.unshift(
+    //     createElement('option', {
+    //       class: { 'mdc-option': 1 },
+    //       attrs: { value: '', disabled: 1, selected: 1 },
+    //     }),
+    //   );
+    // }
+    const anchorNodes = [
       createElement('i', { class: { 'mdc-select__dropdown-icon': 1 } }),
       createElement(
-        'select',
+        'div',
         {
-          class: { 'mdc-select__native-control': 1 },
-          attrs: {
-            ...this.$attrs,
-            disabled: this.disabled,
-            'aria-controls': this.selectAriaControls,
+          class: {
+            'mdc-select__selected-text': 1,
           },
-          ref: 'native_control',
-          on: this.listeners,
+          ref: 'selectedTextEl',
+          on: {
+            click: evt => this.handleClick(evt),
+            focus: () => this.handleFocus(),
+            blur: () => this.handleBlur(),
+          },
         },
-        selectNodes,
+        [this.selectedTextContent],
       ),
+      // createElement(
+      //   'select',
+      //   {
+      //     class: { 'mdc-select__native-control': 1 },
+      //     attrs: {
+      //       ...this.$attrs,
+      //       disabled: this.disabled,
+      //       'aria-controls': this.selectAriaControls,
+      //     },
+      //     ref: 'native_control',
+      //     on: this.listeners,
+      //   },
+      //   selectNodes,
+      // ),
     ];
-    if (this.leadingIcon) {
-      rootNodes.unshift(
-        createElement('select-icon', {
-          attrs: { icon: this.leadingIcon, 'tab-index': '0', role: 'button' },
-          ref: 'leadingIconEl',
-        }),
-      );
-    }
+    // if (this.leadingIcon) {
+    //   anchorNodes.unshift(
+    //     createElement('select-icon', {
+    //       attrs: { icon: this.leadingIcon, 'tab-index': '0', role: 'button' },
+    //       ref: 'leadingIconEl',
+    //     }),
+    //   );
+    // }
 
     if (this.outlined) {
-      rootNodes.push(
+      anchorNodes.push(
         createElement(mcwNotchedOutline, { ref: 'outlineEl' }, this.label),
       );
     } else {
-      rootNodes.push(
+      anchorNodes.push(
         createElement(mcwFloatingLabel, { ref: 'labelEl' }, this.label),
         createElement(mcwLineRipple, { ref: 'lineRippleEl' }, this.label),
       );
     }
 
-    const rootEl = createElement(
+    const anchorEl = createElement(
       'div',
       {
-        class: this.rootClasses,
-        style: this.style,
-        attrs: { id: this.id },
-        ref: 'root',
+        class: { 'mdc-select__anchor': 1 },
+        ref: 'anchor',
       },
-      rootNodes,
+      anchorNodes,
     );
 
-    const nodes = [rootEl];
+    const nodes = [anchorEl, selectNodes];
     if (this.helptext) {
       nodes.push(
         createElement(
@@ -297,6 +383,6 @@ export default {
         ),
       );
     }
-    return createElement('div', { class: { 'mdc-select-wrapper': 1 } }, nodes);
+    return createElement('div', { class: { 'mdc-select': 1 } }, nodes);
   },
 };
