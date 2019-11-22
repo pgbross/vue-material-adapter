@@ -17,7 +17,7 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "@mcwv/base": "^0.12.0",
+    "@mcwv/base": "^0.13.0-alpha.1",
     "@mcwv/button": "^0.13.0-alpha.2",
     "@mcwv/card": "^0.13.0-alpha.2",
     "@mcwv/checkbox": "^0.13.0-alpha.2",
