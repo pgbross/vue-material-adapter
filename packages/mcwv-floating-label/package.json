@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/floating-label",
   "description": "The Vue Material Adapter for the web floating-label component",
-  "version": "0.13.0-alpha.4",
+  "version": "0.13.0-alpha.5",
   "license": "MIT",
   "main": "dist/mcwv.floatingLabel.min.js",
   "module": "index.js",
@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@material/floating-label": "^4.0.0",
-    "@mcwv/base": "^0.13.0-alpha.4"
+    "@mcwv/base": "^0.13.0-alpha.5"
   },
   "gitHead": "65dff468047c4f785aecfdd8024b78295481db1b"
 }

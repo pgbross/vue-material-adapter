@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/select",
   "description": "The Vue Material Adapter for the web select component",
-  "version": "0.13.0-alpha.4",
+  "version": "0.13.0-alpha.5",
   "license": "MIT",
   "main": "dist/mcwv.select.min.js",
   "module": "index.js",
@@ -17,11 +17,11 @@
   },
   "dependencies": {
     "@material/select": "^4.0.0",
-    "@mcwv/base": "^0.13.0-alpha.4",
-    "@mcwv/floating-label": "^0.13.0-alpha.4",
-    "@mcwv/line-ripple": "^0.13.0-alpha.4",
-    "@mcwv/notched-outline": "^0.13.0-alpha.4",
-    "@mcwv/ripple": "^0.13.0-alpha.4"
+    "@mcwv/base": "^0.13.0-alpha.5",
+    "@mcwv/floating-label": "^0.13.0-alpha.5",
+    "@mcwv/line-ripple": "^0.13.0-alpha.5",
+    "@mcwv/notched-outline": "^0.13.0-alpha.5",
+    "@mcwv/ripple": "^0.13.0-alpha.5"
   },
   "gitHead": "65dff468047c4f785aecfdd8024b78295481db1b"
 }
