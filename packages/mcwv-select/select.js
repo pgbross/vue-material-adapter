@@ -1,7 +1,8 @@
 /* eslint-disable quote-props */
 import MDCSelectFoundation from '@material/select/foundation';
 import MDCMenuSurfaceFoundation from '@material/menu-surface/foundation';
-import { MDCMenuFoundation } from '@material/menu/foundation';
+import MDCMenuFoundation from '@material/menu/foundation';
+import { MDCMenu } from '@material/menu/component';
 import { emitCustomEvent, VMAUniqueIdMixin } from '@mcwv/base';
 import { RippleBase } from '@mcwv/ripple';
 import SelectHelperText from './select-helper-text.js';
@@ -68,34 +69,17 @@ export default {
     disabled(value) {
       this.foundation && this.foundation.updateDisabledStyle(value);
     },
-    value: 'refreshIndex',
+    // value: 'refreshIndex',
   },
 
   mounted() {
     const {
-      MENU_SELECTOR,
       SELECTED_ITEM_SELECTOR,
       SELECT_ANCHOR_SELECTOR,
       VALUE_ATTR,
     } = MDCSelectFoundation.strings;
-    this.menuElement = this.$el.querySelector(MENU_SELECTOR);
 
-    this.menu_ = this.menuElement && this.menuElement.__vue__;
-
-    this.menu_.listen(
-      MDCMenuSurfaceFoundation.strings.OPENED_EVENT,
-      this.handleMenuOpened,
-    );
-
-    this.menu_.listen(
-      MDCMenuSurfaceFoundation.strings.CLOSED_EVENT,
-      this.handleMenuClosed,
-    );
-
-    this.menu_.listen(
-      MDCMenuFoundation.strings.SELECTED_EVENT,
-      this.handleMenuItemAction,
-    );
+    this.menuSetup_();
 
     this.foundation = new MDCSelectFoundation(
       Object.assign({
@@ -103,6 +87,7 @@ export default {
         addClass: className => this.$set(this.classes, className, true),
         removeClass: className => this.$delete(this.classes, className),
         hasClass: className => Boolean(this.classes[className]),
+
         setRippleCenter: normalizedX =>
           this.$refs.lineRippleEl &&
           this.$refs.lineRippleEl.setRippleCenter(normalizedX),
@@ -116,6 +101,7 @@ export default {
             this.$refs.lineRippleEl.foundation_.deactivate();
           }
         },
+
         notifyChange: value => {
           const index = this.selectedIndex;
           emitCustomEvent(
@@ -129,29 +115,35 @@ export default {
 
         // select methods
         getSelectedMenuItem: () => {
-          return this.menuElement.querySelector(SELECTED_ITEM_SELECTOR);
+          return this.menuElement_.querySelector(SELECTED_ITEM_SELECTOR);
         },
         getMenuItemAttr: (menuItem, attr) => menuItem.getAttribute(attr),
+
         setSelectedText: text => {
           this.selectedTextContent = text;
         },
         isSelectedTextFocused: () =>
           document.activeElement === this.$refs.selectedTextEl,
+
         getSelectedTextAttr: attr =>
           this.$refs.selectedTextEl.getAttribute(attr),
-        setSelectedTextAttr: (attr, value) =>
-          this.$refs.selectedTextEl.setAttribute(attr, value),
+
+        setSelectedTextAttr: (attr, value) => {
+          const { selectedTextEl } = this.$refs;
+
+          selectedTextEl && selectedTextEl.setAttribute(attr, value);
+        },
         openMenu: () => {
-          this.menu_.surfaceOpen = true;
+          this.menu_.open = true;
         },
         closeMenu: () => {
-          this.menu_.surfaceOpen = false;
+          this.menu_.open = false;
         },
 
         getAnchorElement: () => this.$el.querySelector(SELECT_ANCHOR_SELECTOR),
-        // setMenuAnchorElement: anchorEl => this.menu_.setAnchorElement(anchorEl),
-        // setMenuAnchorCorner: anchorCorner =>
-        //   this.menu_.setAnchorCorner(anchorCorner),
+        setMenuAnchorElement: anchorEl => this.menu_.setAnchorElement(anchorEl),
+        setMenuAnchorCorner: anchorCorner =>
+          this.menu_.setAnchorCorner(anchorCorner),
 
         setMenuWrapFocus: wrapFocus => (this.menu_.wrapFocus = wrapFocus),
         setAttributeAtIndex: (index, attributeName, attributeValue) =>
@@ -207,6 +199,21 @@ export default {
           : undefined,
       },
     );
+
+    if (this.menu_) {
+      this.menu_.listen(
+        MDCMenuSurfaceFoundation.strings.CLOSED_EVENT,
+        this.handleMenuClosed,
+      );
+      this.menu_.listen(
+        MDCMenuSurfaceFoundation.strings.OPENED_EVENT,
+        this.handleMenuOpened,
+      );
+      this.menu_.listen(
+        MDCMenuFoundation.strings.SELECTED_EVENT,
+        this.handleMenuItemAction,
+      );
+    }
 
     this.foundation.init();
     this.foundation.handleChange(false);
@@ -275,28 +282,29 @@ export default {
       this.$refs.selectedTextEl.focus();
       this.foundation.handleClick(this.getNormalizedXCoordinate(evt));
     },
-    refreshIndex() {
-      // const options = [...this.$refs.native_control.querySelectorAll('option')];
-      // const idx = options.findIndex(({ value }) => {
-      //   return this.value === value;
-      // });
-      // if (this.$refs.native_control.selectedIndex !== idx) {
-      //   this.$refs.native_control.selectedIndex = idx;
-      //   this.foundation.handleChange(false);
-      // }
-    },
 
     getNormalizedXCoordinate(evt) {
       const targetClientRect = evt.target.getBoundingClientRect();
       const xCoordinate = evt.clientX;
       return xCoordinate - targetClientRect.left;
     },
+
+    menuSetup_(menuFactory = el => new MDCMenu(el)) {
+      this.menuElement_ = this.$el.querySelector(
+        MDCSelectFoundation.strings.MENU_SELECTOR,
+      );
+      this.menu_ = menuFactory(this.menuElement_);
+    },
   },
 
   render(createElement) {
     const { $scopedSlots: scopedSlots } = this;
 
-    const selectNodes = [scopedSlots.default && scopedSlots.default()];
+    const selectNodes = createElement(
+      'div',
+      { class: ['mdc-select__menu', 'mdc-menu-surface'] },
+      scopedSlots.default && scopedSlots.default(),
+    );
     // if (!this.value) {
     //   selectNodes.unshift(
     //     createElement('option', {
@@ -322,20 +330,6 @@ export default {
         },
         [this.selectedTextContent],
       ),
-      // createElement(
-      //   'select',
-      //   {
-      //     class: { 'mdc-select__native-control': 1 },
-      //     attrs: {
-      //       ...this.$attrs,
-      //       disabled: this.disabled,
-      //       'aria-controls': this.selectAriaControls,
-      //     },
-      //     ref: 'native_control',
-      //     on: this.listeners,
-      //   },
-      //   selectNodes,
-      // ),
     ];
     // if (this.leadingIcon) {
     //   anchorNodes.unshift(

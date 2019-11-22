@@ -1,10 +1,19 @@
 ## Usage
 
 ```html
-<mcw-select v-model="selected" label=">Please select one">
-  <option>A</option>
-  <option>B</option>
-  <option>C</option>
+<mcw-select v-model="selectedType" label="Food" helptext="Pick a food group">
+  <ul class="mdc-list">
+    <li
+      class="mdc-list-item mdc-list-item--selected"
+      data-value
+      aria-selected="true"
+    ></li>
+    <li class="mdc-list-item" data-value="grains">
+      Bread, Cereal, Rice, and Pasta
+    </li>
+    <li class="mdc-list-item" data-value="vegetables">Vegetables</li>
+    <li class="mdc-list-item" data-value="fruit">Fruit</li>
+  </ul>
 </mcw-select>
 <span>Selected: {{ selected }}</span>
 ```
@@ -32,19 +41,6 @@ var vm = new Vue({
 | -------- | ----------------------- |
 | `@focus` | emitted on focus gained |
 | `@blur`  | emitted on focus lost   |
-
-```html
-<mcw-select v-model="selected" label=">Please select one">
-  <optgroup label="Meats">
-    <option value="steak">Steak</option>
-    <option value="hamburger">Hamburger</option>
-  </optgroup>
-  <optgroup label="Vegetables">
-    <option value="beet">Beet</option>
-    <option value="carrot">Carrot</option>
-  </optgroup>
-</mcw-select>
-```
 
 ### Reference
 
