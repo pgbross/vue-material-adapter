@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/ripple",
   "description": "The Vue Material Adapter for the ripple component",
-  "version": "0.13.0-alpha.1",
+  "version": "0.13.0-alpha.2",
   "license": "MIT",
   "main": "dist/mcwv.ripple.min.js",
   "module": "index.js",

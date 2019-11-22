@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/floating-label",
   "description": "The Vue Material Adapter for the web floating-label component",
-  "version": "0.13.0-alpha.1",
+  "version": "0.13.0-alpha.2",
   "license": "MIT",
   "main": "dist/mcwv.floatingLabel.min.js",
   "module": "index.js",
