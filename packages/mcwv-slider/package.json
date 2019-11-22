@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/slider",
   "description": "The Vue Material Adapter for the web slider component",
-  "version": "0.12.0",
+  "version": "0.13.0-alpha.1",
   "license": "MIT",
   "main": "dist/mcwv.slider.min.js",
   "module": "index.js",

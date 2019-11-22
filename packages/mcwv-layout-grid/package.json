@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/layout-grid",
   "description": "The Vue Material Adapter for the web layout-grid component",
-  "version": "0.12.0",
+  "version": "0.13.0-alpha.1",
   "license": "MIT",
   "main": "dist/mcwv.layoutGrid.min.js",
   "module": "index.js",

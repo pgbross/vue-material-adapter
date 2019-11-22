@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/top-app-bar",
   "description": "The Vue Material Adapter for the web top-app-bar component",
-  "version": "0.12.0",
+  "version": "0.13.0-alpha.1",
   "license": "MIT",
   "main": "dist/mcwv.topAppBar.min.js",
   "module": "index.js",
@@ -18,7 +18,7 @@
   "dependencies": {
     "@material/top-app-bar": "^4.0.0",
     "@mcwv/base": "^0.12.0",
-    "@mcwv/ripple": "^0.12.0"
+    "@mcwv/ripple": "^0.13.0-alpha.1"
   },
   "gitHead": "c23f3efa46da6ea87e90591989349b485753c6a3"
 }
