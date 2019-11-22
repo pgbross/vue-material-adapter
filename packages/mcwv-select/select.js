@@ -231,7 +231,7 @@ export default {
   },
 
   beforeDestroy() {
-    this.slotObserver.disconnect();
+    // this.slotObserver.disconnect();
     if (this.menu_) {
       this.menu_.unlisten(
         MDCMenuSurfaceFoundation.strings.SELECTED_EVENT,

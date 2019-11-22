@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/select",
   "description": "The Vue Material Adapter for the web select component",
-  "version": "0.13.0-alpha.3",
+  "version": "0.13.0-alpha.4",
   "license": "MIT",
   "main": "dist/mcwv.select.min.js",
   "module": "index.js",
