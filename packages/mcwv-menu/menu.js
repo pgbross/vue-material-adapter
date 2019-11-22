@@ -139,6 +139,9 @@ export default {
     setAnchorCorner(corner) {
       this.$refs.root.foundation.setAnchorCorner(corner);
     },
+    setAnchorElement(element) {
+      this.$refs.root.setMenuSurfaceAnchorElement(element);
+    },
     setSelectedIndex(index) {
       this.foundation.setSelectedIndex(index);
     },

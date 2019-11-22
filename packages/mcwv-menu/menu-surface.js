@@ -64,9 +64,10 @@ export default {
           isRtl: () =>
             getComputedStyle(this.$el).getPropertyValue('direction') === 'rtl',
           setTransformOrigin: origin => {
-            this.$el.style[
-              `${util.getTransformPropertyName(window)}-origin`
-            ] = origin;
+            this.$el.style.setProperty(
+              `${util.getTransformPropertyName(window)}-origin`,
+              origin,
+            );
           },
         },
         this.getFocusAdapterMethods(),
@@ -134,7 +135,9 @@ export default {
           };
         },
         getAnchorDimensions: () =>
-          this.anchorElement && this.anchorElement.getBoundingClientRect(),
+          this.anchorElement
+            ? this.anchorElement.getBoundingClientRect()
+            : null,
         getWindowDimensions: () => {
           return { width: window.innerWidth, height: window.innerHeight };
         },
@@ -148,10 +151,13 @@ export default {
           return { x: window.pageXOffset, y: window.pageYOffset };
         },
         setPosition: position => {
-          this.$el.style.left = 'left' in position ? position.left : null;
-          this.$el.style.right = 'right' in position ? position.right : null;
-          this.$el.style.top = 'top' in position ? position.top : null;
-          this.$el.style.bottom = 'bottom' in position ? position.bottom : null;
+          this.$el.style.left =
+            'left' in position ? `${position.left}px` : null;
+          this.$el.style.right =
+            'right' in position ? `${position.right}px` : null;
+          this.$el.style.top = 'top' in position ? `${position.top}px` : null;
+          this.$el.style.bottom =
+            'bottom' in position ? `${position.bottom}px` : null;
         },
         setMaxHeight: height => {
           this.$el.style.maxHeight = height;
@@ -182,9 +188,7 @@ export default {
     setIsHoisted(isHoisted) {
       this.foundation.setIsHoisted(isHoisted);
     },
-    setMenuSurfaceAnchorElement(element) {
-      this.anchorElement = element;
-    },
+
     setFixedPosition(isFixed) {
       if (isFixed) {
         this.$el.classList.add(MDCMenuSurfaceFoundation.cssClasses.FIXED);
@@ -203,6 +207,9 @@ export default {
     },
     setAnchorMargin(margin) {
       this.foundation.setAnchorMargin(margin);
+    },
+    setMenuSurfaceAnchorElement(element) {
+      this.anchorElement = element;
     },
     show(options) {
       this.foundation.open(options);

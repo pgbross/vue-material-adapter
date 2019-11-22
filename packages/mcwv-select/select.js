@@ -1,15 +1,13 @@
-/* eslint-disable quote-props */
-import MDCSelectFoundation from '@material/select/foundation';
 import MDCMenuSurfaceFoundation from '@material/menu-surface/foundation';
 import MDCMenuFoundation from '@material/menu/foundation';
-import { MDCMenu } from '@material/menu/component';
+import MDCSelectFoundation from '@material/select/foundation';
 import { emitCustomEvent, VMAUniqueIdMixin } from '@mcwv/base';
+import { mcwFloatingLabel } from '@mcwv/floating-label/index.js';
+import { mcwLineRipple } from '@mcwv/line-ripple/index.js';
+import { mcwNotchedOutline } from '@mcwv/notched-outline/index.js';
 import { RippleBase } from '@mcwv/ripple';
 import SelectHelperText from './select-helper-text.js';
 import SelectIcon from './select-icon.js';
-import { mcwFloatingLabel } from '@mcwv/floating-label/index.js';
-import { mcwNotchedOutline } from '@mcwv/notched-outline/index.js';
-import { mcwLineRipple } from '@mcwv/line-ripple/index.js';
 
 export default {
   name: 'mcw-select',
@@ -21,7 +19,6 @@ export default {
   props: {
     value: String,
     helptext: String,
-
     leadingIcon: String,
     icon: String,
     helptextPersistent: Boolean,
@@ -44,10 +41,11 @@ export default {
   computed: {
     rootClasses() {
       return {
-        'mdc-select__anchor': true,
+        'mdc-select': 1,
         'mdc-select--outlined': this.outlined,
         'mdc-select--with-leading-icon': this.leadingIcon,
         'mdc-select--disabled': this.disabled,
+        'mdc-select--no-label': !this.label,
         ...this.classes,
       };
     },
@@ -134,10 +132,10 @@ export default {
           selectedTextEl && selectedTextEl.setAttribute(attr, value);
         },
         openMenu: () => {
-          this.menu_.open = true;
+          this.menu_.surfaceOpen = true;
         },
         closeMenu: () => {
-          this.menu_.open = false;
+          this.menu_.surfaceOpen = false;
         },
 
         getAnchorElement: () => this.$el.querySelector(SELECT_ANCHOR_SELECTOR),
@@ -150,7 +148,9 @@ export default {
           this.menu_.items[index].setAttribute(attributeName, attributeValue),
         removeAttributeAtIndex: (index, attributeName) =>
           this.menu_.items[index].removeAttribute(attributeName),
-        focusMenuItemAtIndex: index => this.menu_.items[index].focus(),
+        focusMenuItemAtIndex: index => {
+          this.menu_.items[index].focus();
+        },
         getMenuItemCount: () => this.menu_.items.length,
         getMenuItemValues: () =>
           this.menu_.items.map(el => el.getAttribute(VALUE_ATTR) || ''),
@@ -219,7 +219,7 @@ export default {
     this.foundation.handleChange(false);
 
     // initial sync with DOM
-    // this.refreshIndex();
+    this.refreshIndex();
     // this.slotObserver = new MutationObserver(() => this.refreshIndex());
     // this.slotObserver.observe(this.$refs.native_control, {
     //   childList: true,
@@ -280,6 +280,7 @@ export default {
 
     handleClick(evt) {
       this.$refs.selectedTextEl.focus();
+      this.handleFocus();
       this.foundation.handleClick(this.getNormalizedXCoordinate(evt));
     },
 
@@ -289,22 +290,28 @@ export default {
       return xCoordinate - targetClientRect.left;
     },
 
-    menuSetup_(menuFactory = el => new MDCMenu(el)) {
+    menuSetup_() {
       this.menuElement_ = this.$el.querySelector(
         MDCSelectFoundation.strings.MENU_SELECTOR,
       );
-      this.menu_ = menuFactory(this.menuElement_);
+      this.menu_ = this.menuElement_ && this.menuElement_.__vue__;
+    },
+    refreshIndex() {
+      const items = this.menu_.items.map(
+        el => el.getAttribute(MDCSelectFoundation.strings.VALUE_ATTR) || '',
+      );
+
+      const idx = items.findIndex(value => {
+        return this.value === value;
+      });
+      this.foundation.setSelectedIndex(idx);
     },
   },
 
   render(createElement) {
     const { $scopedSlots: scopedSlots } = this;
 
-    const selectNodes = createElement(
-      'div',
-      { class: ['mdc-select__menu', 'mdc-menu-surface'] },
-      scopedSlots.default && scopedSlots.default(),
-    );
+    const selectNodes = [scopedSlots.default && scopedSlots.default()];
     // if (!this.value) {
     //   selectNodes.unshift(
     //     createElement('option', {
@@ -313,6 +320,14 @@ export default {
     //     }),
     //   );
     // }
+    const selectedTextAttrs = {};
+    const helpId = `help-${this.vma_uid_}`;
+
+    if (this.helptext) {
+      selectedTextAttrs['aria-controls'] = helpId;
+      selectedTextAttrs['aria-describedBy'] = helpId;
+    }
+
     const anchorNodes = [
       createElement('i', { class: { 'mdc-select__dropdown-icon': 1 } }),
       createElement(
@@ -321,9 +336,12 @@ export default {
           class: {
             'mdc-select__selected-text': 1,
           },
+          attrs: selectedTextAttrs,
           ref: 'selectedTextEl',
           on: {
             click: evt => this.handleClick(evt),
+          },
+          nativeOn: {
             focus: () => this.handleFocus(),
             blur: () => this.handleBlur(),
           },
@@ -331,14 +349,6 @@ export default {
         [this.selectedTextContent],
       ),
     ];
-    // if (this.leadingIcon) {
-    //   anchorNodes.unshift(
-    //     createElement('select-icon', {
-    //       attrs: { icon: this.leadingIcon, 'tab-index': '0', role: 'button' },
-    //       ref: 'leadingIconEl',
-    //     }),
-    //   );
-    // }
 
     if (this.outlined) {
       anchorNodes.push(
@@ -361,6 +371,16 @@ export default {
     );
 
     const nodes = [anchorEl, selectNodes];
+
+    if (this.leadingIcon) {
+      nodes.unshift(
+        createElement('select-icon', {
+          attrs: { icon: this.leadingIcon, 'tab-index': '0', role: 'button' },
+          ref: 'leadingIconEl',
+        }),
+      );
+    }
+
     if (this.helptext) {
       nodes.push(
         createElement(
@@ -369,7 +389,7 @@ export default {
             attrs: {
               helptextPersistent: this.helptextPersistent,
               helptextValidation: this.helptextValidation,
-              id: `help-${this.vma_uid_}`,
+              id: helpId,
             },
             ref: 'helperTextEl',
           },
@@ -377,6 +397,12 @@ export default {
         ),
       );
     }
-    return createElement('div', { class: { 'mdc-select': 1 } }, nodes);
+    return createElement(
+      'div',
+      {
+        class: this.rootClasses,
+      },
+      nodes,
+    );
   },
 };
