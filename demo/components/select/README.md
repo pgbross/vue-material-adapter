@@ -2,18 +2,11 @@
 
 ```html
 <mcw-select v-model="selectedType" label="Food" helptext="Pick a food group">
-  <ul class="mdc-list">
-    <li
-      class="mdc-list-item mdc-list-item--selected"
-      data-value
-      aria-selected="true"
-    ></li>
-    <li class="mdc-list-item" data-value="grains">
-      Bread, Cereal, Rice, and Pasta
-    </li>
-    <li class="mdc-list-item" data-value="vegetables">Vegetables</li>
-    <li class="mdc-list-item" data-value="fruit">Fruit</li>
-  </ul>
+  <mcw-menu class="mdc-select__menu">
+    <mcw-list-item v-for="type in types" :data-value="type" :key="type"
+      >{{ type }}</mcw-list-item
+    >
+  </mcw-menu>
 </mcw-select>
 <span>Selected: {{ selected }}</span>
 ```
