@@ -17,11 +17,11 @@
   },
   "dependencies": {
     "@material/select": "^4.0.0",
-    "@mcwv/base": "^0.13.0-alpha.3",
-    "@mcwv/floating-label": "^0.13.0-alpha.3",
-    "@mcwv/line-ripple": "^0.13.0-alpha.3",
-    "@mcwv/notched-outline": "^0.13.0-alpha.3",
-    "@mcwv/ripple": "^0.13.0-alpha.3"
+    "@mcwv/base": "^0.13.0-alpha.4",
+    "@mcwv/floating-label": "^0.13.0-alpha.4",
+    "@mcwv/line-ripple": "^0.13.0-alpha.4",
+    "@mcwv/notched-outline": "^0.13.0-alpha.4",
+    "@mcwv/ripple": "^0.13.0-alpha.4"
   },
   "gitHead": "d9bdb4858747391e6b6c31faa1c9c6f7a4ee9bf0"
 }

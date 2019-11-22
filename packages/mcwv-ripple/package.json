@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/ripple",
   "description": "The Vue Material Adapter for the ripple component",
-  "version": "0.13.0-alpha.3",
+  "version": "0.13.0-alpha.4",
   "license": "MIT",
   "main": "dist/mcwv.ripple.min.js",
   "module": "index.js",
@@ -18,7 +18,7 @@
   "dependencies": {
     "@material/dom": "^4.0.0",
     "@material/ripple": "^4.0.0",
-    "@mcwv/base": "^0.13.0-alpha.3"
+    "@mcwv/base": "^0.13.0-alpha.4"
   },
   "gitHead": "10e3aca1f54f0ed6c0534ac52ce35d34297cb011"
 }

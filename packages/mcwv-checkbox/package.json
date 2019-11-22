@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/checkbox",
   "description": "The Vue Material Adapter for the web checkbox component",
-  "version": "0.13.0-alpha.3",
+  "version": "0.13.0-alpha.4",
   "license": "MIT",
   "main": "dist/mcwv.checkbox.min.js",
   "module": "index.js",
@@ -19,8 +19,8 @@
     "@material/checkbox": "^4.0.0",
     "@material/dom": "^4.0.0",
     "@material/form-field": "^4.0.0",
-    "@mcwv/base": "^0.13.0-alpha.3",
-    "@mcwv/ripple": "^0.13.0-alpha.3"
+    "@mcwv/base": "^0.13.0-alpha.4",
+    "@mcwv/ripple": "^0.13.0-alpha.4"
   },
   "gitHead": "d9bdb4858747391e6b6c31faa1c9c6f7a4ee9bf0"
 }

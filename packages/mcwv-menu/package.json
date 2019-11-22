@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/menu",
   "description": "The Vue Material Adapter for the web menu component",
-  "version": "0.13.0-alpha.3",
+  "version": "0.13.0-alpha.4",
   "license": "MIT",
   "main": "dist/mcwv.menu.min.js",
   "module": "index.js",
@@ -18,9 +18,9 @@
   "dependencies": {
     "@material/dom": "^4.0.0",
     "@material/menu": "^4.0.0",
-    "@mcwv/base": "^0.13.0-alpha.3",
-    "@mcwv/list": "^0.13.0-alpha.3",
-    "@mcwv/ripple": "^0.13.0-alpha.3"
+    "@mcwv/base": "^0.13.0-alpha.4",
+    "@mcwv/list": "^0.13.0-alpha.4",
+    "@mcwv/ripple": "^0.13.0-alpha.4"
   },
   "gitHead": "d9bdb4858747391e6b6c31faa1c9c6f7a4ee9bf0"
 }

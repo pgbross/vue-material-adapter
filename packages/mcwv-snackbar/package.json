@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/snackbar",
   "description": "The Vue Material Adapter for the web snackbar component",
-  "version": "0.13.0-alpha.3",
+  "version": "0.13.0-alpha.4",
   "license": "MIT",
   "main": "dist/mcwv.snackbar.min.js",
   "module": "index.js",
@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@material/snackbar": "^4.0.0",
-    "@mcwv/base": "^0.13.0-alpha.3"
+    "@mcwv/base": "^0.13.0-alpha.4"
   },
   "gitHead": "b2449fefc3d18779b40babb1a5ce81523ab4ebfc"
 }
