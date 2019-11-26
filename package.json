@@ -152,7 +152,7 @@
     "style-loader": "^1.0.0",
     "terser-webpack-plugin": "^2.2.1",
     "to-slug-case": "^1.0.0",
-    "url-loader": "^2.2.0",
+    "url-loader": "^3.0.0",
     "vue": "^2.6.10",
     "vue-analytics": "^5.18.0",
     "vue-eslint-parser": "^7.0.0",
