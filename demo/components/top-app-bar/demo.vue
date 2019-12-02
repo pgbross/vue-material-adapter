@@ -1,7 +1,7 @@
 <template>
   <div class="mcw-demo--appbar">
     <section class="mcw-demo">
-      <mcw-top-app-bar class="main-toolbar" :scrollTarget="scrollTarget">
+      <mcw-top-app-bar class="main-toolbar" :scrollTarget="scrollTarget" @nav="onNav">
         <mcw-top-app-bar-row>
           <mcw-top-app-bar-section align="start">
             <mcw-top-app-bar-icon navIcon>
@@ -21,10 +21,14 @@
         </mcw-top-app-bar-row>
       </mcw-top-app-bar>
 
-      <br>
+      <br />
       <div v-if="buttonText">
         Button:
         <span class="demo-button-info">{{ buttonText }}</span>
+      </div>
+      <div v-if="navigation">
+        Navigation count:
+        <span class="demo-button-info">{{ navigationCount }}</span>
       </div>
     </section>
   </div>
@@ -33,7 +37,18 @@
 <script>
 export default {
   data() {
-    return { buttonText: '', scrollTarget: null };
+    return {
+      buttonText: '',
+      navigation: false,
+      navigationCount: 0,
+      scrollTarget: null,
+    };
+  },
+  methods: {
+    onNav(event) {
+      this.navigation = true;
+      this.navigationCount += 1;
+    },
   },
   mounted() {
     const demoEl = this.$el.querySelector('.mcw-demo');

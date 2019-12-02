@@ -1,7 +1,8 @@
 import MDCFixedTopAppBarFoundation from '@material/top-app-bar/fixed/foundation';
 import MDCShortTopAppBarFoundation from '@material/top-app-bar/short/foundation';
-import mcwTopAppBarFoundation from '@material/top-app-bar/standard/foundation';
+import MDCTopAppBarFoundation from '@material/top-app-bar/standard/foundation';
 import { cssClasses } from './constants';
+import { emitCustomEvent } from '@mcwv/base';
 
 export default {
   name: 'mcw-top-app-bar',
@@ -44,8 +45,17 @@ export default {
       }
     },
   },
+  methods: {
+    handleNavigationClick_(event) {
+      this.foundation_.handleNavigationClick(event);
+    },
+  },
 
   mounted() {
+    const {
+      strings: { NAVIGATION_EVENT, NAVIGATION_ICON_SELECTOR },
+    } = MDCTopAppBarFoundation;
+
     const adapter = {
       addClass: className => this.$set(this.rootClasses, className, true),
       removeClass: className => this.$delete(this.rootClasses, className),
@@ -53,6 +63,15 @@ export default {
       setStyle: (property, value) =>
         this.$set(this.rootStyles, property, value),
       getTopAppBarHeight: () => this.$el.clientHeight,
+      notifyNavigationIconClicked: () => {
+        this.$emit('nav', {});
+        emitCustomEvent(
+          this.$el,
+          NAVIGATION_EVENT,
+          {},
+          /** shouldBubble */ true,
+        );
+      },
 
       //  registerScrollHandler: handler => {
       //         if (this.myScrollTarget) {
@@ -79,13 +98,23 @@ export default {
     } else if (fixed) {
       this.foundation_ = new MDCFixedTopAppBarFoundation(adapter);
     } else {
-      this.foundation_ = new mcwTopAppBarFoundation(adapter);
+      this.foundation_ = new MDCTopAppBarFoundation(adapter);
+    }
+
+    this.navIcon_ = this.$el.querySelector(NAVIGATION_ICON_SELECTOR);
+
+    if (this.navIcon_) {
+      this.navIcon_.addEventListener('click', this.handleNavigationClick_);
     }
 
     this.myScrollTarget = this.scrollTarget || window;
     this.foundation_.init();
   },
   beforeDestroy() {
+    if (this.navIcon_) {
+      this.navIcon_.removeEventListener('click', this.handleNavigationClick_);
+    }
+
     this.myScrollTarget &&
       this.myScrollTarget.removeEventListener(
         'scroll',
