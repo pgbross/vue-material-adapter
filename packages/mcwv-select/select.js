@@ -20,7 +20,6 @@ export default {
     value: String,
     helptext: String,
     leadingIcon: String,
-    icon: String,
     helptextPersistent: Boolean,
     helptextValidation: Boolean,
     disabled: Boolean,
@@ -108,7 +107,7 @@ export default {
             { value, index },
             true /* shouldBubble  */,
           );
-          this.$emit('change', value);
+          value != this.value && this.$emit('change', value);
         },
 
         // select methods
@@ -216,7 +215,7 @@ export default {
     }
 
     this.foundation.init();
-    this.foundation.handleChange(false);
+    // this.foundation.handleChange(false);
 
     // initial sync with DOM
     this.refreshIndex();
