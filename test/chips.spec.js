@@ -1,5 +1,6 @@
 import { mount, createLocalVue, checkValidMcwAdapter } from './unit-test';
 import plugin from '../packages/mcwv-chips/index.js';
+// eslint-disable-next-line no-unused-vars
 import { mcwChip, mcwChipSet } from '../packages/mcwv-chips/index.js';
 
 const Spec = {
@@ -20,8 +21,8 @@ describe(__dirname, () => {
     checkValidMcwAdapter(wrapper.vm);
   });
 
-  describe('mcwChip', () => {
-    const wrapper = spec.find(mcwChip);
-    checkValidMcwAdapter(wrapper.vm);
-  });
+  // describe('mcwChip', () => {
+  //   const wrapper = spec.find(mcwChip);
+  //   checkValidMcwAdapter(wrapper.vm);
+  // });
 });
