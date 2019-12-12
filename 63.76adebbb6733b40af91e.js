@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[63],{372:function(t,a,c){"use strict";c.r(a);var e=c(10),i=Object(e.a)({},(function(){var t=this.$createElement,a=this._self._c||t;return a("div",{staticClass:"mcw-demo mcw-demo--container"},[a("mcw-material-icon",{attrs:{icon:"favorite"}}),this._v(" "),a("mcw-material-icon",{attrs:{icon:"aspect_ratio"}})],1)}),[],!1,null,null,null);a.default=i.exports}}]);
+//# sourceMappingURL=63.76adebbb6733b40af91e.js.map
