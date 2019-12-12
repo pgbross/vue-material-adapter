@@ -23,17 +23,23 @@ var vm = new Vue({
 
 ### mcw-select
 
-| props      | Type    | Default | Description                                  |
-| ---------- | ------- | ------- | -------------------------------------------- |
-| `label`    | String  |         | the selection label (placeholder)            |
-| `value`    | String  |         | bind with v-model (update on `change` event) |
-| `disabled` | Boolean | false   | whether this select is disabled              |
-| `outlined` | Boolean | false   | outlined style                               |
+| props                | Type    | Default | Description                                  |
+| -------------------- | ------- | ------- | -------------------------------------------- |
+| `label`              | String  |         | the selection label (placeholder)            |
+| `value`              | String  |         | bind with v-model (update on `change` event) |
+| `disabled`           | Boolean | false   | whether this select is disabled              |
+| `outlined`           | Boolean | false   | outlined style                               |
+| `helptext`           | String  |         | Helptext                                     |
+| `helptextPersistent` | Boolean |         | Always show helptext                         |
+| `leadingIcon`        | String  |         | Optional leading icon                        |
+| `disabled`           | Boolean | false   | Disables control                             |
+| `label`              | String  |         | Optional field label                         |
+| `outlined`           | Boolean | false   | Use outline variant                          |
 
-| event    | Description             |
-| -------- | ----------------------- |
-| `@focus` | emitted on focus gained |
-| `@blur`  | emitted on focus lost   |
+| event               | Description                                         |
+| ------------------- | --------------------------------------------------- |
+| `@change`           | emitted on change (supressed if value is unchanged) |
+| `@MDCSelect:change` | Native event emitted on change                      |
 
 ### Reference
 
