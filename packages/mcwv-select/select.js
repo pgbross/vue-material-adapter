@@ -119,8 +119,9 @@ export default {
         setSelectedText: text => {
           this.selectedTextContent = text;
         },
-        isSelectedTextFocused: () =>
-          document.activeElement === this.$refs.selectedTextEl,
+        isSelectedTextFocused: () => {
+          return document.activeElement === this.$refs.selectedTextEl;
+        },
 
         getSelectedTextAttr: attr =>
           this.$refs.selectedTextEl.getAttribute(attr),
@@ -154,10 +155,12 @@ export default {
         getMenuItemValues: () =>
           this.menu_.items.map(el => el.getAttribute(VALUE_ATTR) || ''),
         getMenuItemTextAtIndex: index => this.menu_.items[index].textContent,
-        addClassAtIndex: (index, className) =>
-          this.menu_.items[index].classList.add(className),
-        removeClassAtIndex: (index, className) =>
-          this.menu_.items[index].classList.remove(className),
+        addClassAtIndex: (index, className) => {
+          this.menu_.items[index].classList.add(className);
+        },
+        removeClassAtIndex: (index, className) => {
+          this.menu_.items[index].classList.remove(className);
+        },
 
         // outline methods
         hasOutline: () => {
@@ -174,7 +177,9 @@ export default {
           }
         },
         // label methods
-        hasLabel: () => !!this.label,
+        hasLabel: () => {
+          return !!this.label;
+        },
         floatLabel: value => {
           if (this.$refs.labelEl) {
             this.$refs.labelEl.float(value);

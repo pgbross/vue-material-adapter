@@ -1,9 +1,10 @@
 import MDCListFoundation from '@material/list/foundation';
 import { emitCustomEvent } from '@mcwv/base';
 
+import { closest, matches } from '@material/dom/ponyfill';
+
 const ARIA_ORIENTATION = 'aria-orientation';
 const VERTICAL = 'vertical';
-const CHECKBOX_TYPE = 'checkbox';
 
 const {
   strings: {
@@ -12,6 +13,10 @@ const {
     CHECKBOX_RADIO_SELECTOR,
     ACTION_EVENT,
     FOCUSABLE_CHILD_ELEMENTS,
+    CHILD_ELEMENTS_TO_TOGGLE_TABINDEX,
+    ARIA_ROLE_CHECKBOX_SELECTOR,
+    ARIA_CHECKED_RADIO_SELECTOR,
+    ARIA_CHECKED_CHECKBOX_SELECTOR,
   },
   cssClasses: {
     LIST_ITEM_CLASS,
@@ -36,20 +41,7 @@ export default {
   },
 
   data() {
-    return {
-      focusListItemAtIndex: -1,
-      followHrefAtIndex: -1,
-      toggleCheckboxAtIndex: -1,
-      // listItemAttributes: {index: {attr: value}}
-      listItemAttributes: {},
-      // listItemClassNames: {index: Array<String>}
-      listItemClassNames: {},
-      // listItemChildrenTabIndex: {index: Number}
-      listItemChildrenTabIndex: {},
-    };
-  },
-  provide() {
-    return { mcwList: this };
+    return {};
   },
 
   watch: {
@@ -97,9 +89,10 @@ export default {
     },
     handleClickEvent(evt) {
       const index = this.getListItemIndex(evt);
+      const target = evt.target;
 
       // Toggle the checkbox only if it's not the target of the event, or the checkbox will have 2 change events.
-      const toggleCheckbox = isCheckbox(evt.target);
+      const toggleCheckbox = !matches(target, CHECKBOX_RADIO_SELECTOR);
       this.foundation.handleClick(index, toggleCheckbox);
     },
 
@@ -115,124 +108,106 @@ export default {
       [].slice
         .call(this.$el.querySelectorAll(FOCUSABLE_CHILD_ELEMENTS))
         .forEach(ele => ele.setAttribute('tabindex', -1));
+
+      this.foundation.layout();
     },
 
     initializeListType() {
-      // Automatically set single selection if selected/activated classes are present.
-      const preselectedElement = this.$el.querySelector(
-        `.${LIST_ITEM_ACTIVATED_CLASS}, .${LIST_ITEM_SELECTED_CLASS}`,
+      const checkboxListItems = this.$el.querySelectorAll(
+        ARIA_ROLE_CHECKBOX_SELECTOR,
+      );
+      const singleSelectedListItem = this.$el.querySelector(`
+        .${LIST_ITEM_ACTIVATED_CLASS},
+        .${LIST_ITEM_SELECTED_CLASS}
+      `);
+      const radioSelectedListItem = this.$el.querySelector(
+        ARIA_CHECKED_RADIO_SELECTOR,
       );
 
-      if (preselectedElement) {
-        if (preselectedElement.classList.contains(LIST_ITEM_ACTIVATED_CLASS)) {
+      if (checkboxListItems.length) {
+        const preselectedItems = this.$el.querySelectorAll(
+          ARIA_CHECKED_CHECKBOX_SELECTOR,
+        );
+        this.selectedIndex = [].map.call(preselectedItems, listItem =>
+          this.listElements.indexOf(listItem),
+        );
+      } else if (singleSelectedListItem) {
+        if (
+          singleSelectedListItem.classList.contains(LIST_ITEM_ACTIVATED_CLASS)
+        ) {
           this.foundation.setUseActivatedClass(true);
         }
 
         this.singleSelection = true;
-        this.selectedIndex = this.listElements.indexOf(preselectedElement);
+        this.selectedIndex = this.listElements.indexOf(singleSelectedListItem);
+      } else if (radioSelectedListItem) {
+        this.selectedIndex = this.listElements.indexOf(radioSelectedListItem);
       }
     },
 
     getListItemIndex(evt) {
-      let eventTarget = evt.target;
-      let index = -1;
-
-      // Find the first ancestor that is a list item or the list.
-      while (
-        !eventTarget.classList.contains(LIST_ITEM_CLASS) &&
-        !eventTarget.classList.contains(ROOT)
-      ) {
-        eventTarget = eventTarget.parentElement;
-      }
+      const eventTarget = evt.target;
+      const nearestParent = closest(
+        eventTarget,
+        `.${LIST_ITEM_CLASS}, .${ROOT}`,
+      );
 
       // Get the index of the element if it is a list item.
-      if (eventTarget.classList.contains(LIST_ITEM_CLASS)) {
-        index = this.listElements.indexOf(eventTarget);
+      if (nearestParent && matches(nearestParent, `.${LIST_ITEM_CLASS}`)) {
+        return this.listElements.indexOf(nearestParent);
       }
 
-      return index;
+      return -1;
     },
   },
   mounted() {
     const { wrapFocus } = this;
 
     const adapter = {
-      getListItemCount: () => this.listItemCount,
-      getFocusedElementIndex: () => -1,
-      setAttributeForElementIndex: (index, attr, value) => {
-        const { listItemAttributes } = this;
-        if (!listItemAttributes[index]) {
-          this.$set(this.listItemAttributes, `${index}`, {});
-        }
-        this.$set(this.listItemAttributes[index], attr, value);
-      },
       addClassForElementIndex: (index, className) => {
-        const { listItemClassNames } = this;
-        if (!listItemClassNames[index]) {
-          this.$set(this.listItemClassNames, `${index}`, []);
-        }
-        listItemClassNames[index].push(className);
-      },
-      removeClassForElementIndex: (index, className) => {
-        const { listItemClassNames } = this;
-        if (!listItemClassNames[index]) {
-          return;
-        }
-        const i = listItemClassNames[index].indexOf(className);
-        if (i >= 0) {
-          listItemClassNames[index].splice(i, 1);
+        const element = this.listElements[index];
+        if (element) {
+          element.classList.add(className);
         }
       },
       focusItemAtIndex: index => {
-        this.focusItemAtIndex = index;
+        const element = this.listElements[index];
+        if (element) {
+          element.focus();
+        }
       },
-      getAttributeForElementIndex: (index, attr) => {
-        const listItems = this.$refs.listItem || [];
-        const listItem = listItems[index];
-        return listItem && listItem.getAttribute(attr);
-      },
-      setTabIndexForListItemChildren: (listItemIndex, tabIndexValue) => {
-        // const { listItemChildrenTabIndex } = this;
-        this.$set(
-          this.listItemChildrenTabIndex,
-          `${listItemIndex}`,
-          tabIndexValue,
-        );
-        // listItemChildrenTabIndex[listItemIndex] = tabIndexValue;
-      },
-      listItemAtIndexHasClass: (index, className) => {
-        return (this.$refs.listItem || [])[index].$el.classList.contains(
-          className,
-        );
-      },
+      getAttributeForElementIndex: (index, attr) =>
+        this.listElements[index].getAttribute(attr),
+
+      getFocusedElementIndex: () =>
+        this.listElements.indexOf(document.activeElement),
+
+      getListItemCount: () => this.listElements.length,
+
       hasCheckboxAtIndex: index => {
-        const listItems = this.$refs.listItem || [];
-        const listItem = listItems[index];
-
-        return listItem && !!listItem.$el.querySelector(CHECKBOX_SELECTOR);
+        const listItem = this.listElements[index];
+        return !!listItem.querySelector(CHECKBOX_SELECTOR);
       },
+
       hasRadioAtIndex: index => {
-        const listItems = this.$refs.listItem || [];
-        const listItem = listItems[index];
-        return listItem && !!listItem.$el.querySelector(RADIO_SELECTOR);
+        const listItem = this.listElements[index];
+        return !!listItem.querySelector(RADIO_SELECTOR);
       },
-      isCheckboxCheckedAtIndex: index => {
-        const listItems = this.$refs.listItem || [];
-        const listItem = listItems[index];
 
-        const toggleEl = listItem.$el.querySelector(CHECKBOX_SELECTOR);
+      isCheckboxCheckedAtIndex: index => {
+        const listItem = this.listElements[index];
+        const toggleEl = listItem.querySelector(CHECKBOX_SELECTOR);
         return toggleEl.checked;
       },
-      setCheckedCheckboxOrRadioAtIndex: (index, isChecked) => {
-        const listItems = this.$refs.listItem || [];
-        const listItem = listItems[index];
 
-        const toggleEl = listItem.$el.querySelector(CHECKBOX_RADIO_SELECTOR);
-        toggleEl.checked = isChecked;
+      isFocusInsideList: () => {
+        return this.$el.contains(document.activeElement);
+      },
 
-        const event = document.createEvent('Event');
-        event.initEvent('change', true, true);
-        toggleEl.dispatchEvent(event);
+      isRootFocused: () => document.activeElement === this.$el,
+
+      listItemAtIndexHasClass: (index, className) => {
+        this.listElements[index].classList.contains(className);
       },
 
       notifyAction: index => {
@@ -244,10 +219,40 @@ export default {
         );
         this.$emit('action', { index });
       },
-      isFocusInsideList: () => {
-        return this.$el.contains(document.activeElement);
+
+      removeClassForElementIndex: (index, className) => {
+        const element = this.listElements[index];
+        if (element) {
+          element.classList.remove(className);
+        }
       },
-      isRootFocused: () => document.activeElement === this.$el,
+
+      setAttributeForElementIndex: (index, attr, value) => {
+        const element = this.listElements[index];
+        if (element) {
+          element.setAttribute(attr, value);
+        }
+      },
+
+      setCheckedCheckboxOrRadioAtIndex: (index, isChecked) => {
+        const listItem = this.listElements[index];
+        const toggleEl = listItem.querySelector(CHECKBOX_RADIO_SELECTOR);
+        toggleEl && (toggleEl.checked = isChecked);
+
+        const event = document.createEvent('Event');
+        event.initEvent('change', true, true);
+        toggleEl && toggleEl.dispatchEvent(event);
+      },
+
+      setTabIndexForListItemChildren: (listItemIndex, tabIndexValue) => {
+        const element = this.listElements[listItemIndex];
+        const listItemChildren = [].slice.call(
+          element.querySelectorAll(CHILD_ELEMENTS_TO_TOGGLE_TABINDEX),
+        );
+        listItemChildren.forEach(el =>
+          el.setAttribute('tabindex', tabIndexValue),
+        );
+      },
     };
 
     this.foundation = new MDCListFoundation(adapter);
@@ -272,79 +277,25 @@ export default {
     this.layout();
   },
   render(createElement) {
-    const {
-      tag,
-      ariaOrientation,
-      $scopedSlots: slots,
-      focusListItemAtIndex,
-      followHrefAtIndex,
-      toggleCheckboxAtIndex,
-      listItemAttributes,
-      listItemClassNames,
-      listItemChildrenTabIndex,
-    } = this;
+    const { tag, ariaOrientation, singleSelection, $scopedSlots: slots } = this;
 
-    const mdt = (slots.default && slots.default()) || [];
-    this.listItemCount = 0;
-
-    const nodes = mdt.map(vn => {
-      if (
-        !vn.tag ||
-        !vn.componentOptions ||
-        (vn.componentOptions.tag !== 'mcw-list-item' &&
-          vn.componentOptions.tag !== 'mdc-list-item')
-      ) {
-        return vn;
-      }
-
-      const index = this.listItemCount++;
-
-      const data = vn.data || {};
-
-      return createElement(
-        'mcw-list-item',
-        {
-          props: {
-            ...data.props,
-            classNamesFromList: listItemClassNames[index],
-            shouldToggleCheckbox: toggleCheckboxAtIndex === index,
-            shouldFollowHref: followHrefAtIndex === index,
-            shouldFocus: focusListItemAtIndex === index,
-            childrenTabIndex: listItemChildrenTabIndex[index],
-            nonInteractive: this.nonInteractive,
-          },
-          attrs: {
-            ...data.attrs,
-            attributesFromList: listItemAttributes[index],
-          },
-          on: {
-            click: evt => this.handleClickEvent(evt),
-            keydown: evt => this.handleKeydownEvent(evt, index),
-            focusin: evt => this.handleFocusInEvent(evt, index),
-            focusout: evt => this.handleFocusOutEvent(evt, index),
-          },
-          ref: 'listItem',
-          refInFor: true,
-        },
-        vn.componentOptions.children,
-      );
-    });
+    const attrs = { 'aria-orientation': ariaOrientation };
+    if (singleSelection) {
+      attrs.role = 'listbox';
+    }
 
     return createElement(
       tag,
       {
         class: this.classes,
-        attrs: { 'aria-orientation': ariaOrientation },
+        attrs,
+        on: {
+          click: event => this.handleClickEvent(event),
+          focusin: event => this.handleFocusInEvent(event),
+          focusout: event => this.handleFocusOutEvent(event),
+        },
       },
-      nodes,
+      slots.default && slots.default(),
     );
   },
 };
-
-// ===
-// Private functions
-// ===
-
-function isCheckbox(element) {
-  return element.type === CHECKBOX_TYPE;
-}
