@@ -38,20 +38,6 @@ export default {
 | `avatar-list` | Boolean |         | set avatar style list                                    |
 | `interactive` | Boolean |         | set interactive style for hover, focus, and press states |
 
-#### mcw-list-item
-
-| prop        | Type    | Default | Description                               |
-| ----------- | ------- | ------- | ----------------------------------------- |
-| `selected`  | Boolean |         | Styles the row in a selected state (\*)   |
-| `activated` | Boolean |         | Styles the row in an activated state (\*) |
-
-> Note: the difference between selected and activated states:
-
-- Selected is ephemeral and likely to change soon. E.g., selecting one or more photos to share in Google Photos. Multiple items in a list can be selected at the same time.
-- Activated is more permanent within the page’s lifetime. E.g., the currently highlighted destination in a nav drawer. Only one item in a list can be activated at a time.
-
-> if the list is interactive, `mcw-list-item` will dispatch mouse and keyboard listeners (`@click`, ...)
-
 ### Dense List
 
 ```html
