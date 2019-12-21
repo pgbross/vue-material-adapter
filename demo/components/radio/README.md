@@ -19,7 +19,7 @@
 ```javascript
 var vm = new Vue({
   data: {
-    picked: null,
+    picked: dog,
   },
 });
 ```

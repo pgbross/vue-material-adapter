@@ -1,8 +1,8 @@
 <template>
   <div>
     <mcw-layout-grid class="mcw-demo mcw-demo--container mcw-list-demo">
-      <mcw-layout-cell>
-        <mcw-list @action="onAction">
+      <!-- <mcw-layout-cell>
+        <mcw-list v-model="selected">
           <li class="mdc-list-item" tabindex="0">
             <span class="mdc-list-item__text">Single-line item</span>
           </li>
@@ -16,7 +16,7 @@
       </mcw-layout-cell>
 
       <mcw-layout-cell>
-        <mcw-list two-line @action="onAction">
+        <mcw-list v-model="selected" two-line>
           <li class="mdc-list-item" tabindex="0">
             <span class="mdc-list-item__text">
               <span class="mdc-list-item__primary-text">Two-line item</span>
@@ -41,7 +41,7 @@
       <mcw-layout-cell>
         <div class="mdc-list-group">
           <h3 class="mdc-list-group__subheader">List 1</h3>
-          <mcw-list @action="onAction">
+          <mcw-list v-model="selected">
             <li class="mdc-list-item" tabindex="0">
               <span class="mdc-list-item__text">line item</span>
             </li>
@@ -53,7 +53,7 @@
             </li>
           </mcw-list>
           <h3 class="mdc-list-group__subheader">List 2</h3>
-          <mcw-list @action="onAction">
+          <mcw-list v-model="selected">
             <li class="mdc-list-item">
               <span class="mdc-list-item__text">line item</span>
             </li>
@@ -68,7 +68,7 @@
       </mcw-layout-cell>
 
       <mcw-layout-cell>
-        <mcw-list @action="onAction">
+        <mcw-list v-model="selected">
           <li class="mdc-list-item" tabindex="0">
             <span class="mdc-list-item__text">Item 1 - Division 1</span>
           </li>
@@ -86,7 +86,7 @@
       </mcw-layout-cell>
 
       <mcw-layout-cell>
-        <mcw-list @action="onAction">
+        <mcw-list v-model="selected">
           <li class="mdc-list-item" tabindex="0">
             <span class="mdc-list-item__text">Item 1 - List 1</span>
           </li>
@@ -96,7 +96,7 @@
         </mcw-list>
         <hr class="mdc-list-divider" />
 
-        <mcw-list @action="onAction">
+        <mcw-list v-model="selected">
           <li class="mdc-list-item">
             <span class="mdc-list-item__text">Item 1 - List 2</span>
           </li>
@@ -107,7 +107,7 @@
       </mcw-layout-cell>
 
       <mcw-layout-cell>
-        <mcw-list single-selection @action="onAction">
+        <mcw-list v-model="selected" single-selection wrap-focus>
           <li class="mdc-list-item" role="option" tabindex="0">
             <span class="mdc-list-item__text">Single-line item</span>
           </li>
@@ -118,33 +118,48 @@
             <span class="mdc-list-item__text">Single-line item</span>
           </li>
         </mcw-list>
-      </mcw-layout-cell>
+      </mcw-layout-cell>-->
 
       <mcw-layout-cell>
-        <mcw-list role="radio" aria-checked="false" @action="onAction">
+        <mcw-list v-model="radioSelected" role="radiogroup">
           <li class="mdc-list-item" role="radio" aria-checked="false">
             <span class="mdc-list-item__graphic">
-              <mcw-radio id="demo-list-radio-item-1" name="demo-list-radio"></mcw-radio>
+              <mcw-radio
+                id="demo-list-radio-item-1"
+                v-model="picked"
+                value="1"
+                name="demo-list-radio"
+              ></mcw-radio>
             </span>
             <label class="mdc-list-item__text" for="demo-list-radio-item-1">Option 1</label>
           </li>
-          <li class="mdc-list-item" role="radio" aria-checked="true" tabindex="0">
+          <li class="mdc-list-item" role="radio" aria-checked="false">
             <span class="mdc-list-item__graphic">
-              <mcw-radio id="demo-list-radio-item-2" name="demo-list-radio"></mcw-radio>
+              <mcw-radio
+                id="demo-list-radio-item-2"
+                v-model="picked"
+                value="2"
+                name="demo-list-radio"
+              ></mcw-radio>
             </span>
             <label class="mdc-list-item__text" for="demo-list-radio-item-2">Option 2</label>
           </li>
           <li class="mdc-list-item" role="radio" aria-checked="false">
             <span class="mdc-list-item__graphic">
-              <mcw-radio id="demo-list-radio-item-3" name="demo-list-radio"></mcw-radio>
+              <mcw-radio
+                id="demo-list-radio-item-3"
+                v-model="picked"
+                value="3"
+                name="demo-list-radio"
+              ></mcw-radio>
             </span>
             <label class="mdc-list-item__text" for="demo-list-radio-item-3">Option 3</label>
           </li>
         </mcw-list>
       </mcw-layout-cell>
-
+      <!--
       <mcw-layout-cell>
-        <mcw-list role="group" aria-label="List with checkbox items" @action="onAction">
+        <mcw-list v-model="listSelected" role="group" aria-label="List with checkbox items">
           <li class="mdc-list-item" role="checkbox" aria-checked="false">
             <span class="mdc-list-item__graphic">
               <mcw-checkbox id="demo-list-checkbox-item-1"></mcw-checkbox>
@@ -164,12 +179,20 @@
             <label class="mdc-list-item__text" for="demo-list-checkbox-item-2">Option 3</label>
           </li>
         </mcw-list>
-      </mcw-layout-cell>
+      </mcw-layout-cell>-->
     </mcw-layout-grid>
 
     <mcw-caption>
       selected:
       <span class>{{ selected }}</span>
+      listSelected:
+      <span class>{{ listSelected }}</span>
+      radioSelected:
+      <span class>{{ radioSelected }}</span>
+    </mcw-caption>
+    <mcw-caption>
+      picked:
+      <span class>{{ picked }}</span>
     </mcw-caption>
   </div>
 </template>
@@ -179,10 +202,13 @@ export default {
   data() {
     return {
       selected: null,
+      listSelected: [],
+      radioSelected: null,
+      picked: '1',
     };
   },
   methods: {
-    onAction({ index }) {
+    onAction(index) {
       this.selected = index;
     },
   },
