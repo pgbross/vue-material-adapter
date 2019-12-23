@@ -9,18 +9,30 @@
           @change="onTypeChanged"
         >
           <mcw-menu class="mdc-select__menu">
-            <mcw-list-item v-for="type in types" :data-value="type" :key="type">{{ type }}</mcw-list-item>
+            <li
+              v-for="type in types"
+              :key="type"
+              class="mdc-list-item"
+              role="menuitem"
+              :data-value="type"
+            >
+              <span class="mdc-list-item__text">{{ type }}</span>
+            </li>
           </mcw-menu>
         </mcw-select>
 
         <br />
         <mcw-select v-if="selectedType" v-model="selectedValue" outlined label="Kind">
           <mcw-menu class="mdc-select__menu">
-            <mcw-list-item
+            <li
               v-for="option of options"
               :key="option"
               :data-value="option.toLowerCase()"
-            >{{ option }}</mcw-list-item>
+              class="mdc-list-item"
+              role="menuitem"
+            >
+              <span class="mdc-list-item__text">{{ option }}</span>
+            </li>
           </mcw-menu>
         </mcw-select>
       </div>
@@ -55,6 +67,10 @@ export default {
     onTypeChanged(nv) {
       console.log(nv);
       this.selectedType = nv;
+      this.selectedValue = null;
+    },
+    onKindChanged(nv) {
+      this.selectedValue = nv;
     },
   },
 };

@@ -66,7 +66,7 @@ export default {
     disabled(value) {
       this.foundation && this.foundation.updateDisabledStyle(value);
     },
-    // value: 'refreshIndex',
+    value: 'refreshIndex',
   },
 
   mounted() {

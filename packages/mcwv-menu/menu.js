@@ -20,6 +20,7 @@ export default {
       classes: {},
       styles: {},
       menuOpen: false,
+      myWrapFocus: this.wrapFocus,
     };
   },
   watch: {
@@ -110,6 +111,14 @@ export default {
         this.menuOpen = value;
       },
     },
+    wrapFocus: {
+      get() {
+        return this.myWrapFocus;
+      },
+      set(nv) {
+        this.myWrapFocus = nv;
+      },
+    },
   },
 
   methods: {
@@ -186,13 +195,14 @@ export default {
           keydown: evt => this.handleKeydown(evt),
           'MDCMenuSurface:opened': evt => this.handleMenuSurfaceOpened(evt),
         },
+        nativeOn: { 'MDCList:action': evt => this.handleAction(evt) },
       },
       [
         createElement(
           'mcw-list',
           {
             ref: 'list',
-            nativeOn: { 'MDCList:action': evt => this.handleAction(evt) },
+            props: { wrapFocus: this.myWrapFocus },
           },
           scopedSlots.default && scopedSlots.default(),
         ),
