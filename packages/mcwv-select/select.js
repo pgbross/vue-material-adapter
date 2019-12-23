@@ -316,14 +316,7 @@ export default {
     const { $scopedSlots: scopedSlots } = this;
 
     const selectNodes = [scopedSlots.default && scopedSlots.default()];
-    // if (!this.value) {
-    //   selectNodes.unshift(
-    //     createElement('option', {
-    //       class: { 'mdc-option': 1 },
-    //       attrs: { value: '', disabled: 1, selected: 1 },
-    //     }),
-    //   );
-    // }
+
     const selectedTextAttrs = {};
     const helpId = `help-${this.vma_uid_}`;
 

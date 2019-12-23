@@ -20,7 +20,7 @@ export default {
       classes: {},
       styles: {},
       menuOpen: false,
-      myWrapFocus: this.wrapFocus,
+      myWrapFocus: true,
     };
   },
   watch: {
@@ -52,7 +52,7 @@ export default {
       elementContainsClass: (element, className) =>
         element.classList.contains(className),
       closeSurface: skipRestoreFocus => {
-        this.$refs.root.close(skipRestoreFocus);
+        this.$refs.menuSurface_.close(skipRestoreFocus);
         this.$emit('change', false);
       },
 
@@ -146,16 +146,16 @@ export default {
       this.foundation.setDefaultFocusState(focusState);
     },
     setAnchorCorner(corner) {
-      this.$refs.root.foundation.setAnchorCorner(corner);
+      this.$refs.menuSurface_.foundation.setAnchorCorner(corner);
     },
     setAnchorElement(element) {
-      this.$refs.root.setMenuSurfaceAnchorElement(element);
+      this.$refs.menuSurface_.setMenuSurfaceAnchorElement(element);
     },
     setSelectedIndex(index) {
       this.foundation.setSelectedIndex(index);
     },
     setAnchorMargin(margin) {
-      this.$refs.root.foundation.setAnchorMargin(margin);
+      this.$refs.menuSurface_.foundation.setAnchorMargin(margin);
     },
     getOptionByIndex(index) {
       const items = this.items;
@@ -166,19 +166,19 @@ export default {
       return null;
     },
     setFixedPosition(isFixed) {
-      this.$refs.root.foundation.setFixedPosition(isFixed);
+      this.$refs.menuSurface_.foundation.setFixedPosition(isFixed);
     },
 
     hoistMenuToBody() {
-      this.$refs.root.foundation.hoistMenuToBody();
+      this.$refs.menuSurface_.foundation.hoistMenuToBody();
     },
 
     setIsHoisted(isHoisted) {
-      this.$refs.root.foundation.setIsHoisted(isHoisted);
+      this.$refs.menuSurface_.foundation.setIsHoisted(isHoisted);
     },
 
     setAbsolutePosition(x, y) {
-      this.$refs.root.foundation.setAbsolutePosition(x, y);
+      this.$refs.menuSurface_.foundation.setAbsolutePosition(x, y);
     },
   },
   render(createElement) {
@@ -188,7 +188,7 @@ export default {
       'mcw-menu-surface',
       {
         class: { 'mdc-menu': 1 },
-        ref: 'root',
+        ref: 'menuSurface_',
         attrs: { 'quick-open': this.quickOpen, open: this.menuOpen },
         on: {
           change: evt => this.onChange(evt),
