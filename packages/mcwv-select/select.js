@@ -9,6 +9,8 @@ import { RippleBase } from '@mcwv/ripple';
 import SelectHelperText from './select-helper-text.js';
 import SelectIcon from './select-icon.js';
 
+const { strings } = MDCSelectFoundation;
+
 export default {
   name: 'mcw-select',
   inheritAttrs: false,
@@ -33,6 +35,7 @@ export default {
       styles: {},
       classes: {},
       selectedTextContent: '',
+      selTextAttrs: {},
     };
   },
 
@@ -48,14 +51,16 @@ export default {
         ...this.classes,
       };
     },
-    listeners() {
-      return {
-        ...this.$listeners,
-        change: event => this.handleChange(event),
-        blur: event => this.handleBlur(event),
-        focus: event => this.handleFocus(event),
-        handleClick: event => this.handleClick(event),
-      };
+
+    selectedTextAttrs() {
+      const helpId = `help-${this.vma_uid_}`;
+
+      const attrs = { ...this.selTextAttrs };
+      if (this.helptext) {
+        attrs['aria-controls'] = helpId;
+        attrs['aria-describedBy'] = helpId;
+      }
+      return attrs;
     },
 
     selectAriaControls() {
@@ -64,18 +69,12 @@ export default {
   },
   watch: {
     disabled(value) {
-      this.foundation && this.foundation.updateDisabledStyle(value);
+      this.foundation?.updateDisabledStyle(value);
     },
     value: 'refreshIndex',
   },
 
   mounted() {
-    const {
-      SELECTED_ITEM_SELECTOR,
-      SELECT_ANCHOR_SELECTOR,
-      VALUE_ATTR,
-    } = MDCSelectFoundation.strings;
-
     this.menuSetup_();
 
     this.foundation = new MDCSelectFoundation(
@@ -83,27 +82,21 @@ export default {
         // common methods
         addClass: className => this.$set(this.classes, className, true),
         removeClass: className => this.$delete(this.classes, className),
-        hasClass: className => Boolean(this.classes[className]),
-
+        hasClass: className => Boolean(this.rootClasses[className]),
         setRippleCenter: normalizedX =>
-          this.$refs.lineRippleEl &&
-          this.$refs.lineRippleEl.setRippleCenter(normalizedX),
+          this.$refs.lineRippleEl?.setRippleCenter(normalizedX),
         activateBottomLine: () => {
-          if (this.$refs.lineRippleEl) {
-            this.$refs.lineRippleEl.foundation_.activate();
-          }
+          this.$refs.lineRippleEl?.foundation_.activate();
         },
         deactivateBottomLine: () => {
-          if (this.$refs.lineRippleEl) {
-            this.$refs.lineRippleEl.foundation_.deactivate();
-          }
+          this.$refs.lineRippleEl?.foundation_.deactivate();
         },
 
         notifyChange: value => {
           const index = this.selectedIndex;
           emitCustomEvent(
-            this.$refs.anchor,
-            MDCSelectFoundation.strings.CHANGE_EVENT,
+            this.$el,
+            strings.CHANGE_EVENT,
             { value, index },
             true /* shouldBubble  */,
           );
@@ -112,7 +105,9 @@ export default {
 
         // select methods
         getSelectedMenuItem: () => {
-          return this.menuElement_.querySelector(SELECTED_ITEM_SELECTOR);
+          return this.menuElement_.querySelector(
+            strings.SELECTED_ITEM_SELECTOR,
+          );
         },
         getMenuItemAttr: (menuItem, attr) => menuItem.getAttribute(attr),
 
@@ -123,13 +118,12 @@ export default {
           return document.activeElement === this.$refs.selectedTextEl;
         },
 
-        getSelectedTextAttr: attr =>
-          this.$refs.selectedTextEl.getAttribute(attr),
+        getSelectedTextAttr: attr => {
+          return this.selectedTextAttrs[attr];
+        },
 
         setSelectedTextAttr: (attr, value) => {
-          const { selectedTextEl } = this.$refs;
-
-          selectedTextEl && selectedTextEl.setAttribute(attr, value);
+          this.$set(this.selectedTextAttrs, attr, value);
         },
         openMenu: () => {
           this.menu_.surfaceOpen = true;
@@ -138,28 +132,33 @@ export default {
           this.menu_.surfaceOpen = false;
         },
 
-        getAnchorElement: () => this.$el.querySelector(SELECT_ANCHOR_SELECTOR),
+        getAnchorElement: () => this.$refs.anchor,
         setMenuAnchorElement: anchorEl => this.menu_.setAnchorElement(anchorEl),
         setMenuAnchorCorner: anchorCorner =>
           this.menu_.setAnchorCorner(anchorCorner),
 
         setMenuWrapFocus: wrapFocus => (this.menu_.wrapFocus = wrapFocus),
         setAttributeAtIndex: (index, attributeName, attributeValue) =>
-          this.menu_.items[index].setAttribute(attributeName, attributeValue),
+          this.menu_
+            .listItems()
+            [index].setAttribute(attributeName, attributeValue),
         removeAttributeAtIndex: (index, attributeName) =>
-          this.menu_.items[index].removeAttribute(attributeName),
+          this.menu_.listItems()[index].removeAttribute(attributeName),
         focusMenuItemAtIndex: index => {
-          this.menu_.items[index].focus();
+          this.menu_.listItems()[index].focus();
         },
-        getMenuItemCount: () => this.menu_.items.length,
+        getMenuItemCount: () => this.menu_.listItems().length,
         getMenuItemValues: () =>
-          this.menu_.items.map(el => el.getAttribute(VALUE_ATTR) || ''),
-        getMenuItemTextAtIndex: index => this.menu_.items[index].textContent,
+          this.menu_
+            .listItems()
+            .map(el => el.getAttribute(strings.VALUE_ATTR) || ''),
+        getMenuItemTextAtIndex: index =>
+          this.menu_.listItems()[index].textContent,
         addClassAtIndex: (index, className) => {
-          this.menu_.items[index].classList.add(className);
+          this.menu_.listItems()[index].classList.add(className);
         },
         removeClassAtIndex: (index, className) => {
-          this.menu_.items[index].classList.remove(className);
+          this.menu_.listItems()[index].classList.remove(className);
         },
 
         // outline methods
@@ -167,40 +166,26 @@ export default {
           return this.outlined;
         },
         notchOutline: labelWidth => {
-          if (this.$refs.outlineEl) {
-            this.$refs.outlineEl.notch(labelWidth);
-          }
+          this.$refs.outlineEl?.notch(labelWidth);
         },
         closeOutline: () => {
-          if (this.$refs.outlineEl) {
-            this.$refs.outlineEl.closeNotch();
-          }
+          this.$refs.outlineEl?.closeNotch();
         },
         // label methods
         hasLabel: () => {
           return !!this.label;
         },
         floatLabel: value => {
-          if (this.$refs.labelEl) {
-            this.$refs.labelEl.float(value);
-          } else {
-            this.$refs.outlineEl.float(value);
-          }
+          (this.$refs.labelEl ?? this.$refs.outlineEl).float(value);
         },
         getLabelWidth: () => {
-          if (this.$refs.labelEl) {
-            return this.$refs.labelEl.getWidth();
-          }
+          return this.$refs.labelEl?.getWidth();
         },
       }),
       {
-        helperText: this.$refs.helpertextEl
-          ? this.$refs.helpertextEl.foundation
-          : void 0,
+        helperText: this.$refs.helperTextEl?.foundation,
 
-        leadingIcon: this.$refs.leadingIconEl
-          ? this.$refs.leadingIconEl.foundation
-          : undefined,
+        leadingIcon: this.$refs.leadingIconEl?.foundation,
       },
     );
 
@@ -298,12 +283,12 @@ export default {
       this.menuElement_ = this.$el.querySelector(
         MDCSelectFoundation.strings.MENU_SELECTOR,
       );
-      this.menu_ = this.menuElement_ && this.menuElement_.__vue__;
+      this.menu_ = this.menuElement_?.__vue__;
     },
     refreshIndex() {
-      const items = this.menu_.items.map(
-        el => el.getAttribute(MDCSelectFoundation.strings.VALUE_ATTR) || '',
-      );
+      const items = this.menu_
+        .listItems()
+        .map(el => el.getAttribute(strings.VALUE_ATTR) || '');
 
       const idx = items.findIndex(value => {
         return this.value === value;
@@ -314,8 +299,6 @@ export default {
 
   render(createElement) {
     const { $scopedSlots: scopedSlots } = this;
-
-    const selectNodes = [scopedSlots.default && scopedSlots.default()];
 
     const selectedTextAttrs = {};
     const helpId = `help-${this.vma_uid_}`;
@@ -337,8 +320,7 @@ export default {
           ref: 'selectedTextEl',
           on: {
             click: evt => this.handleClick(evt),
-          },
-          nativeOn: {
+
             focus: () => this.handleFocus(),
             blur: () => this.handleBlur(),
           },
@@ -367,7 +349,7 @@ export default {
       anchorNodes,
     );
 
-    const nodes = [anchorEl, selectNodes];
+    const nodes = [anchorEl, scopedSlots.default?.()];
 
     if (this.leadingIcon) {
       nodes.unshift(
@@ -390,7 +372,7 @@ export default {
             },
             ref: 'helperTextEl',
           },
-          this.helptext,
+          [this.helptext],
         ),
       );
     }

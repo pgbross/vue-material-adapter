@@ -34,19 +34,19 @@ export default {
 
     const adapter = {
       addClassToElementAtIndex: (index, className) => {
-        const list = this.items;
+        const list = this.listItems();
         list[index].classList.add(className);
       },
       removeClassFromElementAtIndex: (index, className) => {
-        const list = this.items;
+        const list = this.listItems();
         list[index].classList.remove(className);
       },
       addAttributeToElementAtIndex: (index, attr, value) => {
-        const list = this.items;
+        const list = this.listItems();
         list[index].setAttribute(attr, value);
       },
       removeAttributeFromElementAtIndex: (index, attr) => {
-        const list = this.items;
+        const list = this.listItems();
         list[index].removeAttribute(attr);
       },
       elementContainsClass: (element, className) =>
@@ -57,34 +57,37 @@ export default {
       },
 
       getElementIndex: element => {
-        return this.items.indexOf(element);
+        return this.listItems().indexOf(element);
       },
 
       isSelectableItemAtIndex: index =>
-        !!closest(this.items[index], `.${cssClasses.MENU_SELECTION_GROUP}`),
+        !!closest(
+          this.listItems()[index],
+          `.${cssClasses.MENU_SELECTION_GROUP}`,
+        ),
       getSelectedSiblingOfItemAtIndex: index => {
         const selectionGroupEl = closest(
-          this.items[index],
+          this.listItems()[index],
           `.${cssClasses.MENU_SELECTION_GROUP}`,
         );
         const selectedItemEl = selectionGroupEl.querySelector(
           `.${cssClasses.MENU_SELECTED_LIST_ITEM}`,
         );
-        return selectedItemEl ? this.items.indexOf(selectedItemEl) : -1;
+        return selectedItemEl ? this.listItems().indexOf(selectedItemEl) : -1;
       },
       notifySelected: evtData => {
         emitCustomEvent(this.$el, strings.SELECTED_EVENT, {
           index: evtData.index,
-          item: this.items[evtData.index],
+          item: this.listItems()[evtData.index],
         });
 
         this.$emit('select', {
           index: evtData.index,
-          item: this.items[evtData.index],
+          item: this.listItems()[evtData.index],
         });
       },
-      getMenuItemCount: () => this.items.length,
-      focusItemAtIndex: index => this.items[index].focus(),
+      getMenuItemCount: () => this.listItems().length,
+      focusItemAtIndex: index => this.listItems()[index].focus(),
       focusListRoot: () =>
         this.$el.querySelector(strings.LIST_SELECTOR).focus(),
     };
@@ -100,9 +103,6 @@ export default {
   },
 
   computed: {
-    items() {
-      return this.$refs.list ? this.$refs.list.listElements : [];
-    },
     surfaceOpen: {
       get() {
         return this.menuOpen;
@@ -122,6 +122,9 @@ export default {
   },
 
   methods: {
+    listItems() {
+      return this.$refs.list ? this.$refs.list.getListElements() : [];
+    },
     listen(evtType, handler, options) {
       this.$el.addEventListener(evtType, handler, options);
     },
@@ -129,7 +132,7 @@ export default {
       this.$el.removeEventListener(evtType, handler, options);
     },
     handleAction({ detail: { index } }) {
-      this.foundation.handleItemAction(this.items[index]);
+      this.foundation.handleItemAction(this.listItems()[index]);
     },
 
     handleKeydown(evt) {
@@ -158,10 +161,10 @@ export default {
       this.$refs.menuSurface_.foundation.setAnchorMargin(margin);
     },
     getOptionByIndex(index) {
-      const items = this.items;
+      const items = this.listItems();
 
       if (index < items.length) {
-        return this.items[index];
+        return items[index];
       }
       return null;
     },
@@ -195,7 +198,7 @@ export default {
           keydown: evt => this.handleKeydown(evt),
           'MDCMenuSurface:opened': evt => this.handleMenuSurfaceOpened(evt),
         },
-        nativeOn: { 'MDCList:action': evt => this.handleAction(evt) },
+        // nativeOn: { 'MDCList:action': evt => this.handleAction(evt) },
       },
       [
         createElement(
@@ -203,8 +206,9 @@ export default {
           {
             ref: 'list',
             props: { wrapFocus: this.myWrapFocus },
+            on: { change: index => this.handleAction({ detail: { index } }) },
           },
-          scopedSlots.default && scopedSlots.default(),
+          scopedSlots.default?.(),
         ),
       ],
     );

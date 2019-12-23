@@ -22,7 +22,12 @@
         </mcw-select>
 
         <br />
-        <mcw-select v-if="selectedType" v-model="selectedValue" outlined label="Kind">
+        <mcw-select
+          v-if="selectedType"
+          v-model="selectedValue"
+          outlined
+          label="Kind"
+        >
           <mcw-menu class="mdc-select__menu">
             <li
               v-for="option of options"
@@ -37,8 +42,12 @@
         </mcw-select>
       </div>
     </div>
-    <mcw-caption v-if="selectedType" tag="p">Selected Type: {{ selectedType }}</mcw-caption>
-    <mcw-caption v-if="selectedValue" tag="p">Selected Value: {{ selectedValue }}</mcw-caption>
+    <mcw-caption v-if="selectedType" tag="p"
+      >Selected Type: {{ selectedType }}</mcw-caption
+    >
+    <mcw-caption v-if="selectedValue" tag="p"
+      >Selected Value: {{ selectedValue }}</mcw-caption
+    >
   </div>
 </template>
 
