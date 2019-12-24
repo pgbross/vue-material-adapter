@@ -34,19 +34,19 @@ export default {
 
     const adapter = {
       addClassToElementAtIndex: (index, className) => {
-        const list = this.listItems();
+        const list = this.items;
         list[index].classList.add(className);
       },
       removeClassFromElementAtIndex: (index, className) => {
-        const list = this.listItems();
+        const list = this.items;
         list[index].classList.remove(className);
       },
       addAttributeToElementAtIndex: (index, attr, value) => {
-        const list = this.listItems();
+        const list = this.items;
         list[index].setAttribute(attr, value);
       },
       removeAttributeFromElementAtIndex: (index, attr) => {
-        const list = this.listItems();
+        const list = this.items;
         list[index].removeAttribute(attr);
       },
       elementContainsClass: (element, className) =>
@@ -57,37 +57,34 @@ export default {
       },
 
       getElementIndex: element => {
-        return this.listItems().indexOf(element);
+        return this.items.indexOf(element);
       },
 
       isSelectableItemAtIndex: index =>
-        !!closest(
-          this.listItems()[index],
-          `.${cssClasses.MENU_SELECTION_GROUP}`,
-        ),
+        !!closest(this.items[index], `.${cssClasses.MENU_SELECTION_GROUP}`),
       getSelectedSiblingOfItemAtIndex: index => {
         const selectionGroupEl = closest(
-          this.listItems()[index],
+          this.items[index],
           `.${cssClasses.MENU_SELECTION_GROUP}`,
         );
         const selectedItemEl = selectionGroupEl.querySelector(
           `.${cssClasses.MENU_SELECTED_LIST_ITEM}`,
         );
-        return selectedItemEl ? this.listItems().indexOf(selectedItemEl) : -1;
+        return selectedItemEl ? this.items.indexOf(selectedItemEl) : -1;
       },
       notifySelected: evtData => {
         emitCustomEvent(this.$el, strings.SELECTED_EVENT, {
           index: evtData.index,
-          item: this.listItems()[evtData.index],
+          item: this.items[evtData.index],
         });
 
         this.$emit('select', {
           index: evtData.index,
-          item: this.listItems()[evtData.index],
+          item: this.items[evtData.index],
         });
       },
-      getMenuItemCount: () => this.listItems().length,
-      focusItemAtIndex: index => this.listItems()[index].focus(),
+      getMenuItemCount: () => this.items.length,
+      focusItemAtIndex: index => this.items[index].focus(),
       focusListRoot: () =>
         this.$el.querySelector(strings.LIST_SELECTOR).focus(),
     };
@@ -103,6 +100,9 @@ export default {
   },
 
   computed: {
+    items() {
+      return this.$refs.list ? this.$refs.list.listElements : [];
+    },
     surfaceOpen: {
       get() {
         return this.menuOpen;
@@ -122,9 +122,6 @@ export default {
   },
 
   methods: {
-    listItems() {
-      return this.$refs.list ? this.$refs.list.getListElements() : [];
-    },
     listen(evtType, handler, options) {
       this.$el.addEventListener(evtType, handler, options);
     },
@@ -132,7 +129,7 @@ export default {
       this.$el.removeEventListener(evtType, handler, options);
     },
     handleAction({ detail: { index } }) {
-      this.foundation.handleItemAction(this.listItems()[index]);
+      this.foundation.handleItemAction(this.items[index]);
     },
 
     handleKeydown(evt) {
@@ -161,7 +158,7 @@ export default {
       this.$refs.menuSurface_.foundation.setAnchorMargin(margin);
     },
     getOptionByIndex(index) {
-      const items = this.listItems();
+      const items = this.items;
 
       if (index < items.length) {
         return items[index];

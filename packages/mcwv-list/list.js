@@ -28,7 +28,9 @@ export default {
   },
 
   data() {
-    return {};
+    return {
+      listn: 0,
+    };
   },
 
   watch: {
@@ -67,15 +69,17 @@ export default {
         'mdc-list--non-interactive': this.nonInteractive,
       };
     },
-  },
+    listElements() {
+      // eslint-disable-next-line no-unused-vars
+      const xx = this.listn; // for dependency
 
-  methods: {
-    getListElements() {
       return [].slice.call(
         this.$el.querySelectorAll(`.${cssClasses.LIST_ITEM_CLASS}`),
       );
     },
+  },
 
+  methods: {
     handleFocusInEvent(evt, index) {
       this.foundation.handleFocusIn(evt, index);
     },
@@ -120,8 +124,6 @@ export default {
     },
 
     initializeListType() {
-      const listElements = this.getListElements();
-
       const checkboxListItems = this.$el.querySelectorAll(
         strings.ARIA_ROLE_CHECKBOX_SELECTOR,
       );
@@ -150,7 +152,7 @@ export default {
           strings.ARIA_CHECKED_CHECKBOX_SELECTOR,
         );
         this.selIndex = [].map.call(preselectedItems, listItem =>
-          listElements.indexOf(listItem),
+          this.listElements.indexOf(listItem),
         );
       } else if (singleSelectedListItem) {
         if (
@@ -162,9 +164,9 @@ export default {
         }
 
         this.singleSelection = true;
-        this.selIndex = listElements.indexOf(singleSelectedListItem);
+        this.selIndex = this.listElements.indexOf(singleSelectedListItem);
       } else if (radioSelectedListItem) {
-        const selIndex = listElements.indexOf(radioSelectedListItem);
+        const selIndex = this.listElements.indexOf(radioSelectedListItem);
         this.foundation.setSelectedIndex(selIndex);
         this.selIndex = selIndex;
 
@@ -184,7 +186,7 @@ export default {
         nearestParent &&
         matches(nearestParent, `.${cssClasses.LIST_ITEM_CLASS}`)
       ) {
-        return this.getListElements().indexOf(nearestParent);
+        return this.listElements.indexOf(nearestParent);
       }
 
       return -1;
@@ -195,37 +197,37 @@ export default {
 
     const adapter = {
       addClassForElementIndex: (index, className) => {
-        const element = this.getListElements()[index];
+        const element = this.listElements[index];
         if (element) {
           element.classList.add(className);
         }
       },
       focusItemAtIndex: index => {
-        const element = this.getListElements()[index];
+        const element = this.listElements[index];
         if (element) {
           element.focus();
         }
       },
       getAttributeForElementIndex: (index, attr) =>
-        this.getListElements()[index].getAttribute(attr),
+        this.listElements[index].getAttribute(attr),
 
       getFocusedElementIndex: () =>
-        this.getListElements().indexOf(document.activeElement),
+        this.listElements.indexOf(document.activeElement),
 
-      getListItemCount: () => this.getListElements().length,
+      getListItemCount: () => this.listElements.length,
 
       hasCheckboxAtIndex: index => {
-        const listItem = this.getListElements()[index];
+        const listItem = this.listElements[index];
         return !!listItem.querySelector(strings.CHECKBOX_SELECTOR);
       },
 
       hasRadioAtIndex: index => {
-        const listItem = this.getListElements()[index];
+        const listItem = this.listElements[index];
         return !!listItem.querySelector(strings.RADIO_SELECTOR);
       },
 
       isCheckboxCheckedAtIndex: index => {
-        const listItem = this.getListElements()[index];
+        const listItem = this.listElements[index];
         const toggleEl = listItem.querySelector(strings.CHECKBOX_SELECTOR);
         return toggleEl.checked;
       },
@@ -237,7 +239,7 @@ export default {
       isRootFocused: () => document.activeElement === this.$el,
 
       listItemAtIndexHasClass: (index, className) => {
-        this.getListElements()[index].classList.contains(className);
+        this.listElements[index].classList.contains(className);
       },
 
       notifyAction: index => {
@@ -256,21 +258,21 @@ export default {
       },
 
       removeClassForElementIndex: (index, className) => {
-        const element = this.getListElements()[index];
+        const element = this.listElements[index];
         if (element) {
           element.classList.remove(className);
         }
       },
 
       setAttributeForElementIndex: (index, attr, value) => {
-        const element = this.getListElements()[index];
+        const element = this.listElements[index];
         if (element) {
           element.setAttribute(attr, value);
         }
       },
 
       setCheckedCheckboxOrRadioAtIndex: (index, isChecked) => {
-        const listItem = this.getListElements()[index];
+        const listItem = this.listElements[index];
         const toggleEl = listItem.querySelector(
           strings.CHECKBOX_RADIO_SELECTOR,
         );
@@ -282,7 +284,7 @@ export default {
       },
 
       setTabIndexForListItemChildren: (listItemIndex, tabIndexValue) => {
-        const element = this.getListElements()[listItemIndex];
+        const element = this.listElements[listItemIndex];
         const listItemChildren = [].slice.call(
           element.querySelectorAll(strings.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX),
         );
@@ -312,7 +314,24 @@ export default {
     this.foundation.setVerticalOrientation(this[ARIA_ORIENTATION] === VERTICAL);
 
     this.layout();
+
+    // the list content could change outside of this component
+    // so use a mutation observer to trigger an update by
+    // incrementing the dependency variable "listn" referenced
+    // in the computed that selects the list elements
+    this.slotObserver = new MutationObserver((mutationList, observer) => {
+      this.listn++;
+    });
+    this.slotObserver.observe(this.$refs.listRoot, {
+      childList: true,
+      // subtree: true,
+    });
   },
+
+  beforeDestroy() {
+    this.slotObserver.disconnect();
+  },
+
   render(createElement) {
     const { tag, ariaOrientation, singleSelection, $scopedSlots: slots } = this;
 
@@ -332,6 +351,7 @@ export default {
           focusout: event => this.handleFocusOutEvent(event),
           keydown: event => this.handleKeydownEvent(event),
         },
+        ref: 'listRoot',
       },
       slots.default?.(),
     );

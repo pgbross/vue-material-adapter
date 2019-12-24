@@ -139,26 +139,21 @@ export default {
 
         setMenuWrapFocus: wrapFocus => (this.menu_.wrapFocus = wrapFocus),
         setAttributeAtIndex: (index, attributeName, attributeValue) =>
-          this.menu_
-            .listItems()
-            [index].setAttribute(attributeName, attributeValue),
+          this.menu_.items[index].setAttribute(attributeName, attributeValue),
         removeAttributeAtIndex: (index, attributeName) =>
-          this.menu_.listItems()[index].removeAttribute(attributeName),
+          this.menu_.items[index].removeAttribute(attributeName),
         focusMenuItemAtIndex: index => {
-          this.menu_.listItems()[index].focus();
+          this.menu_.items[index].focus();
         },
-        getMenuItemCount: () => this.menu_.listItems().length,
+        getMenuItemCount: () => this.menu_.items.length,
         getMenuItemValues: () =>
-          this.menu_
-            .listItems()
-            .map(el => el.getAttribute(strings.VALUE_ATTR) || ''),
-        getMenuItemTextAtIndex: index =>
-          this.menu_.listItems()[index].textContent,
+          this.menu_.items.map(el => el.getAttribute(strings.VALUE_ATTR) || ''),
+        getMenuItemTextAtIndex: index => this.menu_.items[index].textContent,
         addClassAtIndex: (index, className) => {
-          this.menu_.listItems()[index].classList.add(className);
+          this.menu_.items[index].classList.add(className);
         },
         removeClassAtIndex: (index, className) => {
-          this.menu_.listItems()[index].classList.remove(className);
+          this.menu_.items[index].classList.remove(className);
         },
 
         // outline methods
@@ -286,9 +281,9 @@ export default {
       this.menu_ = this.menuElement_?.__vue__;
     },
     refreshIndex() {
-      const items = this.menu_
-        .listItems()
-        .map(el => el.getAttribute(strings.VALUE_ATTR) || '');
+      const items = this.menu_.items.map(
+        el => el.getAttribute(strings.VALUE_ATTR) || '',
+      );
 
       const idx = items.findIndex(value => {
         return this.value === value;

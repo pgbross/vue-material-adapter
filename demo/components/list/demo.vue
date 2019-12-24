@@ -1,7 +1,7 @@
 <template>
   <div>
     <mcw-layout-grid class="mcw-demo mcw-demo--container mcw-list-demo">
-      <!-- <mcw-layout-cell>
+      <mcw-layout-cell>
         <mcw-list v-model="selected">
           <li class="mdc-list-item" tabindex="0">
             <span class="mdc-list-item__text">Single-line item</span>
@@ -118,7 +118,7 @@
             <span class="mdc-list-item__text">Single-line item</span>
           </li>
         </mcw-list>
-      </mcw-layout-cell>-->
+      </mcw-layout-cell>
 
       <mcw-layout-cell>
         <mcw-list v-model="radioSelected" role="radiogroup">
@@ -131,7 +131,9 @@
                 name="demo-list-radio"
               ></mcw-radio>
             </span>
-            <label class="mdc-list-item__text" for="demo-list-radio-item-1">Option 1</label>
+            <label class="mdc-list-item__text" for="demo-list-radio-item-1"
+              >Option 1</label
+            >
           </li>
           <li class="mdc-list-item" role="radio" aria-checked="false">
             <span class="mdc-list-item__graphic">
@@ -142,7 +144,9 @@
                 name="demo-list-radio"
               ></mcw-radio>
             </span>
-            <label class="mdc-list-item__text" for="demo-list-radio-item-2">Option 2</label>
+            <label class="mdc-list-item__text" for="demo-list-radio-item-2"
+              >Option 2</label
+            >
           </li>
           <li class="mdc-list-item" role="radio" aria-checked="false">
             <span class="mdc-list-item__graphic">
@@ -153,33 +157,53 @@
                 name="demo-list-radio"
               ></mcw-radio>
             </span>
-            <label class="mdc-list-item__text" for="demo-list-radio-item-3">Option 3</label>
+            <label class="mdc-list-item__text" for="demo-list-radio-item-3"
+              >Option 3</label
+            >
           </li>
         </mcw-list>
       </mcw-layout-cell>
-      <!--
+
       <mcw-layout-cell>
-        <mcw-list v-model="listSelected" role="group" aria-label="List with checkbox items">
+        <mcw-list
+          v-model="listSelected"
+          role="group"
+          aria-label="List with checkbox items"
+        >
           <li class="mdc-list-item" role="checkbox" aria-checked="false">
             <span class="mdc-list-item__graphic">
               <mcw-checkbox id="demo-list-checkbox-item-1"></mcw-checkbox>
             </span>
-            <label class="mdc-list-item__text" for="demo-list-checkbox-item-1">Option 1</label>
+            <label class="mdc-list-item__text" for="demo-list-checkbox-item-1"
+              >Option 1</label
+            >
           </li>
-          <li class="mdc-list-item" role="checkbox" aria-checked="true" tabindex="0">
+          <li
+            class="mdc-list-item"
+            role="checkbox"
+            aria-checked="true"
+            tabindex="0"
+          >
             <span class="mdc-list-item__graphic">
-              <mcw-checkbox id="demo-list-checkbox-item-2" checked></mcw-checkbox>
+              <mcw-checkbox
+                id="demo-list-checkbox-item-2"
+                checked
+              ></mcw-checkbox>
             </span>
-            <label class="mdc-list-item__text" for="demo-list-checkbox-item-2">Option 2</label>
+            <label class="mdc-list-item__text" for="demo-list-checkbox-item-2"
+              >Option 2</label
+            >
           </li>
           <li class="mdc-list-item" role="checkbox" aria-checked="false">
             <span class="mdc-list-item__graphic">
               <mcw-checkbox id="demo-list-checkbox-item-3"></mcw-checkbox>
             </span>
-            <label class="mdc-list-item__text" for="demo-list-checkbox-item-2">Option 3</label>
+            <label class="mdc-list-item__text" for="demo-list-checkbox-item-2"
+              >Option 3</label
+            >
           </li>
         </mcw-list>
-      </mcw-layout-cell>-->
+      </mcw-layout-cell>
     </mcw-layout-grid>
 
     <mcw-caption>
@@ -214,7 +238,6 @@ export default {
   },
 };
 </script>
-
 
 <style>
 .demo-article .mcw-layout-grid {
