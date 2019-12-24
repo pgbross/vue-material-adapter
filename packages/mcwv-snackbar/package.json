@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/snackbar",
   "description": "The Vue Material Adapter for the web snackbar component",
-  "version": "0.13.0",
+  "version": "0.14.0-alpha.0",
   "license": "MIT",
   "main": "dist/mcwv.snackbar.min.js",
   "module": "index.js",
