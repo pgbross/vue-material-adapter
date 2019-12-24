@@ -18,7 +18,7 @@
   "dependencies": {
     "@material/dom": "^4.0.0",
     "@material/ripple": "^4.0.0",
-    "@mcwv/base": "^0.13.0"
+    "@mcwv/base": "^0.14.0-alpha.0"
   },
   "gitHead": "65dff468047c4f785aecfdd8024b78295481db1b"
 }
