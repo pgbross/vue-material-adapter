@@ -18,7 +18,7 @@
   "dependencies": {
     "@material/dom": "^4.0.0",
     "@material/menu": "^4.0.0",
-    "@mcwv/base": "^0.13.0",
+    "@mcwv/base": "^0.14.0-alpha.0",
     "@mcwv/list": "^0.13.0",
     "@mcwv/ripple": "^0.13.0"
   },

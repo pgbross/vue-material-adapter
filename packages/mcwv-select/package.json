@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@material/select": "^4.0.0",
-    "@mcwv/base": "^0.13.0",
+    "@mcwv/base": "^0.14.0-alpha.0",
     "@mcwv/floating-label": "^0.13.0",
     "@mcwv/line-ripple": "^0.13.0",
     "@mcwv/notched-outline": "^0.13.0",
