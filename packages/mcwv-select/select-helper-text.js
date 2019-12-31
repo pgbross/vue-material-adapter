@@ -61,7 +61,7 @@ export default {
         class: this.classes,
         attrs: this.attrs,
       },
-      scopedSlots.default?.(),
+      scopedSlots.default && scopedSlots.default(),
     );
   },
 };

@@ -205,7 +205,7 @@ export default {
             props: { wrapFocus: this.myWrapFocus },
             on: { change: index => this.handleAction({ detail: { index } }) },
           },
-          scopedSlots.default?.(),
+          scopedSlots.default && scopedSlots.default(),
         ),
       ],
     );

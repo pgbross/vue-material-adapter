@@ -353,7 +353,7 @@ export default {
         },
         ref: 'listRoot',
       },
-      slots.default?.(),
+      slots.default && slots.default(),
     );
   },
 };

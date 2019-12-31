@@ -69,13 +69,17 @@ export default {
   },
   watch: {
     disabled(value) {
-      this.foundation?.updateDisabledStyle(value);
+      const { foundation } = this;
+      foundation && foundation.updateDisabledStyle(value);
     },
     value: 'refreshIndex',
   },
 
   mounted() {
     this.menuSetup_();
+    const {
+      $refs: { helperTextEl, leadingIconEl },
+    } = this;
 
     this.foundation = new MDCSelectFoundation(
       Object.assign({
@@ -83,13 +87,24 @@ export default {
         addClass: className => this.$set(this.classes, className, true),
         removeClass: className => this.$delete(this.classes, className),
         hasClass: className => Boolean(this.rootClasses[className]),
-        setRippleCenter: normalizedX =>
-          this.$refs.lineRippleEl?.setRippleCenter(normalizedX),
+        setRippleCenter: normalizedX => {
+          const {
+            $refs: { lineRippleEl },
+          } = this;
+
+          lineRippleEl && lineRippleEl.setRippleCenter(normalizedX);
+        },
         activateBottomLine: () => {
-          this.$refs.lineRippleEl?.foundation_.activate();
+          const {
+            $refs: { lineRippleEl },
+          } = this;
+          lineRippleEl && lineRippleEl.foundation_.activate();
         },
         deactivateBottomLine: () => {
-          this.$refs.lineRippleEl?.foundation_.deactivate();
+          const {
+            $refs: { lineRippleEl },
+          } = this;
+          lineRippleEl && lineRippleEl.foundation_.deactivate();
         },
 
         notifyChange: value => {
@@ -161,26 +176,38 @@ export default {
           return this.outlined;
         },
         notchOutline: labelWidth => {
-          this.$refs.outlineEl?.notch(labelWidth);
+          const {
+            $refs: { outlineEl },
+          } = this;
+          outlineEl && outlineEl.notch(labelWidth);
         },
         closeOutline: () => {
-          this.$refs.outlineEl?.closeNotch();
+          const {
+            $refs: { outlineEl },
+          } = this;
+          outlineEl && outlineEl.closeNotch();
         },
         // label methods
         hasLabel: () => {
           return !!this.label;
         },
         floatLabel: value => {
-          (this.$refs.labelEl ?? this.$refs.outlineEl).float(value);
+          const {
+            $refs: { labelEl, outlineEl },
+          } = this;
+          (labelEl || outlineEl).float(value);
         },
         getLabelWidth: () => {
-          return this.$refs.labelEl?.getWidth();
+          const {
+            $refs: { labelEl },
+          } = this;
+          return labelEl && labelEl.getWidth();
         },
       }),
       {
-        helperText: this.$refs.helperTextEl?.foundation,
+        helperText: helperTextEl && helperTextEl.foundation,
 
-        leadingIcon: this.$refs.leadingIconEl?.foundation,
+        leadingIcon: leadingIconEl && leadingIconEl.foundation,
       },
     );
 
@@ -278,7 +305,9 @@ export default {
       this.menuElement_ = this.$el.querySelector(
         MDCSelectFoundation.strings.MENU_SELECTOR,
       );
-      this.menu_ = this.menuElement_?.__vue__;
+      if (this.menuElement_) {
+        this.menu_ = this.menuElement_.__vue__;
+      }
     },
     refreshIndex() {
       const items = this.menu_.items.map(
@@ -344,7 +373,7 @@ export default {
       anchorNodes,
     );
 
-    const nodes = [anchorEl, scopedSlots.default?.()];
+    const nodes = [anchorEl, scopedSlots.default && scopedSlots.default()];
 
     if (this.leadingIcon) {
       nodes.unshift(
