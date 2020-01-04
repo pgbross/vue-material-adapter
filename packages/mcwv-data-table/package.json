@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/data-table",
   "description": "The Vue Material Adapter for the web data-table component",
-  "version": "0.14.0-alpha.1",
+  "version": "0.14.0-alpha.2",
   "license": "MIT",
   "main": "dist/mcwv.data-table.min.js",
   "module": "index.js",
@@ -19,7 +19,7 @@
     "@material/checkbox": "^4.0.0",
     "@material/data-table": "^4.0.0",
     "@material/dom": "^4.0.0",
-    "@mcwv/base": "^0.14.0-alpha.1"
+    "@mcwv/base": "^0.14.0-alpha.2"
   },
   "bugs": {
     "url": "https://github.com/pgbross/vue-material-adapter/issues"
