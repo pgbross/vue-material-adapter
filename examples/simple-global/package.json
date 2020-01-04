@@ -1,0 +1,15 @@
+{
+  "name": "simple-global",
+  "version": "1.0.0",
+  "description": "Simple global",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "serve": "^11.3.0",
+    "vue-material-adapter": "^0.14.0-alpha.1"
+  }
+}

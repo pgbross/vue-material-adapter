@@ -86,7 +86,9 @@ function cpAsset(asset) {
 
 cleanPkgDistDirs();
 
-Promise.all(globSync('build/*.{css,js,map}').map(cpAsset)).catch(err => {
+Promise.all(
+  globSync('build/*.{css,js,map}', { ignore: 'build/*.css.js*' }).map(cpAsset),
+).catch(err => {
   console.error(`Error encountered copying assets: ${err}`);
   process.exit(1);
 });

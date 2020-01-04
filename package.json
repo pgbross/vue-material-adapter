@@ -33,6 +33,7 @@
     "test": "NODE_ENV=test; jest --runInBand",
     "Xtestnc": "NODE_ENV=test; jest --runInBand --no-cache",
     "build": "webpack --progress --colors --mode production",
+    "build:develop": "webpack --progress --colors --mode development",
     "build:demo": "cross-env NODE_ENV=production webpack --config=demo/webpack.config.js --progress",
     "ci": "run-s ci:*",
     "ci:test": "NODE_ENV=test; jest --ci --runInBand",
