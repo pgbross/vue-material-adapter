@@ -14,6 +14,10 @@ customization while sticking to the _Vue Spirit_ (approachable, versatile, and p
 
 ## Release Notes
 
+`v0.14.0` - This release changes how the `mcw-list` component is structured in order to support the `select` component properly, note this is a BREAKING CHANGE.
+
+There are now examples of using `vue-material-adapter` both as a `basic-global` and a `basic-webpack` project [examples](https://pgbross.github.io/vue-material-adapter/examples)
+
 `v0.13.0` - This release now uses `material-components-web` v4.0.0 so there are significant changes in how several of the packages work and are structured.
 
 The most notable change is with the `mcw-select` which no longer uses the native select but renders what was previously known as the "enhanced select". See [Material Components](https://material.io/components/web/) for a list of all the changes, and review the [Documentation & Demo](https://pgbross.github.io/vue-material-adapter) for working examples of how to structure the markup for Vue.
