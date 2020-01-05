@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Basic Webpack</title>
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  </head>
+
+  <body class="mdc-typography">
+    <div id="app">
+      <div class="mdc-typography--headline2">{{title}}</div>
+      <mcw-button @click="onShowSnack" raised>Show snack</mcw-button>
+
+      <div
+        class="mdc-typography--body1"
+        style="margin-top: 16px;"
+        v-for="item in links"
+        :key="item.id"
+      >
+        {{item.desc}} <a :href="item.url" target="_blank">{{humanizeURL(item.url)}}</a>
+      </div>
+
+      <mcw-snackbar-queue ref="snackbar"></mcw-snackbar-queue>
+    </div>
+  </body>
+</html>

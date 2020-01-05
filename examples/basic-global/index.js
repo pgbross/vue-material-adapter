@@ -21,4 +21,21 @@ new Vue({
       },
     ],
   },
+  methods: {
+    humanizeURL: function(url) {
+      return url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+    },
+    onShowSnack() {
+      const snackbar = this.$refs.snackbar;
+      const snack = {
+        message: 'A message from the application.',
+        actionText: 'Hello',
+        dismissAction: true,
+        leading: false,
+      };
+      if (snackbar) {
+        snackbar.handleSnack(snack);
+      }
+    },
+  },
 }).$mount('#app');

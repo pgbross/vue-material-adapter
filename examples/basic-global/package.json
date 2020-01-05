@@ -1,0 +1,16 @@
+{
+  "name": "basic-global",
+  "version": "1.0.0",
+  "description": "Basic global",
+  "main": "index.js",
+  "scripts": {
+    "start": "serve",
+    "dev": "serve"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "serve": "^11.3.0",
+    "vue-material-adapter": "^0.14.0-alpha.2"
+  }
+}
