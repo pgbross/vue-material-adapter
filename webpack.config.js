@@ -73,7 +73,7 @@ module.exports = [
       ],
     },
     plugins: [
-      new CleanWebpackPlugin({ verbose: true }),
+      // new CleanWebpackPlugin({ verbose: true }),
       ...plugins,
       new MiniCssExtractPlugin({
         // Options similar to the same options in webpackOptions.output
