@@ -1,11 +1,22 @@
 ## Usage
 
 ```html
-<mcw-select v-model="selectedType" label="Food" helptext="Pick a food group">
+<mcw-select
+  :value="selectedType"
+  label="Food"
+  helptext="Pick a food group"
+  @change="onTypeChanged"
+>
   <mcw-menu class="mdc-select__menu">
-    <mcw-list-item v-for="type in types" :data-value="type" :key="type"
-      >{{ type }}</mcw-list-item
+    <li
+      v-for="type in types"
+      :key="type"
+      class="mdc-list-item"
+      role="menuitem"
+      :data-value="type"
     >
+      <span class="mdc-list-item__text">{{ type }}</span>
+    </li>
   </mcw-menu>
 </mcw-select>
 <span>Selected: {{ selected }}</span>
