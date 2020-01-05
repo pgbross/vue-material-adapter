@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/line-ripple",
   "description": "The Vue Material Adapter for the web line-ripple component",
-  "version": "0.14.0-alpha.2",
+  "version": "0.14.0",
   "license": "MIT",
   "main": "dist/mcwv.lineRipple.min.js",
   "module": "index.js",
@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@material/line-ripple": "^4.0.0",
-    "@mcwv/base": "^0.14.0-alpha.2"
+    "@mcwv/base": "^0.14.0"
   },
   "gitHead": "65dff468047c4f785aecfdd8024b78295481db1b"
 }
