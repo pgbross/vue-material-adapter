@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome to Vue Material Adapter</title>
+
+    <!-- import material icons, fonts and vue-mdc-adapter stylesheets -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="node_modules/vue-material-adapter/dist/vue-material-adapter.min.css"
+    />
+
+    <script src="https://unpkg.com/vue@latest/dist/vue.js"></script>
+    <script src="node_modules/vue-material-adapter/dist/vue-material-adapter.min.js"></script>
+    <script src="node_modules/@mcwv/button/dist/mcwv.button.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div class="mdc-typography--headline2">{{title}}</div>
+      <mcw-button @click="onShowSnack" raised>Show snack</mcw-button>
+
+      <div
+        class="mdc-typography--body1"
+        style="margin-top: 16px;"
+        v-for="item in links"
+        :key="item.id"
+      >
+        {{item.desc}} <a :href="item.url" target="_blank">{{humanizeURL(item.url)}}</a>
+      </div>
+
+      <mcw-snackbar-queue ref="snackbar"></mcw-snackbar-queue>
+    </div>
+  </body>
+</html>
+
+<script src="index.js"></script>

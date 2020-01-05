@@ -13,6 +13,7 @@ export default {
         'mdc-select-helper-text--persistent': this.helptextPersistent,
         'mdc-select-helper-text--validation-msg': this.helptextValidation,
       },
+      attrs: { 'aria-hidden': 'true' },
     };
   },
   watch: {
@@ -32,10 +33,12 @@ export default {
       hasClass: className => Boolean(this.classes[className]),
 
       setAttr: (attr, value) => {
-        this.$el.setAttribute(attr, value);
+        this.$set(this.attrs, attr, value);
+        // this.$el.setAttribute(attr, value);
       },
       removeAttr: attr => {
-        this.$el.removeAttribute(attr);
+        this.$delete(this.attrs, attr);
+        // this.$el.removeAttribute(attr);
       },
 
       setContent: (/* content */) => {
@@ -56,7 +59,7 @@ export default {
       'p',
       {
         class: this.classes,
-        attrs: { 'aria-hidden': 'true' },
+        attrs: this.attrs,
       },
       scopedSlots.default && scopedSlots.default(),
     );

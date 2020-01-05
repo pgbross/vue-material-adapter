@@ -2,40 +2,39 @@
   <div class>
     <section class="mcw-demo">
       <mcw-chip-set>
-        <mcw-chip>Item One</mcw-chip>
-        <mcw-chip>Item Two</mcw-chip>
-        <mcw-chip>Item Three</mcw-chip>
+        <mcw-chip>Chip One</mcw-chip>
+        <mcw-chip>Chip Two</mcw-chip>
       </mcw-chip-set>
     </section>
 
     <section class="mcw-demo">
-      <mcw-headline4>Entry Chips</mcw-headline4>
-      <mcw-chip-set>
-        <mcw-chip leading-icon="face" trailing-icon="more_vert">Jane Smith</mcw-chip>
-        <mcw-chip
-          leading-icon="face"
-          trailing-icon="more_vert"
-          :shouldRemoveOnTrailingIconClick="false"
-        >John Doe</mcw-chip>
+      <mcw-headline6>Input Chips</mcw-headline6>
+      <mcw-chip-set input>
+        <mcw-chip id="wiffle" leading-icon="face" trailing-icon="clear">Jane Smith</mcw-chip>
+        <mcw-chip leading-icon="face" trailing-icon="clear">John Doe</mcw-chip>
       </mcw-chip-set>
     </section>
 
     <section class="mcw-demo">
-      <mcw-headline4>Entry Chips (font-awesome)</mcw-headline4>
-      <mcw-chip-set>
-        <mcw-chip :shouldRemoveOnTrailingIconClick="false">
+      <mcw-headline6>Input Chips (font-awesome)</mcw-headline6>
+      <mcw-chip-set input>
+        <mcw-chip>
           <div slot="leading-icon" class="fa fa-font-awesome"></div>
-          <div slot="trailing-icon" class="fa fa-ellipsis-v"></div>Jane Smith
+          <div slot="trailing-icon">
+            <span role="gridcell" class="fa fa-times"></span>
+          </div>Jane Smith
         </mcw-chip>
-        <mcw-chip :shouldRemoveOnTrailingIconClick="false">
+        <mcw-chip>
           <div slot="leading-icon" class="fa fa-smile-o"></div>
-          <div slot="trailing-icon" class="fa fa-ellipsis-v"></div>John Doe
+          <div slot="trailing-icon">
+            <span role="gridcell" class="fa fa-times"></span>
+          </div>John Doe
         </mcw-chip>
       </mcw-chip-set>
     </section>
 
     <section class="mcw-demo">
-      <mcw-headline4>Choice Chips</mcw-headline4>
+      <mcw-headline6>Choice Chips</mcw-headline6>
       <mcw-chip-set choice>
         <mcw-chip>Extra small</mcw-chip>
         <mcw-chip>Small</mcw-chip>
@@ -46,28 +45,27 @@
     </section>
 
     <section class="mcw-demo">
-      <mcw-headline4>Filter Chips</mcw-headline4>
+      <mcw-headline6>Filter Chips</mcw-headline6>
       <mcw-chip-set filter>
-        <mcw-chip trailing-icon="cancel" leading-icon="add">Tops</mcw-chip>
+        <mcw-chip leading-icon="add">Tops</mcw-chip>
         <mcw-chip>
           <mcw-material-icon slot="leading-icon" icon="add"></mcw-material-icon>Bottoms
-          <mcw-material-icon slot="trailing-icon" icon="cancel"></mcw-material-icon>
         </mcw-chip>
-        <mcw-chip trailing-icon="cancel">Shoes</mcw-chip>
-        <mcw-chip trailing-icon="cancel">Accessories</mcw-chip>
+        <mcw-chip>Shoes</mcw-chip>
+        <mcw-chip>Accessories</mcw-chip>
       </mcw-chip-set>
 
-      <mcw-headline4>Filter Chips with leading icon</mcw-headline4>
+      <mcw-headline6>Filter Chips with leading icon</mcw-headline6>
       <mcw-chip-set filter>
-        <mcw-chip leading-icon="face" trailing-icon="cancel">Tops</mcw-chip>
-        <mcw-chip leading-icon="face" trailing-icon="cancel">Bottoms</mcw-chip>
-        <mcw-chip leading-icon="face" trailing-icon="cancel">Shoes</mcw-chip>
-        <mcw-chip leading-icon="face" trailing-icon="cancel">Accessories</mcw-chip>
+        <mcw-chip leading-icon="face">Tops</mcw-chip>
+        <mcw-chip leading-icon="face">Bottoms</mcw-chip>
+        <mcw-chip leading-icon="face">Shoes</mcw-chip>
+        <mcw-chip leading-icon="face">Accessories</mcw-chip>
       </mcw-chip-set>
     </section>
 
     <section class="mcw-demo">
-      <mcw-headline4>Custom theme</mcw-headline4>
+      <mcw-headline6>Custom theme</mcw-headline6>
       <mcw-chip-set>
         <mcw-chip class="custom-chip-primary">Add to Calendar</mcw-chip>
         <mcw-chip class="custom-chip-primary">Bookmark</mcw-chip>

@@ -8,6 +8,10 @@ const {
   NAVIGATION_EVENT,
 } = MDCChipFoundation.strings;
 
+const { CHIP_SELECTOR } = MDCChipSetFoundation.strings;
+
+let idCounter = 0;
+
 export default {
   name: 'mcw-chip-set',
   props: {
@@ -26,49 +30,61 @@ export default {
         'mdc-chip-set--filter': this.filter,
         'mdc-chip-set--input': this.input,
       },
+      listn: 0,
     };
   },
-  methods: {
-    instantiateChips() {
-      const chips = this.$slots.default
-        .filter(
-          ({ componentInstance }) =>
-            !!componentInstance &&
-            componentInstance.shouldRemoveOnTrailingIconClick,
-        )
-        .map(({ componentInstance }) => componentInstance);
 
-      return chips;
+  computed: {
+    chipElements() {
+      // eslint-disable-next-line no-unused-vars
+      const xx = this.listn; // for dependency
+
+      return [].slice.call(this.$el.querySelectorAll(CHIP_SELECTOR));
+    },
+    chips_() {
+      return this.chipElements.map(el => {
+        el.id = el.id || `mdc-chip-${++idCounter}`;
+
+        return el.__vue__;
+      });
     },
   },
+
   mounted() {
-    this.chips_ = this.instantiateChips();
+    // do not delete this reference as it triggers initial chip list instantiation.
+    this.chips_;
     this.foundation = new MDCChipSetFoundation({
+      focusChipPrimaryActionAtIndex: index => {
+        const chip = this.chips_[index];
+
+        chip && chip.focusPrimaryAction();
+      },
+      focusChipTrailingActionAtIndex: index => {
+        const chip = this.chips_[index];
+        chip && chip.focusTrailingAction();
+      },
+      getChipListCount: () => {
+        return this.chips_.length;
+      },
+      getIndexOfChipById: chipId => {
+        return this.chips_.findIndex(({ id }) => id == chipId);
+      },
       hasClass: className => this.$el.classList.contains(className),
+      isRTL: () =>
+        window.getComputedStyle(this.$el).getPropertyValue('direction') ===
+        'rtl',
       removeChipAtIndex: index => {
         if (index >= 0 && index < this.chips_.length) {
+          // tell chip to remove itself from the DOM
           this.chips_[index].remove();
           this.chips_.splice(index, 1);
         }
       },
 
-      focusChipPrimaryActionAtIndex: index => {
-        this.chips_[index].focusPrimaryAction();
-      },
-      focusChipTrailingActionAtIndex: index => {
-        this.chips_[index].focusTrailingAction();
-      },
-      getChipListCount: () => this.chips_.length,
-      getIndexOfChipById: chipId => {
-        return findChipIndex(this.chips_, chipId);
-      },
-      isRTL: () =>
-        window.getComputedStyle(this.$el).getPropertyValue('direction') ===
-        'rtl',
-
       removeFocusFromChipAtIndex: index => {
         this.chips_[index].removeFocus();
       },
+
       selectChipAtIndex: (index, selected, shouldNotifyClients) => {
         if (index >= 0 && index < this.chips_.length) {
           this.chips_[index].setSelectedFromChipSet(
@@ -80,9 +96,22 @@ export default {
     });
 
     this.foundation.init();
+
+    // the chips could change outside of this component
+    // so use a mutation observer to trigger an update by
+    // incrementing the dependency variable "listn" referenced
+    // in the computed that selects the chip elements
+    this.slotObserver = new MutationObserver((mutationList, observer) => {
+      this.listn++;
+    });
+    this.slotObserver.observe(this.$refs.listRoot, {
+      childList: true,
+      // subtree: true,
+    });
   },
 
   beforeDestroy() {
+    this.slotObserver.disconnect();
     this.foundation.destroy();
   },
 
@@ -92,6 +121,7 @@ export default {
       'div',
       {
         class: this.classes,
+        attrs: { role: 'grid' },
         on: {
           [INTERACTION_EVENT]: ({ detail: { chipId } }) =>
             this.foundation.handleChipInteraction(chipId),
@@ -102,18 +132,9 @@ export default {
           [NAVIGATION_EVENT]: ({ detail: { chipId, key, source } }) =>
             this.foundation.handleChipNavigation(chipId, key, source),
         },
+        ref: 'listRoot',
       },
       scopedSlots.default && scopedSlots.default(),
     );
   },
 };
-
-// ===
-// Private functions
-// ===
-
-function findChipIndex(chips, chipId) {
-  const index = chips.findIndex(({ _uid }) => _uid == chipId);
-
-  return index;
-}

@@ -3,6 +3,8 @@ import { MDCMenuSurfaceFoundation } from '@material/menu-surface/foundation';
 import { emitCustomEvent } from '@mcwv/base';
 import * as util from '@material/menu-surface/util';
 
+const { strings, cssClasses } = MDCMenuSurfaceFoundation;
+
 export default {
   name: 'mcw-menu-surface',
   model: {
@@ -21,7 +23,6 @@ export default {
         'mdc-menu': 1,
         'mdc-menu-surface': 1,
       },
-      styles: {},
     };
   },
 
@@ -43,24 +44,16 @@ export default {
           hasClass: className => this.$el.classList.contains(className),
           hasAnchor: () => !!this.anchorElement,
           notifyClose: () => {
-            emitCustomEvent(
-              this.$el,
-              MDCMenuSurfaceFoundation.strings.CLOSED_EVENT,
-              {},
-            );
+            emitCustomEvent(this.$el, strings.CLOSED_EVENT, {});
 
             this.$emit('change', false);
           },
           notifyOpen: () => {
-            emitCustomEvent(
-              this.$el,
-              MDCMenuSurfaceFoundation.strings.OPENED_EVENT,
-              {},
-            );
+            emitCustomEvent(this.$el, strings.OPENED_EVENT, {});
 
             this.$emit('change', true);
           },
-          isElementInContainer: el => this.$el === el || this.$el.contains(el),
+          isElementInContainer: el => this.$el.contains(el),
           isRtl: () =>
             getComputedStyle(this.$el).getPropertyValue('direction') === 'rtl',
           setTransformOrigin: origin => {
@@ -77,9 +70,7 @@ export default {
 
     if (
       this.$el.parentElement &&
-      this.$el.parentElement.classList.contains(
-        MDCMenuSurfaceFoundation.cssClasses.ANCHOR,
-      )
+      this.$el.parentElement.classList.contains(cssClasses.ANCHOR)
     ) {
       this.anchorElement = this.$el.parentElement;
     }
@@ -95,11 +86,6 @@ export default {
   methods: {
     handleBodyClick(evt) {
       this.foundation.handleBodyClick(evt);
-    },
-
-    handleMenuSurfaceOpened(evt) {
-      this.registerBodyClickListener(evt);
-      this.$emit('MDCMenuSurface:opened', evt);
     },
 
     registerBodyClickListener() {
@@ -166,20 +152,8 @@ export default {
     },
 
     onOpen_(value) {
-      if (value) {
-        const focusableElements = this.$el.querySelectorAll(
-          MDCMenuSurfaceFoundation.strings.FOCUSABLE_ELEMENTS,
-        );
-        this.firstFocusableElement_ =
-          focusableElements.length > 0 ? focusableElements[0] : null;
-        this.lastFocusableElement_ =
-          focusableElements.length > 0
-            ? focusableElements[focusableElements.length - 1]
-            : null;
-        this.foundation.open();
-      } else {
-        this.foundation.close();
-      }
+      const method = value ? 'open' : 'close';
+      this.foundation[method]();
     },
     hoistMenuToBody() {
       document.body.appendChild(this.$el.parentElement.removeChild(this.$el));
@@ -191,9 +165,9 @@ export default {
 
     setFixedPosition(isFixed) {
       if (isFixed) {
-        this.$el.classList.add(MDCMenuSurfaceFoundation.cssClasses.FIXED);
+        this.$set(this.classes, cssClasses.FIXED, true);
       } else {
-        this.$el.classList.remove(MDCMenuSurfaceFoundation.cssClasses.FIXED);
+        this.$delete(this.classes, cssClasses.FIXED);
       }
 
       this.foundation.setFixedPosition(isFixed);
@@ -232,7 +206,7 @@ export default {
         class: this.classes,
         on: {
           keydown: evt => this.handleKeydown(evt),
-          'MDCMenuSurface:opened': evt => this.handleMenuSurfaceOpened(evt),
+          'MDCMenuSurface:opened': evt => this.registerBodyClickListener(evt),
           'MDCMenuSurface:closed': evt => this.deregisterBodyClickListener(evt),
         },
       },
