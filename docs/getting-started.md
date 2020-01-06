@@ -6,6 +6,10 @@
 
 ## Quick Start
 
+#### Examples
+
+There are now examples of using `vue-material-adapter` both as a `basic-global` and a `basic-webpack` project [examples](https://github.com/pgbross/vue-material-adapter/tree/master/examples).
+
 #### Playground
 
 See demo in the source distribution for examples of how vue-material-adapter can be used.
@@ -222,13 +226,15 @@ Configure Webpack with sass-loader and make sure sass modules can be resolved.
 
 #### Full build
 
+See `basic-webpack` project [examples](https://github.com/pgbross/vue-material-adapter/tree/master/examples).
+
 ```scss
 /* theme.scss */
 $mdc-theme-primary: #212121;
 $mdc-theme-accent: #41b883;
 $mdc-theme-background: #fff;
 
-@import 'vue-material-adapter/styles';
+@import 'vue-material-adapter/index.scss';
 ```
 
 ```javascript
@@ -247,8 +253,8 @@ $mdc-theme-primary: #212121;
 $mdc-theme-accent: #41b883;
 $mdc-theme-background: #fff;
 
-@import 'vue-material-adapter/button/styles';
-@import 'vue-material-adapter/fab/styles';
+@import '@mcwv/button/index.scss';
+@import '@mcwv/fab/index.scss';
 ```
 
 ```javascript
