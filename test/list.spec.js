@@ -7,18 +7,25 @@ const Spec = {
 <mcw-list-group>
   <mcw-list-group-sub-header>Group 1</mcw-list-group-sub-header>
   <mcw-list>
-    <mcw-list-item>Item1</mcw-list-item>
-    <mcw-list-item>Item2</mcw-list-item>
-    <mcw-list-divider />
-    <mcw-list-item>Item3</mcw-list-item>
+  <li class="mdc-list-item" tabindex="0">
+  <span class="mdc-list-item__text">Single-line item</span>
+</li>
+<li class="mdc-list-item">
+  <span class="mdc-list-item__text">Single-line item</span>
+</li>
+<li class="mdc-list-item">
+  <span class="mdc-list-item__text">Single-line item</span>
+</li>
   </mcw-list>
   <mcw-list-divider />
   <mcw-list-group-sub-header>Group 2</mcw-list-group-sub-header>
   <mcw-list>
-    <mcw-list-item>Item4</mcw-list-item>
-    <mcw-list-item>Item5</mcw-list-item>
-    <mcw-list-divider />
-    <mcw-list-item>Item6</mcw-list-item>
+  <li class="mdc-list-item" tabindex="0">
+  <span class="mdc-list-item__text">line item</span>
+</li>
+<li class="mdc-list-item">
+  <span class="mdc-list-item__text">line item</span>
+</li>
   </mcw-list>
 </mcw-list-group>
 </div>`,
