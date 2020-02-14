@@ -16,7 +16,7 @@
     "url": "https://github.com/pgbross/vue-material-adapter"
   },
   "dependencies": {
-    "@material/tab": "^4.0.0",
+    "@material/tab": "^5.0.0",
     "@material/tab-bar": "^5.0.0",
     "@material/tab-indicator": "^5.0.0",
     "@material/tab-scroller": "^5.0.0",
