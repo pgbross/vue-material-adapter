@@ -16,7 +16,7 @@
     "url": "https://github.com/pgbross/vue-material-adapter"
   },
   "dependencies": {
-    "@material/checkbox": "^4.0.0",
+    "@material/checkbox": "^5.0.0",
     "@material/dom": "^4.0.0",
     "@material/form-field": "^4.0.0",
     "@mcwv/base": "^0.14.0",
