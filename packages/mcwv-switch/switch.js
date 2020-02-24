@@ -23,6 +23,7 @@ export default {
       styles: {},
       nativeControlChecked: this.checked,
       nativeControlDisabled: this.disabled,
+      nativeAttrs: {},
     };
   },
   computed: {
@@ -46,6 +47,10 @@ export default {
       setNativeControlChecked: checked => (this.nativeControlChecked = checked),
       setNativeControlDisabled: disabled =>
         (this.nativeControlDisabled = disabled),
+
+      setNativeControlAttr: (attr, value) => {
+        this.nativeAttrs[attr] = value;
+      },
     });
     this.foundation.init();
     this.foundation.setChecked(this.checked);
@@ -70,21 +75,21 @@ export default {
       createElement('div', { class: this.classes, style: this.styles }, [
         createElement('div', { class: { 'mdc-switch__track': 1 } }),
         createElement('div', { class: { 'mdc-switch__thumb-underlay': 1 } }, [
-          createElement('div', { class: { 'mdc-switch__thumb': 1 } }, [
-            createElement('input', {
-              class: { 'mdc-switch__native-control': 1 },
-              attrs: {
-                name: this.name,
-                id: this.vma_uid_,
-                value: this.value,
-                type: 'checkbox',
-                role: 'switch',
-                checked: this.nativeControlChecked,
-                disabled: this.nativeControlDisabled,
-              },
-              on: { change: evt => this.onChanged(evt) },
-            }),
-          ]),
+          createElement('div', { class: { 'mdc-switch__thumb': 1 } }),
+          createElement('input', {
+            class: { 'mdc-switch__native-control': 1 },
+            attrs: {
+              ...this.nativeAttrs,
+              name: this.name,
+              id: this.vma_uid_,
+              value: this.value,
+              type: 'checkbox',
+              role: 'switch',
+              checked: this.nativeControlChecked,
+              disabled: this.nativeControlDisabled,
+            },
+            on: { change: evt => this.onChanged(evt) },
+          }),
         ]),
       ]),
 

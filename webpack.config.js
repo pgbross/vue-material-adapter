@@ -124,10 +124,6 @@ module.exports = [
         resolve('packages/mcwv-floating-label/index.scss'),
         resolve('packages/mcwv-floating-label/index.js'),
       ],
-      gridList: [
-        resolve('packages/mcwv-grid-list/index.scss'),
-        resolve('packages/mcwv-grid-list/index.js'),
-      ],
       iconButton: [
         resolve('packages/mcwv-icon-button/index.scss'),
         resolve('packages/mcwv-icon-button/index.js'),
@@ -219,6 +215,7 @@ module.exports = [
             cacheDirectory: true,
           },
         },
+
         {
           test: /\.scss$/,
           exclude: /\.module.(s(a|c)ss)$/,
@@ -236,10 +233,9 @@ module.exports = [
             {
               loader: 'sass-loader',
               options: {
+                implementation: require('dart-sass'),
                 sassOptions: {
                   includePaths: ['node_modules'],
-
-                  fiber: true,
                 },
               },
             },
