@@ -19,7 +19,7 @@
     "@material/dom": "^4.0.0",
     "@material/textfield": "^4.0.0",
     "@mcwv/base": "^0.14.0",
-    "@mcwv/floating-label": "^0.14.0",
+    "@mcwv/floating-label": "^0.15.0",
     "@mcwv/line-ripple": "^0.14.0",
     "@mcwv/notched-outline": "^0.14.0",
     "@mcwv/ripple": "^0.14.0"
