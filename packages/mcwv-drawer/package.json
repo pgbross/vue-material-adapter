@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@material/drawer": "^5.0.0",
+    "@material/dom": "^5.0.0",
     "@mcwv/base": "^0.15.0",
     "@mcwv/ripple": "^0.15.0"
   },

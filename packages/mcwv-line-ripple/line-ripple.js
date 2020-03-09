@@ -53,7 +53,7 @@ export default {
     },
   },
   render(createElement) {
-    return createElement('div', {
+    return createElement('span', {
       class: this.lineClasses,
       style: this.lineStyles,
       on: { transitionend: evt => this.foundation_.handleTransitionEnd(evt) },
