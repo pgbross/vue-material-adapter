@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@material/switch": "^4.0.0",
-    "@mcwv/base": "^0.14.0",
+    "@mcwv/base": "^0.15.0",
     "@mcwv/ripple": "^0.14.0"
   },
   "gitHead": "65dff468047c4f785aecfdd8024b78295481db1b"
