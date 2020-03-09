@@ -18,7 +18,7 @@
   "sideEffects": false,
   "dependencies": {
     "@mcwv/base": "^0.14.0",
-    "@mcwv/button": "^0.14.0",
+    "@mcwv/button": "^0.15.0",
     "@mcwv/card": "^0.14.0",
     "@mcwv/checkbox": "^0.14.0",
     "@mcwv/chips": "^0.14.0",
