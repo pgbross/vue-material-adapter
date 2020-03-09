@@ -42,7 +42,7 @@
     "@mcwv/slider": "^0.14.0",
     "@mcwv/snackbar": "^0.14.0",
     "@mcwv/switch": "^0.14.0",
-    "@mcwv/tabs": "^0.14.0",
+    "@mcwv/tabs": "^0.15.0",
     "@mcwv/textfield": "^0.14.0",
     "@mcwv/top-app-bar": "^0.14.0",
     "@mcwv/typography": "^0.14.0"
