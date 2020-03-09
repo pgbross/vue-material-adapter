@@ -240,10 +240,6 @@ export default {
         style: this.styles,
         attrs: {
           id: this.id,
-          'aria-modal': 'true',
-          'aria-labelledby': this.labelledBy,
-          'aria-describedby': this.describedBy,
-          role: 'alertdialog',
         },
         ref: 'root',
         on: {
@@ -261,7 +257,15 @@ export default {
           [
             createElement(
               'div',
-              { class: cssClasses.SURFACE },
+              {
+                class: cssClasses.SURFACE,
+                attrs: {
+                  'aria-modal': 'true',
+                  'aria-labelledby': this.labelledBy,
+                  'aria-describedby': this.describedBy,
+                  role: 'alertdialog',
+                },
+              },
               this.$scopedSlots.default && this.$scopedSlots.default(),
             ),
           ],

@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@material/chips": "^5.0.0",
+    "@material/dom": "^5.1.0",
     "@mcwv/base": "^0.15.0",
     "@mcwv/ripple": "^0.15.0"
   },
