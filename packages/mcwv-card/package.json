@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@material/card": "^4.0.0",
-    "@mcwv/base": "^0.14.0",
+    "@mcwv/base": "^0.15.0",
     "@mcwv/button": "^0.14.0",
     "@mcwv/ripple": "^0.14.0"
   },
