@@ -359,6 +359,7 @@ export default {
             placeholder: this.inputPlaceHolder,
             'aria-label': this.inputPlaceHolder,
             'aria-controls': this.inputAriaControls,
+            'aria-labelledby': `label-${this.vma_uid_}`,
           },
           ref: 'input',
           on: {
@@ -374,7 +375,7 @@ export default {
         createElement(
           mcwFloatingLabel,
           {
-            attrs: { for: this.vma_uid_ },
+            attrs: { id: `label-${this.vma_uid_}` },
             ref: 'labelEl',
           },
           this.label,
@@ -416,7 +417,7 @@ export default {
     }
 
     const rootEl = createElement(
-      'div',
+      'label',
       {
         class: this.classes,
         style: this.styles,

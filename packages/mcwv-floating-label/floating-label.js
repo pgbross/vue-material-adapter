@@ -47,7 +47,7 @@ export default {
     const { $scopedSlots: scopedSlots } = this;
 
     return createElement(
-      'label',
+      'span',
       { class: this.labelClasses },
       scopedSlots.default && scopedSlots.default(),
     );
