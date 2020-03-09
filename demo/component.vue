@@ -9,8 +9,7 @@
     <article v-if="readme" class="doc-article markdown">
       <mcw-headline4>
         Note: elements can use names prefixed with either
-        <em>mcw-</em> (preferred) or for backwards compatibility
-        <em>mdc-</em>.
+        <em>mcw-</em> (preferred) or for backwards compatibility <em>mdc-</em>.
       </mcw-headline4>
       <component :is="readme" />
     </article>
@@ -38,7 +37,6 @@ export default {
     'dialog-readme': () => import('./components/dialog/README.md'),
     'drawer-readme': () => import('./components/drawer/README.md'),
     'fab-readme': () => import('./components/fab/README.md'),
-    'grid-list-readme': () => import('./components/grid-list/README.md'),
     'icon-button-readme': () => import('./components/icon-button/README.md'),
     'layout-grid-readme': () => import('./components/layout-grid/README.md'),
     'linear-progress-readme': () =>
@@ -65,7 +63,6 @@ export default {
     'dialog-demo': () => import('./components/dialog/demo.vue'),
     'drawer-demo': () => import('./components/drawer/demo.vue'),
     'fab-demo': () => import('./components/fab/demo.vue'),
-    'grid-list-demo': () => import('./components/grid-list/demo.vue'),
     'icon-button-demo': () => import('./components/icon-button/demo.vue'),
     'layout-grid-demo': () => import('./components/layout-grid/demo.vue'),
     'linear-progress-demo': () =>

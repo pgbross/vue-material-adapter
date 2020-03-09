@@ -84,17 +84,17 @@
 </template>
 
 <style lang="scss" scoped>
-@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
-@import '@material/chips/mixins';
+// @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+// @import '@material/chips/mixins';
 
-.custom-chip-primary {
-  @include mdc-chip-fill-color(#6200ee);
-  @include mdc-chip-ink-color(white);
-}
+// .custom-chip-primary {
+//   @include mdc-chip-fill-color(#6200ee);
+//   @include mdc-chip-ink-color(white);
+// }
 
-.custom-chip-secondary {
-  @include mdc-chip-fill-color(white);
-  @include mdc-chip-ink-color(#018786);
-  @include mdc-chip-outline(2px, solid, #018786);
-}
+// .custom-chip-secondary {
+//   @include mdc-chip-fill-color(white);
+//   @include mdc-chip-ink-color(#018786);
+//   @include mdc-chip-outline(2px, solid, #018786);
+// }
 </style>

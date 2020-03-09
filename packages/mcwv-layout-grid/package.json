@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/layout-grid",
   "description": "The Vue Material Adapter for the web layout-grid component",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "license": "MIT",
   "main": "dist/mcwv.layoutGrid.min.js",
   "module": "index.js",
@@ -16,8 +16,8 @@
     "url": "https://github.com/pgbross/vue-material-adapter"
   },
   "dependencies": {
-    "@material/layout-grid": "^4.0.0",
-    "@mcwv/base": "^0.14.0"
+    "@material/layout-grid": "^5.1.0",
+    "@mcwv/base": "^0.15.0"
   },
   "gitHead": "65dff468047c4f785aecfdd8024b78295481db1b"
 }

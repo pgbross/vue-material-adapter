@@ -8,7 +8,6 @@ import dialog from '@mcwv/dialog/index';
 import drawer from '@mcwv/drawer/index';
 import fab from '@mcwv/fab/index';
 import floatingLabel from '@mcwv/floating-label/index';
-import gridList from '@mcwv/grid-list/index';
 import iconButton from '@mcwv/icon-button/index';
 import layoutGrid from '@mcwv/layout-grid/index';
 import lineRipple from '@mcwv/line-ripple/index';
@@ -38,7 +37,6 @@ export default {
     vm.use(drawer);
     vm.use(fab);
     vm.use(floatingLabel);
-    vm.use(gridList);
     vm.use(iconButton);
     vm.use(layoutGrid);
     vm.use(lineRipple);
@@ -69,7 +67,6 @@ export {
   drawer,
   fab,
   floatingLabel,
-  gridList,
   iconButton,
   layoutGrid,
   lineRipple,

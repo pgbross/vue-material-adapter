@@ -12,7 +12,15 @@ recommended by Google:
 This project aims to find the right balance between ease of use and
 customization while sticking to the _Vue Spirit_ (approachable, versatile, and performant)
 
+## Install
+
+```
+$ npm install vue-material-adapter
+```
+
 ## Release Notes
+
+`v0.15.0` - This release targets the recently released `material-components-web v5.1.0`. BREAKING CHANGE: It no longer re-exports the `@material` stylesheets so any CSS stylesheets will need to use the `material-components-web` stylesheets directly.
 
 `v0.14.0` - This release changes how the `mcw-list` component is structured in order to support the `select` component properly, note this is a BREAKING CHANGE.
 
@@ -24,7 +32,7 @@ The most notable change is with the `mcw-select` which no longer uses the native
 
 ## Project Status
 
-This project is under active development. The long term goal is to allow easy integration with Vue but to allow maximum flexibility in structuring the markup with an emphasis of being as close to the plain `material-components-web` documented structure as feasible. There are helper components defined to aid
+This project is under continual development. The long term goal is to allow easy integration with Vue but to allow maximum flexibility in structuring the markup with an emphasis of being as close to the plain `material-components-web` documented structure as feasible. There are helper components defined to aid
 simple use, but they can constrain the markup sometimes. As the `material-components-web` library matures the goal is to avoid simplistic helper elements such as those that just add required classes, for example, as they risk needing to understand how to control the helpers when it is in practice simpler to control the underlying markup directly.
 
 Do not hesitate to open an issue on [GitHub](https://github.com/pgbross/vue-material-adapter/issues)

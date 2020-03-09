@@ -33,7 +33,7 @@ const cssLoaders = [
   {
     loader: 'sass-loader',
     options: {
-      sourceMap: false,
+      implementation: require('dart-sass'),
       sassOptions: {
         includePaths: [resolve('../node_modules')],
       },

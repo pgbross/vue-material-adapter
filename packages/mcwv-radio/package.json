@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/radio",
   "description": "The Vue Material Adapter for the web radio component",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "main": "dist/mcwv.radio.min.js",
   "module": "index.js",
   "license": "MIT",
@@ -16,11 +16,11 @@
     "url": "https://github.com/pgbross/vue-material-adapter"
   },
   "dependencies": {
-    "@material/dom": "^4.0.0",
-    "@material/form-field": "^4.0.0",
-    "@material/radio": "^4.0.0",
-    "@mcwv/base": "^0.14.0",
-    "@mcwv/ripple": "^0.14.0"
+    "@material/dom": "^5.1.0",
+    "@material/form-field": "^5.1.0",
+    "@material/radio": "^5.1.0",
+    "@mcwv/base": "^0.15.0",
+    "@mcwv/ripple": "^0.15.0"
   },
   "gitHead": "65dff468047c4f785aecfdd8024b78295481db1b"
 }

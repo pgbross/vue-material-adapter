@@ -1,25 +1,41 @@
-@import '../packages/mcwv-button/index';
-@import '../packages/mcwv-card/index';
-@import '../packages/mcwv-checkbox/index';
-@import '../packages/mcwv-chips/index';
-@import '../packages/mcwv-data-table/index';
-@import '../packages/mcwv-dialog/index';
-@import '../packages/mcwv-drawer/index';
-@import '../packages/mcwv-fab/index';
-@import '../packages/mcwv-grid-list/index';
-@import '../packages/mcwv-icon-button/index';
-@import '../packages/mcwv-layout-grid/index';
-@import '../packages/mcwv-linear-progress/index';
-@import '../packages/mcwv-list/index';
-@import '../packages/mcwv-material-icon/index';
-@import '../packages/mcwv-menu/index';
-@import '../packages/mcwv-radio/index';
-@import '../packages/mcwv-ripple/index';
-@import '../packages/mcwv-select/index';
-@import '../packages/mcwv-slider/index';
-@import '../packages/mcwv-snackbar/index';
-@import '../packages/mcwv-switch/index';
-@import '../packages/mcwv-tabs/index';
-@import '../packages/mcwv-textfield/index';
-@import '../packages/mcwv-top-app-bar/index';
-@import '../packages/mcwv-typography/index';
+@use "@material/theme" with (
+  $primary: #212121,
+  $secondary: #41b883,
+  $accent: #41b883,
+  $background: #fff
+);
+
+@use "@material/button/mdc-button";
+@use "@material/card/mdc-card";
+@use "@material/checkbox/mdc-checkbox";
+@use "@material/chips/mdc-chips";
+@use "@material/data-table/mdc-data-table";
+@use "@material/dialog/mdc-dialog";
+@use "@material/drawer/mdc-drawer";
+@use "@material/elevation/mdc-elevation";
+@use "@material/fab/mdc-fab";
+@use "@material/floating-label/mdc-floating-label";
+@use "@material/form-field/mdc-form-field";
+@use "@material/icon-button/mdc-icon-button";
+@use "@material/image-list/mdc-image-list";
+@use "@material/layout-grid/mdc-layout-grid";
+@use "@material/line-ripple/mdc-line-ripple";
+@use "@material/linear-progress/mdc-linear-progress";
+@use "@material/list/mdc-list";
+@use "@material/menu/mdc-menu";
+@use "@material/menu-surface/mdc-menu-surface";
+@use "@material/notched-outline/mdc-notched-outline";
+@use "@material/radio/mdc-radio";
+@use "@material/ripple/mdc-ripple";
+@use "@material/select/mdc-select";
+@use "@material/slider/mdc-slider";
+@use "@material/snackbar/mdc-snackbar";
+@use "@material/switch/mdc-switch";
+@use "@material/tab/mdc-tab";
+@use "@material/tab-bar/mdc-tab-bar";
+@use "@material/tab-indicator/mdc-tab-indicator";
+@use "@material/tab-scroller/mdc-tab-scroller";
+@use "@material/textfield/mdc-text-field";
+
+@use "@material/top-app-bar/mdc-top-app-bar";
+@use "@material/typography/mdc-typography";

@@ -1,10 +1,6 @@
-$mdc-theme-primary: #212121;
-$mdc-theme-accent: #41b883;
-$mdc-theme-background: #fff;
-
-@import '../components/styles';
+@use '../components/styles';
+@use '@material/elevation' as elevation-mixins;
 @import './_constant';
-// @import "./jazzy";
 @import './markdown';
 
 .mcw-list-item__text,
@@ -74,7 +70,7 @@ $mdc-theme-background: #fff;
     }
 
     .mcw-demo--container {
-        @include mdc-elevation(0);
+        @include elevation-mixins.elevation(0);
         min-height: 100px;
         min-width: 200px;
         padding: 32px;

@@ -1,7 +1,7 @@
 {
   "name": "@mcwv/dialog",
   "description": "The Vue Material Adapter for the web dialog component",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "license": "MIT",
   "main": "dist/mcwv.dialog.min.js",
   "module": "index.js",
@@ -16,9 +16,9 @@
     "url": "https://github.com/pgbross/vue-material-adapter"
   },
   "dependencies": {
-    "@material/dialog": "^4.0.0",
-    "@mcwv/base": "^0.14.0",
-    "@mcwv/button": "^0.14.0"
+    "@material/dialog": "^5.1.0",
+    "@mcwv/base": "^0.15.0",
+    "@mcwv/button": "^0.15.0"
   },
   "gitHead": "65dff468047c4f785aecfdd8024b78295481db1b"
 }

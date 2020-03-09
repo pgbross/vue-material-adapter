@@ -1,3 +1,4 @@
+@use '@material/typography' as typography-mixins;
 $rootpath: '' !default;
 
 $black-02: rgba(0, 0, 0, 0.02);
@@ -22,43 +23,43 @@ $code_bg_color: rgba(0, 0, 0, 0.05);
 $code_font: 'Roboto Mono';
 
 .markdown {
-    @include mdc-typography(body1);
+    @include typography-mixins.typography(body1);
 
     // max-width: 800px;
     // padding: 32px;
 
     h1 {
         // See _component-icons.scss for additional mutations in component pages.
-        @include mdc-typography(headline3);
+        @include typography-mixins.typography(headline3);
         margin-bottom: 24px;
         font-weight: 400;
     }
 
     h2 {
-        @include mdc-typography(headline4);
+        @include typography-mixins.typography(headline4);
         margin: 56px 0 24px;
         font-weight: 400;
     }
 
     h3 {
-        @include mdc-typography(headline6);
+        @include typography-mixins.typography(headline6);
         margin: 32px 0 0;
         font-weight: 400;
     }
 
     h4 {
-        @include mdc-typography(subtitle2);
+        @include typography-mixins.typography(subtitle2);
         margin: 20px 0 0;
     }
 
     h5 {
-        @include mdc-typography(subtitle1);
+        @include typography-mixins.typography(subtitle1);
         font-weight: 500;
         margin: 20px 0 0;
     }
 
     h6 {
-        @include mdc-typography(body2);
+        @include typography-mixins.typography(body2);
     }
 
     h1,

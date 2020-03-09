@@ -2,6 +2,7 @@ import * as util from '@material/drawer/util';
 import MDCDismissibleDrawerFoundation from '@material/drawer/dismissible/foundation';
 import MDCModalDrawerFoundation from '@material/drawer/modal/foundation';
 import MDCListFoundation from '@material/list/foundation';
+import { FocusTrap } from '@material/dom/focus-trap';
 
 export default {
   name: 'mcw-drawer',
@@ -61,6 +62,8 @@ export default {
       this.list_.wrapFocus = true;
     }
 
+    this.focusTrapFactory_ = el => new FocusTrap(el);
+
     const adapter = {
       addClass: className => this.$set(this.classes, className, true),
       removeClass: className => this.$delete(this.classes, className),
@@ -92,8 +95,8 @@ export default {
         this.$emit('change', true);
         this.$emit('open');
       },
-      trapFocus: () => this.focusTrap_.activate(),
-      releaseFocus: () => this.focusTrap_.deactivate(),
+      trapFocus: () => this.focusTrap_.trapFocus(),
+      releaseFocus: () => this.focusTrap_.releaseFocus(),
     };
 
     const { DISMISSIBLE, MODAL } = MDCDismissibleDrawerFoundation.cssClasses;
