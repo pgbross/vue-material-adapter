@@ -38,7 +38,7 @@
     "@mcwv/notched-outline": "^0.14.0",
     "@mcwv/radio": "^0.14.0",
     "@mcwv/ripple": "^0.14.0",
-    "@mcwv/select": "^0.14.0",
+    "@mcwv/select": "^0.15.0",
     "@mcwv/slider": "^0.14.0",
     "@mcwv/snackbar": "^0.14.0",
     "@mcwv/switch": "^0.14.0",
