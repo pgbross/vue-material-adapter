@@ -29,7 +29,7 @@
     "@mcwv/floating-label": "^0.14.0",
     "@mcwv/grid-list": "^0.14.0",
     "@mcwv/icon-button": "^0.14.0",
-    "@mcwv/layout-grid": "^0.14.0",
+    "@mcwv/layout-grid": "^0.15.0",
     "@mcwv/line-ripple": "^0.14.0",
     "@mcwv/linear-progress": "^0.14.0",
     "@mcwv/list": "^0.14.0",
