@@ -22,7 +22,7 @@
     "@mcwv/floating-label": "^0.14.0",
     "@mcwv/line-ripple": "^0.14.0",
     "@mcwv/notched-outline": "^0.14.0",
-    "@mcwv/ripple": "^0.14.0"
+    "@mcwv/ripple": "^0.15.0"
   },
   "gitHead": "65dff468047c4f785aecfdd8024b78295481db1b"
 }
