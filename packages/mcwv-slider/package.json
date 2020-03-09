@@ -16,8 +16,8 @@
     "url": "https://github.com/pgbross/vue-material-adapter"
   },
   "dependencies": {
-    "@material/dom": "^5.0.0",
-    "@material/slider": "^5.0.0",
+    "@material/dom": "^5.1.0",
+    "@material/slider": "^5.1.0",
     "@mcwv/base": "^0.15.0"
   },
   "gitHead": "65dff468047c4f785aecfdd8024b78295481db1b"
