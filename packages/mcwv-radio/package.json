@@ -18,7 +18,7 @@
   "dependencies": {
     "@material/dom": "^6.0.0",
     "@material/form-field": "^6.0.0",
-    "@material/radio": "^5.1.0",
+    "@material/radio": "^6.0.0",
     "@mcwv/base": "^0.15.0",
     "@mcwv/ripple": "^0.15.0"
   },
