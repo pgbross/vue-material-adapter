@@ -16,7 +16,7 @@
     "url": "https://github.com/pgbross/vue-material-adapter"
   },
   "dependencies": {
-    "@material/fab": "^5.1.0",
+    "@material/fab": "^6.0.0",
     "@mcwv/base": "^0.15.0",
     "@mcwv/ripple": "^0.15.0"
   },
