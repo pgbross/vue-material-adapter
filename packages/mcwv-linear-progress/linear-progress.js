@@ -23,6 +23,9 @@ export default {
       classes: {
         'mdc-linear-progress': 1,
       },
+      bufferbarStyles: {},
+      primaryStyles: {},
+      rootAttrs: {},
     };
   },
   watch: {
@@ -53,11 +56,17 @@ export default {
         this.$set(this.classes, className, true);
       },
       forceLayout: () => this.$el.offsetWidth,
-      getPrimaryBar: () => this.$refs.primary,
-      getBuffer: () => this.$refs.buffer,
+      setBufferBarStyle: (styleProperty, value) => {
+        this.$set(this.bufferbarStyles, styleProperty, value);
+      },
+      setPrimaryBarStyle: (styleProperty, value) => {
+        this.$set(this.primaryStyles, styleProperty, value);
+      },
       hasClass: className => this.$el.classList.contains(className),
       removeClass: className => this.$delete(this.classes, className),
-      setStyle: (el, styleProperty, value) => (el.style[styleProperty] = value),
+      setAttribute: (attributeName, value) => {
+        this.$set(this.rootAttrs, attributeName, value);
+      },
     };
 
     this.foundation = new MDCLinearProgressFoundation(adapter);
@@ -79,19 +88,28 @@ export default {
   },
   render(createElement) {
     const nodes = [
-      this.bufferingDots &&
-        createElement('div', {
-          class: 'mdc-linear-progress__buffering-dots',
-        }),
-      createElement('div', {
-        ref: 'buffer',
-        class: 'mdc-linear-progress__buffer',
-      }),
+      createElement(
+        'div',
+        {
+          ref: 'buffer',
+          class: 'mdc-linear-progress__buffer',
+        },
+        [
+          createElement('div', {
+            class: 'mdc-linear-progress__buffer-bar',
+            style: this.bufferbarStyles,
+          }),
+          createElement('div', {
+            class: 'mdc-linear-progress__buffer-dots',
+          }),
+        ],
+      ),
       createElement(
         'div',
         {
           ref: 'primary',
           class: 'mdc-linear-progress__bar mdc-linear-progress__primary-bar',
+          style: this.primaryStyles,
         },
         [
           createElement('span', {
@@ -117,7 +135,7 @@ export default {
       this.tag,
       {
         class: this.classes,
-        attrs: { role: 'progressbar' },
+        attrs: { role: 'progressbar', ...this.rootAttrs },
       },
       nodes,
     );
