@@ -6,6 +6,12 @@ export default {
   functional: true,
   props: {
     disabled: Boolean,
+    leading: {
+      type: Boolean,
+      default() {
+        return true;
+      },
+    },
   },
 
   mounted() {
@@ -41,7 +47,12 @@ export default {
   },
   render(createElement, context) {
     const node = context.children[0];
-    node.data.class = 'mdc-text-field__icon';
+    const {
+      props: { leading },
+    } = context;
+    node.data.class = `mdc-text-field__icon mdc-text-field__icon--${
+      leading ? 'leading' : 'trailing'
+    }`;
     return node;
   },
 };

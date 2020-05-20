@@ -23,7 +23,7 @@ export default {
     type: {
       type: String,
       default: 'text',
-      validator: function(value) {
+      validator: function (value) {
         return (
           [
             'text',
@@ -37,7 +37,6 @@ export default {
         );
       },
     },
-    dense: Boolean,
     label: String,
     outline: Boolean,
     disabled: Boolean,
@@ -55,7 +54,7 @@ export default {
     helptextPersistent: Boolean,
     helptextValidation: Boolean,
   },
-  data: function() {
+  data: function () {
     return {
       text: this.value,
       classes: {
@@ -63,13 +62,12 @@ export default {
         'mdc-text-field': true,
         'mdc-text-field--upgraded': true,
         'mdc-text-field--disabled': this.disabled,
-        'mdc-text-field--dense': this.dense,
         'mdc-text-field--fullwidth': this.fullwidth,
         'mdc-text-field--textarea': this.multiline,
         'mdc-text-field--outlined': !this.fullwidth && this.outline,
         'mdc-text-field--with-leading-icon': Boolean(this.$slots.leadingIcon),
         'mdc-text-field--with-trailing-icon': Boolean(this.$slots.trailingIcon),
-
+        'mdc-text-field--filled': Boolean(!this.outline),
         'mdc-text-field--no-label': !this.label,
       },
       styles: {},
@@ -128,9 +126,7 @@ export default {
         this.foundation && this.foundation.setValid(this.valid);
       }
     },
-    dense() {
-      this.$set(this.classes, 'mdc-text-field--dense', this.dense);
-    },
+
     value(value) {
       if (this.foundation) {
         if (value !== this.foundation.getValue()) {
@@ -311,7 +307,7 @@ export default {
       rootNodes.push(
         createElement(
           'textfield-icon',
-          { ref: 'leadingIconEl' },
+          { ref: 'leadingIconEl', props: { leading: true } },
           leadingIconSlot,
         ),
       );
@@ -390,7 +386,7 @@ export default {
       rootNodes.push(
         createElement(
           'textfield-icon',
-          { ref: 'trailingIconEl' },
+          { ref: 'trailingIconEl', props: { leading: false } },
           trailingIconSlot,
         ),
       );
