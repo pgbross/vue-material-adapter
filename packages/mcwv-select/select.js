@@ -36,6 +36,7 @@ export default {
       classes: {},
       selectedTextContent: '',
       selTextAttrs: {},
+      selectAnchorAttrs: {},
     };
   },
 
@@ -129,16 +130,16 @@ export default {
         setSelectedText: text => {
           this.selectedTextContent = text;
         },
-        isSelectedTextFocused: () => {
-          return document.activeElement === this.$refs.selectedTextEl;
+        isSelectAnchorFocused: () => {
+          return document.activeElement === this.$refs.anchorEl;
         },
 
-        getSelectedTextAttr: attr => {
-          return this.selectedTextAttrs[attr];
+        getSelectAnchorAttr: attr => {
+          return this.selectAnchorAttrs[attr];
         },
 
-        setSelectedTextAttr: (attr, value) => {
-          this.$set(this.selectedTextAttrs, attr, value);
+        setSelectAnchorAttr: (attr, value) => {
+          this.$set(this.selectAnchorAttrs, attr, value);
         },
         openMenu: () => {
           this.menu_.surfaceOpen = true;
@@ -147,7 +148,7 @@ export default {
           this.menu_.surfaceOpen = false;
         },
 
-        getAnchorElement: () => this.$refs.anchor,
+        getAnchorElement: () => this.$refs.anchorEl,
         setMenuAnchorElement: anchorEl => this.menu_.setAnchorElement(anchorEl),
         setMenuAnchorCorner: anchorCorner =>
           this.menu_.setAnchorCorner(anchorCorner),
@@ -237,8 +238,10 @@ export default {
     //   subtree: true,
     // });
 
-    this.ripple = new RippleBase(this);
-    this.ripple.init();
+    if (!this.outlined) {
+      this.ripple = new RippleBase(this);
+      this.ripple.init();
+    }
   },
 
   beforeDestroy() {
@@ -290,7 +293,7 @@ export default {
     },
 
     handleClick(evt) {
-      this.$refs.selectedTextEl.focus();
+      this.$refs.anchorEl.focus();
       this.handleFocus();
       this.foundation.handleClick(this.getNormalizedXCoordinate(evt));
     },
@@ -324,33 +327,23 @@ export default {
   render(createElement) {
     const { $scopedSlots: scopedSlots } = this;
 
-    const selectedTextAttrs = {};
     const helpId = `help-${this.vma_uid_}`;
 
-    if (this.helptext) {
-      selectedTextAttrs['aria-controls'] = helpId;
-      selectedTextAttrs['aria-describedBy'] = helpId;
-    }
-
     const anchorNodes = [
-      createElement('i', { class: { 'mdc-select__dropdown-icon': 1 } }),
-      createElement(
-        'div',
-        {
-          class: {
-            'mdc-select__selected-text': 1,
-          },
-          attrs: selectedTextAttrs,
-          ref: 'selectedTextEl',
-          on: {
-            click: evt => this.handleClick(evt),
-
-            focus: () => this.handleFocus(),
-            blur: () => this.handleBlur(),
-          },
+      createElement('span', { class: ['mdc-select__ripple'] }),
+      createElement('input', {
+        class: {
+          'mdc-select__selected-text': 1,
         },
-        [this.selectedTextContent],
-      ),
+        attrs: {
+          disabled: true,
+          readonly: true,
+          value: this.selectedTextContent,
+          ...this.selectedTextAttrs,
+        },
+        ref: 'selectedTextEl',
+      }),
+      createElement('i', { class: { 'mdc-select__dropdown-icon': 1 } }),
     ];
 
     if (this.outlined) {
@@ -363,26 +356,31 @@ export default {
         createElement(mcwLineRipple, { ref: 'lineRippleEl' }, this.label),
       );
     }
-
-    const anchorEl = createElement(
-      'div',
-      {
-        class: { 'mdc-select__anchor': 1 },
-        ref: 'anchor',
-      },
-      anchorNodes,
-    );
-
-    const nodes = [anchorEl, scopedSlots.default && scopedSlots.default()];
-
     if (this.leadingIcon) {
-      nodes.unshift(
+      anchorNodes.unshift(
         createElement('select-icon', {
           attrs: { icon: this.leadingIcon, 'tab-index': '0', role: 'button' },
           ref: 'leadingIconEl',
         }),
       );
     }
+
+    const anchorEl = createElement(
+      'div',
+      {
+        class: { 'mdc-select__anchor': 1 },
+        attrs: this.selectAnchorAttrs,
+        ref: 'anchorEl',
+        on: {
+          click: evt => this.handleClick(evt),
+          focus: () => this.handleFocus(),
+          blur: () => this.handleBlur(),
+        },
+      },
+      anchorNodes,
+    );
+
+    const nodes = [anchorEl, scopedSlots.default && scopedSlots.default()];
 
     if (this.helptext) {
       nodes.push(
