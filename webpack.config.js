@@ -83,6 +83,11 @@ module.exports = [
         chunkFilename: '[id].min.css',
       }),
     ],
+    resolve: {
+      alias: {
+        '~': resolve('packages'),
+      },
+    },
   },
   {
     name: 'main-js-a-la-carte',
@@ -299,5 +304,10 @@ module.exports = [
         chunkFilename: '[id].min.css',
       }),
     ],
+    resolve: {
+      alias: {
+        '~': resolve('packages'),
+      },
+    },
   },
 ];

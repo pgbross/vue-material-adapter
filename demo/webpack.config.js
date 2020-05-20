@@ -152,6 +152,7 @@ const config = {
         '../packages/vue-material-adapter/index.js',
       ),
       demo: resolve('./'),
+      '~': resolve('../packages'),
     },
   },
   externals: {},
