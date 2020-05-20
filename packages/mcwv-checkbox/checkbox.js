@@ -57,20 +57,21 @@ export default {
   mounted() {
     const adapter = {
       addClass: className => this.$set(this.classes, className, true),
+      forceLayout: () => this.$refs.root.offsetWidth,
+      hasNativeControl: () => true,
+      isAttachedToDOM: () => true,
+      isChecked: () => this.$refs.control.checked,
+      isIndeterminate: () => this.$refs.control.indeterminate,
       removeClass: className => this.$delete(this.classes, className),
-      setNativeControlAttr: (attr, value) => {
-        this.$refs.control.setAttribute(attr, value);
-      },
       removeNativeControlAttr: attr => {
         this.$refs.control.removeAttribute(attr);
       },
-      isIndeterminate: () => this.$refs.control.indeterminate,
-      isChecked: () => this.$refs.control.checked,
-      hasNativeControl: () => true,
+      setNativeControlAttr: (attr, value) => {
+        this.$refs.control.setAttribute(attr, value);
+      },
+
       setNativeControlDisabled: disabled =>
         (this.$refs.control.disabled = disabled),
-      forceLayout: () => this.$refs.root.offsetWidth,
-      isAttachedToDOM: () => true,
     };
 
     this.foundation = new MDCCheckboxFoundation(adapter);
@@ -246,7 +247,11 @@ export default {
     const checkboxElement = createElement(
       'div',
       { class: this.classes, style: this.styles, ref: 'root' },
-      [inputElement, background],
+      [
+        inputElement,
+        background,
+        createElement('div', { class: ['mdc-checkbox__ripple'] }),
+      ],
     );
     const labelElement = createElement(
       'label',
