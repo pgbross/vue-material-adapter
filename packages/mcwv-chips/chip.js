@@ -3,6 +3,16 @@ import { CustomLinkMixin, emitCustomEvent } from '@mcwv/base';
 import { RippleBase } from '@mcwv/ripple';
 import mcwChipCheckmark from './chip-checkmark.js';
 
+const {
+  INTERACTION_EVENT,
+  SELECTION_EVENT,
+  REMOVAL_EVENT,
+  TRAILING_ICON_INTERACTION_EVENT,
+  PRIMARY_ACTION_SELECTOR,
+  TRAILING_ACTION_SELECTOR,
+  NAVIGATION_EVENT,
+} = MDCChipFoundation.strings;
+
 export default {
   name: 'mcw-chip',
   mixins: [CustomLinkMixin],
@@ -151,7 +161,7 @@ export default {
               'mdc-chip__icon': 1,
               'mdc-chip__icon--trailing': 1,
               'material-icons': 1,
-              'mdc-chip__trailing-action': 1,
+              // 'mdc-chip__trailing-action': 1,
             },
             attrs: { ...this.trailingAttrs },
             ref: 'trailing-icon',
@@ -167,22 +177,10 @@ export default {
     },
   },
   mounted() {
-    const {
-      INTERACTION_EVENT,
-      SELECTION_EVENT,
-      REMOVAL_EVENT,
-      TRAILING_ICON_INTERACTION_EVENT,
-      PRIMARY_ACTION_SELECTOR,
-      TRAILING_ACTION_SELECTOR,
-      NAVIGATION_EVENT,
-    } = MDCChipFoundation.strings;
-
     this.trailingAction_ = this.$el.querySelector(TRAILING_ACTION_SELECTOR);
 
     this.foundation = new MDCChipFoundation({
       addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      hasClass: className => this.$el.classList.contains(className),
       addClassToLeadingIcon: className => {
         this.$set(this.leadingClasses, className, true);
 
@@ -192,18 +190,8 @@ export default {
           (item.elm || item).classList.add(className);
         }
       },
-      removeClassFromLeadingIcon: className => {
-        this.$delete(this.leadingClasses, className);
-
-        // if no ref, then using slot, so just remove class directly
-        if (!this.$refs['leading-icon'] && this.haveleadingIcon) {
-          const item = this.$slots['leading-icon'][0];
-          (item.elm || item).classList.remove(className);
-        }
-      },
       eventTargetHasClass: (target, className) =>
         target.classList.contains(className),
-
       focusPrimaryAction: () => {
         const {
           $refs: {
@@ -214,26 +202,20 @@ export default {
         primaryAction && primaryAction.focus();
       },
       focusTrailingAction: () => {
-        const {
-          $refs: {
-            ['trailing-icon']: trailingAction = this.$el.querySelector(
-              TRAILING_ACTION_SELECTOR,
-            ),
-          },
-        } = this;
-
-        trailingAction && trailingAction.focus();
+        this.trailingAction_ && this.trailingAction_.focus();
       },
       getAttribute: attr => this.$el.getAttribute(attr),
       getCheckmarkBoundingClientRect: () => {
-        return this.$refs.checkmarkEl ? this.$refs.checkmarkEl.width : null;
+        return this.$refs.checkmarkEl
+          ? this.$refs.checkmarkEl.$el.getBoundingClientRect()
+          : null;
       },
       getComputedStyleValue: propertyName =>
         window.getComputedStyle(this.$el).getPropertyValue(propertyName),
       getRootBoundingClientRect: () => this.$el.getBoundingClientRect(),
-
+      hasClass: className => this.$el.classList.contains(className),
       hasLeadingIcon: () => !!this.haveleadingIcon,
-      hasTrailingIcon: () => !!this.havetrailingIcon,
+      hasTrailingAction: () => !!this.trailingAction_,
       isRTL: () =>
         window.getComputedStyle(this.$el).getPropertyValue('direction') ===
         'rtl',
@@ -267,7 +249,6 @@ export default {
           true,
         );
       },
-
       notifySelection: selected =>
         emitCustomEvent(
           this.$el,
@@ -285,14 +266,26 @@ export default {
           true,
         );
       },
+      removeClass: className => this.$delete(this.classes, className),
+      removeClassFromLeadingIcon: className => {
+        this.$delete(this.leadingClasses, className);
+
+        // if no ref, then using slot, so just remove class directly
+        if (!this.$refs['leading-icon'] && this.haveleadingIcon) {
+          const item = this.$slots['leading-icon'][0];
+          (item.elm || item).classList.remove(className);
+        }
+      },
+
       setPrimaryActionAttr: (attr, value) => {
         this.$set(this.primaryAttrs, attr, value);
       },
       setStyleProperty: (property, value) =>
         this.$set(this.styles, property, value),
-
       setTrailingActionAttr: (attr, value) => {
-        this.$set(this.trailingAttrs, attr, value);
+        if (this.trailingAction_) {
+          this.trailingAction_.setAttribute(attr, value);
+        }
       },
     });
 
@@ -316,6 +309,9 @@ export default {
   },
   beforeDestroy() {
     this.ripple.destroy();
+    if (this.trailingAction_) {
+      this.trailingAction_.destroy();
+    }
     this.foundation.destroy();
   },
 
@@ -330,17 +326,25 @@ export default {
 
     const role = isFilter ? 'checkbox' : 'button';
 
+    const on = {
+      click: evt => this.foundation.handleInteraction(evt),
+      keydown: evt => this.foundation.handleInteraction(evt),
+      transitionend: evt => this.foundation.handleTransitionEnd(evt),
+      focusin: evt => this.foundation.handleFocusIn(evt),
+      focusout: evt => this.foundation.handleFocusOut(evt),
+    };
+    if (this.trailingAction_) {
+      on[INTERACTION_EVENT] = evt =>
+        this.foundation.handleTrailingIconInteraction(evt);
+    }
+
     return createElement(
       'div',
       {
         class: this.classes,
         style: this.styles,
         attrs: { role: 'row' },
-        on: {
-          click: evt => this.foundation.handleInteraction(evt),
-          keydown: evt => this.foundation.handleInteraction(evt),
-          transitionend: evt => this.foundation.handleTransitionEnd(evt),
-        },
+        on,
       },
       [
         createElement('div', { class: { 'mdc-chip__ripple': 1 } }),
@@ -351,11 +355,19 @@ export default {
           createElement(
             'span',
             {
-              class: ['mdc-chip__text', 'mdc-chip__action--primary'],
-              attrs: { role, ...primaryAttrs },
+              attrs: { role, tabindex: 0, ...primaryAttrs },
+              class: { 'mdc-chip__primary-action': 1 },
               ref: 'primaryAction',
             },
-            scopedSlots.default && scopedSlots.default(),
+            [
+              createElement(
+                'span',
+                {
+                  class: ['mdc-chip__text'],
+                },
+                scopedSlots.default && scopedSlots.default(),
+              ),
+            ],
           ),
         ]),
         havetrailingIcon && this.renderTrailingIcon(createElement),
