@@ -1,4 +1,5 @@
 const path = require('path');
+// eslint-disable-next-line no-unused-vars
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const pkg = require('./package.json');
 const resolve = relativePath => path.resolve(__dirname, relativePath);

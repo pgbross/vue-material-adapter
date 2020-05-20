@@ -115,7 +115,7 @@ const plugins = [
     template: 'demo/index.html',
     inject: 'body',
     minify: false,
-    chunksSortMode: 'dependency',
+    chunksSortMode: 'auto',
   }),
 
   // add vue dependencies
@@ -228,13 +228,15 @@ if (isProduction) {
     }),
 
     // copy assets
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve(__dirname, '../static'),
-        to: config.output.path,
-        ignore: ['.*'],
-      },
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, '../static'),
+          to: config.output.path,
+          ignore: ['.*'],
+        },
+      ],
+    }),
   );
 }
 
