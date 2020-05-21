@@ -1,4 +1,4 @@
-import { MDCnotchedOutlineFoundation } from '@material/notched-outline/foundation';
+import { MDCNotchedOutlineFoundation } from '@material/notched-outline/foundation';
 import { mcwFloatingLabel } from '~/floating-label/index.js';
 
 export default {
@@ -15,7 +15,7 @@ export default {
     const {
       OUTLINE_UPGRADED,
       NO_LABEL,
-    } = MDCnotchedOutlineFoundation.cssClasses;
+    } = MDCNotchedOutlineFoundation.cssClasses;
 
     const adapter = {
       addClass: className => {
@@ -30,7 +30,7 @@ export default {
       removeNotchWidthProperty: () => this.$delete(this.notchStyles, 'width'),
     };
 
-    this.foundation = new MDCnotchedOutlineFoundation(adapter);
+    this.foundation = new MDCNotchedOutlineFoundation(adapter);
     this.foundation.init();
 
     const key = this.$slots.default ? OUTLINE_UPGRADED : NO_LABEL;

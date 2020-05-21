@@ -1,4 +1,4 @@
-import { MDCTextfieldIconFoundation } from '@material/textfield/icon/foundation.js';
+import { MDCTextFieldIconFoundation } from '@material/textfield/icon/foundation.js';
 import { emitCustomEvent } from '~/base/index.js';
 
 export default {
@@ -15,7 +15,7 @@ export default {
   },
 
   mounted() {
-    this.foundation = new MDCTextfieldIconFoundation(
+    this.foundation = new MDCTextFieldIconFoundation(
       Object.assign({
         getAttr: attr => this.$el.getAttribute(attr),
         setAttr: (attr, value) => this.$el.setAttribute(attr, value),
@@ -31,7 +31,7 @@ export default {
           this.$emit('click');
           emitCustomEvent(
             this.$el,
-            MDCTextfieldIconFoundation.strings.ICON_EVENT,
+            MDCTextFieldIconFoundation.strings.ICON_EVENT,
             {},
             true /* shouldBubble  */,
           );

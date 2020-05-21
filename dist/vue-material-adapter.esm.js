@@ -28,7 +28,7 @@ import { MDCLinearProgressFoundation } from '@material/linear-progress/foundatio
 import { MDCMenuFoundation } from '@material/menu/foundation';
 import { MDCMenuSurfaceFoundation } from '@material/menu-surface/foundation';
 import { getTransformPropertyName } from '@material/menu-surface/util';
-import { MDCnotchedOutlineFoundation } from '@material/notched-outline/foundation';
+import { MDCNotchedOutlineFoundation } from '@material/notched-outline/foundation';
 import { MDCRadioFoundation } from '@material/radio/foundation';
 import { MDCSelectFoundation } from '@material/select/foundation';
 import { MDCSelectHelperTextFoundation } from '@material/select/helper-text/foundation.js';
@@ -43,7 +43,7 @@ import { computeHorizontalScrollbarHeight } from '@material/tab-scroller/util';
 import MDCTabFoundation from '@material/tab/foundation';
 import { MDCTextFieldFoundation } from '@material/textfield/foundation';
 import { MDCTextFieldHelperTextFoundation } from '@material/textfield/helper-text/foundation';
-import { MDCTextfieldIconFoundation } from '@material/textfield/icon/foundation.js';
+import { MDCTextFieldIconFoundation } from '@material/textfield/icon/foundation.js';
 import { MDCFixedTopAppBarFoundation } from '@material/top-app-bar/fixed/foundation';
 import { MDCShortTopAppBarFoundation } from '@material/top-app-bar/short/foundation';
 import { MDCTopAppBarFoundation } from '@material/top-app-bar/standard/foundation';
@@ -4142,7 +4142,7 @@ var mcwNotchedOutline = {
     const {
       OUTLINE_UPGRADED,
       NO_LABEL,
-    } = MDCnotchedOutlineFoundation.cssClasses;
+    } = MDCNotchedOutlineFoundation.cssClasses;
 
     const adapter = {
       addClass: className => {
@@ -4157,7 +4157,7 @@ var mcwNotchedOutline = {
       removeNotchWidthProperty: () => this.$delete(this.notchStyles, 'width'),
     };
 
-    this.foundation = new MDCnotchedOutlineFoundation(adapter);
+    this.foundation = new MDCNotchedOutlineFoundation(adapter);
     this.foundation.init();
 
     const key = this.$slots.default ? OUTLINE_UPGRADED : NO_LABEL;
@@ -6310,7 +6310,7 @@ var TextfieldIcon = {
   },
 
   mounted() {
-    this.foundation = new MDCTextfieldIconFoundation(
+    this.foundation = new MDCTextFieldIconFoundation(
       Object.assign({
         getAttr: attr => this.$el.getAttribute(attr),
         setAttr: (attr, value) => this.$el.setAttribute(attr, value),
@@ -6326,7 +6326,7 @@ var TextfieldIcon = {
           this.$emit('click');
           emitCustomEvent(
             this.$el,
-            MDCTextfieldIconFoundation.strings.ICON_EVENT,
+            MDCTextFieldIconFoundation.strings.ICON_EVENT,
             {},
             true /* shouldBubble  */,
           );
