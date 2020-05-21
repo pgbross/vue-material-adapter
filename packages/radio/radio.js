@@ -1,7 +1,7 @@
 /* eslint-disable quote-props */
 import { applyPassive } from '@material/dom/events';
-import MDCFormFieldFoundation from '@material/form-field/foundation';
-import MDCRadioFoundation from '@material/radio/foundation';
+import { MDCFormFieldFoundation } from '@material/form-field/foundation';
+import { MDCRadioFoundation } from '@material/radio/foundation';
 import { DispatchFocusMixin, VMAUniqueIdMixin } from '~/base/index.js';
 import { RippleBase } from '~/ripple/index.js';
 

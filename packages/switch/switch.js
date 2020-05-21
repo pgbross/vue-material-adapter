@@ -1,4 +1,4 @@
-import MDCSwitchFoundation from '@material/switch/foundation';
+import { MDCSwitchFoundation } from '@material/switch/foundation';
 import { DispatchFocusMixin, VMAUniqueIdMixin } from '~/base/index.js';
 import { RippleBase } from '~/ripple/index.js';
 

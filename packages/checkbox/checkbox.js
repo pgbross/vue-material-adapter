@@ -1,8 +1,8 @@
 /* eslint-disable quote-props */
 import { getCorrectEventName } from '@material/animation';
-import MDCCheckboxFoundation from '@material/checkbox/foundation';
+import { MDCCheckboxFoundation } from '@material/checkbox/foundation';
 import { applyPassive } from '@material/dom/events';
-import MDCFormFieldFoundation from '@material/form-field/foundation';
+import { MDCFormFieldFoundation } from '@material/form-field/foundation';
 import { DispatchFocusMixin, VMAUniqueIdMixin } from '~/base/index.js';
 import { RippleBase } from '~/ripple/index.js';
 

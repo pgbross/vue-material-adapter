@@ -1,6 +1,6 @@
 /* eslint-disable quote-props */
 import { applyPassive } from '@material/dom/events';
-import MDCTextfieldFoundation from '@material/textfield/foundation';
+import { MDCTextFieldFoundation } from '@material/textfield/foundation';
 import { DispatchFocusMixin, VMAUniqueIdMixin } from '~/base/index.js';
 import { mcwFloatingLabel } from '~/floating-label/index.js';
 import { mcwLineRipple } from '~/line-ripple/index.js';
@@ -136,7 +136,7 @@ export default {
     },
   },
   mounted() {
-    this.foundation = new MDCTextfieldFoundation(
+    this.foundation = new MDCTextFieldFoundation(
       Object.assign(
         {
           addClass: className => {

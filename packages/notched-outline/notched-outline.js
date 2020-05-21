@@ -1,4 +1,4 @@
-import MDCnotchedOutlineFoundation from '@material/notched-outline/foundation';
+import { MDCnotchedOutlineFoundation } from '@material/notched-outline/foundation';
 import { mcwFloatingLabel } from '~/floating-label/index.js';
 
 export default {

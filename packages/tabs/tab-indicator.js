@@ -1,4 +1,4 @@
-import MDCTabIndicatorFoundation from '@material/tab-indicator/foundation';
+import { MDCTabIndicatorFoundation } from '@material/tab-indicator/foundation';
 
 const { cssClasses } = MDCTabIndicatorFoundation;
 

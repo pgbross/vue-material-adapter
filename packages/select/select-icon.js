@@ -1,4 +1,4 @@
-import MDCSelectIconFoundation from '@material/select/icon/foundation.js';
+import { MDCSelectIconFoundation } from '@material/select/icon/foundation.js';
 import { emitCustomEvent } from '~/base/index.js';
 
 export default {

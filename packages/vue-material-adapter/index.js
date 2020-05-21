@@ -63,6 +63,7 @@ export {
   card,
   checkbox,
   chips,
+  dataTable,
   dialog,
   drawer,
   fab,

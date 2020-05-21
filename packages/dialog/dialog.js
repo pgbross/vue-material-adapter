@@ -1,5 +1,5 @@
 /* eslint-disable quote-props */
-import MDCDialogFoundation from '@material/dialog/foundation';
+import { MDCDialogFoundation } from '@material/dialog/foundation';
 import * as util from '@material/dialog/util';
 import { closest, matches } from '@material/dom/ponyfill.js';
 import { VMAUniqueIdMixin } from '~/base/index.js';

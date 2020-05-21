@@ -1,4 +1,4 @@
-import MDCTabBarFoundation from '@material/tab-bar/foundation';
+import { MDCTabBarFoundation } from '@material/tab-bar/foundation';
 import { emitCustomEvent } from '~/base/index.js';
 
 export default {

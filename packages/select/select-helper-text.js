@@ -1,4 +1,4 @@
-import MDCSelectHelperTextFoundation from '@material/select/helper-text/foundation.js';
+import { MDCSelectHelperTextFoundation } from '@material/select/helper-text/foundation.js';
 
 export default {
   name: 'select-helper-text',

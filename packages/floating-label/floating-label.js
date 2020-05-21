@@ -1,4 +1,4 @@
-import MDCFloatingLabelFoundation from '@material/floating-label/foundation';
+import { MDCFloatingLabelFoundation } from '@material/floating-label/foundation';
 
 export default {
   name: 'mcw-floating-label',

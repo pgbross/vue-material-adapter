@@ -1,4 +1,4 @@
-import MDCTextfieldIconFoundation from '@material/textfield/icon/foundation.js';
+import { MDCTextfieldIconFoundation } from '@material/textfield/icon/foundation.js';
 import { emitCustomEvent } from '~/base/index.js';
 
 export default {

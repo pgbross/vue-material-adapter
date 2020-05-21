@@ -1,4 +1,4 @@
-import MDCTextFieldHelperTextFoundation from '@material/textfield/helper-text/foundation';
+import { MDCTextFieldHelperTextFoundation } from '@material/textfield/helper-text/foundation';
 
 export default {
   name: 'textfield-helper-text',

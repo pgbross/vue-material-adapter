@@ -1,6 +1,6 @@
 /* eslint-disable quote-props */
 import { closest } from '@material/dom/ponyfill';
-import MDCSnackbarFoundation from '@material/snackbar/foundation';
+import { MDCSnackbarFoundation } from '@material/snackbar/foundation';
 
 const { strings, numbers } = MDCSnackbarFoundation;
 

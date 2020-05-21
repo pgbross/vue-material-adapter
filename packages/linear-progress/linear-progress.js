@@ -1,4 +1,4 @@
-import MDCLinearProgressFoundation from '@material/linear-progress/foundation';
+import { MDCLinearProgressFoundation } from '@material/linear-progress/foundation';
 
 const ProgressPropType = {
   type: [Number, String],

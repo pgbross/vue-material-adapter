@@ -1,5 +1,5 @@
 /* eslint-disable quote-props */
-import MDCSliderFoundation from '@material/slider/foundation';
+import { MDCSliderFoundation } from '@material/slider/foundation';
 import { DispatchFocusMixin } from '~/base/index.js';
 import { applyPassive } from '@material/dom/events';
 

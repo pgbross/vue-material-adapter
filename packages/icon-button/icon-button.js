@@ -1,5 +1,5 @@
 /* eslint-disable quote-props */
-import MDCIconButtonToggleFoundation from '@material/icon-button/foundation';
+import { MDCIconButtonToggleFoundation } from '@material/icon-button/foundation';
 import { RippleBase } from '~/ripple/index.js';
 
 export default {

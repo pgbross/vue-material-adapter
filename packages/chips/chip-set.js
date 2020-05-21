@@ -1,4 +1,4 @@
-import MDCChipSetFoundation from '@material/chips/chip-set/foundation';
+import { MDCChipSetFoundation } from '@material/chips/chip-set/foundation';
 import { MDCChipFoundation } from '@material/chips/chip/foundation';
 import { announce } from '@material/dom/announce';
 

@@ -1,6 +1,6 @@
-import MDCFixedTopAppBarFoundation from '@material/top-app-bar/fixed/foundation';
-import MDCShortTopAppBarFoundation from '@material/top-app-bar/short/foundation';
-import MDCTopAppBarFoundation from '@material/top-app-bar/standard/foundation';
+import { MDCFixedTopAppBarFoundation } from '@material/top-app-bar/fixed/foundation';
+import { MDCShortTopAppBarFoundation } from '@material/top-app-bar/short/foundation';
+import { MDCTopAppBarFoundation } from '@material/top-app-bar/standard/foundation';
 import { cssClasses } from './constants';
 import { emitCustomEvent } from '~/base/index.js';
 

@@ -1,4 +1,4 @@
-import MDCTabScrollerFoundation from '@material/tab-scroller/foundation';
+import { MDCTabScrollerFoundation } from '@material/tab-scroller/foundation';
 import * as util from '@material/tab-scroller/util';
 import { matches } from '@material/dom/ponyfill';
 

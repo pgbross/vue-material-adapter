@@ -1,4 +1,4 @@
-import MDCLineRippleFoundation from '@material/line-ripple/foundation';
+import { MDCLineRippleFoundation } from '@material/line-ripple/foundation';
 
 export default {
   name: 'mcw-line-ripple',

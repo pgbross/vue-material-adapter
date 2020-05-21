@@ -1,7 +1,7 @@
 import * as util from '@material/drawer/util';
-import MDCDismissibleDrawerFoundation from '@material/drawer/dismissible/foundation';
-import MDCModalDrawerFoundation from '@material/drawer/modal/foundation';
-import MDCListFoundation from '@material/list/foundation';
+import { MDCDismissibleDrawerFoundation } from '@material/drawer/dismissible/foundation';
+import { MDCModalDrawerFoundation } from '@material/drawer/modal/foundation';
+import { MDCListFoundation } from '@material/list/foundation';
 import { FocusTrap } from '@material/dom/focus-trap';
 
 export default {

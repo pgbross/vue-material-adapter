@@ -1,6 +1,6 @@
-import MDCMenuSurfaceFoundation from '@material/menu-surface/foundation';
-import MDCMenuFoundation from '@material/menu/foundation';
-import MDCSelectFoundation from '@material/select/foundation';
+import { MDCMenuSurfaceFoundation } from '@material/menu-surface/foundation';
+import { MDCMenuFoundation } from '@material/menu/foundation';
+import { MDCSelectFoundation } from '@material/select/foundation';
 import { emitCustomEvent, VMAUniqueIdMixin } from '~/base/index.js';
 import { mcwFloatingLabel } from '~/floating-label/index.js';
 import { mcwLineRipple } from '~/line-ripple/index.js';

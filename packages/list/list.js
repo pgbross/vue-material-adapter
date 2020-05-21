@@ -1,4 +1,4 @@
-import MDCListFoundation from '@material/list/foundation';
+import { MDCListFoundation } from '@material/list/foundation';
 import { emitCustomEvent } from '~/base/index.js';
 
 import { closest, matches } from '@material/dom/ponyfill';
