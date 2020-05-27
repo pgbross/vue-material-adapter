@@ -63,6 +63,7 @@ export {
   base,
   button,
   card,
+  circularProgress,
   checkbox,
   chips,
   dataTable,
