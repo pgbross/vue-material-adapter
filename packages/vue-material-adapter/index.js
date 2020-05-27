@@ -1,6 +1,7 @@
 import * as base from '~/base/index.js';
 import button from '~/button/index.js';
 import card from '~/card/index.js';
+import circularProgress from '~/circular-progress/index.js';
 import checkbox from '~/checkbox/index.js';
 import chips from '~/chips/index.js';
 import dataTable from '~/data-table/index.js';
@@ -30,6 +31,7 @@ export default {
   install(vm) {
     vm.use(button);
     vm.use(card);
+    vm.use(circularProgress);
     vm.use(checkbox);
     vm.use(chips);
     vm.use(dataTable);

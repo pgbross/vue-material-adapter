@@ -9,7 +9,8 @@
     <article v-if="readme" class="doc-article markdown">
       <mcw-headline4>
         Note: elements can use names prefixed with either
-        <em>mcw-</em> (preferred) or for backwards compatibility <em>mdc-</em>.
+        <em>mcw-</em> (preferred) or for backwards compatibility
+        <em>mdc-</em>.
       </mcw-headline4>
       <component :is="readme" />
     </article>
@@ -31,6 +32,8 @@ export default {
   components: {
     'button-readme': () => import('./components/button/README.md'),
     'card-readme': () => import('./components/card/README.md'),
+    'circular-progress-readme': () =>
+      import('./components/circular-progress/README.md'),
     'chips-readme': () => import('./components/chips/README.md'),
     'checkbox-readme': () => import('./components/checkbox/README.md'),
     'data-table-readme': () => import('./components/data-table/README.md'),
@@ -57,6 +60,8 @@ export default {
 
     'button-demo': () => import('./components/button/demo.vue'),
     'card-demo': () => import('./components/card/demo.vue'),
+      'circular-progress-demo': () =>
+      import('./components/circular-progress/demo.vue'),
     'checkbox-demo': () => import('./components/checkbox/demo.vue'),
     'data-table-demo': () => import('./components/data-table/demo.vue'),
     'chips-demo': () => import('./components/chips/demo.vue'),
@@ -82,11 +87,11 @@ export default {
   },
   computed: {
     demo() {
-      let key = this.$route.params.id + '-demo';
+      const key = this.$route.params.id + '-demo';
       return key in this.$options.components ? key : undefined;
     },
     readme() {
-      let key = this.$route.params.id + '-readme';
+      const key = this.$route.params.id + '-readme';
       return key in this.$options.components ? key : undefined;
     },
     title() {

@@ -36,6 +36,7 @@ function link(id, icon, name, title) {
 export default [
   link('button', icButton),
   link('card', icCard),
+  link('circular-progress', icProgressActivity),
   link('checkbox', icSelectionControl),
   link('chips', icChips),
   link('data-table', icComponent),

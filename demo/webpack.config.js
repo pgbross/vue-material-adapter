@@ -9,7 +9,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 // const TerserPlugin = require('terser-webpack-plugin');
-const pkg = require('../package.json');
 
 const isProduction = process.env.NODE_ENV === `production`;
 const isDevelopment = process.env.NODE_ENV === `development`;
@@ -67,9 +66,6 @@ const rules = [
             modules: false,
             useBuiltIns: 'entry',
             corejs: 3,
-            targets: {
-              browsers: pkg.browserslist,
-            },
           },
         ],
       ],
