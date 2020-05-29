@@ -2899,6 +2899,7 @@ var mcwIconButton = {
       hasClass: className => Boolean(this.classes[className]),
       setAttr: (attrName, attrValue) =>
         this.$el.setAttribute(attrName, attrValue),
+      getAttr: attrName => this.$el.getAttribute(attrName),
       notifyChange: evtData => {
         this.$emit(CHANGE_EVENT, evtData);
         this.$emit('change', evtData.isOn);
@@ -3251,6 +3252,9 @@ var mcwLinearProgress = {
       removeClass: className => this.$delete(this.classes, className),
       setAttribute: (attributeName, value) => {
         this.$set(this.rootAttrs, attributeName, value);
+      },
+      removeAttribute: attributeName => {
+        this.$delete(this.rootAttrs, attributeName);
       },
     };
 
