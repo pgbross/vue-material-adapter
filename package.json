@@ -37,7 +37,7 @@
     "Xbuild": "webpack --progress --colors --mode production",
     "build": "node --experimental-json-modules scripts/build.mjs",
     "build:develop": "webpack --progress --colors --mode development",
-    "build:demo": "cross-env NODE_ENV=production webpack --config=demo/webpack.config.js --progress",
+    "build:demo": "cross-env NODE_ENV=production BROWSERLISTS_ENV=evergreen webpack --config=demo/webpack.config.js --progress",
     "ci": "run-s ci:*",
     "ci:test": "NODE_ENV=test; jest --ci --runInBand",
     "ci:build": "run-s build",

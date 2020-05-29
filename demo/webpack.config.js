@@ -230,7 +230,6 @@ if (isProduction) {
         {
           from: path.resolve(__dirname, '../static'),
           to: config.output.path,
-          ignore: ['.*'],
         },
       ],
     }),
