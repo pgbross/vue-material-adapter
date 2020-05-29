@@ -1,9 +1,9 @@
 import { mount, createLocalVue, checkValidMcwAdapter } from './unit-test';
-import { mcwSelect } from '../packages/mcwv-select/index.js';
-import { mcwMenu, mcwMenuSurface } from '../packages/mcwv-menu/index.js';
-import { mcwList } from '../packages/mcwv-list/index.js';
-import { mcwFloatingLabel } from '../packages/mcwv-floating-label/index.js';
-import { mcwLineRipple } from '../packages/mcwv-line-ripple/index.js';
+import { mcwSelect } from '../packages/select/index.js';
+import { mcwMenu, mcwMenuSurface } from '../packages/menu/index.js';
+import { mcwList } from '../packages/list/index.js';
+import { mcwFloatingLabel } from '../packages/floating-label/index.js';
+import { mcwLineRipple } from '../packages/line-ripple/index.js';
 
 const Spec = {
   name: 'spec',
@@ -37,10 +37,10 @@ describe(__dirname, () => {
       },
     });
     test('is a Vue instance', () => {
-      expect(spec.isVueInstance()).toBeTruthy();
+      expect(spec).toBeTruthy();
     });
     describe('mcwSelect', () => {
-      checkValidMcwAdapter(spec.find(mcwSelect).vm);
+      checkValidMcwAdapter(spec.findComponent(mcwSelect).vm);
     });
   });
 });

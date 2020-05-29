@@ -4,7 +4,7 @@ import {
   mount,
   checkValidMcwAdapter,
 } from './unit-test';
-import plugin, { mcwTabBar, mcwTab } from '../packages/mcwv-tabs/index.js';
+import plugin, { mcwTabBar, mcwTab } from '../packages/tabs/index.js';
 
 // pluginSanityCheck(__dirname, plugin);
 
@@ -20,12 +20,12 @@ describe(__dirname, () => {
   const spec = mount(Spec, { localVue });
 
   describe('mcwTabBar', () => {
-    const wrapper = spec.find(mcwTabBar);
+    const wrapper = spec.findComponent(mcwTabBar);
     checkValidMcwAdapter(wrapper.vm);
   });
 
   describe('mcwTab', () => {
-    const wrapper = spec.find(mcwTab);
+    const wrapper = spec.findComponent(mcwTab);
     checkValidMcwAdapter(wrapper.vm);
   });
 

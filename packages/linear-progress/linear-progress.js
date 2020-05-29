@@ -67,6 +67,9 @@ export default {
       setAttribute: (attributeName, value) => {
         this.$set(this.rootAttrs, attributeName, value);
       },
+      removeAttribute: attributeName => {
+        this.$delete(this.rootAttrs, attributeName);
+      },
     };
 
     this.foundation = new MDCLinearProgressFoundation(adapter);

@@ -1,6 +1,6 @@
 import { pluginSanityCheck } from './unit-test';
-import plugin from '../packages/mcwv-dialog/index.js';
-import { mcwButton } from '../packages/mcwv-button/index.js';
+import plugin from '../packages/dialog/index.js';
+import { mcwButton } from '../packages/button/index.js';
 
 pluginSanityCheck(__dirname, plugin, {
   mcwDialogContent: {

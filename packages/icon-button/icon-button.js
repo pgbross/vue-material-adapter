@@ -34,6 +34,7 @@ export default {
       hasClass: className => Boolean(this.classes[className]),
       setAttr: (attrName, attrValue) =>
         this.$el.setAttribute(attrName, attrValue),
+      getAttr: attrName => this.$el.getAttribute(attrName),
       notifyChange: evtData => {
         this.$emit(CHANGE_EVENT, evtData);
         this.$emit('change', evtData.isOn);

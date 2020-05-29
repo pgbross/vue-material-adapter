@@ -1,4 +1,4 @@
 import { pluginSanityCheck } from './unit-test';
-import plugin from '../packages/mcwv-slider/index.js';
+import plugin from '../packages/slider/index.js';
 
 pluginSanityCheck(__dirname, plugin);

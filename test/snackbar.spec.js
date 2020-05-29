@@ -1,5 +1,5 @@
 import { pluginSanityCheck } from './unit-test';
-import plugin, { mcwSnackbar } from '../packages/mcwv-snackbar/index.js';
+import plugin, { mcwSnackbar } from '../packages/snackbar/index.js';
 
 pluginSanityCheck(__dirname, plugin, {
   mcwSnackbarQueue: {

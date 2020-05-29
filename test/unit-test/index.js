@@ -32,15 +32,13 @@ export function pluginSanityCheck(pluginName, plugin, options) {
           if (!options || !options[key]) {
             // if there are stubs then the wrapper doesnt match the component so ignore
             test('is a functional component', () => {
-              expect(
-                wrapper.isFunctionalComponent && wrapper.is(component),
-              ).toBeTruthy();
+              expect(wrapper.isFunctionalComponent).toBeTruthy();
             });
           }
           checkValidFunctionalComponent(component);
         } else {
           test('is a Vue instance', () => {
-            expect(wrapper.isVueInstance()).toBeTruthy();
+            expect(wrapper).toBeTruthy();
           });
           checkValidMcwAdapter(wrapper.vm);
         }

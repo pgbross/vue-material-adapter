@@ -10,6 +10,7 @@ module.exports = {
   },
   transformIgnorePatterns: ['/node_modules/(?!@material/)'],
   moduleNameMapper: {
-    '^@mcwv\\/([^\\/]+)': '<rootDir>/packages/mcwv-$1/index',
+    '^\\/([^\\/]+)': '<rootDir>/packages/$1/index',
+    '^~/(.*)': '<rootDir>/packages/$1',
   },
 };

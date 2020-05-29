@@ -1,8 +1,7 @@
 import { pluginSanityCheck, mount, checkValidFoundation } from './unit-test';
-import plugin, { mcwTextfield } from '../packages/mcwv-textfield/index.js';
-import { mcwLineRipple } from '../packages/mcwv-line-ripple/index.js';
-import { mcwFloatingLabel } from '../packages/mcwv-floating-label/index.js';
-import { mcwNotchedOutline } from '../packages/mcwv-notched-outline/index.js';
+import plugin, { mcwTextfield } from '../packages/textfield/index.js';
+import { mcwLineRipple } from '../packages/line-ripple/index.js';
+import { mcwFloatingLabel } from '../packages/floating-label/index.js';
 
 pluginSanityCheck(__dirname, plugin, {
   mcwTextfield: {
@@ -16,12 +15,12 @@ describe('mcwTextfield', () => {
   });
 
   describe('labelFoundation', () => {
-    const component = wrapper.find(mcwFloatingLabel);
+    const component = wrapper.findComponent(mcwFloatingLabel);
     checkValidFoundation(component.vm.foundation);
   });
 
   describe('lineRippleFoundation', () => {
-    const component = wrapper.find(mcwLineRipple);
+    const component = wrapper.findComponent(mcwLineRipple);
     expect(component).toBeInstanceOf(Object);
   });
 
@@ -37,12 +36,12 @@ describe('mcwTextfield', () => {
   });
 
   describe('labelFoundation', () => {
-    const component = wrapper.find(mcwFloatingLabel);
+    const component = wrapper.findComponent(mcwFloatingLabel);
     checkValidFoundation(component.vm.foundation);
   });
 
   describe('lineRippleFoundation', () => {
-    const component = wrapper.find(mcwLineRipple);
+    const component = wrapper.findComponent(mcwLineRipple);
     expect(component).toBeInstanceOf(Object);
   });
 

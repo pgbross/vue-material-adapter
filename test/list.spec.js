@@ -1,6 +1,6 @@
 import { mount, createLocalVue, checkValidMcwAdapter } from './unit-test';
-import plugin from '../packages/mcwv-list/index.js';
-import { mcwList } from '../packages/mcwv-list/index.js';
+import plugin from '../packages/list/index.js';
+import { mcwList } from '../packages/list/index.js';
 
 const Spec = {
   template: `  <div>
@@ -36,7 +36,7 @@ describe(__dirname, () => {
   const spec = mount(Spec, { localVue });
 
   describe('mcwList', () => {
-    const wrapper = spec.find(mcwList);
+    const wrapper = spec.findComponent(mcwList);
     checkValidMcwAdapter(wrapper.vm);
   });
 });

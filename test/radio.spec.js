@@ -1,4 +1,4 @@
-import plugin from '../packages/mcwv-radio/index.js';
+import plugin from '../packages/radio/index.js';
 import { pluginSanityCheck } from './unit-test';
 
 pluginSanityCheck(__dirname, plugin, {

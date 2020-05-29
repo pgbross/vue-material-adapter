@@ -10,7 +10,7 @@ import plugin, {
   mcwDrawerList,
   mcwDrawerItem,
   mcwDrawerDivider,
-} from '../packages/mcwv-drawer/index.js';
+} from '../packages/drawer/index.js';
 const Spec = {
   template: `<mcw-drawer>
   <mcw-drawer-header slot="header">
@@ -29,27 +29,27 @@ describe(__dirname, () => {
   const spec = mount(Spec, { localVue, stubs: { 'mcw-drawer': mcwDrawer } });
 
   describe('mcwDrawer', () => {
-    const drawer = spec.find(mcwDrawer);
+    const drawer = spec.findComponent(mcwDrawer);
 
     checkValidMcwAdapter(drawer.vm);
 
     describe('mcwDrawerHeader', () => {
-      const { isFunctionalComponent } = drawer.find(mcwDrawerHeader);
+      const { isFunctionalComponent } = drawer.findComponent(mcwDrawerHeader);
       isFunctionalComponent && checkValidFunctionalComponent(mcwDrawerHeader);
     });
 
     describe('mcwDrawerList', () => {
-      const { isFunctionalComponent } = drawer.find(mcwDrawerList);
+      const { isFunctionalComponent } = drawer.findComponent(mcwDrawerList);
       isFunctionalComponent && checkValidFunctionalComponent(mcwDrawerList);
     });
 
     describe('mcwDrawerItem', () => {
-      const { isFunctionalComponent } = drawer.find(mcwDrawerItem);
+      const { isFunctionalComponent } = drawer.findComponent(mcwDrawerItem);
       isFunctionalComponent && checkValidFunctionalComponent(mcwDrawerItem);
     });
 
     describe('mcwDrawerDivider', () => {
-      const { isFunctionalComponent } = drawer.find(mcwDrawerDivider);
+      const { isFunctionalComponent } = drawer.findComponent(mcwDrawerDivider);
       isFunctionalComponent && checkValidFunctionalComponent(mcwDrawerDivider);
     });
   });
