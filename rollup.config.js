@@ -28,8 +28,8 @@ export default {
       sourcemap: true,
     },
     {
-      file: `${filename}.amd.js`,
-      format: 'amd',
+      file: `${filename}.umd.js`,
+      format: 'umd',
       name: 'vue-material-adapter',
       exports: 'named',
       interop: false,

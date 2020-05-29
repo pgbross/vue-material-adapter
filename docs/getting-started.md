@@ -1,7 +1,7 @@
 > This Guide assumes you are familiar with [Vue.js](https://vuejs.org/v2/guide/index.html)
 > components and plugin system.  
 > Vue.js version `^2.6` is required as a peer dependency.  
-> Material Components are bundled and do not need to be installed.  
+> Material Components Web are not bundled and need to be installed.  
 > Material Icons and Fonts are not bundled and need to be fetched.
 
 ## Quick Start

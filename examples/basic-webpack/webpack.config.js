@@ -47,6 +47,7 @@ module.exports = [
 
         {
           test: /\.scss$/,
+          exclude: /\.module.(s(a|c)ss)$/,
           use: [
             {
               loader: 'file-loader',
@@ -69,9 +70,9 @@ module.exports = [
             {
               loader: 'sass-loader',
               options: {
+                implementation: require('dart-sass'),
                 sassOptions: {
                   includePaths: ['node_modules'],
-                  fiber: true,
                 },
               },
             },
@@ -97,7 +98,7 @@ module.exports = [
         filename: '[hash]-[name].css',
       }),
 
-      new BundleAnalyzerPlugin({}), // uncomment to analyze the bundles
+      // new BundleAnalyzerPlugin({}), // uncomment to analyze the bundles
     ],
     output: {
       filename: '[name].js',
@@ -141,7 +142,7 @@ module.exports = [
       alias: {
         vue$: 'vue/dist/vue.esm.js',
         'vue-material-adapter$':
-          'vue-material-adapter/dist/vue-material-adapter.min.js',
+          'vue-material-adapter/dist/vue-material-adapter.esm.js',
       },
       extensions: ['*', '.vue', '.js', '.json'],
     },
