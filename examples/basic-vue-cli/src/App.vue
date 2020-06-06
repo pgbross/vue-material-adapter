@@ -21,6 +21,7 @@
         <mcw-dialog-button action="accept" isDefault>Accept</mcw-dialog-button>
       </mcw-dialog-footer>
     </mcw-dialog>
+    <mcw-snackbar-queue ref="snackbar" />
   </div>
 </template>
 
@@ -34,7 +35,7 @@ export default {
   },
   methods: {
     onClosed() {
-      console.log("closed");
+      this.$refs.snackbar.handleSnack({ message: "Dialog closed" });
     }
   },
 }
