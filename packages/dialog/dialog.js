@@ -158,42 +158,6 @@ export default {
         this.foundation.close();
       }
     },
-    onCancel() {
-      if (this.$listeners['validateCancel']) {
-        this.$emit('validateCancel', {
-          cancel: (notify = true) => {
-            // if notify = false, the dialog will close
-            // but the notifyAccept method will not be called
-            // so we need to notify listeners the open state
-            // is changing.
-            if (!notify) {
-              this.$emit('change', false);
-            }
-            this.foundation.cancel(notify);
-          },
-        });
-      } else {
-        this.foundation.cancel(true);
-      }
-    },
-    onAccept() {
-      if (this.$listeners['validate']) {
-        this.$emit('validate', {
-          accept: (notify = true) => {
-            // if notify = false, the dialog will close
-            // but the notifyAccept method will not be called
-            // so we need to notify listeners the open state
-            // is changing.
-            if (!notify) {
-              this.$emit('change', false);
-            }
-            this.foundation.accept(notify);
-          },
-        });
-      } else {
-        this.foundation.accept(true);
-      }
-    },
   },
 
   render(createElement) {
