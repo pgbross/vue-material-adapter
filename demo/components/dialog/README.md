@@ -35,9 +35,9 @@ var vm = new Vue({
 });
 ```
 
-### props
-
 ### mcw-dialog
+
+### Props
 
 | Prop Name        | Type    | Default       | Description                                                                                                                                                              |
 | ---------------- | ------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -49,15 +49,15 @@ var vm = new Vue({
 | scrimClickAction | String  | `close`       | the action reflected when the scrim is clicked. Setting to `''` disables closing via scrim click                                                                         |
 | tag              | String  | `div`         | Customizes the `Dialog` tag type.                                                                                                                                        |
 
-### events
+### Events
 
-| props             | args    | Description                                             |
-| ----------------- | ------- | ------------------------------------------------------- |
-| `@change`         | Boolean | notify v-model/listeners that drawer state has changed. |
-| `@accept`         | none    | emitted when dialog is accepted                         |
-| `@cancel`         | none    | emitted when dialog is cancelled                        |
-| `@validate`       | accept  | emitted before the dialog is accepted _(\*)_            |
-| `@validateCancel` | cancel  | emitted before the dialog is cancelled _(\*)_           |
+| Event Name           | args    | Description                                             |
+| -------------------- | ------- | ------------------------------------------------------- |
+| `@change`            | Boolean | notify v-model/listeners that drawer state has changed. |
+| `@MDCDialog:opening` | none    | emitted when dialog starts its opening animation        |
+| `@MDCDialog:opened`  | none    | emitted when dialog finishes its opening animation      |
+| `@MDCDialog:closing` | none    | emitted when dialog starts its closing animation        |
+| `@MDCDialog:closed`  | none    | emitted when dialog finishes its closing animation      |
 
 > Note that if you listen to the @validate or @validateCancel events, then You must call
 > the accept or cancel argument to finally close the box. Use `accept(false)` to
@@ -65,6 +65,8 @@ var vm = new Vue({
 > the `cancel` event.
 
 ### mcw-dialog-title
+
+### Props
 
 | Prop Name | Type   | Description                                                  |
 | --------- | ------ | ------------------------------------------------------------ |
@@ -77,6 +79,8 @@ var vm = new Vue({
 
 ### mcw-dialog-content
 
+### Props
+
 | Prop Name | Type   | Description                                                     |
 | --------- | ------ | --------------------------------------------------------------- |
 | id        | String | the id attribute placed on the root element.                    |
@@ -88,16 +92,26 @@ var vm = new Vue({
 
 ### mcw-dialog-footer
 
+### Props
+
 | Prop Name | Type   | Description                                                       |
 | --------- | ------ | ----------------------------------------------------------------- |
 | tag       | String | customizes the `mcw-dialog-footer` tag type. (defaults: `footer`) |
 
 ### mcw-dialog-button
 
-| Prop Name | Type    | Description                                                                            |
-| --------- | ------- | -------------------------------------------------------------------------------------- |
-| action    | String  | required action of the button. Returned `onClose` && `onClosing` in `<mcw-dialog/>`    |
-| isDefault | Boolean | represents the default action, triggered by pressing the Enter key (defaults: `false`) |
+### Props
+
+| Prop Name | Type    | Description                                                                                                       |
+| --------- | ------- | ----------------------------------------------------------------------------------------------------------------- |
+| action    | String  | required action of the button. Emitted as payload of `MDCDialog:closing` && `MDCDialog:closed` in `<mcw-dialog/>` |
+| isDefault | Boolean | represents the default action, triggered by pressing the Enter key (defaults: `false`)                            |
+
+### Events
+
+| Event Name | args    | Description                     |
+| ---------- | ------- | ------------------------------- |
+| `@click`   | Boolean | eMitted when button is pressed. |
 
 ### Reference
 
