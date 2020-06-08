@@ -59,11 +59,6 @@ var vm = new Vue({
 | `@MDCDialog:closing` | none    | emitted when dialog starts its closing animation        |
 | `@MDCDialog:closed`  | none    | emitted when dialog finishes its closing animation      |
 
-> Note that if you listen to the @validate or @validateCancel events, then You must call
-> the accept or cancel argument to finally close the box. Use `accept(false)` to
-> prevent emitting the `accept` event and just close, and `cancel(false)` to prevent emitting
-> the `cancel` event.
-
 ### mcw-dialog-title
 
 ### Props
@@ -109,9 +104,9 @@ var vm = new Vue({
 
 ### Events
 
-| Event Name | args    | Description                     |
-| ---------- | ------- | ------------------------------- |
-| `@click`   | Boolean | eMitted when button is pressed. |
+| Event Name | args       | Description                     |
+| ---------- | ---------- | ------------------------------- |
+| `@click`   | MouseEvent | emitted when button is pressed. |
 
 ### Reference
 
