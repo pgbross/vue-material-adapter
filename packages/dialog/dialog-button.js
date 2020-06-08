@@ -15,8 +15,11 @@ export default {
       props: { action, isDefault, isInitialFocus },
       data: { staticClass, attrs },
       scopedSlots,
+      listeners,
     },
   ) {
+    const onClick = listeners['click'] || (() => {});
+
     return createElement(
       'mcw-button',
       {
@@ -26,6 +29,9 @@ export default {
           'data-mdc-dialog-action': action,
           'data-mdc-dialog-button-default': isDefault,
           'data-mdc-dialog-initial-focus': isInitialFocus,
+        },
+        on: {
+          click: onClick,
         },
       },
       scopedSlots.default && scopedSlots.default(),

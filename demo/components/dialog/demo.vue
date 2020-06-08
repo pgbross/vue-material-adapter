@@ -6,6 +6,7 @@
       <mcw-button @click="openAlert = !openAlert">Alert Dialog</mcw-button>
       <mcw-button @click="openConfirmation = !openConfirmation">Confirmation Dialog</mcw-button>
       <mcw-button @click="openScrolling = !openScrolling">Scrolling Dialog</mcw-button>
+      <mcw-button @click="openValidate = !openValidate">Validate Before Submit Dialog</mcw-button>
     </div>
 
     <mcw-caption v-if="hasBeenOpened">
@@ -24,8 +25,6 @@
       escape-key-action="close"
       scrim-click-action="close"
       :auto-stack-buttons="true"
-      @validate="$event.accept(false)"
-      @validateCancel="$event.cancel(false)"
       @MDCDialog:closing="onClosed"
     >
       <mcw-dialog-title>Lorem ipsum dolor</mcw-dialog-title>
@@ -51,8 +50,6 @@
       escape-key-action="close"
       scrim-click-action="close"
       :auto-stack-buttons="true"
-      @validate="$event.accept(false)"
-      @validateCancel="$event.cancel(false)"
       @MDCDialog:closing="onClosed"
     >
       <mcw-dialog-title>Select user</mcw-dialog-title>
@@ -82,8 +79,6 @@
       escape-key-action="close"
       scrim-click-action="close"
       :auto-stack-buttons="true"
-      @validate="$event.accept(false)"
-      @validateCancel="$event.cancel(false)"
       @MDCDialog:closing="onClosed"
     >
       <mcw-dialog-content>
@@ -102,8 +97,6 @@
       escape-key-action="close"
       scrim-click-action="close"
       :auto-stack-buttons="true"
-      @validate="$event.accept(false)"
-      @validateCancel="$event.cancel(false)"
       @MDCDialog:closing="onClosed"
     >
       <mcw-dialog-title>Chose a Phone Ringtone</mcw-dialog-title>
@@ -136,8 +129,6 @@
       escape-key-action="close"
       scrim-click-action="close"
       :auto-stack-buttons="true"
-      @validate="$event.accept(false)"
-      @validateCancel="$event.cancel(false)"
       @MDCDialog:closing="onClosed"
     >
       <mcw-dialog-title>The Wonderful Wizard of Oz</mcw-dialog-title>
@@ -211,6 +202,25 @@
         <mcw-dialog-button action="confirm" is-default>Ok</mcw-dialog-button>
       </mcw-dialog-footer>
     </mcw-dialog>
+
+    <mcw-dialog
+      v-if="openValidate"
+      id="alert-dialog"
+      v-model="openValidate"
+      escape-key-action="close"
+      scrim-click-action="close"
+      :auto-stack-buttons="true"
+      @MDCDialog:closing="onClosed"
+    >
+      <mcw-dialog-title>Complete some task before submitting</mcw-dialog-title>
+      <mcw-dialog-content>
+        <mcw-switch v-model="valid" label="Task complete" />
+      </mcw-dialog-content>
+      <mcw-dialog-footer>
+        <mcw-dialog-button action="dismiss">Cancel</mcw-dialog-button>
+        <mcw-dialog-button is-default @click="checkValidationAndClose">Submit</mcw-dialog-button>
+      </mcw-dialog-footer>
+    </mcw-dialog>
   </div>
 </template>
 
@@ -228,6 +238,8 @@ export default {
       openAlert: false,
       openConfirmation: false,
       openScrolling: false,
+      openValidate: false,
+      valid: false,
       action: '',
       selectedIndex: -1,
       choices: ['Never gonna give you up', 'Host cross buns', 'None'],
@@ -243,6 +255,15 @@ export default {
         action !== 'dismiss'
           ? 'Accepted, thanks!'
           : 'Declined... Maybe next time?';
+    },
+    checkValidationAndClose() {
+      if (this.valid) {
+        this.valid = false;
+        this.openValidate = false;
+        this.action = "Task complete, submitting...";
+      } else {
+        this.action = "Please complete the task before submitting!";
+      }
     },
   },
 };
