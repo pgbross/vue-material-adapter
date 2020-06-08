@@ -9,9 +9,8 @@ import pkg from '../package.json';
 import mkdirp from 'mkdirp';
 import path from 'path';
 import cpy from 'cpy';
-import rpt from 'rollup-plugin-terser';
+import { terser } from 'rollup-plugin-terser';
 
-const { terser } = rpt;
 const asyncRimraf = promisify(rimraf);
 
 // Errors in promises should be fatal.
