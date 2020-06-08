@@ -27,6 +27,9 @@ export default {
           'data-mdc-dialog-button-default': isDefault,
           'data-mdc-dialog-initial-focus': isInitialFocus,
         },
+        on: {
+          click: evt => this.$emit('click', evt),
+        },
       },
       scopedSlots.default && scopedSlots.default(),
     );
