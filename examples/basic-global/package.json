@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "serve": "^11.3.0",
+    "serve": "^11.3.2",
     "vue-material-adapter": "^0.16.4-beta"
   }
 }
