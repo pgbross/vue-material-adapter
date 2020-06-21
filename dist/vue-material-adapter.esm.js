@@ -6,7 +6,6 @@ import { MDCCircularProgressFoundation } from '@material/circular-progress/found
 import { getCorrectEventName } from '@material/animation';
 import { MDCCheckboxFoundation } from '@material/checkbox/foundation';
 import { MDCFormFieldFoundation } from '@material/form-field/foundation';
-import { openBlock, createBlock, createVNode, renderSlot, createTextVNode, toDisplayString } from 'vue';
 import { MDCChipSetFoundation } from '@material/chips/chip-set/foundation';
 import { MDCChipFoundation } from '@material/chips/chip/foundation';
 import { announce } from '@material/dom/announce';
@@ -735,7 +734,7 @@ function getCircleAttrs(medium = false, indeterminate = true) {
       };
 }
 
-var mcwCircularProgress = {
+var script = {
   name: 'mcw-circular-progress',
   props: {
     open: { type: Boolean, default: true },
@@ -813,103 +812,251 @@ var mcwCircularProgress = {
   beforeDestroy() {
     this.foundation.destroy();
   },
-
-  methods: {
-    renderCircle(createElement, mode) {
-      const svgClass_ = {
-        determinate: 'mdc-circular-progress__determinate-circle-graphic',
-        indeterminate: 'mdc-circular-progress__indeterminate-circle-graphic',
-      };
-
-      const circleOptions = {
-        attrs:
-          mode === 'determinate' ? this.circleAttrs : this.indeterminateAttrs,
-      };
-
-      if (mode === 'determinate') {
-        circleOptions.class = 'mdc-circular-progress__determinate-circle';
-      }
-
-      return createElement(
-        'svg',
-        {
-          attrs: {
-            viewbox: '0 0 48 48',
-            xmlns: '"http://www.w3.org/2000/svg"',
-          },
-          class: svgClass_[mode],
-        },
-        [createElement('circle', circleOptions)],
-      );
-    },
-  },
-
-  render(createElement) {
-    const determinateNode = createElement(
-      'div',
-      { class: 'mdc-circular-progress__determinate-container' },
-      [this.renderCircle(createElement, 'determinate')],
-    );
-
-    const indeterminateNode = createElement(
-      'div',
-      {
-        class: 'mdc-circular-progress__indeterminate-container',
-        // domProps: { innerHTML: indeterminateHtml_ },
-      },
-      [
-        createElement(
-          'div',
-          { class: 'mdc-circular-progress__spinner-layer' },
-          [
-            createElement(
-              'div',
-              {
-                class:
-                  'mdc-circular-progress__circle-clipper mdc-circular-progress__circle-left',
-              },
-              [this.renderCircle(createElement, 'indeterminate')],
-            ),
-            createElement(
-              'div',
-              {
-                class: 'mdc-circular-progress__gap-patch',
-              },
-              [this.renderCircle(createElement, 'indeterminate')],
-            ),
-            createElement(
-              'div',
-              {
-                class:
-                  'mdc-circular-progress__circle-clipper mdc-circular-progress__circle-right',
-              },
-              [this.renderCircle(createElement, 'indeterminate')],
-            ),
-          ],
-        ),
-      ],
-    );
-
-    return createElement(
-      this.tag,
-      {
-        class: this.classes,
-        attrs: { role: 'progressbar', ...this.rootAttrs },
-      },
-      [determinateNode, indeterminateNode],
-    );
-  },
 };
 
+function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
+    if (typeof shadowMode !== 'boolean') {
+        createInjectorSSR = createInjector;
+        createInjector = shadowMode;
+        shadowMode = false;
+    }
+    // Vue.extend constructor export interop.
+    const options = typeof script === 'function' ? script.options : script;
+    // render functions
+    if (template && template.render) {
+        options.render = template.render;
+        options.staticRenderFns = template.staticRenderFns;
+        options._compiled = true;
+        // functional template
+        if (isFunctionalTemplate) {
+            options.functional = true;
+        }
+    }
+    // scopedId
+    if (scopeId) {
+        options._scopeId = scopeId;
+    }
+    let hook;
+    if (moduleIdentifier) {
+        // server build
+        hook = function (context) {
+            // 2.3 injection
+            context =
+                context || // cached call
+                    (this.$vnode && this.$vnode.ssrContext) || // stateful
+                    (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext); // functional
+            // 2.2 with runInNewContext: true
+            if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+                context = __VUE_SSR_CONTEXT__;
+            }
+            // inject component styles
+            if (style) {
+                style.call(this, createInjectorSSR(context));
+            }
+            // register component module identifier for async chunk inference
+            if (context && context._registeredComponents) {
+                context._registeredComponents.add(moduleIdentifier);
+            }
+        };
+        // used by ssr in case component is cached and beforeCreate
+        // never gets called
+        options._ssrRegister = hook;
+    }
+    else if (style) {
+        hook = shadowMode
+            ? function (context) {
+                style.call(this, createInjectorShadow(context, this.$root.$options.shadowRoot));
+            }
+            : function (context) {
+                style.call(this, createInjector(context));
+            };
+    }
+    if (hook) {
+        if (options.functional) {
+            // register for functional component in vue file
+            const originalRender = options.render;
+            options.render = function renderWithStyleInjection(h, context) {
+                hook.call(context);
+                return originalRender(h, context);
+            };
+        }
+        else {
+            // inject component registration as beforeCreate hook
+            const existing = options.beforeCreate;
+            options.beforeCreate = existing ? [].concat(existing, hook) : [hook];
+        }
+    }
+    return script;
+}
+
+/* script */
+const __vue_script__ = script;
+
+/* template */
+var __vue_render__ = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    _vm._b(
+      { class: _vm.classes, attrs: { role: "progressbar" } },
+      "div",
+      _vm.rootAttrs,
+      false
+    ),
+    [
+      _c(
+        "div",
+        { staticClass: "mdc-circular-progress__determinate-container" },
+        [
+          _c(
+            "svg",
+            {
+              staticClass: "mdc-circular-progress__determinate-circle-graphic",
+              attrs: {
+                viewBox: "0 0 48 48",
+                xmlns: "http://www.w3.org/2000/svg"
+              }
+            },
+            [
+              _c(
+                "circle",
+                _vm._b(
+                  { staticClass: "mdc-circular-progress__determinate-circle" },
+                  "circle",
+                  _vm.circleAttrs,
+                  false
+                )
+              )
+            ]
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "mdc-circular-progress__indeterminate-container" },
+        [
+          _c("div", { staticClass: "mdc-circular-progress__spinner-layer" }, [
+            _c(
+              "div",
+              {
+                staticClass:
+                  "mdc-circular-progress__circle-clipper mdc-circular-progress__circle-left"
+              },
+              [
+                _c(
+                  "svg",
+                  {
+                    staticClass:
+                      "mdc-circular-progress__indeterminate-circle-graphic",
+                    attrs: {
+                      viewBox: "0 0 48 48",
+                      xmlns: "http://www.w3.org/2000/svg"
+                    }
+                  },
+                  [
+                    _c(
+                      "circle",
+                      _vm._b({}, "circle", _vm.indeterminateAttrs, false)
+                    )
+                  ]
+                )
+              ]
+            ),
+            _c("div", { staticClass: "mdc-circular-progress__gap-patch" }, [
+              _c(
+                "svg",
+                {
+                  staticClass:
+                    "mdc-circular-progress__indeterminate-circle-graphic",
+                  attrs: {
+                    viewBox: "0 0 48 48",
+                    xmlns: "http://www.w3.org/2000/svg"
+                  }
+                },
+                [
+                  _c(
+                    "circle",
+                    _vm._b({}, "circle", _vm.indeterminateAttrs, false)
+                  )
+                ]
+              )
+            ]),
+            _c(
+              "div",
+              {
+                staticClass:
+                  "mdc-circular-progress__circle-clipper mdc-circular-progress__circle-right"
+              },
+              [
+                _c(
+                  "svg",
+                  {
+                    staticClass:
+                      "mdc-circular-progress__indeterminate-circle-graphic",
+                    attrs: {
+                      viewBox: "0 0 48 48",
+                      xmlns: "http://www.w3.org/2000/svg"
+                    }
+                  },
+                  [
+                    _c(
+                      "circle",
+                      _vm._b({}, "circle", _vm.indeterminateAttrs, false)
+                    )
+                  ]
+                )
+              ]
+            )
+          ])
+        ]
+      )
+    ]
+  )
+};
+var __vue_staticRenderFns__ = [];
+__vue_render__._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__ = undefined;
+  /* scoped */
+  const __vue_scope_id__ = undefined;
+  /* module identifier */
+  const __vue_module_identifier__ = undefined;
+  /* functional template */
+  const __vue_is_functional_template__ = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__ = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ },
+    __vue_inject_styles__,
+    __vue_script__,
+    __vue_scope_id__,
+    __vue_is_functional_template__,
+    __vue_module_identifier__,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
 var circularProgress = BasePlugin({
-  mcwCircularProgress,
+  mcwCircularProgress: __vue_component__,
 });
 
 /* eslint-disable quote-props */
 
 const CB_PROTO_PROPS = ['checked', 'indeterminate'];
 
-var script = {
+var script$1 = {
   name: 'mcw-checkbox',
   mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
   model: {
@@ -1044,7 +1191,7 @@ var script = {
       this.$refs.control.indeterminate = indeterminate;
     },
 
-    onChange(checked, indeterminate) {
+    onChange({ target: { indeterminate, checked } }) {
       // note indeterminate will not currently work with the array model
       this.$emit('update:indeterminate', indeterminate);
 
@@ -1102,69 +1249,6 @@ var script = {
       });
     },
   },
-  render(createElement) {
-    const { $scopedSlots: scopedSlots } = this;
-    const inputElement = createElement('input', {
-      attrs: {
-        name: this.name,
-        value: this.value,
-        type: 'checkbox',
-        id: this.vma_uid_,
-        disabled: this.disabled,
-      },
-      class: { 'mdc-checkbox__native-control': 1 },
-      on: {
-        change: ({ target: { indeterminate, checked } }) =>
-          this.onChange(checked, indeterminate),
-      },
-      ref: 'control',
-    });
-
-    const background = createElement(
-      'div',
-      { class: { 'mdc-checkbox__background': 1 } },
-      [
-        createElement(
-          'svg',
-          {
-            class: { 'mdc-checkbox__checkmark': 1 },
-            attrs: { viewBox: '0 0 24 24' },
-          },
-          [
-            createElement('path', {
-              class: { 'mdc-checkbox__checkmark-path': 1 },
-              attrs: {
-                fill: 'none',
-                stroke: 'white',
-                d: 'M1.73,12.91 8.1,19.28 22.79,4.59',
-              },
-            }),
-          ],
-        ),
-        createElement('div', { class: { 'mdc-checkbox__mixedmark': 1 } }),
-      ],
-    );
-
-    const checkboxElement = createElement(
-      'div',
-      { class: this.classes, style: this.styles, ref: 'root' },
-      [
-        inputElement,
-        background,
-        createElement('div', { class: ['mdc-checkbox__ripple'] }),
-      ],
-    );
-    const labelElement = createElement(
-      'label',
-      { attrs: { for: this.vma_uid_ }, ref: 'label' },
-      (scopedSlots.default && scopedSlots.default()) || this.label,
-    );
-
-    return createElement('div', { class: this.formFieldClasses }, [
-      checkboxElement,
-      labelElement,
-    ]);
-  },
 };
 
 // ===
@@ -1175,57 +1259,91 @@ function validDescriptor(inputPropDesc) {
   return !!inputPropDesc && typeof inputPropDesc.set === 'function';
 }
 
-const _hoisted_1 = /*#__PURE__*/createVNode("div", { class: "mdc-checkbox__background" }, [
-  /*#__PURE__*/createVNode("svg", {
-    class: "mdc-checkbox__checkmark",
-    viewBox: "0 0 24 24"
-  }, [
-    /*#__PURE__*/createVNode("path", {
-      class: "mdc-checkbox__checkmark-path",
-      fill: "none",
-      stroke: "white",
-      d: "M1.73,12.91 8.1,19.28 22.79,4.59"
-    })
-  ]),
-  /*#__PURE__*/createVNode("div", { class: "mdc-checkbox__mixedmark" })
-], -1 /* HOISTED */);
+/* script */
+const __vue_script__$1 = script$1;
 
-function render(_ctx, _cache) {
-  return (openBlock(), createBlock("div", {
-    class: [_ctx.formFieldClasses, "mdc-checkbox-wrapper"]
-  }, [
-    createVNode("div", {
-      ref: "root",
-      class: [_ctx.classes, "mdc-checkbox"],
-      style: _ctx.styles
-    }, [
-      createVNode("input", {
-        id: _ctx.vma_uid_,
-        ref: "control",
-        name: _ctx.name,
-        value: _ctx.value,
-        type: "checkbox",
-        class: "mdc-checkbox__native-control",
-        onChange: _cache[1] || (_cache[1] = $event => (_ctx.onChange($event)))
-      }, null, 40 /* PROPS, HYDRATE_EVENTS */, ["id", "name", "value"]),
-      _hoisted_1
-    ], 6 /* CLASS, STYLE */),
-    createVNode("label", {
-      ref: "label",
-      for: _ctx.vma_uid_
-    }, [
-      renderSlot(_ctx.$slots, "default", {}, () => [
-        createTextVNode(toDisplayString(_ctx.label), 1 /* TEXT */)
-      ])
-    ], 8 /* PROPS */, ["for"])
-  ], 2 /* CLASS */))
-}
+/* template */
+var __vue_render__$1 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    { staticClass: "mdc-checkbox-wrapper", class: _vm.formFieldClasses },
+    [
+      _c("div", { ref: "root", class: _vm.classes, style: _vm.styles }, [
+        _c("input", {
+          ref: "control",
+          staticClass: "mdc-checkbox__native-control",
+          attrs: { id: _vm.vma_uid_, name: _vm.name, type: "checkbox" },
+          domProps: { value: _vm.value },
+          on: { change: _vm.onChange }
+        }),
+        _vm._v(" "),
+        _c("div", { staticClass: "mdc-checkbox__background" }, [
+          _c(
+            "svg",
+            {
+              staticClass: "mdc-checkbox__checkmark",
+              attrs: { viewBox: "0 0 24 24" }
+            },
+            [
+              _c("path", {
+                staticClass: "mdc-checkbox__checkmark-path",
+                attrs: { fill: "none", d: "M1.73,12.91 8.1,19.28 22.79,4.59" }
+              })
+            ]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "mdc-checkbox__mixedmark" })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "mdc-checkbox__ripple" })
+      ]),
+      _vm._v(" "),
+      _c(
+        "label",
+        { ref: "label", attrs: { for: _vm.vma_uid_ } },
+        [_vm._t("default", [_vm._v(_vm._s(_vm.label))])],
+        2
+      )
+    ]
+  )
+};
+var __vue_staticRenderFns__$1 = [];
+__vue_render__$1._withStripped = true;
 
-script.render = render;
-script.__file = "packages/checkbox/checkbox.vue";
+  /* style */
+  const __vue_inject_styles__$1 = undefined;
+  /* scoped */
+  const __vue_scope_id__$1 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$1 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$1 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$1 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$1, staticRenderFns: __vue_staticRenderFns__$1 },
+    __vue_inject_styles__$1,
+    __vue_script__$1,
+    __vue_scope_id__$1,
+    __vue_is_functional_template__$1,
+    __vue_module_identifier__$1,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var checkbox = BasePlugin({
-  mcwCheckbox: script,
+  mcwCheckbox: __vue_component__$1,
 });
 
 var mcwChipCheckmark = {
@@ -1780,7 +1898,7 @@ var chips = BasePlugin({
   mcwChipCheckmark,
 });
 
-var mcwDataTable = {
+var script$2 = {
   name: 'mcw-data-table',
   data() {
     return {};
@@ -1884,8 +2002,10 @@ var mcwDataTable = {
     this.foundation.init();
 
     this.headerRow_ = this.$el.querySelector(`.${cssClasses.HEADER_ROW}`);
+
     this.handleHeaderRowCheckboxChange_ = () =>
       this.foundation.handleHeaderRowCheckboxChange();
+
     this.headerRow_.addEventListener(
       'change',
       this.handleHeaderRowCheckboxChange_,
@@ -1913,23 +2033,52 @@ var mcwDataTable = {
     }
     this.foundation.destroy();
   },
-
-  render(createElement) {
-    const { $scopedSlots: scopedSlots } = this;
-
-    return createElement(
-      'div',
-      {
-        class: ['mdc-data-table'],
-        attrs: {},
-      },
-      scopedSlots.default && scopedSlots.default(),
-    );
-  },
 };
 
+/* script */
+const __vue_script__$2 = script$2;
+
+/* template */
+var __vue_render__$2 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { staticClass: "mdc-data-table" }, [_vm._t("default")], 2)
+};
+var __vue_staticRenderFns__$2 = [];
+__vue_render__$2._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$2 = undefined;
+  /* scoped */
+  const __vue_scope_id__$2 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$2 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$2 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$2 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$2, staticRenderFns: __vue_staticRenderFns__$2 },
+    __vue_inject_styles__$2,
+    __vue_script__$2,
+    __vue_scope_id__$2,
+    __vue_is_functional_template__$2,
+    __vue_module_identifier__$2,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
 var dataTable = BasePlugin({
-  mcwDataTable,
+  mcwDataTable: __vue_component__$2,
 });
 
 const BASE = 'mdc-dialog';
@@ -2745,7 +2894,7 @@ var drawer = BasePlugin({
   mcwDrawerDivider,
 });
 
-var mcwFAB = {
+var script$3 = {
   name: 'mcw-fab',
   mixins: [DispatchEventMixin, CustomButtonMixin, RippleMixin],
   props: {
@@ -2775,56 +2924,76 @@ var mcwFAB = {
       this.$set(this.classes, 'mdc-fab--exited', this.exited);
     },
   },
-  render(createElement) {
-    const { $scopedSlots: scopedSlots } = this;
-
-    const nodes = [createElement('div', { class: { 'mdc-fab__ripple': 1 } })];
-
-    const iconSlot = scopedSlots.icon && scopedSlots.icon();
-    if (iconSlot) {
-      const v0 = iconSlot[0];
-      if (v0) {
-        const { staticClass = '' } = v0.data;
-        const haveClasses =
-          staticClass && staticClass.indexOf('mdc-fab__icon') > -1;
-        if (!haveClasses) {
-          v0.data.staticClass = `mdc-fab__icon ${staticClass}`;
-        }
-      }
-      nodes.push(iconSlot);
-    } else {
-      nodes.push(
-        createElement(
-          'span',
-          { class: ['mdc-fab__icon', 'material-icons'] },
-          this.icon,
-        ),
-      );
-    }
-
-    const labelOrSlot =
-      this.label || (scopedSlots.default && scopedSlots.default());
-    if (labelOrSlot) {
-      nodes.push(
-        createElement('span', { class: { 'mdc-fab__label': 1 } }, labelOrSlot),
-      );
-    }
-
-    return createElement(
-      'custom-button',
-      {
-        class: this.classes,
-        styles: this.styles,
-        attrs: { href: this.href, link: this.link },
-        on: this.listeners,
-      },
-      nodes,
-    );
-  },
 };
 
+/* script */
+const __vue_script__$3 = script$3;
+
+/* template */
+var __vue_render__$3 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "custom-button",
+    {
+      class: _vm.classes,
+      style: _vm.styles,
+      attrs: { href: _vm.href, link: _vm.link }
+    },
+    [
+      _c("div", { staticClass: "mdc-fab__ripple" }),
+      _vm._v(" "),
+      _vm._t("icon", [
+        _c("span", { staticClass: "mdc-fab__icon material-icons" }, [
+          _vm._v(_vm._s(_vm.icon))
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "span",
+        { staticClass: "mdc-fab__label" },
+        [_vm._t("default", [_vm._v(_vm._s(_vm.label))])],
+        2
+      )
+    ],
+    2
+  )
+};
+var __vue_staticRenderFns__$3 = [];
+__vue_render__$3._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$3 = undefined;
+  /* scoped */
+  const __vue_scope_id__$3 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$3 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$3 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$3 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$3, staticRenderFns: __vue_staticRenderFns__$3 },
+    __vue_inject_styles__$3,
+    __vue_script__$3,
+    __vue_scope_id__$3,
+    __vue_is_functional_template__$3,
+    __vue_module_identifier__$3,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
 var fab = BasePlugin({
-  mcwFAB,
+  mcwFAB: __vue_component__$3,
 });
 
 var mcwFloatingLabel = {
@@ -3016,7 +3185,7 @@ const spanOptions = {
   },
 };
 
-var script$1 = {
+var script$4 = {
   name: 'mcw-layout-cell',
   props: {
     span: spanOptions,
@@ -3064,16 +3233,55 @@ var script$1 = {
   },
 };
 
-function render$1(_ctx, _cache) {
-  return (openBlock(), createBlock("div", {
-    class: [_ctx.classes, "mdc-layout-cell mdc-layout-grid__cell"]
-  }, [
-    renderSlot(_ctx.$slots, "default")
-  ], 2 /* CLASS */))
-}
+/* script */
+const __vue_script__$4 = script$4;
 
-script$1.render = render$1;
-script$1.__file = "packages/layout-grid/layout-cell.vue";
+/* template */
+var __vue_render__$4 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    {
+      staticClass: "mdc-layout-cell mdc-layout-grid__cell",
+      class: _vm.classes
+    },
+    [_vm._t("default")],
+    2
+  )
+};
+var __vue_staticRenderFns__$4 = [];
+__vue_render__$4._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$4 = undefined;
+  /* scoped */
+  const __vue_scope_id__$4 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$4 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$4 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$4 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$4, staticRenderFns: __vue_staticRenderFns__$4 },
+    __vue_inject_styles__$4,
+    __vue_script__$4,
+    __vue_scope_id__$4,
+    __vue_is_functional_template__$4,
+    __vue_module_identifier__$4,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 //
 //
@@ -3084,7 +3292,7 @@ script$1.__file = "packages/layout-grid/layout-cell.vue";
 //
 //
 
-var script$2 = {
+var script$5 = {
   name: 'mcw-layout-grid',
   props: {
     fixedColumWidth: Boolean,
@@ -3103,18 +3311,49 @@ var script$2 = {
   },
 };
 
-const _hoisted_1$1 = { class: "mdc-layout-grid__inner" };
+/* script */
+const __vue_script__$5 = script$5;
 
-function render$2(_ctx, _cache) {
-  return (openBlock(), createBlock("div", { class: _ctx.classes }, [
-    createVNode("div", _hoisted_1$1, [
-      renderSlot(_ctx.$slots, "default")
-    ])
-  ], 2 /* CLASS */))
-}
+/* template */
+var __vue_render__$5 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { class: _vm.classes }, [
+    _c("div", { staticClass: "mdc-layout-grid__inner" }, [_vm._t("default")], 2)
+  ])
+};
+var __vue_staticRenderFns__$5 = [];
+__vue_render__$5._withStripped = true;
 
-script$2.render = render$2;
-script$2.__file = "packages/layout-grid/layout-grid.vue";
+  /* style */
+  const __vue_inject_styles__$5 = undefined;
+  /* scoped */
+  const __vue_scope_id__$5 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$5 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$5 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$5 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$5, staticRenderFns: __vue_staticRenderFns__$5 },
+    __vue_inject_styles__$5,
+    __vue_script__$5,
+    __vue_scope_id__$5,
+    __vue_is_functional_template__$5,
+    __vue_module_identifier__$5,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 //
 //
@@ -3123,25 +3362,61 @@ script$2.__file = "packages/layout-grid/layout-grid.vue";
 //
 //
 
-var script$3 = {
+var script$6 = {
   name: 'mdc-layout-inner-grid',
 };
 
-const _hoisted_1$2 = { class: "mdc-layout-inner-grid mdc-layout-grid__inner" };
+/* script */
+const __vue_script__$6 = script$6;
 
-function render$3(_ctx, _cache) {
-  return (openBlock(), createBlock("div", _hoisted_1$2, [
-    renderSlot(_ctx.$slots, "default")
-  ]))
-}
+/* template */
+var __vue_render__$6 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    { staticClass: "mdc-layout-inner-grid mdc-layout-grid__inner" },
+    [_vm._t("default")],
+    2
+  )
+};
+var __vue_staticRenderFns__$6 = [];
+__vue_render__$6._withStripped = true;
 
-script$3.render = render$3;
-script$3.__file = "packages/layout-grid/layout-inner-grid.vue";
+  /* style */
+  const __vue_inject_styles__$6 = undefined;
+  /* scoped */
+  const __vue_scope_id__$6 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$6 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$6 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$6 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$6, staticRenderFns: __vue_staticRenderFns__$6 },
+    __vue_inject_styles__$6,
+    __vue_script__$6,
+    __vue_scope_id__$6,
+    __vue_is_functional_template__$6,
+    __vue_module_identifier__$6,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var layoutGrid = BasePlugin({
-  mcwLayoutGrid: script$2,
-  mcwLayoutCell: script$1,
-  mcwLayoutInnerGrid: script$3,
+  mcwLayoutGrid: __vue_component__$5,
+  mcwLayoutCell: __vue_component__$4,
+  mcwLayoutInnerGrid: __vue_component__$6,
 });
 
 var mcwLineRipple = {
