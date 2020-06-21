@@ -6,6 +6,7 @@ import { MDCCircularProgressFoundation } from '@material/circular-progress/found
 import { getCorrectEventName } from '@material/animation';
 import { MDCCheckboxFoundation } from '@material/checkbox/foundation';
 import { MDCFormFieldFoundation } from '@material/form-field/foundation';
+import { openBlock, createBlock, createVNode, renderSlot, createTextVNode, toDisplayString } from 'vue';
 import { MDCChipSetFoundation } from '@material/chips/chip-set/foundation';
 import { MDCChipFoundation } from '@material/chips/chip/foundation';
 import { announce } from '@material/dom/announce';
@@ -908,7 +909,7 @@ var circularProgress = BasePlugin({
 
 const CB_PROTO_PROPS = ['checked', 'indeterminate'];
 
-var mcwCheckbox = {
+var script = {
   name: 'mcw-checkbox',
   mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
   model: {
@@ -920,7 +921,7 @@ var mcwCheckbox = {
     indeterminate: Boolean,
     disabled: Boolean,
     label: String,
-    'align-end': Boolean,
+    alignEnd: Boolean,
     value: {
       type: [String, Number],
       default() {
@@ -1174,8 +1175,57 @@ function validDescriptor(inputPropDesc) {
   return !!inputPropDesc && typeof inputPropDesc.set === 'function';
 }
 
+const _hoisted_1 = /*#__PURE__*/createVNode("div", { class: "mdc-checkbox__background" }, [
+  /*#__PURE__*/createVNode("svg", {
+    class: "mdc-checkbox__checkmark",
+    viewBox: "0 0 24 24"
+  }, [
+    /*#__PURE__*/createVNode("path", {
+      class: "mdc-checkbox__checkmark-path",
+      fill: "none",
+      stroke: "white",
+      d: "M1.73,12.91 8.1,19.28 22.79,4.59"
+    })
+  ]),
+  /*#__PURE__*/createVNode("div", { class: "mdc-checkbox__mixedmark" })
+], -1 /* HOISTED */);
+
+function render(_ctx, _cache) {
+  return (openBlock(), createBlock("div", {
+    class: [_ctx.formFieldClasses, "mdc-checkbox-wrapper"]
+  }, [
+    createVNode("div", {
+      ref: "root",
+      class: [_ctx.classes, "mdc-checkbox"],
+      style: _ctx.styles
+    }, [
+      createVNode("input", {
+        id: _ctx.vma_uid_,
+        ref: "control",
+        name: _ctx.name,
+        value: _ctx.value,
+        type: "checkbox",
+        class: "mdc-checkbox__native-control",
+        onChange: _cache[1] || (_cache[1] = $event => (_ctx.onChange($event)))
+      }, null, 40 /* PROPS, HYDRATE_EVENTS */, ["id", "name", "value"]),
+      _hoisted_1
+    ], 6 /* CLASS, STYLE */),
+    createVNode("label", {
+      ref: "label",
+      for: _ctx.vma_uid_
+    }, [
+      renderSlot(_ctx.$slots, "default", {}, () => [
+        createTextVNode(toDisplayString(_ctx.label), 1 /* TEXT */)
+      ])
+    ], 8 /* PROPS */, ["for"])
+  ], 2 /* CLASS */))
+}
+
+script.render = render;
+script.__file = "packages/checkbox/checkbox.vue";
+
 var checkbox = BasePlugin({
-  mcwCheckbox,
+  mcwCheckbox: script,
 });
 
 var mcwChipCheckmark = {
@@ -2950,18 +3000,24 @@ var iconButton = BasePlugin({
   mcwIconToggle,
 });
 
+//
+//
+//
+//
+//
+//
+
 const spanOptions = {
   type: [String, Number],
   default: null,
-  validator: function(value) {
+  validator: function (value) {
     const num = Number(value);
     return isFinite(num) && num <= 12 && num > 0;
   },
 };
 
-var mcwLayoutCell = {
+var script$1 = {
   name: 'mcw-layout-cell',
-  functional: true,
   props: {
     span: spanOptions,
     order: spanOptions,
@@ -2970,125 +3026,122 @@ var mcwLayoutCell = {
     desktop: spanOptions,
     align: {
       type: String,
-      validator: function(value) {
+      validator: function (value) {
         return ['top', 'bottom', 'middle'].indexOf(value) !== -1;
       },
     },
   },
+  computed: {
+    classes() {
+      const cssClasses = [];
 
-  render(
-    createElement,
-    {
-      props: { span, order, phone, tablet, desktop, align },
-      scopedSlots,
-      data: { staticClass = '' },
+      if (this.span) {
+        cssClasses.push(`mdc-layout-grid__cell--span-${this.span}`);
+      }
+
+      if (this.order) {
+        cssClasses.push(`mdc-layout-grid__cell--order-${this.order}`);
+      }
+
+      if (this.phone) {
+        cssClasses.push(`mdc-layout-grid__cell--span-${this.phone}-phone`);
+      }
+
+      if (this.tablet) {
+        cssClasses.push(`mdc-layout-grid__cell--span-${this.tablet}-tablet`);
+      }
+
+      if (this.desktop) {
+        cssClasses.push(`mdc-layout-grid__cell--span-${this.desktop}-desktop`);
+      }
+
+      if (this.align) {
+        cssClasses.push(`mdc-layout-grid__cell--align-${this.align}`);
+      }
+
+      return cssClasses;
     },
-  ) {
-    const classes = {
-      'mdc-layout-cell': 1,
-      'mdc-layout-grid__cell': 1,
-    };
-    staticClass.split(' ').forEach(c => (classes[c] = 1));
-
-    if (span) {
-      classes[`mdc-layout-grid__cell--span-${span}`] = 1;
-    }
-
-    if (order) {
-      classes[`mdc-layout-grid__cell--order-${order}`] = 1;
-    }
-
-    if (phone) {
-      classes[`mdc-layout-grid__cell--span-${phone}-phone`] = 1;
-    }
-
-    if (tablet) {
-      classes[`mdc-layout-grid__cell--span-${tablet}-tablet`] = 1;
-    }
-
-    if (desktop) {
-      classes[`mdc-layout-grid__cell--span-${desktop}-desktop`] = 1;
-    }
-
-    if (align) {
-      classes[`mdc-layout-grid__cell--align-${align}`] = 1;
-    }
-
-    return createElement(
-      'div',
-      {
-        class: classes,
-      },
-      scopedSlots.default && scopedSlots.default(),
-    );
   },
 };
 
-var mcwLayoutGrid = {
+function render$1(_ctx, _cache) {
+  return (openBlock(), createBlock("div", {
+    class: [_ctx.classes, "mdc-layout-cell mdc-layout-grid__cell"]
+  }, [
+    renderSlot(_ctx.$slots, "default")
+  ], 2 /* CLASS */))
+}
+
+script$1.render = render$1;
+script$1.__file = "packages/layout-grid/layout-cell.vue";
+
+//
+//
+//
+//
+//
+//
+//
+//
+
+var script$2 = {
   name: 'mcw-layout-grid',
   props: {
-    'fixed-column-width': Boolean,
-    'align-left': Boolean,
-    'align-right': Boolean,
+    fixedColumWidth: Boolean,
+    alignLeft: Boolean,
+    alignRight: Boolean,
   },
-  functional: true,
-  render(
-    createElement,
-    {
-      props: { fixedColumnWidth, alignLeft, alignRight },
-      data: { attrs, staticClass, staticStyle },
-      scopedSlots,
+  computed: {
+    classes() {
+      return {
+        'mdc-layout-grid': true,
+        'mdc-layout-grid--fixed-column-width': this.fixedColumnWidth,
+        'mdc-layout-grid--align-left': this.alignLeft,
+        'mdc-layout-grid--align-right': this.alignRight,
+      };
     },
-  ) {
-    return createElement(
-      'div',
-      {
-        class: [
-          staticClass,
-          {
-            'mdc-layout-grid': true,
-            'mdc-layout-grid--fixed-column-width': fixedColumnWidth,
-            'mdc-layout-grid--align-left': alignLeft,
-            'mdc-layout-grid--align-right': alignRight,
-          },
-        ],
-        style: staticStyle,
-        attrs,
-      },
-      [
-        createElement(
-          'div',
-          {
-            class: ['mdc-layout-grid__inner'],
-          },
-          scopedSlots.default && scopedSlots.default(),
-        ),
-      ],
-    );
   },
 };
 
-var mcwLayoutInnerGrid = {
-  name: 'mcw-layout-inner-grid',
-  functional: true,
-  render(createElement, { scopedSlots }) {
-    return createElement(
-      'div',
-      {
-        class: {
-          'mdc-layout-inner-grid': 1,
-          'mdc-layout-grid__inner': 1,
-        },
-      },
-      scopedSlots.default && scopedSlots.default(),
-    );
-  },
+const _hoisted_1$1 = { class: "mdc-layout-grid__inner" };
+
+function render$2(_ctx, _cache) {
+  return (openBlock(), createBlock("div", { class: _ctx.classes }, [
+    createVNode("div", _hoisted_1$1, [
+      renderSlot(_ctx.$slots, "default")
+    ])
+  ], 2 /* CLASS */))
+}
+
+script$2.render = render$2;
+script$2.__file = "packages/layout-grid/layout-grid.vue";
+
+//
+//
+//
+//
+//
+//
+
+var script$3 = {
+  name: 'mdc-layout-inner-grid',
 };
+
+const _hoisted_1$2 = { class: "mdc-layout-inner-grid mdc-layout-grid__inner" };
+
+function render$3(_ctx, _cache) {
+  return (openBlock(), createBlock("div", _hoisted_1$2, [
+    renderSlot(_ctx.$slots, "default")
+  ]))
+}
+
+script$3.render = render$3;
+script$3.__file = "packages/layout-grid/layout-inner-grid.vue";
 
 var layoutGrid = BasePlugin({
-  mcwLayoutGrid,
-  mcwLayoutCell,
-  mcwLayoutInnerGrid,
+  mcwLayoutGrid: script$2,
+  mcwLayoutCell: script$1,
+  mcwLayoutInnerGrid: script$3,
 });
 
 var mcwLineRipple = {

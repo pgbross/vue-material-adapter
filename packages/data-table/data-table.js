@@ -107,8 +107,10 @@ export default {
     this.foundation.init();
 
     this.headerRow_ = this.$el.querySelector(`.${cssClasses.HEADER_ROW}`);
+
     this.handleHeaderRowCheckboxChange_ = () =>
       this.foundation.handleHeaderRowCheckboxChange();
+
     this.headerRow_.addEventListener(
       'change',
       this.handleHeaderRowCheckboxChange_,
@@ -135,18 +137,5 @@ export default {
       this.rowCheckboxList_.forEach(checkbox => checkbox.destroy());
     }
     this.foundation.destroy();
-  },
-
-  render(createElement) {
-    const { $scopedSlots: scopedSlots } = this;
-
-    return createElement(
-      'div',
-      {
-        class: ['mdc-data-table'],
-        attrs: {},
-      },
-      scopedSlots.default && scopedSlots.default(),
-    );
   },
 };

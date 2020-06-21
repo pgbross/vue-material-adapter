@@ -1,5 +1,5 @@
 import { BasePlugin } from '~/base/index.js';
-import mcwDataTable from './data-table.js';
+import mcwDataTable from './data-table.vue';
 
 export { mcwDataTable };
 

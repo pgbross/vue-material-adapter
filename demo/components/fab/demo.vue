@@ -1,14 +1,16 @@
 <template>
   <div class="mcw-demo mcw-demo--container fab-demo">
     <div>
-      <mcw-fab icon="favorite"/>
-      <mcw-fab mini icon="favorite"/>
-      <mcw-fab icon="favorite" label="wiffle"/>
+      <mcw-fab icon="favorite" />
+      <mcw-fab mini icon="favorite" />
+      <mcw-fab icon="favorite" label="wiffle" />
       <mcw-fab>
-        <mcw-material-icon icon="add" slot="icon"></mcw-material-icon>
+        <template #icon>
+          <mcw-material-icon icon="add"></mcw-material-icon>
+        </template>
       </mcw-fab>
       <mcw-fab>
-        <span class="fa fa-star" slot="icon"></span>
+        <template #icon> <span class="fa fa-star"></span></template>
       </mcw-fab>
       <mcw-fab icon="home" href="#">Home</mcw-fab>
     </div>

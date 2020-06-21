@@ -1,0 +1,5 @@
+<custom-button :class="classes" :style="styles" :href="href" :link="link">
+  <div class="mdc-fab__ripple"></div>
+  <slot name="icon"><span class="mdc-fab__icon material-icons">{{icon}}</span></slot>
+  <span class="mdc-fab__label"><slot>{{label}}</slot></span>
+</custom-button>

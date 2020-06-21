@@ -20,7 +20,7 @@ export default {
     indeterminate: Boolean,
     disabled: Boolean,
     label: String,
-    'align-end': Boolean,
+    alignEnd: Boolean,
     value: {
       type: [String, Number],
       default() {
@@ -143,7 +143,7 @@ export default {
       this.$refs.control.indeterminate = indeterminate;
     },
 
-    onChange(checked, indeterminate) {
+    onChange({ target: { indeterminate, checked } }) {
       // note indeterminate will not currently work with the array model
       this.$emit('update:indeterminate', indeterminate);
 
@@ -200,69 +200,6 @@ export default {
         }
       });
     },
-  },
-  render(createElement) {
-    const { $scopedSlots: scopedSlots } = this;
-    const inputElement = createElement('input', {
-      attrs: {
-        name: this.name,
-        value: this.value,
-        type: 'checkbox',
-        id: this.vma_uid_,
-        disabled: this.disabled,
-      },
-      class: { 'mdc-checkbox__native-control': 1 },
-      on: {
-        change: ({ target: { indeterminate, checked } }) =>
-          this.onChange(checked, indeterminate),
-      },
-      ref: 'control',
-    });
-
-    const background = createElement(
-      'div',
-      { class: { 'mdc-checkbox__background': 1 } },
-      [
-        createElement(
-          'svg',
-          {
-            class: { 'mdc-checkbox__checkmark': 1 },
-            attrs: { viewBox: '0 0 24 24' },
-          },
-          [
-            createElement('path', {
-              class: { 'mdc-checkbox__checkmark-path': 1 },
-              attrs: {
-                fill: 'none',
-                stroke: 'white',
-                d: 'M1.73,12.91 8.1,19.28 22.79,4.59',
-              },
-            }),
-          ],
-        ),
-        createElement('div', { class: { 'mdc-checkbox__mixedmark': 1 } }),
-      ],
-    );
-
-    const checkboxElement = createElement(
-      'div',
-      { class: this.classes, style: this.styles, ref: 'root' },
-      [
-        inputElement,
-        background,
-        createElement('div', { class: ['mdc-checkbox__ripple'] }),
-      ],
-    );
-    const labelElement = createElement(
-      'label',
-      { attrs: { for: this.vma_uid_ }, ref: 'label' },
-      (scopedSlots.default && scopedSlots.default()) || this.label,
-    );
-
-    return createElement('div', { class: this.formFieldClasses }, [
-      checkboxElement,
-      labelElement,
-    ]);
   },
 };
 

@@ -4,6 +4,7 @@ globals:
 plugins:
   - vue
 extends:
+  - plugin:vue/essential
   - eslint:recommended
   - google
   - plugin:vue/recommended

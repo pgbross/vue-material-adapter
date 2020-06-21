@@ -5,6 +5,7 @@ import codeFrame from 'babel-code-frame';
 import chalk from 'chalk';
 import { rollup } from 'rollup';
 import alias from '@rollup/plugin-alias';
+import VuePlugin from 'rollup-plugin-vue';
 import pkg from '../package.json';
 import mkdirp from 'mkdirp';
 import path from 'path';
@@ -152,6 +153,7 @@ function getPlugins(bundleType, minimize) {
     alias({
       entries: [{ find: '~', replacement: 'packages' }],
     }),
+    VuePlugin({ css: false }),
   ];
 
   if (minimize) {

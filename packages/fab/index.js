@@ -1,5 +1,5 @@
 import { BasePlugin } from '~/base/index.js';
-import mcwFAB from './fab.js';
+import mcwFAB from './fab.vue';
 
 export { mcwFAB };
 

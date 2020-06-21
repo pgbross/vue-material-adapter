@@ -5,11 +5,15 @@
         v-model="checked"
         :disabled="disabled"
         :indeterminate.sync="indeterminate"
-        :label="checked ? 'checked' : 'unchecked'"
+        :label="checked ? 'Checked' : 'Unchecked'"
       />
       <div>
-        <mcw-button dense @click="indeterminate = true" outlined>make indeterminate</mcw-button>
-        <mcw-button dense @click="disabled = !disabled" outlined>toggle disabled</mcw-button>
+        <mcw-button outlined @click="indeterminate = true"
+          >make indeterminate</mcw-button
+        >
+        <mcw-button outlined @click="disabled = !disabled"
+          >toggle disabled</mcw-button
+        >
       </div>
     </div>
   </div>
