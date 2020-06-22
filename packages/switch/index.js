@@ -1,5 +1,5 @@
 import { BasePlugin } from '~/base/index.js';
-import mcwSwitch from './switch.js';
+import mcwSwitch from './switch.vue';
 
 export { mcwSwitch };
 
