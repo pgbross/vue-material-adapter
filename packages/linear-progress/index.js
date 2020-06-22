@@ -1,5 +1,5 @@
 import { BasePlugin } from '~/base/index.js';
-import mcwLinearProgress from './linear-progress.js';
+import mcwLinearProgress from './linear-progress.vue';
 
 export { mcwLinearProgress };
 

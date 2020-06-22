@@ -1,22 +1,27 @@
 <template>
   <div class="mcw-demo mcw-demo--container">
     <div class="linear-progress-demo">
-      <mcw-linear-progress progress="0.5"/>
+      <mcw-linear-progress
+        progress="0.5"
+        aria-label="Example Progress Bar"
+        aria-valuemin="0"
+        aria-valuemax="1"
+      />
       <p>
         <mcw-caption>Determinate</mcw-caption>
       </p>
-      <br>
-      <mcw-linear-progress indeterminate/>
+      <br />
+      <mcw-linear-progress indeterminate />
       <p>
         <mcw-caption>Indeterminate</mcw-caption>
       </p>
-      <br>
-      <mcw-linear-progress progress="0.5" buffer="0.75"/>
+      <br />
+      <mcw-linear-progress progress="0.5" buffer="0.75" />
       <p>
         <mcw-caption>Buffer</mcw-caption>
       </p>
-      <br>
-      <mcw-linear-progress reversed progress="0.5"/>
+      <br />
+      <mcw-linear-progress reversed progress="0.5" />
       <p>
         <mcw-caption>Reversed</mcw-caption>
       </p>
