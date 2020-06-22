@@ -5,22 +5,17 @@ export default {
     isOn: Boolean,
   },
 
-  render(
-    createElement,
-    {
-      props: { isOn },
-      scopedSlots,
-    },
-  ) {
+  render(createElement, { props: { isOn }, scopedSlots }) {
     return createElement(
-      'div',
+      'i',
       {
         class: {
+          'material-icons': 1,
           'mdc-icon-button__icon': true,
           'mdc-icon-button__icon--on': isOn,
         },
       },
-      scopedSlots.default && scopedSlots.default(),
+      scopedSlots?.default(),
     );
   },
 };
