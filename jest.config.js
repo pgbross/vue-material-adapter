@@ -5,8 +5,8 @@ module.exports = {
   moduleFileExtensions: ['js', 'json', 'vue'],
   modulePathIgnorePatterns: ['<rootDir>/packages'],
   transform: {
-    '^.+\\.js$': '<rootDir>/node_modules/babel-jest',
     '.*\\.(vue)$': '<rootDir>/node_modules/vue-jest',
+    '^.+\\.js$': '<rootDir>/node_modules/babel-jest',
   },
   transformIgnorePatterns: ['/node_modules/(?!@material/)'],
   moduleNameMapper: {
