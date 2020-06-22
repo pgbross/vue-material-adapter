@@ -1,7 +1,10 @@
 import { MDCNotchedOutlineFoundation } from '@material/notched-outline/foundation';
 
+import { mcwFloatingLabel } from '../floating-label/index.js';
+
 export default {
   name: 'mcw-notched-outline',
+  components: { mcwFloatingLabel },
 
   data() {
     return {
@@ -57,7 +60,7 @@ export default {
     },
 
     getWidth() {
-      return this.$refs.labelEl.getWidth();
+      return this.$refs.labelEl?.getWidth();
     },
   },
 };

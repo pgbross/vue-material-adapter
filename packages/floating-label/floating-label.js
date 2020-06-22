@@ -43,13 +43,4 @@ export default {
       this.foundation.shake(shouldShake);
     },
   },
-  render(createElement) {
-    const { $scopedSlots: scopedSlots } = this;
-
-    return createElement(
-      'span',
-      { class: this.labelClasses },
-      scopedSlots.default && scopedSlots.default(),
-    );
-  },
 };

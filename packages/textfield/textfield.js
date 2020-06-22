@@ -255,7 +255,7 @@ export default {
           return !!this.$refs.labelEl || !!this.$refs.notchedEl;
         },
         getLabelWidth: () => {
-          return this.$refs.labelEl && this.$refs.labelEl.getWidth();
+          return this.$refs.labelEl.getWidth();
         },
       };
     },
