@@ -1,5 +1,4 @@
 import { MDCNotchedOutlineFoundation } from '@material/notched-outline/foundation';
-import { mcwFloatingLabel } from '~/floating-label/index.js';
 
 export default {
   name: 'mcw-notched-outline',
@@ -60,29 +59,5 @@ export default {
     getWidth() {
       return this.$refs.labelEl.getWidth();
     },
-  },
-  render(createElement) {
-    const { $scopedSlots: scopedSlots } = this;
-    const notchEl = createElement(
-      'span',
-      {
-        class: 'mdc-notched-outline__notch',
-        style: this.notchStyles,
-      },
-      [
-        scopedSlots.default &&
-          createElement(
-            mcwFloatingLabel,
-            { ref: 'labelEl' },
-            scopedSlots.default(),
-          ),
-      ],
-    );
-
-    return createElement('span', { class: this.outlinedClasses }, [
-      createElement('span', { class: 'mdc-notched-outline__leading' }),
-      notchEl,
-      createElement('span', { class: 'mdc-notched-outline__trailing' }),
-    ]);
   },
 };
