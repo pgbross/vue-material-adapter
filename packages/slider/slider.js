@@ -1,4 +1,3 @@
-/* eslint-disable quote-props */
 import { MDCSliderFoundation } from '@material/slider/foundation';
 import { DispatchFocusMixin } from '~/base/index.js';
 import { applyPassive } from '@material/dom/events';
@@ -192,68 +191,5 @@ export default {
         this.foundation && this.foundation.layout();
       });
     },
-  },
-  render(createElement) {
-    const trackContainer = createElement(
-      'div',
-      {
-        class: 'mdc-slider__track-container',
-      },
-      [
-        createElement('div', {
-          style: this.trackStyles,
-          class: 'mdc-slider__track',
-        }),
-        this.hasMarkers &&
-          createElement('div', {
-            class: { 'mdc-slider__track-marker-container': 1 },
-            style: this.markerBkgdShorthand,
-            ref: 'trackMarkerContainer',
-          }),
-      ],
-    );
-
-    const thumbContainer = createElement(
-      'div',
-      {
-        class: 'mdc-slider__thumb-container',
-        style: this.thumbStyles,
-        ref: 'thumbContainer',
-      },
-      [
-        this.discrete &&
-          createElement('div', { class: 'mdc-slider__pin' }, [
-            createElement(
-              'span',
-              { class: 'mdc-slider__pin-value-marker' },
-              this.markerValue,
-            ),
-          ]),
-        createElement(
-          'svg',
-          { class: 'mdc-slider__thumb', attrs: { width: 21, height: 21 } },
-          [
-            createElement('circle', {
-              attrs: { cx: 10.5, cy: 10.5, r: 7.875 },
-            }),
-          ],
-        ),
-        createElement('div', { class: 'mdc-slider__focus-ring' }),
-      ],
-    );
-
-    return createElement(
-      'div',
-      {
-        class: this.classes,
-        attrs: {
-          tabindex: '0',
-          role: 'slider',
-          'aria-label': 'Select value',
-          ...this.sliderAttrs,
-        },
-      },
-      [trackContainer, thumbContainer],
-    );
   },
 };
