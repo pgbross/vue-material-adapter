@@ -365,7 +365,7 @@ export default {
                 {
                   class: ['mdc-chip__text'],
                 },
-                scopedSlots.default && scopedSlots.default(),
+                scopedSlots?.default(),
               ),
             ],
           ),

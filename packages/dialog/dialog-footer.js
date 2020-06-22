@@ -1,44 +1,21 @@
-import { cssClasses } from './constants';
-
 export default {
   name: 'mcw-dialog-footer',
-  functional: true,
   props: {
     tag: {
       type: String,
       default() {
-        return 'footer';
+        return 'div';
       },
     },
   },
 
-  render(createElement, context) {
-    const {
-      scopedSlots: slots,
-      props: { id, tag },
-      data: { class: classes, staticClass, attrs },
-    } = context;
-
-    // if we have the scope, just defer to it
-    if (slots.footer) {
-      const content = createElement(
-        tag,
-        { class: classes, attrs },
-        slots.default(),
-      );
-      return slots.footer({ id, content });
-    }
-
-    // if no scope, parent will create it
-    // note, can't use same element type as that would be an infinite loop
+  render(createElement) {
     return createElement(
-      'template',
+      this.tag,
       {
-        props: { tag: 'mdc-dialog-footer' },
-        attrs,
-        class: [staticClass, cssClasses.ACTIONS],
+        class: ['mdc-dialog__actions'],
       },
-      slots.default && slots.default(),
+      this.$scopedSlots?.default(),
     );
   },
 };

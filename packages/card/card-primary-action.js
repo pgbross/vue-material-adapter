@@ -16,10 +16,14 @@ export default {
       {
         class: this.classes,
         style: this.styles, // from RippleMixin
+        attrs: {
+          tabIndex: 0,
+          ...this.$attrs,
+        },
         props: { link: this.link },
         on: this.listeners,
       },
-      slots.default && slots.default(),
+      slots?.default(),
     );
   },
 };

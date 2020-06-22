@@ -1,11 +1,11 @@
-/* eslint-disable quote-props */
 import { MDCDialogFoundation } from '@material/dialog/foundation';
 import * as util from '@material/dialog/util';
 import { closest, matches } from '@material/dom/ponyfill.js';
 import { VMAUniqueIdMixin } from '~/base/index.js';
 import { mcwButton } from '~/button/index.js';
-import { cssClasses, LAYOUT_EVENTS } from './constants';
 import { FocusTrap } from '@material/dom/focus-trap.js';
+
+const { cssClasses } = MDCDialogFoundation;
 
 export default {
   name: 'mcw-dialog',
@@ -25,12 +25,11 @@ export default {
     role: String,
     scrimClickAction: { type: String, default: 'close' },
     tag: { type: String, default: 'div' },
-    id: { type: String, default: 'mcw-dialog' },
+    labelledBy: String,
+    describedBy: String,
   },
   data() {
     return {
-      labelledBy: null,
-      describedBy: null,
       classes: { 'mdc-dialog': 1 },
       styles: {},
     };
@@ -40,6 +39,7 @@ export default {
   },
 
   mounted() {
+    const LAYOUT_EVENTS = ['resize', 'orientationchange'];
     const strings = MDCDialogFoundation.strings;
 
     const { open, autoStackButtons, escapeKeyAction, scrimClickAction } = this;
@@ -48,6 +48,15 @@ export default {
     this.defaultButton = this.$el.querySelector(
       `[${strings.BUTTON_DEFAULT_ATTRIBUTE}]`,
     );
+
+    const container = this.$el.querySelector(strings.CONTAINER_SELECTOR);
+    if (!container) {
+      throw new Error(
+        `Dialog component requires a ${strings.CONTAINER_SELECTOR} container element`,
+      );
+    }
+
+    this.content_ = this.$el.querySelector(strings.CONTENT_SELECTOR);
 
     this.focusTrapFactory_ = el => new FocusTrap(el);
 
@@ -61,19 +70,15 @@ export default {
       trapFocus: initialFocusEl => this.focusTrap && this.focusTrap.trapFocus(),
       releaseFocus: () => this.focusTrap && this.focusTrap.releaseFocus(),
       getInitialFocusEl: () => this.getInitialFocusEl_(),
-      isContentScrollable: () =>
-        !!this.$refs.contentEl && util.isScrollable(this.$refs.contentEl),
+      isContentScrollable: () => util.isScrollable(this.content_),
       areButtonsStacked: () => util.areTopsMisaligned(this.buttons_),
 
       getActionFromEvent: event => {
         const elem = closest(event.target, `[${strings.ACTION_ATTRIBUTE}]`);
-        return elem && elem.getAttribute(strings.ACTION_ATTRIBUTE);
+        return elem?.getAttribute(strings.ACTION_ATTRIBUTE);
       },
       clickDefaultButton: () => {
-        const defaultButton = this.defaultButton;
-        if (defaultButton) {
-          defaultButton.click();
-        }
+        this.defaultButton?.click();
       },
       reverseButtons: () => {
         const buttons = this.buttons_;
@@ -81,11 +86,7 @@ export default {
           buttons &&
           buttons
             .reverse()
-            .forEach(
-              button =>
-                button.parentElement &&
-                button.parentElement.appendChild(button),
-            )
+            .forEach(button => button.parentElement?.appendChild(button))
         );
       },
       notifyOpening: () => {
@@ -98,8 +99,8 @@ export default {
       notifyOpened: () => this.$emit(strings.OPENED_EVENT, {}),
       notifyClosing: action => {
         this.$emit('change', false);
-        // console.log(action)
         this.$emit(strings.CLOSING_EVENT, action ? { action } : {});
+
         LAYOUT_EVENTS.forEach(evt =>
           window.removeEventListener(evt, this.handleLayout),
         );
@@ -111,7 +112,6 @@ export default {
     };
 
     this.foundation = new MDCDialogFoundation(adapter);
-
     this.foundation.init();
 
     if (!autoStackButtons) {
@@ -129,9 +129,11 @@ export default {
     }
     this.onOpen_(open);
   },
+
   beforeDestroy() {
     this.foundation.destroy();
   },
+
   methods: {
     handleLayout() {
       this.foundation.layout();
@@ -158,85 +160,12 @@ export default {
         this.foundation.close();
       }
     },
-  },
 
-  render(createElement) {
-    const mdt =
-      (this.$scopedSlots.default && this.$scopedSlots.default()) || [];
-
-    mdt.forEach(
-      ({ tag: childTag, data: { props, class: classes, attrs } = {} }, i) => {
-        if (childTag === 'template' && props.tag) {
-          const kind = props.tag.split('-').pop();
-
-          mdt[i] = createElement(
-            props.tag,
-            {
-              class: classes,
-              attrs,
-              scopedSlots: {
-                [kind]: ({ id, content }) => {
-                  if (kind === 'title' || kind === 'content') {
-                    const cdata = content.data || (content.data = {});
-                    const cattrs = cdata.attrs || (cdata.attrs = {});
-                    cattrs.id = id || `${this.id}-${kind}`;
-                    this[kind === 'title' ? 'labelledBy' : 'describedBy'] =
-                      cattrs.id;
-                  }
-                  if (kind === 'content') {
-                    const cdata = content.data || (content.data = {});
-                    cdata.ref = 'contentEl';
-                  }
-                  return content;
-                },
-              },
-            },
-            mdt[i].children,
-          );
-        }
-      },
-    );
-
-    return createElement(
-      'div',
-      {
-        class: this.classes,
-        style: this.styles,
-        attrs: {
-          id: this.id,
-        },
-        ref: 'root',
-        on: {
-          click: evt => this.foundation.handleClick(evt),
-          keydown: evt => this.foundation.handleKeydown(evt),
-        },
-      },
-      [
-        createElement(
-          'div',
-          {
-            class: cssClasses.CONTAINER,
-            ref: 'container',
-          },
-          [
-            createElement(
-              'div',
-              {
-                class: cssClasses.SURFACE,
-                attrs: {
-                  'aria-modal': 'true',
-                  'aria-labelledby': this.labelledBy,
-                  'aria-describedby': this.describedBy,
-                  role: 'alertdialog',
-                },
-              },
-              this.$scopedSlots.default && this.$scopedSlots.default(),
-            ),
-          ],
-        ),
-
-        createElement('div', { class: 'mdc-dialog__scrim' }),
-      ],
-    );
+    onClick(evt) {
+      this.foundation.handleClick(evt);
+    },
+    onKeydown(evt) {
+      this.foundation.handleKeydown(evt);
+    },
   },
 };

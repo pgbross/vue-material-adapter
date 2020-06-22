@@ -1,8 +1,5 @@
-import { cssClasses } from './constants';
-
 export default {
   name: 'mcw-dialog-title',
-  functional: true,
   props: {
     tag: {
       type: String,
@@ -10,36 +7,17 @@ export default {
         return 'h2';
       },
     },
-    id: {},
   },
 
-  render(createElement, context) {
-    const {
-      scopedSlots: slots,
-      props: { id, tag },
-      data: { class: classes, staticClass, attrs },
-    } = context;
+  render(createElement) {
+    const { $scopedSlots: slots, tag } = this;
 
-    // if we have the scope, just defer to it
-    if (slots.title) {
-      const content = createElement(
-        tag,
-        { class: classes, attrs },
-        slots.default(),
-      );
-      return slots.title({ id, content });
-    }
-
-    // if no scope, parent will create it
-    // note, can't use same element type as that would be an infinite loop
     return createElement(
-      'template',
+      tag,
       {
-        props: { tag: 'mdc-dialog-title' },
-        attrs,
-        class: [staticClass, cssClasses.TITLE],
+        class: ['mdc-dialog__title'],
       },
-      slots.default && slots.default(),
+      slots?.default(),
     );
   },
 };
