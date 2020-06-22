@@ -198,6 +198,7 @@ export default {
       return this.foundation ? this.foundation.isOpen() : false;
     },
   },
+
   render(createElement) {
     const { $scopedSlots: scopedSlots } = this;
     return createElement(
@@ -210,7 +211,7 @@ export default {
           'MDCMenuSurface:closed': evt => this.deregisterBodyClickListener(evt),
         },
       },
-      scopedSlots.default && scopedSlots.default(),
+      scopedSlots.default?.(),
     );
   },
 };

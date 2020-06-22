@@ -1,5 +1,3 @@
-import { cssClasses } from './constants';
-
 export default {
   name: 'mcw-top-app-bar-section',
   props: {
@@ -20,21 +18,17 @@ export default {
 
   render(
     createElement,
-    {
-      props: { tag, align },
-      scopedSlots,
-      data: { attrs, staticClass },
-    },
+    { props: { tag, align }, scopedSlots, data: { attrs, staticClass } },
   ) {
-    const classes = [cssClasses.SECTION, staticClass];
+    const classes = ['mdc-top-app-bar__section', staticClass];
 
-    align == 'start' && classes.push(cssClasses.SECTION_START);
-    align == 'end' && classes.push(cssClasses.SECTION_END);
+    align == 'start' && classes.push('mdc-top-app-bar__section--align-start');
+    align == 'end' && classes.push('mdc-top-app-bar__section--align-end');
 
     return createElement(
       tag,
       { class: classes, attrs },
-      scopedSlots.default && scopedSlots.default(),
+      scopedSlots.default?.(),
     );
   },
 };

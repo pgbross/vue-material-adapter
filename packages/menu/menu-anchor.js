@@ -10,7 +10,7 @@ export default {
           'mdc-menu-surface--anchor': 1,
         },
       },
-      scopedSlots.default && scopedSlots.default(),
+      scopedSlots.default?.(),
     );
   },
 };

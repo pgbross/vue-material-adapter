@@ -101,6 +101,8 @@ export default {
       this.foundation_ = new MDCTopAppBarFoundation(adapter);
     }
 
+    // todo: hunt down icons for ripples
+
     this.navIcon_ = this.$el.querySelector(NAVIGATION_ICON_SELECTOR);
 
     if (this.navIcon_) {

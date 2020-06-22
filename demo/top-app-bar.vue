@@ -2,21 +2,19 @@
   <mcw-top-app-bar class="main-toolbar">
     <mcw-top-app-bar-row>
       <mcw-top-app-bar-section align="start">
-        <mcw-top-app-bar-icon navIcon>
-          <mcw-material-icon @click="$emit('nav')" icon="menu"></mcw-material-icon>
-        </mcw-top-app-bar-icon>
+        <mcw-top-app-bar-icon @click="$emit('nav')">menu</mcw-top-app-bar-icon>
         <mcw-top-app-bar-title>vue material adapter</mcw-top-app-bar-title>
       </mcw-top-app-bar-section>
 
       <mcw-top-app-bar-section align="end">
-        <mcw-top-app-bar-icon actionItem aria-label="Help">
-          <button
-            @click="goto('https://github.com/pgbross/vue-material-adapter')"
-            target="_blank"
-            title="Vue-material-adapter"
-          >
-            <img :src="githubLogo" />
-          </button>
+        <mcw-top-app-bar-icon
+          aria-label="Help"
+          target="_blank"
+          title="Vue-material-adapter"
+          action-item
+          @click="goto('https://github.com/pgbross/vue-material-adapter')"
+        >
+          <img :src="githubLogo" />
         </mcw-top-app-bar-icon>
       </mcw-top-app-bar-section>
     </mcw-top-app-bar-row>

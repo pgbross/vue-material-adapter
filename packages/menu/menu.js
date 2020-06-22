@@ -195,7 +195,6 @@ export default {
           keydown: evt => this.handleKeydown(evt),
           'MDCMenuSurface:opened': evt => this.handleMenuSurfaceOpened(evt),
         },
-        // nativeOn: { 'MDCList:action': evt => this.handleAction(evt) },
       },
       [
         createElement(
@@ -205,7 +204,7 @@ export default {
             props: { wrapFocus: this.myWrapFocus },
             on: { change: index => this.handleAction({ detail: { index } }) },
           },
-          scopedSlots.default && scopedSlots.default(),
+          scopedSlots.default?.(),
         ),
       ],
     );

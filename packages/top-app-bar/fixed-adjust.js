@@ -18,6 +18,7 @@ export default {
   ) {
     const base = 'mdc-top-app-bar';
     const suffix = '-fixed-adjust';
+
     return createElement(
       tag,
       {
@@ -34,7 +35,7 @@ export default {
         style: staticStyle,
         attrs,
       },
-      scopedSlots.default && scopedSlots.default(),
+      scopedSlots.default?.(),
     );
   },
 };

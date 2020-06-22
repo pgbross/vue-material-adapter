@@ -1,5 +1,3 @@
-import { cssClasses } from './constants';
-
 export default {
   name: 'mcw-top-app-bar-title',
   props: {
@@ -14,16 +12,12 @@ export default {
 
   render(
     createElement,
-    {
-      props: { tag },
-      scopedSlots,
-      data: { attrs, staticClass },
-    },
+    { props: { tag }, scopedSlots, data: { attrs, staticClass } },
   ) {
     return createElement(
       tag,
-      { class: [cssClasses.TITLE, staticClass], attrs },
-      scopedSlots.default && scopedSlots.default(),
+      { class: ['mdc-top-app-bar__title', staticClass], attrs },
+      scopedSlots.default?.(),
     );
   },
 };

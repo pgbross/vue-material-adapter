@@ -5,13 +5,7 @@ export default {
     disabled: Boolean,
   },
   functional: true,
-  render(
-    createElement,
-    {
-      props: { disabled },
-      scopedSlots,
-    },
-  ) {
+  render(createElement, { props: { disabled }, scopedSlots }) {
     return createElement(
       'li',
       {
@@ -25,7 +19,7 @@ export default {
           role: 'menuitem',
         },
       },
-      scopedSlots.default && scopedSlots.default(),
+      scopedSlots.default?.(),
     );
   },
 };
