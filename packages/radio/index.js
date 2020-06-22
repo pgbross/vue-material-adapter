@@ -1,5 +1,5 @@
 import { BasePlugin } from '~/base/index.js';
-import mcwRadio from './radio.js';
+import mcwRadio from './radio.vue';
 
 export { mcwRadio };
 

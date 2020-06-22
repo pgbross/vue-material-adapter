@@ -14,7 +14,7 @@ export default {
   },
   props: {
     label: String,
-    'align-end': Boolean,
+    alignEnd: Boolean,
     radioClasses: String,
     name: { type: String, required: true },
     id: { type: String, required: true },
@@ -26,6 +26,7 @@ export default {
   data() {
     return {
       classes: { 'mdc-radio': 1 },
+
       styles: {},
     };
   },
@@ -34,6 +35,18 @@ export default {
     picked: 'onPicked',
     disabled(value) {
       this.foundation.setDisabled(value);
+    },
+  },
+
+  computed: {
+    rootClasses() {
+      return { ...this.classes, ...this.radioClasses };
+    },
+    formFieldClasses() {
+      return {
+        'mdc-form-field': 1,
+        'mdc-form-field--align-end': this.alignEnd,
+      };
     },
   },
 
@@ -117,7 +130,7 @@ export default {
     this.foundation.destroy();
   },
 
-  render(createElement) {
+  renderX(createElement) {
     const {
       alignEnd,
       value,
