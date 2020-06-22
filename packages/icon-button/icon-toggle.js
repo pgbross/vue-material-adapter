@@ -15,7 +15,7 @@ export default {
           'mdc-icon-button__icon--on': isOn,
         },
       },
-      scopedSlots?.default(),
+      scopedSlots.default?.(),
     );
   },
 };

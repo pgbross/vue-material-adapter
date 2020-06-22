@@ -54,42 +54,4 @@ export default {
     this.ripple && this.ripple.destroy();
     this.ripple = null;
   },
-  render(createElement) {
-    const { $scopedSlots: scopedSlots } = this;
-
-    const nodes = [
-      createElement(
-        'span',
-        { class: { 'mdc-list-item__text': 1 } },
-        scopedSlots.default && scopedSlots.default(),
-      ),
-    ];
-
-    if (this.hasStartDetail) {
-      nodes.unshift(
-        createElement('span', { class: { 'mdc-list-item__graphic': 1 } }, [
-          this.$slots['start-detail'] ||
-            createElement(
-              'i',
-              {
-                class: { 'material-icons': 1 },
-                attrs: { 'aria-hidden': 'true' },
-              },
-              this.startIcon,
-            ),
-        ]),
-      );
-    }
-
-    return createElement(
-      'custom-link',
-      {
-        class: { ...this.classes, ...this.itemClasses },
-        styles: this.styles,
-        attrs: { link: this.link },
-        on: this.mylisteners,
-      },
-      nodes,
-    );
-  },
 };

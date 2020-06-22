@@ -24,7 +24,7 @@ export default {
           click: onClick,
         },
       },
-      this.$scopedSlots?.default(),
+      this.$scopedSlots.default?.(),
     );
   },
 };

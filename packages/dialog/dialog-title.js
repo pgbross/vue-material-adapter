@@ -17,7 +17,7 @@ export default {
       {
         class: ['mdc-dialog__title'],
       },
-      slots?.default(),
+      slots.default?.(),
     );
   },
 };

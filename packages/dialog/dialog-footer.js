@@ -15,7 +15,7 @@ export default {
       {
         class: ['mdc-dialog__actions'],
       },
-      this.$scopedSlots?.default(),
+      this.$scopedSlots.default?.(),
     );
   },
 };

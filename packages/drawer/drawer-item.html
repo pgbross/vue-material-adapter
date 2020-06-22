@@ -1,0 +1,8 @@
+<custom-link :link="link" :class="[classes, itemClasses]" :style="styles" v-on="mylisteners">
+  <span v-if="hasStartDetail" class="mdc-list-item__graphic">
+    <slot name="start-detail">
+      <i class="material-icons" aria-hidden="true">{{ startIcon }}</i>
+    </slot>
+  </span>
+  <span class="mdc-list-item__text"> <slot></slot></span>
+</custom-link>

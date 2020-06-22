@@ -4,13 +4,7 @@ export default {
   props: {
     dense: Boolean,
   },
-  render(
-    createElement,
-    {
-      props: { dense },
-      scopedSlots,
-    },
-  ) {
+  render(createElement, { props: { dense }, scopedSlots }) {
     return createElement(
       'nav',
       {
@@ -20,7 +14,7 @@ export default {
           'mdc-list--dense': dense,
         },
       },
-      scopedSlots.default && scopedSlots.default(),
+      scopedSlots.default?.(),
     );
   },
 };

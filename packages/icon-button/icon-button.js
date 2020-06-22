@@ -78,7 +78,7 @@ export default {
           disabled: this.disabled,
         },
       },
-      scopedSlots?.default(),
+      scopedSlots.default?.(),
     );
   },
 };

@@ -23,7 +23,7 @@ export default {
         props: { link: this.link },
         on: this.listeners,
       },
-      slots?.default(),
+      slots.default?.(),
     );
   },
 };

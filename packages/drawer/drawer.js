@@ -186,29 +186,19 @@ export default {
     isOpen() {
       return this.foundation.isOpen();
     },
-    refreshMedia() {
-      // this.small = media.small.matches
-      // this.large = media.large.matches
-      // if (this.isResponsive) {
-      //   if (this.large) {
-      //     this.show()
-      //   } else {
-      //     this.close()
-      //   }
-      // }
-    },
   },
+
   render(createElement) {
     const { $scopedSlots: scopedSlots } = this;
     const asideNodes = [
       createElement(
         'div',
         { class: { 'mdc-drawer__content': 1 } },
-        scopedSlots.default && scopedSlots.default(),
+        scopedSlots.default?.(),
       ),
     ];
 
-    const headerSlot = scopedSlots.header && scopedSlots.header();
+    const headerSlot = scopedSlots.header?.();
     if (headerSlot) {
       asideNodes.unshift(headerSlot);
     }

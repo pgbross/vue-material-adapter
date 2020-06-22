@@ -7,7 +7,7 @@ export default {
       {
         class: 'mdc-drawer__header',
       },
-      scopedSlots.default && scopedSlots.default(),
+      scopedSlots.default?.(),
     );
   },
 };
