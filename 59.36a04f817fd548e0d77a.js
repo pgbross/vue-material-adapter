@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[59],{221:function(t,a,c){"use strict";c.r(a);var e=c(13),i=Object(e.a)({},(function(){var t=this.$createElement,a=this._self._c||t;return a("div",{staticClass:"mcw-demo mcw-demo--container"},[a("mcw-material-icon",{attrs:{icon:"favorite"}}),this._v(" "),a("mcw-material-icon",{attrs:{icon:"aspect_ratio"}})],1)}),[],!1,null,null,null);a.default=i.exports}}]);
-//# sourceMappingURL=59.36a04f817fd548e0d77a.js.map
