@@ -309,9 +309,7 @@ export default {
   },
   beforeDestroy() {
     this.ripple.destroy();
-    if (this.trailingAction_) {
-      this.trailingAction_.destroy();
-    }
+
     this.foundation.destroy();
   },
 
