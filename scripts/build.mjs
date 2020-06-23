@@ -11,6 +11,9 @@ import mkdirp from 'mkdirp';
 import path from 'path';
 import cpy from 'cpy';
 import { terser } from 'rollup-plugin-terser';
+import pb from '@rollup/plugin-babel';
+
+const { babel } = pb;
 
 const asyncRimraf = promisify(rimraf);
 
@@ -154,6 +157,7 @@ function getPlugins(bundleType, minimize) {
       entries: [{ find: '~', replacement: 'packages' }],
     }),
     VuePlugin({ css: false }),
+    babel({ babelHelpers: 'bundled' }),
   ];
 
   if (minimize) {
