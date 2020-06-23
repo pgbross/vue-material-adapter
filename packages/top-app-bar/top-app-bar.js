@@ -1,8 +1,10 @@
 import { MDCFixedTopAppBarFoundation } from '@material/top-app-bar/fixed/foundation';
 import { MDCShortTopAppBarFoundation } from '@material/top-app-bar/short/foundation';
 import { MDCTopAppBarFoundation } from '@material/top-app-bar/standard/foundation';
-import { cssClasses } from './constants';
 import { emitCustomEvent } from '~/base/index.js';
+import { RippleElement } from '~/ripple/index.js';
+
+const { cssClasses, strings } = MDCTopAppBarFoundation;
 
 export default {
   name: 'mcw-top-app-bar',
@@ -52,10 +54,6 @@ export default {
   },
 
   mounted() {
-    const {
-      strings: { NAVIGATION_EVENT, NAVIGATION_ICON_SELECTOR },
-    } = MDCTopAppBarFoundation;
-
     const adapter = {
       addClass: className => this.$set(this.rootClasses, className, true),
       removeClass: className => this.$delete(this.rootClasses, className),
@@ -67,7 +65,7 @@ export default {
         this.$emit('nav', {});
         emitCustomEvent(
           this.$el,
-          NAVIGATION_EVENT,
+          strings.NAVIGATION_EVENT,
           {},
           /** shouldBubble */ true,
         );
@@ -103,7 +101,7 @@ export default {
 
     // todo: hunt down icons for ripples
 
-    this.navIcon_ = this.$el.querySelector(NAVIGATION_ICON_SELECTOR);
+    this.navIcon_ = this.$el.querySelector(strings.NAVIGATION_ICON_SELECTOR);
 
     if (this.navIcon_) {
       this.navIcon_.addEventListener('click', this.handleNavigationClick_);
@@ -111,11 +109,28 @@ export default {
 
     this.myScrollTarget = this.scrollTarget || window;
     this.foundation_.init();
+
+    // Get all icons in the toolbar and instantiate the ripples
+    const icons = [].slice.call(
+      this.$el.querySelectorAll(strings.ACTION_ITEM_SELECTOR),
+    );
+    if (this.navIcon_) {
+      icons.push(this.navIcon_);
+    }
+
+    this.iconRipples_ = icons.map(icon => {
+      const ripple = new RippleElement(icon);
+      ripple.init();
+      ripple.unbounded = true;
+
+      return ripple;
+    });
   },
   beforeDestroy() {
     if (this.navIcon_) {
       this.navIcon_.removeEventListener('click', this.handleNavigationClick_);
     }
+    this.iconRipples_.forEach(iconRipple => iconRipple.destroy());
 
     this.myScrollTarget &&
       this.myScrollTarget.removeEventListener(
