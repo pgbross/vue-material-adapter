@@ -17,7 +17,7 @@ export default {
           'mdc-icon-button': 1,
           'material-icons': 1,
           'mdc-top-app-bar__action-item': actionItem,
-          'mdc-top-app-bar__nav-item': !actionItem,
+          'mdc-top-app-bar__navigation-icon': !actionItem,
         },
 
         attrs,
