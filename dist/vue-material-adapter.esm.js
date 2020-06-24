@@ -11,8 +11,7 @@ import { MDCChipFoundation } from '@material/chips/chip/foundation';
 import { announce } from '@material/dom/announce';
 import { MDCDataTableFoundation } from '@material/data-table/foundation';
 import { MDCCheckbox } from '@material/checkbox';
-import * as test from '@material/data-table';
-import { strings as strings$5 } from '@material/data-table';
+import { strings as strings$5, cssClasses as cssClasses$5, events } from '@material/data-table';
 import { MDCDialogFoundation } from '@material/dialog/foundation';
 import { createFocusTrapInstance, isScrollable, areTopsMisaligned } from '@material/dialog/util';
 import { matches as matches$1, closest as closest$1 } from '@material/dom/ponyfill.js';
@@ -49,53 +48,298 @@ import { MDCFixedTopAppBarFoundation } from '@material/top-app-bar/fixed/foundat
 import { MDCShortTopAppBarFoundation } from '@material/top-app-bar/short/foundation';
 import { MDCTopAppBarFoundation } from '@material/top-app-bar/standard/foundation';
 
+function _typeof(obj) {
+  "@babel/helpers - typeof";
+
+  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+    _typeof = function (obj) {
+      return typeof obj;
+    };
+  } else {
+    _typeof = function (obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    };
+  }
+
+  return _typeof(obj);
+}
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _objectSpread2(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      ownKeys(Object(source), true).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function");
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) _setPrototypeOf(subClass, superClass);
+}
+
+function _getPrototypeOf(o) {
+  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  };
+  return _getPrototypeOf(o);
+}
+
+function _setPrototypeOf(o, p) {
+  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+
+  return _setPrototypeOf(o, p);
+}
+
+function _isNativeReflectConstruct() {
+  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+  if (Reflect.construct.sham) return false;
+  if (typeof Proxy === "function") return true;
+
+  try {
+    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return self;
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (call && (typeof call === "object" || typeof call === "function")) {
+    return call;
+  }
+
+  return _assertThisInitialized(self);
+}
+
+function _createSuper(Derived) {
+  var hasNativeReflectConstruct = _isNativeReflectConstruct();
+
+  return function _createSuperInternal() {
+    var Super = _getPrototypeOf(Derived),
+        result;
+
+    if (hasNativeReflectConstruct) {
+      var NewTarget = _getPrototypeOf(this).constructor;
+
+      result = Reflect.construct(Super, arguments, NewTarget);
+    } else {
+      result = Super.apply(this, arguments);
+    }
+
+    return _possibleConstructorReturn(this, result);
+  };
+}
+
+function _slicedToArray(arr, i) {
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+}
+
+function _toArray(arr) {
+  return _arrayWithHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableRest();
+}
+
+function _toConsumableArray(arr) {
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
+}
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) return _arrayLikeToArray(arr);
+}
+
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+
+function _iterableToArray(iter) {
+  if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+}
+
+function _iterableToArrayLimit(arr, i) {
+  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _e = undefined;
+
+  try {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
+
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+  return arr2;
+}
+
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
 function BasePlugin(components) {
   return {
     version: '__VERSION__',
-    install: vm => {
-      Object.entries(components).forEach(([key, component]) => {
-        const name = key.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase(); // eslint-disable-next-line no-unused-vars
+    install: function install(vm) {
+      Object.entries(components).forEach(function (_ref) {
+        var _ref2 = _slicedToArray(_ref, 2),
+            key = _ref2[0],
+            component = _ref2[1];
 
-        const [pfx, ...rest] = name.split('-');
-        const mdcName = ['mdc', ...rest].join('-');
-        const mcwName = ['mcw', ...rest].join('-');
-        const definition = vm.extend(component);
+        var name = key.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase(); // eslint-disable-next-line no-unused-vars
+
+        var _name$split = name.split('-'),
+            _name$split2 = _toArray(_name$split),
+            pfx = _name$split2[0],
+            rest = _name$split2.slice(1);
+
+        var mdcName = ['mdc'].concat(_toConsumableArray(rest)).join('-');
+        var mcwName = ['mcw'].concat(_toConsumableArray(rest)).join('-');
+        var definition = vm.extend(component);
         vm.component(mcwName, definition);
         vm.component(mdcName, definition);
       });
     },
-    components
+    components: components
   };
 }
 
-const CustomButton = {
+var CustomButton = {
   name: 'custom-button',
   functional: true,
   props: {
     link: Object
   },
-
-  render(createElement, {
-    children,
-    data,
-    props: {
-      link,
-      tag
-    },
-    parent: {
-      $router,
-      $root
-    }
-  }) {
-    let element;
+  render: function render(createElement, _ref) {
+    var children = _ref.children,
+        data = _ref.data,
+        _ref$props = _ref.props,
+        link = _ref$props.link,
+        tag = _ref$props.tag,
+        _ref$parent = _ref.parent,
+        $router = _ref$parent.$router,
+        $root = _ref$parent.$root;
+    var element;
 
     if (link && $router) {
       // router-link case
       element = $root.$options.components['RouterLink'];
-      data.props = {
-        tag,
-        ...link
-      };
+      data.props = _objectSpread2({
+        tag: tag
+      }, link);
       data.attrs.role = 'button';
 
       if (data.on.click) {
@@ -114,9 +358,8 @@ const CustomButton = {
 
     return createElement(element, data, children);
   }
-
 };
-const CustomButtonMixin = {
+var CustomButtonMixin = {
   props: {
     href: String,
     disabled: Boolean,
@@ -128,7 +371,7 @@ const CustomButtonMixin = {
     exactActiveClass: String
   },
   computed: {
-    link() {
+    link: function link() {
       return this.to && {
         to: this.to,
         exact: this.exact,
@@ -138,16 +381,16 @@ const CustomButtonMixin = {
         exactActiveClass: this.exactActiveClass
       };
     }
-
   },
   components: {
-    CustomButton
+    CustomButton: CustomButton
   }
 };
 
 /* global CustomEvent */
-function emitCustomEvent(el, evtType, evtData, shouldBubble = false) {
-  let evt;
+function emitCustomEvent(el, evtType, evtData) {
+  var shouldBubble = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+  var evt;
 
   if (typeof CustomEvent === 'function') {
     evt = new CustomEvent(evtType, {
@@ -162,7 +405,7 @@ function emitCustomEvent(el, evtType, evtData, shouldBubble = false) {
   el.dispatchEvent(evt);
 }
 
-const CustomLink = {
+var CustomLink = {
   name: 'custom-link',
   functional: true,
   props: {
@@ -172,28 +415,23 @@ const CustomLink = {
     },
     link: Object
   },
-
-  render(createElement, {
-    data,
-    children,
-    props: {
-      link,
-      tag
-    },
-    parent: {
-      $router,
-      $root
-    }
-  }) {
-    let element;
+  render: function render(createElement, _ref) {
+    var data = _ref.data,
+        children = _ref.children,
+        _ref$props = _ref.props,
+        link = _ref$props.link,
+        tag = _ref$props.tag,
+        _ref$parent = _ref.parent,
+        $router = _ref$parent.$router,
+        $root = _ref$parent.$root;
+    var element;
 
     if (link && $router) {
       // router-link case
       element = $root.$options.components['RouterLink'];
-      data.props = {
-        tag,
-        ...link
-      };
+      data.props = _objectSpread2({
+        tag: tag
+      }, link);
 
       if (data.on.click) {
         data.nativeOn = {
@@ -207,9 +445,8 @@ const CustomLink = {
 
     return createElement(element, data, children);
   }
-
 };
-const CustomLinkMixin = {
+var CustomLinkMixin = {
   props: {
     to: [String, Object],
     exact: Boolean,
@@ -219,7 +456,7 @@ const CustomLinkMixin = {
     exactActiveClass: String
   },
   computed: {
-    link() {
+    link: function link() {
       return this.to && {
         to: this.to,
         exact: this.exact,
@@ -229,102 +466,101 @@ const CustomLinkMixin = {
         exactActiveClass: this.exactActiveClass
       };
     }
-
   },
   components: {
-    CustomLink
+    CustomLink: CustomLink
   }
 };
 
 /* eslint-disable quote-props */
-const DispatchEventMixin = {
+var DispatchEventMixin = {
   props: {
     event: String,
     'event-target': Object,
     'event-args': Array
   },
   methods: {
-    dispatchEvent(evt) {
+    dispatchEvent: function dispatchEvent(evt) {
       evt && this.$emit(evt.type, evt);
 
       if (this.event) {
-        const target = this.eventTarget || this.$root;
-        const args = this.eventArgs || [];
-        target.$emit(this.event, ...args);
+        var target = this.eventTarget || this.$root;
+        var args = this.eventArgs || [];
+        target.$emit.apply(target, [this.event].concat(_toConsumableArray(args)));
       }
     }
-
   },
   computed: {
-    listeners() {
-      return { ...this.$listeners,
-        click: e => this.dispatchEvent(e)
-      };
-    }
+    listeners: function listeners() {
+      var _this = this;
 
+      return _objectSpread2(_objectSpread2({}, this.$listeners), {}, {
+        click: function click(e) {
+          return _this.dispatchEvent(e);
+        }
+      });
+    }
   }
 };
 
-const DispatchFocusMixin = {
-  data() {
+var DispatchFocusMixin = {
+  data: function data() {
     return {
       hasFocus: false
     };
   },
-
   methods: {
-    onMouseDown() {
+    onMouseDown: function onMouseDown() {
       this._active = true;
     },
-
-    onMouseUp() {
+    onMouseUp: function onMouseUp() {
       this._active = false;
     },
+    onFocusEvent: function onFocusEvent() {
+      var _this = this;
 
-    onFocusEvent() {
       // dispatch async to let time to other focus event to propagate
-      setTimeout(() => this.dispatchFocusEvent(), 0);
+      setTimeout(function () {
+        return _this.dispatchFocusEvent();
+      }, 0);
     },
+    onBlurEvent: function onBlurEvent() {
+      var _this2 = this;
 
-    onBlurEvent() {
       // dispatch async to let time to other focus event to propagate
       // also filtur blur if mousedown
-      this._active || setTimeout(() => this.dispatchFocusEvent(), 0);
+      this._active || setTimeout(function () {
+        return _this2.dispatchFocusEvent();
+      }, 0);
     },
-
-    dispatchFocusEvent() {
-      const hasFocus = this.$el === document.activeElement || this.$el.contains(document.activeElement);
+    dispatchFocusEvent: function dispatchFocusEvent() {
+      var hasFocus = this.$el === document.activeElement || this.$el.contains(document.activeElement);
 
       if (hasFocus != this.hasFocus) {
         this.$emit(hasFocus ? 'focus' : 'blur');
         this.hasFocus = hasFocus;
       }
     }
-
   },
-
-  mounted() {
+  mounted: function mounted() {
     this.$el.addEventListener('focusin', this.onFocusEvent);
     this.$el.addEventListener('focusout', this.onBlurEvent);
     this.$el.addEventListener('mousedown', this.onMouseDown);
     this.$el.addEventListener('mouseup', this.onMouseUp);
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.$el.removeEventListener('focusin', this.onFocusEvent);
     this.$el.removeEventListener('focusout', this.onBlurEvent);
     this.$el.removeEventListener('mousedown', this.onMouseDown);
     this.$el.removeEventListener('mouseup', this.onMouseUp);
   }
-
 };
 
-const scope = Math.floor(Math.random() * Math.floor(0x10000000)).toString() + '-';
-const VMAUniqueIdMixin = {
-  beforeCreate() {
+var scope = Math.floor(Math.random() * Math.floor(0x10000000)).toString() + '-';
+var VMAUniqueIdMixin = {
+  beforeCreate: function beforeCreate() {
     this.vma_uid_ = scope + this._uid;
   }
-
 };
 
 var index = /*#__PURE__*/Object.freeze({
@@ -340,132 +576,176 @@ var index = /*#__PURE__*/Object.freeze({
   VMAUniqueIdMixin: VMAUniqueIdMixin
 });
 
-class RippleBase extends MDCRippleFoundation {
-  constructor(vm, options) {
-    super({
-      addClass(className) {
+var RippleBase = /*#__PURE__*/function (_MDCRippleFoundation) {
+  _inherits(RippleBase, _MDCRippleFoundation);
+
+  var _super = _createSuper(RippleBase);
+
+  function RippleBase(vm, options) {
+    _classCallCheck(this, RippleBase);
+
+    return _super.call(this, _objectSpread2({
+      addClass: function addClass(className) {
         vm.$set(vm.classes, className, true);
       },
-
-      browserSupportsCssVars: () => {
+      browserSupportsCssVars: function browserSupportsCssVars() {
         return supportsCssVariables(window);
       },
-      computeBoundingRect: () => {
+      computeBoundingRect: function computeBoundingRect() {
         return vm.$el.getBoundingClientRect();
       },
-      containsEventTarget: target => vm.$el.contains(target),
-      deregisterDocumentInteractionHandler: (evtType, handler) => document.documentElement.removeEventListener(evtType, handler, applyPassive()),
-      deregisterInteractionHandler: (evt, handler) => {
+      containsEventTarget: function containsEventTarget(target) {
+        return vm.$el.contains(target);
+      },
+      deregisterDocumentInteractionHandler: function deregisterDocumentInteractionHandler(evtType, handler) {
+        return document.documentElement.removeEventListener(evtType, handler, applyPassive());
+      },
+      deregisterInteractionHandler: function deregisterInteractionHandler(evt, handler) {
         vm.$el.removeEventListener(evt, handler, applyPassive());
       },
-      deregisterResizeHandler: handler => {
+      deregisterResizeHandler: function deregisterResizeHandler(handler) {
         return window.removeEventListener('resize', handler);
       },
-      getWindowPageOffset: () => {
+      getWindowPageOffset: function getWindowPageOffset() {
         return {
           x: window.pageXOffset,
           y: window.pageYOffset
         };
       },
-      isSurfaceActive: () => {
+      isSurfaceActive: function isSurfaceActive() {
         return matches(vm.$el, ':active');
       },
-      isSurfaceDisabled: () => {
+      isSurfaceDisabled: function isSurfaceDisabled() {
         return vm.disabled;
       },
-      isUnbounded: () => {
+      isUnbounded: function isUnbounded() {
         return false;
       },
-      registerDocumentInteractionHandler: (evtType, handler) => document.documentElement.addEventListener(evtType, handler, applyPassive()),
-      registerInteractionHandler: (evt, handler) => {
+      registerDocumentInteractionHandler: function registerDocumentInteractionHandler(evtType, handler) {
+        return document.documentElement.addEventListener(evtType, handler, applyPassive());
+      },
+      registerInteractionHandler: function registerInteractionHandler(evt, handler) {
         vm.$el.addEventListener(evt, handler, applyPassive());
       },
-      registerResizeHandler: handler => {
+      registerResizeHandler: function registerResizeHandler(handler) {
         return window.addEventListener('resize', handler);
       },
-
-      removeClass(className) {
+      removeClass: function removeClass(className) {
         vm.$delete(vm.classes, className);
       },
-
-      updateCssVariable: (varName, value) => {
+      updateCssVariable: function updateCssVariable(varName, value) {
         vm.$set(vm.styles, varName, value);
-      },
-      ...options
-    });
+      }
+    }, options));
   }
 
-} // todo: can this be combined with the ripplebase implementation depending on whether a vm or element is passed?
+  return RippleBase;
+}(MDCRippleFoundation); // todo: can this be combined with the ripplebase implementation depending on whether a vm or element is passed?
 
-class RippleElement extends MDCRippleFoundation {
-  constructor(element, options) {
-    const $el = element;
-    super({
-      addClass: className => $el.classList.add(className),
-      browserSupportsCssVars: () => supportsCssVariables(window),
-      computeBoundingRect: () => $el.getBoundingClientRect(),
-      containsEventTarget: target => $el.contains(target),
-      deregisterDocumentInteractionHandler: (evtType, handler) => document.documentElement.removeEventListener(evtType, handler, applyPassive()),
-      deregisterInteractionHandler: (evt, handler) => $el.removeEventListener(evt, handler, applyPassive()),
-      deregisterResizeHandler: handler => window.removeEventListener('resize', handler),
-      getWindowPageOffset: () => ({
-        x: window.pageXOffset,
-        y: window.pageYOffset
-      }),
-      isSurfaceActive: () => matches($el, ':active'),
-      isSurfaceDisabled: () => false,
+var RippleElement = /*#__PURE__*/function (_MDCRippleFoundation2) {
+  _inherits(RippleElement, _MDCRippleFoundation2);
+
+  var _super2 = _createSuper(RippleElement);
+
+  function RippleElement(element, options) {
+    var _this;
+
+    _classCallCheck(this, RippleElement);
+
+    var $el = element;
+    _this = _super2.call(this, _objectSpread2({
+      addClass: function addClass(className) {
+        return $el.classList.add(className);
+      },
+      browserSupportsCssVars: function browserSupportsCssVars() {
+        return supportsCssVariables(window);
+      },
+      computeBoundingRect: function computeBoundingRect() {
+        return $el.getBoundingClientRect();
+      },
+      containsEventTarget: function containsEventTarget(target) {
+        return $el.contains(target);
+      },
+      deregisterDocumentInteractionHandler: function deregisterDocumentInteractionHandler(evtType, handler) {
+        return document.documentElement.removeEventListener(evtType, handler, applyPassive());
+      },
+      deregisterInteractionHandler: function deregisterInteractionHandler(evt, handler) {
+        return $el.removeEventListener(evt, handler, applyPassive());
+      },
+      deregisterResizeHandler: function deregisterResizeHandler(handler) {
+        return window.removeEventListener('resize', handler);
+      },
+      getWindowPageOffset: function getWindowPageOffset() {
+        return {
+          x: window.pageXOffset,
+          y: window.pageYOffset
+        };
+      },
+      isSurfaceActive: function isSurfaceActive() {
+        return matches($el, ':active');
+      },
+      isSurfaceDisabled: function isSurfaceDisabled() {
+        return false;
+      },
       // todo: consider if this is right
-      isUnbounded: () => this.unbounded_,
-      registerDocumentInteractionHandler: (evtType, handler) => document.documentElement.addEventListener(evtType, handler, applyPassive()),
-      registerInteractionHandler: (evt, handler) => {
+      isUnbounded: function isUnbounded() {
+        return _this.unbounded_;
+      },
+      registerDocumentInteractionHandler: function registerDocumentInteractionHandler(evtType, handler) {
+        return document.documentElement.addEventListener(evtType, handler, applyPassive());
+      },
+      registerInteractionHandler: function registerInteractionHandler(evt, handler) {
         $el.addEventListener(evt, handler, applyPassive());
       },
-      registerResizeHandler: handler => {
+      registerResizeHandler: function registerResizeHandler(handler) {
         return window.addEventListener('resize', handler);
       },
-      removeClass: className => $el.classList.remove(className),
-      updateCssVariable: (varName, value) => $el.style.setProperty(varName, value),
-      ...options
-    });
-    this.unbounded_ = false;
+      removeClass: function removeClass(className) {
+        return $el.classList.remove(className);
+      },
+      updateCssVariable: function updateCssVariable(varName, value) {
+        return $el.style.setProperty(varName, value);
+      }
+    }, options));
+    _this.unbounded_ = false;
+    return _this;
   }
 
-  get unbounded() {
-    return this.unbounded_;
-  }
+  _createClass(RippleElement, [{
+    key: "unbounded",
+    get: function get() {
+      return this.unbounded_;
+    },
+    set: function set(unbounded) {
+      this.unbounded_ = Boolean(unbounded);
+      this.setUnbounded(this.unbounded_);
+    }
+  }]);
 
-  set unbounded(unbounded) {
-    this.unbounded_ = Boolean(unbounded);
-    this.setUnbounded(this.unbounded_);
-  }
-
-}
-const RippleMixin = {
-  data() {
+  return RippleElement;
+}(MDCRippleFoundation);
+var RippleMixin = {
+  data: function data() {
     return {
       classes: {},
       styles: {}
     };
   },
-
-  mounted() {
+  mounted: function mounted() {
     this.ripple = new RippleBase(this);
     this.ripple.init();
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.ripple.destroy();
   }
-
 };
 
 var mcwButtonBase = {
   name: 'mcw-button-base',
   mixins: [DispatchEventMixin, CustomButtonMixin, RippleMixin],
-
   // note RippleMixin defines data(){ return {classes:{}, styles: {} }; }
-  render(createElement) {
-    const nodes = [createElement('div', {
+  render: function render(createElement) {
+    var nodes = [createElement('div', {
       class: {
         'mdc-button__ripple': 1
       }
@@ -513,7 +793,6 @@ var mcwButtonBase = {
       ref: 'root'
     }, nodes);
   }
-
 };
 
 var mcwButton = {
@@ -526,8 +805,7 @@ var mcwButton = {
     icon: String,
     trailingIcon: String
   },
-
-  data() {
+  data: function data() {
     return {
       classes: {
         'mdc-button': true,
@@ -537,25 +815,21 @@ var mcwButton = {
       }
     };
   },
-
   watch: {
-    raised() {
+    raised: function raised() {
       this.$set(this.classes, 'mdc-button--raised', this.raised);
     },
-
-    unelevated() {
+    unelevated: function unelevated() {
       this.$set(this.classes, 'mdc-button--unelevated', this.unelevated);
     },
-
-    outlined() {
+    outlined: function outlined() {
       this.$set(this.classes, 'mdc-button--outlined', this.outlined);
     }
-
   }
 };
 
 var button = BasePlugin({
-  mcwButton
+  mcwButton: mcwButton
 });
 
 var mcwCard = {
@@ -564,47 +838,38 @@ var mcwCard = {
     outlined: Boolean
   },
   functional: true,
-
-  render(createElement, {
-    props: {
-      outlined
-    },
-    data: {
-      attrs,
-      staticClass
-    },
-    scopedSlots
-  }) {
+  render: function render(createElement, _ref) {
+    var outlined = _ref.props.outlined,
+        _ref$data = _ref.data,
+        attrs = _ref$data.attrs,
+        staticClass = _ref$data.staticClass,
+        scopedSlots = _ref.scopedSlots;
     return createElement('div', {
       class: [{
         'mdc-card': 1,
         'mdc-card--outlined': outlined
       }, staticClass],
-      attrs
+      attrs: attrs
     }, scopedSlots.default && scopedSlots.default());
   }
-
 };
 
 var mcwCardActionButtons = {
   name: 'mcw-card-action-buttons',
   functional: true,
-
-  render(createElement, {
-    scopedSlots,
-    data: {
-      attrs,
-      staticClass,
-      staticStyle
-    }
-  }) {
-    const vNodes = scopedSlots.default && scopedSlots.default() || [];
+  render: function render(createElement, _ref) {
+    var scopedSlots = _ref.scopedSlots,
+        _ref$data = _ref.data,
+        attrs = _ref$data.attrs,
+        staticClass = _ref$data.staticClass,
+        staticStyle = _ref$data.staticStyle;
+    var vNodes = scopedSlots.default && scopedSlots.default() || [];
 
     if (vNodes) {
       // add icon class to children
-      vNodes.forEach(vNode => {
+      vNodes.forEach(function (vNode) {
         if (vNode.tag && vNode.data) {
-          vNode.data.staticClass = `mdc-card__action mdc-card__action--button ${vNode.data.staticClass || ''}`;
+          vNode.data.staticClass = "mdc-card__action mdc-card__action--button ".concat(vNode.data.staticClass || '');
         }
       });
     }
@@ -612,31 +877,27 @@ var mcwCardActionButtons = {
     return createElement('div', {
       class: ['mdc-card__action-buttons', staticClass],
       style: staticStyle,
-      attrs
+      attrs: attrs
     }, vNodes);
   }
-
 };
 
 var mcwCardActionIcons = {
   name: 'mcw-card-action-icons',
   functional: true,
-
-  render(createElement, {
-    scopedSlots,
-    data: {
-      attrs,
-      staticClass,
-      staticStyle
-    }
-  }) {
-    const vNodes = scopedSlots.default && scopedSlots.default() || [];
+  render: function render(createElement, _ref) {
+    var scopedSlots = _ref.scopedSlots,
+        _ref$data = _ref.data,
+        attrs = _ref$data.attrs,
+        staticClass = _ref$data.staticClass,
+        staticStyle = _ref$data.staticStyle;
+    var vNodes = scopedSlots.default && scopedSlots.default() || [];
 
     if (vNodes) {
       // add icon class to children
-      vNodes.forEach(vNode => {
+      vNodes.forEach(function (vNode) {
         if (vNode.tag && vNode.data) {
-          vNode.data.staticClass = `mdc-card__action mdc-card__action--icon ${vNode.data.staticClass || ''}`;
+          vNode.data.staticClass = "mdc-card__action mdc-card__action--icon ".concat(vNode.data.staticClass || '');
         }
       });
     }
@@ -644,10 +905,9 @@ var mcwCardActionIcons = {
     return createElement('div', {
       class: ['mdc-card__action-icons', staticClass],
       style: staticStyle,
-      attrs
+      attrs: attrs
     }, vNodes);
   }
-
 };
 
 var mcwCardActions = {
@@ -656,26 +916,20 @@ var mcwCardActions = {
   props: {
     fullBleed: Boolean
   },
-
-  render(createElement, {
-    props: {
-      fullBleed
-    },
-    data: {
-      staticClass,
-      attrs
-    },
-    scopedSlots
-  }) {
+  render: function render(createElement, _ref) {
+    var fullBleed = _ref.props.fullBleed,
+        _ref$data = _ref.data,
+        staticClass = _ref$data.staticClass,
+        attrs = _ref$data.attrs,
+        scopedSlots = _ref.scopedSlots;
     return createElement('section', {
       class: [{
         'mdc-card__actions': 1,
         'mdc-card__actions--full-bleed': fullBleed
       }, staticClass],
-      attrs
+      attrs: attrs
     }, scopedSlots.default && scopedSlots.default());
   }
-
 };
 
 var mcwCardMedia = {
@@ -685,37 +939,28 @@ var mcwCardMedia = {
     src: String,
     square: {
       type: Boolean,
-
-      default() {
+      default: function _default() {
         return false;
       }
-
     },
     wide: {
       type: Boolean,
-
-      default() {
+      default: function _default() {
         return false;
       }
-
     },
     contentClass: String
   },
-
-  render(createElement, {
-    props: {
-      src,
-      square,
-      wide,
-      contentClass
-    },
-    data: {
-      staticStyle
-    },
-    scopedSlots
-  }) {
-    const nodes = [];
-    const content = scopedSlots.default && scopedSlots.default();
+  render: function render(createElement, _ref) {
+    var _ref$props = _ref.props,
+        src = _ref$props.src,
+        square = _ref$props.square,
+        wide = _ref$props.wide,
+        contentClass = _ref$props.contentClass,
+        staticStyle = _ref.data.staticStyle,
+        scopedSlots = _ref.scopedSlots;
+    var nodes = [];
+    var content = scopedSlots.default && scopedSlots.default();
 
     if (content) {
       nodes.push(createElement('div', {
@@ -729,69 +974,61 @@ var mcwCardMedia = {
         'mdc-card__media--square': square,
         'mdc-card__media--16-9': wide && !square
       },
-      style: {
-        backgroundImage: `url(${src})`,
-        ...staticStyle
-      }
+      style: _objectSpread2({
+        backgroundImage: "url(".concat(src, ")")
+      }, staticStyle)
     }, nodes);
   }
-
 };
 
 var mcwCardPrimaryAction = {
   name: 'mcw-card-primary-action',
   mixins: [DispatchEventMixin, CustomLinkMixin, RippleMixin],
-
-  data() {
+  data: function data() {
     return {
       classes: {
         'mdc-card__primary-action': 1
       }
     };
   },
-
-  render(createElement) {
+  render: function render(createElement) {
     var _slots$default;
 
-    const {
-      $scopedSlots: slots
-    } = this;
+    var slots = this.$scopedSlots;
     return createElement('custom-link', {
       class: this.classes,
       style: this.styles,
       // from RippleMixin
-      attrs: {
-        tabIndex: 0,
-        ...this.$attrs
-      },
+      attrs: _objectSpread2({
+        tabIndex: 0
+      }, this.$attrs),
       props: {
         link: this.link
       },
       on: this.listeners
     }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
   }
-
 };
 
 var card = BasePlugin({
-  mcwCard,
-  mcwCardPrimaryAction,
-  mcwCardMedia,
-  mcwCardActions,
-  mcwCardActionButtons,
-  mcwCardActionIcons
+  mcwCard: mcwCard,
+  mcwCardPrimaryAction: mcwCardPrimaryAction,
+  mcwCardMedia: mcwCardMedia,
+  mcwCardActions: mcwCardActions,
+  mcwCardActionButtons: mcwCardActionButtons,
+  mcwCardActionIcons: mcwCardActionIcons
 });
 
-const ProgressPropType = {
+var ProgressPropType = {
   type: [Number, String],
-
-  validator(value) {
+  validator: function validator(value) {
     return Number(value) >= 0 && Number(value) <= 1;
   }
-
 };
 
-function getCircleAttrs(medium = false, indeterminate = true) {
+function getCircleAttrs() {
+  var medium = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+  var indeterminate = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
   return medium ? {
     cx: '16',
     cy: '16',
@@ -822,8 +1059,7 @@ var script = {
       default: 'div'
     }
   },
-
-  data() {
+  data: function data() {
     return {
       classes: {
         'mdc-circular-progress': 1,
@@ -835,43 +1071,46 @@ var script = {
       indeterminateAttrs: getCircleAttrs(this.medium, true)
     };
   },
-
   watch: {
-    open(nv) {
+    open: function open(nv) {
       if (nv) {
         this.foundation.open();
       } else {
         this.foundation.close();
       }
     },
-
-    progress(nv) {
+    progress: function progress(nv) {
       this.foundation.setProgress(Number(nv));
     },
-
-    indeterminate(nv) {
+    indeterminate: function indeterminate(nv) {
       this.foundation.setDeterminate(!nv);
     }
-
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
-    const adapter = {
-      addClass: className => {
-        this.$set(this.classes, className, true);
+    var adapter = {
+      addClass: function addClass(className) {
+        _this.$set(_this.classes, className, true);
       },
-      getDeterminateCircleAttribute: attributeName => {
-        return this.circleAttrs[attributeName];
+      getDeterminateCircleAttribute: function getDeterminateCircleAttribute(attributeName) {
+        return _this.circleAttrs[attributeName];
       },
-      hasClass: className => this.$el.classList.contains(className),
-      removeClass: className => this.$delete(this.classes, className),
-      removeAttribute: attributeName => {
-        this.$delete(this.rootAttrs, attributeName);
+      hasClass: function hasClass(className) {
+        return _this.$el.classList.contains(className);
       },
-      setAttribute: (attributeName, value) => {
-        this.$set(this.rootAttrs, attributeName, value);
+      removeClass: function removeClass(className) {
+        return _this.$delete(_this.classes, className);
       },
-      setDeterminateCircleAttribute: (attributeName, value) => this.$set(this.circleAttrs, attributeName, value)
+      removeAttribute: function removeAttribute(attributeName) {
+        _this.$delete(_this.rootAttrs, attributeName);
+      },
+      setAttribute: function setAttribute(attributeName, value) {
+        _this.$set(_this.rootAttrs, attributeName, value);
+      },
+      setDeterminateCircleAttribute: function setDeterminateCircleAttribute(attributeName, value) {
+        return _this.$set(_this.circleAttrs, attributeName, value);
+      }
     };
     this.foundation = new MDCCircularProgressFoundation(adapter);
     this.foundation.init();
@@ -884,11 +1123,9 @@ var script = {
       this.foundation.close();
     }
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.foundation.destroy();
   }
-
 };
 
 function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier
@@ -901,7 +1138,7 @@ function normalizeComponent(template, style, script, scopeId, isFunctionalTempla
   } // Vue.extend constructor export interop.
 
 
-  const options = typeof script === 'function' ? script.options : script; // render functions
+  var options = typeof script === 'function' ? script.options : script; // render functions
 
   if (template && template.render) {
     options.render = template.render;
@@ -918,11 +1155,11 @@ function normalizeComponent(template, style, script, scopeId, isFunctionalTempla
     options._scopeId = scopeId;
   }
 
-  let hook;
+  var hook;
 
   if (moduleIdentifier) {
     // server build
-    hook = function (context) {
+    hook = function hook(context) {
       // 2.3 injection
       context = context || // cached call
       this.$vnode && this.$vnode.ssrContext || // stateful
@@ -958,7 +1195,7 @@ function normalizeComponent(template, style, script, scopeId, isFunctionalTempla
   if (hook) {
     if (options.functional) {
       // register for functional component in vue file
-      const originalRender = options.render;
+      var originalRender = options.render;
 
       options.render = function renderWithStyleInjection(h, context) {
         hook.call(context);
@@ -966,7 +1203,7 @@ function normalizeComponent(template, style, script, scopeId, isFunctionalTempla
       };
     } else {
       // inject component registration as beforeCreate hook
-      const existing = options.beforeCreate;
+      var existing = options.beforeCreate;
       options.beforeCreate = existing ? [].concat(existing, hook) : [hook];
     }
   }
@@ -1138,7 +1375,7 @@ var circularProgress = BasePlugin({
 });
 
 /* eslint-disable quote-props */
-const CB_PROTO_PROPS = ['checked', 'indeterminate'];
+var CB_PROTO_PROPS = ['checked', 'indeterminate'];
 var script$1 = {
   name: 'mcw-checkbox',
   mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
@@ -1154,16 +1391,13 @@ var script$1 = {
     alignEnd: Boolean,
     value: {
       type: [String, Number],
-
-      default() {
+      default: function _default() {
         return 'on';
       }
-
     },
     name: String
   },
-
-  data() {
+  data: function data() {
     return {
       styles: {},
       classes: {
@@ -1171,78 +1405,96 @@ var script$1 = {
       }
     };
   },
-
   computed: {
-    hasLabel() {
+    hasLabel: function hasLabel() {
       return this.label || this.$slots.default;
     },
-
-    formFieldClasses() {
+    formFieldClasses: function formFieldClasses() {
       return {
         'mdc-form-field': this.hasLabel,
         'mdc-form-field--align-end': this.hasLabel && this.alignEnd
       };
     }
-
   },
   watch: {
     checked: 'setChecked',
-
-    disabled(value) {
+    disabled: function disabled(value) {
       this.foundation.setDisabled(value);
     },
-
     indeterminate: 'setIndeterminate'
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
-    const adapter = {
-      addClass: className => this.$set(this.classes, className, true),
-      forceLayout: () => this.$refs.root.offsetWidth,
-      hasNativeControl: () => true,
-      isAttachedToDOM: () => true,
-      isChecked: () => this.$refs.control.checked,
-      isIndeterminate: () => this.$refs.control.indeterminate,
-      removeClass: className => this.$delete(this.classes, className),
-      removeNativeControlAttr: attr => {
-        this.$refs.control.removeAttribute(attr);
+    var adapter = {
+      addClass: function addClass(className) {
+        return _this.$set(_this.classes, className, true);
       },
-      setNativeControlAttr: (attr, value) => {
-        this.$refs.control.setAttribute(attr, value);
+      forceLayout: function forceLayout() {
+        return _this.$refs.root.offsetWidth;
       },
-      setNativeControlDisabled: disabled => this.$refs.control.disabled = disabled
+      hasNativeControl: function hasNativeControl() {
+        return true;
+      },
+      isAttachedToDOM: function isAttachedToDOM() {
+        return true;
+      },
+      isChecked: function isChecked() {
+        return _this.$refs.control.checked;
+      },
+      isIndeterminate: function isIndeterminate() {
+        return _this.$refs.control.indeterminate;
+      },
+      removeClass: function removeClass(className) {
+        return _this.$delete(_this.classes, className);
+      },
+      removeNativeControlAttr: function removeNativeControlAttr(attr) {
+        _this.$refs.control.removeAttribute(attr);
+      },
+      setNativeControlAttr: function setNativeControlAttr(attr, value) {
+        _this.$refs.control.setAttribute(attr, value);
+      },
+      setNativeControlDisabled: function setNativeControlDisabled(disabled) {
+        return _this.$refs.control.disabled = disabled;
+      }
     };
     this.foundation = new MDCCheckboxFoundation(adapter);
 
-    this.handleAnimationEnd_ = () => this.foundation.handleAnimationEnd();
+    this.handleAnimationEnd_ = function () {
+      return _this.foundation.handleAnimationEnd();
+    };
 
     this.$el.addEventListener(getCorrectEventName(window, 'animationend'), this.handleAnimationEnd_);
     this.installPropertyChangeHooks_();
     this.ripple = new RippleBase(this, {
-      isUnbounded: () => true,
-      isSurfaceActive: () => RippleBase.isSurfaceActive(this.$refs.control),
-      registerInteractionHandler: (evt, handler) => {
-        this.$refs.control.addEventListener(evt, handler, applyPassive());
+      isUnbounded: function isUnbounded() {
+        return true;
       },
-      deregisterInteractionHandler: (evt, handler) => {
-        this.$refs.control.removeEventListener(evt, handler, applyPassive());
+      isSurfaceActive: function isSurfaceActive() {
+        return RippleBase.isSurfaceActive(_this.$refs.control);
       },
-      computeBoundingRect: () => {
-        return this.$refs.root.getBoundingClientRect();
+      registerInteractionHandler: function registerInteractionHandler(evt, handler) {
+        _this.$refs.control.addEventListener(evt, handler, applyPassive());
+      },
+      deregisterInteractionHandler: function deregisterInteractionHandler(evt, handler) {
+        _this.$refs.control.removeEventListener(evt, handler, applyPassive());
+      },
+      computeBoundingRect: function computeBoundingRect() {
+        return _this.$refs.root.getBoundingClientRect();
       }
     });
     this.formField = new MDCFormFieldFoundation({
-      registerInteractionHandler: (type, handler) => {
-        this.$refs.label.addEventListener(type, handler);
+      registerInteractionHandler: function registerInteractionHandler(type, handler) {
+        _this.$refs.label.addEventListener(type, handler);
       },
-      deregisterInteractionHandler: (type, handler) => {
-        this.$refs.label.removeEventListener(type, handler);
+      deregisterInteractionHandler: function deregisterInteractionHandler(type, handler) {
+        _this.$refs.label.removeEventListener(type, handler);
       },
-      activateInputRipple: () => {
-        this.ripple && this.ripple.activate();
+      activateInputRipple: function activateInputRipple() {
+        _this.ripple && _this.ripple.activate();
       },
-      deactivateInputRipple: () => {
-        this.ripple && this.ripple.deactivate();
+      deactivateInputRipple: function deactivateInputRipple() {
+        _this.ripple && _this.ripple.deactivate();
       }
     });
     this.foundation.init();
@@ -1252,35 +1504,29 @@ var script$1 = {
     this.foundation.setDisabled(this.disabled);
     this.setIndeterminate(this.indeterminate);
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.$el.removeEventListener(getCorrectEventName(window, 'animationend'), this.handleAnimationEnd_);
     this.formField.destroy();
     this.ripple.destroy();
     this.uninstallPropertyChangeHooks_();
     this.foundation.destroy();
   },
-
   methods: {
-    setChecked(checked) {
+    setChecked: function setChecked(checked) {
       this.$refs.control.checked = Array.isArray(checked) ? checked.indexOf(this.value) > -1 : checked;
     },
-
-    setIndeterminate(indeterminate) {
+    setIndeterminate: function setIndeterminate(indeterminate) {
       this.$refs.control.indeterminate = indeterminate;
     },
-
-    onChange({
-      target: {
-        indeterminate,
-        checked
-      }
-    }) {
+    onChange: function onChange(_ref) {
+      var _ref$target = _ref.target,
+          indeterminate = _ref$target.indeterminate,
+          checked = _ref$target.checked;
       // note indeterminate will not currently work with the array model
       this.$emit('update:indeterminate', indeterminate);
 
       if (Array.isArray(this.checked)) {
-        const idx = this.checked.indexOf(this.value);
+        var idx = this.checked.indexOf(this.value);
 
         if (checked) {
           idx < 0 && this.$emit('change', this.checked.concat(this.value));
@@ -1291,22 +1537,24 @@ var script$1 = {
         this.$emit('change', checked);
       }
     },
+    installPropertyChangeHooks_: function installPropertyChangeHooks_() {
+      var _this2 = this;
 
-    installPropertyChangeHooks_() {
-      const nativeCb = this.$refs.control;
-      const cbProto = Object.getPrototypeOf(nativeCb);
-      CB_PROTO_PROPS.forEach(controlState => {
-        const desc = Object.getOwnPropertyDescriptor(cbProto, controlState); // We have to check for this descriptor, since some browsers (Safari) don't support its return.
+      var nativeCb = this.$refs.control;
+      var cbProto = Object.getPrototypeOf(nativeCb);
+      CB_PROTO_PROPS.forEach(function (controlState) {
+        var desc = Object.getOwnPropertyDescriptor(cbProto, controlState); // We have to check for this descriptor, since some browsers (Safari) don't support its return.
         // See: https://bugs.webkit.org/show_bug.cgi?id=49739
 
         if (validDescriptor(desc)) {
-          const nativeCbDesc =
+          var nativeCbDesc =
           /** @type {!ObjectPropertyDescriptor} */
           {
             get: desc.get,
-            set: state => {
+            set: function set(state) {
               desc.set.call(nativeCb, state);
-              this.foundation.handleChange();
+
+              _this2.foundation.handleChange();
             },
             configurable: desc.configurable,
             enumerable: desc.enumerable
@@ -1315,12 +1563,11 @@ var script$1 = {
         }
       });
     },
-
-    uninstallPropertyChangeHooks_() {
-      const nativeCb = this.$refs.control;
-      const cbProto = Object.getPrototypeOf(nativeCb);
-      CB_PROTO_PROPS.forEach(controlState => {
-        const desc =
+    uninstallPropertyChangeHooks_: function uninstallPropertyChangeHooks_() {
+      var nativeCb = this.$refs.control;
+      var cbProto = Object.getPrototypeOf(nativeCb);
+      CB_PROTO_PROPS.forEach(function (controlState) {
+        var desc =
         /** @type {!ObjectPropertyDescriptor} */
         Object.getOwnPropertyDescriptor(cbProto, controlState);
 
@@ -1329,7 +1576,6 @@ var script$1 = {
         }
       });
     }
-
   }
 }; // ===
 // Private functions
@@ -1428,14 +1674,12 @@ var checkbox = BasePlugin({
 
 var mcwChipCheckmark = {
   name: 'mcw-chip-checkmark',
-
-  data() {
+  data: function data() {
     return {
       width: 0
     };
   },
-
-  render(createElement) {
+  render: function render(createElement) {
     return createElement('div', {
       class: {
         'mdc-chip__checkmark': 1
@@ -1458,23 +1702,18 @@ var mcwChipCheckmark = {
       }
     })])]);
   },
-
-  mounted() {
+  mounted: function mounted() {
     this.width = this.$el.getBoundingClientRect().height;
   }
-
 };
 
-const {
-  INTERACTION_EVENT,
-  SELECTION_EVENT,
-  REMOVAL_EVENT,
-  NAVIGATION_EVENT
-} = MDCChipFoundation.strings;
-const {
-  CHIP_SELECTOR
-} = MDCChipSetFoundation.strings;
-let idCounter = 0;
+var _MDCChipFoundation$st = MDCChipFoundation.strings,
+    INTERACTION_EVENT = _MDCChipFoundation$st.INTERACTION_EVENT,
+    SELECTION_EVENT = _MDCChipFoundation$st.SELECTION_EVENT,
+    REMOVAL_EVENT = _MDCChipFoundation$st.REMOVAL_EVENT,
+    NAVIGATION_EVENT = _MDCChipFoundation$st.NAVIGATION_EVENT;
+var CHIP_SELECTOR = MDCChipSetFoundation.strings.CHIP_SELECTOR;
+var idCounter = 0;
 var mcwChipSet = {
   name: 'mcw-chip-set',
   props: {
@@ -1482,14 +1721,12 @@ var mcwChipSet = {
     filter: [Boolean],
     input: [Boolean]
   },
-
-  provide() {
+  provide: function provide() {
     return {
       mcwChipSet: this
     };
   },
-
-  data() {
+  data: function data() {
     return {
       classes: {
         'mdc-chip-set': true,
@@ -1500,62 +1737,66 @@ var mcwChipSet = {
       listn: 0
     };
   },
-
   computed: {
-    chipElements() {
+    chipElements: function chipElements() {
       // eslint-disable-next-line no-unused-vars
-      const xx = this.listn; // for dependency
+      var xx = this.listn; // for dependency
 
       return [].slice.call(this.$el.querySelectorAll(CHIP_SELECTOR));
     },
-
-    chips_() {
-      return this.chipElements.map(el => {
-        el.id = el.id || `mdc-chip-${++idCounter}`;
+    chips_: function chips_() {
+      return this.chipElements.map(function (el) {
+        el.id = el.id || "mdc-chip-".concat(++idCounter);
         return el.__vue__;
       });
     }
-
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
     // do not delete this reference as it triggers initial chip list instantiation.
     this.chips_;
     this.foundation = new MDCChipSetFoundation({
-      announceMessage: message => {
+      announceMessage: function announceMessage(message) {
         announce(message);
       },
-      focusChipPrimaryActionAtIndex: index => {
-        const chip = this.chips_[index];
+      focusChipPrimaryActionAtIndex: function focusChipPrimaryActionAtIndex(index) {
+        var chip = _this.chips_[index];
         chip && chip.focusPrimaryAction();
       },
-      focusChipTrailingActionAtIndex: index => {
-        const chip = this.chips_[index];
+      focusChipTrailingActionAtIndex: function focusChipTrailingActionAtIndex(index) {
+        var chip = _this.chips_[index];
         chip && chip.focusTrailingAction();
       },
-      getChipListCount: () => {
-        return this.chips_.length;
+      getChipListCount: function getChipListCount() {
+        return _this.chips_.length;
       },
-      getIndexOfChipById: chipId => {
-        return this.chips_.findIndex(({
-          id
-        }) => id == chipId);
+      getIndexOfChipById: function getIndexOfChipById(chipId) {
+        return _this.chips_.findIndex(function (_ref) {
+          var id = _ref.id;
+          return id == chipId;
+        });
       },
-      hasClass: className => this.$el.classList.contains(className),
-      isRTL: () => window.getComputedStyle(this.$el).getPropertyValue('direction') === 'rtl',
-      removeChipAtIndex: index => {
-        if (index >= 0 && index < this.chips_.length) {
+      hasClass: function hasClass(className) {
+        return _this.$el.classList.contains(className);
+      },
+      isRTL: function isRTL() {
+        return window.getComputedStyle(_this.$el).getPropertyValue('direction') === 'rtl';
+      },
+      removeChipAtIndex: function removeChipAtIndex(index) {
+        if (index >= 0 && index < _this.chips_.length) {
           // tell chip to remove itself from the DOM
-          this.chips_[index].remove();
-          this.chips_.splice(index, 1);
+          _this.chips_[index].remove();
+
+          _this.chips_.splice(index, 1);
         }
       },
-      removeFocusFromChipAtIndex: index => {
-        this.chips_[index].removeFocus();
+      removeFocusFromChipAtIndex: function removeFocusFromChipAtIndex(index) {
+        _this.chips_[index].removeFocus();
       },
-      selectChipAtIndex: (index, selected, shouldNotifyClients) => {
-        if (index >= 0 && index < this.chips_.length) {
-          this.chips_[index].setSelectedFromChipSet(selected, shouldNotifyClients);
+      selectChipAtIndex: function selectChipAtIndex(index, selected, shouldNotifyClients) {
+        if (index >= 0 && index < _this.chips_.length) {
+          _this.chips_[index].setSelectedFromChipSet(selected, shouldNotifyClients);
         }
       }
     });
@@ -1564,58 +1805,54 @@ var mcwChipSet = {
     // incrementing the dependency variable "listn" referenced
     // in the computed that selects the chip elements
 
-    this.slotObserver = new MutationObserver((mutationList, observer) => {
-      this.listn++;
+    this.slotObserver = new MutationObserver(function (mutationList, observer) {
+      _this.listn++;
     });
     this.slotObserver.observe(this.$refs.listRoot, {
       childList: true // subtree: true,
 
     });
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.slotObserver.disconnect();
     this.foundation.destroy();
   },
+  render: function render(createElement) {
+    var _this2 = this,
+        _on;
 
-  render(createElement) {
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
+    var scopedSlots = this.$scopedSlots;
     return createElement('div', {
       class: this.classes,
       attrs: {
         role: 'grid'
       },
-      on: {
-        [INTERACTION_EVENT]: ({
-          detail
-        }) => this.foundation.handleChipInteraction(detail),
-        [SELECTION_EVENT]: ({
-          detail
-        }) => this.foundation.handleChipSelection(detail),
-        [REMOVAL_EVENT]: ({
-          detail
-        }) => this.foundation.handleChipRemoval(detail),
-        [NAVIGATION_EVENT]: ({
-          detail
-        }) => this.foundation.handleChipNavigation(detail)
-      },
+      on: (_on = {}, _defineProperty(_on, INTERACTION_EVENT, function (_ref2) {
+        var detail = _ref2.detail;
+        return _this2.foundation.handleChipInteraction(detail);
+      }), _defineProperty(_on, SELECTION_EVENT, function (_ref3) {
+        var detail = _ref3.detail;
+        return _this2.foundation.handleChipSelection(detail);
+      }), _defineProperty(_on, REMOVAL_EVENT, function (_ref4) {
+        var detail = _ref4.detail;
+        return _this2.foundation.handleChipRemoval(detail);
+      }), _defineProperty(_on, NAVIGATION_EVENT, function (_ref5) {
+        var detail = _ref5.detail;
+        return _this2.foundation.handleChipNavigation(detail);
+      }), _on),
       ref: 'listRoot'
     }, scopedSlots.default && scopedSlots.default());
   }
-
 };
 
-const {
-  INTERACTION_EVENT: INTERACTION_EVENT$1,
-  SELECTION_EVENT: SELECTION_EVENT$1,
-  REMOVAL_EVENT: REMOVAL_EVENT$1,
-  TRAILING_ICON_INTERACTION_EVENT,
-  PRIMARY_ACTION_SELECTOR,
-  TRAILING_ACTION_SELECTOR,
-  NAVIGATION_EVENT: NAVIGATION_EVENT$1
-} = MDCChipFoundation.strings;
+var _MDCChipFoundation$st$1 = MDCChipFoundation.strings,
+    INTERACTION_EVENT$1 = _MDCChipFoundation$st$1.INTERACTION_EVENT,
+    SELECTION_EVENT$1 = _MDCChipFoundation$st$1.SELECTION_EVENT,
+    REMOVAL_EVENT$1 = _MDCChipFoundation$st$1.REMOVAL_EVENT,
+    TRAILING_ICON_INTERACTION_EVENT = _MDCChipFoundation$st$1.TRAILING_ICON_INTERACTION_EVENT,
+    PRIMARY_ACTION_SELECTOR = _MDCChipFoundation$st$1.PRIMARY_ACTION_SELECTOR,
+    TRAILING_ACTION_SELECTOR = _MDCChipFoundation$st$1.TRAILING_ACTION_SELECTOR,
+    NAVIGATION_EVENT$1 = _MDCChipFoundation$st$1.NAVIGATION_EVENT;
 var mcwChip = {
   name: 'mcw-chip',
   mixins: [CustomLinkMixin],
@@ -1624,16 +1861,13 @@ var mcwChip = {
     trailingIcon: [String],
     shouldRemoveOnTrailingIconClick: {
       type: Boolean,
-
-      default() {
+      default: function _default() {
         return true;
       }
-
     }
   },
   inject: ['mcwChipSet'],
-
-  data() {
+  data: function data() {
     return {
       classes: {
         'mdc-chip': true
@@ -1648,97 +1882,75 @@ var mcwChip = {
       trailingAttrs: {}
     };
   },
-
   watch: {
-    shouldRemoveOnTrailingIconClick(shouldRemove) {
+    shouldRemoveOnTrailingIconClick: function shouldRemoveOnTrailingIconClick(shouldRemove) {
       this.foundation.setShouldRemoveOnTrailingIconClick(shouldRemove);
     }
-
   },
   computed: {
-    id() {
+    id: function id() {
       return this.$el.id;
     },
-
     selected: {
-      get() {
+      get: function get() {
         return this.foundation.isSelected();
       },
-
-      set(nv) {
+      set: function set(nv) {
         this.foundation.setSelected(nv);
       }
-
     },
-
-    isFilter() {
+    isFilter: function isFilter() {
       return this.mcwChipSet && this.mcwChipSet.filter;
     },
-
-    isInput() {
+    isInput: function isInput() {
       return this.mcwChipSet && this.mcwChipSet.input;
     },
-
-    haveleadingIcon() {
-      const slot = this.$slots['leading-icon'];
+    haveleadingIcon: function haveleadingIcon() {
+      var slot = this.$slots['leading-icon'];
       return slot && slot[0] || !!this.leadingIcon;
     },
-
-    havetrailingIcon() {
-      const slot = this.$slots['trailing-icon'];
+    havetrailingIcon: function havetrailingIcon() {
+      var slot = this.$slots['trailing-icon'];
       return this.isInput && (slot && slot[0] || !!this.trailingIcon);
     }
-
   },
   methods: {
-    setSelectedFromChipSet(selected, shouldNotifyClients) {
+    setSelectedFromChipSet: function setSelectedFromChipSet(selected, shouldNotifyClients) {
       this.foundation.setSelectedFromChipSet(selected, shouldNotifyClients);
     },
-
-    focusPrimaryAction() {
+    focusPrimaryAction: function focusPrimaryAction() {
       this.foundation.focusPrimaryAction();
     },
-
-    focusTrailingAction() {
+    focusTrailingAction: function focusTrailingAction() {
       this.foundation.focusTrailingAction();
     },
-
-    removeFocus() {
+    removeFocus: function removeFocus() {
       this.foundation.removeFocus();
     },
-
-    toggleSelected() {
+    toggleSelected: function toggleSelected() {
       this.foundation.toggleSelected();
     },
-
-    isSelected() {
+    isSelected: function isSelected() {
       return this.foundation.isSelected();
     },
-
-    remove() {
-      const parent = this.$el.parentNode;
+    remove: function remove() {
+      var parent = this.$el.parentNode;
 
       if (parent != null) {
         parent.removeChild(this.$el);
       }
     },
-
-    renderLeadingIcon(createElement) {
-      const {
-        $slots: {
-          ['leading-icon']: slot
-        }
-      } = this;
-      const v0 = slot && slot[0];
+    renderLeadingIcon: function renderLeadingIcon(createElement) {
+      var slot = this.$slots['leading-icon'];
+      var v0 = slot && slot[0];
 
       if (v0) {
-        const {
-          staticClass = ''
-        } = v0.data;
-        const haveClasses = staticClass && staticClass.indexOf('mdc-chip__icon') > -1;
+        var _v0$data$staticClass = v0.data.staticClass,
+            staticClass = _v0$data$staticClass === void 0 ? '' : _v0$data$staticClass;
+        var haveClasses = staticClass && staticClass.indexOf('mdc-chip__icon') > -1;
 
         if (!haveClasses) {
-          v0.data.staticClass = `mdc-chip__icon mdc-chip__icon--leading ${staticClass}`;
+          v0.data.staticClass = "mdc-chip__icon mdc-chip__icon--leading ".concat(staticClass);
         }
 
         return slot;
@@ -1749,29 +1961,27 @@ var mcwChip = {
         ref: 'leading-icon'
       }, this.leadingIcon);
     },
+    renderTrailingIcon: function renderTrailingIcon(createElement) {
+      var _this = this;
 
-    renderTrailingIcon(createElement) {
-      const {
-        $slots: {
-          ['trailing-icon']: slot
-        }
-      } = this;
-      const v0 = slot && slot[0];
+      var slot = this.$slots['trailing-icon'];
+      var v0 = slot && slot[0];
 
       if (v0) {
-        const {
-          staticClass = ''
-        } = v0.data;
-        const haveClasses = staticClass && staticClass.indexOf('mdc-chip__icon') > -1;
+        var _v0$data$staticClass2 = v0.data.staticClass,
+            staticClass = _v0$data$staticClass2 === void 0 ? '' : _v0$data$staticClass2;
+        var haveClasses = staticClass && staticClass.indexOf('mdc-chip__icon') > -1;
 
         if (!haveClasses) {
-          v0.data.staticClass = `mdc-chip__icon mdc-chip__icon--trailing mdc-chip__trailing-action${staticClass}`;
-          v0.data.on = { ...v0.data.on,
-            click: evt => {
-              this.foundation.handleTrailingIconInteraction(evt);
+          v0.data.staticClass = "mdc-chip__icon mdc-chip__icon--trailing mdc-chip__trailing-action".concat(staticClass);
+          v0.data.on = _objectSpread2(_objectSpread2({}, v0.data.on), {}, {
+            click: function click(evt) {
+              _this.foundation.handleTrailingIconInteraction(evt);
             },
-            keydown: evt => this.foundation.handleTrailingIconInteraction(evt)
-          };
+            keydown: function keydown(evt) {
+              return _this.foundation.handleTrailingIconInteraction(evt);
+            }
+          });
         }
 
         return slot;
@@ -1788,96 +1998,124 @@ var mcwChip = {
           'material-icons': 1 // 'mdc-chip__trailing-action': 1,
 
         },
-        attrs: { ...this.trailingAttrs
-        },
+        attrs: _objectSpread2({}, this.trailingAttrs),
         ref: 'trailing-icon',
         on: {
-          click: evt => this.foundation.handleTrailingIconInteraction(evt),
-          keydown: evt => this.foundation.handleTrailingIconInteraction(evt)
+          click: function click(evt) {
+            return _this.foundation.handleTrailingIconInteraction(evt);
+          },
+          keydown: function keydown(evt) {
+            return _this.foundation.handleTrailingIconInteraction(evt);
+          }
         }
       }, this.trailingIcon)]);
     }
-
   },
+  mounted: function mounted() {
+    var _this2 = this;
 
-  mounted() {
     this.trailingAction_ = this.$el.querySelector(TRAILING_ACTION_SELECTOR);
     this.foundation = new MDCChipFoundation({
-      addClass: className => this.$set(this.classes, className, true),
-      addClassToLeadingIcon: className => {
-        this.$set(this.leadingClasses, className, true); // if no ref, then using slot, so just add class directly
+      addClass: function addClass(className) {
+        return _this2.$set(_this2.classes, className, true);
+      },
+      addClassToLeadingIcon: function addClassToLeadingIcon(className) {
+        _this2.$set(_this2.leadingClasses, className, true); // if no ref, then using slot, so just add class directly
 
-        if (!this.$refs['leading-icon'] && this.haveleadingIcon) {
-          const item = this.$slots['leading-icon'][0];
+
+        if (!_this2.$refs['leading-icon'] && _this2.haveleadingIcon) {
+          var item = _this2.$slots['leading-icon'][0];
           (item.elm || item).classList.add(className);
         }
       },
-      eventTargetHasClass: (target, className) => target.classList.contains(className),
-      focusPrimaryAction: () => {
-        const {
-          $refs: {
-            primaryAction = this.$el.querySelector(PRIMARY_ACTION_SELECTOR)
-          }
-        } = this;
+      eventTargetHasClass: function eventTargetHasClass(target, className) {
+        return target.classList.contains(className);
+      },
+      focusPrimaryAction: function focusPrimaryAction() {
+        var _this2$$refs$primaryA = _this2.$refs.primaryAction,
+            primaryAction = _this2$$refs$primaryA === void 0 ? _this2.$el.querySelector(PRIMARY_ACTION_SELECTOR) : _this2$$refs$primaryA;
         primaryAction && primaryAction.focus();
       },
-      focusTrailingAction: () => {
-        this.trailingAction_ && this.trailingAction_.focus();
+      focusTrailingAction: function focusTrailingAction() {
+        _this2.trailingAction_ && _this2.trailingAction_.focus();
       },
-      getAttribute: attr => this.$el.getAttribute(attr),
-      getCheckmarkBoundingClientRect: () => {
-        return this.$refs.checkmarkEl ? this.$refs.checkmarkEl.$el.getBoundingClientRect() : null;
+      getAttribute: function getAttribute(attr) {
+        return _this2.$el.getAttribute(attr);
       },
-      getComputedStyleValue: propertyName => window.getComputedStyle(this.$el).getPropertyValue(propertyName),
-      getRootBoundingClientRect: () => this.$el.getBoundingClientRect(),
-      hasClass: className => this.$el.classList.contains(className),
-      hasLeadingIcon: () => !!this.haveleadingIcon,
-      hasTrailingAction: () => !!this.trailingAction_,
-      isRTL: () => window.getComputedStyle(this.$el).getPropertyValue('direction') === 'rtl',
-      notifyInteraction: () => {
-        emitCustomEvent(this.$el, INTERACTION_EVENT$1, {
-          chipId: this.id
+      getCheckmarkBoundingClientRect: function getCheckmarkBoundingClientRect() {
+        return _this2.$refs.checkmarkEl ? _this2.$refs.checkmarkEl.$el.getBoundingClientRect() : null;
+      },
+      getComputedStyleValue: function getComputedStyleValue(propertyName) {
+        return window.getComputedStyle(_this2.$el).getPropertyValue(propertyName);
+      },
+      getRootBoundingClientRect: function getRootBoundingClientRect() {
+        return _this2.$el.getBoundingClientRect();
+      },
+      hasClass: function hasClass(className) {
+        return _this2.$el.classList.contains(className);
+      },
+      hasLeadingIcon: function hasLeadingIcon() {
+        return !!_this2.haveleadingIcon;
+      },
+      hasTrailingAction: function hasTrailingAction() {
+        return !!_this2.trailingAction_;
+      },
+      isRTL: function isRTL() {
+        return window.getComputedStyle(_this2.$el).getPropertyValue('direction') === 'rtl';
+      },
+      notifyInteraction: function notifyInteraction() {
+        emitCustomEvent(_this2.$el, INTERACTION_EVENT$1, {
+          chipId: _this2.id
         }, true);
       },
-      notifyNavigation: (key, source) => emitCustomEvent(this.$el, NAVIGATION_EVENT$1, {
-        chipId: this.id,
-        key,
-        source
-      }, true),
-      notifyRemoval: removedAnnouncement => {
-        emitCustomEvent(this.$el, REMOVAL_EVENT$1, {
-          chipId: this.id,
-          root: this.$el,
-          removedAnnouncement
+      notifyNavigation: function notifyNavigation(key, source) {
+        return emitCustomEvent(_this2.$el, NAVIGATION_EVENT$1, {
+          chipId: _this2.id,
+          key: key,
+          source: source
         }, true);
       },
-      notifySelection: selected => emitCustomEvent(this.$el, SELECTION_EVENT$1, {
-        chipId: this.id,
-        selected: selected
-      }, true
-      /* shouldBubble */
-      ),
-      notifyTrailingIconInteraction: () => {
-        emitCustomEvent(this.$el, TRAILING_ICON_INTERACTION_EVENT, {
-          chipId: this.id
+      notifyRemoval: function notifyRemoval(removedAnnouncement) {
+        emitCustomEvent(_this2.$el, REMOVAL_EVENT$1, {
+          chipId: _this2.id,
+          root: _this2.$el,
+          removedAnnouncement: removedAnnouncement
         }, true);
       },
-      removeClass: className => this.$delete(this.classes, className),
-      removeClassFromLeadingIcon: className => {
-        this.$delete(this.leadingClasses, className); // if no ref, then using slot, so just remove class directly
+      notifySelection: function notifySelection(selected) {
+        return emitCustomEvent(_this2.$el, SELECTION_EVENT$1, {
+          chipId: _this2.id,
+          selected: selected
+        }, true
+        /* shouldBubble */
+        );
+      },
+      notifyTrailingIconInteraction: function notifyTrailingIconInteraction() {
+        emitCustomEvent(_this2.$el, TRAILING_ICON_INTERACTION_EVENT, {
+          chipId: _this2.id
+        }, true);
+      },
+      removeClass: function removeClass(className) {
+        return _this2.$delete(_this2.classes, className);
+      },
+      removeClassFromLeadingIcon: function removeClassFromLeadingIcon(className) {
+        _this2.$delete(_this2.leadingClasses, className); // if no ref, then using slot, so just remove class directly
 
-        if (!this.$refs['leading-icon'] && this.haveleadingIcon) {
-          const item = this.$slots['leading-icon'][0];
+
+        if (!_this2.$refs['leading-icon'] && _this2.haveleadingIcon) {
+          var item = _this2.$slots['leading-icon'][0];
           (item.elm || item).classList.remove(className);
         }
       },
-      setPrimaryActionAttr: (attr, value) => {
-        this.$set(this.primaryAttrs, attr, value);
+      setPrimaryActionAttr: function setPrimaryActionAttr(attr, value) {
+        _this2.$set(_this2.primaryAttrs, attr, value);
       },
-      setStyleProperty: (property, value) => this.$set(this.styles, property, value),
-      setTrailingActionAttr: (attr, value) => {
-        if (this.trailingAction_) {
-          this.trailingAction_.setAttribute(attr, value);
+      setStyleProperty: function setStyleProperty(property, value) {
+        return _this2.$set(_this2.styles, property, value);
+      },
+      setTrailingActionAttr: function setTrailingActionAttr(attr, value) {
+        if (_this2.trailingAction_) {
+          _this2.trailingAction_.setAttribute(attr, value);
         }
       }
     });
@@ -1889,37 +2127,48 @@ var mcwChip = {
     }
 
     this.ripple = new RippleBase(this, {
-      computeBoundingRect: () => this.foundation.getDimensions()
+      computeBoundingRect: function computeBoundingRect() {
+        return _this2.foundation.getDimensions();
+      }
     });
     this.ripple.init();
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.ripple.destroy();
     this.foundation.destroy();
   },
+  render: function render(createElement) {
+    var _this3 = this,
+        _scopedSlots$default;
 
-  render(createElement) {
-    var _scopedSlots$default;
-
-    const {
-      $scopedSlots: scopedSlots,
-      haveleadingIcon,
-      havetrailingIcon,
-      isFilter,
-      primaryAttrs
-    } = this;
-    const role = isFilter ? 'checkbox' : 'button';
-    const on = {
-      click: evt => this.foundation.handleInteraction(evt),
-      keydown: evt => this.foundation.handleInteraction(evt),
-      transitionend: evt => this.foundation.handleTransitionEnd(evt),
-      focusin: evt => this.foundation.handleFocusIn(evt),
-      focusout: evt => this.foundation.handleFocusOut(evt)
+    var scopedSlots = this.$scopedSlots,
+        haveleadingIcon = this.haveleadingIcon,
+        havetrailingIcon = this.havetrailingIcon,
+        isFilter = this.isFilter,
+        primaryAttrs = this.primaryAttrs;
+    var role = isFilter ? 'checkbox' : 'button';
+    var on = {
+      click: function click(evt) {
+        return _this3.foundation.handleInteraction(evt);
+      },
+      keydown: function keydown(evt) {
+        return _this3.foundation.handleInteraction(evt);
+      },
+      transitionend: function transitionend(evt) {
+        return _this3.foundation.handleTransitionEnd(evt);
+      },
+      focusin: function focusin(evt) {
+        return _this3.foundation.handleFocusIn(evt);
+      },
+      focusout: function focusout(evt) {
+        return _this3.foundation.handleFocusOut(evt);
+      }
     };
 
     if (this.trailingAction_) {
-      on[INTERACTION_EVENT$1] = evt => this.foundation.handleTrailingIconInteraction(evt);
+      on[INTERACTION_EVENT$1] = function (evt) {
+        return _this3.foundation.handleTrailingIconInteraction(evt);
+      };
     }
 
     return createElement('div', {
@@ -1928,7 +2177,7 @@ var mcwChip = {
       attrs: {
         role: 'row'
       },
-      on
+      on: on
     }, [createElement('div', {
       class: {
         'mdc-chip__ripple': 1
@@ -1940,11 +2189,10 @@ var mcwChip = {
         role: 'gridcell'
       }
     }, [createElement('span', {
-      attrs: {
-        role,
-        tabindex: 0,
-        ...primaryAttrs
-      },
+      attrs: _objectSpread2({
+        role: role,
+        tabindex: 0
+      }, primaryAttrs),
       class: {
         'mdc-chip__primary-action': 1
       },
@@ -1953,128 +2201,150 @@ var mcwChip = {
       class: ['mdc-chip__text']
     }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots))])]), havetrailingIcon && this.renderTrailingIcon(createElement)]);
   }
-
 };
 
 var chips = BasePlugin({
-  mcwChip,
-  mcwChipSet,
-  mcwChipCheckmark
+  mcwChip: mcwChip,
+  mcwChipSet: mcwChipSet,
+  mcwChipCheckmark: mcwChipCheckmark
 });
 
 var script$2 = {
   name: 'mcw-data-table',
-
-  data() {
+  data: function data() {
     return {};
   },
-
   methods: {
-    getRows() {
+    getRows: function getRows() {
       return this.foundation.getRows();
     },
-
-    layout() {
+    layout: function layout() {
       this.foundation.layout();
     },
-
-    getRowByIndex_(index) {
+    getRowByIndex_: function getRowByIndex_(index) {
       return this.getRows()[index];
     },
-
-    getRowIdByIndex_(index) {
+    getRowIdByIndex_: function getRowIdByIndex_(index) {
       return this.getRowByIndex_(index).getAttribute(strings$5.DATA_ROW_ID_ATTR);
     }
-
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
-    this.checkboxFactory_ = el => new MDCCheckbox(el);
+    this.checkboxFactory_ = function (el) {
+      return new MDCCheckbox(el);
+    };
 
-    const {
-      cssClasses,
-      events,
-      strings
-    } = test;
-    const adapter = {
-      addClassAtRowIndex: (rowIndex, className) => this.getRows()[rowIndex].classList.add(className),
-      getRowCount: () => this.getRows().length,
-      getRowElements: () => [].slice.call(this.$el.querySelectorAll(strings.ROW_SELECTOR)),
-      getRowIdAtIndex: rowIndex => this.getRows()[rowIndex].getAttribute(strings.DATA_ROW_ID_ATTR),
-      getRowIndexByChildElement: el => {
-        return this.getRows().indexOf(closest(el, strings.ROW_SELECTOR));
+    var cssClasses = cssClasses$5,
+        events$1 = events,
+        strings = strings$5;
+    var adapter = {
+      addClassAtRowIndex: function addClassAtRowIndex(rowIndex, className) {
+        return _this.getRows()[rowIndex].classList.add(className);
       },
-      getSelectedRowCount: () => this.$el.querySelectorAll(strings.ROW_SELECTED_SELECTOR).length,
-      isCheckboxAtRowIndexChecked: rowIndex => this.rowCheckboxList_[rowIndex].checked,
-      isHeaderRowCheckboxChecked: () => this.headerRowCheckbox_.checked,
-      isRowsSelectable: () => !!this.$el.querySelector(strings.ROW_CHECKBOX_SELECTOR),
-      notifyRowSelectionChanged: data => {
-        this.$emit(events.ROW_SELECTION_CHANGED, {
-          row: this.getRowByIndex_(data.rowIndex),
-          rowId: this.getRowIdByIndex_(data.rowIndex),
+      getRowCount: function getRowCount() {
+        return _this.getRows().length;
+      },
+      getRowElements: function getRowElements() {
+        return [].slice.call(_this.$el.querySelectorAll(strings.ROW_SELECTOR));
+      },
+      getRowIdAtIndex: function getRowIdAtIndex(rowIndex) {
+        return _this.getRows()[rowIndex].getAttribute(strings.DATA_ROW_ID_ATTR);
+      },
+      getRowIndexByChildElement: function getRowIndexByChildElement(el) {
+        return _this.getRows().indexOf(closest(el, strings.ROW_SELECTOR));
+      },
+      getSelectedRowCount: function getSelectedRowCount() {
+        return _this.$el.querySelectorAll(strings.ROW_SELECTED_SELECTOR).length;
+      },
+      isCheckboxAtRowIndexChecked: function isCheckboxAtRowIndexChecked(rowIndex) {
+        return _this.rowCheckboxList_[rowIndex].checked;
+      },
+      isHeaderRowCheckboxChecked: function isHeaderRowCheckboxChecked() {
+        return _this.headerRowCheckbox_.checked;
+      },
+      isRowsSelectable: function isRowsSelectable() {
+        return !!_this.$el.querySelector(strings.ROW_CHECKBOX_SELECTOR);
+      },
+      notifyRowSelectionChanged: function notifyRowSelectionChanged(data) {
+        _this.$emit(events$1.ROW_SELECTION_CHANGED, {
+          row: _this.getRowByIndex_(data.rowIndex),
+          rowId: _this.getRowIdByIndex_(data.rowIndex),
           rowIndex: data.rowIndex,
           selected: data.selected
         },
         /** shouldBubble */
         true);
       },
-      notifySelectedAll: () => this.$emit(events.SELECTED_ALL, {},
-      /** shouldBubble */
-      true),
-      notifyUnselectedAll: () => this.$emit(events.UNSELECTED_ALL, {},
-      /** shouldBubble */
-      true),
-      registerHeaderRowCheckbox: () => {
-        if (this.headerRowCheckbox_) {
-          this.headerRowCheckbox_.destroy();
-        }
-
-        const checkboxEl = this.$el.querySelector(strings.HEADER_ROW_CHECKBOX_SELECTOR);
-        this.headerRowCheckbox_ = this.checkboxFactory_(checkboxEl);
+      notifySelectedAll: function notifySelectedAll() {
+        return _this.$emit(events$1.SELECTED_ALL, {},
+        /** shouldBubble */
+        true);
       },
-      registerRowCheckboxes: () => {
-        if (this.rowCheckboxList_) {
-          this.rowCheckboxList_.forEach(checkbox => checkbox.destroy());
+      notifyUnselectedAll: function notifyUnselectedAll() {
+        return _this.$emit(events$1.UNSELECTED_ALL, {},
+        /** shouldBubble */
+        true);
+      },
+      registerHeaderRowCheckbox: function registerHeaderRowCheckbox() {
+        if (_this.headerRowCheckbox_) {
+          _this.headerRowCheckbox_.destroy();
         }
 
-        this.rowCheckboxList_ = [];
-        this.getRows().forEach(rowEl => {
-          const checkbox = this.checkboxFactory_(rowEl.querySelector(strings.ROW_CHECKBOX_SELECTOR));
-          this.rowCheckboxList_.push(checkbox);
+        var checkboxEl = _this.$el.querySelector(strings.HEADER_ROW_CHECKBOX_SELECTOR);
+
+        _this.headerRowCheckbox_ = _this.checkboxFactory_(checkboxEl);
+      },
+      registerRowCheckboxes: function registerRowCheckboxes() {
+        if (_this.rowCheckboxList_) {
+          _this.rowCheckboxList_.forEach(function (checkbox) {
+            return checkbox.destroy();
+          });
+        }
+
+        _this.rowCheckboxList_ = [];
+
+        _this.getRows().forEach(function (rowEl) {
+          var checkbox = _this.checkboxFactory_(rowEl.querySelector(strings.ROW_CHECKBOX_SELECTOR));
+
+          _this.rowCheckboxList_.push(checkbox);
         });
       },
-      removeClassAtRowIndex: (rowIndex, className) => {
-        this.getRows()[rowIndex].classList.remove(className);
+      removeClassAtRowIndex: function removeClassAtRowIndex(rowIndex, className) {
+        _this.getRows()[rowIndex].classList.remove(className);
       },
-      setAttributeAtRowIndex: (rowIndex, attr, value) => {
-        this.getRows()[rowIndex].setAttribute(attr, value);
+      setAttributeAtRowIndex: function setAttributeAtRowIndex(rowIndex, attr, value) {
+        _this.getRows()[rowIndex].setAttribute(attr, value);
       },
-      setHeaderRowCheckboxChecked: checked => {
-        this.headerRowCheckbox_.checked = checked;
+      setHeaderRowCheckboxChecked: function setHeaderRowCheckboxChecked(checked) {
+        _this.headerRowCheckbox_.checked = checked;
       },
-      setHeaderRowCheckboxIndeterminate: indeterminate => {
-        this.headerRowCheckbox_.indeterminate = indeterminate;
+      setHeaderRowCheckboxIndeterminate: function setHeaderRowCheckboxIndeterminate(indeterminate) {
+        _this.headerRowCheckbox_.indeterminate = indeterminate;
       },
-      setRowCheckboxCheckedAtIndex: (rowIndex, checked) => {
-        this.rowCheckboxList_[rowIndex].checked = checked;
+      setRowCheckboxCheckedAtIndex: function setRowCheckboxCheckedAtIndex(rowIndex, checked) {
+        _this.rowCheckboxList_[rowIndex].checked = checked;
       }
     };
     this.foundation = new MDCDataTableFoundation(adapter);
     this.foundation.init();
-    this.headerRow_ = this.$el.querySelector(`.${cssClasses.HEADER_ROW}`);
+    this.headerRow_ = this.$el.querySelector(".".concat(cssClasses.HEADER_ROW));
 
-    this.handleHeaderRowCheckboxChange_ = () => this.foundation.handleHeaderRowCheckboxChange();
+    this.handleHeaderRowCheckboxChange_ = function () {
+      return _this.foundation.handleHeaderRowCheckboxChange();
+    };
 
     this.headerRow_.addEventListener('change', this.handleHeaderRowCheckboxChange_);
-    this.content_ = this.$el.querySelector(`.${cssClasses.CONTENT}`);
+    this.content_ = this.$el.querySelector(".".concat(cssClasses.CONTENT));
 
-    this.handleRowCheckboxChange_ = event => this.foundation.handleRowCheckboxChange(event);
+    this.handleRowCheckboxChange_ = function (event) {
+      return _this.foundation.handleRowCheckboxChange(event);
+    };
 
     this.content_.addEventListener('change', this.handleRowCheckboxChange_);
     this.layout();
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.headerRow_.removeEventListener('change', this.handleHeaderRowCheckboxChange_);
     this.content_.removeEventListener('change', this.handleRowCheckboxChange_);
 
@@ -2083,12 +2353,13 @@ var script$2 = {
     }
 
     if (this.rowCheckboxList_) {
-      this.rowCheckboxList_.forEach(checkbox => checkbox.destroy());
+      this.rowCheckboxList_.forEach(function (checkbox) {
+        return checkbox.destroy();
+      });
     }
 
     this.foundation.destroy();
   }
-
 };
 
 /* script */
@@ -2137,9 +2408,7 @@ var dataTable = BasePlugin({
   mcwDataTable: __vue_component__$2
 });
 
-const {
-  cssClasses
-} = MDCDialogFoundation;
+var cssClasses = MDCDialogFoundation.cssClasses;
 var script$3 = {
   name: 'mcw-dialog',
   components: {
@@ -2167,8 +2436,7 @@ var script$3 = {
     labelledBy: String,
     describedBy: String
   },
-
-  data() {
+  data: function data() {
     return {
       classes: {
         'mdc-dialog': 1
@@ -2176,78 +2444,109 @@ var script$3 = {
       styles: {}
     };
   },
-
   watch: {
     open: 'onOpen_'
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
-    const LAYOUT_EVENTS = ['resize', 'orientationchange'];
-    const strings = MDCDialogFoundation.strings;
-    const {
-      open,
-      autoStackButtons,
-      escapeKeyAction,
-      scrimClickAction
-    } = this;
+    var LAYOUT_EVENTS = ['resize', 'orientationchange'];
+    var strings = MDCDialogFoundation.strings;
+    var open = this.open,
+        autoStackButtons = this.autoStackButtons,
+        escapeKeyAction = this.escapeKeyAction,
+        scrimClickAction = this.scrimClickAction;
     this.buttons_ = [].slice.call(this.$el.querySelectorAll(cssClasses.BUTTON));
-    this.defaultButton = this.$el.querySelector(`[${strings.BUTTON_DEFAULT_ATTRIBUTE}]`);
-    const container = this.$el.querySelector(strings.CONTAINER_SELECTOR);
+    this.defaultButton = this.$el.querySelector("[".concat(strings.BUTTON_DEFAULT_ATTRIBUTE, "]"));
+    var container = this.$el.querySelector(strings.CONTAINER_SELECTOR);
 
     if (!container) {
-      throw new Error(`Dialog component requires a ${strings.CONTAINER_SELECTOR} container element`);
+      throw new Error("Dialog component requires a ".concat(strings.CONTAINER_SELECTOR, " container element"));
     }
 
     this.content_ = this.$el.querySelector(strings.CONTENT_SELECTOR);
 
-    this.focusTrapFactory_ = el => new FocusTrap(el);
+    this.focusTrapFactory_ = function (el) {
+      return new FocusTrap(el);
+    };
 
-    const adapter = {
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      hasClass: className => this.$el.classList.contains(className),
-      addBodyClass: className => document.body.classList.add(className),
-      removeBodyClass: className => document.body.classList.remove(className),
-      eventTargetMatches: (target, selector) => matches$1(target, selector),
-      trapFocus: initialFocusEl => this.focusTrap && this.focusTrap.trapFocus(),
-      releaseFocus: () => this.focusTrap && this.focusTrap.releaseFocus(),
-      getInitialFocusEl: () => this.getInitialFocusEl_(),
-      isContentScrollable: () => isScrollable(this.content_),
-      areButtonsStacked: () => areTopsMisaligned(this.buttons_),
-      getActionFromEvent: event => {
-        const elem = closest$1(event.target, `[${strings.ACTION_ATTRIBUTE}]`);
+    var adapter = {
+      addClass: function addClass(className) {
+        return _this.$set(_this.classes, className, true);
+      },
+      removeClass: function removeClass(className) {
+        return _this.$delete(_this.classes, className);
+      },
+      hasClass: function hasClass(className) {
+        return _this.$el.classList.contains(className);
+      },
+      addBodyClass: function addBodyClass(className) {
+        return document.body.classList.add(className);
+      },
+      removeBodyClass: function removeBodyClass(className) {
+        return document.body.classList.remove(className);
+      },
+      eventTargetMatches: function eventTargetMatches(target, selector) {
+        return matches$1(target, selector);
+      },
+      trapFocus: function trapFocus(initialFocusEl) {
+        return _this.focusTrap && _this.focusTrap.trapFocus();
+      },
+      releaseFocus: function releaseFocus() {
+        return _this.focusTrap && _this.focusTrap.releaseFocus();
+      },
+      getInitialFocusEl: function getInitialFocusEl() {
+        return _this.getInitialFocusEl_();
+      },
+      isContentScrollable: function isContentScrollable() {
+        return isScrollable(_this.content_);
+      },
+      areButtonsStacked: function areButtonsStacked() {
+        return areTopsMisaligned(_this.buttons_);
+      },
+      getActionFromEvent: function getActionFromEvent(event) {
+        var elem = closest$1(event.target, "[".concat(strings.ACTION_ATTRIBUTE, "]"));
         return elem === null || elem === void 0 ? void 0 : elem.getAttribute(strings.ACTION_ATTRIBUTE);
       },
-      clickDefaultButton: () => {
+      clickDefaultButton: function clickDefaultButton() {
         var _this$defaultButton;
 
-        (_this$defaultButton = this.defaultButton) === null || _this$defaultButton === void 0 ? void 0 : _this$defaultButton.click();
+        (_this$defaultButton = _this.defaultButton) === null || _this$defaultButton === void 0 ? void 0 : _this$defaultButton.click();
       },
-      reverseButtons: () => {
-        const buttons = this.buttons_;
-        return buttons && buttons.reverse().forEach(button => {
+      reverseButtons: function reverseButtons() {
+        var buttons = _this.buttons_;
+        return buttons && buttons.reverse().forEach(function (button) {
           var _button$parentElement;
 
           return (_button$parentElement = button.parentElement) === null || _button$parentElement === void 0 ? void 0 : _button$parentElement.appendChild(button);
         });
       },
-      notifyOpening: () => {
-        this.$emit(strings.OPENING_EVENT, {});
-        LAYOUT_EVENTS.forEach(evt => window.addEventListener(evt, this.handleLayout));
-        document.addEventListener('keydown', this.handleDocumentKeyDown);
+      notifyOpening: function notifyOpening() {
+        _this.$emit(strings.OPENING_EVENT, {});
+
+        LAYOUT_EVENTS.forEach(function (evt) {
+          return window.addEventListener(evt, _this.handleLayout);
+        });
+        document.addEventListener('keydown', _this.handleDocumentKeyDown);
       },
-      notifyOpened: () => this.$emit(strings.OPENED_EVENT, {}),
-      notifyClosing: action => {
-        this.$emit('change', false);
-        this.$emit(strings.CLOSING_EVENT, action ? {
-          action
+      notifyOpened: function notifyOpened() {
+        return _this.$emit(strings.OPENED_EVENT, {});
+      },
+      notifyClosing: function notifyClosing(action) {
+        _this.$emit('change', false);
+
+        _this.$emit(strings.CLOSING_EVENT, action ? {
+          action: action
         } : {});
-        LAYOUT_EVENTS.forEach(evt => window.removeEventListener(evt, this.handleLayout));
-        document.removeEventListener('keydown', this.handleDocumentKeyDown);
+
+        LAYOUT_EVENTS.forEach(function (evt) {
+          return window.removeEventListener(evt, _this.handleLayout);
+        });
+        document.removeEventListener('keydown', _this.handleDocumentKeyDown);
       },
-      notifyClosed: action => {
-        this.$emit(strings.CLOSED_EVENT, action ? {
-          action
+      notifyClosed: function notifyClosed(action) {
+        _this.$emit(strings.CLOSED_EVENT, action ? {
+          action: action
         } : {});
       }
     };
@@ -2270,25 +2569,20 @@ var script$3 = {
 
     this.onOpen_(open);
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.foundation.destroy();
   },
-
   methods: {
-    handleLayout() {
+    handleLayout: function handleLayout() {
       this.foundation.layout();
     },
-
-    handleDocumentKeyDown(e) {
+    handleDocumentKeyDown: function handleDocumentKeyDown(e) {
       this.foundation.handleDocumentKeydown(e);
     },
-
-    getInitialFocusEl_() {
-      return document.querySelector(`[${MDCDialogFoundation.strings.INITIAL_FOCUS_ATTRIBUTE}]`);
+    getInitialFocusEl_: function getInitialFocusEl_() {
+      return document.querySelector("[".concat(MDCDialogFoundation.strings.INITIAL_FOCUS_ATTRIBUTE, "]"));
     },
-
-    onOpen_(value) {
+    onOpen_: function onOpen_(value) {
       if (value) {
         if (this.$refs.container) {
           this.focusTrap = createFocusTrapInstance(this.$el, this.focusTrapFactory_, this.getInitialFocusEl_() || void 0);
@@ -2299,15 +2593,12 @@ var script$3 = {
         this.foundation.close();
       }
     },
-
-    onClick(evt) {
+    onClick: function onClick(evt) {
       this.foundation.handleClick(evt);
     },
-
-    onKeydown(evt) {
+    onKeydown: function onKeydown(evt) {
       this.foundation.handleKeydown(evt);
     }
-
   }
 };
 
@@ -2389,17 +2680,14 @@ var mcwDialogButton = {
     isDefault: Boolean,
     isInitialFocus: Boolean
   },
-
-  render(createElement) {
+  render: function render(createElement) {
     var _this$$scopedSlots$de, _this$$scopedSlots;
 
-    const {
-      action,
-      isDefault,
-      isInitialFocus
-    } = this;
+    var action = this.action,
+        isDefault = this.isDefault,
+        isInitialFocus = this.isInitialFocus;
 
-    const onClick = this.$listeners['click'] || (() => {});
+    var onClick = this.$listeners['click'] || function () {};
 
     return createElement('mcw-button', {
       class: ['mdc-dialog__button'],
@@ -2413,7 +2701,6 @@ var mcwDialogButton = {
       }
     }, (_this$$scopedSlots$de = (_this$$scopedSlots = this.$scopedSlots).default) === null || _this$$scopedSlots$de === void 0 ? void 0 : _this$$scopedSlots$de.call(_this$$scopedSlots));
   }
-
 };
 
 var mcwDialogContent = {
@@ -2421,26 +2708,20 @@ var mcwDialogContent = {
   props: {
     tag: {
       type: String,
-
-      default() {
+      default: function _default() {
         return 'div';
       }
-
     }
   },
-
-  render(createElement, context) {
+  render: function render(createElement, context) {
     var _slots$default;
 
-    const {
-      $scopedSlots: slots,
-      tag
-    } = this;
+    var slots = this.$scopedSlots,
+        tag = this.tag;
     return createElement(tag, {
       class: ['mdc-dialog__content']
     }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
   }
-
 };
 
 var mcwDialogFooter = {
@@ -2448,22 +2729,18 @@ var mcwDialogFooter = {
   props: {
     tag: {
       type: String,
-
-      default() {
+      default: function _default() {
         return 'div';
       }
-
     }
   },
-
-  render(createElement) {
+  render: function render(createElement) {
     var _this$$scopedSlots$de, _this$$scopedSlots;
 
     return createElement(this.tag, {
       class: ['mdc-dialog__actions']
     }, (_this$$scopedSlots$de = (_this$$scopedSlots = this.$scopedSlots).default) === null || _this$$scopedSlots$de === void 0 ? void 0 : _this$$scopedSlots$de.call(_this$$scopedSlots));
   }
-
 };
 
 var mcwDialogTitle = {
@@ -2471,34 +2748,28 @@ var mcwDialogTitle = {
   props: {
     tag: {
       type: String,
-
-      default() {
+      default: function _default() {
         return 'h2';
       }
-
     }
   },
-
-  render(createElement) {
+  render: function render(createElement) {
     var _slots$default;
 
-    const {
-      $scopedSlots: slots,
-      tag
-    } = this;
+    var slots = this.$scopedSlots,
+        tag = this.tag;
     return createElement(tag, {
       class: ['mdc-dialog__title']
     }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
   }
-
 };
 
 var dialog = BasePlugin({
   mcwDialog: __vue_component__$3,
-  mcwDialogTitle,
-  mcwDialogFooter,
-  mcwDialogButton,
-  mcwDialogContent
+  mcwDialogTitle: mcwDialogTitle,
+  mcwDialogFooter: mcwDialogFooter,
+  mcwDialogButton: mcwDialogButton,
+  mcwDialogContent: mcwDialogContent
 });
 
 var mcwDrawer = {
@@ -2527,14 +2798,12 @@ var mcwDrawer = {
       required: false
     }
   },
-
-  provide() {
+  provide: function provide() {
     return {
       mcwDrawer: this
     };
   },
-
-  data() {
+  data: function data() {
     return {
       classes: {
         'mdc-drawer': 1,
@@ -2542,74 +2811,87 @@ var mcwDrawer = {
       }
     };
   },
-
   computed: {
-    type() {},
-
-    isModal() {
+    type: function type() {},
+    isModal: function isModal() {
       return this.modal;
     }
-
   },
   watch: {
     open: 'onOpen_'
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
     this.drawer_ = this.$refs.drawer;
-    const listEl = this.$el.querySelector(`.${MDCListFoundation.cssClasses.ROOT}`);
+    var listEl = this.$el.querySelector(".".concat(MDCListFoundation.cssClasses.ROOT));
 
     if (listEl) {
       this.list_ = listEl;
       this.list_.wrapFocus = true;
     }
 
-    this.focusTrapFactory_ = el => new FocusTrap$1(el);
+    this.focusTrapFactory_ = function (el) {
+      return new FocusTrap$1(el);
+    };
 
-    const adapter = {
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      hasClass: className => this.drawer_.classList.contains(className),
-      elementHasClass: (element, className) => element.classList.contains(className),
-      saveFocus: () => {
-        this.previousFocus_ = document.activeElement;
+    var adapter = {
+      addClass: function addClass(className) {
+        return _this.$set(_this.classes, className, true);
       },
-      restoreFocus: () => {
-        const previousFocus = this.previousFocus_ && this.previousFocus_.focus;
+      removeClass: function removeClass(className) {
+        return _this.$delete(_this.classes, className);
+      },
+      hasClass: function hasClass(className) {
+        return _this.drawer_.classList.contains(className);
+      },
+      elementHasClass: function elementHasClass(element, className) {
+        return element.classList.contains(className);
+      },
+      saveFocus: function saveFocus() {
+        _this.previousFocus_ = document.activeElement;
+      },
+      restoreFocus: function restoreFocus() {
+        var previousFocus = _this.previousFocus_ && _this.previousFocus_.focus;
 
-        if (this.drawer_.contains(document.activeElement) && previousFocus) {
-          this.previousFocus_.focus();
+        if (_this.drawer_.contains(document.activeElement) && previousFocus) {
+          _this.previousFocus_.focus();
         }
       },
-      focusActiveNavigationItem: () => {
-        const activeNavItemEl = this.drawer_.querySelector(`.${MDCListFoundation.cssClasses.LIST_ITEM_ACTIVATED_CLASS}`);
+      focusActiveNavigationItem: function focusActiveNavigationItem() {
+        var activeNavItemEl = _this.drawer_.querySelector(".".concat(MDCListFoundation.cssClasses.LIST_ITEM_ACTIVATED_CLASS));
 
         if (activeNavItemEl) {
           activeNavItemEl.focus();
         }
       },
-      notifyClose: () => {
-        this.$emit('change', false);
-        this.$emit('close');
+      notifyClose: function notifyClose() {
+        _this.$emit('change', false);
+
+        _this.$emit('close');
       },
-      notifyOpen: () => {
-        this.$emit('change', true);
-        this.$emit('open');
+      notifyOpen: function notifyOpen() {
+        _this.$emit('change', true);
+
+        _this.$emit('open');
       },
-      trapFocus: () => this.focusTrap_.trapFocus(),
-      releaseFocus: () => this.focusTrap_.releaseFocus()
+      trapFocus: function trapFocus() {
+        return _this.focusTrap_.trapFocus();
+      },
+      releaseFocus: function releaseFocus() {
+        return _this.focusTrap_.releaseFocus();
+      }
     };
-    const {
-      DISMISSIBLE,
-      MODAL
-    } = MDCDismissibleDrawerFoundation.cssClasses;
+    var _MDCDismissibleDrawer = MDCDismissibleDrawerFoundation.cssClasses,
+        DISMISSIBLE = _MDCDismissibleDrawer.DISMISSIBLE,
+        MODAL = _MDCDismissibleDrawer.MODAL;
 
     if (this.drawer_.classList.contains(DISMISSIBLE)) {
       this.foundation = new MDCDismissibleDrawerFoundation(adapter);
     } else if (this.drawer_.classList.contains(MODAL)) {
       this.foundation = new MDCModalDrawerFoundation(adapter);
     } else {
-      throw new Error(`mcwDrawer: Failed to instantiate component. Supported variants are ${DISMISSIBLE} and ${MODAL}.`);
+      throw new Error("mcwDrawer: Failed to instantiate component. Supported variants are ".concat(DISMISSIBLE, " and ").concat(MODAL, "."));
     }
 
     this.foundation && this.foundation.init();
@@ -2630,8 +2912,7 @@ var mcwDrawer = {
       this.closeOnEventSource.$on(this.closeOn, this.close);
     }
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.foundation && this.foundation.destroy();
     this.foundation = null;
 
@@ -2647,86 +2928,79 @@ var mcwDrawer = {
       this.closeOnEventSource.$off(this.closeOn, this.close);
     }
   },
-
   methods: {
-    initialSyncWithDOM() {
-      const {
-        MODAL
-      } = MDCDismissibleDrawerFoundation.cssClasses;
+    initialSyncWithDOM: function initialSyncWithDOM() {
+      var _this2 = this;
+
+      var MODAL = MDCDismissibleDrawerFoundation.cssClasses.MODAL;
 
       if (this.drawer_.classList.contains(MODAL)) {
-        const {
-          SCRIM_SELECTOR
-        } = MDCDismissibleDrawerFoundation.strings;
+        var SCRIM_SELECTOR = MDCDismissibleDrawerFoundation.strings.SCRIM_SELECTOR;
         this.scrim_ = this.drawer_.parentElement.querySelector(SCRIM_SELECTOR);
 
-        this.handleScrimClick_ = () => this.foundation.handleScrimClick();
+        this.handleScrimClick_ = function () {
+          return _this2.foundation.handleScrimClick();
+        };
 
         this.scrim_.addEventListener('click', this.handleScrimClick_);
         this.focusTrap_ = createFocusTrapInstance$1(this.drawer_, this.focusTrapFactory_);
       }
 
-      this.handleKeydown_ = evt => this.foundation.handleKeydown(evt);
+      this.handleKeydown_ = function (evt) {
+        return _this2.foundation.handleKeydown(evt);
+      };
 
-      this.handleTransitionEnd_ = evt => this.foundation.handleTransitionEnd(evt);
+      this.handleTransitionEnd_ = function (evt) {
+        return _this2.foundation.handleTransitionEnd(evt);
+      };
 
       this.$el.addEventListener('keydown', this.handleKeydown_);
       this.$el.addEventListener('transitionend', this.handleTransitionEnd_);
     },
-
-    onOpen_(value) {
+    onOpen_: function onOpen_(value) {
       if (this.open) {
         this.foundation && this.foundation.open();
       } else {
         this.foundation && this.foundation.close();
       }
     },
-
-    onChange(event) {
+    onChange: function onChange(event) {
       this.$emit('change', event);
       this.$root.$emit('vma:layout');
     },
-
-    show() {
+    show: function show() {
       this.foundation.open();
     },
-
-    close() {
+    close: function close() {
       this.foundation.close();
     },
-
-    toggle() {
+    toggle: function toggle() {
       this.foundation.isOpen() ? this.foundation.close() : this.foundation.open();
     },
-
-    isOpen() {
+    isOpen: function isOpen() {
       return this.foundation.isOpen();
     }
-
   },
-
-  render(createElement) {
+  render: function render(createElement) {
     var _scopedSlots$default, _scopedSlots$header;
 
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
-    const asideNodes = [createElement('div', {
+    var scopedSlots = this.$scopedSlots;
+    var asideNodes = [createElement('div', {
       class: {
         'mdc-drawer__content': 1
       }
     }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots))];
-    const headerSlot = (_scopedSlots$header = scopedSlots.header) === null || _scopedSlots$header === void 0 ? void 0 : _scopedSlots$header.call(scopedSlots);
+    var headerSlot = (_scopedSlots$header = scopedSlots.header) === null || _scopedSlots$header === void 0 ? void 0 : _scopedSlots$header.call(scopedSlots);
 
     if (headerSlot) {
       asideNodes.unshift(headerSlot);
     }
 
-    const asideElement = createElement('aside', {
+    var asideElement = createElement('aside', {
       class: this.classes,
       ref: 'drawer'
     }, asideNodes);
-    const nodes = [asideElement, createElement('div', {
+    var nodes = [asideElement, createElement('div', {
       class: {
         'mdc-drawer-scrim': 1
       }
@@ -2742,37 +3016,31 @@ var mcwDrawer = {
 
     return createElement('div', {}, nodes);
   }
-
 };
 
 var mcwDrawerDivider = {
   name: 'mcw-drawer-divider',
   functional: true,
-
-  render(createElement) {
+  render: function render(createElement) {
     return createElement('hr', {
       class: {
         'mdc-list-divider': 1
       }
     });
   }
-
 };
 
 var mcwDrawerHeader = {
   name: 'mcw-drawer-header',
   functional: true,
-
-  render(createElement, {
-    scopedSlots
-  }) {
+  render: function render(createElement, _ref) {
     var _scopedSlots$default;
 
+    var scopedSlots = _ref.scopedSlots;
     return createElement('div', {
       class: 'mdc-drawer__header'
     }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots));
   }
-
 };
 
 var script$4 = {
@@ -2791,8 +3059,7 @@ var script$4 = {
       default: 'mdc-list-item--activated'
     }
   },
-
-  data() {
+  data: function data() {
     return {
       classes: {
         'mdc-list-item': 1,
@@ -2801,39 +3068,35 @@ var script$4 = {
       styles: {}
     };
   },
-
   computed: {
-    mylisteners() {
-      return { ...this.$listeners,
-        click: e => {
-          this.mcwDrawer.isModal && this.modalClose && this.mcwDrawer.close();
-          this.dispatchEvent(e);
-        }
-      };
-    },
+    mylisteners: function mylisteners() {
+      var _this = this;
 
-    itemClasses() {
+      return _objectSpread2(_objectSpread2({}, this.$listeners), {}, {
+        click: function click(e) {
+          _this.mcwDrawer.isModal && _this.modalClose && _this.mcwDrawer.close();
+
+          _this.dispatchEvent(e);
+        }
+      });
+    },
+    itemClasses: function itemClasses() {
       return {
         'mdc-list-item--activated': this.activated
       };
     },
-
-    hasStartDetail() {
+    hasStartDetail: function hasStartDetail() {
       return this.startIcon || this.$slots['start-detail'];
     }
-
   },
-
-  mounted() {
+  mounted: function mounted() {
     this.ripple = new RippleBase(this);
     this.ripple.init();
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.ripple && this.ripple.destroy();
     this.ripple = null;
   }
-
 };
 
 /* script */
@@ -2917,15 +3180,11 @@ var mcwDrawerList = {
   props: {
     dense: Boolean
   },
-
-  render(createElement, {
-    props: {
-      dense
-    },
-    scopedSlots
-  }) {
+  render: function render(createElement, _ref) {
     var _scopedSlots$default;
 
+    var dense = _ref.props.dense,
+        scopedSlots = _ref.scopedSlots;
     return createElement('nav', {
       class: {
         'mdc-drawer-list': 1,
@@ -2934,15 +3193,14 @@ var mcwDrawerList = {
       }
     }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots));
   }
-
 };
 
 var drawer = BasePlugin({
-  mcwDrawer,
-  mcwDrawerHeader,
-  mcwDrawerList,
+  mcwDrawer: mcwDrawer,
+  mcwDrawerHeader: mcwDrawerHeader,
+  mcwDrawerList: mcwDrawerList,
   mcwDrawerItem: __vue_component__$4,
-  mcwDrawerDivider
+  mcwDrawerDivider: mcwDrawerDivider
 });
 
 var script$5 = {
@@ -2954,8 +3212,7 @@ var script$5 = {
     exited: Boolean,
     label: String
   },
-
-  data() {
+  data: function data() {
     return {
       classes: {
         'mdc-fab': 1,
@@ -2965,20 +3222,16 @@ var script$5 = {
       }
     };
   },
-
   watch: {
-    icon() {
+    icon: function icon() {
       this.$set(this.classes, 'material-icons', this.icon);
     },
-
-    mini() {
+    mini: function mini() {
       this.$set(this.classes, 'mdc-fab--mini', this.mini);
     },
-
-    exited() {
+    exited: function exited() {
       this.$set(this.classes, 'mdc-fab--exited', this.exited);
     }
-
   }
 };
 
@@ -3057,51 +3310,48 @@ var fab = BasePlugin({
 
 var script$6 = {
   name: 'mcw-floating-label',
-
-  data() {
+  data: function data() {
     return {
       labelClasses: {
         'mdc-floating-label': true
       }
     };
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
     this.foundation = new MDCFloatingLabelFoundation({
-      addClass: className => {
-        this.$set(this.labelClasses, className, true);
+      addClass: function addClass(className) {
+        _this.$set(_this.labelClasses, className, true);
       },
-      removeClass: className => {
-        this.$delete(this.labelClasses, className);
+      removeClass: function removeClass(className) {
+        _this.$delete(_this.labelClasses, className);
       },
-      getWidth: () => this.$el.scrollWidth,
-      registerInteractionHandler: (evtType, handler) => {
-        this.$el.addEventListener(evtType, handler);
+      getWidth: function getWidth() {
+        return _this.$el.scrollWidth;
       },
-      deregisterInteractionHandler: (evtType, handler) => {
-        this.$el.removeEventListener(evtType, handler);
+      registerInteractionHandler: function registerInteractionHandler(evtType, handler) {
+        _this.$el.addEventListener(evtType, handler);
+      },
+      deregisterInteractionHandler: function deregisterInteractionHandler(evtType, handler) {
+        _this.$el.removeEventListener(evtType, handler);
       }
     });
     this.foundation.init();
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.foundation.destroy();
   },
-
   methods: {
-    getWidth() {
+    getWidth: function getWidth() {
       return this.foundation.getWidth();
     },
-
-    float(shouldFloat) {
+    float: function float(shouldFloat) {
       this.foundation.float(shouldFloat);
     },
-
-    shake(shouldShake) {
+    shake: function shake(shouldShake) {
       this.foundation.shake(shouldShake);
     }
-
   }
 };
 
@@ -3151,7 +3401,6 @@ var floatingLabel = BasePlugin({
   mcwFloatingLabel: __vue_component__$6
 });
 
-/* eslint-disable quote-props */
 var mcwIconButton = {
   name: 'mcw-icon-button',
   model: {
@@ -3162,8 +3411,7 @@ var mcwIconButton = {
     isOn: Boolean,
     disabled: Boolean
   },
-
-  data() {
+  data: function data() {
     return {
       classes: {
         'mdc-icon-button': 1,
@@ -3172,70 +3420,77 @@ var mcwIconButton = {
       styles: {}
     };
   },
-
   watch: {
     isOn: 'onOn_'
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
-    const {
-      CHANGE_EVENT
-    } = MDCIconButtonToggleFoundation.strings;
-    const adapter = {
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      hasClass: className => Boolean(this.classes[className]),
-      setAttr: (attrName, attrValue) => this.$el.setAttribute(attrName, attrValue),
-      getAttr: attrName => this.$el.getAttribute(attrName),
-      notifyChange: evtData => {
-        this.$emit(CHANGE_EVENT, evtData);
-        this.$emit('change', evtData.isOn);
+    var CHANGE_EVENT = MDCIconButtonToggleFoundation.strings.CHANGE_EVENT;
+    var adapter = {
+      addClass: function addClass(className) {
+        return _this.$set(_this.classes, className, true);
+      },
+      removeClass: function removeClass(className) {
+        return _this.$delete(_this.classes, className);
+      },
+      hasClass: function hasClass(className) {
+        return Boolean(_this.classes[className]);
+      },
+      setAttr: function setAttr(attrName, attrValue) {
+        return _this.$el.setAttribute(attrName, attrValue);
+      },
+      getAttr: function getAttr(attrName) {
+        return _this.$el.getAttribute(attrName);
+      },
+      notifyChange: function notifyChange(evtData) {
+        _this.$emit(CHANGE_EVENT, evtData);
+
+        _this.$emit('change', evtData.isOn);
       }
     };
     this.foundation = new MDCIconButtonToggleFoundation(adapter);
     this.foundation.init();
     this.ripple = new RippleBase(this, {
-      isUnbounded: () => true
+      isUnbounded: function isUnbounded() {
+        return true;
+      }
     });
     this.ripple.init();
     this.foundation.toggle(this.isOn);
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.ripple.destroy();
     this.foundation.destroy();
   },
-
   methods: {
-    onOn_(isOn) {
+    onOn_: function onOn_(isOn) {
       if (this.isOn !== isOn) {
         this.foundation.toggle(isOn);
       }
     }
-
   },
+  render: function render(createElement) {
+    var _this2 = this,
+        _scopedSlots$default;
 
-  render(createElement) {
-    var _scopedSlots$default;
-
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
-    const isLink = Boolean(this.$attrs.href);
-    const tag = isLink ? 'a' : 'button';
+    var scopedSlots = this.$scopedSlots;
+    var isLink = Boolean(this.$attrs.href);
+    var tag = isLink ? 'a' : 'button';
     return createElement(tag, {
       class: this.classes,
       style: this.styles,
       on: {
-        click: evt => this.foundation.handleClick(evt)
+        click: function click(evt) {
+          return _this2.foundation.handleClick(evt);
+        }
       },
-      attrs: { ...this.$attrs,
+      attrs: _objectSpread2(_objectSpread2({}, this.$attrs), {}, {
         'aria-pressed': 'false',
         disabled: this.disabled
-      }
+      })
     }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots));
   }
-
 };
 
 var mcwIconToggle = {
@@ -3244,15 +3499,11 @@ var mcwIconToggle = {
   props: {
     isOn: Boolean
   },
-
-  render(createElement, {
-    props: {
-      isOn
-    },
-    scopedSlots
-  }) {
+  render: function render(createElement, _ref) {
     var _scopedSlots$default;
 
+    var isOn = _ref.props.isOn,
+        scopedSlots = _ref.scopedSlots;
     return createElement('i', {
       class: {
         'material-icons': 1,
@@ -3261,19 +3512,18 @@ var mcwIconToggle = {
       }
     }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots));
   }
-
 };
 
 var iconButton = BasePlugin({
-  mcwIconButton,
-  mcwIconToggle
+  mcwIconButton: mcwIconButton,
+  mcwIconToggle: mcwIconToggle
 });
 
-const spanOptions = {
+var spanOptions = {
   type: [String, Number],
   default: null,
-  validator: function (value) {
-    const num = Number(value);
+  validator: function validator(value) {
+    var num = Number(value);
     return isFinite(num) && num <= 12 && num > 0;
   }
 };
@@ -3287,42 +3537,41 @@ var script$7 = {
     desktop: spanOptions,
     align: {
       type: String,
-      validator: function (value) {
+      validator: function validator(value) {
         return ['top', 'bottom', 'middle'].indexOf(value) !== -1;
       }
     }
   },
   computed: {
-    classes() {
-      const cssClasses = [];
+    classes: function classes() {
+      var cssClasses = [];
 
       if (this.span) {
-        cssClasses.push(`mdc-layout-grid__cell--span-${this.span}`);
+        cssClasses.push("mdc-layout-grid__cell--span-".concat(this.span));
       }
 
       if (this.order) {
-        cssClasses.push(`mdc-layout-grid__cell--order-${this.order}`);
+        cssClasses.push("mdc-layout-grid__cell--order-".concat(this.order));
       }
 
       if (this.phone) {
-        cssClasses.push(`mdc-layout-grid__cell--span-${this.phone}-phone`);
+        cssClasses.push("mdc-layout-grid__cell--span-".concat(this.phone, "-phone"));
       }
 
       if (this.tablet) {
-        cssClasses.push(`mdc-layout-grid__cell--span-${this.tablet}-tablet`);
+        cssClasses.push("mdc-layout-grid__cell--span-".concat(this.tablet, "-tablet"));
       }
 
       if (this.desktop) {
-        cssClasses.push(`mdc-layout-grid__cell--span-${this.desktop}-desktop`);
+        cssClasses.push("mdc-layout-grid__cell--span-".concat(this.desktop, "-desktop"));
       }
 
       if (this.align) {
-        cssClasses.push(`mdc-layout-grid__cell--align-${this.align}`);
+        cssClasses.push("mdc-layout-grid__cell--align-".concat(this.align));
       }
 
       return cssClasses;
     }
-
   }
 };
 
@@ -3384,7 +3633,7 @@ var script$8 = {
     alignRight: Boolean
   },
   computed: {
-    classes() {
+    classes: function classes() {
       return {
         'mdc-layout-grid': true,
         'mdc-layout-grid--fixed-column-width': this.fixedColumnWidth,
@@ -3392,7 +3641,6 @@ var script$8 = {
         'mdc-layout-grid--align-right': this.alignRight
       };
     }
-
   }
 };
 
@@ -3506,8 +3754,7 @@ var mcwLineRipple = {
     },
     active: Boolean
   },
-
-  data() {
+  data: function data() {
     return {
       lineClasses: {
         'mdc-line-ripple': 1
@@ -3515,20 +3762,21 @@ var mcwLineRipple = {
       lineStyles: {}
     };
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
-    const adapter = {
-      addClass: className => {
-        this.$set(this.lineClasses, className, true);
+    var adapter = {
+      addClass: function addClass(className) {
+        _this.$set(_this.lineClasses, className, true);
       },
-      removeClass: className => {
-        this.$delete(this.lineClasses, className);
+      removeClass: function removeClass(className) {
+        _this.$delete(_this.lineClasses, className);
       },
-      hasClass: className => {
-        return Boolean(this.lineClasses[className]);
+      hasClass: function hasClass(className) {
+        return Boolean(_this.lineClasses[className]);
       },
-      setStyle: (name, value) => {
-        this.$set(this.lineStyles, name, value);
+      setStyle: function setStyle(name, value) {
+        _this.$set(_this.lineStyles, name, value);
       }
     }; // note: do not call the property 'foundation' as the tests will then
     // expext all methods to be implemented, and we handle transitionend locally
@@ -3536,49 +3784,44 @@ var mcwLineRipple = {
     this.foundation_ = new MDCLineRippleFoundation(adapter);
     this.foundation_.init();
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.foundation_.destroy();
   },
-
   methods: {
-    setRippleCenter(xCoordinate) {
+    setRippleCenter: function setRippleCenter(xCoordinate) {
       this.foundation_.setRippleCenter(xCoordinate);
     },
-
-    activate() {
+    activate: function activate() {
       this.foundation_.activate();
     },
-
-    deactivate() {
+    deactivate: function deactivate() {
       this.foundation_.deactivate();
     }
-
   },
+  render: function render(createElement) {
+    var _this2 = this;
 
-  render(createElement) {
     return createElement('span', {
       class: this.lineClasses,
       style: this.lineStyles,
       on: {
-        transitionend: evt => this.foundation_.handleTransitionEnd(evt)
+        transitionend: function transitionend(evt) {
+          return _this2.foundation_.handleTransitionEnd(evt);
+        }
       }
     });
   }
-
 };
 
 var lineRipple = BasePlugin({
-  mcwLineRipple
+  mcwLineRipple: mcwLineRipple
 });
 
-const ProgressPropType$1 = {
+var ProgressPropType$1 = {
   type: [Number, String],
-
-  validator(value) {
+  validator: function validator(value) {
     return Number(value) >= 0 && Number(value) <= 1;
   }
-
 };
 var script$a = {
   name: 'mcw-linear-progress',
@@ -3600,8 +3843,7 @@ var script$a = {
       default: 'div'
     }
   },
-
-  data() {
+  data: function data() {
     return {
       classes: {
         'mdc-linear-progress': 1
@@ -3611,53 +3853,54 @@ var script$a = {
       rootAttrs: {}
     };
   },
-
   watch: {
-    open(nv) {
+    open: function open(nv) {
       if (nv) {
         this.foundation.open();
       } else {
         this.foundation.close();
       }
     },
-
-    progress(nv) {
+    progress: function progress(nv) {
       this.foundation.setProgress(Number(nv));
     },
-
-    buffer(nv) {
+    buffer: function buffer(nv) {
       this.foundation.setBuffer(Number(nv));
     },
-
-    indeterminate(nv) {
+    indeterminate: function indeterminate(nv) {
       this.foundation.setDeterminate(!nv);
     },
-
-    reversed(nv) {
+    reversed: function reversed(nv) {
       this.foundation.setReverse(nv);
     }
-
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
-    const adapter = {
-      addClass: className => {
-        this.$set(this.classes, className, true);
+    var adapter = {
+      addClass: function addClass(className) {
+        _this.$set(_this.classes, className, true);
       },
-      forceLayout: () => this.$el.offsetWidth,
-      setBufferBarStyle: (styleProperty, value) => {
-        this.$set(this.bufferbarStyles, styleProperty, value);
+      forceLayout: function forceLayout() {
+        return _this.$el.offsetWidth;
       },
-      setPrimaryBarStyle: (styleProperty, value) => {
-        this.$set(this.primaryStyles, styleProperty, value);
+      setBufferBarStyle: function setBufferBarStyle(styleProperty, value) {
+        _this.$set(_this.bufferbarStyles, styleProperty, value);
       },
-      hasClass: className => this.$el.classList.contains(className),
-      removeClass: className => this.$delete(this.classes, className),
-      setAttribute: (attributeName, value) => {
-        this.$set(this.rootAttrs, attributeName, value);
+      setPrimaryBarStyle: function setPrimaryBarStyle(styleProperty, value) {
+        _this.$set(_this.primaryStyles, styleProperty, value);
       },
-      removeAttribute: attributeName => {
-        this.$delete(this.rootAttrs, attributeName);
+      hasClass: function hasClass(className) {
+        return _this.$el.classList.contains(className);
+      },
+      removeClass: function removeClass(className) {
+        return _this.$delete(_this.classes, className);
+      },
+      setAttribute: function setAttribute(attributeName, value) {
+        _this.$set(_this.rootAttrs, attributeName, value);
+      },
+      removeAttribute: function removeAttribute(attributeName) {
+        _this.$delete(_this.rootAttrs, attributeName);
       }
     };
     this.foundation = new MDCLinearProgressFoundation(adapter);
@@ -3673,11 +3916,9 @@ var script$a = {
       this.foundation.close();
     }
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.foundation.destroy();
   }
-
 };
 
 /* script */
@@ -3765,20 +4006,18 @@ var linearProgress = BasePlugin({
   mcwLinearProgress: __vue_component__$a
 });
 
-const ARIA_ORIENTATION = 'aria-orientation';
-const VERTICAL = 'vertical';
-const RADIO_CHECKED_RADIO_SELECTOR = `input[type="radio"][checked="checked"]`;
-const {
-  strings,
-  cssClasses: cssClasses$1
-} = MDCListFoundation;
+var ARIA_ORIENTATION = 'aria-orientation';
+var VERTICAL = 'vertical';
+var RADIO_CHECKED_RADIO_SELECTOR = "input[type=\"radio\"][checked=\"checked\"]";
+var strings = MDCListFoundation.strings,
+    cssClasses$1 = MDCListFoundation.cssClasses;
 var mcwList = {
   name: 'mcw-list',
   model: {
     prop: 'selectedIndex',
     event: 'change'
   },
-  props: {
+  props: _defineProperty({
     nonInteractive: {
       type: Boolean,
       default: false
@@ -3794,54 +4033,44 @@ var mcwList = {
     tag: {
       type: String,
       default: 'ul'
-    },
-    [ARIA_ORIENTATION]: {
-      type: String,
-      default: VERTICAL
     }
-  },
-
-  data() {
+  }, ARIA_ORIENTATION, {
+    type: String,
+    default: VERTICAL
+  }),
+  data: function data() {
     return {
       listn: 0
     };
   },
-
   watch: {
-    singleSelection(nv) {
+    singleSelection: function singleSelection(nv) {
       this.foundation.setSingleSelection(nv);
     },
-
-    selectedIndex(nv) {
+    selectedIndex: function selectedIndex(nv) {
       if (Array.isArray(nv)) {
         this.foundation.setSelectedIndex(nv);
       } else if (this.selectedIndex != nv) {
         this.foundation.setSelectedIndex(nv);
       }
     },
-
-    wrapFocus(nv) {
+    wrapFocus: function wrapFocus(nv) {
       this.foundation.setWrapFocus(nv);
     },
-
-    ariaOrientation(nv) {
+    ariaOrientation: function ariaOrientation(nv) {
       this.foundation.setVerticalOrientation(nv === VERTICAL);
     }
-
   },
   computed: {
     selIndex: {
-      get() {
+      get: function get() {
         return this.selectedIndex;
       },
-
-      set(nv) {
+      set: function set(nv) {
         this.$emit('change', nv);
       }
-
     },
-
-    classes() {
+    classes: function classes() {
       return {
         'mdc-list': 1,
         'mdc-list--dense': this.dense,
@@ -3850,68 +4079,64 @@ var mcwList = {
         'mdc-list--non-interactive': this.nonInteractive
       };
     },
-
-    listElements() {
+    listElements: function listElements() {
       // eslint-disable-next-line no-unused-vars
-      const xx = this.listn; // for dependency
+      var xx = this.listn; // for dependency
 
-      return [].slice.call(this.$el.querySelectorAll(`.${cssClasses$1.LIST_ITEM_CLASS}`));
+      return [].slice.call(this.$el.querySelectorAll(".".concat(cssClasses$1.LIST_ITEM_CLASS)));
     }
-
   },
   methods: {
-    handleFocusInEvent(evt, index) {
+    handleFocusInEvent: function handleFocusInEvent(evt, index) {
       this.foundation.handleFocusIn(evt, index);
     },
-
-    handleFocusOutEvent(evt, index) {
+    handleFocusOutEvent: function handleFocusOutEvent(evt, index) {
       this.foundation.handleFocusOut(evt, index);
     },
-
-    handleKeydownEvent(evt) {
-      const index = this.getListItemIndex(evt);
-      const target = evt.target;
+    handleKeydownEvent: function handleKeydownEvent(evt) {
+      var index = this.getListItemIndex(evt);
+      var target = evt.target;
       this.foundation.handleKeydown(evt, target.classList.contains(cssClasses$1.LIST_ITEM_CLASS), index);
     },
+    handleClickEvent: function handleClickEvent(evt) {
+      var index = this.getListItemIndex(evt);
+      var target = evt.target; // Toggle the checkbox only if it's not the target of the event, or the checkbox will have 2 change events.
 
-    handleClickEvent(evt) {
-      const index = this.getListItemIndex(evt);
-      const target = evt.target; // Toggle the checkbox only if it's not the target of the event, or the checkbox will have 2 change events.
-
-      const toggleCheckbox = !matches(target, strings.CHECKBOX_RADIO_SELECTOR);
+      var toggleCheckbox = !matches(target, strings.CHECKBOX_RADIO_SELECTOR);
       this.foundation.handleClick(index, toggleCheckbox);
     },
-
-    layout() {
+    layout: function layout() {
       this.foundation.setVerticalOrientation(this.ariaOrientation == VERTICAL); // List items need to have at least tabindex=-1 to be focusable.
 
-      [].slice.call(this.$el.querySelectorAll('.mdc-list-item:not([tabindex])')).forEach(ele => {
+      [].slice.call(this.$el.querySelectorAll('.mdc-list-item:not([tabindex])')).forEach(function (ele) {
         ele.setAttribute('tabindex', -1);
       }); // Child button/a elements are not tabbable until the list item is focused.
 
-      [].slice.call(this.$el.querySelectorAll(strings.FOCUSABLE_CHILD_ELEMENTS)).forEach(ele => ele.setAttribute('tabindex', -1));
+      [].slice.call(this.$el.querySelectorAll(strings.FOCUSABLE_CHILD_ELEMENTS)).forEach(function (ele) {
+        return ele.setAttribute('tabindex', -1);
+      });
       this.foundation.layout();
     },
+    initializeListType: function initializeListType() {
+      var _this = this;
 
-    initializeListType() {
-      const checkboxListItems = this.$el.querySelectorAll(strings.ARIA_ROLE_CHECKBOX_SELECTOR);
-      const singleSelectedListItem = this.$el.querySelector(`
-        .${cssClasses$1.LIST_ITEM_ACTIVATED_CLASS},
-        .${cssClasses$1.LIST_ITEM_SELECTED_CLASS}
-      `);
-      let radioSelectedListItem = this.$el.querySelector(strings.ARIA_CHECKED_RADIO_SELECTOR);
+      var checkboxListItems = this.$el.querySelectorAll(strings.ARIA_ROLE_CHECKBOX_SELECTOR);
+      var singleSelectedListItem = this.$el.querySelector("\n        .".concat(cssClasses$1.LIST_ITEM_ACTIVATED_CLASS, ",\n        .").concat(cssClasses$1.LIST_ITEM_SELECTED_CLASS, "\n      "));
+      var radioSelectedListItem = this.$el.querySelector(strings.ARIA_CHECKED_RADIO_SELECTOR);
 
       if (!radioSelectedListItem) {
-        const radioSelectedInput = this.$el.querySelector(RADIO_CHECKED_RADIO_SELECTOR);
+        var radioSelectedInput = this.$el.querySelector(RADIO_CHECKED_RADIO_SELECTOR);
 
         if (radioSelectedInput) {
-          radioSelectedListItem = closest(radioSelectedInput, `[role="radio"].${cssClasses$1.LIST_ITEM_CLASS}`);
+          radioSelectedListItem = closest(radioSelectedInput, "[role=\"radio\"].".concat(cssClasses$1.LIST_ITEM_CLASS));
         }
       }
 
       if (checkboxListItems.length) {
-        const preselectedItems = this.$el.querySelectorAll(strings.ARIA_CHECKED_CHECKBOX_SELECTOR);
-        this.selIndex = [].map.call(preselectedItems, listItem => this.listElements.indexOf(listItem));
+        var preselectedItems = this.$el.querySelectorAll(strings.ARIA_CHECKED_CHECKBOX_SELECTOR);
+        this.selIndex = [].map.call(preselectedItems, function (listItem) {
+          return _this.listElements.indexOf(listItem);
+        });
       } else if (singleSelectedListItem) {
         if (singleSelectedListItem.classList.contains(cssClasses$1.LIST_ITEM_ACTIVATED_CLASS)) {
           this.foundation.setUseActivatedClass(true);
@@ -3920,107 +4145,114 @@ var mcwList = {
         this.singleSelection = true;
         this.selIndex = this.listElements.indexOf(singleSelectedListItem);
       } else if (radioSelectedListItem) {
-        const selIndex = this.listElements.indexOf(radioSelectedListItem);
+        var selIndex = this.listElements.indexOf(radioSelectedListItem);
         this.foundation.setSelectedIndex(selIndex);
         this.selIndex = selIndex;
         radioSelectedListItem.setAttribute('tabindex', '0');
       }
     },
+    getListItemIndex: function getListItemIndex(evt) {
+      var eventTarget = evt.target;
+      var nearestParent = closest(eventTarget, ".".concat(cssClasses$1.LIST_ITEM_CLASS, ", .").concat(cssClasses$1.ROOT)); // Get the index of the element if it is a list item.
 
-    getListItemIndex(evt) {
-      const eventTarget = evt.target;
-      const nearestParent = closest(eventTarget, `.${cssClasses$1.LIST_ITEM_CLASS}, .${cssClasses$1.ROOT}`); // Get the index of the element if it is a list item.
-
-      if (nearestParent && matches(nearestParent, `.${cssClasses$1.LIST_ITEM_CLASS}`)) {
+      if (nearestParent && matches(nearestParent, ".".concat(cssClasses$1.LIST_ITEM_CLASS))) {
         return this.listElements.indexOf(nearestParent);
       }
 
       return -1;
     }
-
   },
+  mounted: function mounted() {
+    var _this2 = this;
 
-  mounted() {
-    const {
-      wrapFocus
-    } = this;
-    const adapter = {
-      addClassForElementIndex: (index, className) => {
-        const element = this.listElements[index];
+    var wrapFocus = this.wrapFocus;
+    var adapter = {
+      addClassForElementIndex: function addClassForElementIndex(index, className) {
+        var element = _this2.listElements[index];
 
         if (element) {
           element.classList.add(className);
         }
       },
-      focusItemAtIndex: index => {
-        const element = this.listElements[index];
+      focusItemAtIndex: function focusItemAtIndex(index) {
+        var element = _this2.listElements[index];
 
         if (element) {
           element.focus();
         }
       },
-      getAttributeForElementIndex: (index, attr) => this.listElements[index].getAttribute(attr),
-      getFocusedElementIndex: () => this.listElements.indexOf(document.activeElement),
-      getListItemCount: () => this.listElements.length,
-      hasCheckboxAtIndex: index => {
-        const listItem = this.listElements[index];
+      getAttributeForElementIndex: function getAttributeForElementIndex(index, attr) {
+        return _this2.listElements[index].getAttribute(attr);
+      },
+      getFocusedElementIndex: function getFocusedElementIndex() {
+        return _this2.listElements.indexOf(document.activeElement);
+      },
+      getListItemCount: function getListItemCount() {
+        return _this2.listElements.length;
+      },
+      hasCheckboxAtIndex: function hasCheckboxAtIndex(index) {
+        var listItem = _this2.listElements[index];
         return !!listItem.querySelector(strings.CHECKBOX_SELECTOR);
       },
-      hasRadioAtIndex: index => {
-        const listItem = this.listElements[index];
+      hasRadioAtIndex: function hasRadioAtIndex(index) {
+        var listItem = _this2.listElements[index];
         return !!listItem.querySelector(strings.RADIO_SELECTOR);
       },
-      isCheckboxCheckedAtIndex: index => {
-        const listItem = this.listElements[index];
-        const toggleEl = listItem.querySelector(strings.CHECKBOX_SELECTOR);
+      isCheckboxCheckedAtIndex: function isCheckboxCheckedAtIndex(index) {
+        var listItem = _this2.listElements[index];
+        var toggleEl = listItem.querySelector(strings.CHECKBOX_SELECTOR);
         return toggleEl.checked;
       },
-      isFocusInsideList: () => {
-        return this.$el.contains(document.activeElement);
+      isFocusInsideList: function isFocusInsideList() {
+        return _this2.$el.contains(document.activeElement);
       },
-      isRootFocused: () => document.activeElement === this.$el,
-      listItemAtIndexHasClass: (index, className) => {
-        this.listElements[index].classList.contains(className);
+      isRootFocused: function isRootFocused() {
+        return document.activeElement === _this2.$el;
       },
-      notifyAction: index => {
-        emitCustomEvent(this.$el, strings.ACTION_EVENT, {
-          index
+      listItemAtIndexHasClass: function listItemAtIndexHasClass(index, className) {
+        _this2.listElements[index].classList.contains(className);
+      },
+      notifyAction: function notifyAction(index) {
+        emitCustomEvent(_this2.$el, strings.ACTION_EVENT, {
+          index: index
         },
         /** shouldBubble */
         true);
 
-        if (Array.isArray(this.selectedIndex)) {
-          this.$emit('change', this.foundation.getSelectedIndex());
+        if (Array.isArray(_this2.selectedIndex)) {
+          _this2.$emit('change', _this2.foundation.getSelectedIndex());
         } else {
-          this.$emit('change', index);
+          _this2.$emit('change', index);
         }
       },
-      removeClassForElementIndex: (index, className) => {
-        const element = this.listElements[index];
+      removeClassForElementIndex: function removeClassForElementIndex(index, className) {
+        var element = _this2.listElements[index];
 
         if (element) {
           element.classList.remove(className);
         }
       },
-      setAttributeForElementIndex: (index, attr, value) => {
-        const element = this.listElements[index];
+      setAttributeForElementIndex: function setAttributeForElementIndex(index, attr, value) {
+        var element = _this2.listElements[index];
 
         if (element) {
           element.setAttribute(attr, value);
         }
       },
-      setCheckedCheckboxOrRadioAtIndex: (index, isChecked) => {
-        const listItem = this.listElements[index];
-        const toggleEl = listItem.querySelector(strings.CHECKBOX_RADIO_SELECTOR);
+      setCheckedCheckboxOrRadioAtIndex: function setCheckedCheckboxOrRadioAtIndex(index, isChecked) {
+        var listItem = _this2.listElements[index];
+        var toggleEl = listItem.querySelector(strings.CHECKBOX_RADIO_SELECTOR);
         toggleEl && (toggleEl.checked = isChecked);
-        const event = document.createEvent('Event');
+        var event = document.createEvent('Event');
         event.initEvent('change', true, true);
         toggleEl && toggleEl.dispatchEvent(event);
       },
-      setTabIndexForListItemChildren: (listItemIndex, tabIndexValue) => {
-        const element = this.listElements[listItemIndex];
-        const listItemChildren = [].slice.call(element.querySelectorAll(strings.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX));
-        listItemChildren.forEach(el => el.setAttribute('tabindex', tabIndexValue));
+      setTabIndexForListItemChildren: function setTabIndexForListItemChildren(listItemIndex, tabIndexValue) {
+        var element = _this2.listElements[listItemIndex];
+        var listItemChildren = [].slice.call(element.querySelectorAll(strings.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX));
+        listItemChildren.forEach(function (el) {
+          return el.setAttribute('tabindex', tabIndexValue);
+        });
       }
     };
     this.foundation = new MDCListFoundation(adapter);
@@ -4040,27 +4272,25 @@ var mcwList = {
     // incrementing the dependency variable "listn" referenced
     // in the computed that selects the list elements
 
-    this.slotObserver = new MutationObserver((mutationList, observer) => {
-      this.listn++;
+    this.slotObserver = new MutationObserver(function (mutationList, observer) {
+      _this2.listn++;
     });
     this.slotObserver.observe(this.$refs.listRoot, {
       childList: true // subtree: true,
 
     });
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.slotObserver.disconnect();
   },
+  render: function render(createElement) {
+    var _this3 = this;
 
-  render(createElement) {
-    const {
-      tag,
-      ariaOrientation,
-      singleSelection,
-      $scopedSlots: slots
-    } = this;
-    const attrs = {
+    var tag = this.tag,
+        ariaOrientation = this.ariaOrientation,
+        singleSelection = this.singleSelection,
+        slots = this.$scopedSlots;
+    var attrs = {
       'aria-orientation': ariaOrientation
     };
 
@@ -4070,17 +4300,24 @@ var mcwList = {
 
     return createElement(tag, {
       class: this.classes,
-      attrs,
+      attrs: attrs,
       on: {
-        click: event => this.handleClickEvent(event),
-        focusin: event => this.handleFocusInEvent(event),
-        focusout: event => this.handleFocusOutEvent(event),
-        keydown: event => this.handleKeydownEvent(event)
+        click: function click(event) {
+          return _this3.handleClickEvent(event);
+        },
+        focusin: function focusin(event) {
+          return _this3.handleFocusInEvent(event);
+        },
+        focusout: function focusout(event) {
+          return _this3.handleFocusOutEvent(event);
+        },
+        keydown: function keydown(event) {
+          return _this3.handleKeydownEvent(event);
+        }
       },
       ref: 'listRoot'
     }, slots.default && slots.default());
   }
-
 };
 
 var mcwListDivider = {
@@ -4090,44 +4327,36 @@ var mcwListDivider = {
     padded: Boolean,
     role: {
       type: String,
-
-      default() {
+      default: function _default() {
         return 'separator';
       }
-
     },
     tag: {
       type: String,
-
-      default() {
+      default: function _default() {
         return 'li';
       }
-
     }
   },
   functional: true,
-
-  render(createElement, {
-    props: {
-      tag,
-      inset,
-      padded,
-      role,
-      staticClass,
-      attrs
-    }
-  }) {
+  render: function render(createElement, _ref) {
+    var _ref$props = _ref.props,
+        tag = _ref$props.tag,
+        inset = _ref$props.inset,
+        padded = _ref$props.padded,
+        role = _ref$props.role,
+        staticClass = _ref$props.staticClass,
+        attrs = _ref$props.attrs;
     return createElement(tag, {
       class: ['mdc-list-divider', staticClass, {
         'mdc-list-divider--inset': inset,
         'mdc-list-divider--padded': padded
       }],
-      attrs: { ...attrs,
-        role
-      }
+      attrs: _objectSpread2(_objectSpread2({}, attrs), {}, {
+        role: role
+      })
     });
   }
-
 };
 
 var mcwListGroupSubHeader = {
@@ -4136,28 +4365,21 @@ var mcwListGroupSubHeader = {
   props: {
     tag: {
       type: String,
-
-      default() {
+      default: function _default() {
         return 'h3';
       }
-
     }
   },
-
-  render(createElement, {
-    scopedSlots,
-    props: {
-      tag
-    },
-    staticClass,
-    attrs
-  }) {
+  render: function render(createElement, _ref) {
+    var scopedSlots = _ref.scopedSlots,
+        tag = _ref.props.tag,
+        staticClass = _ref.staticClass,
+        attrs = _ref.attrs;
     return createElement(tag, {
       class: ['mdc-list-group__subheader', staticClass],
-      attrs
+      attrs: attrs
     }, scopedSlots.default && scopedSlots.default());
   }
-
 };
 
 var mcwListGroup = {
@@ -4166,35 +4388,28 @@ var mcwListGroup = {
   props: {
     tag: {
       type: String,
-
-      default() {
+      default: function _default() {
         return 'div';
       }
-
     }
   },
-
-  render(createElement, {
-    props: {
-      tag
-    },
-    scopedSlots,
-    staticClass,
-    attrs
-  }) {
+  render: function render(createElement, _ref) {
+    var tag = _ref.props.tag,
+        scopedSlots = _ref.scopedSlots,
+        staticClass = _ref.staticClass,
+        attrs = _ref.attrs;
     return createElement(tag, {
       class: ['mdc-list-group', staticClass],
-      attrs
+      attrs: attrs
     }, scopedSlots.default && scopedSlots.default());
   }
-
 };
 
 var list = BasePlugin({
-  mcwList,
-  mcwListDivider,
-  mcwListGroup,
-  mcwListGroupSubHeader
+  mcwList: mcwList,
+  mcwListDivider: mcwListDivider,
+  mcwListGroup: mcwListGroup,
+  mcwListGroupSubHeader: mcwListGroupSubHeader
 });
 
 var mcwMaterialIcon = {
@@ -4207,8 +4422,7 @@ var mcwMaterialIcon = {
       default: 'i'
     }
   },
-
-  data() {
+  data: function data() {
     return {
       classes: {
         'material-icons': true,
@@ -4218,37 +4432,33 @@ var mcwMaterialIcon = {
 
     };
   },
-
-  mounted() {
+  mounted: function mounted() {
     if (this.hasRipple) {
       this.ripple = new RippleBase(this, {
-        isUnbounded: () => true
+        isUnbounded: function isUnbounded() {
+          return true;
+        }
       });
       this.ripple.init();
     }
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     if (this.ripple) {
       this.ripple.destroy();
     }
   },
-
-  render(createElement) {
-    const {
-      tag
-    } = this;
+  render: function render(createElement) {
+    var tag = this.tag;
     return createElement(tag, {
       class: this.classes,
       on: this.$listeners,
       style: this.styles
     }, this.icon);
   }
-
 };
 
 var materialIcon = BasePlugin({
-  mcwMaterialIcon
+  mcwMaterialIcon: mcwMaterialIcon
 });
 
 /* eslint-disable quote-props */
@@ -4264,8 +4474,7 @@ var mcwMenu = {
     'anchor-corner': [String, Number],
     'anchor-margin': Object
   },
-
-  data() {
+  data: function data() {
     return {
       classes: {},
       styles: {},
@@ -4273,153 +4482,141 @@ var mcwMenu = {
       myWrapFocus: true
     };
   },
-
   watch: {
-    open(nv) {
+    open: function open(nv) {
       this.menuOpen = nv;
     }
-
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
     this._previousFocus = undefined;
-    const {
-      cssClasses,
-      strings
-    } = MDCMenuFoundation;
-    const adapter = {
-      addClassToElementAtIndex: (index, className) => {
-        const list = this.items;
+    var cssClasses = MDCMenuFoundation.cssClasses,
+        strings = MDCMenuFoundation.strings;
+    var adapter = {
+      addClassToElementAtIndex: function addClassToElementAtIndex(index, className) {
+        var list = _this.items;
         list[index].classList.add(className);
       },
-      removeClassFromElementAtIndex: (index, className) => {
-        const list = this.items;
+      removeClassFromElementAtIndex: function removeClassFromElementAtIndex(index, className) {
+        var list = _this.items;
         list[index].classList.remove(className);
       },
-      addAttributeToElementAtIndex: (index, attr, value) => {
-        const list = this.items;
+      addAttributeToElementAtIndex: function addAttributeToElementAtIndex(index, attr, value) {
+        var list = _this.items;
         list[index].setAttribute(attr, value);
       },
-      removeAttributeFromElementAtIndex: (index, attr) => {
-        const list = this.items;
+      removeAttributeFromElementAtIndex: function removeAttributeFromElementAtIndex(index, attr) {
+        var list = _this.items;
         list[index].removeAttribute(attr);
       },
-      elementContainsClass: (element, className) => element.classList.contains(className),
-      closeSurface: skipRestoreFocus => {
-        this.$refs.menuSurface_.close(skipRestoreFocus);
-        this.$emit('change', false);
+      elementContainsClass: function elementContainsClass(element, className) {
+        return element.classList.contains(className);
       },
-      getElementIndex: element => {
-        return this.items.indexOf(element);
+      closeSurface: function closeSurface(skipRestoreFocus) {
+        _this.$refs.menuSurface_.close(skipRestoreFocus);
+
+        _this.$emit('change', false);
       },
-      isSelectableItemAtIndex: index => !!closest(this.items[index], `.${cssClasses.MENU_SELECTION_GROUP}`),
-      getSelectedSiblingOfItemAtIndex: index => {
-        const selectionGroupEl = closest(this.items[index], `.${cssClasses.MENU_SELECTION_GROUP}`);
-        const selectedItemEl = selectionGroupEl.querySelector(`.${cssClasses.MENU_SELECTED_LIST_ITEM}`);
-        return selectedItemEl ? this.items.indexOf(selectedItemEl) : -1;
+      getElementIndex: function getElementIndex(element) {
+        return _this.items.indexOf(element);
       },
-      notifySelected: evtData => {
-        emitCustomEvent(this.$el, strings.SELECTED_EVENT, {
+      isSelectableItemAtIndex: function isSelectableItemAtIndex(index) {
+        return !!closest(_this.items[index], ".".concat(cssClasses.MENU_SELECTION_GROUP));
+      },
+      getSelectedSiblingOfItemAtIndex: function getSelectedSiblingOfItemAtIndex(index) {
+        var selectionGroupEl = closest(_this.items[index], ".".concat(cssClasses.MENU_SELECTION_GROUP));
+        var selectedItemEl = selectionGroupEl.querySelector(".".concat(cssClasses.MENU_SELECTED_LIST_ITEM));
+        return selectedItemEl ? _this.items.indexOf(selectedItemEl) : -1;
+      },
+      notifySelected: function notifySelected(evtData) {
+        emitCustomEvent(_this.$el, strings.SELECTED_EVENT, {
           index: evtData.index,
-          item: this.items[evtData.index]
+          item: _this.items[evtData.index]
         });
-        this.$emit('select', {
+
+        _this.$emit('select', {
           index: evtData.index,
-          item: this.items[evtData.index]
+          item: _this.items[evtData.index]
         });
       },
-      getMenuItemCount: () => this.items.length,
-      focusItemAtIndex: index => this.items[index].focus(),
-      focusListRoot: () => this.$el.querySelector(strings.LIST_SELECTOR).focus()
+      getMenuItemCount: function getMenuItemCount() {
+        return _this.items.length;
+      },
+      focusItemAtIndex: function focusItemAtIndex(index) {
+        return _this.items[index].focus();
+      },
+      focusListRoot: function focusListRoot() {
+        return _this.$el.querySelector(strings.LIST_SELECTOR).focus();
+      }
     };
     this.menuOpen = this.open;
     this.foundation = new MDCMenuFoundation(adapter);
     this.foundation.init();
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this._previousFocus = null;
     this.foundation.destroy();
   },
-
   computed: {
-    items() {
+    items: function items() {
       return this.$refs.list ? this.$refs.list.listElements : [];
     },
-
     surfaceOpen: {
-      get() {
+      get: function get() {
         return this.menuOpen;
       },
-
-      set(value) {
+      set: function set(value) {
         this.menuOpen = value;
       }
-
     },
     wrapFocus: {
-      get() {
+      get: function get() {
         return this.myWrapFocus;
       },
-
-      set(nv) {
+      set: function set(nv) {
         this.myWrapFocus = nv;
       }
-
     }
   },
   methods: {
-    listen(evtType, handler, options) {
+    listen: function listen(evtType, handler, options) {
       this.$el.addEventListener(evtType, handler, options);
     },
-
-    unlisten(evtType, handler, options) {
+    unlisten: function unlisten(evtType, handler, options) {
       this.$el.removeEventListener(evtType, handler, options);
     },
-
-    handleAction({
-      detail: {
-        index
-      }
-    }) {
+    handleAction: function handleAction(_ref) {
+      var index = _ref.detail.index;
       this.foundation.handleItemAction(this.items[index]);
     },
-
-    handleKeydown(evt) {
+    handleKeydown: function handleKeydown(evt) {
       this.foundation.handleKeydown(evt);
     },
-
-    onChange(item) {
+    onChange: function onChange(item) {
       this.menuOpen = item;
       this.$emit('change', item);
     },
-
-    handleMenuSurfaceOpened() {
+    handleMenuSurfaceOpened: function handleMenuSurfaceOpened() {
       this.foundation.handleMenuSurfaceOpened();
     },
-
-    setDefaultFocusState(focusState) {
+    setDefaultFocusState: function setDefaultFocusState(focusState) {
       this.foundation.setDefaultFocusState(focusState);
     },
-
-    setAnchorCorner(corner) {
+    setAnchorCorner: function setAnchorCorner(corner) {
       this.$refs.menuSurface_.foundation.setAnchorCorner(corner);
     },
-
-    setAnchorElement(element) {
+    setAnchorElement: function setAnchorElement(element) {
       this.$refs.menuSurface_.setMenuSurfaceAnchorElement(element);
     },
-
-    setSelectedIndex(index) {
+    setSelectedIndex: function setSelectedIndex(index) {
       this.foundation.setSelectedIndex(index);
     },
-
-    setAnchorMargin(margin) {
+    setAnchorMargin: function setAnchorMargin(margin) {
       this.$refs.menuSurface_.foundation.setAnchorMargin(margin);
     },
-
-    getOptionByIndex(index) {
-      const items = this.items;
+    getOptionByIndex: function getOptionByIndex(index) {
+      var items = this.items;
 
       if (index < items.length) {
         return items[index];
@@ -4427,31 +4624,24 @@ var mcwMenu = {
 
       return null;
     },
-
-    setFixedPosition(isFixed) {
+    setFixedPosition: function setFixedPosition(isFixed) {
       this.$refs.menuSurface_.foundation.setFixedPosition(isFixed);
     },
-
-    hoistMenuToBody() {
+    hoistMenuToBody: function hoistMenuToBody() {
       this.$refs.menuSurface_.foundation.hoistMenuToBody();
     },
-
-    setIsHoisted(isHoisted) {
+    setIsHoisted: function setIsHoisted(isHoisted) {
       this.$refs.menuSurface_.foundation.setIsHoisted(isHoisted);
     },
-
-    setAbsolutePosition(x, y) {
+    setAbsolutePosition: function setAbsolutePosition(x, y) {
       this.$refs.menuSurface_.foundation.setAbsolutePosition(x, y);
     }
-
   },
+  render: function render(createElement) {
+    var _this2 = this,
+        _scopedSlots$default;
 
-  render(createElement) {
-    var _scopedSlots$default;
-
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
+    var scopedSlots = this.$scopedSlots;
     return createElement('mcw-menu-surface', {
       class: {
         'mdc-menu': 1
@@ -4462,9 +4652,15 @@ var mcwMenu = {
         open: this.menuOpen
       },
       on: {
-        change: evt => this.onChange(evt),
-        keydown: evt => this.handleKeydown(evt),
-        'MDCMenuSurface:opened': evt => this.handleMenuSurfaceOpened(evt)
+        change: function change(evt) {
+          return _this2.onChange(evt);
+        },
+        keydown: function keydown(evt) {
+          return _this2.handleKeydown(evt);
+        },
+        'MDCMenuSurface:opened': function MDCMenuSurfaceOpened(evt) {
+          return _this2.handleMenuSurfaceOpened(evt);
+        }
       }
     }, [createElement('mcw-list', {
       ref: 'list',
@@ -4472,26 +4668,25 @@ var mcwMenu = {
         wrapFocus: this.myWrapFocus
       },
       on: {
-        change: index => this.handleAction({
-          detail: {
-            index
-          }
-        })
+        change: function change(index) {
+          return _this2.handleAction({
+            detail: {
+              index: index
+            }
+          });
+        }
       }
     }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots))]);
   }
-
 };
 
 var mcwMenuAnchor = {
   name: 'mcw-menu-anchor',
   functional: true,
-
-  render(createElement, {
-    scopedSlots
-  }) {
+  render: function render(createElement, _ref) {
     var _scopedSlots$default;
 
+    var scopedSlots = _ref.scopedSlots;
     return createElement('div', {
       class: {
         'mdc-menu-anchor': 1,
@@ -4499,7 +4694,6 @@ var mcwMenuAnchor = {
       }
     }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots));
   }
-
 };
 
 /* eslint-disable quote-props */
@@ -4509,15 +4703,11 @@ var mcwMenuItem = {
     disabled: Boolean
   },
   functional: true,
-
-  render(createElement, {
-    props: {
-      disabled
-    },
-    scopedSlots
-  }) {
+  render: function render(createElement, _ref) {
     var _scopedSlots$default;
 
+    var disabled = _ref.props.disabled,
+        scopedSlots = _ref.scopedSlots;
     return createElement('li', {
       class: {
         'mdc-menu-divider': 1,
@@ -4530,14 +4720,11 @@ var mcwMenuItem = {
       }
     }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots));
   }
-
 };
 
 /* eslint-disable quote-props */
-const {
-  strings: strings$1,
-  cssClasses: cssClasses$2
-} = MDCMenuSurfaceFoundation;
+var strings$1 = MDCMenuSurfaceFoundation.strings,
+    cssClasses$2 = MDCMenuSurfaceFoundation.cssClasses;
 var mcwMenuSurface = {
   name: 'mcw-menu-surface',
   model: {
@@ -4550,8 +4737,7 @@ var mcwMenuSurface = {
     'anchor-corner': [String, Number],
     'anchor-margin': Object
   },
-
-  data() {
+  data: function data() {
     return {
       classes: {
         'mdc-menu': 1,
@@ -4559,35 +4745,47 @@ var mcwMenuSurface = {
       }
     };
   },
-
   watch: {
     open: 'onOpen_',
-
-    quickOpen(nv) {
+    quickOpen: function quickOpen(nv) {
       this.foundation.setQuickOpen(nv);
     }
-
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
     this._previousFocus = undefined;
     this.foundation = new MDCMenuSurfaceFoundation(Object.assign({
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      hasClass: className => this.$el.classList.contains(className),
-      hasAnchor: () => !!this.anchorElement,
-      notifyClose: () => {
-        emitCustomEvent(this.$el, strings$1.CLOSED_EVENT, {});
-        this.$emit('change', false);
+      addClass: function addClass(className) {
+        return _this.$set(_this.classes, className, true);
       },
-      notifyOpen: () => {
-        emitCustomEvent(this.$el, strings$1.OPENED_EVENT, {});
-        this.$emit('change', true);
+      removeClass: function removeClass(className) {
+        return _this.$delete(_this.classes, className);
       },
-      isElementInContainer: el => this.$el.contains(el),
-      isRtl: () => getComputedStyle(this.$el).getPropertyValue('direction') === 'rtl',
-      setTransformOrigin: origin => {
-        this.$el.style.setProperty(`${getTransformPropertyName(window)}-origin`, origin);
+      hasClass: function hasClass(className) {
+        return _this.$el.classList.contains(className);
+      },
+      hasAnchor: function hasAnchor() {
+        return !!_this.anchorElement;
+      },
+      notifyClose: function notifyClose() {
+        emitCustomEvent(_this.$el, strings$1.CLOSED_EVENT, {});
+
+        _this.$emit('change', false);
+      },
+      notifyOpen: function notifyOpen() {
+        emitCustomEvent(_this.$el, strings$1.OPENED_EVENT, {});
+
+        _this.$emit('change', true);
+      },
+      isElementInContainer: function isElementInContainer(el) {
+        return _this.$el.contains(el);
+      },
+      isRtl: function isRtl() {
+        return getComputedStyle(_this.$el).getPropertyValue('direction') === 'rtl';
+      },
+      setTransformOrigin: function setTransformOrigin(origin) {
+        _this.$el.style.setProperty("".concat(getTransformPropertyName(window), "-origin"), origin);
       }
     }, this.getFocusAdapterMethods(), this.getDimensionAdapterMethods()));
 
@@ -4597,99 +4795,96 @@ var mcwMenuSurface = {
 
     this.foundation.init();
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this._previousFocus = null;
     this.foundation.destroy();
   },
-
   methods: {
-    handleBodyClick(evt) {
+    handleBodyClick: function handleBodyClick(evt) {
       this.foundation.handleBodyClick(evt);
     },
-
-    registerBodyClickListener() {
+    registerBodyClickListener: function registerBodyClickListener() {
       document.body.addEventListener('click', this.handleBodyClick);
     },
-
-    deregisterBodyClickListener() {
+    deregisterBodyClickListener: function deregisterBodyClickListener() {
       document.body.removeEventListener('click', this.handleBodyClick);
     },
-
-    handleKeydown(evt) {
+    handleKeydown: function handleKeydown(evt) {
       this.foundation.handleKeydown(evt);
     },
+    getFocusAdapterMethods: function getFocusAdapterMethods() {
+      var _this2 = this;
 
-    getFocusAdapterMethods() {
       return {
-        isFocused: () => document.activeElement === this.$el,
-        saveFocus: () => {
-          this.previousFocus_ = document.activeElement;
+        isFocused: function isFocused() {
+          return document.activeElement === _this2.$el;
         },
-        restoreFocus: () => {
-          if (this.$el.contains(document.activeElement)) {
-            if (this.previousFocus_ && this.previousFocus_.focus) {
-              this.previousFocus_.focus();
+        saveFocus: function saveFocus() {
+          _this2.previousFocus_ = document.activeElement;
+        },
+        restoreFocus: function restoreFocus() {
+          if (_this2.$el.contains(document.activeElement)) {
+            if (_this2.previousFocus_ && _this2.previousFocus_.focus) {
+              _this2.previousFocus_.focus();
             }
           }
         }
       };
     },
+    getDimensionAdapterMethods: function getDimensionAdapterMethods() {
+      var _this3 = this;
 
-    getDimensionAdapterMethods() {
       return {
-        getInnerDimensions: () => {
+        getInnerDimensions: function getInnerDimensions() {
           return {
-            width: this.$el.offsetWidth,
-            height: this.$el.offsetHeight
+            width: _this3.$el.offsetWidth,
+            height: _this3.$el.offsetHeight
           };
         },
-        getAnchorDimensions: () => this.anchorElement ? this.anchorElement.getBoundingClientRect() : null,
-        getWindowDimensions: () => {
+        getAnchorDimensions: function getAnchorDimensions() {
+          return _this3.anchorElement ? _this3.anchorElement.getBoundingClientRect() : null;
+        },
+        getWindowDimensions: function getWindowDimensions() {
           return {
             width: window.innerWidth,
             height: window.innerHeight
           };
         },
-        getBodyDimensions: () => {
+        getBodyDimensions: function getBodyDimensions() {
           return {
             width: document.body.clientWidth,
             height: document.body.clientHeight
           };
         },
-        getWindowScroll: () => {
+        getWindowScroll: function getWindowScroll() {
           return {
             x: window.pageXOffset,
             y: window.pageYOffset
           };
         },
-        setPosition: position => {
-          this.$el.style.left = 'left' in position ? `${position.left}px` : null;
-          this.$el.style.right = 'right' in position ? `${position.right}px` : null;
-          this.$el.style.top = 'top' in position ? `${position.top}px` : null;
-          this.$el.style.bottom = 'bottom' in position ? `${position.bottom}px` : null;
+        setPosition: function setPosition(position) {
+          _this3.$el.style.left = 'left' in position ? "".concat(position.left, "px") : null;
+          _this3.$el.style.right = 'right' in position ? "".concat(position.right, "px") : null;
+          _this3.$el.style.top = 'top' in position ? "".concat(position.top, "px") : null;
+          _this3.$el.style.bottom = 'bottom' in position ? "".concat(position.bottom, "px") : null;
         },
-        setMaxHeight: height => {
-          this.$el.style.maxHeight = height;
+        setMaxHeight: function setMaxHeight(height) {
+          _this3.$el.style.maxHeight = height;
         }
       };
     },
-
-    onOpen_(value) {
-      const method = value ? 'open' : 'close';
+    onOpen_: function onOpen_(value) {
+      var method = value ? 'open' : 'close';
       this.foundation[method]();
     },
-
-    hoistMenuToBody() {
+    hoistMenuToBody: function hoistMenuToBody() {
       document.body.appendChild(this.$el.parentElement.removeChild(this.$el));
       this.setIsHoisted(true);
     },
-
-    setIsHoisted(isHoisted) {
+    setIsHoisted: function setIsHoisted(isHoisted) {
       this.foundation.setIsHoisted(isHoisted);
     },
-
-    setFixedPosition(isFixed) {
+    setFixedPosition: function setFixedPosition(isFixed) {
       if (isFixed) {
         this.$set(this.classes, cssClasses$2.FIXED, true);
       } else {
@@ -4698,65 +4893,60 @@ var mcwMenuSurface = {
 
       this.foundation.setFixedPosition(isFixed);
     },
-
-    setAbsolutePosition(x, y) {
+    setAbsolutePosition: function setAbsolutePosition(x, y) {
       this.foundation.setAbsolutePosition(x, y);
       this.setIsHoisted(true);
     },
-
-    setAnchorCorner(corner) {
+    setAnchorCorner: function setAnchorCorner(corner) {
       this.foundation.setAnchorCorner(corner);
     },
-
-    setAnchorMargin(margin) {
+    setAnchorMargin: function setAnchorMargin(margin) {
       this.foundation.setAnchorMargin(margin);
     },
-
-    setMenuSurfaceAnchorElement(element) {
+    setMenuSurfaceAnchorElement: function setMenuSurfaceAnchorElement(element) {
       this.anchorElement = element;
     },
-
-    show(options) {
+    show: function show(options) {
       this.foundation.open(options);
     },
-
-    hide() {
+    hide: function hide() {
       this.close();
     },
-
-    close(skipRestoreFocus = false) {
+    close: function close() {
+      var skipRestoreFocus = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
       this.foundation.close(skipRestoreFocus);
     },
-
-    isOpen() {
+    isOpen: function isOpen() {
       return this.foundation ? this.foundation.isOpen() : false;
     }
-
   },
+  render: function render(createElement) {
+    var _this4 = this,
+        _scopedSlots$default;
 
-  render(createElement) {
-    var _scopedSlots$default;
-
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
+    var scopedSlots = this.$scopedSlots;
     return createElement('div', {
       class: this.classes,
       on: {
-        keydown: evt => this.handleKeydown(evt),
-        'MDCMenuSurface:opened': evt => this.registerBodyClickListener(evt),
-        'MDCMenuSurface:closed': evt => this.deregisterBodyClickListener(evt)
+        keydown: function keydown(evt) {
+          return _this4.handleKeydown(evt);
+        },
+        'MDCMenuSurface:opened': function MDCMenuSurfaceOpened(evt) {
+          return _this4.registerBodyClickListener(evt);
+        },
+        'MDCMenuSurface:closed': function MDCMenuSurfaceClosed(evt) {
+          return _this4.deregisterBodyClickListener(evt);
+        }
       }
     }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots));
   }
-
 };
 
 var menu = BasePlugin({
-  mcwMenu,
-  mcwMenuSurface,
-  mcwMenuItem,
-  mcwMenuAnchor
+  mcwMenu: mcwMenu,
+  mcwMenuSurface: mcwMenuSurface,
+  mcwMenuItem: mcwMenuItem,
+  mcwMenuAnchor: mcwMenuAnchor
 });
 
 var script$b = {
@@ -4764,8 +4954,7 @@ var script$b = {
   components: {
     mcwFloatingLabel: __vue_component__$6
   },
-
-  data() {
+  data: function data() {
     return {
       outlinedClasses: {
         'mdc-notched-outline': true
@@ -4773,55 +4962,52 @@ var script$b = {
       notchStyles: {}
     };
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
-    const {
-      OUTLINE_UPGRADED,
-      NO_LABEL
-    } = MDCNotchedOutlineFoundation.cssClasses;
-    const adapter = {
-      addClass: className => {
-        this.$set(this.outlinedClasses, className, true);
+    var _MDCNotchedOutlineFou = MDCNotchedOutlineFoundation.cssClasses,
+        OUTLINE_UPGRADED = _MDCNotchedOutlineFou.OUTLINE_UPGRADED,
+        NO_LABEL = _MDCNotchedOutlineFou.NO_LABEL;
+    var adapter = {
+      addClass: function addClass(className) {
+        _this.$set(_this.outlinedClasses, className, true);
       },
-      removeClass: className => {
-        this.$delete(this.outlinedClasses, className);
+      removeClass: function removeClass(className) {
+        _this.$delete(_this.outlinedClasses, className);
       },
-      setNotchWidthProperty: width => this.$set(this.notchStyles, 'width', `${width}px`),
-      removeNotchWidthProperty: () => this.$delete(this.notchStyles, 'width')
+      setNotchWidthProperty: function setNotchWidthProperty(width) {
+        return _this.$set(_this.notchStyles, 'width', "".concat(width, "px"));
+      },
+      removeNotchWidthProperty: function removeNotchWidthProperty() {
+        return _this.$delete(_this.notchStyles, 'width');
+      }
     };
     this.foundation = new MDCNotchedOutlineFoundation(adapter);
     this.foundation.init();
-    const key = this.$slots.default ? OUTLINE_UPGRADED : NO_LABEL;
+    var key = this.$slots.default ? OUTLINE_UPGRADED : NO_LABEL;
     this.$set(this.outlinedClasses, key, true);
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.foundation.destroy();
   },
-
   methods: {
-    notch(notchWidth) {
+    notch: function notch(notchWidth) {
       this.foundation.notch(notchWidth);
     },
-
-    closeNotch() {
+    closeNotch: function closeNotch() {
       this.foundation.closeNotch();
     },
-
-    float(shouldFloat) {
+    float: function float(shouldFloat) {
       this.$refs.labelEl && this.$refs.labelEl.float(shouldFloat);
     },
-
-    shake(shouldShake) {
+    shake: function shake(shouldShake) {
       this.$refs.labelEl && this.$refs.labelEl.shake(shouldShake);
     },
-
-    getWidth() {
+    getWidth: function getWidth() {
       var _this$$refs$labelEl;
 
       return (_this$$refs$labelEl = this.$refs.labelEl) === null || _this$$refs$labelEl === void 0 ? void 0 : _this$$refs$labelEl.getWidth();
     }
-
   }
 };
 
@@ -4890,7 +5076,6 @@ var notchedOutline = BasePlugin({
   mcwNotchedOutline: __vue_component__$b
 });
 
-/* eslint-disable quote-props */
 var script$c = {
   name: 'mcw-radio',
   mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
@@ -4915,8 +5100,7 @@ var script$c = {
     disabled: Boolean,
     checked: Boolean
   },
-
-  data() {
+  data: function data() {
     return {
       classes: {
         'mdc-radio': 1
@@ -4924,120 +5108,116 @@ var script$c = {
       styles: {}
     };
   },
-
   watch: {
     checked: 'setChecked',
     picked: 'onPicked',
-
-    disabled(value) {
+    disabled: function disabled(value) {
       this.foundation.setDisabled(value);
     }
-
   },
   computed: {
-    rootClasses() {
-      return { ...this.classes,
-        ...this.radioClasses
-      };
+    rootClasses: function rootClasses() {
+      return _objectSpread2(_objectSpread2({}, this.classes), this.radioClasses);
     },
-
-    formFieldClasses() {
+    formFieldClasses: function formFieldClasses() {
       return {
         'mdc-form-field': 1,
         'mdc-form-field--align-end': this.alignEnd
       };
     }
-
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
-    const adapter = {
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      setNativeControlDisabled: disabled => this.$refs.controlEl && this.$refs.controlEl.disabled == disabled
+    var adapter = {
+      addClass: function addClass(className) {
+        return _this.$set(_this.classes, className, true);
+      },
+      removeClass: function removeClass(className) {
+        return _this.$delete(_this.classes, className);
+      },
+      setNativeControlDisabled: function setNativeControlDisabled(disabled) {
+        return _this.$refs.controlEl && _this.$refs.controlEl.disabled == disabled;
+      }
     }; // add foundation
 
     this.foundation = new MDCRadioFoundation(adapter); // add ripple
 
     this.ripple = new RippleBase(this, {
-      isUnbounded: () => true,
+      isUnbounded: function isUnbounded() {
+        return true;
+      },
       // Radio buttons technically go "active" whenever there is *any* keyboard interaction. This is not the
       // UI we desire.
-      isSurfaceActive: () => false,
-      registerInteractionHandler: (evt, handler) => {
-        this.$refs.controlEl.addEventListener(evt, handler, applyPassive());
+      isSurfaceActive: function isSurfaceActive() {
+        return false;
       },
-      deregisterInteractionHandler: (evt, handler) => {
-        this.$refs.controlEl.removeEventListener(evt, handler, applyPassive());
+      registerInteractionHandler: function registerInteractionHandler(evt, handler) {
+        _this.$refs.controlEl.addEventListener(evt, handler, applyPassive());
       },
-      computeBoundingRect: () => {
-        return this.$refs.root.getBoundingClientRect();
+      deregisterInteractionHandler: function deregisterInteractionHandler(evt, handler) {
+        _this.$refs.controlEl.removeEventListener(evt, handler, applyPassive());
+      },
+      computeBoundingRect: function computeBoundingRect() {
+        return _this.$refs.root.getBoundingClientRect();
       }
     });
     this.formField = new MDCFormFieldFoundation({
-      registerInteractionHandler: (type, handler) => {
-        this.$refs.labelEl && this.$refs.labelEl.addEventListener(type, handler);
+      registerInteractionHandler: function registerInteractionHandler(type, handler) {
+        _this.$refs.labelEl && _this.$refs.labelEl.addEventListener(type, handler);
       },
-      deregisterInteractionHandler: (type, handler) => {
-        this.$refs.labelEl && this.$refs.labelEl.removeEventListener(type, handler);
+      deregisterInteractionHandler: function deregisterInteractionHandler(type, handler) {
+        _this.$refs.labelEl && _this.$refs.labelEl.removeEventListener(type, handler);
       },
-      activateInputRipple: () => {
-        this.ripple && this.ripple.activate();
+      activateInputRipple: function activateInputRipple() {
+        _this.ripple && _this.ripple.activate();
       },
-      deactivateInputRipple: () => {
-        this.ripple && this.ripple.deactivate();
+      deactivateInputRipple: function deactivateInputRipple() {
+        _this.ripple && _this.ripple.deactivate();
       }
     });
     this.foundation.init();
     this.ripple.init();
     this.formField.init();
-    const {
-      checked,
-      disabled,
-      picked,
-      value
-    } = this;
+    var checked = this.checked,
+        disabled = this.disabled,
+        picked = this.picked,
+        value = this.value;
     this.foundation.setDisabled(disabled);
     this.setChecked(checked || picked == value); // if checked, need to sync any change of value
 
     checked && this.onChange();
   },
-
   methods: {
-    onChange() {
-      const nativeValue = this.$refs.controlEl.value;
+    onChange: function onChange() {
+      var nativeValue = this.$refs.controlEl.value;
       nativeValue != this.picked && this.$emit('change', this.$refs.controlEl.value);
     },
-
-    onPicked(nv) {
+    onPicked: function onPicked(nv) {
       this.setChecked(nv == this.$refs.controlEl.value);
     },
-
-    setChecked(checked) {
+    setChecked: function setChecked(checked) {
       this.$refs.controlEl.checked = checked;
     }
-
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.formField.destroy();
     this.ripple.destroy();
     this.foundation.destroy();
   },
+  renderX: function renderX(createElement) {
+    var _this2 = this;
 
-  renderX(createElement) {
-    const {
-      alignEnd,
-      value,
-      disabled,
-      picked,
-      $attrs: attrs,
-      $listeners: listeners,
-      id,
-      label,
-      name
-    } = this;
-    const backgroundEl = createElement('div', {
+    var alignEnd = this.alignEnd,
+        value = this.value,
+        disabled = this.disabled,
+        picked = this.picked,
+        attrs = this.$attrs,
+        listeners = this.$listeners,
+        id = this.id,
+        label = this.label,
+        name = this.name;
+    var backgroundEl = createElement('div', {
       class: {
         'mdc-radio__background': 1
       }
@@ -5046,22 +5226,24 @@ var script$c = {
     }), createElement('div', {
       class: 'mdc-radio__inner-circle'
     })]);
-    const inputEl = createElement('input', {
+    var inputEl = createElement('input', {
       class: ['mdc-radio__native-control'],
-      attrs: { ...attrs,
-        name,
-        id,
+      attrs: _objectSpread2(_objectSpread2({}, attrs), {}, {
+        name: name,
+        id: id,
         type: 'radio',
-        value,
+        value: value,
         checked: picked == value,
-        disabled
-      },
+        disabled: disabled
+      }),
       ref: 'controlEl',
-      on: { ...listeners,
-        change: evt => this.onChange(evt)
-      }
+      on: _objectSpread2(_objectSpread2({}, listeners), {}, {
+        change: function change(evt) {
+          return _this2.onChange(evt);
+        }
+      })
     });
-    const radioEl = createElement('div', {
+    var radioEl = createElement('div', {
       class: [this.classes, this.radioClasses],
       style: this.styles,
       ref: 'root'
@@ -5087,7 +5269,6 @@ var script$c = {
       }
     }, label)]);
   }
-
 };
 
 /* script */
@@ -5191,8 +5372,7 @@ var SelectHelperText = {
     helptextPersistent: Boolean,
     helptextValidation: Boolean
   },
-
-  data() {
+  data: function data() {
     return {
       classes: {
         'mdc-select-helper-text': true,
@@ -5204,30 +5384,36 @@ var SelectHelperText = {
       }
     };
   },
-
   watch: {
-    helptextPersistent() {
+    helptextPersistent: function helptextPersistent() {
       this.foundation.setPersistent(this.helptextPersistent);
     },
-
-    helptextValidation() {
+    helptextValidation: function helptextValidation() {
       this.foundation.setValidation(this.helptextValidation);
     }
-
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
     this.foundation = new MDCSelectHelperTextFoundation({
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      hasClass: className => Boolean(this.classes[className]),
-      setAttr: (attr, value) => {
-        this.$set(this.attrs, attr, value); // this.$el.setAttribute(attr, value);
+      addClass: function addClass(className) {
+        return _this.$set(_this.classes, className, true);
       },
-      removeAttr: attr => {
-        this.$delete(this.attrs, attr); // this.$el.removeAttribute(attr);
+      removeClass: function removeClass(className) {
+        return _this.$delete(_this.classes, className);
       },
-      setContent: () =>
+      hasClass: function hasClass(className) {
+        return Boolean(_this.classes[className]);
+      },
+      setAttr: function setAttr(attr, value) {
+        _this.$set(_this.attrs, attr, value); // this.$el.setAttribute(attr, value);
+
+      },
+      removeAttr: function removeAttr(attr) {
+        _this.$delete(_this.attrs, attr); // this.$el.removeAttribute(attr);
+
+      },
+      setContent: function setContent()
       /* content */
       {// help text get's updated from {{helptext}}
         // cf. this.$el.textContent = content
@@ -5235,21 +5421,16 @@ var SelectHelperText = {
     });
     this.foundation.init();
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.foundation.destroy();
   },
-
-  render(createElement) {
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
+  render: function render(createElement) {
+    var scopedSlots = this.$scopedSlots;
     return createElement('p', {
       class: this.classes,
       attrs: this.attrs
     }, scopedSlots.default && scopedSlots.default());
   }
-
 };
 
 var SelectIcon = {
@@ -5257,8 +5438,7 @@ var SelectIcon = {
   props: {
     icon: String
   },
-
-  data() {
+  data: function data() {
     return {
       classes: {
         'material-icons': true,
@@ -5267,32 +5447,42 @@ var SelectIcon = {
       styles: {}
     };
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
     this.foundation = new MDCSelectIconFoundation(Object.assign({
-      getAttr: attr => this.$el.getAttribute(attr),
-      setAttr: (attr, value) => this.$el.setAttribute(attr, value),
-      removeAttr: attr => this.$el.removeAttribute(attr),
-      setContent: content => {
-        this.$el.textContent = content;
+      getAttr: function getAttr(attr) {
+        return _this.$el.getAttribute(attr);
       },
-      registerInteractionHandler: (evtType, handler) => this.$el.addEventListener(evtType, handler),
-      deregisterInteractionHandler: (evtType, handler) => this.$el.removeEventListener(evtType, handler),
-      notifyIconAction: () => {
-        this.$emit('click');
-        emitCustomEvent(this.$el, MDCSelectIconFoundation.strings.ICON_EVENT, {}, true
+      setAttr: function setAttr(attr, value) {
+        return _this.$el.setAttribute(attr, value);
+      },
+      removeAttr: function removeAttr(attr) {
+        return _this.$el.removeAttribute(attr);
+      },
+      setContent: function setContent(content) {
+        _this.$el.textContent = content;
+      },
+      registerInteractionHandler: function registerInteractionHandler(evtType, handler) {
+        return _this.$el.addEventListener(evtType, handler);
+      },
+      deregisterInteractionHandler: function deregisterInteractionHandler(evtType, handler) {
+        return _this.$el.removeEventListener(evtType, handler);
+      },
+      notifyIconAction: function notifyIconAction() {
+        _this.$emit('click');
+
+        emitCustomEvent(_this.$el, MDCSelectIconFoundation.strings.ICON_EVENT, {}, true
         /* shouldBubble  */
         );
       }
     }));
     this.foundation.init();
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.foundation.destroy();
   },
-
-  render(createElement) {
+  render: function render(createElement) {
     return createElement('i', {
       class: this.classes,
       style: this.styles,
@@ -5300,12 +5490,9 @@ var SelectIcon = {
       on: this.$listeners
     }, this.icon);
   }
-
 };
 
-const {
-  strings: strings$2
-} = MDCSelectFoundation;
+var strings$2 = MDCSelectFoundation.strings;
 var mcwSelect = {
   name: 'mcw-select',
   inheritAttrs: false,
@@ -5327,8 +5514,7 @@ var mcwSelect = {
     }
   },
   mixins: [VMAUniqueIdMixin],
-
-  data() {
+  data: function data() {
     return {
       styles: {},
       classes: {},
@@ -5337,27 +5523,24 @@ var mcwSelect = {
       selectAnchorAttrs: {}
     };
   },
-
   components: {
-    SelectHelperText,
-    SelectIcon
+    SelectHelperText: SelectHelperText,
+    SelectIcon: SelectIcon
   },
   computed: {
-    rootClasses() {
-      return {
+    rootClasses: function rootClasses() {
+      return _objectSpread2({
         'mdc-select': 1,
         'mdc-select--outlined': this.outlined,
         'mdc-select--with-leading-icon': this.leadingIcon,
         'mdc-select--disabled': this.disabled,
-        'mdc-select--no-label': !this.label,
-        ...this.classes
-      };
+        'mdc-select--no-label': !this.label
+      }, this.classes);
     },
+    selectedTextAttrs: function selectedTextAttrs() {
+      var helpId = "help-".concat(this.vma_uid_);
 
-    selectedTextAttrs() {
-      const helpId = `help-${this.vma_uid_}`;
-      const attrs = { ...this.selTextAttrs
-      };
+      var attrs = _objectSpread2({}, this.selTextAttrs);
 
       if (this.helptext) {
         attrs['aria-controls'] = helpId;
@@ -5366,150 +5549,144 @@ var mcwSelect = {
 
       return attrs;
     },
-
-    selectAriaControls() {
+    selectAriaControls: function selectAriaControls() {
       return this.helptext ? 'help-' + this.vma_uid_ : undefined;
     }
-
   },
   watch: {
-    disabled(value) {
-      const {
-        foundation
-      } = this;
+    disabled: function disabled(value) {
+      var foundation = this.foundation;
       foundation && foundation.updateDisabledStyle(value);
     },
-
     value: 'refreshIndex'
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
     this.menuSetup_();
-    const {
-      $refs: {
-        helperTextEl,
-        leadingIconEl
-      }
-    } = this;
+    var _this$$refs = this.$refs,
+        helperTextEl = _this$$refs.helperTextEl,
+        leadingIconEl = _this$$refs.leadingIconEl;
     this.foundation = new MDCSelectFoundation(Object.assign({
       // common methods
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      hasClass: className => Boolean(this.rootClasses[className]),
-      setRippleCenter: normalizedX => {
-        const {
-          $refs: {
-            lineRippleEl
-          }
-        } = this;
+      addClass: function addClass(className) {
+        return _this.$set(_this.classes, className, true);
+      },
+      removeClass: function removeClass(className) {
+        return _this.$delete(_this.classes, className);
+      },
+      hasClass: function hasClass(className) {
+        return Boolean(_this.rootClasses[className]);
+      },
+      setRippleCenter: function setRippleCenter(normalizedX) {
+        var lineRippleEl = _this.$refs.lineRippleEl;
         lineRippleEl && lineRippleEl.setRippleCenter(normalizedX);
       },
-      activateBottomLine: () => {
-        const {
-          $refs: {
-            lineRippleEl
-          }
-        } = this;
+      activateBottomLine: function activateBottomLine() {
+        var lineRippleEl = _this.$refs.lineRippleEl;
         lineRippleEl && lineRippleEl.foundation_.activate();
       },
-      deactivateBottomLine: () => {
-        const {
-          $refs: {
-            lineRippleEl
-          }
-        } = this;
+      deactivateBottomLine: function deactivateBottomLine() {
+        var lineRippleEl = _this.$refs.lineRippleEl;
         lineRippleEl && lineRippleEl.foundation_.deactivate();
       },
-      notifyChange: value => {
-        const index = this.selectedIndex;
-        emitCustomEvent(this.$el, strings$2.CHANGE_EVENT, {
-          value,
-          index
+      notifyChange: function notifyChange(value) {
+        var index = _this.selectedIndex;
+        emitCustomEvent(_this.$el, strings$2.CHANGE_EVENT, {
+          value: value,
+          index: index
         }, true
         /* shouldBubble  */
         );
-        value != this.value && this.$emit('change', value);
+        value != _this.value && _this.$emit('change', value);
       },
       // select methods
-      getSelectedMenuItem: () => {
-        return this.menuElement_.querySelector(strings$2.SELECTED_ITEM_SELECTOR);
+      getSelectedMenuItem: function getSelectedMenuItem() {
+        return _this.menuElement_.querySelector(strings$2.SELECTED_ITEM_SELECTOR);
       },
-      getMenuItemAttr: (menuItem, attr) => menuItem.getAttribute(attr),
-      setSelectedText: text => {
-        this.selectedTextContent = text;
+      getMenuItemAttr: function getMenuItemAttr(menuItem, attr) {
+        return menuItem.getAttribute(attr);
       },
-      isSelectAnchorFocused: () => {
-        return document.activeElement === this.$refs.anchorEl;
+      setSelectedText: function setSelectedText(text) {
+        _this.selectedTextContent = text;
       },
-      getSelectAnchorAttr: attr => {
-        return this.selectAnchorAttrs[attr];
+      isSelectAnchorFocused: function isSelectAnchorFocused() {
+        return document.activeElement === _this.$refs.anchorEl;
       },
-      setSelectAnchorAttr: (attr, value) => {
-        this.$set(this.selectAnchorAttrs, attr, value);
+      getSelectAnchorAttr: function getSelectAnchorAttr(attr) {
+        return _this.selectAnchorAttrs[attr];
       },
-      openMenu: () => {
-        this.menu_.surfaceOpen = true;
+      setSelectAnchorAttr: function setSelectAnchorAttr(attr, value) {
+        _this.$set(_this.selectAnchorAttrs, attr, value);
       },
-      closeMenu: () => {
-        this.menu_.surfaceOpen = false;
+      openMenu: function openMenu() {
+        _this.menu_.surfaceOpen = true;
       },
-      getAnchorElement: () => this.$refs.anchorEl,
-      setMenuAnchorElement: anchorEl => this.menu_.setAnchorElement(anchorEl),
-      setMenuAnchorCorner: anchorCorner => this.menu_.setAnchorCorner(anchorCorner),
-      setMenuWrapFocus: wrapFocus => this.menu_.wrapFocus = wrapFocus,
-      setAttributeAtIndex: (index, attributeName, attributeValue) => this.menu_.items[index].setAttribute(attributeName, attributeValue),
-      removeAttributeAtIndex: (index, attributeName) => this.menu_.items[index].removeAttribute(attributeName),
-      focusMenuItemAtIndex: index => {
-        this.menu_.items[index].focus();
+      closeMenu: function closeMenu() {
+        _this.menu_.surfaceOpen = false;
       },
-      getMenuItemCount: () => this.menu_.items.length,
-      getMenuItemValues: () => this.menu_.items.map(el => el.getAttribute(strings$2.VALUE_ATTR) || ''),
-      getMenuItemTextAtIndex: index => this.menu_.items[index].textContent,
-      addClassAtIndex: (index, className) => {
-        this.menu_.items[index].classList.add(className);
+      getAnchorElement: function getAnchorElement() {
+        return _this.$refs.anchorEl;
       },
-      removeClassAtIndex: (index, className) => {
-        this.menu_.items[index].classList.remove(className);
+      setMenuAnchorElement: function setMenuAnchorElement(anchorEl) {
+        return _this.menu_.setAnchorElement(anchorEl);
+      },
+      setMenuAnchorCorner: function setMenuAnchorCorner(anchorCorner) {
+        return _this.menu_.setAnchorCorner(anchorCorner);
+      },
+      setMenuWrapFocus: function setMenuWrapFocus(wrapFocus) {
+        return _this.menu_.wrapFocus = wrapFocus;
+      },
+      setAttributeAtIndex: function setAttributeAtIndex(index, attributeName, attributeValue) {
+        return _this.menu_.items[index].setAttribute(attributeName, attributeValue);
+      },
+      removeAttributeAtIndex: function removeAttributeAtIndex(index, attributeName) {
+        return _this.menu_.items[index].removeAttribute(attributeName);
+      },
+      focusMenuItemAtIndex: function focusMenuItemAtIndex(index) {
+        _this.menu_.items[index].focus();
+      },
+      getMenuItemCount: function getMenuItemCount() {
+        return _this.menu_.items.length;
+      },
+      getMenuItemValues: function getMenuItemValues() {
+        return _this.menu_.items.map(function (el) {
+          return el.getAttribute(strings$2.VALUE_ATTR) || '';
+        });
+      },
+      getMenuItemTextAtIndex: function getMenuItemTextAtIndex(index) {
+        return _this.menu_.items[index].textContent;
+      },
+      addClassAtIndex: function addClassAtIndex(index, className) {
+        _this.menu_.items[index].classList.add(className);
+      },
+      removeClassAtIndex: function removeClassAtIndex(index, className) {
+        _this.menu_.items[index].classList.remove(className);
       },
       // outline methods
-      hasOutline: () => {
-        return this.outlined;
+      hasOutline: function hasOutline() {
+        return _this.outlined;
       },
-      notchOutline: labelWidth => {
-        const {
-          $refs: {
-            outlineEl
-          }
-        } = this;
+      notchOutline: function notchOutline(labelWidth) {
+        var outlineEl = _this.$refs.outlineEl;
         outlineEl && outlineEl.notch(labelWidth);
       },
-      closeOutline: () => {
-        const {
-          $refs: {
-            outlineEl
-          }
-        } = this;
+      closeOutline: function closeOutline() {
+        var outlineEl = _this.$refs.outlineEl;
         outlineEl && outlineEl.closeNotch();
       },
       // label methods
-      hasLabel: () => {
-        return !!this.label;
+      hasLabel: function hasLabel() {
+        return !!_this.label;
       },
-      floatLabel: value => {
-        const {
-          $refs: {
-            labelEl,
-            outlineEl
-          }
-        } = this;
+      floatLabel: function floatLabel(value) {
+        var _this$$refs2 = _this.$refs,
+            labelEl = _this$$refs2.labelEl,
+            outlineEl = _this$$refs2.outlineEl;
         (labelEl || outlineEl).float(value);
       },
-      getLabelWidth: () => {
-        const {
-          $refs: {
-            labelEl
-          }
-        } = this;
+      getLabelWidth: function getLabelWidth() {
+        var labelEl = _this.$refs.labelEl;
         return labelEl && labelEl.getWidth();
       }
     }), {
@@ -5537,8 +5714,7 @@ var mcwSelect = {
       this.ripple.init();
     }
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     // this.slotObserver.disconnect();
     if (this.menu_) {
       this.menu_.unlisten(MDCMenuSurfaceFoundation.strings.SELECTED_EVENT, this.handleMenuItemAction);
@@ -5546,84 +5722,75 @@ var mcwSelect = {
       this.menu_.unlisten(MDCMenuSurfaceFoundation.strings.CLOSED_EVENT, this.handleMenuClosed);
     }
 
-    const foundation = this.foundation;
+    var foundation = this.foundation;
     this.foundation = null;
     foundation.destroy();
     this.ripple && this.ripple.destroy();
   },
-
   methods: {
-    handleMenuOpened() {
+    handleMenuOpened: function handleMenuOpened() {
       this.foundation.handleMenuOpened();
     },
-
-    handleMenuClosed() {
+    handleMenuClosed: function handleMenuClosed() {
       this.foundation.handleMenuClosed();
     },
-
-    handleMenuItemAction(evt) {
+    handleMenuItemAction: function handleMenuItemAction(evt) {
       this.foundation.handleMenuItemAction(evt.detail.index);
     },
-
-    handleChange() {
+    handleChange: function handleChange() {
       this.foundation.handleChange(true);
     },
-
-    handleFocus() {
+    handleFocus: function handleFocus() {
       this.foundation.handleFocus();
     },
-
-    handleBlur() {
+    handleBlur: function handleBlur() {
       this.foundation.handleBlur();
     },
-
-    handleClick(evt) {
+    handleClick: function handleClick(evt) {
       this.$refs.anchorEl.focus();
       this.handleFocus();
       this.foundation.handleClick(this.getNormalizedXCoordinate(evt));
     },
-
-    getNormalizedXCoordinate(evt) {
-      const targetClientRect = evt.target.getBoundingClientRect();
-      const xCoordinate = evt.clientX;
+    getNormalizedXCoordinate: function getNormalizedXCoordinate(evt) {
+      var targetClientRect = evt.target.getBoundingClientRect();
+      var xCoordinate = evt.clientX;
       return xCoordinate - targetClientRect.left;
     },
-
-    menuSetup_() {
+    menuSetup_: function menuSetup_() {
       this.menuElement_ = this.$el.querySelector(MDCSelectFoundation.strings.MENU_SELECTOR);
 
       if (this.menuElement_) {
         this.menu_ = this.menuElement_.__vue__;
       }
     },
+    refreshIndex: function refreshIndex() {
+      var _this2 = this;
 
-    refreshIndex() {
-      const items = this.menu_.items.map(el => el.getAttribute(strings$2.VALUE_ATTR) || '');
-      const idx = items.findIndex(value => {
-        return this.value === value;
+      var items = this.menu_.items.map(function (el) {
+        return el.getAttribute(strings$2.VALUE_ATTR) || '';
+      });
+      var idx = items.findIndex(function (value) {
+        return _this2.value === value;
       });
       this.foundation.setSelectedIndex(idx);
     }
-
   },
+  render: function render(createElement) {
+    var _this3 = this;
 
-  render(createElement) {
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
-    const helpId = `help-${this.vma_uid_}`;
-    const anchorNodes = [createElement('span', {
+    var scopedSlots = this.$scopedSlots;
+    var helpId = "help-".concat(this.vma_uid_);
+    var anchorNodes = [createElement('span', {
       class: ['mdc-select__ripple']
     }), createElement('input', {
       class: {
         'mdc-select__selected-text': 1
       },
-      attrs: {
+      attrs: _objectSpread2({
         disabled: true,
         readonly: true,
-        value: this.selectedTextContent,
-        ...this.selectedTextAttrs
-      },
+        value: this.selectedTextContent
+      }, this.selectedTextAttrs),
       ref: 'selectedTextEl'
     }), createElement('i', {
       class: {
@@ -5654,19 +5821,25 @@ var mcwSelect = {
       }));
     }
 
-    const anchorEl = createElement('div', {
+    var anchorEl = createElement('div', {
       class: {
         'mdc-select__anchor': 1
       },
       attrs: this.selectAnchorAttrs,
       ref: 'anchorEl',
       on: {
-        click: evt => this.handleClick(evt),
-        focus: () => this.handleFocus(),
-        blur: () => this.handleBlur()
+        click: function click(evt) {
+          return _this3.handleClick(evt);
+        },
+        focus: function focus() {
+          return _this3.handleFocus();
+        },
+        blur: function blur() {
+          return _this3.handleBlur();
+        }
       }
     }, anchorNodes);
-    const nodes = [anchorEl, scopedSlots.default && scopedSlots.default()];
+    var nodes = [anchorEl, scopedSlots.default && scopedSlots.default()];
 
     if (this.helptext) {
       nodes.push(createElement('select-helper-text', {
@@ -5683,11 +5856,10 @@ var mcwSelect = {
       class: this.rootClasses
     }, nodes);
   }
-
 };
 
 var select = BasePlugin({
-  mcwSelect
+  mcwSelect: mcwSelect
 });
 
 var script$d = {
@@ -5720,9 +5892,8 @@ var script$d = {
       required: false
     }
   },
-
-  data() {
-    let stepSize = this.step;
+  data: function data() {
+    var stepSize = this.step;
 
     if (this.discrete && !stepSize) {
       stepSize = 1;
@@ -5741,93 +5912,99 @@ var script$d = {
       thumbStyles: {},
       markerValue: '',
       numMarkers: 0,
-      stepSize
+      stepSize: stepSize
     };
   },
-
   computed: {
-    hasMarkers() {
+    hasMarkers: function hasMarkers() {
       return this.discrete && this.displayMarkers;
     }
-
   },
   watch: {
-    value(nv) {
+    value: function value(nv) {
       if (this.foundation.getValue() !== Number(nv)) {
         this.foundation.setValue(nv);
       }
     },
-
-    min(nv) {
+    min: function min(nv) {
       this.foundation.setMin(Number(nv));
     },
-
-    max(nv) {
+    max: function max(nv) {
       this.foundation.setMax(Number(nv));
     },
-
-    step(nv) {
+    step: function step(nv) {
       this.foundation.setStep(Number(nv));
     },
-
-    disabled(nv) {
+    disabled: function disabled(nv) {
       this.foundation.setDisabled(nv);
     }
-
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
-    const adapter = {
-      hasClass: className => this.$el.classList.contains(className),
-      addClass: className => {
-        this.$set(this.classes, className, true);
+    var adapter = {
+      hasClass: function hasClass(className) {
+        return _this.$el.classList.contains(className);
       },
-      removeClass: className => {
-        this.$delete(this.classes, className, true);
+      addClass: function addClass(className) {
+        _this.$set(_this.classes, className, true);
       },
-      getAttribute: name => this.$el.getAttribute(name),
-      setAttribute: (name, value) => this.$set(this.sliderAttrs, name, value),
-      removeAttribute: name => this.$delete(this.sliderAttrs, name),
-      computeBoundingRect: () => this.$el.getBoundingClientRect(),
-      getTabIndex: () => this.$el.tabIndex,
-      registerInteractionHandler: (type, handler) => {
-        this.$el.addEventListener(type, handler, applyPassive());
+      removeClass: function removeClass(className) {
+        _this.$delete(_this.classes, className, true);
       },
-      deregisterInteractionHandler: (type, handler) => {
-        this.$el.removeEventListener(type, handler, applyPassive());
+      getAttribute: function getAttribute(name) {
+        return _this.$el.getAttribute(name);
       },
-      registerThumbContainerInteractionHandler: (type, handler) => {
-        this.$refs.thumbContainer.addEventListener(type, handler, applyPassive());
+      setAttribute: function setAttribute(name, value) {
+        return _this.$set(_this.sliderAttrs, name, value);
       },
-      deregisterThumbContainerInteractionHandler: (type, handler) => {
-        this.$refs.thumbContainer.removeEventListener(type, handler, applyPassive());
+      removeAttribute: function removeAttribute(name) {
+        return _this.$delete(_this.sliderAttrs, name);
       },
-      registerBodyInteractionHandler: (type, handler) => {
+      computeBoundingRect: function computeBoundingRect() {
+        return _this.$el.getBoundingClientRect();
+      },
+      getTabIndex: function getTabIndex() {
+        return _this.$el.tabIndex;
+      },
+      registerInteractionHandler: function registerInteractionHandler(type, handler) {
+        _this.$el.addEventListener(type, handler, applyPassive());
+      },
+      deregisterInteractionHandler: function deregisterInteractionHandler(type, handler) {
+        _this.$el.removeEventListener(type, handler, applyPassive());
+      },
+      registerThumbContainerInteractionHandler: function registerThumbContainerInteractionHandler(type, handler) {
+        _this.$refs.thumbContainer.addEventListener(type, handler, applyPassive());
+      },
+      deregisterThumbContainerInteractionHandler: function deregisterThumbContainerInteractionHandler(type, handler) {
+        _this.$refs.thumbContainer.removeEventListener(type, handler, applyPassive());
+      },
+      registerBodyInteractionHandler: function registerBodyInteractionHandler(type, handler) {
         document.body.addEventListener(type, handler);
       },
-      deregisterBodyInteractionHandler: (type, handler) => {
+      deregisterBodyInteractionHandler: function deregisterBodyInteractionHandler(type, handler) {
         document.body.removeEventListener(type, handler);
       },
-      registerResizeHandler: handler => {
+      registerResizeHandler: function registerResizeHandler(handler) {
         window.addEventListener('resize', handler);
       },
-      deregisterResizeHandler: handler => {
+      deregisterResizeHandler: function deregisterResizeHandler(handler) {
         window.removeEventListener('resize', handler);
       },
-      notifyInput: () => {
-        this.$emit('input', this.foundation.getValue());
+      notifyInput: function notifyInput() {
+        _this.$emit('input', _this.foundation.getValue());
       },
-      notifyChange: () => {
-        this.$emit('change', this.foundation.getValue());
+      notifyChange: function notifyChange() {
+        _this.$emit('change', _this.foundation.getValue());
       },
-      setThumbContainerStyleProperty: (propertyName, value) => {
-        this.$set(this.thumbStyles, propertyName, value);
+      setThumbContainerStyleProperty: function setThumbContainerStyleProperty(propertyName, value) {
+        _this.$set(_this.thumbStyles, propertyName, value);
       },
-      setTrackStyleProperty: (propertyName, value) => {
-        this.$set(this.trackStyles, propertyName, value);
+      setTrackStyleProperty: function setTrackStyleProperty(propertyName, value) {
+        _this.$set(_this.trackStyles, propertyName, value);
       },
-      setMarkerValue: value => {
-        this.markerValue = value;
+      setMarkerValue: function setMarkerValue(value) {
+        _this.markerValue = value;
       },
       // appendTrackMarkers: numMarkers => {
       //   this.numMarkers = numMarkers;
@@ -5838,19 +6015,22 @@ var script$d = {
       // setLastTrackMarkersStyleProperty: (propertyName, value) => {
       //   this.$set(this.lastTrackMarkersStyles, propertyName, value);
       // },
-      setTrackMarkers: (step, max, min) => {
-        const stepStr = step.toLocaleString();
-        const maxStr = max.toLocaleString();
-        const minStr = min.toLocaleString(); // keep calculation in css for better rounding/subpixel behavior
+      setTrackMarkers: function setTrackMarkers(step, max, min) {
+        var stepStr = step.toLocaleString();
+        var maxStr = max.toLocaleString();
+        var minStr = min.toLocaleString(); // keep calculation in css for better rounding/subpixel behavior
 
-        const markerAmount = `((${maxStr} - ${minStr}) / ${stepStr})`;
-        const markerWidth = `2px`;
-        const markerBkgdImage = `linear-gradient(to right, currentColor ${markerWidth}, transparent 0)`;
-        const markerBkgdLayout = `0 center / calc((100% - ${markerWidth}) / ${markerAmount}) 100% repeat-x`;
-        const markerBkgdShorthand = `${markerBkgdImage} ${markerBkgdLayout}`;
-        this.$set(this.markerBkgdShorthand, 'background', markerBkgdShorthand);
+        var markerAmount = "((".concat(maxStr, " - ").concat(minStr, ") / ").concat(stepStr, ")");
+        var markerWidth = "2px";
+        var markerBkgdImage = "linear-gradient(to right, currentColor ".concat(markerWidth, ", transparent 0)");
+        var markerBkgdLayout = "0 center / calc((100% - ".concat(markerWidth, ") / ").concat(markerAmount, ") 100% repeat-x");
+        var markerBkgdShorthand = "".concat(markerBkgdImage, " ").concat(markerBkgdLayout);
+
+        _this.$set(_this.markerBkgdShorthand, 'background', markerBkgdShorthand);
       },
-      isRTL: () => getComputedStyle(this.$el).direction === 'rtl'
+      isRTL: function isRTL() {
+        return getComputedStyle(_this.$el).direction === 'rtl';
+      }
     };
     this.foundation = new MDCSliderFoundation(adapter);
     this.foundation.init();
@@ -5878,8 +6058,7 @@ var script$d = {
       this.layoutOnEventSource.$on(this.layoutOn, this.layout);
     }
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.$root.$off('vma:layout', this.layout);
 
     if (this.layoutOnEventSource) {
@@ -5888,14 +6067,14 @@ var script$d = {
 
     this.foundation.destroy();
   },
-
   methods: {
-    layout() {
-      this.$nextTick(() => {
-        this.foundation && this.foundation.layout();
+    layout: function layout() {
+      var _this2 = this;
+
+      this.$nextTick(function () {
+        _this2.foundation && _this2.foundation.layout();
       });
     }
-
   }
 };
 
@@ -5998,12 +6177,11 @@ var slider = BasePlugin({
   mcwSlider: __vue_component__$d
 });
 
-const noop = () => {};
+var noop = function noop() {};
 
 var mcwSnackbarQueue = {
   name: 'mcw-snackbar-queue',
-
-  data() {
+  data: function data() {
     return {
       open: false,
       queue: [],
@@ -6018,86 +6196,90 @@ var mcwSnackbarQueue = {
       }
     };
   },
-
-  render(createElement) {
+  render: function render(createElement) {
     return createElement('mcw-snackbar', {
-      props: {
-        open: this.open,
-        ...this.snack
-      },
+      props: _objectSpread2({
+        open: this.open
+      }, this.snack),
       on: this.listeners
     });
   },
-
   methods: {
-    handleSnack({
-      timeoutMs = 5000,
-      closeOnEscape,
-      message = '',
-      actionText = '',
-      dismissAction = true,
-      stacked,
-      leading,
-      actionHandler = noop
-    }) {
-      this.queue.push(() => {
-        this.snack = {
-          timeoutMs,
-          closeOnEscape,
-          message,
-          actionText,
-          actionHandler,
-          dismissAction,
-          stacked,
-          leading
+    handleSnack: function handleSnack(_ref) {
+      var _this = this;
+
+      var _ref$timeoutMs = _ref.timeoutMs,
+          timeoutMs = _ref$timeoutMs === void 0 ? 5000 : _ref$timeoutMs,
+          closeOnEscape = _ref.closeOnEscape,
+          _ref$message = _ref.message,
+          message = _ref$message === void 0 ? '' : _ref$message,
+          _ref$actionText = _ref.actionText,
+          actionText = _ref$actionText === void 0 ? '' : _ref$actionText,
+          _ref$dismissAction = _ref.dismissAction,
+          dismissAction = _ref$dismissAction === void 0 ? true : _ref$dismissAction,
+          stacked = _ref.stacked,
+          leading = _ref.leading,
+          _ref$actionHandler = _ref.actionHandler,
+          actionHandler = _ref$actionHandler === void 0 ? noop : _ref$actionHandler;
+      this.queue.push(function () {
+        _this.snack = {
+          timeoutMs: timeoutMs,
+          closeOnEscape: closeOnEscape,
+          message: message,
+          actionText: actionText,
+          actionHandler: actionHandler,
+          dismissAction: dismissAction,
+          stacked: stacked,
+          leading: leading
         };
-        this.actionHandler = actionHandler;
-        this.open = true;
+        _this.actionHandler = actionHandler;
+        _this.open = true;
       });
 
       if (this.queue.length === 1) {
         this.queue[0]();
       }
     },
+    handleClosed: function handleClosed() {
+      var _this2 = this;
 
-    handleClosed() {
       this.open = false;
       this.queue.shift();
 
       if (this.queue.length > 0) {
-        this.$nextTick(() => this.queue[0]());
+        this.$nextTick(function () {
+          return _this2.queue[0]();
+        });
       }
     }
-
   },
   computed: {
-    listeners() {
-      return { ...this.$listeners,
-        'MDCSnackbar:closed': ({
-          reason
-        }) => {
-          if (this.actionHandler && reason === 'action') {
-            this.actionHandler({
-              reason
+    listeners: function listeners() {
+      var _this3 = this;
+
+      return _objectSpread2(_objectSpread2({}, this.$listeners), {}, {
+        'MDCSnackbar:closed': function MDCSnackbarClosed(_ref2) {
+          var reason = _ref2.reason;
+
+          if (_this3.actionHandler && reason === 'action') {
+            _this3.actionHandler({
+              reason: reason
             });
           }
 
-          this.handleClosed();
-          this.$emit('closed', {
-            reason
+          _this3.handleClosed();
+
+          _this3.$emit('closed', {
+            reason: reason
           });
         }
-      };
+      });
     }
-
   }
 };
 
-/* eslint-disable quote-props */
-const {
-  strings: strings$3,
-  numbers
-} = MDCSnackbarFoundation;
+var strings$3 = MDCSnackbarFoundation.strings,
+    numbers = MDCSnackbarFoundation.numbers;
 var mcwSnackbar = {
   name: 'mcw-snackbar',
   model: {
@@ -6121,8 +6303,7 @@ var mcwSnackbar = {
     },
     reason: String
   },
-
-  data() {
+  data: function data() {
     return {
       classes: {},
       hidden: false,
@@ -6130,43 +6311,54 @@ var mcwSnackbar = {
       showMessage: true
     };
   },
-
   watch: {
     open: 'onOpen_',
     timeoutMs: 'onTimeoutMs_',
     closeOnEscape: 'onCloseOnEscape_'
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
     window.addEventListener('keydown', this.handleKeydownEvent);
-    const adapter = {
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      announce: () => this.announce(this.$refs.labelEl),
-      notifyOpening: () => this.$emit(strings$3.OPENING_EVENT, {}),
-      notifyOpened: () => {
-        this.$emit(strings$3.OPENED_EVENT, {});
-        this.$emit('change', true);
-        this.$emit('show', {});
+    var adapter = {
+      addClass: function addClass(className) {
+        return _this.$set(_this.classes, className, true);
       },
-      notifyClosing: reason => {
-        this.$emit(strings$3.CLOSING_EVENT, reason ? {
-          reason
-        } : {});
-        this.$emit('update:reason', reason);
+      removeClass: function removeClass(className) {
+        return _this.$delete(_this.classes, className);
       },
-      notifyClosed: reason => {
-        this.$emit(strings$3.CLOSED_EVENT, reason ? {
-          reason
+      announce: function announce() {
+        return _this.announce(_this.$refs.labelEl);
+      },
+      notifyOpening: function notifyOpening() {
+        return _this.$emit(strings$3.OPENING_EVENT, {});
+      },
+      notifyOpened: function notifyOpened() {
+        _this.$emit(strings$3.OPENED_EVENT, {});
+
+        _this.$emit('change', true);
+
+        _this.$emit('show', {});
+      },
+      notifyClosing: function notifyClosing(reason) {
+        _this.$emit(strings$3.CLOSING_EVENT, reason ? {
+          reason: reason
         } : {});
-        this.$emit('change', false);
-        this.$emit('hide');
+
+        _this.$emit('update:reason', reason);
+      },
+      notifyClosed: function notifyClosed(reason) {
+        _this.$emit(strings$3.CLOSED_EVENT, reason ? {
+          reason: reason
+        } : {});
+
+        _this.$emit('change', false);
+
+        _this.$emit('hide');
       }
     };
-    const {
-      closeOnEscape,
-      timeoutMs
-    } = this;
+    var closeOnEscape = this.closeOnEscape,
+        timeoutMs = this.timeoutMs;
     this.foundation = new MDCSnackbarFoundation(adapter);
     this.foundation.init();
 
@@ -6176,72 +6368,61 @@ var mcwSnackbar = {
 
     this.foundation.setCloseOnEscape(closeOnEscape);
   },
-
   computed: {
-    rootClasses() {
+    rootClasses: function rootClasses() {
       return {
         'mdc-snackbar': 1,
         'mdc-snackbar--leading': this.leading,
         'mdc-snackbar--stacked': this.stacked
       };
     },
-
-    showDismissAction() {
+    showDismissAction: function showDismissAction() {
       return typeof this.dismissAction === 'string' ? this.dismissAction != 'false' : this.dismissAction;
     }
-
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     window.removeEventListener('keydown', this.handleKeydownEvent);
     this.foundation.destroy();
   },
-
   methods: {
-    onTimeoutMs_(value) {
+    onTimeoutMs_: function onTimeoutMs_(value) {
       if (value !== void 0) {
         this.foundation.setTimeoutMs(value);
       }
     },
-
-    onCloseOnEscape_(nv) {
+    onCloseOnEscape_: function onCloseOnEscape_(nv) {
       this.foundation.setCloseOnEscape(nv);
     },
-
-    onOpen_(value) {
+    onOpen_: function onOpen_(value) {
       if (value) {
         this.foundation.open();
       } else {
-        const {
-          reason
-        } = this;
+        var reason = this.reason;
         this.foundation.close(reason ? reason : '');
       }
     },
-
-    surfaceClickHandler(evt) {
+    surfaceClickHandler: function surfaceClickHandler(evt) {
       if (this.isActionButton_(evt.target)) {
         this.foundation.handleActionButtonClick(evt);
       } else if (this.isActionIcon_(evt.target)) {
         this.foundation.handleActionIconClick(evt);
       }
     },
-
-    handleKeydownEvent(evt) {
+    handleKeydownEvent: function handleKeydownEvent(evt) {
       this.foundation.handleKeyDown(evt);
     },
-
-    isActionButton_(target) {
+    isActionButton_: function isActionButton_(target) {
       return Boolean(closest(target, strings$3.ACTION_SELECTOR));
     },
-
-    isActionIcon_(target) {
+    isActionIcon_: function isActionIcon_(target) {
       return Boolean(closest(target, strings$3.DISMISS_SELECTOR));
     },
+    announce: function announce(ariaEl) {
+      var _this2 = this;
 
-    announce(ariaEl, labelEl = ariaEl) {
-      const priority = ariaEl.getAttribute('aria-live');
-      const text = this.message;
+      var labelEl = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ariaEl;
+      var priority = ariaEl.getAttribute('aria-live');
+      var text = this.message;
 
       if (!text) {
         return;
@@ -6283,20 +6464,20 @@ var mcwSnackbar = {
       // however, `aria-live` is turned off, so this DOM update will be ignored by screen readers.
 
       labelEl.setAttribute(strings$3.ARIA_LIVE_LABEL_TEXT_ATTR, this.message);
-      setTimeout(() => {
+      setTimeout(function () {
         // Allow screen readers to announce changes to the DOM again.
         ariaEl.setAttribute('aria-live', priority); // Remove the message from the ::before pseudo-element.
 
         labelEl.removeAttribute(strings$3.ARIA_LIVE_LABEL_TEXT_ATTR); // Restore the original label text, which will be announced by screen readers.
 
-        this.showMessage = true;
+        _this2.showMessage = true;
       }, numbers.ARIA_LIVE_DELAY_MS);
     }
-
   },
+  render: function render(createElement) {
+    var _this3 = this;
 
-  render(createElement) {
-    const surfaceNodes = [createElement('div', {
+    var surfaceNodes = [createElement('div', {
       class: {
         'mdc-snackbar__label': 1
       },
@@ -6317,7 +6498,7 @@ var mcwSnackbar = {
     })])];
 
     if (this.showDismissAction || this.actionText) {
-      const buttonNodes = [];
+      var buttonNodes = [];
 
       if (this.actionText) {
         buttonNodes.push(createElement('button', {
@@ -6354,25 +6535,24 @@ var mcwSnackbar = {
     }
 
     return createElement('div', {
-      class: { ...this.rootClasses,
-        ...this.classes
-      },
+      class: _objectSpread2(_objectSpread2({}, this.rootClasses), this.classes),
       ref: 'root'
     }, [createElement('div', {
       class: {
         'mdc-snackbar__surface': 1
       },
       on: {
-        click: evt => this.surfaceClickHandler(evt)
+        click: function click(evt) {
+          return _this3.surfaceClickHandler(evt);
+        }
       }
     }, surfaceNodes)]);
   }
-
 };
 
 var snackbar = BasePlugin({
-  mcwSnackbar,
-  mcwSnackbarQueue
+  mcwSnackbar: mcwSnackbar,
+  mcwSnackbarQueue: mcwSnackbarQueue
 });
 
 var script$e = {
@@ -6390,8 +6570,7 @@ var script$e = {
     alignEnd: Boolean,
     name: String
   },
-
-  data() {
+  data: function data() {
     return {
       classes: {
         'mdc-switch': 1
@@ -6402,32 +6581,37 @@ var script$e = {
       nativeAttrs: {}
     };
   },
-
   computed: {
-    hasLabel() {
+    hasLabel: function hasLabel() {
       return this.label || this.$slots.default;
     }
-
   },
   watch: {
-    checked(value) {
+    checked: function checked(value) {
       this.foundation && this.foundation.setChecked(value);
     },
-
-    disabled(value) {
+    disabled: function disabled(value) {
       this.foundation && this.foundation.setDisabled(value);
     }
-
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
     this.foundation = new MDCSwitchFoundation({
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      setNativeControlChecked: checked => this.nativeControlChecked = checked,
-      setNativeControlDisabled: disabled => this.nativeControlDisabled = disabled,
-      setNativeControlAttr: (attr, value) => {
-        this.nativeAttrs[attr] = value;
+      addClass: function addClass(className) {
+        return _this.$set(_this.classes, className, true);
+      },
+      removeClass: function removeClass(className) {
+        return _this.$delete(_this.classes, className);
+      },
+      setNativeControlChecked: function setNativeControlChecked(checked) {
+        return _this.nativeControlChecked = checked;
+      },
+      setNativeControlDisabled: function setNativeControlDisabled(disabled) {
+        return _this.nativeControlDisabled = disabled;
+      },
+      setNativeControlAttr: function setNativeControlAttr(attr, value) {
+        _this.nativeAttrs[attr] = value;
       }
     });
     this.foundation.init();
@@ -6436,18 +6620,15 @@ var script$e = {
     this.ripple = new RippleBase(this);
     this.ripple.init();
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.foundation && this.foundation.destroy();
     this.ripple && this.ripple.destroy();
   },
-
   methods: {
-    onChanged(event) {
+    onChanged: function onChanged(event) {
       this.foundation && this.foundation.handleChange(event);
       this.$emit('change', event.target.checked);
     }
-
   }
 };
 
@@ -6555,8 +6736,7 @@ var switchControl = BasePlugin({
 
 var mcwTabBar = {
   name: 'mcw-tab-bar',
-
-  data() {
+  data: function data() {
     return {
       classes: {
         'mdc-tab-bar': 1
@@ -6565,106 +6745,121 @@ var mcwTabBar = {
       tabList: []
     };
   },
-
   props: {
     activeTabIndex: [Number, String]
   },
-
-  provide() {
+  provide: function provide() {
     return {
       mcwTabBar: this
     };
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
     this.foundation = new MDCTabBarFoundation({
-      scrollTo: scrollX => this.$refs.scroller.scrollTo(scrollX),
-      incrementScroll: scrollXIncrement => this.$refs.scroller.incrementScroll(scrollXIncrement),
-      getScrollPosition: () => this.$refs.scroller.getScrollPosition(),
-      getScrollContentWidth: () => this.$refs.scroller.getScrollContentWidth(),
-      getOffsetWidth: () => this.$el.offsetWidth,
-      isRTL: () => window.getComputedStyle(this.$el).getPropertyValue('direction') === 'rtl',
-      setActiveTab: index => {
-        this.foundation.activateTab(index);
+      scrollTo: function scrollTo(scrollX) {
+        return _this.$refs.scroller.scrollTo(scrollX);
       },
-      activateTabAtIndex: (index, clientRect) => {
-        this.tabList[index].activate(clientRect);
+      incrementScroll: function incrementScroll(scrollXIncrement) {
+        return _this.$refs.scroller.incrementScroll(scrollXIncrement);
       },
-      deactivateTabAtIndex: index => {
-        this.tabList[index] && this.tabList[index].deactivate();
+      getScrollPosition: function getScrollPosition() {
+        return _this.$refs.scroller.getScrollPosition();
       },
-      focusTabAtIndex: index => this.tabList[index].focus(),
-      getTabIndicatorClientRectAtIndex: index => {
-        return this.tabList[index] && this.tabList[index].computeIndicatorClientRect();
+      getScrollContentWidth: function getScrollContentWidth() {
+        return _this.$refs.scroller.getScrollContentWidth();
       },
-      getTabDimensionsAtIndex: index => {
-        return this.tabList[index].computeDimensions();
+      getOffsetWidth: function getOffsetWidth() {
+        return _this.$el.offsetWidth;
       },
-      getPreviousActiveTabIndex: () => {
-        for (let i = 0; i < this.tabList.length; i++) {
-          if (this.tabList[i].isActive()) {
+      isRTL: function isRTL() {
+        return window.getComputedStyle(_this.$el).getPropertyValue('direction') === 'rtl';
+      },
+      setActiveTab: function setActiveTab(index) {
+        _this.foundation.activateTab(index);
+      },
+      activateTabAtIndex: function activateTabAtIndex(index, clientRect) {
+        _this.tabList[index].activate(clientRect);
+      },
+      deactivateTabAtIndex: function deactivateTabAtIndex(index) {
+        _this.tabList[index] && _this.tabList[index].deactivate();
+      },
+      focusTabAtIndex: function focusTabAtIndex(index) {
+        return _this.tabList[index].focus();
+      },
+      getTabIndicatorClientRectAtIndex: function getTabIndicatorClientRectAtIndex(index) {
+        return _this.tabList[index] && _this.tabList[index].computeIndicatorClientRect();
+      },
+      getTabDimensionsAtIndex: function getTabDimensionsAtIndex(index) {
+        return _this.tabList[index].computeDimensions();
+      },
+      getPreviousActiveTabIndex: function getPreviousActiveTabIndex() {
+        for (var i = 0; i < _this.tabList.length; i++) {
+          if (_this.tabList[i].isActive()) {
             return i;
           }
         }
 
         return -1;
       },
-      getFocusedTabIndex: () => {
-        const tabElements = this.getTabElements_();
-        const activeElement = document.activeElement;
+      getFocusedTabIndex: function getFocusedTabIndex() {
+        var tabElements = _this.getTabElements_();
+
+        var activeElement = document.activeElement;
         return tabElements.indexOf(activeElement);
       },
-      getIndexOfTabById: id => {
-        for (let i = 0; i < this.tabList.length; i++) {
-          if (this.tabList[i].id === id) {
+      getIndexOfTabById: function getIndexOfTabById(id) {
+        for (var i = 0; i < _this.tabList.length; i++) {
+          if (_this.tabList[i].id === id) {
             return i;
           }
         }
 
         return -1;
       },
-      getTabListLength: () => this.tabList.length,
-      notifyTabActivated: index => {
-        emitCustomEvent(this.$el, MDCTabBarFoundation.strings.TAB_ACTIVATED_EVENT, {
-          index
+      getTabListLength: function getTabListLength() {
+        return _this.tabList.length;
+      },
+      notifyTabActivated: function notifyTabActivated(index) {
+        emitCustomEvent(_this.$el, MDCTabBarFoundation.strings.TAB_ACTIVATED_EVENT, {
+          index: index
         }, true);
-        this.$emit('change', index);
+
+        _this.$emit('change', index);
       }
     });
     this.foundation.init(); // ensure active tab
 
     this.foundation.activateTab(this.activeTabIndex || 0);
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.foundation.destroy();
   },
-
   computed: {
-    listeners() {
-      return { ...this.$listeners,
-        'MDCTab:interacted': event => this.handleInteraction(event),
-        // eslint-disable-next-line quote-props
-        keydown: event => this.handleKeyDown(event)
-      };
-    }
+    listeners: function listeners() {
+      var _this2 = this;
 
+      return _objectSpread2(_objectSpread2({}, this.$listeners), {}, {
+        'MDCTab:interacted': function MDCTabInteracted(event) {
+          return _this2.handleInteraction(event);
+        },
+        // eslint-disable-next-line quote-props
+        keydown: function keydown(event) {
+          return _this2.handleKeyDown(event);
+        }
+      });
+    }
   },
   methods: {
-    handleInteraction(evt) {
+    handleInteraction: function handleInteraction(evt) {
       this.foundation.handleTabInteraction(evt);
     },
-
-    handleKeyDown(evt) {
+    handleKeyDown: function handleKeyDown(evt) {
       this.foundation.handleKeyDown(evt);
     }
-
   },
-
-  render(createElement) {
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
+  render: function render(createElement) {
+    var scopedSlots = this.$scopedSlots;
     return createElement('div', {
       class: this.classes,
       on: this.listeners,
@@ -6675,16 +6870,12 @@ var mcwTabBar = {
       ref: 'scroller'
     }, scopedSlots.default && scopedSlots.default())]);
   }
-
 };
 
-const {
-  cssClasses: cssClasses$3
-} = MDCTabIndicatorFoundation;
+var cssClasses$3 = MDCTabIndicatorFoundation.cssClasses;
 var mcwTabIndicator = {
   name: 'mcw-tab-indicator',
-
-  data() {
+  data: function data() {
     return {
       classes: {
         'mdc-tab-indicator': 1
@@ -6692,34 +6883,39 @@ var mcwTabIndicator = {
       styles: {}
     };
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
     this.adapter_ = {
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      computeContentClientRect: () => this.$refs.content.getBoundingClientRect(),
-      setContentStyleProperty: (prop, value) => {
-        this.$set(this.styles, prop, value);
+      addClass: function addClass(className) {
+        return _this.$set(_this.classes, className, true);
+      },
+      removeClass: function removeClass(className) {
+        return _this.$delete(_this.classes, className);
+      },
+      computeContentClientRect: function computeContentClientRect() {
+        return _this.$refs.content.getBoundingClientRect();
+      },
+      setContentStyleProperty: function setContentStyleProperty(prop, value) {
+        _this.$set(_this.styles, prop, value);
       }
     };
     this.foundation = new MDCTabIndicatorFoundation(this.adapter_);
     this.foundation.init();
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.foundation.destroy();
   },
-
   methods: {
-    deactivate() {
+    deactivate: function deactivate() {
       this.adapter_.removeClass(cssClasses$3.ACTIVE);
     },
-
-    computeContentClientRect() {
+    computeContentClientRect: function computeContentClientRect() {
       return this.foundation.computeContentClientRect();
     },
+    activate: function activate(previousIndicatorClientRect) {
+      var _this2 = this;
 
-    activate(previousIndicatorClientRect) {
       // Early exit if no indicator is present to handle cases where an indicator
       // may be activated without a prior indicator state
       if (!previousIndicatorClientRect) {
@@ -6727,22 +6923,22 @@ var mcwTabIndicator = {
         return;
       }
 
-      const currentClientRect = this.computeContentClientRect();
-      const widthDelta = previousIndicatorClientRect.width / currentClientRect.width;
-      const xPosition = previousIndicatorClientRect.left - currentClientRect.left;
+      var currentClientRect = this.computeContentClientRect();
+      var widthDelta = previousIndicatorClientRect.width / currentClientRect.width;
+      var xPosition = previousIndicatorClientRect.left - currentClientRect.left;
       this.foundation.adapter_.addClass(cssClasses$3.NO_TRANSITION);
-      this.adapter_.setContentStyleProperty('transform', `translateX(${xPosition}px) scaleX(${widthDelta})`); // THE FIX
+      this.adapter_.setContentStyleProperty('transform', "translateX(".concat(xPosition, "px) scaleX(").concat(widthDelta, ")")); // THE FIX
 
-      requestAnimationFrame(() => {
-        this.adapter_.removeClass(cssClasses$3.NO_TRANSITION);
-        this.adapter_.addClass(cssClasses$3.ACTIVE);
-        this.adapter_.setContentStyleProperty('transform', '');
+      requestAnimationFrame(function () {
+        _this2.adapter_.removeClass(cssClasses$3.NO_TRANSITION);
+
+        _this2.adapter_.addClass(cssClasses$3.ACTIVE);
+
+        _this2.adapter_.setContentStyleProperty('transform', '');
       });
     }
-
   },
-
-  render(createElement) {
+  render: function render(createElement) {
     return createElement('span', {
       class: this.classes
     }, [createElement('span', {
@@ -6754,13 +6950,11 @@ var mcwTabIndicator = {
       ref: 'content'
     })]);
   }
-
 };
 
 var mcwTabRipple = {
   name: 'mcw-tab-ripple',
-
-  data() {
+  data: function data() {
     return {
       classes: {
         'mdc-tab__ripple': 1,
@@ -6769,29 +6963,24 @@ var mcwTabRipple = {
       styles: {}
     };
   },
-
-  mounted() {
+  mounted: function mounted() {
     this.ripple = new RippleBase(this);
     this.ripple.init();
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.ripple.destroy();
   },
-
-  render(createElement) {
+  render: function render(createElement) {
     return createElement('span', {
       class: this.classes,
       style: this.styles
     });
   }
-
 };
 
 var mcwTabScroller = {
   name: 'mcw-tab-scroller',
-
-  data() {
+  data: function data() {
     return {
       classes: {
         'mdc-tab-scroller': 1
@@ -6803,66 +6992,96 @@ var mcwTabScroller = {
       contentStyles: {}
     };
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
     this.foundation = new MDCTabScrollerFoundation({
-      eventTargetMatchesSelector: (evtTarget, selector) => {
+      eventTargetMatchesSelector: function eventTargetMatchesSelector(evtTarget, selector) {
         return matches(evtTarget, selector);
       },
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      addScrollAreaClass: className => this.$set(this.areaClasses, className, true),
-      setScrollAreaStyleProperty: (prop, value) => this.$set(this.areaStyles, prop, value),
-      setScrollContentStyleProperty: (prop, value) => this.$set(this.contentStyles, prop, value),
-      getScrollContentStyleValue: propName => window.getComputedStyle(this.$refs.content).getPropertyValue(propName),
-      setScrollAreaScrollLeft: scrollX => this.$refs.area.scrollLeft = scrollX,
-      getScrollAreaScrollLeft: () => this.$refs.area.scrollLeft,
-      getScrollContentOffsetWidth: () => this.$refs.content.offsetWidth,
-      getScrollAreaOffsetWidth: () => this.$refs.area.offsetWidth,
-      computeScrollAreaClientRect: () => this.$refs.area.getBoundingClientRect(),
-      computeScrollContentClientRect: () => this.$refs.content.getBoundingClientRect(),
-      computeHorizontalScrollbarHeight: () => computeHorizontalScrollbarHeight(document)
+      addClass: function addClass(className) {
+        return _this.$set(_this.classes, className, true);
+      },
+      removeClass: function removeClass(className) {
+        return _this.$delete(_this.classes, className);
+      },
+      addScrollAreaClass: function addScrollAreaClass(className) {
+        return _this.$set(_this.areaClasses, className, true);
+      },
+      setScrollAreaStyleProperty: function setScrollAreaStyleProperty(prop, value) {
+        return _this.$set(_this.areaStyles, prop, value);
+      },
+      setScrollContentStyleProperty: function setScrollContentStyleProperty(prop, value) {
+        return _this.$set(_this.contentStyles, prop, value);
+      },
+      getScrollContentStyleValue: function getScrollContentStyleValue(propName) {
+        return window.getComputedStyle(_this.$refs.content).getPropertyValue(propName);
+      },
+      setScrollAreaScrollLeft: function setScrollAreaScrollLeft(scrollX) {
+        return _this.$refs.area.scrollLeft = scrollX;
+      },
+      getScrollAreaScrollLeft: function getScrollAreaScrollLeft() {
+        return _this.$refs.area.scrollLeft;
+      },
+      getScrollContentOffsetWidth: function getScrollContentOffsetWidth() {
+        return _this.$refs.content.offsetWidth;
+      },
+      getScrollAreaOffsetWidth: function getScrollAreaOffsetWidth() {
+        return _this.$refs.area.offsetWidth;
+      },
+      computeScrollAreaClientRect: function computeScrollAreaClientRect() {
+        return _this.$refs.area.getBoundingClientRect();
+      },
+      computeScrollContentClientRect: function computeScrollContentClientRect() {
+        return _this.$refs.content.getBoundingClientRect();
+      },
+      computeHorizontalScrollbarHeight: function computeHorizontalScrollbarHeight$1() {
+        return computeHorizontalScrollbarHeight(document);
+      }
     });
     this.foundation.init();
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.foundation.destroy();
   },
-
   methods: {
-    getScrollPosition() {
+    getScrollPosition: function getScrollPosition() {
       return this.foundation.getScrollPosition();
     },
-
-    getScrollContentWidth() {
+    getScrollContentWidth: function getScrollContentWidth() {
       return this.$refs.content.offsetWidth;
     },
-
-    incrementScroll(scrollXIncrement) {
+    incrementScroll: function incrementScroll(scrollXIncrement) {
       this.foundation.incrementScroll(scrollXIncrement);
     },
-
-    scrollTo(scrollX) {
+    scrollTo: function scrollTo(scrollX) {
       this.foundation.scrollTo(scrollX);
     }
-
   },
+  render: function render(createElement) {
+    var _this2 = this;
 
-  render(createElement) {
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
-    const areaEl = createElement('div', {
+    var scopedSlots = this.$scopedSlots;
+    var areaEl = createElement('div', {
       class: this.areaClasses,
       style: this.areaStyles,
       ref: 'area',
       on: {
-        mousedown: evt => this.foundation.handleInteraction(evt),
-        wheel: evt => this.foundation.handleInteraction(evt),
-        pointerdown: evt => this.foundation.handleInteraction(evt),
-        touchstart: evt => this.foundation.handleInteraction(evt),
-        keydown: evt => this.foundation.handleInteraction(evt)
+        mousedown: function mousedown(evt) {
+          return _this2.foundation.handleInteraction(evt);
+        },
+        wheel: function wheel(evt) {
+          return _this2.foundation.handleInteraction(evt);
+        },
+        pointerdown: function pointerdown(evt) {
+          return _this2.foundation.handleInteraction(evt);
+        },
+        touchstart: function touchstart(evt) {
+          return _this2.foundation.handleInteraction(evt);
+        },
+        keydown: function keydown(evt) {
+          return _this2.foundation.handleInteraction(evt);
+        }
       }
     }, [createElement('div', {
       class: {
@@ -6871,17 +7090,17 @@ var mcwTabScroller = {
       style: this.contentStyles,
       ref: 'content',
       on: {
-        transitionend: evt => this.foundation.handleTransitionEnd(evt)
+        transitionend: function transitionend(evt) {
+          return _this2.foundation.handleTransitionEnd(evt);
+        }
       }
     }, scopedSlots.default && scopedSlots.default())]);
     return createElement('div', {
       class: this.classes
     }, [areaEl]);
   }
-
 };
 
-/* eslint-disable quote-props */
 var mcwTab = {
   name: 'mcw-tab',
   mixins: [CustomLinkMixin, DispatchEventMixin, VMAUniqueIdMixin],
@@ -6891,8 +7110,7 @@ var mcwTab = {
     stacked: Boolean,
     minWidth: Boolean
   },
-
-  data() {
+  data: function data() {
     return {
       classes: {
         'mdc-tab': 1,
@@ -6902,13 +7120,10 @@ var mcwTab = {
       styles: {}
     };
   },
-
   inject: ['mcwTabBar'],
   computed: {
-    hasIcon() {
-      const {
-        $scopedSlots: scopedSlots
-      } = this;
+    hasIcon: function hasIcon() {
+      var scopedSlots = this.$scopedSlots;
 
       if (this.icon || scopedSlots.icon && scopedSlots.icon()) {
         return this.icon ? extractIconProp(this.icon) : {};
@@ -6916,97 +7131,103 @@ var mcwTab = {
 
       return false;
     },
-
-    hasText() {
-      const {
-        $scopedSlots: scopedSlots
-      } = this;
+    hasText: function hasText() {
+      var scopedSlots = this.$scopedSlots;
       return !!(scopedSlots.default && scopedSlots.default());
     }
-
   },
   watch: {
-    active(value) {}
-
+    active: function active(value) {}
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
     this.id = this.vma_uid_;
     this.foundation = new MDCTabFoundation({
-      setAttr: (attr, value) => this.$el.setAttribute(attr, value),
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      hasClass: className => this.$el.classList.contains(className),
-      activateIndicator: previousIndicatorClientRect => {
-        this.$refs.tabIndicator.activate(previousIndicatorClientRect);
+      setAttr: function setAttr(attr, value) {
+        return _this.$el.setAttribute(attr, value);
       },
-      deactivateIndicator: () => {
-        this.$refs.tabIndicator.deactivate();
+      addClass: function addClass(className) {
+        return _this.$set(_this.classes, className, true);
       },
-      notifyInteracted: () => emitCustomEvent(this.$el, MDCTabFoundation.strings.INTERACTED_EVENT, {
-        tabId: this.id
-      }, true
-      /* bubble */
-      ),
-      getOffsetLeft: () => this.$el.offsetLeft,
-      getOffsetWidth: () => this.$el.offsetWidth,
-      getContentOffsetLeft: () => this.$refs.content.offsetLeft,
-      getContentOffsetWidth: () => this.$refs.content.offsetWidth,
-      focus: () => this.$el.focus()
+      removeClass: function removeClass(className) {
+        return _this.$delete(_this.classes, className);
+      },
+      hasClass: function hasClass(className) {
+        return _this.$el.classList.contains(className);
+      },
+      activateIndicator: function activateIndicator(previousIndicatorClientRect) {
+        _this.$refs.tabIndicator.activate(previousIndicatorClientRect);
+      },
+      deactivateIndicator: function deactivateIndicator() {
+        _this.$refs.tabIndicator.deactivate();
+      },
+      notifyInteracted: function notifyInteracted() {
+        return emitCustomEvent(_this.$el, MDCTabFoundation.strings.INTERACTED_EVENT, {
+          tabId: _this.id
+        }, true
+        /* bubble */
+        );
+      },
+      getOffsetLeft: function getOffsetLeft() {
+        return _this.$el.offsetLeft;
+      },
+      getOffsetWidth: function getOffsetWidth() {
+        return _this.$el.offsetWidth;
+      },
+      getContentOffsetLeft: function getContentOffsetLeft() {
+        return _this.$refs.content.offsetLeft;
+      },
+      getContentOffsetWidth: function getContentOffsetWidth() {
+        return _this.$refs.content.offsetWidth;
+      },
+      focus: function focus() {
+        return _this.$el.focus();
+      }
     });
     this.foundation.init(); // console.log('tab mounted')
 
     this.mcwTabBar.tabList.push(this); // this.setActive(this.active)
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.foundation.destroy();
   },
-
   methods: {
-    activate(computeIndicatorClientRect) {
+    activate: function activate(computeIndicatorClientRect) {
       this.foundation.activate(computeIndicatorClientRect);
     },
-
-    deactivate() {
+    deactivate: function deactivate() {
       this.foundation.deactivate();
     },
-
-    isActive() {
+    isActive: function isActive() {
       return this.foundation.isActive();
     },
-
-    setActive(isActive) {
+    setActive: function setActive(isActive) {
       if (isActive) {
         this.$set(this.classes, 'mdc-tab--active', true), this.$refs.tabIndicator.activate();
       }
     },
-
-    computeIndicatorClientRect() {
+    computeIndicatorClientRect: function computeIndicatorClientRect() {
       return this.$refs.tabIndicator.computeContentClientRect();
     },
-
-    computeDimensions() {
+    computeDimensions: function computeDimensions() {
       return this.foundation.computeDimensions();
     },
-
-    focus() {
+    focus: function focus() {
       this.$el.focus();
     }
-
   },
+  render: function render(createElement) {
+    var _this2 = this;
 
-  render(createElement) {
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
-    const contentNodes = [];
+    var scopedSlots = this.$scopedSlots;
+    var contentNodes = [];
 
     if (this.hasIcon) {
       contentNodes.push(createElement('i', {
-        class: { ...this.hasIcon.classes,
+        class: _objectSpread2(_objectSpread2({}, this.hasIcon.classes), {}, {
           'mdc-tab__icon': 1
-        },
+        }),
         attrs: {
           tabindex: '0',
           'aria-hidden': 'true'
@@ -7023,13 +7244,13 @@ var mcwTab = {
       }, scopedSlots.default && scopedSlots.default()));
     }
 
-    const spanEl = createElement('span', {
+    var spanEl = createElement('span', {
       class: {
         'mdc-tab__content': 1
       },
       ref: 'content'
     }, contentNodes);
-    const nodes = [spanEl, createElement('mdc-tab-indicator', {
+    var nodes = [spanEl, createElement('mdc-tab-indicator', {
       ref: 'tabIndicator'
     }), createElement('mdc-tab-ripple')];
     return createElement('custom-link', {
@@ -7042,11 +7263,12 @@ var mcwTab = {
         tabindex: '-1'
       },
       on: {
-        click: evt => this.foundation.handleClick(evt)
+        click: function click(evt) {
+          return _this2.foundation.handleClick(evt);
+        }
       }
     }, nodes);
   }
-
 }; // ===
 // Private functions
 // ===
@@ -7061,26 +7283,26 @@ function extractIconProp(iconProp) {
     };
   } else if (iconProp instanceof Array) {
     return {
-      classes: iconProp.reduce((result, value) => Object.assign(result, {
-        [value]: true
-      }), {})
+      classes: iconProp.reduce(function (result, value) {
+        return Object.assign(result, _defineProperty({}, value, true));
+      }, {})
     };
-  } else if (typeof iconProp === 'object') {
+  } else if (_typeof(iconProp) === 'object') {
     return {
-      classes: iconProp.className.split(' ').reduce((result, value) => Object.assign(result, {
-        [value]: true
-      }), {}),
+      classes: iconProp.className.split(' ').reduce(function (result, value) {
+        return Object.assign(result, _defineProperty({}, value, true));
+      }, {}),
       content: iconProp.textContent
     };
   }
 }
 
 var tabs = BasePlugin({
-  mcwTab,
-  mcwTabBar,
-  mcwTabScroller,
-  mcwTabIndicator,
-  mcwTabRipple
+  mcwTab: mcwTab,
+  mcwTabBar: mcwTabBar,
+  mcwTabScroller: mcwTabScroller,
+  mcwTabIndicator: mcwTabIndicator,
+  mcwTabRipple: mcwTabRipple
 });
 
 var TextfieldHelperText = {
@@ -7090,8 +7312,7 @@ var TextfieldHelperText = {
     validation: Boolean,
     helptext: String
   },
-
-  data() {
+  data: function data() {
     return {
       classes: {
         'mdc-text-field-helper-text': true,
@@ -7100,30 +7321,34 @@ var TextfieldHelperText = {
       }
     };
   },
-
   watch: {
-    persistent() {
+    persistent: function persistent() {
       this.foundation.setPersistent(this.persistent);
     },
-
-    validation() {
+    validation: function validation() {
       this.foundation.setValidation(this.validation);
     }
-
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
     this.foundation = new MDCTextFieldHelperTextFoundation({
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      hasClass: className => Boolean(this.classes[className]),
-      setAttr: (attr, value) => {
-        this.$el.setAttribute(attr, value);
+      addClass: function addClass(className) {
+        return _this.$set(_this.classes, className, true);
       },
-      removeAttr: attr => {
-        this.$el.removeAttribute(attr);
+      removeClass: function removeClass(className) {
+        return _this.$delete(_this.classes, className);
       },
-      setContent: () =>
+      hasClass: function hasClass(className) {
+        return Boolean(_this.classes[className]);
+      },
+      setAttr: function setAttr(attr, value) {
+        _this.$el.setAttribute(attr, value);
+      },
+      removeAttr: function removeAttr(attr) {
+        _this.$el.removeAttribute(attr);
+      },
+      setContent: function setContent()
       /* content */
       {// help text get's updated from {{helptext}}
         // cf. this.$el.textContent = content
@@ -7131,17 +7356,13 @@ var TextfieldHelperText = {
     });
     this.foundation.init();
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.foundation.destroy();
   },
-
-  render(createElement) {
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
-    const defaultSlot = scopedSlots.default && scopedSlots.default();
-    const classes = classNames(this.classes);
+  render: function render(createElement) {
+    var scopedSlots = this.$scopedSlots;
+    var defaultSlot = scopedSlots.default && scopedSlots.default();
+    var classes = classNames(this.classes);
 
     if (defaultSlot) {
       return defaultSlot[0];
@@ -7154,33 +7375,33 @@ var TextfieldHelperText = {
       attrs: this.$attrs
     }, this.helptext)]);
   }
-
 }; // ===
 // Private functions
 // ===
 
-const hasOwn = {}.hasOwnProperty;
+var hasOwn = {}.hasOwnProperty;
 
 function classNames() {
-  const classes = [];
+  var classes = [];
 
-  for (let i = 0; i < arguments.length; i++) {
+  for (var i = 0; i < arguments.length; i++) {
     // eslint-disable-next-line prefer-rest-params
-    const arg = arguments[i];
+    var arg = arguments[i];
     if (!arg) continue;
-    const argType = typeof arg;
+
+    var argType = _typeof(arg);
 
     if (argType === 'string' || argType === 'number') {
       classes.push(arg);
     } else if (Array.isArray(arg) && arg.length) {
       // eslint-disable-next-line prefer-spread
-      const inner = classNames.apply(null, arg);
+      var inner = classNames.apply(null, arg);
 
       if (inner) {
         classes.push(inner);
       }
     } else if (argType === 'object') {
-      for (const key in arg) {
+      for (var key in arg) {
         if (hasOwn.call(arg, key) && arg[key]) {
           classes.push(key);
         }
@@ -7198,52 +7419,54 @@ var TextfieldIcon = {
     disabled: Boolean,
     leading: {
       type: Boolean,
-
-      default() {
+      default: function _default() {
         return true;
       }
-
     }
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
     this.foundation = new MDCTextFieldIconFoundation(Object.assign({
-      getAttr: attr => this.$el.getAttribute(attr),
-      setAttr: (attr, value) => this.$el.setAttribute(attr, value),
-      removeAttr: attr => this.$el.removeAttribute(attr),
-      setContent: content => {
-        this.$el.textContent = content;
+      getAttr: function getAttr(attr) {
+        return _this.$el.getAttribute(attr);
       },
-      registerInteractionHandler: (evtType, handler) => this.$el.addEventListener(evtType, handler),
-      deregisterInteractionHandler: (evtType, handler) => this.$el.removeEventListener(evtType, handler),
-      notifyIconAction: () => {
-        this.$emit('click');
-        emitCustomEvent(this.$el, MDCTextFieldIconFoundation.strings.ICON_EVENT, {}, true
+      setAttr: function setAttr(attr, value) {
+        return _this.$el.setAttribute(attr, value);
+      },
+      removeAttr: function removeAttr(attr) {
+        return _this.$el.removeAttribute(attr);
+      },
+      setContent: function setContent(content) {
+        _this.$el.textContent = content;
+      },
+      registerInteractionHandler: function registerInteractionHandler(evtType, handler) {
+        return _this.$el.addEventListener(evtType, handler);
+      },
+      deregisterInteractionHandler: function deregisterInteractionHandler(evtType, handler) {
+        return _this.$el.removeEventListener(evtType, handler);
+      },
+      notifyIconAction: function notifyIconAction() {
+        _this.$emit('click');
+
+        emitCustomEvent(_this.$el, MDCTextFieldIconFoundation.strings.ICON_EVENT, {}, true
         /* shouldBubble  */
         );
       }
     }));
     this.foundation.init();
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.foundation.destroy();
   },
-
-  render(createElement, context) {
-    const node = context.children[0];
-    const {
-      props: {
-        leading
-      }
-    } = context;
-    node.data.class = `mdc-text-field__icon mdc-text-field__icon--${leading ? 'leading' : 'trailing'}`;
+  render: function render(createElement, context) {
+    var node = context.children[0];
+    var leading = context.props.leading;
+    node.data.class = "mdc-text-field__icon mdc-text-field__icon--".concat(leading ? 'leading' : 'trailing');
     return node;
   }
-
 };
 
-/* eslint-disable quote-props */
 var mcwTextfield = {
   name: 'mcw-textfield',
   mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
@@ -7257,7 +7480,7 @@ var mcwTextfield = {
     type: {
       type: String,
       default: 'text',
-      validator: function (value) {
+      validator: function validator(value) {
         return ['text', 'email', 'search', 'password', 'tel', 'url', 'number'].indexOf(value) !== -1;
       }
     },
@@ -7298,7 +7521,7 @@ var mcwTextfield = {
     helptextPersistent: Boolean,
     helptextValidation: Boolean
   },
-  data: function () {
+  data: function data() {
     return {
       text: this.value,
       classes: {
@@ -7330,99 +7553,93 @@ var mcwTextfield = {
     };
   },
   components: {
-    TextfieldHelperText,
-    TextfieldIcon
+    TextfieldHelperText: TextfieldHelperText,
+    TextfieldIcon: TextfieldIcon
   },
   computed: {
-    inputPlaceHolder() {
+    inputPlaceHolder: function inputPlaceHolder() {
       return this.fullwidth ? this.label : undefined;
     },
-
-    inputAriaControls() {
+    inputAriaControls: function inputAriaControls() {
       return this.help ? 'help-' + this.vma_uid_ : undefined;
     },
-
-    hasLabel() {
+    hasLabel: function hasLabel() {
       return !this.fullwidth && !this.outline && this.label;
     },
-
-    hasOutlineLabel() {
+    hasOutlineLabel: function hasOutlineLabel() {
       return this.hasOutline && this.label;
     },
-
-    hasOutline() {
+    hasOutline: function hasOutline() {
       return !this.fullwidth && this.outline;
     },
-
-    hasLineRipple() {
+    hasLineRipple: function hasLineRipple() {
       return !this.hasOutline && !this.multiline;
     },
-
-    hasHelptext() {
-      const {
-        $scopedSlots: scopedSlots
-      } = this;
+    hasHelptext: function hasHelptext() {
+      var scopedSlots = this.$scopedSlots;
       return scopedSlots.helpText && scopedSlots.helpText() || this.helptext;
     }
-
   },
   watch: {
-    disabled() {
+    disabled: function disabled() {
       this.foundation && this.foundation.setDisabled(this.disabled);
     },
-
-    required() {
+    required: function required() {
       this.$refs.input && (this.$refs.input.required = this.required);
     },
-
-    valid() {
+    valid: function valid() {
       if (typeof this.valid !== 'undefined') {
         this.foundation && this.foundation.setValid(this.valid);
       }
     },
-
-    value(value) {
+    value: function value(_value) {
       if (this.foundation) {
-        if (value !== this.foundation.getValue()) {
-          this.foundation.setValue(value);
+        if (_value !== this.foundation.getValue()) {
+          this.foundation.setValue(_value);
         }
       }
     }
-
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
     this.foundation = new MDCTextFieldFoundation(Object.assign({
-      addClass: className => {
-        this.$set(this.classes, className, true);
+      addClass: function addClass(className) {
+        _this.$set(_this.classes, className, true);
       },
-      removeClass: className => {
-        this.$delete(this.classes, className);
+      removeClass: function removeClass(className) {
+        _this.$delete(_this.classes, className);
       },
-      hasClass: className => {
-        this.$refs.root.classList.contains(className);
+      hasClass: function hasClass(className) {
+        _this.$refs.root.classList.contains(className);
       },
-      registerTextFieldInteractionHandler: (evtType, handler) => {
-        this.$refs.root.addEventListener(evtType, handler);
+      registerTextFieldInteractionHandler: function registerTextFieldInteractionHandler(evtType, handler) {
+        _this.$refs.root.addEventListener(evtType, handler);
       },
-      deregisterTextFieldInteractionHandler: (evtType, handler) => {
-        this.$refs.root.removeEventListener(evtType, handler);
+      deregisterTextFieldInteractionHandler: function deregisterTextFieldInteractionHandler(evtType, handler) {
+        _this.$refs.root.removeEventListener(evtType, handler);
       },
-      isFocused: () => {
-        return document.activeElement === this.$refs.input;
+      isFocused: function isFocused() {
+        return document.activeElement === _this.$refs.input;
       },
-      registerValidationAttributeChangeHandler: handler => {
-        const getAttributesList = mutationsList => mutationsList.map(mutation => mutation.attributeName);
+      registerValidationAttributeChangeHandler: function registerValidationAttributeChangeHandler(handler) {
+        var getAttributesList = function getAttributesList(mutationsList) {
+          return mutationsList.map(function (mutation) {
+            return mutation.attributeName;
+          });
+        };
 
-        const observer = new MutationObserver(mutationsList => handler(getAttributesList(mutationsList)));
-        const targetNode = this.$refs.input;
-        const config = {
+        var observer = new MutationObserver(function (mutationsList) {
+          return handler(getAttributesList(mutationsList));
+        });
+        var targetNode = _this.$refs.input;
+        var config = {
           attributes: true
         };
         observer.observe(targetNode, config);
         return observer;
       },
-      deregisterValidationAttributeChangeHandler: observer => {
+      deregisterValidationAttributeChangeHandler: function deregisterValidationAttributeChangeHandler(observer) {
         observer.disconnect();
       }
     }, this.getInputAdapterMethods(), this.getLabelAdapterMethods(), this.getLineRippleAdapterMethods(), this.getOutlineAdapterMethods()), {
@@ -7439,106 +7656,114 @@ var mcwTextfield = {
       this.foundation.setValid(this.valid);
     }
 
-    const isTextArea = this.$refs.root.classList.contains('mdc-text-field--textarea');
-    const isOutlined = this.$refs.root.classList.contains('mdc-text-field--outlined');
+    var isTextArea = this.$refs.root.classList.contains('mdc-text-field--textarea');
+    var isOutlined = this.$refs.root.classList.contains('mdc-text-field--outlined');
 
     if (!isTextArea && !isOutlined) {
       this.ripple = new RippleBase(this, {
-        isSurfaceActive: () => matches(this.$refs.input, ':active'),
-        registerInteractionHandler: (evtType, handler) => {
-          this.$refs.input.addEventListener(evtType, handler, applyPassive());
+        isSurfaceActive: function isSurfaceActive() {
+          return matches(_this.$refs.input, ':active');
         },
-        deregisterInteractionHandler: (evtType, handler) => this.$refs.input.removeEventListener(evtType, handler, applyPassive())
+        registerInteractionHandler: function registerInteractionHandler(evtType, handler) {
+          _this.$refs.input.addEventListener(evtType, handler, applyPassive());
+        },
+        deregisterInteractionHandler: function deregisterInteractionHandler(evtType, handler) {
+          return _this.$refs.input.removeEventListener(evtType, handler, applyPassive());
+        }
       });
       this.ripple.init();
     }
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     this.foundation && this.foundation.destroy();
     this.ripple && this.ripple.destroy();
   },
-
   methods: {
-    getInputAdapterMethods() {
+    getInputAdapterMethods: function getInputAdapterMethods() {
+      var _this2 = this;
+
       return {
-        registerInputInteractionHandler: (evtType, handler) => {
-          this.$refs.input.addEventListener(evtType, handler, applyPassive());
+        registerInputInteractionHandler: function registerInputInteractionHandler(evtType, handler) {
+          _this2.$refs.input.addEventListener(evtType, handler, applyPassive());
         },
-        deregisterInputInteractionHandler: (evtType, handler) => {
-          this.$refs.input.removeEventListener(evtType, handler, applyPassive());
+        deregisterInputInteractionHandler: function deregisterInputInteractionHandler(evtType, handler) {
+          _this2.$refs.input.removeEventListener(evtType, handler, applyPassive());
         },
-        getNativeInput: () => {
-          return this.$refs.input;
+        getNativeInput: function getNativeInput() {
+          return _this2.$refs.input;
         }
       };
     },
+    getLabelAdapterMethods: function getLabelAdapterMethods() {
+      var _this3 = this;
 
-    getLabelAdapterMethods() {
       return {
-        shakeLabel: shouldShake => {
-          this.$refs.labelEl && this.$refs.labelEl.shake(shouldShake);
+        shakeLabel: function shakeLabel(shouldShake) {
+          _this3.$refs.labelEl && _this3.$refs.labelEl.shake(shouldShake);
         },
-        floatLabel: shouldFloat => {
-          this.$refs.labelEl && this.$refs.labelEl.float(shouldFloat);
+        floatLabel: function floatLabel(shouldFloat) {
+          _this3.$refs.labelEl && _this3.$refs.labelEl.float(shouldFloat);
         },
-        hasLabel: () => {
-          return !!this.$refs.labelEl || !!this.$refs.notchedEl;
+        hasLabel: function hasLabel() {
+          return !!_this3.$refs.labelEl || !!_this3.$refs.notchedEl;
         },
-        getLabelWidth: () => {
-          return this.$refs.labelEl.getWidth();
+        getLabelWidth: function getLabelWidth() {
+          return _this3.$refs.labelEl.getWidth();
         }
       };
     },
+    getLineRippleAdapterMethods: function getLineRippleAdapterMethods() {
+      var _this4 = this;
 
-    getLineRippleAdapterMethods() {
       return {
-        deactivateLineRipple: () => {
-          if (this.$refs.lineRippleEl) {
-            this.$refs.lineRippleEl.deactivate();
+        deactivateLineRipple: function deactivateLineRipple() {
+          if (_this4.$refs.lineRippleEl) {
+            _this4.$refs.lineRippleEl.deactivate();
           }
         },
-        activateLineRipple: () => {
-          if (this.$refs.lineRippleEl) {
-            this.$refs.lineRippleEl.activate();
+        activateLineRipple: function activateLineRipple() {
+          if (_this4.$refs.lineRippleEl) {
+            _this4.$refs.lineRippleEl.activate();
           }
         },
-        setLineRippleTransformOrigin: normalizedX => {
-          if (this.$refs.lineRippleEl) {
-            this.$refs.lineRippleEl.setRippleCenter(normalizedX);
+        setLineRippleTransformOrigin: function setLineRippleTransformOrigin(normalizedX) {
+          if (_this4.$refs.lineRippleEl) {
+            _this4.$refs.lineRippleEl.setRippleCenter(normalizedX);
           }
         }
       };
     },
+    getOutlineAdapterMethods: function getOutlineAdapterMethods() {
+      var _this5 = this;
 
-    getOutlineAdapterMethods() {
       return {
-        hasOutline: () => !!this.hasOutline,
-        notchOutline: (notchWidth, isRtl) => this.$refs.labelEl.notch(notchWidth, isRtl),
-        closeOutline: () => this.$refs.labelEl.closeNotch()
+        hasOutline: function hasOutline() {
+          return !!_this5.hasOutline;
+        },
+        notchOutline: function notchOutline(notchWidth, isRtl) {
+          return _this5.$refs.labelEl.notch(notchWidth, isRtl);
+        },
+        closeOutline: function closeOutline() {
+          return _this5.$refs.labelEl.closeNotch();
+        }
       };
     },
-
-    updateValue(value) {
+    updateValue: function updateValue(value) {
       this.$emit('model', value);
     },
-
-    focus() {
+    focus: function focus() {
       this.$refs.input && this.$refs.input.focus();
     },
-
-    blur() {
+    blur: function blur() {
       this.$refs.input && this.$refs.input.blur();
     }
-
   },
+  render: function render(createElement) {
+    var _this6 = this;
 
-  render(createElement) {
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
-    const rootNodes = [];
-    const leadingIconSlot = scopedSlots.leadingIcon && scopedSlots.leadingIcon();
+    var scopedSlots = this.$scopedSlots;
+    var rootNodes = [];
+    var leadingIconSlot = scopedSlots.leadingIcon && scopedSlots.leadingIcon();
 
     if (leadingIconSlot) {
       rootNodes.push(createElement('textfield-icon', {
@@ -7552,7 +7777,7 @@ var mcwTextfield = {
     if (this.multiline) {
       rootNodes.push(createElement('textarea', {
         class: this.inputClasses,
-        attrs: { ...this.$attrs,
+        attrs: _objectSpread2(_objectSpread2({}, this.$attrs), {}, {
           id: this.vma_uid_,
           minlength: this.minlength,
           maxlength: this.maxlength,
@@ -7561,11 +7786,13 @@ var mcwTextfield = {
           'aria-controls': this.inputAriaControls,
           rows: this.rows,
           cols: this.cols
-        },
+        }),
         ref: 'input',
-        on: { ...this.$listeners,
-          input: evt => this.updateValue(evt.target.value)
-        }
+        on: _objectSpread2(_objectSpread2({}, this.$listeners), {}, {
+          input: function input(evt) {
+            return _this6.updateValue(evt.target.value);
+          }
+        })
       }));
     } else {
       rootNodes.push(createElement('span', {
@@ -7574,7 +7801,7 @@ var mcwTextfield = {
       }));
       rootNodes.push(createElement('input', {
         class: this.inputClasses,
-        attrs: { ...this.$attrs,
+        attrs: _objectSpread2(_objectSpread2({}, this.$attrs), {}, {
           id: this.vma_uid_,
           type: this.type,
           minlength: this.minlength,
@@ -7582,25 +7809,27 @@ var mcwTextfield = {
           placeholder: this.inputPlaceHolder,
           'aria-label': this.inputPlaceHolder,
           'aria-controls': this.inputAriaControls,
-          'aria-labelledby': `label-${this.vma_uid_}`
-        },
+          'aria-labelledby': "label-".concat(this.vma_uid_)
+        }),
         ref: 'input',
-        on: { ...this.$listeners,
-          input: evt => this.updateValue(evt.target.value)
-        }
+        on: _objectSpread2(_objectSpread2({}, this.$listeners), {}, {
+          input: function input(evt) {
+            return _this6.updateValue(evt.target.value);
+          }
+        })
       }));
     }
 
     if (this.hasLabel) {
       rootNodes.push(createElement(__vue_component__$6, {
         attrs: {
-          id: `label-${this.vma_uid_}`
+          id: "label-".concat(this.vma_uid_)
         },
         ref: 'labelEl'
       }, this.label));
     }
 
-    const trailingIconSlot = scopedSlots.trailingIcon && scopedSlots.trailingIcon();
+    var trailingIconSlot = scopedSlots.trailingIcon && scopedSlots.trailingIcon();
 
     if (trailingIconSlot) {
       rootNodes.push(createElement('textfield-icon', {
@@ -7623,18 +7852,18 @@ var mcwTextfield = {
       }));
     }
 
-    const rootEl = createElement('label', {
+    var rootEl = createElement('label', {
       class: this.classes,
       style: this.styles,
       ref: 'root'
     }, rootNodes);
-    const nodes = [rootEl];
-    const helpTextSlot = scopedSlots.helpText && scopedSlots.helpText();
+    var nodes = [rootEl];
+    var helpTextSlot = scopedSlots.helpText && scopedSlots.helpText();
 
     if (this.hasHelptext) {
       nodes.push(createElement('textfield-helper-text', {
         attrs: {
-          id: `help${this.vma_uid_}`,
+          id: "help".concat(this.vma_uid_),
           helptext: this.helptext,
           persistent: this.helptextPersistent,
           validation: this.helptextValidation
@@ -7652,17 +7881,14 @@ var mcwTextfield = {
       }
     }, nodes);
   }
-
 };
 
 var textfield = BasePlugin({
-  mcwTextfield
+  mcwTextfield: mcwTextfield
 });
 
-const {
-  cssClasses: cssClasses$4,
-  strings: strings$4
-} = MDCTopAppBarFoundation;
+var cssClasses$4 = MDCTopAppBarFoundation.cssClasses,
+    strings$4 = MDCTopAppBarFoundation.strings;
 var mcwTopAppBar = {
   name: 'mcw-top-app-bar',
   props: {
@@ -7677,8 +7903,7 @@ var mcwTopAppBar = {
     },
     scrollTarget: HTMLElement
   },
-
-  data() {
+  data: function data() {
     return {
       rootStyles: {
         top: '0'
@@ -7694,34 +7919,43 @@ var mcwTopAppBar = {
       myScrollTarget: null
     };
   },
-
   watch: {
-    scrollTarget(nv, ov) {
+    scrollTarget: function scrollTarget(nv, ov) {
       if (nv !== ov) {
         this.myScrollTarget.removeEventListener('scroll', this.foundation_.handleTargetScroll);
         this.myScrollTarget = nv;
         this.myScrollTarget.addEventListener('scroll', this.foundation_.handleTargetScroll);
       }
     }
-
   },
   methods: {
-    handleNavigationClick_(event) {
+    handleNavigationClick_: function handleNavigationClick_(event) {
       this.foundation_.handleNavigationClick(event);
     }
-
   },
+  mounted: function mounted() {
+    var _this = this;
 
-  mounted() {
-    const adapter = {
-      addClass: className => this.$set(this.rootClasses, className, true),
-      removeClass: className => this.$delete(this.rootClasses, className),
-      hasClass: className => Boolean(this.rootClasses[className]),
-      setStyle: (property, value) => this.$set(this.rootStyles, property, value),
-      getTopAppBarHeight: () => this.$el.clientHeight,
-      notifyNavigationIconClicked: () => {
-        this.$emit('nav', {});
-        emitCustomEvent(this.$el, strings$4.NAVIGATION_EVENT, {},
+    var adapter = {
+      addClass: function addClass(className) {
+        return _this.$set(_this.rootClasses, className, true);
+      },
+      removeClass: function removeClass(className) {
+        return _this.$delete(_this.rootClasses, className);
+      },
+      hasClass: function hasClass(className) {
+        return Boolean(_this.rootClasses[className]);
+      },
+      setStyle: function setStyle(property, value) {
+        return _this.$set(_this.rootStyles, property, value);
+      },
+      getTopAppBarHeight: function getTopAppBarHeight() {
+        return _this.$el.clientHeight;
+      },
+      notifyNavigationIconClicked: function notifyNavigationIconClicked() {
+        _this.$emit('nav', {});
+
+        emitCustomEvent(_this.$el, strings$4.NAVIGATION_EVENT, {},
         /** shouldBubble */
         true);
       },
@@ -7739,14 +7973,16 @@ var mcwTopAppBar = {
       //           window.removeEventListener('scroll', handler);
       //         }
       //       },
-      getViewportScrollY: () => window.pageYOffset,
-      getTotalActionItems: () => this.$refs.root.querySelectorAll(`.${cssClasses$4.ACTION_ITEM}`).length
+      getViewportScrollY: function getViewportScrollY() {
+        return window.pageYOffset;
+      },
+      getTotalActionItems: function getTotalActionItems() {
+        return _this.$refs.root.querySelectorAll(".".concat(cssClasses$4.ACTION_ITEM)).length;
+      }
     };
-    const {
-      short,
-      shortCollapsed,
-      fixed
-    } = this;
+    var short = this.short,
+        shortCollapsed = this.shortCollapsed,
+        fixed = this.fixed;
 
     if (short || shortCollapsed) {
       this.foundation_ = new MDCShortTopAppBarFoundation(adapter);
@@ -7766,34 +8002,32 @@ var mcwTopAppBar = {
     this.myScrollTarget = this.scrollTarget || window;
     this.foundation_.init(); // Get all icons in the toolbar and instantiate the ripples
 
-    const icons = [].slice.call(this.$el.querySelectorAll(strings$4.ACTION_ITEM_SELECTOR));
+    var icons = [].slice.call(this.$el.querySelectorAll(strings$4.ACTION_ITEM_SELECTOR));
 
     if (this.navIcon_) {
       icons.push(this.navIcon_);
     }
 
-    this.iconRipples_ = icons.map(icon => {
-      const ripple = new RippleElement(icon);
+    this.iconRipples_ = icons.map(function (icon) {
+      var ripple = new RippleElement(icon);
       ripple.init();
       ripple.unbounded = true;
       return ripple;
     });
   },
-
-  beforeDestroy() {
+  beforeDestroy: function beforeDestroy() {
     if (this.navIcon_) {
       this.navIcon_.removeEventListener('click', this.handleNavigationClick_);
     }
 
-    this.iconRipples_.forEach(iconRipple => iconRipple.destroy());
+    this.iconRipples_.forEach(function (iconRipple) {
+      return iconRipple.destroy();
+    });
     this.myScrollTarget && this.myScrollTarget.removeEventListener('scroll', this.foundation_.handleTargetScroll);
     this.foundation_.destroy();
   },
-
-  render(createElement) {
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
+  render: function render(createElement) {
+    var scopedSlots = this.$scopedSlots;
     return createElement(this.tag, {
       class: this.rootClasses,
       style: this.rootStyles,
@@ -7801,7 +8035,6 @@ var mcwTopAppBar = {
       on: this.$listeners
     }, scopedSlots.default && scopedSlots.default());
   }
-
 };
 
 var mcwFixedAdjust = {
@@ -7816,38 +8049,27 @@ var mcwFixedAdjust = {
     short: Boolean,
     prominent: Boolean
   },
+  render: function render(createElement, _ref) {
+    var _ref2, _scopedSlots$default;
 
-  render(createElement, {
-    props: {
-      short,
-      dense,
-      prominent,
-      tag
-    },
-    scopedSlots,
-    data: {
-      attrs,
-      staticStyle,
-      staticClass
-    }
-  }) {
-    var _scopedSlots$default;
-
-    const base = 'mdc-top-app-bar';
-    const suffix = '-fixed-adjust';
+    var _ref$props = _ref.props,
+        short = _ref$props.short,
+        dense = _ref$props.dense,
+        prominent = _ref$props.prominent,
+        tag = _ref$props.tag,
+        scopedSlots = _ref.scopedSlots,
+        _ref$data = _ref.data,
+        attrs = _ref$data.attrs,
+        staticStyle = _ref$data.staticStyle,
+        staticClass = _ref$data.staticClass;
+    var base = 'mdc-top-app-bar';
+    var suffix = '-fixed-adjust';
     return createElement(tag, {
-      class: [{
-        [base + '--short' + suffix]: short,
-        [base + '--dense' + suffix]: dense && !prominent,
-        [base + '--dense-prominent' + suffix]: dense && prominent,
-        [base + '--prominent' + suffix]: !dense && prominent,
-        [base + '-' + suffix]: !short && !dense && !prominent
-      }, staticClass],
+      class: [(_ref2 = {}, _defineProperty(_ref2, base + '--short' + suffix, short), _defineProperty(_ref2, base + '--dense' + suffix, dense && !prominent), _defineProperty(_ref2, base + '--dense-prominent' + suffix, dense && prominent), _defineProperty(_ref2, base + '--prominent' + suffix, !dense && prominent), _defineProperty(_ref2, base + '-' + suffix, !short && !dense && !prominent), _ref2), staticClass],
       style: staticStyle,
-      attrs
+      attrs: attrs
     }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots));
   }
-
 };
 
 var mcwTopAppBarIcon = {
@@ -7855,16 +8077,13 @@ var mcwTopAppBarIcon = {
   props: {
     actionItem: Boolean
   },
-
-  render(createElement) {
+  render: function render(createElement) {
     var _scopedSlots$default;
 
-    const {
-      $attrs: attrs,
-      $scopedSlots: scopedSlots,
-      actionItem,
-      $listeners: listeners
-    } = this;
+    var attrs = this.$attrs,
+        scopedSlots = this.$scopedSlots,
+        actionItem = this.actionItem,
+        listeners = this.$listeners;
     return createElement('button', {
       class: {
         'mdc-icon-button': 1,
@@ -7872,12 +8091,10 @@ var mcwTopAppBarIcon = {
         'mdc-top-app-bar__action-item': actionItem,
         'mdc-top-app-bar__navigation-icon': !actionItem
       },
-      attrs,
-      on: { ...listeners
-      }
+      attrs: attrs,
+      on: _objectSpread2({}, listeners)
     }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots));
   }
-
 };
 
 var mcwTopAppBarRow = {
@@ -7885,33 +8102,25 @@ var mcwTopAppBarRow = {
   props: {
     tag: {
       type: String,
-
-      default() {
+      default: function _default() {
         return 'div';
       }
-
     }
   },
   functional: true,
-
-  render(createElement, {
-    props: {
-      tag
-    },
-    scopedSlots,
-    data: {
-      attrs,
-      staticClass
-    }
-  }) {
+  render: function render(createElement, _ref) {
     var _scopedSlots$default;
 
+    var tag = _ref.props.tag,
+        scopedSlots = _ref.scopedSlots,
+        _ref$data = _ref.data,
+        attrs = _ref$data.attrs,
+        staticClass = _ref$data.staticClass;
     return createElement(tag, {
       class: ['mdc-top-app-bar__row', staticClass],
-      attrs
+      attrs: attrs
     }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots));
   }
-
 };
 
 var mcwTopAppBarSection = {
@@ -7919,45 +8128,36 @@ var mcwTopAppBarSection = {
   props: {
     align: {
       type: String,
-
-      default() {
+      default: function _default() {
         return 'start';
       }
-
     },
     tag: {
       type: String,
-
-      default() {
+      default: function _default() {
         return 'div';
       }
-
     }
   },
   functional: true,
-
-  render(createElement, {
-    props: {
-      tag,
-      align
-    },
-    scopedSlots,
-    data: {
-      attrs,
-      staticClass
-    }
-  }) {
+  render: function render(createElement, _ref) {
     var _scopedSlots$default;
 
-    const classes = ['mdc-top-app-bar__section', staticClass];
+    var _ref$props = _ref.props,
+        tag = _ref$props.tag,
+        align = _ref$props.align,
+        scopedSlots = _ref.scopedSlots,
+        _ref$data = _ref.data,
+        attrs = _ref$data.attrs,
+        staticClass = _ref$data.staticClass;
+    var classes = ['mdc-top-app-bar__section', staticClass];
     align == 'start' && classes.push('mdc-top-app-bar__section--align-start');
     align == 'end' && classes.push('mdc-top-app-bar__section--align-end');
     return createElement(tag, {
       class: classes,
-      attrs
+      attrs: attrs
     }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots));
   }
-
 };
 
 var mcwTopAppBarTitle = {
@@ -7965,45 +8165,38 @@ var mcwTopAppBarTitle = {
   props: {
     tag: {
       type: String,
-
-      default() {
+      default: function _default() {
         return 'span';
       }
-
     }
   },
   functional: true,
-
-  render(createElement, {
-    props: {
-      tag
-    },
-    scopedSlots,
-    data: {
-      attrs,
-      staticClass
-    }
-  }) {
+  render: function render(createElement, _ref) {
     var _scopedSlots$default;
 
+    var tag = _ref.props.tag,
+        scopedSlots = _ref.scopedSlots,
+        _ref$data = _ref.data,
+        attrs = _ref$data.attrs,
+        staticClass = _ref$data.staticClass;
     return createElement(tag, {
       class: ['mdc-top-app-bar__title', staticClass],
-      attrs
+      attrs: attrs
     }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots));
   }
-
 };
 
 var topAppBar = BasePlugin({
-  mcwTopAppBar,
-  mcwFixedAdjust,
-  mcwTopAppBarIcon,
-  mcwTopAppBarRow,
-  mcwTopAppBarSection,
-  mcwTopAppBarTitle
+  mcwTopAppBar: mcwTopAppBar,
+  mcwFixedAdjust: mcwFixedAdjust,
+  mcwTopAppBarIcon: mcwTopAppBarIcon,
+  mcwTopAppBarRow: mcwTopAppBarRow,
+  mcwTopAppBarSection: mcwTopAppBarSection,
+  mcwTopAppBarTitle: mcwTopAppBarTitle
 });
 
-function mcwTypoMixin(defaultTag, defaultClassModifier, name = `mdc-${defaultTag}`) {
+function mcwTypoMixin(defaultTag, defaultClassModifier) {
+  var name = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "mdc-".concat(defaultTag);
   return {
     functional: true,
     props: {
@@ -8016,116 +8209,108 @@ function mcwTypoMixin(defaultTag, defaultClassModifier, name = `mdc-${defaultTag
         default: defaultClassModifier
       }
     },
+    render: function render(createElement, _ref) {
+      var _class;
 
-    render(createElement, {
-      props: {
-        tag,
-        classModifier
-      },
-      scopedSlots,
-      listeners,
-      data: {
-        attrs
-      }
-    }) {
+      var _ref$props = _ref.props,
+          tag = _ref$props.tag,
+          classModifier = _ref$props.classModifier,
+          scopedSlots = _ref.scopedSlots,
+          listeners = _ref.listeners,
+          attrs = _ref.data.attrs;
       return createElement(tag, {
-        class: {
-          [name]: true,
-          'mdc-typography': true,
-          [`mdc-typography--${classModifier}`]: true
-        },
-        attrs,
+        class: (_class = {}, _defineProperty(_class, name, true), _defineProperty(_class, 'mdc-typography', true), _defineProperty(_class, "mdc-typography--".concat(classModifier), true), _class),
+        attrs: attrs,
         on: listeners
       }, scopedSlots.default && scopedSlots.default());
     }
-
   };
 }
 
-const mcwHeadline1 = {
+var mcwHeadline1 = {
   name: 'mcw-headline1',
   functional: true,
   mixins: [mcwTypoMixin('h1', 'headline1')]
 };
-const mcwHeadline2 = {
+var mcwHeadline2 = {
   name: 'mcw-headline2',
   functional: true,
   mixins: [mcwTypoMixin('h2', 'headline2')]
 };
-const mcwHeadline3 = {
+var mcwHeadline3 = {
   name: 'mcw-headline3',
   functional: true,
   mixins: [mcwTypoMixin('h3', 'headline3')]
 };
-const mcwHeadline4 = {
+var mcwHeadline4 = {
   name: 'mcw-headline4',
   functional: true,
   mixins: [mcwTypoMixin('h4', 'headline4')]
 };
-const mcwHeadline5 = {
+var mcwHeadline5 = {
   name: 'mcw-headline5',
   functional: true,
   mixins: [mcwTypoMixin('h5', 'headline5')]
 };
-const mcwHeadline6 = {
+var mcwHeadline6 = {
   name: 'mcw-headline6',
   functional: true,
   mixins: [mcwTypoMixin('h6', 'headline6')]
 };
-const mcwSubtitle1 = {
+var mcwSubtitle1 = {
   name: 'mcw-subtitle1',
   functional: true,
   mixins: [mcwTypoMixin('h6', 'subtitle1')]
 };
-const mcwSubtitle2 = {
+var mcwSubtitle2 = {
   name: 'mcw-subtitle2',
   functional: true,
   mixins: [mcwTypoMixin('h6', 'subtitle2')]
 };
-const mcwBody1 = {
+var mcwBody1 = {
   name: 'mcw-body1',
   functional: true,
   mixins: [mcwTypoMixin('p', 'body1')]
 };
-const mcwBody2 = {
+var mcwBody2 = {
   name: 'mcw-body2',
   functional: true,
   mixins: [mcwTypoMixin('p', 'body2')]
 };
-const mcwButton1 = {
+var mcwButton1 = {
   name: 'mcw-button1',
   functional: true,
   mixins: [mcwTypoMixin('span', 'button', 'mdc-button1')]
 };
-const mcwCaption = {
+var mcwCaption = {
   name: 'mcw-caption',
   functional: true,
   mixins: [mcwTypoMixin('span', 'caption')]
 };
-const mcwOverline = {
+var mcwOverline = {
   name: 'mcw-overline',
   functional: true,
   mixins: [mcwTypoMixin('span', 'overline')]
 };
 
 var typography = BasePlugin({
-  mcwHeadline1,
-  mcwHeadline2,
-  mcwHeadline3,
-  mcwHeadline4,
-  mcwHeadline5,
-  mcwHeadline6,
-  mcwOverline,
-  mcwSubtitle1,
-  mcwSubtitle2,
-  mcwBody1,
-  mcwBody2,
-  mcwButton1,
-  mcwCaption
+  mcwHeadline1: mcwHeadline1,
+  mcwHeadline2: mcwHeadline2,
+  mcwHeadline3: mcwHeadline3,
+  mcwHeadline4: mcwHeadline4,
+  mcwHeadline5: mcwHeadline5,
+  mcwHeadline6: mcwHeadline6,
+  mcwOverline: mcwOverline,
+  mcwSubtitle1: mcwSubtitle1,
+  mcwSubtitle2: mcwSubtitle2,
+  mcwBody1: mcwBody1,
+  mcwBody2: mcwBody2,
+  mcwButton1: mcwButton1,
+  mcwCaption: mcwCaption
 });
 
 var index$1 = {
-  install(vm) {
+  install: function install(vm) {
     vm.use(button);
     vm.use(card);
     vm.use(circularProgress);
@@ -8154,7 +8339,6 @@ var index$1 = {
     vm.use(topAppBar);
     vm.use(typography);
   }
-
 };
 
 export default index$1;
