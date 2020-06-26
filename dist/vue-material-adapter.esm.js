@@ -2992,11 +2992,14 @@ var __vue_render__$5 = function() {
   var _c = _vm._self._c || _h;
   return _c(
     "custom-button",
-    {
-      class: _vm.classes,
-      style: _vm.styles,
-      attrs: { href: _vm.href, link: _vm.link }
-    },
+    _vm._g(
+      {
+        class: _vm.classes,
+        style: _vm.styles,
+        attrs: { href: _vm.href, link: _vm.link }
+      },
+      _vm.listeners
+    ),
     [
       _c("div", { staticClass: "mdc-fab__ripple" }),
       _vm._v(" "),
@@ -7867,7 +7870,7 @@ var mcwTopAppBarIcon = {
         'mdc-icon-button': 1,
         'material-icons': 1,
         'mdc-top-app-bar__action-item': actionItem,
-        'mdc-top-app-bar__nav-item': !actionItem
+        'mdc-top-app-bar__navigation-icon': !actionItem
       },
       attrs,
       on: { ...listeners
