@@ -1,6 +1,6 @@
 <!--must be no space between divs-->
 <!-- prettier-ignore -->
-<div :class="classes" role="progressbar" v-bind="rootAttrs">
+<div ref="root" :class="classes" role="progressbar" v-bind="rootAttrs">
   <div class="mdc-circular-progress__determinate-container">
     <svg
       class="mdc-circular-progress__determinate-circle-graphic"

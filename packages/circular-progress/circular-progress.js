@@ -1,5 +1,14 @@
 import { MDCCircularProgressFoundation } from '@material/circular-progress/foundation';
 
+import {
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  ref,
+  watch,
+  toRefs,
+} from '@vue/composition-api';
+
 const ProgressPropType = {
   type: [Number, String],
   validator(value) {
@@ -34,73 +43,96 @@ export default {
     progress: ProgressPropType,
     tag: { type: String, default: 'div' },
   },
-  data() {
-    return {
+
+  setup(props) {
+    const uiState = reactive({
       classes: {
         'mdc-circular-progress': 1,
-        'mdc-circular-progress--medium': this.medium,
-        'mdc-circular-progress--large': !this.medium,
+        'mdc-circular-progress--medium': props.medium,
+        'mdc-circular-progress--large': !props.medium,
       },
       rootAttrs: {},
-      circleAttrs: getCircleAttrs(this.medium, false),
-      indeterminateAttrs: getCircleAttrs(this.medium, true),
-    };
-  },
-  watch: {
-    open(nv) {
-      if (nv) {
-        this.foundation.open();
-      } else {
-        this.foundation.close();
-      }
-    },
-    progress(nv) {
-      this.foundation.setProgress(Number(nv));
-    },
+      circleAttrs: getCircleAttrs(props.medium, false),
+      indeterminateAttrs: getCircleAttrs(props.medium, true),
+    });
 
-    indeterminate(nv) {
-      this.foundation.setDeterminate(!nv);
-    },
-  },
+    const root = ref(null);
+    let foundation;
 
-  mounted() {
     const adapter = {
       addClass: className => {
-        this.$set(this.classes, className, true);
+        uiState.classes = { ...uiState.classes, [className]: true };
       },
 
       getDeterminateCircleAttribute: attributeName => {
-        return this.circleAttrs[attributeName];
+        return uiState.circleAttrs[attributeName];
       },
 
-      hasClass: className => this.$el.classList.contains(className),
-      removeClass: className => this.$delete(this.classes, className),
+      hasClass: className => root.value.classList.contains(className),
+      removeClass: className => {
+        // eslint-disable-next-line no-unused-vars
+        const { [className]: removed, ...rest } = uiState.classes;
+        uiState.classes = rest;
+      },
 
       removeAttribute: attributeName => {
-        this.$delete(this.rootAttrs, attributeName);
+        // eslint-disable-next-line no-unused-vars
+        const { [attributeName]: removed, ...rest } = uiState.rootAttrs;
+        uiState.rootAttrs = rest;
       },
 
       setAttribute: (attributeName, value) => {
-        this.$set(this.rootAttrs, attributeName, value);
+        uiState.rootAttrs = { ...uiState.rootAttrs, [attributeName]: value };
       },
 
       setDeterminateCircleAttribute: (attributeName, value) =>
-        this.$set(this.circleAttrs, attributeName, value),
+        (uiState.circleAttrs = {
+          ...uiState.circleAttrs,
+          [attributeName]: value,
+        }),
     };
 
-    this.foundation = new MDCCircularProgressFoundation(adapter);
-    this.foundation.init();
+    watch(
+      () => props.open,
+      nv => {
+        if (nv) {
+          foundation.open();
+        } else {
+          foundation.close();
+        }
+      },
+    );
 
-    this.foundation.setProgress(Number(this.progress));
-    this.foundation.setDeterminate(!this.indeterminate);
+    watch(
+      () => props.progress,
+      nv => {
+        foundation.setProgress(Number(nv));
+      },
+    );
 
-    if (this.open) {
-      this.foundation.open();
-    } else {
-      this.foundation.close();
-    }
-  },
-  beforeDestroy() {
-    this.foundation.destroy();
+    watch(
+      () => props.indeterminate,
+      nv => {
+        foundation.setDeterminate(!nv);
+      },
+    );
+
+    onMounted(() => {
+      foundation = new MDCCircularProgressFoundation(adapter);
+      foundation.init();
+
+      foundation.setProgress(Number(props.progress));
+      foundation.setDeterminate(!props.indeterminate);
+
+      if (props.open) {
+        foundation.open();
+      } else {
+        foundation.close();
+      }
+    });
+
+    onBeforeUnmount(() => foundation.destroy());
+
+    return { ...toRefs(uiState), root };
   },
 };
