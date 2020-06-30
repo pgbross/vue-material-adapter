@@ -1,3 +1,5 @@
+import { computed } from '@vue/composition-api';
+
 export const CustomButton = {
   name: 'custom-button',
   functional: true,
@@ -6,12 +8,7 @@ export const CustomButton = {
   },
   render(
     createElement,
-    {
-      children,
-      data,
-      props: { link, tag },
-      parent: { $router, $root },
-    },
+    { children, data, props: { link, tag }, parent: { $router, $root } },
   ) {
     let element;
 
@@ -65,3 +62,31 @@ export const CustomButtonMixin = {
     CustomButton,
   },
 };
+
+export const customButtonProps = {
+  href: String,
+  disabled: Boolean,
+  to: [String, Object],
+  exact: Boolean,
+  append: Boolean,
+  replace: Boolean,
+  activeClass: String,
+  exactActiveClass: String,
+};
+
+export function useCutomButtonPlugin(props) {
+  const link = computed(() => {
+    return (
+      props.to && {
+        to: props.to,
+        exact: props.exact,
+        append: props.append,
+        replace: props.replace,
+        activeClass: props.activeClass,
+        exactActiveClass: props.exactActiveClass,
+      }
+    );
+  });
+
+  return { link };
+}

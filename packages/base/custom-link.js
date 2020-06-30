@@ -1,34 +1,27 @@
+import { computed, createElement } from '@vue/composition-api';
+
 export const CustomLink = {
   name: 'custom-link',
-  functional: true,
   props: {
     tag: { type: String, default: 'a' },
     link: Object,
   },
-  render(
-    createElement,
-    {
-      data,
-      children,
-      props: { link, tag },
-      parent: { $router, $root },
-    },
-  ) {
-    let element;
+  setup(props, { listeners, $router, slots }) {
+    return () => {
+      let element;
 
-    if (link && $router) {
-      // router-link case
-      element = $root.$options.components['RouterLink'];
-      data.props = { tag, ...link };
-      if (data.on.click) {
-        data.nativeOn = { click: data.on.click };
+      const data = { on: listeners };
+
+      if (props.link && $router) {
+        // router-link case
+        element = 'router-link';
+        data.props = { tag: props.tag, ...props.link };
+      } else {
+        element = props.tag;
       }
-    } else {
-      // element fallback
-      element = tag;
-    }
 
-    return createElement(element, data, children);
+      return createElement(element, data, [slots.default?.()]);
+    };
   },
 };
 
@@ -58,4 +51,30 @@ export const CustomLinkMixin = {
   components: {
     CustomLink,
   },
+};
+
+export function useCustomLink(props) {
+  const link = computed(() => {
+    return (
+      props.to && {
+        to: props.to,
+        exact: props.exact,
+        append: props.append,
+        replace: props.replace,
+        activeClass: props.activeClass,
+        exactActiveClass: props.exactActiveClass,
+      }
+    );
+  });
+
+  return { link };
+}
+
+export const customLinkProps = {
+  to: [String, Object],
+  exact: Boolean,
+  append: Boolean,
+  replace: Boolean,
+  activeClass: String,
+  exactActiveClass: String,
 };

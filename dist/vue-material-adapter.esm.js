@@ -2,6 +2,7 @@ import { applyPassive } from '@material/dom/events';
 import { matches, closest } from '@material/dom/ponyfill';
 import { MDCRippleFoundation } from '@material/ripple';
 import { supportsCssVariables } from '@material/ripple/util';
+import { createElement } from '@vue/composition-api';
 import { MDCCircularProgressFoundation } from '@material/circular-progress/foundation';
 import { getCorrectEventName } from '@material/animation';
 import { MDCCheckboxFoundation } from '@material/checkbox/foundation';
@@ -837,20 +838,22 @@ var mcwCard = {
   props: {
     outlined: Boolean
   },
-  functional: true,
-  render: function render(createElement, _ref) {
-    var outlined = _ref.props.outlined,
-        _ref$data = _ref.data,
-        attrs = _ref$data.attrs,
-        staticClass = _ref$data.staticClass,
-        scopedSlots = _ref.scopedSlots;
-    return createElement('div', {
-      class: [{
-        'mdc-card': 1,
-        'mdc-card--outlined': outlined
-      }, staticClass],
-      attrs: attrs
-    }, scopedSlots.default && scopedSlots.default());
+  setup: function setup(props, _ref) {
+    var attrs = _ref.attrs,
+        slots = _ref.slots;
+    return function () {
+      var _slots$default;
+
+      var outlined = props.outlined;
+      return createElement('div', {
+        class: [{
+          'mdc-card': 1,
+          'mdc-card--outlined': outlined
+        } // staticClass,
+        ],
+        attrs: attrs
+      }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
+    };
   }
 };
 

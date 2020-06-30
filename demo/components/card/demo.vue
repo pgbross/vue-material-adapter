@@ -1,7 +1,7 @@
 <template>
   <div class="mcw-demo">
     <mcw-card>
-      <mcw-card-primary-action>
+      <mcw-card-primary-action @click="onPrimaryAction">
         <mcw-card-media :src="card" wide>Media</mcw-card-media>
       </mcw-card-primary-action>
       <section>
@@ -10,10 +10,15 @@
       </section>
       <mcw-card-actions>
         <mcw-card-action-buttons>
-          <mcw-button outlined>ACTION</mcw-button>
+          <mcw-button class="mdc-card__action mdc-card__action--button" outlined
+            >ACTION</mcw-button
+          >
         </mcw-card-action-buttons>
         <mcw-card-action-icons>
-          <mcw-material-icon icon="star"></mcw-material-icon>
+          <mcw-material-icon
+            class="mdc-card__action mdc-card__action--icon"
+            icon="star"
+          ></mcw-material-icon>
         </mcw-card-action-icons>
       </mcw-card-actions>
     </mcw-card>
@@ -28,6 +33,11 @@ export default {
     return {
       card,
     };
+  },
+  methods: {
+    onPrimaryAction() {
+      console.log('on primary action');
+    },
   },
 };
 </script>

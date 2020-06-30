@@ -136,3 +136,13 @@ export const RippleMixin = {
     this.ripple.destroy();
   },
 };
+
+export const RippleMixin2 = {
+  mounted() {
+    this.ripple = new RippleBase(this);
+    this.ripple.init();
+  },
+  beforeDestroy() {
+    this.ripple.destroy();
+  },
+};

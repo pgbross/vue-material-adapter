@@ -1,38 +1,49 @@
 <template>
   <div class="mcw-demo">
-    <div class="mcw-demo--container" style="min-height: 40px; padding-bottom: 0">
+    <div
+      class="mcw-demo--container"
+      style="min-height: 40px; padding-bottom: 0;"
+    >
       <div ref="buttons" class="mcw-demo-button">
-        <mcw-button v-bind="buttonProps">Button</mcw-button>
+        <mcw-button v-bind="buttonProps" @click="onClick">Button</mcw-button>
         <mcw-button v-bind="buttonProps">
           <mcw-material-icon slot="icon" icon="add"></mcw-material-icon>Button
         </mcw-button>
-        <mcw-button v-bind="buttonProps" trailingIcon="done">Button</mcw-button>
+        <mcw-button v-bind="buttonProps" trailing-icon="done"
+          >Button</mcw-button
+        >
       </div>
     </div>
 
     <div class="mcw-demo--container">
       <div class="button-type-select">
         <mcw-radio
-          label="baseline"
           id="baseline"
-          value="baseline"
           v-model="type"
+          label="baseline"
+          value="baseline"
           name="button-type"
           checked
         ></mcw-radio>
-        <mcw-radio label="raised" id="raised" value="raised" v-model="type" name="button-type"></mcw-radio>
         <mcw-radio
-          label="unelevated"
-          id="unelevated"
-          value="unelevated"
+          id="raised"
           v-model="type"
+          label="raised"
+          value="raised"
           name="button-type"
         ></mcw-radio>
         <mcw-radio
-          label="outlined"
-          id="outlined"
-          value="outlined"
+          id="unelevated"
           v-model="type"
+          label="unelevated"
+          value="unelevated"
+          name="button-type"
+        ></mcw-radio>
+        <mcw-radio
+          id="outlined"
+          v-model="type"
+          label="outlined"
+          value="outlined"
           name="button-type"
         ></mcw-radio>
       </div>
@@ -69,6 +80,11 @@ export default {
         outlined: this.outlined,
         unelevated: this.unelevated,
       };
+    },
+  },
+  methods: {
+    onClick() {
+      console.log('onClick');
     },
   },
 };
