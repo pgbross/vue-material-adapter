@@ -1,10 +1,19 @@
-/* eslint-disable quote-props */
 import { getCorrectEventName } from '@material/animation';
 import { MDCCheckboxFoundation } from '@material/checkbox/foundation';
 import { applyPassive } from '@material/dom/events';
+import { matches } from '@material/dom/ponyfill';
 import { MDCFormFieldFoundation } from '@material/form-field/foundation';
+import {
+  computed,
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  ref,
+  watch,
+  watchEffect,
+} from '@vue/composition-api';
 import { DispatchFocusMixin, VMAUniqueIdMixin } from '~/base/index.js';
-import { RippleBase } from '~/ripple/index.js';
+import { useRipplePlugin } from '../ripple/ripple-plugin';
 
 const CB_PROTO_PROPS = ['checked', 'indeterminate'];
 
@@ -29,142 +38,107 @@ export default {
     },
     name: String,
   },
-  data() {
-    return {
-      styles: {},
-      classes: { 'mdc-checkbox': 1 },
-    };
-  },
-  computed: {
-    hasLabel() {
-      return this.label || this.$slots.default;
-    },
-    formFieldClasses() {
-      return {
-        'mdc-form-field': this.hasLabel,
-        'mdc-form-field--align-end': this.hasLabel && this.alignEnd,
-      };
-    },
-  },
-  watch: {
-    checked: 'setChecked',
-    disabled(value) {
-      this.foundation.setDisabled(value);
-    },
-    indeterminate: 'setIndeterminate',
-  },
+  setup(props, { emit, slots }) {
+    const uiState = reactive({ classes: { 'mdc-checkbox': 1 } });
+    const root = ref(null);
+    const control = ref(null);
+    const labelEl = ref(null);
 
-  mounted() {
-    const adapter = {
-      addClass: className => this.$set(this.classes, className, true),
-      forceLayout: () => this.$refs.root.offsetWidth,
-      hasNativeControl: () => true,
-      isAttachedToDOM: () => true,
-      isChecked: () => this.$refs.control.checked,
-      isIndeterminate: () => this.$refs.control.indeterminate,
-      removeClass: className => this.$delete(this.classes, className),
-      removeNativeControlAttr: attr => {
-        this.$refs.control.removeAttribute(attr);
-      },
-      setNativeControlAttr: (attr, value) => {
-        this.$refs.control.setAttribute(attr, value);
-      },
+    let foundation;
+    let formField;
 
-      setNativeControlDisabled: disabled =>
-        (this.$refs.control.disabled = disabled),
-    };
-
-    this.foundation = new MDCCheckboxFoundation(adapter);
-
-    this.handleAnimationEnd_ = () => this.foundation.handleAnimationEnd();
-
-    this.$el.addEventListener(
-      getCorrectEventName(window, 'animationend'),
-      this.handleAnimationEnd_,
-    );
-
-    this.installPropertyChangeHooks_();
-
-    this.ripple = new RippleBase(this, {
+    const {
+      classes: rippleClasses,
+      styles,
+      activate,
+      deactivate,
+    } = useRipplePlugin(root, {
       isUnbounded: () => true,
-      isSurfaceActive: () => RippleBase.isSurfaceActive(this.$refs.control),
+      isSurfaceActive: () => {
+        return matches(control.value, ':active');
+      },
       registerInteractionHandler: (evt, handler) => {
-        this.$refs.control.addEventListener(evt, handler, applyPassive());
+        control.value.addEventListener(evt, handler, applyPassive());
       },
       deregisterInteractionHandler: (evt, handler) => {
-        this.$refs.control.removeEventListener(evt, handler, applyPassive());
+        control.value.removeEventListener(evt, handler, applyPassive());
       },
       computeBoundingRect: () => {
-        return this.$refs.root.getBoundingClientRect();
+        return root.value.getBoundingClientRect();
       },
     });
 
-    this.formField = new MDCFormFieldFoundation({
-      registerInteractionHandler: (type, handler) => {
-        this.$refs.label.addEventListener(type, handler);
-      },
-      deregisterInteractionHandler: (type, handler) => {
-        this.$refs.label.removeEventListener(type, handler);
-      },
-      activateInputRipple: () => {
-        this.ripple && this.ripple.activate();
-      },
-      deactivateInputRipple: () => {
-        this.ripple && this.ripple.deactivate();
-      },
+    const classes = computed(() => {
+      return { ...rippleClasses.value, ...uiState.classes };
     });
 
-    this.foundation.init();
-    this.ripple.init();
-    this.formField.init();
-    this.setChecked(this.checked);
-    this.foundation.setDisabled(this.disabled);
-    this.setIndeterminate(this.indeterminate);
-  },
-  beforeDestroy() {
-    this.$el.removeEventListener(
-      getCorrectEventName(window, 'animationend'),
-      this.handleAnimationEnd_,
-    );
+    const hasLabel = computed(() => {
+      return props.label ?? slots.default;
+    });
 
-    this.formField.destroy();
-    this.ripple.destroy();
-
-    this.uninstallPropertyChangeHooks_();
-    this.foundation.destroy();
-  },
-  methods: {
-    setChecked(checked) {
-      this.$refs.control.checked = Array.isArray(checked)
-        ? checked.indexOf(this.value) > -1
-        : checked;
-    },
-    setIndeterminate(indeterminate) {
-      this.$refs.control.indeterminate = indeterminate;
-    },
-
-    onChange({ target: { indeterminate, checked } }) {
+    const formFieldClasses = computed(() => {
+      return {
+        'mdc-form-field': hasLabel.value,
+        'mdc-form-field--align-end': hasLabel.value && props.alignEnd,
+      };
+    });
+    const onChange = ({ target: { indeterminate, checked } }) => {
       // note indeterminate will not currently work with the array model
-      this.$emit('update:indeterminate', indeterminate);
+      emit('update:indeterminate', indeterminate);
 
-      if (Array.isArray(this.checked)) {
-        const idx = this.checked.indexOf(this.value);
+      if (Array.isArray(props.checked)) {
+        const idx = props.checked.indexOf(props.value);
         if (checked) {
-          idx < 0 && this.$emit('change', this.checked.concat(this.value));
+          idx < 0 && emit('change', props.checked.concat(props.value));
         } else {
           idx > -1 &&
-            this.$emit(
+            emit(
               'change',
-              this.checked.slice(0, idx).concat(this.checked.slice(idx + 1)),
+              props.checked.slice(0, idx).concat(props.checked.slice(idx + 1)),
             );
         }
       } else {
-        this.$emit('change', checked);
+        emit('change', checked);
       }
-    },
+    };
 
-    installPropertyChangeHooks_() {
-      const nativeCb = this.$refs.control;
+    const adapter = {
+      addClass: className =>
+        (uiState.classes = { ...uiState.classes, [className]: true }),
+      forceLayout: () => root.value.offsetWidth,
+      hasNativeControl: () => true,
+      isAttachedToDOM: () => true,
+      isChecked: () => control.value.checked,
+      isIndeterminate: () => control.value.indeterminate,
+      removeClass: className => {
+        // eslint-disable-next-line no-unused-vars
+        const { [className]: removed, ...rest } = uiState.classes;
+        uiState.classes = rest;
+      },
+      removeNativeControlAttr: attr => {
+        control.value.removeAttribute(attr);
+      },
+      setNativeControlAttr: (attr, value) => {
+        control.value.setAttribute(attr, value);
+      },
+
+      setNativeControlDisabled: disabled => (control.value.disabled = disabled),
+    };
+
+    const handleAnimationEnd_ = () => foundation.handleAnimationEnd();
+
+    const setChecked = checked => {
+      control.value.checked = Array.isArray(checked)
+        ? checked.indexOf(props.value) > -1
+        : checked;
+    };
+
+    const setIndeterminate = indeterminate => {
+      control.value && (control.value.indeterminate = indeterminate);
+    };
+
+    const installPropertyChangeHooks_ = () => {
+      const nativeCb = control.value;
       const cbProto = Object.getPrototypeOf(nativeCb);
 
       CB_PROTO_PROPS.forEach(controlState => {
@@ -176,7 +150,7 @@ export default {
             get: desc.get,
             set: state => {
               desc.set.call(nativeCb, state);
-              this.foundation.handleChange();
+              foundation.handleChange();
             },
             configurable: desc.configurable,
             enumerable: desc.enumerable,
@@ -184,10 +158,10 @@ export default {
           Object.defineProperty(nativeCb, controlState, nativeCbDesc);
         }
       });
-    },
+    };
 
-    uninstallPropertyChangeHooks_() {
-      const nativeCb = this.$refs.control;
+    const uninstallPropertyChangeHooks_ = () => {
+      const nativeCb = control.value;
       const cbProto = Object.getPrototypeOf(nativeCb);
 
       CB_PROTO_PROPS.forEach(controlState => {
@@ -199,7 +173,87 @@ export default {
           Object.defineProperty(nativeCb, controlState, desc);
         }
       });
+    };
+
+    watchEffect(() => {
+      setIndeterminate(props.indeterminate);
+    });
+
+    watch(
+      () => props.disabled,
+      (nv, ov) => {
+        nv != ov && foundation?.setDisabled(nv);
+      },
+    );
+
+    watch(
+      () => props.checked,
+      (nv, ov) => {
+        nv != ov && setChecked(nv);
+      },
+    );
+
+    onMounted(() => {
+      foundation = new MDCCheckboxFoundation(adapter);
+
+      root.value.addEventListener(
+        getCorrectEventName(window, 'animationend'),
+        handleAnimationEnd_,
+      );
+
+      installPropertyChangeHooks_();
+
+      formField = new MDCFormFieldFoundation({
+        registerInteractionHandler: (type, handler) => {
+          labelEl.value.addEventListener(type, handler);
+        },
+        deregisterInteractionHandler: (type, handler) => {
+          labelEl.value.removeEventListener(type, handler);
+        },
+        activateInputRipple: () => {
+          activate();
+        },
+        deactivateInputRipple: () => {
+          deactivate();
+        },
+      });
+
+      foundation.init();
+      formField.init();
+      setChecked(props.checked);
+      foundation.setDisabled(props.disabled);
+      setIndeterminate(props.indeterminate);
+    });
+
+    onBeforeUnmount(() => {
+      root.value.removeEventListener(
+        getCorrectEventName(window, 'animationend'),
+        handleAnimationEnd_,
+      );
+
+      formField.destroy();
+
+      uninstallPropertyChangeHooks_();
+      foundation.destroy();
+    });
+
+    return {
+      root,
+      control,
+      labelEl,
+      formFieldClasses,
+      onChange,
+      classes,
+      styles,
+    };
+  },
+
+  watchX: {
+    checked: 'setChecked',
+    disabled(value) {
+      this.foundation.setDisabled(value);
     },
+    indeterminate: 'setIndeterminate',
   },
 };
 

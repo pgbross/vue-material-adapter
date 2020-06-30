@@ -11,7 +11,7 @@ import {
 } from '@vue/composition-api';
 
 export class RippleElement extends MDCRippleFoundation {
-  constructor(element, state) {
+  constructor(element, state, options) {
     const $el = element.$el ?? element;
 
     super({
@@ -58,6 +58,7 @@ export class RippleElement extends MDCRippleFoundation {
       updateCssVariable: (varName, value) => {
         state.styles = { ...state.styles, [varName]: value };
       },
+      ...options,
     });
 
     this.unbounded_ = false;
@@ -72,17 +73,20 @@ export class RippleElement extends MDCRippleFoundation {
   }
 }
 
-export function useRipplePlugin(root) {
+export function useRipplePlugin(root, options) {
   const ripple = ref(null);
   const state = shallowReactive({ classes: {}, styles: {} });
 
+  const activate = () => ripple.value?.activate();
+  const deactivate = () => ripple.value?.deactivate();
+
   onMounted(() => {
-    ripple.value = new RippleElement(root.value, state);
+    ripple.value = new RippleElement(root.value, state, options);
     ripple.value.init();
   });
   onBeforeUnmount(() => {
     ripple.value.destroy();
   });
 
-  return { ...toRefs(state) };
+  return { ...toRefs(state), activate, deactivate };
 }

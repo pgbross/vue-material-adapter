@@ -6,7 +6,7 @@ export const CustomLink = {
     tag: { type: String, default: 'a' },
     link: Object,
   },
-  setup(props, { listeners, $router, slots }) {
+  setup(props, { listeners, root: { $router }, slots }) {
     return () => {
       let element;
 
