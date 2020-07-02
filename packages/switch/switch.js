@@ -1,6 +1,15 @@
 import { MDCSwitchFoundation } from '@material/switch/foundation';
 import { DispatchFocusMixin, VMAUniqueIdMixin } from '~/base/index.js';
-import { RippleBase } from '~/ripple/index.js';
+import {
+  computed,
+  ref,
+  reactive,
+  toRefs,
+  onMounted,
+  onBeforeUnmount,
+  watch,
+} from '@vue/composition-api';
+import { useRipplePlugin } from '~/ripple/ripple-plugin';
 
 export default {
   name: 'mcw-switch',
@@ -17,56 +26,86 @@ export default {
     alignEnd: Boolean,
     name: String,
   },
-  data() {
-    return {
-      classes: { 'mdc-switch': 1 },
-      styles: {},
-      nativeControlChecked: this.checked,
-      nativeControlDisabled: this.disabled,
-      nativeAttrs: {},
-    };
-  },
-  computed: {
-    hasLabel() {
-      return this.label || this.$slots.default;
-    },
-  },
-  watch: {
-    checked(value) {
-      this.foundation && this.foundation.setChecked(value);
-    },
-    disabled(value) {
-      this.foundation && this.foundation.setDisabled(value);
-    },
-  },
 
-  mounted() {
-    this.foundation = new MDCSwitchFoundation({
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      setNativeControlChecked: checked => (this.nativeControlChecked = checked),
+  setup(props, { slots, emit }) {
+    const control = ref(null);
+    const root = ref(null);
+    const uiState = reactive({
+      classes: { 'mdc-switch': 1 },
+      nativeControlChecked: props.checked,
+      nativeControlDisabled: props.disabled,
+      nativeAttrs: {},
+    });
+
+    const { classes: rippleClasses, styles } = useRipplePlugin(root);
+
+    let foundation;
+
+    const classes = computed(() => {
+      return { ...rippleClasses.value, ...uiState.classes };
+    });
+
+    const hasLabel = computed(() => {
+      return props.label || slots.default;
+    });
+
+    const onChanged = event => {
+      foundation?.handleChange(event);
+      emit('change', event.target.checked);
+    };
+
+    const adapter = {
+      addClass: className =>
+        (uiState.classes = { ...uiState.classes, [className]: true }),
+      removeClass: className => {
+        // eslint-disable-next-line no-unused-vars
+        const { [className]: removed, ...rest } = uiState.classes;
+        uiState.classes = rest;
+      },
+      setNativeControlChecked: checked =>
+        (uiState.nativeControlChecked = checked),
       setNativeControlDisabled: disabled =>
-        (this.nativeControlDisabled = disabled),
+        (uiState.nativeControlDisabled = disabled),
 
       setNativeControlAttr: (attr, value) => {
-        this.nativeAttrs[attr] = value;
+        uiState.nativeAttrs[attr] = value;
       },
-    });
-    this.foundation.init();
-    this.foundation.setChecked(this.checked);
-    this.foundation.setDisabled(this.disabled);
+    };
 
-    this.ripple = new RippleBase(this);
-    this.ripple.init();
-  },
-  beforeDestroy() {
-    this.foundation && this.foundation.destroy();
-    this.ripple && this.ripple.destroy();
-  },
-  methods: {
-    onChanged(event) {
-      this.foundation && this.foundation.handleChange(event);
-      this.$emit('change', event.target.checked);
-    },
+    watch(
+      () => props.checked,
+      (nv, ov) => {
+        nv != ov && foundation?.setChecked(nv);
+      },
+    );
+
+    watch(
+      () => props.disabled,
+      (nv, ov) => {
+        nv != ov && foundation?.setDisabled(nv);
+      },
+    );
+
+    onMounted(() => {
+      foundation = new MDCSwitchFoundation(adapter);
+
+      foundation.init();
+      foundation.setChecked(props.checked);
+      foundation.setDisabled(props.disabled);
+    });
+
+    onBeforeUnmount(() => {
+      foundation.destroy();
+    });
+
+    return {
+      ...toRefs(uiState),
+      classes,
+      hasLabel,
+      onChanged,
+      control,
+      root,
+      styles,
+    };
   },
 };
