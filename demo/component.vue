@@ -2,16 +2,17 @@
   <section>
     <div :style="'background-image: url(' + icon + ')'" class="demo-icon" />
 
-    <mcw-headline4 v-if="title" ref="title">{{ title }}</mcw-headline4>
+    <div v-if="title" ref="title" class="mdc-typography--headline4">
+      {{ title }}
+    </div>
     <article v-if="demo" class="demo-article">
       <component :is="demo" />
     </article>
     <article v-if="readme" class="doc-article markdown">
-      <mcw-headline4>
+      <div class="mdc-typography--headline4">
         Note: elements can use names prefixed with either
-        <em>mcw-</em> (preferred) or for backwards compatibility
-        <em>mdc-</em>.
-      </mcw-headline4>
+        <em>mcw-</em> (preferred) or for backwards compatibility <em>mdc-</em>.
+      </div>
       <component :is="readme" />
     </article>
   </section>
@@ -56,11 +57,10 @@ export default {
     'tabs-readme': () => import('./components/tabs/README.md'),
     'textfield-readme': () => import('./components/textfield/README.md'),
     'top-app-bar-readme': () => import('./components/top-app-bar/README.md'),
-    'typography-readme': () => import('./components/typography/README.md'),
 
     'button-demo': () => import('./components/button/demo.vue'),
     'card-demo': () => import('./components/card/demo.vue'),
-      'circular-progress-demo': () =>
+    'circular-progress-demo': () =>
       import('./components/circular-progress/demo.vue'),
     'checkbox-demo': () => import('./components/checkbox/demo.vue'),
     'data-table-demo': () => import('./components/data-table/demo.vue'),
@@ -83,7 +83,6 @@ export default {
     'tabs-demo': () => import('./components/tabs/demo.vue'),
     'textfield-demo': () => import('./components/textfield/demo.vue'),
     'top-app-bar-demo': () => import('./components/top-app-bar/demo.vue'),
-    'typography-demo': () => import('./components/typography/demo.vue'),
   },
   computed: {
     demo() {

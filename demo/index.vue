@@ -36,5 +36,10 @@ export default {
   data() {
     return { open: false, links };
   },
+  methods: {
+    onNav() {
+      this.open = !this.open;
+    },
+  },
 };
 </script>

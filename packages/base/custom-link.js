@@ -1,4 +1,4 @@
-import { computed, createElement } from '@vue/composition-api';
+import { computed, h } from '@vue/composition-api';
 
 export const CustomLink = {
   name: 'custom-link',
@@ -16,11 +16,16 @@ export const CustomLink = {
         // router-link case
         element = 'router-link';
         data.props = { tag: props.tag, ...props.link };
+
+        // we add the native click so it can bubble and be detected in a menu/drawer
+        if (data.on.click) {
+          data.nativeOn = { click: data.on.click };
+        }
       } else {
         element = props.tag;
       }
 
-      return createElement(element, data, [slots.default?.()]);
+      return h(element, data, [slots.default?.()]);
     };
   },
 };

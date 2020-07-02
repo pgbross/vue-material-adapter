@@ -1,4 +1,4 @@
-import { createElement } from '@vue/composition-api';
+import { h } from '@vue/composition-api';
 
 export default {
   name: 'mcw-card-media',
@@ -26,7 +26,7 @@ export default {
       const content = slots.default?.();
       if (content) {
         nodes.push(
-          createElement(
+          h(
             'div',
             { class: ['mdc-card__media-content', props.contentClass] },
             content,
@@ -34,7 +34,7 @@ export default {
         );
       }
 
-      return createElement(
+      return h(
         'section',
         {
           class: {

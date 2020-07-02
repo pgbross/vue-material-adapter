@@ -1,4 +1,4 @@
-import { createElement as h } from '@vue/composition-api';
+import { h } from '@vue/composition-api';
 
 export default {
   name: 'mcw-card',

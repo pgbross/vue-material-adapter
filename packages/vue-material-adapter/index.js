@@ -25,7 +25,6 @@ import switchControl from '~/switch/index.js';
 import tabs from '~/tabs/index.js';
 import textfield from '~/textfield/index.js';
 import topAppBar from '~/top-app-bar/index.js';
-import typography from '~/typography/index.js';
 
 export default {
   install(vm) {
@@ -55,7 +54,6 @@ export default {
     vm.use(tabs);
     vm.use(textfield);
     vm.use(topAppBar);
-    vm.use(typography);
   },
 };
 
@@ -87,5 +85,4 @@ export {
   tabs,
   textfield,
   topAppBar,
-  typography,
 };

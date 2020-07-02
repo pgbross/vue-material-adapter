@@ -1,4 +1,4 @@
-import { createElement } from '@vue/composition-api';
+import { h } from '@vue/composition-api';
 
 export default {
   name: 'mcw-card-actions',
@@ -7,7 +7,7 @@ export default {
   },
   setup(props, { slots }) {
     return () => {
-      return createElement(
+      return h(
         'section',
         {
           class: [

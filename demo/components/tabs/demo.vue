@@ -1,19 +1,21 @@
 <template>
   <div class>
-    <mcw-headline6>Simple</mcw-headline6>
+    <div class="mdc-typography--headline6">Simple</div>
     <section class="mcw-demo mcw-demo--container">
       <mcw-tab-bar @change="onSelected" activeTabIndex="1">
-        <mcw-tab v-for="item in filteredItems" :key="item.label">{{ item }}</mcw-tab>
+        <mcw-tab v-for="item in filteredItems" :key="item.label">{{
+          item
+        }}</mcw-tab>
       </mcw-tab-bar>
     </section>
-    <br>
-    <div v-if="selectedItem" style="text-align: right">
+    <br />
+    <div v-if="selectedItem" style="text-align: right;">
       <mcw-caption>
         Selected:
         <span class="demo-tabs-selected">{{ selectedItem }}</span>
       </mcw-caption>
     </div>
-    <mcw-headline6>With icons and text</mcw-headline6>
+    <div class="mdc-typography--headline6">With icons and text</div>
     <section class="mcw-demo mcw-demo--container">
       <mcw-tab-bar>
         <mcw-tab icon="phone">Recents</mcw-tab>
@@ -21,7 +23,7 @@
         <mcw-tab icon="personal_pin">Nearby</mcw-tab>
       </mcw-tab-bar>
     </section>
-    <mcw-headline6>Scrollable</mcw-headline6>
+    <div class="mdc-typography--headline6">Scrollable</div>
     <section class="mcw-demo mcw-demo--container mcw-demo--container-narrow">
       <mcw-tab-bar @change="onSelected" activeTabIndex="1">
         <mcw-tab v-for="item in items" :key="item.label">{{ item }}</mcw-tab>
