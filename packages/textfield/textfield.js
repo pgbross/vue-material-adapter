@@ -371,7 +371,7 @@ export default {
         createElement(
           mcwFloatingLabel,
           {
-            attrs: { id: `label-${this.vma_uid_}` },
+            attrs: { id: `label-${this.vma_uid_}`, required: this.required },
             ref: 'labelEl',
           },
           this.label,
