@@ -1,5 +1,5 @@
 import { BasePlugin } from '~/base/index.js';
-import mcwLineRipple from './line-ripple.js';
+import mcwLineRipple from './line-ripple.vue';
 
 export { mcwLineRipple };
 
