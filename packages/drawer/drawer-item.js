@@ -1,11 +1,18 @@
-import { CustomLinkMixin, DispatchEventMixin } from '~/base/index.js';
-import { RippleBase } from '~/ripple/index.js';
+import { computed, inject, reactive, ref, toRefs } from '@vue/composition-api';
+import { CustomLinkMixin } from '~/base/index.js';
+import { useRipplePlugin } from '~/ripple/ripple-plugin';
+
+const dispatchProps = {
+  event: String,
+  'event-target': Object,
+  'event-args': Array,
+};
 
 export default {
   name: 'mcw-drawer-item',
-  inject: ['mcwDrawer'],
-  mixins: [DispatchEventMixin, CustomLinkMixin],
+  mixins: [CustomLinkMixin],
   props: {
+    ...dispatchProps,
     startIcon: String,
     modalClose: {
       type: Boolean,
@@ -17,41 +24,60 @@ export default {
       default: 'mdc-list-item--activated',
     },
   },
-  data() {
-    return {
+
+  setup(props, { emit, listeners, slots, root: $root }) {
+    const root = ref(null);
+    const uiState = reactive({
       classes: {
         'mdc-list-item': 1,
         'mdc-drawer-item': 1,
       },
-      styles: {},
-    };
-  },
+    });
+    const { classes: rippleClasses, styles } = useRipplePlugin(root);
 
-  computed: {
-    mylisteners() {
+    const mcwDrawer = inject('mcwDrawer');
+
+    const classes = computed(() => {
+      return { ...rippleClasses.value, ...uiState.classes };
+    });
+
+    const dispatchEvent = evt => {
+      evt && emit(evt.type, evt);
+      if (props.event) {
+        const target = props.eventTarget || $root;
+        const args = props.eventArgs || [];
+        target.$emit(props.event, ...args);
+      }
+    };
+
+    const mylisteners = computed(() => {
       return {
-        ...this.$listeners,
+        ...listeners,
         click: e => {
-          this.mcwDrawer.isModal && this.modalClose && this.mcwDrawer.close();
-          this.dispatchEvent(e);
+          mcwDrawer.isModal && props.modalClose && mcwDrawer.close();
+          dispatchEvent(e);
         },
       };
-    },
-    itemClasses() {
+    });
+
+    const itemClasses = computed(() => {
       return {
-        'mdc-list-item--activated': this.activated,
+        'mdc-list-item--activated': props.activated,
       };
-    },
-    hasStartDetail() {
-      return this.startIcon || this.$slots['start-detail'];
-    },
-  },
-  mounted() {
-    this.ripple = new RippleBase(this);
-    this.ripple.init();
-  },
-  beforeDestroy() {
-    this.ripple && this.ripple.destroy();
-    this.ripple = null;
+    });
+
+    const hasStartDetail = computed(() => {
+      return props.startIcon || slots['start-detail'];
+    });
+
+    return {
+      ...toRefs(uiState),
+      classes,
+      root,
+      styles,
+      mylisteners,
+      itemClasses,
+      hasStartDetail,
+    };
   },
 };

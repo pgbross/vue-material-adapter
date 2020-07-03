@@ -1,13 +1,16 @@
+import { h } from '@vue/composition-api';
+
 export default {
   name: 'mcw-drawer-header',
-  functional: true,
-  render(createElement, { scopedSlots }) {
-    return createElement(
-      'div',
-      {
-        class: 'mdc-drawer__header',
-      },
-      scopedSlots.default?.(),
-    );
+  setup(props, { slots }) {
+    return () => {
+      return h(
+        'div',
+        {
+          class: 'mdc-drawer__header',
+        },
+        slots.default?.(),
+      );
+    };
   },
 };

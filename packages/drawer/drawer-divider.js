@@ -1,11 +1,15 @@
+import { h } from '@vue/composition-api';
+
 export default {
   name: 'mcw-drawer-divider',
-  functional: true,
-  render(createElement) {
-    return createElement('hr', {
-      class: {
-        'mdc-list-divider': 1,
-      },
-    });
+
+  setup(props, { slots }) {
+    return () => {
+      return h('hr', {
+        class: {
+          'mdc-list-divider': 1,
+        },
+      });
+    };
   },
 };
