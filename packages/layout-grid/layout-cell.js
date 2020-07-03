@@ -1,7 +1,9 @@
-const spanOptions = {
+import { computed } from '@vue/composition-api';
+
+const spanOptions_ = {
   type: [String, Number],
   default: null,
-  validator: function (value) {
+  validator: value => {
     const num = Number(value);
     return isFinite(num) && num <= 12 && num > 0;
   },
@@ -10,47 +12,46 @@ const spanOptions = {
 export default {
   name: 'mcw-layout-cell',
   props: {
-    span: spanOptions,
-    order: spanOptions,
-    phone: spanOptions,
-    tablet: spanOptions,
-    desktop: spanOptions,
+    span: spanOptions_,
+    order: spanOptions_,
+    phone: spanOptions_,
+    tablet: spanOptions_,
+    desktop: spanOptions_,
     align: {
       type: String,
-      validator: function (value) {
-        return ['top', 'bottom', 'middle'].indexOf(value) !== -1;
-      },
+      validator: value => ['top', 'bottom', 'middle'].indexOf(value) !== -1,
     },
   },
-  computed: {
-    classes() {
+  setup(props) {
+    const classes = computed(() => {
       const cssClasses = [];
 
-      if (this.span) {
-        cssClasses.push(`mdc-layout-grid__cell--span-${this.span}`);
+      if (props.span) {
+        cssClasses.push(`mdc-layout-grid__cell--span-${props.span}`);
       }
 
-      if (this.order) {
-        cssClasses.push(`mdc-layout-grid__cell--order-${this.order}`);
+      if (props.order) {
+        cssClasses.push(`mdc-layout-grid__cell--order-${props.order}`);
       }
 
-      if (this.phone) {
-        cssClasses.push(`mdc-layout-grid__cell--span-${this.phone}-phone`);
+      if (props.phone) {
+        cssClasses.push(`mdc-layout-grid__cell--span-${props.phone}-phone`);
       }
 
-      if (this.tablet) {
-        cssClasses.push(`mdc-layout-grid__cell--span-${this.tablet}-tablet`);
+      if (props.tablet) {
+        cssClasses.push(`mdc-layout-grid__cell--span-${props.tablet}-tablet`);
       }
 
-      if (this.desktop) {
-        cssClasses.push(`mdc-layout-grid__cell--span-${this.desktop}-desktop`);
+      if (props.desktop) {
+        cssClasses.push(`mdc-layout-grid__cell--span-${props.desktop}-desktop`);
       }
 
-      if (this.align) {
-        cssClasses.push(`mdc-layout-grid__cell--align-${this.align}`);
+      if (props.align) {
+        cssClasses.push(`mdc-layout-grid__cell--align-${props.align}`);
       }
 
       return cssClasses;
-    },
+    });
+    return { classes };
   },
 };
