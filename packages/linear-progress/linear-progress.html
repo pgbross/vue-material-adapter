@@ -1,4 +1,4 @@
-<div :class="classes" role="progressbar" v-bind="rootAttrs">
+<div ref="root" :class="classes" role="progressbar" v-bind="rootAttrs">
   <div ref="buffer" class="mdc-linear-progress__buffer">
     <div class="mdc-linear-progress__buffer-bar" :style="bufferbarStyles"></div>
     <div class="mdc-linear-progress__buffer-dots"></div>

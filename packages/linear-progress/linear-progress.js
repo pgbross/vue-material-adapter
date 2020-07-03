@@ -1,6 +1,15 @@
 import { MDCLinearProgressFoundation } from '@material/linear-progress/foundation';
 
-const ProgressPropType = {
+import {
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  ref,
+  watch,
+  toRefs,
+} from '@vue/composition-api';
+
+const progressPropType_ = {
   type: [Number, String],
   validator(value) {
     return Number(value) >= 0 && Number(value) <= 1;
@@ -13,80 +22,112 @@ export default {
     open: { type: Boolean, default: true },
     indeterminate: Boolean,
     reversed: Boolean,
-    progress: ProgressPropType,
-    buffer: ProgressPropType,
+    progress: progressPropType_,
+    buffer: progressPropType_,
     bufferingDots: { type: Boolean, default: true },
     tag: { type: String, default: 'div' },
   },
-  data() {
-    return {
+
+  setup(props) {
+    const uiState = reactive({
       classes: {
         'mdc-linear-progress': 1,
       },
       bufferbarStyles: {},
       primaryStyles: {},
       rootAttrs: {},
-    };
-  },
-  watch: {
-    open(nv) {
-      if (nv) {
-        this.foundation.open();
-      } else {
-        this.foundation.close();
-      }
-    },
-    progress(nv) {
-      this.foundation.setProgress(Number(nv));
-    },
-    buffer(nv) {
-      this.foundation.setBuffer(Number(nv));
-    },
-    indeterminate(nv) {
-      this.foundation.setDeterminate(!nv);
-    },
-    reversed(nv) {
-      this.foundation.setReverse(nv);
-    },
-  },
+    });
 
-  mounted() {
+    const root = ref(null);
+    let foundation;
+
     const adapter = {
-      addClass: className => {
-        this.$set(this.classes, className, true);
+      addClass: className =>
+        (uiState.classes = { ...uiState.classes, [className]: true }),
+      forceLayout: () => root.value.offsetWidth,
+      setBufferBarStyle: (styleProperty, value) =>
+        (uiState.bufferbarStyles = {
+          ...uiState.bufferbarStyles,
+          [styleProperty]: value,
+        }),
+      setPrimaryBarStyle: (styleProperty, value) =>
+        (uiState.primaryStyles = {
+          ...uiState.primaryStyles,
+          [styleProperty]: value,
+        }),
+
+      hasClass: className => root.value.classList.contains(className),
+      removeClass: className => {
+        // eslint-disable-next-line no-unused-vars
+        const { [className]: removed, ...rest } = uiState.classes;
+        uiState.classes = rest;
       },
-      forceLayout: () => this.$el.offsetWidth,
-      setBufferBarStyle: (styleProperty, value) => {
-        this.$set(this.bufferbarStyles, styleProperty, value);
-      },
-      setPrimaryBarStyle: (styleProperty, value) => {
-        this.$set(this.primaryStyles, styleProperty, value);
-      },
-      hasClass: className => this.$el.classList.contains(className),
-      removeClass: className => this.$delete(this.classes, className),
-      setAttribute: (attributeName, value) => {
-        this.$set(this.rootAttrs, attributeName, value);
-      },
+      setAttribute: (attributeName, value) =>
+        (uiState.rootAttrs = {
+          ...uiState.rootAttrs,
+          [attributeName]: value,
+        }),
+
       removeAttribute: attributeName => {
-        this.$delete(this.rootAttrs, attributeName);
+        // eslint-disable-next-line no-unused-vars
+        const { [attributeName]: removed, ...rest } = uiState.rootAttrs;
+        uiState.rootAttrs = rest;
       },
     };
 
-    this.foundation = new MDCLinearProgressFoundation(adapter);
-    this.foundation.init();
+    watch(
+      () => props.open,
+      nv => {
+        if (nv) {
+          foundation.open();
+        } else {
+          foundation.close();
+        }
+      },
+    );
 
-    this.foundation.setReverse(this.reversed);
-    this.foundation.setProgress(Number(this.progress));
-    this.foundation.setBuffer(Number(this.buffer));
-    this.foundation.setDeterminate(!this.indeterminate);
+    watch(
+      () => props.progress,
+      nv => {
+        foundation.setProgress(Number(nv));
+      },
+    );
+    watch(
+      () => props.buffer,
+      nv => {
+        foundation.setBuffer(Number(nv));
+      },
+    );
+    watch(
+      () => props.indeterminate,
+      nv => {
+        foundation.setDeterminate(!nv);
+      },
+    );
+    watch(
+      () => props.reversed,
+      nv => {
+        foundation.setReverse(nv);
+      },
+    );
 
-    if (this.open) {
-      this.foundation.open();
-    } else {
-      this.foundation.close();
-    }
-  },
-  beforeDestroy() {
-    this.foundation.destroy();
+    onMounted(() => {
+      foundation = new MDCLinearProgressFoundation(adapter);
+      foundation.init();
+      foundation.setReverse(props.reversed);
+      foundation.setProgress(Number(props.progress));
+      foundation.setBuffer(Number(props.buffer));
+      foundation.setDeterminate(!props.indeterminate);
+
+      if (props.open) {
+        foundation.open();
+      } else {
+        foundation.close();
+      }
+    });
+
+    onBeforeUnmount(() => foundation.destroy());
+
+    return { ...toRefs(uiState), root };
   },
 };
