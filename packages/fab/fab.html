@@ -1,4 +1,11 @@
-<custom-button :class="classes" :style="styles" :href="href" :link="link" v-on="listeners">
+<custom-button
+  ref="root"
+  :class="classes"
+  :style="styles"
+  :href="href"
+  :link="link"
+  v-on="listeners"
+>
   <div class="mdc-fab__ripple"></div>
   <slot name="icon"><span class="mdc-fab__icon material-icons">{{icon}}</span></slot>
   <span class="mdc-fab__label"><slot>{{label}}</slot></span>
