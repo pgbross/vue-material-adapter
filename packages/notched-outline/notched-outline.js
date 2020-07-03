@@ -1,66 +1,96 @@
 import { MDCNotchedOutlineFoundation } from '@material/notched-outline/foundation';
-
+import {
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  ref,
+  toRefs,
+} from '@vue/composition-api';
 import { mcwFloatingLabel } from '../floating-label/index.js';
 
 export default {
   name: 'mcw-notched-outline',
   components: { mcwFloatingLabel },
 
-  data() {
-    return {
+  setup(props, { slots }) {
+    const labelEl = ref(null);
+
+    const uiState = reactive({
       outlinedClasses: { 'mdc-notched-outline': true },
       notchStyles: {},
-    };
-  },
+    });
 
-  mounted() {
+    let foundation;
+
     const {
       OUTLINE_UPGRADED,
       NO_LABEL,
     } = MDCNotchedOutlineFoundation.cssClasses;
 
     const adapter = {
-      addClass: className => {
-        this.$set(this.outlinedClasses, className, true);
-      },
+      addClass: className =>
+        (uiState.outlinedClasses = {
+          ...uiState.outlinedClasses,
+          [className]: true,
+        }),
+
       removeClass: className => {
-        this.$delete(this.outlinedClasses, className);
+        // eslint-disable-next-line no-unused-vars
+        const { [className]: removed, ...rest } = uiState.outlinedClasses;
+        uiState.outlinedClasses = rest;
       },
 
       setNotchWidthProperty: width =>
-        this.$set(this.notchStyles, 'width', `${width}px`),
-      removeNotchWidthProperty: () => this.$delete(this.notchStyles, 'width'),
+        (uiState.notchStyles = { ...uiState.notchStyles, width: `${width}px` }),
+
+      removeNotchWidthProperty: () => {
+        // eslint-disable-next-line no-unused-vars
+        const { width: removed, ...rest } = uiState.notchStyles;
+        uiState.notchStyles = rest;
+      },
     };
 
-    this.foundation = new MDCNotchedOutlineFoundation(adapter);
-    this.foundation.init();
+    const notch = notchWidth => {
+      foundation.notch(notchWidth);
+    };
 
-    const key = this.$slots.default ? OUTLINE_UPGRADED : NO_LABEL;
-    this.$set(this.outlinedClasses, key, true);
-  },
+    const closeNotch = () => {
+      foundation.closeNotch();
+    };
 
-  beforeDestroy() {
-    this.foundation.destroy();
-  },
+    const float = shouldFloat => {
+      labelEl.value?.float(shouldFloat);
+    };
 
-  methods: {
-    notch(notchWidth) {
-      this.foundation.notch(notchWidth);
-    },
+    const shake = shouldShake => {
+      labelEl.value?.shake(shouldShake);
+    };
 
-    closeNotch() {
-      this.foundation.closeNotch();
-    },
-    float(shouldFloat) {
-      this.$refs.labelEl && this.$refs.labelEl.float(shouldFloat);
-    },
+    const getWidth = () => {
+      return labelEl.value?.getWidth();
+    };
 
-    shake(shouldShake) {
-      this.$refs.labelEl && this.$refs.labelEl.shake(shouldShake);
-    },
+    onMounted(() => {
+      foundation = new MDCNotchedOutlineFoundation(adapter);
+      foundation.init();
 
-    getWidth() {
-      return this.$refs.labelEl?.getWidth();
-    },
+      const key = slots.default ? OUTLINE_UPGRADED : NO_LABEL;
+
+      uiState.outlinedClasses = { ...uiState.outlinedClasses, [key]: true };
+    });
+
+    onBeforeUnmount(() => {
+      foundation.destroy();
+    });
+
+    return {
+      ...toRefs(uiState),
+      labelEl,
+      getWidth,
+      shake,
+      float,
+      closeNotch,
+      notch,
+    };
   },
 };
