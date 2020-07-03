@@ -1,3 +1,5 @@
+import { h } from '@vue/composition-api';
+
 export default {
   name: 'mcw-dialog-footer',
   props: {
@@ -9,13 +11,15 @@ export default {
     },
   },
 
-  render(createElement) {
-    return createElement(
-      this.tag,
-      {
-        class: ['mdc-dialog__actions'],
-      },
-      this.$scopedSlots.default?.(),
-    );
+  setup(props, { slots }) {
+    return () => {
+      return h(
+        props.tag,
+        {
+          class: ['mdc-dialog__actions'],
+        },
+        slots.default?.(),
+      );
+    };
   },
 };

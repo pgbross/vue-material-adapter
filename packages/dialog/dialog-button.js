@@ -1,3 +1,5 @@
+import { h } from '@vue/composition-api';
+
 export default {
   name: 'mcw-dialog-button',
   props: {
@@ -6,25 +8,25 @@ export default {
     isInitialFocus: Boolean,
   },
 
-  render(createElement) {
-    const { action, isDefault, isInitialFocus } = this;
+  setup(props, { listeners, slots }) {
+    const onClick = listeners['click'] || (() => {});
 
-    const onClick = this.$listeners['click'] || (() => {});
-
-    return createElement(
-      'mcw-button',
-      {
-        class: ['mdc-dialog__button'],
-        attrs: {
-          'data-mdc-dialog-action': action,
-          'data-mdc-dialog-button-default': isDefault,
-          'data-mdc-dialog-initial-focus': isInitialFocus,
+    return () => {
+      return h(
+        'mcw-button',
+        {
+          class: ['mdc-dialog__button'],
+          attrs: {
+            'data-mdc-dialog-action': props.action,
+            'data-mdc-dialog-button-default': props.isDefault,
+            'data-mdc-dialog-initial-focus': props.isInitialFocus,
+          },
+          on: {
+            click: onClick,
+          },
         },
-        on: {
-          click: onClick,
-        },
-      },
-      this.$scopedSlots.default?.(),
-    );
+        slots.default?.(),
+      );
+    };
   },
 };
