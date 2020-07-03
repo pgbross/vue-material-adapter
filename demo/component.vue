@@ -9,7 +9,7 @@
       <component :is="demo" />
     </article>
     <article v-if="readme" class="doc-article markdown">
-      <div class="mdc-typography--headline4">
+      <div class="mdc-typography--subtitle2">
         Note: elements can use names prefixed with either
         <em>mcw-</em> (preferred) or for backwards compatibility <em>mdc-</em>.
       </div>

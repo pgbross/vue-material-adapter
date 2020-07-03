@@ -1,4 +1,11 @@
-<div :class="classes" v-bind="sliderAttrs" tabindex="0" role="slider" aria-label="Select value">
+<div
+  ref="root"
+  :class="classes"
+  v-bind="sliderAttrs"
+  tabindex="0"
+  role="slider"
+  aria-label="Select value"
+>
   <div class="mdc-slider__track-container">
     <div :style="trackStyles" class="mdc-slider__track" />
     <div

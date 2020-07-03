@@ -2,21 +2,23 @@
   <div class="mcw-demo">
     <section>
       <div class="mcw-demo mcw-demo--container">
-        <mcw-button @click="showSimple">{{open ? 'Close' : 'Simple'}}</mcw-button>
+        <mcw-button @click="showSimple">{{
+          open ? 'Close' : 'Simple'
+        }}</mcw-button>
         <mcw-button @click="showBaseline">Baseline</mcw-button>
         <mcw-button @click="showLeading">Leading</mcw-button>
         <mcw-button @click="showStacked">Stacked</mcw-button>
       </div>
     </section>
-    <mcw-caption v-if="reason">
+    <div v-if="reason" class="mdc-typography--caption">
       Result:
       <span class>{{ reason }}</span>
-    </mcw-caption>
-    <mcw-snackbar-queue ref="bar" @update:reason="onReason"/>
+    </div>
+    <mcw-snackbar-queue ref="bar" @update:reason="onReason" />
     <mcw-snackbar
       v-model="open"
       message="Simple message"
-      :dismissAction="false"
+      :dismiss-action="false"
       @update:reason="onReason"
     ></mcw-snackbar>
   </div>

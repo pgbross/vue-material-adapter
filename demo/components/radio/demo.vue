@@ -2,19 +2,25 @@
   <div class="mcw-demo">
     <div class="mcw-demo mcw-demo--container">
       <mcw-radio
-        label="Dog"
-        radioClasses="my-radio"
-        v-model="picked"
         id="dog"
+        v-model="picked"
+        radio-classes="my-radio"
+        label="Dog"
         name="pets"
         value="dog"
       ></mcw-radio>
-      <mcw-radio label="Cat" v-model="picked" id="cat" name="pets" value="cat"></mcw-radio>
+      <mcw-radio
+        id="cat"
+        v-model="picked"
+        label="Cat"
+        name="pets"
+        value="cat"
+      ></mcw-radio>
     </div>
-    <mcw-caption v-if="picked">
+    <div v-if="picked" class="mdc-typography--caption">
       picked:
       <span class>{{ picked }}</span>
-    </mcw-caption>
+    </div>
   </div>
 </template>
 

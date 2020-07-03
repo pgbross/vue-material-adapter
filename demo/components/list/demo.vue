@@ -206,18 +206,18 @@
       </mcw-layout-cell>
     </mcw-layout-grid>
 
-    <mcw-caption>
+    <div class="mdc-typography--caption">
       selected:
       <span class>{{ selected }}</span>
       listSelected:
       <span class>{{ listSelected }}</span>
       radioSelected:
       <span class>{{ radioSelected }}</span>
-    </mcw-caption>
-    <mcw-caption>
+    </div>
+    <div class="mdc-typography--caption">
       picked:
       <span class>{{ picked }}</span>
-    </mcw-caption>
+    </div>
   </div>
 </template>
 

@@ -2,7 +2,7 @@
   <div class>
     <div class="mdc-typography--headline6">Simple</div>
     <section class="mcw-demo mcw-demo--container">
-      <mcw-tab-bar @change="onSelected" activeTabIndex="1">
+      <mcw-tab-bar active-tab-index="1" @change="onSelected">
         <mcw-tab v-for="item in filteredItems" :key="item.label">{{
           item
         }}</mcw-tab>
@@ -10,10 +10,10 @@
     </section>
     <br />
     <div v-if="selectedItem" style="text-align: right;">
-      <mcw-caption>
+      <div class="mdc-typography--caption">
         Selected:
         <span class="demo-tabs-selected">{{ selectedItem }}</span>
-      </mcw-caption>
+      </div>
     </div>
     <div class="mdc-typography--headline6">With icons and text</div>
     <section class="mcw-demo mcw-demo--container">
@@ -25,7 +25,7 @@
     </section>
     <div class="mdc-typography--headline6">Scrollable</div>
     <section class="mcw-demo mcw-demo--container mcw-demo--container-narrow">
-      <mcw-tab-bar @change="onSelected" activeTabIndex="1">
+      <mcw-tab-bar active-tab-index="1" @change="onSelected">
         <mcw-tab v-for="item in items" :key="item.label">{{ item }}</mcw-tab>
       </mcw-tab-bar>
     </section>

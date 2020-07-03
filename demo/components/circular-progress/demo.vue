@@ -2,19 +2,17 @@
   <div class="mcw-demo mcw-demo--container">
     <div class="circular-progress-demo">
       <mcw-circular-progress progress="0.3" />
-      <p>
-        <mcw-caption>Determinate</mcw-caption>
-      </p>
+      <p>        <div class="mdc-typography--caption">Determinate</div>      </p>
       <br />
       <mcw-circular-progress indeterminate />
       <p>
-        <mcw-caption>Indeterminate</mcw-caption>
+        <div class="mdc-typography--caption" >Indeterminate</div>
       </p>
       <br />
 
       <mcw-circular-progress medium :progress="progressValue" />
       <p>
-        <mcw-caption>Medium</mcw-caption>
+        <div class="mdc-typography--caption" >Medium</div>
       </p>
     </div>
   </div>

@@ -15,14 +15,14 @@
       >
     </div>
 
-    <mcw-caption v-if="hasBeenOpened">
+    <div v-if="hasBeenOpened" class="mdc-typography--caption">
       <span class>{{ action }}</span>
-    </mcw-caption>
+    </div>
 
-    <mcw-caption v-if="picked">
+    <div v-if="picked" class="mdc-typography--caption">
       Picked:
       <span class>{{ picked }}</span>
-    </mcw-caption>
+    </div>
 
     <mcw-dialog
       v-if="openBasic"
