@@ -27,7 +27,7 @@
           </div>
           Jane Smith
         </mcw-chip>
-        <mcw-chip>
+        <mcw-chip :should-remove-on-trailing-icon-click="false">
           <div slot="leading-icon" class="fa fa-smile-o"></div>
           <div slot="trailing-icon">
             <span role="gridcell" class="fa fa-times"></span>
@@ -53,7 +53,11 @@
       <mcw-chip-set filter>
         <mcw-chip leading-icon="add">Tops</mcw-chip>
         <mcw-chip>
-          <mcw-material-icon slot="leading-icon" icon="add"></mcw-material-icon
+          <mcw-material-icon
+            slot="leading-icon"
+            class="mdc-chip__icon mdc-chip__icon--leading"
+            icon="add"
+          ></mcw-material-icon
           >Bottoms
         </mcw-chip>
         <mcw-chip>Shoes</mcw-chip>
