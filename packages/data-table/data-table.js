@@ -12,10 +12,13 @@ import {
 
 export default {
   name: 'mcw-data-table',
+  props: { sticky: { type: Boolean } },
   setup(props, { emit }) {
     const root = ref(null);
 
-    const uiState = reactive({ classes: {} });
+    const uiState = reactive({
+      classes: { 'mdc-data-table--sticky-header': props.sticky },
+    });
 
     const checkboxFactory = el => new MDCCheckbox(el);
 
@@ -204,9 +207,8 @@ export default {
 
         rowCheckboxList = [];
         getRows().forEach(rowEl => {
-          const checkbox = checkboxFactory(
-            rowEl.querySelector(selectors.ROW_CHECKBOX),
-          );
+          const el = rowEl.querySelector(selectors.ROW_CHECKBOX);
+          const checkbox = checkboxFactory(el);
           rowCheckboxList.push(checkbox);
         });
       },

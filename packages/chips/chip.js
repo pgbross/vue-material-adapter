@@ -12,16 +12,6 @@ import {
 } from '@vue/composition-api';
 import { useRipplePlugin } from '~/ripple/ripple-plugin';
 
-const {
-  INTERACTION_EVENT,
-  SELECTION_EVENT,
-  REMOVAL_EVENT,
-  TRAILING_ICON_INTERACTION_EVENT,
-  PRIMARY_ACTION_SELECTOR,
-  TRAILING_ACTION_SELECTOR,
-  NAVIGATION_EVENT,
-} = MDCChipFoundation.strings;
-
 const { strings } = MDCChipFoundation;
 
 export default {
@@ -117,7 +107,7 @@ export default {
       eventTargetHasClass: (target, className) =>
         target.classList.contains(className),
       focusPrimaryAction: () => {
-        root.value.querySelector(PRIMARY_ACTION_SELECTOR)?.focus();
+        root.value.querySelector(strings.PRIMARY_ACTION_SELECTOR)?.focus();
       },
       focusTrailingAction: () => {
         trailingAction_?.focus();
@@ -131,15 +121,20 @@ export default {
       getRootBoundingClientRect: () => root.value.getBoundingClientRect(),
       hasClass: className => root.value.classList.contains(className),
       hasLeadingIcon: () => !!haveleadingIcon.value,
-      hasTrailingAction: () => !!trailingAction_,
       isRTL: () =>
         window.getComputedStyle(root.value).getPropertyValue('direction') ===
         'rtl',
+      isTrailingActionNavigable: () => {
+        if (trailingAction_) {
+          return trailingAction.value?.isNavigable();
+        }
+        return false;
+      },
 
       notifyInteraction: () => {
         emitCustomEvent(
           root.value,
-          INTERACTION_EVENT,
+          strings.INTERACTION_EVENT,
           {
             chipId: id.value,
           },
@@ -149,7 +144,7 @@ export default {
       notifyNavigation: (key, source) =>
         emitCustomEvent(
           root.value,
-          NAVIGATION_EVENT,
+          strings.NAVIGATION_EVENT,
           {
             chipId: id.value,
             key,
@@ -160,22 +155,22 @@ export default {
       notifyRemoval: removedAnnouncement => {
         emitCustomEvent(
           root.value,
-          REMOVAL_EVENT,
-          { chipId: id.value, root: root.value, removedAnnouncement },
+          strings.REMOVAL_EVENT,
+          { chipId: id.value, removedAnnouncement },
           true,
         );
       },
-      notifySelection: selected =>
+      notifySelection: (selected, shouldIgnore) =>
         emitCustomEvent(
           root.value,
-          SELECTION_EVENT,
-          { chipId: id.value, selected: selected },
+          strings.SELECTION_EVENT,
+          { chipId: id.value, selected: selected, shouldIgnore },
           true /* shouldBubble */,
         ),
       notifyTrailingIconInteraction: () => {
         emitCustomEvent(
           root.value,
-          TRAILING_ICON_INTERACTION_EVENT,
+          strings.TRAILING_ICON_INTERACTION_EVENT,
           {
             chipId: id.value,
           },
@@ -200,11 +195,6 @@ export default {
 
       setStyleProperty: (property, value) =>
         (uiState.styles = { ...uiState.styles, [property]: value }),
-      setTrailingActionAttr: (attr, value) => {
-        if (trailingAction_) {
-          trailingAction_.setAttribute(attr, value);
-        }
-      },
     };
 
     const setSelectedFromChipSet = (selected, shouldNotifyClients) => {
@@ -236,8 +226,11 @@ export default {
     );
 
     onMounted(() => {
-      trailingAction_ = root.value.querySelector(TRAILING_ACTION_SELECTOR);
       leadingIcon_ = root.value.querySelector(strings.LEADING_ICON_SELECTOR);
+
+      trailingAction_ = root.value.querySelector(
+        strings.TRAILING_ACTION_SELECTOR,
+      );
 
       foundation = new MDCChipFoundation(adapter);
 
@@ -248,11 +241,12 @@ export default {
         focusin: evt => foundation.handleFocusIn(evt),
         focusout: evt => foundation.handleFocusOut(evt),
       };
+
       if (trailingAction_) {
-        uiState.myListeners[INTERACTION_EVENT] = evt =>
+        uiState.myListeners[strings.INTERACTION_EVENT] = evt =>
           foundation.handleTrailingActionInteraction(evt);
 
-        uiState.myListeners[NAVIGATION_EVENT] = evt =>
+        uiState.myListeners[strings.NAVIGATION_EVENT] = evt =>
           foundation.handleTrailingActionNavigation(evt);
       }
 

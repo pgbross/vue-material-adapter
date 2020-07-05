@@ -5,8 +5,14 @@
         v-model="checked"
         :disabled="disabled"
         :indeterminate.sync="indeterminate"
+      />
+      <mcw-checkbox
+        v-model="checked"
+        :disabled="disabled"
+        :indeterminate.sync="indeterminate"
         :label="checked ? 'Checked' : 'Unchecked'"
       />
+
       <div>
         <mcw-button outlined @click="indeterminate = true"
           >make indeterminate</mcw-button

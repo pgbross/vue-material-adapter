@@ -202,24 +202,26 @@ export default {
       );
 
       installPropertyChangeHooks_();
-
-      formField = new MDCFormFieldFoundation({
-        registerInteractionHandler: (type, handler) => {
-          labelEl.value.addEventListener(type, handler);
-        },
-        deregisterInteractionHandler: (type, handler) => {
-          labelEl.value.removeEventListener(type, handler);
-        },
-        activateInputRipple: () => {
-          activate();
-        },
-        deactivateInputRipple: () => {
-          deactivate();
-        },
-      });
+      if (hasLabel.value) {
+        formField = new MDCFormFieldFoundation({
+          registerInteractionHandler: (type, handler) => {
+            labelEl.value.addEventListener(type, handler);
+          },
+          deregisterInteractionHandler: (type, handler) => {
+            labelEl.value.removeEventListener(type, handler);
+          },
+          activateInputRipple: () => {
+            activate();
+          },
+          deactivateInputRipple: () => {
+            deactivate();
+          },
+        });
+        formField.init();
+      }
 
       foundation.init();
-      formField.init();
+
       setChecked(props.checked);
       foundation.setDisabled(props.disabled);
       setIndeterminate(props.indeterminate);
@@ -231,7 +233,7 @@ export default {
         handleAnimationEnd_,
       );
 
-      formField.destroy();
+      formField?.destroy();
 
       uninstallPropertyChangeHooks_();
       foundation.destroy();
@@ -245,15 +247,8 @@ export default {
       onChange,
       classes,
       styles,
+      hasLabel,
     };
-  },
-
-  watchX: {
-    checked: 'setChecked',
-    disabled(value) {
-      this.foundation.setDisabled(value);
-    },
-    indeterminate: 'setIndeterminate',
   },
 };
 

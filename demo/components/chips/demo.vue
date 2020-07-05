@@ -18,26 +18,6 @@
     </section>
 
     <section class="mcw-demo">
-      <div class="mdc-typography--headline6">Input Chips (font-awesome)</div>
-      <mcw-chip-set input>
-        <mcw-chip>
-          <div slot="leading-icon" class="fa fa-font-awesome"></div>
-          <div slot="trailing-icon">
-            <span role="gridcell" class="fa fa-times"></span>
-          </div>
-          Jane Smith
-        </mcw-chip>
-        <mcw-chip :should-remove-on-trailing-icon-click="false">
-          <div slot="leading-icon" class="fa fa-smile-o"></div>
-          <div slot="trailing-icon">
-            <span role="gridcell" class="fa fa-times"></span>
-          </div>
-          John Doe
-        </mcw-chip>
-      </mcw-chip-set>
-    </section>
-
-    <section class="mcw-demo">
       <div class="mdc-typography--headline6">Choice Chips</div>
       <mcw-chip-set choice>
         <mcw-chip>Extra small</mcw-chip>

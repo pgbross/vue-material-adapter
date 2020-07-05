@@ -74,7 +74,7 @@
     <p></p>
     <div class>
       <div class="mdc-typography--headline6">Row Selection</div>
-      <mcw-data-table>
+      <mcw-data-table sticky>
         <table class="mdc-data-table__table" aria-label="Dessert calories">
           <thead>
             <tr class="mdc-data-table__header-row">
@@ -151,11 +151,14 @@
           <tbody class="mdc-data-table__content">
             <tr class="mdc-data-table__row" data-row-id="u0">
               <td class="mdc-data-table__cell mdc-data-table__cell--checkbox">
+                <!-- <mcw-checkbox
+                  class="mdc-data-table__row-checkbox"
+                ></mcw-checkbox> -->
                 <div class="mdc-checkbox mdc-data-table__row-checkbox">
                   <input
                     type="checkbox"
                     class="mdc-checkbox__native-control"
-                    aria-labelledby="r0"
+                    aria-labelledby="u0"
                   />
                   <div class="mdc-checkbox__background">
                     <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
@@ -329,7 +332,7 @@
                 </div>
               </th>
               <th
-                class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric mdc-data-table__header-cell--with-sort mdc-data-table__header-cell--sorted"
+                class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric mdc-data-table__header-cell--with-sort"
                 role="columnheader"
                 scope="col"
                 aria-sort="ascending"
@@ -390,7 +393,7 @@
           </thead>
           <tbody class="mdc-data-table__content">
             <tr
-              v-for="item in desserts"
+              v-for="item in filteredData"
               :key="item.dessert"
               class="mdc-data-table__row"
             >
@@ -424,21 +427,68 @@ const desserts_ = [
     protein: '1.0',
     comments: 'Hot and cold',
   },
+  {
+    dessert: 'Ice cream',
+    carbs: '10',
+    protein: '5',
+    comments: 'Cold',
+  },
 ];
 export default {
   data() {
-    return { desserts: [] };
+    return { desserts: [], sortBy: '', sortValue: '' };
+  },
+  computed: {
+    filteredData() {
+      const { sortBy, sortValue, desserts: data } = this;
+      return this.sorter({ sortBy, sortValue, data });
+    },
   },
   mounted() {
     this.desserts = desserts_.slice();
   },
 
   methods: {
-    onSorted(data) {
-      console.dir(data);
+    onSorted({ data }) {
+      this.sortBy = data.columnId;
+      this.sortValue = data.sortValue;
+    },
+
+    sorter({ sortBy, sortValue, data }) {
+      if (!sortBy) {
+        return data.slice();
+      }
+      const order = sortValue === 'ascending' ? 1 : -1;
+
+      data = data.slice().sort(function (a, b) {
+        a = getProperty(a, sortBy);
+        b = getProperty(b, sortBy);
+        if (sortBy.indexOf('created') !== -1) {
+          a = new Date(a);
+          b = new Date(b);
+        }
+        return (a === b ? 0 : a > b ? 1 : -1) * order;
+      });
+      return data;
     },
   },
 };
+
+function getProperty(o, s) {
+  // copied from http://stackoverflow.com/questions/6491463/accessing-nested-javascript-objects-with-string-key
+  s = s.replace(/\[(\w+)]/g, '.$1'); // convert indexes to properties
+  s = s.replace(/^\./, ''); // strip a leading dot
+  const a = s.split('.');
+  while (a.length) {
+    const n = a.shift();
+    if (n in o) {
+      o = o[n];
+    } else {
+      return;
+    }
+  }
+  return o;
+}
 </script>
 
 <style>
