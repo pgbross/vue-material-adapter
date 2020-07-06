@@ -27,42 +27,39 @@ By default the drawer component is responsive and will switch from temporary to 
 
 ### Drawer
 
-| prop               | Type    | Default   | Description                                        |
-| ------------------ | ------- | --------- | -------------------------------------------------- |
-| `toolbar-spacer`   | Boolean | undefined | add a toolbar spacer                               |
-| `open`             | Boolean | false     | optional v-model when true opens drawer            |
-| `toggle-on`        | String  | undefined | optional toggle event to listen on                 |
-| `toggle-on-source` | Object  | vm.\$root | optional toggle event source, defaults to root bus |
-| `open-on`          | String  | undefined | optional open event to listen on                   |
-| `open-on-source`   | Object  | vm.\$root | optional open event source, defaults to root bus   |
-| `close-on`         | String  | undefined | optional close event to listen on                  |
-| `close-on-source`  | Object  | vm.\$root | optional close event source, defaults to root bus  |
-
-> (\*) drawer is responsive if `drawer-type` undefined: temporary on mobile breakpoint and persistent otherwise.
+| prop               | Type    | Default   | Description                             |
+| ------------------ | ------- | --------- | --------------------------------------- |
+| `modal`            | Boolean |           | Make drawer modal                       |
+| `open`             | Boolean | false     | optional v-model when true opens drawer |
+| `toolbar-spacer`   | Boolean | undefined | add a toolbar spacer                    |
+| `toggle-on`        | String  | undefined | optional toggle event to listen on      |
+| `toggle-on-source` | Object  | vm.\$root | optional toggle event source            |
+| `open-on`          | String  | undefined | optional open event to listen on        |
+| `open-on-source`   | Object  | vm.\$root | optional open event source              |
+| `close-on`         | String  | undefined | optional close event to listen on       |
+| `close-on-source`  | Object  | vm.\$root | optional close event source             |
 
 | event         | args    | Description                                             |
 | ------------- | ------- | ------------------------------------------------------- |
 | `@change`     | Boolean | notify v-model/listeners that drawer state has changed. |
-| `@open`       |         | triggered on drawer open                                |
-| `@close`      |         | triggered on drawer close                               |
-| `@vma:layout` | Boolean | notify listeners that screen layout has changed.        |
+| `@open`       |         | on drawer open                                          |
+| `@close`      |         | on drawer close                                         |
+| `@vma:layout` | Boolean | notify listeners on vm.\$root layout has changed.       |
 
-### Drawer Items
+### Drawer Item
 
-| prop                 | Type           | Default                  | Description                                                            |
-| -------------------- | -------------- | ------------------------ | ---------------------------------------------------------------------- |
-| `start-icon`         | String         | undefined                | material start icon                                                    |
-| `modal-close`        | Boolean        | true                     | whether temporary drawer closes on click                               |
-| `event`              | String         | undefined                | optional event to emit on click                                        |
-| `event-target`       | Object         | vm.\$root                | optional event target, defaults to root bus                            |
-| `event-args`         | Array          | []                       | optional event args                                                    |
-| `to`                 | String, Object | undefined                | router-link property _(\*)_                                            |
-| `replace`            | Boolean        | false                    | router-link property _(\*)_                                            |
-| `append`             | Boolean        | false                    | router-link property _(\*)_                                            |
-| `exact`              | Boolean        | false                    | router-link property _(\*)_                                            |
-| `active-class`       | String         | router-link-active       | router-link property _(\*)_                                            |
-| `exact-active-class` | String         | router-link-exact-active | router-link property _(\*)_                                            |
-| `activated`          | Boolean        | undefined                | whether this item is selected (not needed if router-link mode is used) |
+| prop                 | Type           | Default                  | Description                              |
+| -------------------- | -------------- | ------------------------ | ---------------------------------------- |
+| `start-icon`         | String         | undefined                | material start icon                      |
+| `modal-close`        | Boolean        | true                     | whether temporary drawer closes on click |
+| `to`                 | String, Object | undefined                | router-link property _(\*)_              |
+| `replace`            | Boolean        | false                    | router-link property _(\*)_              |
+| `append`             | Boolean        | false                    | router-link property _(\*)_              |
+| `exact`              | Boolean        | false                    | router-link property _(\*)_              |
+| `active-class`       | String         | router-link-active       | router-link property _(\*)_              |
+| `exact-active-class` | String         | router-link-exact-active | router-link property _(\*)_              |
+| `activated`          | Boolean        | undefined                | whether this item is selected            |
+|                      |                |                          | (not needed if router-link mode is used) |
 
 > _(\*)_ Requires [vue-router](https://router.vuejs.org)
 > If the `to` property is defined, the item behaves as a
@@ -76,7 +73,7 @@ By default the drawer component is responsive and will switch from temporary to 
 <mcw-drawer-item href="#">Inbox</mcw-drawer-item>
 ```
 
-- With vue-router
+or with vue-router
 
 ```html
 <mcw-drawer-item to="/path">Inbox</mcw-drawer-item>
@@ -105,4 +102,4 @@ By default the drawer component is responsive and will switch from temporary to 
 
 ### Reference
 
-- <https://material.io/components/web/catalog/drawers>
+- <https://github.com/material-components/material-components-web/tree/master/packages/mdc-drawer>

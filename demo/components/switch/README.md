@@ -17,7 +17,7 @@ var vm = new Vue({
 });
 ```
 
-### props
+### Props
 
 | props       | Type    | Default | Description                                          |
 | ----------- | ------- | ------- | ---------------------------------------------------- |
@@ -28,13 +28,12 @@ var vm = new Vue({
 | `value`     | String  |         | input control value                                  |
 | `name`      | String  |         | input name                                           |
 
-### events
+### Events
 
-| event    | args | Description             |
-| -------- | ---- | ----------------------- |
-| `@focus` | -    | emitted on focus gained |
-| `@blur`  | -    | emitted on focus lost   |
+| event     | args | Description              |
+| --------- | ---- | ------------------------ |
+| `@change` | -    | On checked status change |
 
 ### Reference
 
-- <https://material.io/components/web/catalog/input-controls/switches>
+- <https://github.com/material-components/material-components-web/tree/master/packages/mdc-switch>

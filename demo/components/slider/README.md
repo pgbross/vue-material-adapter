@@ -4,7 +4,7 @@
 <mcw-slider v-model="sliderValue1" max="10" />
 <mcw-slider v-model="sliderValue1" max="10" dir="rtl" />
 <mcw-slider v-model="sliderValue1" discrete max="10" />
-<mcw-slider v-model="sliderValue2" discrete step="1" max="10" display-markers />
+<mcw-slider v-model="sliderValue2" discrete step="2" max="10" display-markers />
 ```
 
 ```javascript
@@ -16,19 +16,19 @@ var vm = new Vue({
 });
 ```
 
-- Continuous Slider
+### Continuous Slider
 
 ```html
 <mcw-slider max="10" v-model="sliderValue" />
 ```
 
-- Discrete Slider
+### Discrete Slider
 
 ```html
 <mcw-slider min="0" max="10" discrete v-model="sliderValue" />
 ```
 
-- Discrete Slider with Markers
+### Discrete Slider with Markers
 
 ```html
 <mcw-slider
@@ -41,18 +41,18 @@ var vm = new Vue({
 />
 ```
 
-### props
+### Props
 
-| props              | Type    | Default   | Description                                                                                                                      |
-| ------------------ | ------- | --------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `value`            | Number  |           | The current value of the slider.                                                                                                 |
-| `min`              | Number  | 0         | The minimum value a slider can have. Changing this property will update the slider’s value if it is lower than the new minimum   |
-| `max`              | Number  | 100       | The maximum value a slider can have. Changing this property will update the slider’s value if it is greater than the new maximum |
-| `step`             | Number  | 0         | the slider will quantize all values to match that step value                                                                     |
-| `disabled`         | Boolean | false     | Disables slider if true                                                                                                          |
-| `display-markers`  | Boolean | false     | Display discrete markers if true                                                                                                 |
-| `layout-on`        | String  | undefined | optional event to trigger a re-layout _(\*)_                                                                                     |
-| `layout-on-source` | Object  | vm.\$root | optional layout event source, defaults to root bus                                                                               |
+| props              | Type    | Default   | Description                                                  |
+| ------------------ | ------- | --------- | ------------------------------------------------------------ |
+| `value`            | Number  |           | The current value of the slider.                             |
+| `min`              | Number  | 0         | The minimum value a slider can have.                         |
+| `max`              | Number  | 100       | The maximum value a slider can have.                         |
+| `step`             | Number  | 0         | The slider will quantize all values to match that step value |
+| `disabled`         | Boolean | false     | Disables slider if true                                      |
+| `display-markers`  | Boolean | false     | Display discrete markers if true                             |
+| `layout-on`        | String  | undefined | optional event to trigger a re-layout _(\*)_                 |
+| `layout-on-source` | Object  | vm.\$root | optional layout event source, defaults to root bus           |
 
 > NOTE: If a slider contains a step value it does not mean that the slider is a "discrete" slider. "Discrete slider" is a UX treatment, while having a step value is behavioral.
 
@@ -64,14 +64,12 @@ var vm = new Vue({
 > but it in case off css resize or positioning change, the layout may be off. in this case you can use the `layout-on` event
 > to force a layout, or call the layout() method programatically.
 
-### events
+### Events
 
-| event     | args | Description                                                                        |
-| --------- | ---- | ---------------------------------------------------------------------------------- |
-| `@input`  | -    | emitted whenever the slider value is changed by way of a user event.               |
-| `@change` | -    | emitted whenever the slider value is changed and committed by way of a user event. |
-| `@focus`  | -    | emitted on focus gained                                                            |
-| `@blur`   | -    | emitted on focus lost                                                              |
+| event     | args | Description                                                      |
+| --------- | ---- | ---------------------------------------------------------------- |
+| `@input`  | -    | On slider value is changed by way of a user event.               |
+| `@change` | -    | On slider value is changed and committed by way of a user event. |
 
 ### model
 
@@ -85,4 +83,4 @@ The v-model directive is `lazy`, update happens on the `change` event.
 
 ### Reference
 
-- <https://material.io/components/web/catalog/input-controls/sliders>
+- <https://github.com/material-components/material-components-web/tree/master/packages/mdc-slider>

@@ -1,21 +1,31 @@
 <template>
   <div class="mcw-demo--appbar">
     <section class="mcw-demo">
-      <mcw-top-app-bar class="main-toolbar" :scrollTarget="scrollTarget" @nav="onNav">
+      <mcw-top-app-bar
+        class="main-toolbar"
+        :scroll-target="scrollTarget"
+        @nav="onNav"
+      >
         <mcw-top-app-bar-row>
           <mcw-top-app-bar-section align="start">
-            <mcw-top-app-bar-icon navIcon>
+            <mcw-top-app-bar-icon nav-icon>
               <mcw-material-icon icon="menu"></mcw-material-icon>
             </mcw-top-app-bar-icon>
             <mcw-top-app-bar-title>vue material adapter</mcw-top-app-bar-title>
           </mcw-top-app-bar-section>
 
           <mcw-top-app-bar-section align="end">
-            <mcw-top-app-bar-icon actionItem aria-label="Help">
-              <mcw-material-icon @click="buttonText = 'show help'" icon="help"></mcw-material-icon>
+            <mcw-top-app-bar-icon action-item aria-label="Help">
+              <mcw-material-icon
+                icon="help"
+                @click="buttonText = 'show help'"
+              ></mcw-material-icon>
             </mcw-top-app-bar-icon>
-            <mcw-top-app-bar-icon actionItem aria-label="Help">
-              <mcw-material-icon @click="buttonText = 'show information'" icon="info_outline"></mcw-material-icon>
+            <mcw-top-app-bar-icon action-item aria-label="Help">
+              <mcw-material-icon
+                icon="info_outline"
+                @click="buttonText = 'show information'"
+              ></mcw-material-icon>
             </mcw-top-app-bar-icon>
           </mcw-top-app-bar-section>
         </mcw-top-app-bar-row>

@@ -33,7 +33,6 @@ export default {
     disabled: Boolean,
     label: String,
     outlined: Boolean,
-    id: { type: String },
     required: Boolean,
   },
   mixins: [VMAUniqueIdMixin],

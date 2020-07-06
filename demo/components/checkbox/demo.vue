@@ -5,12 +5,6 @@
         v-model="checked"
         :disabled="disabled"
         :indeterminate.sync="indeterminate"
-        @change="onChange"
-      />
-      <mcw-checkbox
-        v-model="checked"
-        :disabled="disabled"
-        :indeterminate.sync="indeterminate"
         :label="checked ? 'Checked' : 'Unchecked'"
       />
 

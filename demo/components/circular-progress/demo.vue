@@ -2,28 +2,23 @@
   <div class="mcw-demo mcw-demo--container">
     <div class="circular-progress-demo">
       <mcw-circular-progress progress="0.3" />
-      <p>        <div class="mdc-typography--caption">Determinate</div>      </p>
+      <div class="mdc-typography--caption">Determinate</div>
       <br />
       <mcw-circular-progress indeterminate />
-      <p>
-        <div class="mdc-typography--caption" >Indeterminate</div>
-      </p>
+      <div class="mdc-typography--caption">Indeterminate</div>
       <br />
-
       <mcw-circular-progress medium :progress="progressValue" />
-      <p>
-        <div class="mdc-typography--caption" >Medium</div>
-      </p>
+      <div class="mdc-typography--caption">Medium</div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  data(){
-    return {progressValue: 0.8}
-  }
-}
+  data() {
+    return { progressValue: 0.8 };
+  },
+};
 </script>
 
 <style>

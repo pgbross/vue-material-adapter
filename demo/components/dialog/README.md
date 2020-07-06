@@ -39,75 +39,71 @@ var vm = new Vue({
 
 ### Props
 
-| Prop Name        | Type    | Default       | Description                                                                                                                                                              |
-| ---------------- | ------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| autoStackButtons | Boolean | `true`        | reverses the buttons when applying the stacked layout.                                                                                                                   |
-| escapeKeyAction  | String  | `close`       | the action reflected when the Escape key is pressed. Setting to `''` disables closing via the escape key                                                                 |
-| id               | String  | `mcw-dialog`  | the id attribute placed on the root element                                                                                                                              |
-| open             | Boolean | `false`       | If true opens the dialog. If false closes the dialog                                                                                                                     |
-| role             | String  | `alertdialog` | [ARIA attribute](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/dialog_role) that specifies the role of dialog. Must be `alertdialog` or `dialog` |
-| scrimClickAction | String  | `close`       | the action reflected when the scrim is clicked. Setting to `''` disables closing via scrim click                                                                         |
-| tag              | String  | `div`         | Customizes the `Dialog` tag type.                                                                                                                                        |
+| Prop Name          | Type    | Default       | Description                                            |
+| ------------------ | ------- | ------------- | ------------------------------------------------------ |
+| `autoStackButtons` | Boolean | `true`        | reverses the buttons when applying the stacked layout. |
+| `escapeKeyAction`  | String  | `close`       | the action reflected when the Escape key is pressed.   |
+|                    |         |               | Setting to `''` disables closing via the escape key    |
+| `scrollable`       | Boolean | false         | Scrollable content                                     |
+| `open`             | Boolean | `false`       | If true opens the dialog. If false closes the dialog   |
+| `role`             | String  | `alertdialog` | ARIA attribute _\*_ that specifies the role of dialog. |
+|                    |         |               | Must be `alertdialog` or `dialog`                      |
+| `scrimClickAction` | String  | `close`       | the action reflected when the scrim is clicked.        |
+|                    |         |               | Setting to `''` disables closing via scrim click       |
+| `tag`              | String  | `div`         | Customizes the `Dialog` tag type.                      |
+
+_\*_[ARIA attribute roles](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/dialog_role)
 
 ### Events
 
 | Event Name           | args    | Description                                             |
 | -------------------- | ------- | ------------------------------------------------------- |
 | `@change`            | Boolean | notify v-model/listeners that drawer state has changed. |
-| `@MDCDialog:opening` | none    | emitted when dialog starts its opening animation        |
-| `@MDCDialog:opened`  | none    | emitted when dialog finishes its opening animation      |
-| `@MDCDialog:closing` | none    | emitted when dialog starts its closing animation        |
-| `@MDCDialog:closed`  | none    | emitted when dialog finishes its closing animation      |
+| `@MDCDialog:opening` | none    | On dialog starts its opening animation                  |
+| `@MDCDialog:opened`  | none    | On dialog finishes its opening animation                |
+| `@MDCDialog:closing` | none    | On starts its closing animation                         |
+| `@MDCDialog:closed`  | none    | On finishes its closing animation                       |
 
-### mcw-dialog-title
-
-### Props
-
-| Prop Name | Type   | Description                                                  |
-| --------- | ------ | ------------------------------------------------------------ |
-| id        | String | the id attribute placed on the root element.                 |
-| tag       | String | customizes the `mcw-dialog-title` tag type. (defaults: `h2`) |
-
-> NOTE: that `id` is also set to `aria-labelledby` on the `<mcw-dialog/>` element .
-> Additionally, if unset will default to the `id` of `<mcw-dialog/>` with the suffix
-> `-title`.
-
-### mcw-dialog-content
+### `mcw-dialog-title`
 
 ### Props
 
-| Prop Name | Type   | Description                                                     |
-| --------- | ------ | --------------------------------------------------------------- |
-| id        | String | the id attribute placed on the root element.                    |
-| tag       | String | customizes the `mcw-dialog-content` tag type. (defaults: `div`) |
+| Prop Name | Type   | Description                       |
+| --------- | ------ | --------------------------------- |
+| tag       | String | Custom tag type. (defaults: `h2`) |
 
-> NOTE: that `id` value is also set to `aria-describedby` on the `<mcw-dialog/>`
-> element. Additionally, if unset will default the to `id` of `<mcw-dialog/>` with the
-> suffix `-content`.
-
-### mcw-dialog-footer
+### `mcw-dialog-content`
 
 ### Props
 
-| Prop Name | Type   | Description                                                       |
-| --------- | ------ | ----------------------------------------------------------------- |
-| tag       | String | customizes the `mcw-dialog-footer` tag type. (defaults: `footer`) |
+| Prop Name | Type   | Description                        |
+| --------- | ------ | ---------------------------------- |
+| tag       | String | Custom tag type. (defaults: `div`) |
 
-### mcw-dialog-button
+### `mcw-dialog-footer`
 
 ### Props
 
-| Prop Name | Type    | Description                                                                                                       |
-| --------- | ------- | ----------------------------------------------------------------------------------------------------------------- |
-| action    | String  | required action of the button. Emitted as payload of `MDCDialog:closing` && `MDCDialog:closed` in `<mcw-dialog/>` |
-| isDefault | Boolean | represents the default action, triggered by pressing the Enter key (defaults: `false`)                            |
+| Prop Name | Type   | Description                        |
+| --------- | ------ | ---------------------------------- |
+| tag       | String | Custom tag type. (defaults: `div`) |
+
+### `mcw-dialog-button`
+
+### Props
+
+| Prop Name      | Type    | Description               |
+| -------------- | ------- | ------------------------- |
+| action         | String  | Marks as an action button |
+| isDefault      | Boolean | Marks as default action   |
+| isInitialFocus | Boolean | Sets initial focus        |
 
 ### Events
 
-| Event Name | args       | Description                     |
-| ---------- | ---------- | ------------------------------- |
-| `@click`   | MouseEvent | emitted when button is pressed. |
+| Event Name | args | Description |
+| ---------- | ---- | ----------- |
+| `@click`   |      | On click.   |
 
 ### Reference
 
-<https://material.io/components/web/catalog/dialogs>
+<https://github.com/material-components/material-components-web/tree/master/packages/mdc-dialog>

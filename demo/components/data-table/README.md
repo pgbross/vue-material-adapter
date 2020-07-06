@@ -394,4 +394,4 @@ export interface MDCDataTableRowSelectionChangedEventDetail {
 
 ### Reference
 
-- <https://material.io/components/web/catalog/input-controls/data-table>
+- <https://github.com/material-components/material-components-web/tree/master/packages/mdc-data-table>

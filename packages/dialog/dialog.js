@@ -35,8 +35,6 @@ export default {
     role: String,
     scrimClickAction: { type: String, default: 'close' },
     tag: { type: String, default: 'div' },
-    labelledBy: String,
-    describedBy: String,
   },
 
   setup(props, { emit }) {

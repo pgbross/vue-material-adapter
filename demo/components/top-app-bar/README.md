@@ -1,23 +1,30 @@
 ## Usage
 
 ```html
-<mcw-top-app-bar class="main-toolbar">
+<mcw-top-app-bar
+  class="main-toolbar"
+  :scroll-target="scrollTarget"
+  @nav="onNav"
+>
   <mcw-top-app-bar-row>
     <mcw-top-app-bar-section align="start">
-      <mcw-top-app-bar-icon navIcon>
+      <mcw-top-app-bar-icon nav-icon>
         <mcw-material-icon icon="menu"></mcw-material-icon>
       </mcw-top-app-bar-icon>
       <mcw-top-app-bar-title>vue material adapter</mcw-top-app-bar-title>
     </mcw-top-app-bar-section>
 
     <mcw-top-app-bar-section align="end">
-      <mcw-top-app-bar-icon actionItem aria-label="Help">
-        <mcw-material-icon @click="showHelp" icon="help"></mcw-material-icon>
-      </mcw-top-app-bar-icon>
-      <mcw-top-app-bar-icon actionItem aria-label="Info">
+      <mcw-top-app-bar-icon action-item aria-label="Help">
         <mcw-material-icon
-          @click="showInfo"
+          icon="help"
+          @click="buttonText = 'show help'"
+        ></mcw-material-icon>
+      </mcw-top-app-bar-icon>
+      <mcw-top-app-bar-icon action-item aria-label="Help">
+        <mcw-material-icon
           icon="info_outline"
+          @click="buttonText = 'show information'"
         ></mcw-material-icon>
       </mcw-top-app-bar-icon>
     </mcw-top-app-bar-section>
@@ -38,7 +45,7 @@ var vm = new Vue({
 });
 ```
 
-### McwTopAppBar
+### Props
 
 | Prop Name      | Type        | Description                                                    |
 | -------------- | ----------- | -------------------------------------------------------------- |
@@ -50,40 +57,36 @@ var vm = new Vue({
 | scrollTarget   | HTMLElement | Sets scroll target to different DOM node (default is `window`) |
 | tag            | String      | Customizes the `mcwTopAppBar` HTML tag. (default: `<header>`)  |
 
-> NOTES: As per design guidelines, prominent and dense variants should not be used with short or short collapsed. Additionally, dense variants should only be used on desktop. Additionally short top-app-bars should be used with no more than 1 action item.
+### `mcw-top-app-bar-row`
 
-### McwTopAppBarRow
+| Prop Name | Type   | Description                      |
+| --------- | ------ | -------------------------------- |
+| tag       | String | Custom element (default: `<div>` |
 
-| Prop Name | Type   | Description                                           |
-| --------- | ------ | ----------------------------------------------------- |
-| tag       | String | Customizes the `TopAppBarRow` tag. (default: `<div>`) |
+### `mcw-top-app-bar-section`
 
-### McwTopAppBarSection
-
-| Prop Name | Type                     | Description                                                                     |
-| --------- | ------------------------ | ------------------------------------------------------------------------------- |
-| align     | Sring ('start' or 'end') | optional property that aligns section content to either start or end of section |
-| tag       | String                   | Customizes the `TopAppBarSection` tag. (default: `<section>`)                   |
+| Prop Name | Type                     | Description                                           |
+| --------- | ------------------------ | ----------------------------------------------------- |
+| align     | Sring ('start' or 'end') | optional align section content to either start or end |
+| tag       | String                   | Custom element (default: `<div>`                      |
 
 > Note: if section contains action items it is recommended to add property role='toolbar' for a11y purposes
 
-### McwTopAppBarTitle
+### `mcw-top-app-bar-title`
 
-| Prop Name | Type   | Description                                              |
-| --------- | ------ | -------------------------------------------------------- |
-| tag       | String | Customizes the `TopAppBarTitle` tag. (default: `<span>`) |
+| Prop Name | Type   | Description                       |
+| --------- | ------ | --------------------------------- |
+| tag       | String | Custom element (default: `<span>` |
 
-### McwTopAppBarIcon
+### `mcw-top-app-bar-icon`
 
-| Prop Name  | Type    | Description                                     |
-| ---------- | ------- | ----------------------------------------------- |
-| actionItem | Boolean | applies action-item class to icon               |
-| navIcon    | Boolean | applies nav-icon class to icon                  |
-| children   |         | can be any icon. Material Icons are recommended |
+| Prop Name  | Type    | Description                       |
+| ---------- | ------- | --------------------------------- |
+| actionItem | Boolean | applies action-item class to icon |
 
 > Notes: (1) consider adding `aria-label` to actionItem's. (2) you may need to manually add ripple or tabindex to icon. (3) Short top-app-bars should be used with no more than 1 action item.
 
-### McwFixedAdjust
+### `mcw-fixed-adjust`
 
 | Prop Name | Type    | Description                                                    |
 | --------- | ------- | -------------------------------------------------------------- |
@@ -96,11 +99,11 @@ var vm = new Vue({
 
 ## Icons
 
-Use of [Material Icon's](../material-icon/README.md) for Action Items and Navigation Icons are recommended, since the Ripple is included with the Component. Using custom Components will require you to wrap the Component with your own ripple handling.
+Use of [Material Icon's](../material-icon/README.md) for Action Items and Navigation Icons are recommended, since the Ripple is included with the Component.
 
 ### Navigation Icon
 
-The navigation icon can be a `<a>`, `<i>`, `<svg>`, `<image>`, `<span>`, etc., but again must be wrapped with ripple handling.
+The navigation icon can be a `<a>`, `<i>`, `<svg>`, `<image>`, `<span>`, etc.
 
 ```html
 <mcw-top-app-bar-icon navIcon>
@@ -110,7 +113,7 @@ The navigation icon can be a `<a>`, `<i>`, `<svg>`, `<image>`, `<span>`, etc., b
 
 ### Action Items
 
-Similar to the [navigation icon](#navigation-icon), it can be `<a>`, `<i>`, `<svg>`, `<image>`, `<span>`, etc., and must be wrapped with the `withRipple HOC`.
+Similar to the [navigation icon](#navigation-icon), it can be `<a>`, `<i>`, `<svg>`, `<image>`, `<span>`, etc.
 
 ```html
 <mcw-top-app-bar-icon actionItem>
@@ -120,4 +123,4 @@ Similar to the [navigation icon](#navigation-icon), it can be `<a>`, `<i>`, `<sv
 
 ### Reference
 
-- <https://material.io/components/web/catalog/top-app-bar>
+- <https://github.com/material-components/material-components-web/tree/master/packages/mdc-top-app-bar>

@@ -17,7 +17,6 @@ export default {
               'mdc-card': 1,
               'mdc-card--outlined': outlined,
             },
-            // staticClass,
           ],
           attrs,
         },
