@@ -9,6 +9,7 @@ import {
   ref,
   toRefs,
 } from '@vue/composition-api';
+import { CheckboxAdapter } from './checkbox-adapter';
 
 export default {
   name: 'mcw-data-table',
@@ -20,7 +21,9 @@ export default {
       classes: { 'mdc-data-table--sticky-header': props.sticky },
     });
 
-    const checkboxFactory = el => new MDCCheckbox(el);
+    const checkboxFactory = el => {
+      return el.__vue__ ? new CheckboxAdapter(el.__vue__) : new MDCCheckbox(el);
+    };
 
     const {
       cssClasses,
@@ -191,9 +194,7 @@ export default {
       notifyUnselectedAll: () =>
         emit(events.UNSELECTED_ALL, {}, /** shouldBubble */ true),
       registerHeaderRowCheckbox: () => {
-        if (headerRowCheckbox) {
-          headerRowCheckbox.destroy();
-        }
+        headerRowCheckbox?.destroy();
 
         const checkboxEl = root.value.querySelector(
           selectors.HEADER_ROW_CHECKBOX,
@@ -209,6 +210,7 @@ export default {
         getRows().forEach(rowEl => {
           const el = rowEl.querySelector(selectors.ROW_CHECKBOX);
           const checkbox = checkboxFactory(el);
+
           rowCheckboxList.push(checkbox);
         });
       },
@@ -218,15 +220,12 @@ export default {
       setAttributeAtRowIndex: (rowIndex, attr, value) => {
         getRows()[rowIndex].setAttribute(attr, value);
       },
-      setHeaderRowCheckboxChecked: checked => {
-        headerRowCheckbox.checked = checked;
-      },
-      setHeaderRowCheckboxIndeterminate: indeterminate => {
-        headerRowCheckbox.indeterminate = indeterminate;
-      },
-      setRowCheckboxCheckedAtIndex: (rowIndex, checked) => {
-        rowCheckboxList[rowIndex].checked = checked;
-      },
+      setHeaderRowCheckboxChecked: checked =>
+        (headerRowCheckbox.checked = checked),
+      setHeaderRowCheckboxIndeterminate: indeterminate =>
+        (headerRowCheckbox.indeterminate = indeterminate),
+      setRowCheckboxCheckedAtIndex: (rowIndex, checked) =>
+        (rowCheckboxList[rowIndex].checked = checked),
       setSortStatusLabelByHeaderCellIndex: (columnIndex, sortValue) => {
         const headerCell = getHeaderCells()[columnIndex];
         const sortStatusLabel = headerCell.querySelector(
@@ -276,11 +275,13 @@ export default {
 
       content.removeEventListener('change', handleRowCheckboxChange);
 
-      headerRowCheckbox?.destroy();
-      rowCheckboxList?.forEach(checkbox => checkbox.destroy());
+      headerRowCheckbox?.destroy?.();
+      rowCheckboxList?.forEach(checkbox => {
+        checkbox.destroy?.();
+      });
       foundation.destroy();
     });
 
-    return { ...toRefs(uiState), root, getSelectedRowIds };
+    return { ...toRefs(uiState), root, getSelectedRowIds, layout };
   },
 };

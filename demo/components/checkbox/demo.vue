@@ -1,10 +1,11 @@
 <template>
   <div class="mcw-demo mcw-demo--container">
-    <div>
+    <div @change="onChange">
       <mcw-checkbox
         v-model="checked"
         :disabled="disabled"
         :indeterminate.sync="indeterminate"
+        @change="onChange"
       />
       <mcw-checkbox
         v-model="checked"
@@ -33,6 +34,11 @@ export default {
       indeterminate: false,
       disabled: false,
     };
+  },
+  methods: {
+    onChange(evt) {
+      console.dir(evt);
+    },
   },
 };
 </script>

@@ -10,9 +10,9 @@ import {
   reactive,
   ref,
   watch,
-  watchEffect,
 } from '@vue/composition-api';
 import { DispatchFocusMixin, VMAUniqueIdMixin } from '~/base/index.js';
+import { emitCustomEvent } from '../base/custom-event';
 import { useRipplePlugin } from '../ripple/ripple-plugin';
 
 const CB_PROTO_PROPS = ['checked', 'indeterminate'];
@@ -98,9 +98,14 @@ export default {
             );
         }
       } else {
+        // emit a native event so that it bubbles to parent elements
+        // e.g. data table row
+        emitCustomEvent(root.value, 'change', true);
         emit('change', checked);
       }
     };
+
+    const isChecked = () => control.value.checked;
 
     const adapter = {
       addClass: className =>
@@ -175,10 +180,6 @@ export default {
       });
     };
 
-    watchEffect(() => {
-      setIndeterminate(props.indeterminate);
-    });
-
     watch(
       () => props.disabled,
       (nv, ov) => {
@@ -190,6 +191,13 @@ export default {
       () => props.checked,
       (nv, ov) => {
         nv != ov && setChecked(nv);
+      },
+    );
+
+    watch(
+      () => props.indeterminate,
+      (nv, ov) => {
+        nv != ov && setIndeterminate(nv);
       },
     );
 
@@ -248,6 +256,9 @@ export default {
       classes,
       styles,
       hasLabel,
+      setChecked,
+      setIndeterminate,
+      isChecked,
     };
   },
 };
