@@ -1,0 +1,56 @@
+<div class="select-wrapper">
+  <div ref="root" :class="rootClasses">
+    <div
+      ref="anchorEl"
+      class="mdc-select__anchor"
+      @click="handleClick"
+      @keydown="handleKeydown"
+      focus="handleFocus"
+      blur="handleBlur"
+      v-bind="selectAnchorAttrs"
+    >
+      <select-icon
+        ref="leadingIconEl"
+        v-if="leadingIcon"
+        :icon="leadingIcon"
+        tabindex="0"
+        role="button"
+      ></select-icon>
+      <span class="mdc-select__ripple"></span>
+      <span class="mdc-select__selected-text">{{selectedTextContent}}</span>
+      <span class="mdc-select__dropdown-icon">
+        <svg class="mdc-select__dropdown-icon-graphic" viewBox="7 10 10 5">
+          <polygon
+            class="mdc-select__dropdown-icon-inactive"
+            stroke="none"
+            fill-rule="evenodd"
+            points="7 10 12 15 17 10"
+          ></polygon>
+          <polygon
+            class="mdc-select__dropdown-icon-active"
+            stroke="none"
+            fill-rule="evenodd"
+            points="7 15 12 10 17 15"
+          ></polygon>
+        </svg>
+      </span>
+
+      <template v-if="outlined">
+        <mcw-notched-outline ref="outlineEl">{{label}}</mcw-notched-outline>
+      </template>
+      <template v-else>
+        <mcw-floating-label ref="labelEl">{{label}}</mcw-floating-label>
+        <mdc-line-ripple ref="lineRippleEl"></mdc-line-ripple>
+      </template>
+    </div>
+    <slot></slot>
+  </div>
+  <select-helper-text
+    ref="helperTextEl"
+    v-if="helptext"
+    :id="helpId"
+    :helptextPersistent="helptextPersistent"
+    :helptextValidation="helptextValidation"
+    >{{helptext}}</select-helper-text
+  >
+</div>

@@ -42,10 +42,10 @@
         </mcw-select>
       </div>
     </div>
-    <div class="mdc-typography--caption" v-if="selectedType" tag="p">
+    <div v-if="selectedType" class="mdc-typography--caption">
       Selected Type: {{ selectedType }}
     </div>
-    <div class="mdc-typography--caption" v-if="selectedValue" tag="p">
+    <div v-if="selectedValue" class="mdc-typography--caption">
       Selected Value: {{ selectedValue }}
     </div>
   </div>
