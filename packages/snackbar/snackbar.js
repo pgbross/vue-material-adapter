@@ -1,7 +1,15 @@
 /* eslint-disable quote-props */
 import { closest } from '@material/dom/ponyfill';
 import { MDCSnackbarFoundation } from '@material/snackbar/foundation';
-
+import {
+  computed,
+  ref,
+  reactive,
+  toRefs,
+  onMounted,
+  onBeforeUnmount,
+  watch,
+} from '@vue/composition-api';
 const { strings, numbers } = MDCSnackbarFoundation;
 
 export default {
@@ -21,112 +29,40 @@ export default {
     dismissAction: { type: [String, Boolean], default: true },
     reason: String,
   },
-  data() {
-    return {
+  setup(props, { emit }) {
+    const root = ref(null);
+    const labelEl = ref(null);
+
+    const uiState = reactive({
       classes: {},
       hidden: false,
       actionHidden: false,
       showMessage: true,
-    };
-  },
-  watch: {
-    open: 'onOpen_',
-    timeoutMs: 'onTimeoutMs_',
-    closeOnEscape: 'onCloseOnEscape_',
-  },
+    });
 
-  mounted() {
-    window.addEventListener('keydown', this.handleKeydownEvent);
-    const adapter = {
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      announce: () => this.announce(this.$refs.labelEl),
-      notifyOpening: () => this.$emit(strings.OPENING_EVENT, {}),
-      notifyOpened: () => {
-        this.$emit(strings.OPENED_EVENT, {});
-        this.$emit('change', true);
-        this.$emit('show', {});
-      },
-      notifyClosing: reason => {
-        this.$emit(strings.CLOSING_EVENT, reason ? { reason } : {});
-        this.$emit('update:reason', reason);
-      },
-      notifyClosed: reason => {
-        this.$emit(strings.CLOSED_EVENT, reason ? { reason } : {});
-        this.$emit('change', false);
-        this.$emit('hide');
-      },
-    };
+    let foundation;
 
-    const { closeOnEscape, timeoutMs } = this;
-    this.foundation = new MDCSnackbarFoundation(adapter);
-    this.foundation.init();
-
-    if (timeoutMs !== void 0) {
-      this.foundation.setTimeoutMs(timeoutMs);
-    }
-
-    this.foundation.setCloseOnEscape(closeOnEscape);
-  },
-  computed: {
-    rootClasses() {
+    const rootClasses = computed(() => {
       return {
         'mdc-snackbar': 1,
-        'mdc-snackbar--leading': this.leading,
-        'mdc-snackbar--stacked': this.stacked,
+        'mdc-snackbar--leading': props.leading,
+        'mdc-snackbar--stacked': props.stacked,
+        ...uiState.classes,
       };
-    },
-    showDismissAction() {
-      return typeof this.dismissAction === 'string'
-        ? this.dismissAction != 'false'
-        : this.dismissAction;
-    },
-  },
-  beforeDestroy() {
-    window.removeEventListener('keydown', this.handleKeydownEvent);
-    this.foundation.destroy();
-  },
-  methods: {
-    onTimeoutMs_(value) {
-      if (value !== void 0) {
-        this.foundation.setTimeoutMs(value);
-      }
-    },
-    onCloseOnEscape_(nv) {
-      this.foundation.setCloseOnEscape(nv);
-    },
-    onOpen_(value) {
-      if (value) {
-        this.foundation.open();
-      } else {
-        const { reason } = this;
-        this.foundation.close(reason ? reason : '');
-      }
-    },
-    surfaceClickHandler(evt) {
-      if (this.isActionButton_(evt.target)) {
-        this.foundation.handleActionButtonClick(evt);
-      } else if (this.isActionIcon_(evt.target)) {
-        this.foundation.handleActionIconClick(evt);
-      }
-    },
+    });
 
-    handleKeydownEvent(evt) {
-      this.foundation.handleKeyDown(evt);
-    },
+    const showDismissAction = computed(() => {
+      return typeof props.dismissAction === 'string'
+        ? props.dismissAction != 'false'
+        : props.dismissAction;
+    });
 
-    isActionButton_(target) {
-      return Boolean(closest(target, strings.ACTION_SELECTOR));
-    },
+    const handleKeydownEvent = evt => foundation.handleKeyDown(evt);
 
-    isActionIcon_(target) {
-      return Boolean(closest(target, strings.DISMISS_SELECTOR));
-    },
-
-    announce(ariaEl, labelEl = ariaEl) {
+    const announce = (ariaEl, labelEl = ariaEl) => {
       const priority = ariaEl.getAttribute('aria-live');
 
-      const text = this.message;
+      const text = props.message;
       if (!text) {
         return;
       }
@@ -162,13 +98,13 @@ export default {
       //       - Firefox 60 (ESR)
       //       - IE 11
       //   * ChromeVox 53
-      this.showMessage = false;
+      uiState.showMessage = false;
 
       // Prevent visual jank by temporarily displaying the label text in the ::before pseudo-element.
       // CSS generated content is normally announced by screen readers
       // (except in IE 11; see https://tink.uk/accessibility-support-for-css-generated-content/);
       // however, `aria-live` is turned off, so this DOM update will be ignored by screen readers.
-      labelEl.setAttribute(strings.ARIA_LIVE_LABEL_TEXT_ATTR, this.message);
+      labelEl.setAttribute(strings.ARIA_LIVE_LABEL_TEXT_ATTR, props.message);
 
       setTimeout(() => {
         // Allow screen readers to announce changes to the DOM again.
@@ -178,91 +114,105 @@ export default {
         labelEl.removeAttribute(strings.ARIA_LIVE_LABEL_TEXT_ATTR);
 
         // Restore the original label text, which will be announced by screen readers.
-        this.showMessage = true;
+        uiState.showMessage = true;
       }, numbers.ARIA_LIVE_DELAY_MS);
-    },
-  },
-  render(createElement) {
-    const surfaceNodes = [
-      createElement(
-        'div',
-        {
-          class: { 'mdc-snackbar__label': 1 },
-          attrs: { role: 'status', 'aria-live': 'polite' },
-          ref: 'labelEl',
-        },
-        [
-          this.showMessage
-            ? this.message
-            : createElement('span', {
-                style: { display: 'inline-block', width: 0, height: '1px' },
-                domProps: {
-                  innerHTML: '&nbsp;',
-                },
-              }),
-        ],
-      ),
-    ];
+    };
 
-    if (this.showDismissAction || this.actionText) {
-      const buttonNodes = [];
+    const adapter = {
+      addClass: className =>
+        (uiState.classes = { ...uiState.classes, [className]: true }),
+      announce: () => announce(labelEl.value),
+      notifyClosed: reason => {
+        emit(strings.CLOSED_EVENT, reason ? { reason } : {});
+        emit('change', false);
+        emit('hide');
+      },
+      notifyClosing: reason => {
+        emit(strings.CLOSING_EVENT, reason ? { reason } : {});
+        emit('update:reason', reason);
+      },
+      notifyOpened: () => {
+        emit(strings.OPENED_EVENT, {});
+        emit('change', true);
+        emit('show', {});
+      },
 
-      if (this.actionText) {
-        buttonNodes.push(
-          createElement(
-            'button',
-            {
-              class: {
-                'mdc-button': 1,
-                'mdc-snackbar__action': 1,
-              },
-              attrs: { type: 'button' },
-              ref: 'actionEl',
-              on: this.$listeners,
-            },
-            this.actionText,
-          ),
-        );
+      notifyOpening: () => emit(strings.OPENING_EVENT, {}),
+
+      removeClass: className => {
+        // eslint-disable-next-line no-unused-vars
+        const { [className]: removed, ...rest } = uiState.classes;
+        uiState.classes = rest;
+      },
+    };
+
+    const surfaceClickHandler = evt => {
+      if (isActionButton_(evt.target)) {
+        foundation.handleActionButtonClick(evt);
+      } else if (isActionIcon_(evt.target)) {
+        foundation.handleActionIconClick(evt);
       }
+    };
 
-      if (this.showDismissAction) {
-        buttonNodes.push(
-          createElement(
-            'button',
-            {
-              class: {
-                'mdc-icon-button': 1,
-                'mdc-snackbar__dismiss': 1,
-                'material-icons': 1,
-              },
-              attrs: { title: 'Dismiss' },
-            },
-            ['close'],
-          ),
-        );
-      }
-      surfaceNodes.push(
-        createElement(
-          'div',
-          { class: { 'mdc-snackbar__actions': 1 } },
-          buttonNodes,
-        ),
-      );
-    }
-
-    return createElement(
-      'div',
-      { class: { ...this.rootClasses, ...this.classes }, ref: 'root' },
-      [
-        createElement(
-          'div',
-          {
-            class: { 'mdc-snackbar__surface': 1 },
-            on: { click: evt => this.surfaceClickHandler(evt) },
-          },
-          surfaceNodes,
-        ),
-      ],
+    watch(
+      () => props.open,
+      nv => {
+        if (nv) {
+          foundation.open();
+        } else {
+          foundation.close(props.reason ? props.reason : '');
+        }
+      },
     );
+    watch(
+      () => props.timeoutMs,
+      nv => {
+        if (nv !== void 0) {
+          foundation.setTimeoutMs(nv);
+        }
+      },
+    );
+    watch(
+      () => props.closeOnEscape,
+      nv => foundation.setCloseOnEscape(nv),
+    );
+
+    onMounted(() => {
+      window.addEventListener('keydown', handleKeydownEvent);
+      foundation = new MDCSnackbarFoundation(adapter);
+      foundation.init();
+
+      if (props.timeoutMs !== void 0) {
+        foundation.setTimeoutMs(props.timeoutMs);
+      }
+
+      foundation.setCloseOnEscape(props.closeOnEscape);
+    });
+
+    onBeforeUnmount(() => {
+      window.removeEventListener('keydown', handleKeydownEvent);
+      foundation.destroy();
+    });
+
+    return {
+      ...toRefs(uiState),
+      rootClasses,
+      root,
+      labelEl,
+      showDismissAction,
+      surfaceClickHandler,
+    };
   },
 };
+
+// ===
+// Private functions
+// ===
+
+function isActionButton_(target) {
+  return Boolean(closest(target, strings.ACTION_SELECTOR));
+}
+
+function isActionIcon_(target) {
+  return Boolean(closest(target, strings.DISMISS_SELECTOR));
+}

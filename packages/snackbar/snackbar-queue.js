@@ -1,9 +1,11 @@
+import { computed, reactive, toRefs } from '@vue/composition-api';
+
 const noop = () => {};
 
 export default {
   name: 'mcw-snackbar-queue',
-  data() {
-    return {
+  setup(props, { emit, $listeners, root: $root }) {
+    const uiState = reactive({
       open: false,
       queue: [],
       snack: {
@@ -15,19 +17,11 @@ export default {
         leading: false,
         stacked: false,
       },
-    };
-  },
-  render(createElement) {
-    return createElement('mcw-snackbar', {
-      props: {
-        open: this.open,
-        ...this.snack,
-      },
-      on: this.listeners,
     });
-  },
-  methods: {
-    handleSnack({
+
+    let actionHandler_;
+
+    const handleSnack = ({
       timeoutMs = 5000,
       closeOnEscape,
       message = '',
@@ -36,9 +30,9 @@ export default {
       stacked,
       leading,
       actionHandler = noop,
-    }) {
-      this.queue.push(() => {
-        this.snack = {
+    }) => {
+      uiState.queue.push(() => {
+        uiState.snack = {
           timeoutMs,
           closeOnEscape,
           message,
@@ -48,33 +42,35 @@ export default {
           stacked,
           leading,
         };
-        this.actionHandler = actionHandler;
-        this.open = true;
+        actionHandler_ = actionHandler;
+        uiState.open = true;
       });
-      if (this.queue.length === 1) {
-        this.queue[0]();
+      if (uiState.queue.length === 1) {
+        uiState.queue[0]();
       }
-    },
-    handleClosed() {
-      this.open = false;
-      this.queue.shift();
-      if (this.queue.length > 0) {
-        this.$nextTick(() => this.queue[0]());
+    };
+
+    const handleClosed = () => {
+      uiState.open = false;
+      uiState.queue.shift();
+      if (uiState.queue.length > 0) {
+        $root.$nextTick(() => uiState.queue[0]());
       }
-    },
-  },
-  computed: {
-    listeners() {
+    };
+
+    const listeners = computed(() => {
       return {
-        ...this.$listeners,
+        ...$listeners,
         'MDCSnackbar:closed': ({ reason }) => {
-          if (this.actionHandler && reason === 'action') {
-            this.actionHandler({ reason });
+          if (actionHandler_ && reason === 'action') {
+            actionHandler_({ reason });
           }
-          this.handleClosed();
-          this.$emit('closed', { reason });
+          handleClosed();
+          emit('closed', { reason });
         },
       };
-    },
+    });
+
+    return { ...toRefs(uiState), handleSnack, listeners };
   },
 };

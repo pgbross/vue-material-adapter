@@ -8,7 +8,7 @@
 ></mcw-snackbar>
 ```
 
-Simple `mcw-snackbar` is does not queue messages.
+Simple `mcw-snackbar` does not queue messages.
 
 ```javascript
 export default {
@@ -40,23 +40,26 @@ export default {
   },
 ```
 
-### props
+### Props
 
 ### `mcw-snackbar`
 
-| Prop Name     | Type    | Description                                                     |
-| ------------- | ------- | --------------------------------------------------------------- |
-| message       | String  | Message to show in the snackbar                                 |
-| reason        | String  | Passed as argument when snackbar closes programatically         |
-| timeoutMs     | Number  | Timeout in milliseconds when to close snackbar.                 |
-| closeOnEscape | Boolean | Closes popup on "Esc" button if true.                           |
-| actionText    | String  | Text for action button                                          |
-| leading       | Boolean | Shows snackbar on the left if true (or right for rtl languages) |
-| stacked       | Boolean | Shows buttons under text if true                                |
+| Prop Name        | Type           | Description                                             |
+| ---------------- | -------------- | ------------------------------------------------------- |
+| `open`           | Boolean        | v-model                                                 |
+| message          | String         | Message to show in the snackbar                         |
+| reason           | String         | Passed as argument when snackbar closes programatically |
+| timeoutMs        | Number         | Timeout in milliseconds when to close snackbar.         |
+| closeOnEscape    | Boolean        | Closes popup on "Esc" button if true.                   |
+| actionText       | String         | Text for action button                                  |
+| leading          | Boolean        | Shows snackbar on the left if true                      |
+|                  |                | (or right for rtl languages)                            |
+| stacked          | Boolean        | Shows buttons under text if true                        |
+| `dismiss-action` | String/Boolean | Show dismiss action                                     |
 
 ### `mcw-snackbar-queue`
 
-#### methods
+#### Methods
 
 | Method                                                                                                            | Description           |
 | ----------------------------------------------------------------------------------------------------------------- | --------------------- |
@@ -75,4 +78,4 @@ export default {
 
 ### Reference
 
-- <https://material.io/components/web/catalog/snackbars>
+- <https://github.com/material-components/material-components-web/tree/master/packages/mdc-snackbar>

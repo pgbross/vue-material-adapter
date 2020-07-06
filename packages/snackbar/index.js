@@ -1,6 +1,6 @@
 import { BasePlugin } from '~/base/index.js';
-import mcwSnackbarQueue from './snackbar-queue.js';
-import mcwSnackbar from './snackbar.js';
+import mcwSnackbarQueue from './snackbar-queue.vue';
+import mcwSnackbar from './snackbar.vue';
 
 export { mcwSnackbar, mcwSnackbarQueue };
 
