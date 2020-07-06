@@ -3,10 +3,12 @@
     <div
       ref="anchorEl"
       class="mdc-select__anchor"
+      :class="rippleClasses"
+      :style="rippleStyles"
       @click="handleClick"
       @keydown="handleKeydown"
-      focus="handleFocus"
-      blur="handleBlur"
+      @focus="handleFocus"
+      @blur="handleBlur"
       v-bind="selectAnchorAttrs"
     >
       <select-icon
@@ -16,7 +18,7 @@
         tabindex="0"
         role="button"
       ></select-icon>
-      <span class="mdc-select__ripple"></span>
+      <span class="mdc-select__ripple" v-if="!outlined"></span>
       <span class="mdc-select__selected-text">{{selectedTextContent}}</span>
       <span class="mdc-select__dropdown-icon">
         <svg class="mdc-select__dropdown-icon-graphic" viewBox="7 10 10 5">

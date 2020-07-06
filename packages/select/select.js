@@ -15,6 +15,7 @@ import SelectHelperText from './select-helper-text.js';
 import SelectIcon from './select-icon.js';
 
 const { strings } = MDCSelectFoundation;
+import { useRipplePlugin } from '~/ripple/ripple-plugin';
 
 export default {
   name: 'mcw-select',
@@ -54,6 +55,22 @@ export default {
       selectAnchorAttrs: {},
       helpId: '',
     });
+
+    let rippleClasses;
+    let rippleStyles;
+
+    if (props.outlined) {
+      const { classes, styles } = useRipplePlugin(anchorEl, {
+        registerInteractionHandler: (evtType, handler) => {
+          anchorEl.value.addEventListener(evtType, handler);
+        },
+        deregisterInteractionHandler: (evtType, handler) => {
+          anchorEl.value.removeEventListener(evtType, handler);
+        },
+      });
+      rippleClasses = classes;
+      rippleStyles = styles;
+    }
 
     const rootClasses = computed(() => {
       return {
@@ -321,7 +338,8 @@ export default {
       handleKeydown,
       layout,
       layoutOptions,
-
+      rippleClasses,
+      rippleStyles,
       selectedTextAttrs,
       selectAriaControls,
     };

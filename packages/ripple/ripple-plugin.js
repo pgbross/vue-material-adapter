@@ -11,7 +11,7 @@ import {
 } from '@vue/composition-api';
 
 export class RippleElement extends MDCRippleFoundation {
-  constructor(element, state, options) {
+  constructor(element, state, { unbounded = false, ...options } = {}) {
     const $el = element.$el ?? element;
 
     super({
@@ -61,7 +61,7 @@ export class RippleElement extends MDCRippleFoundation {
       ...options,
     });
 
-    this.unbounded_ = false;
+    this.unbounded_ = unbounded;
   }
 
   get unbounded() {
