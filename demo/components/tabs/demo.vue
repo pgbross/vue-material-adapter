@@ -9,6 +9,15 @@
       </mcw-tab-bar>
     </section>
     <br />
+    <div class="mdc-typography--headline6">Span content</div>
+    <section class="mcw-demo mcw-demo--container">
+      <mcw-tab-bar active-tab-index="1" span-content @change="onSelected">
+        <mcw-tab v-for="item in filteredItems" :key="item.label">{{
+          item
+        }}</mcw-tab>
+      </mcw-tab-bar>
+    </section>
+    <br />
     <div v-if="selectedItem" style="text-align: right;">
       <div class="mdc-typography--caption">
         Selected:
@@ -19,7 +28,15 @@
     <section class="mcw-demo mcw-demo--container">
       <mcw-tab-bar>
         <mcw-tab icon="phone">Recents</mcw-tab>
-        <mcw-tab icon="favorite" stacked>Favorites</mcw-tab>
+        <mcw-tab icon="favorite">Favorites</mcw-tab>
+        <mcw-tab icon="personal_pin">Nearby</mcw-tab>
+      </mcw-tab-bar>
+    </section>
+    <div class="mdc-typography--headline6">With stacked icons and text</div>
+    <section class="mcw-demo mcw-demo--container">
+      <mcw-tab-bar stacked>
+        <mcw-tab icon="phone">Recents</mcw-tab>
+        <mcw-tab icon="favorite">Favorites</mcw-tab>
         <mcw-tab icon="personal_pin">Nearby</mcw-tab>
       </mcw-tab-bar>
     </section>

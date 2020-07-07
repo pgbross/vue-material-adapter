@@ -1,15 +1,13 @@
 import { BasePlugin } from '~/base/index.js';
-import mcwTabBar from './tab-bar.js';
-import mcwTabIndicator from './tab-indicator.js';
-import mcwTabRipple from './tab-ripple.js';
-import mcwTabScroller from './tab-scroller.js';
-import mcwTab from './tab.js';
-export { mcwTab, mcwTabBar, mcwTabScroller, mcwTabIndicator, mcwTabRipple };
+import mcwTabBar from './tab-bar.vue';
+import mcwTabIndicator from './tab-indicator.vue';
+import mcwTabScroller from './tab-scroller.vue';
+import mcwTab from './tab.vue';
+export { mcwTab, mcwTabBar, mcwTabScroller, mcwTabIndicator };
 
 export default BasePlugin({
   mcwTab,
   mcwTabBar,
   mcwTabScroller,
   mcwTabIndicator,
-  mcwTabRipple,
 });
