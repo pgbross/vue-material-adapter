@@ -1,14 +1,10 @@
 import { BasePlugin } from '~/base/index.js';
-import mcwList from './list.js';
-import mcwListDivider from './list-divider.js';
-import mcwListGroupSubHeader from './list-group-sub-header.js';
-import mcwListGroup from './list-group.js';
+import mcwList from './list.vue';
+import mcwListItem from './list-item.vue';
 
-export { mcwList, mcwListDivider, mcwListGroup, mcwListGroupSubHeader };
+export { mcwList, mcwListItem };
 
 export default BasePlugin({
   mcwList,
-  mcwListDivider,
-  mcwListGroup,
-  mcwListGroupSubHeader,
+  mcwListItem,
 });

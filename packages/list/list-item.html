@@ -1,0 +1,11 @@
+<li :class="classes">
+  <span class="mdc-list-item__ripple"></span>
+  <span class="mdc-list-item__text" v-if="isTwoLine">
+    <span class="mdc-list-item__primary-text"><slot></slot></span>
+    <span class="mdc-list-item__secondary-text"
+      ><slot name="secondary-text">{{twoLine}}</slot></span
+    >
+  </span>
+
+  <span class="mdc-list-item__text" v-else><slot></slot></span>
+</li>
