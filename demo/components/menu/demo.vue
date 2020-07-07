@@ -9,7 +9,7 @@
         <li class="mdc-list-item" role="menuitem">
           <span class="mdc-list-item__text">Another Menu Item</span>
         </li>
-        <mcw-list-divider></mcw-list-divider>
+        <li role="separator" class="mdc-list-divider"></li>
         <li class="mdc-list-item" role="menuitem">
           <span class="mdc-list-item__text">A Menu Item</span>
         </li>
@@ -25,13 +25,17 @@
         <li>
           <ul class="mdc-menu__selection-group">
             <li class="mdc-list-item" role="menuitem">
-              <span class="mdc-list-item__graphic mdc-menu__selection-group-icon">
+              <span
+                class="mdc-list-item__graphic mdc-menu__selection-group-icon"
+              >
                 <i class="material-icons">check</i>
               </span>
               <span class="mdc-list-item__text">Single</span>
             </li>
             <li class="mdc-list-item" role="menuitem">
-              <span class="mdc-list-item__graphic mdc-menu__selection-group-icon">
+              <span
+                class="mdc-list-item__graphic mdc-menu__selection-group-icon"
+              >
                 <i class="material-icons">check</i>
               </span>
               <span class="mdc-list-item__text">1.15</span>

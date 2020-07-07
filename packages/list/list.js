@@ -402,6 +402,7 @@ export default {
     return {
       ...toRefs(uiState),
       listRoot,
+      listElements,
       rootListeners,
       layout,
       setEnabled,

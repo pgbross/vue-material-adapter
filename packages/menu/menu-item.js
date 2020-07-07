@@ -1,25 +1,27 @@
-/* eslint-disable quote-props */
+import { h } from '@vue/composition-api';
+
 export default {
   name: 'mcw-menu-item',
   props: {
     disabled: Boolean,
   },
-  functional: true,
-  render(createElement, { props: { disabled }, scopedSlots }) {
-    return createElement(
-      'li',
-      {
-        class: {
-          'mdc-menu-divider': 1,
-          'mdc-list-divider': 1,
+  setup(props, { slots }) {
+    return () => {
+      return h(
+        'li',
+        {
+          class: {
+            'mdc-menu-divider': 1,
+            'mdc-list-divider': 1,
+          },
+          attrs: {
+            tabindex: props.disabled ? '-1' : '0',
+            'aria-disabled': props.disabled,
+            role: 'menuitem',
+          },
         },
-        attrs: {
-          tabindex: disabled ? '-1' : '0',
-          'aria-disabled': disabled,
-          role: 'menuitem',
-        },
-      },
-      scopedSlots.default?.(),
-    );
+        slots.default?.(),
+      );
+    };
   },
 };
