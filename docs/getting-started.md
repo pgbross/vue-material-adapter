@@ -1,6 +1,8 @@
-> This Guide assumes you are familiar with [Vue.js](https://vuejs.org/v2/guide/index.html)
-> components and plugin system.  
-> Vue.js version `^2.6` is required as a peer dependency.  
+This Guide assumes you are familiar with [Vue.js](https://vuejs.org/v2/guide/index.html)
+components and plugin system.  
+`Vue.js` 2.6 or greater and `@vue/composition-api` 1.0 or greater are required as peer dependencies.
+
+> Note: Applications must install `Vue.use(VueCompositionApi)` but have no requirement to use the composition style of programming.
 > Material Components Web are not bundled and need to be installed.  
 > Material Icons and Fonts are not bundled and need to be fetched.
 
@@ -8,7 +10,7 @@
 
 #### Examples
 
-There are now examples of using `vue-material-adapter` both as a `basic-vue-cli` and a `basic-webpack` project [examples](https://github.com/pgbross/vue-material-adapter/tree/master/examples).
+There are examples of using `vue-material-adapter` both as a `basic-vue-cli` and a `basic-webpack` project [examples](https://github.com/pgbross/vue-material-adapter/tree/master/examples).
 
 #### Playground
 
@@ -16,9 +18,9 @@ See demo in the source distribution for examples of how vue-material-adapter can
 
 ## Getting Serious
 
-The distribution comes in AMD/CJS as well as the more usual tree-shakeable ES (ESM) variants.
+The distribution comes in a tree-shakeable ES (ESM) as well as the older AMD/CJS variants.
 
-#### standalone plugin
+#### Standalone plugin
 
 | distribution                         | env        | description                |
 | ------------------------------------ | ---------- | -------------------------- |
@@ -31,13 +33,13 @@ The distribution comes in AMD/CJS as well as the more usual tree-shakeable ES (E
 ### ESM Distribution
 
 > The following guide assumes you have a valid Vue.js/Webpack config.
-> refer to [vuejs-templates/webpack](https://github.com/vuejs-templates/webpack) for more.
+> refer to [vuejs-templates/webpack](https://github.com/vuejs-templates/webpack) for more info.
 
 | module                      | type |
 | --------------------------- | ---- |
 | vue-material-adapter.esm.js | ESM  |
 
-#### install vue, @vue/composition-api, vue-material-adapter (and eventually vue-router).
+#### Install vue, @vue/composition-api, vue-material-adapter (and eventually vue-router).
 
 ```bash
 npm install vue
@@ -145,26 +147,4 @@ import `./theme.scss`
 import Vue from 'vue'
 import VueMaterialAdapter from 'vue-material-adapter'
 Vue.use(VueMaterialAdapter)
-```
-
-#### or cherry pick _a la carte_ plugins
-
-```scss
-/* theme.scss */
-$mdc-theme-primary: #212121;
-$mdc-theme-accent: #41b883;
-$mdc-theme-background: #fff;
-
-@import '@mcwv/button/index.scss';
-@import '@mcwv/fab/index.scss';
-```
-
-```javascript
-// main.js
-import `./theme.scss`
-import Vue from 'vue'
-import mcwButton from '@mcwv/button/index.js'
-import mcwFAB from '@mcwv/fab/index.js'
-Vue.use(mcwButton)
-Vue.use(mcwFAB)
 ```

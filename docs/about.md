@@ -1,8 +1,13 @@
 [vue-material-adapter](https://github.com/pgbross/vue-material-adapter) is an integration of
 [Material Web Components](https://material.io/components/web/)
-and [Vue.js](https://vuejs.org) which follows the best practices
-recommended by Google:
-[Using Foundations and Adapters](https://github.com/material-components/material-components-web/blob/master/docs/integrating-into-frameworks.md#the-advanced-approach-using-foundations-and-adapters).
-This project aims to find the right balance between ease of use and customization, while sticking to the _Vue Spirit_ (approachable, versatile, and performant)
+and [Vue.js](https://vuejs.org) which uses the
+[`Using Foundations and Adapters`](https://github.com/material-components/material-components-web/blob/master/docs/integrating-into-frameworks.md#the-advanced-approach-using-foundations-and-adapters) integration technique.
 
-> This project is under active development, do not hesitate to open issues on [GitHub](https://github.com/pgbross/vue-material-adapter/issues),
+This project defines Vue components that use the `Material Components Web` library to implement Material Design.
+
+> Please raise issues or pull-request suggestions on [GitHub](https://github.com/pgbross/vue-material-adapter/issues)
+
+> NOTE: Material Components Web tends to release breaking changes on a monthly basis, but follows
+> [semver](https://semver.org/) so you can control when you incorporate them.
+> Similarly, `vue-material-adapter` will therefore often also have some breaking changes, but many changes to HTML layout
+> or other API changes only affect the internal implementation so there will be less work in applications to adopt a new version.
