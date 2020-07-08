@@ -45,7 +45,15 @@
         <mdc-line-ripple ref="lineRippleEl"></mdc-line-ripple>
       </template>
     </div>
-    <slot></slot>
+    <mcw-menu
+      ref="menu"
+      class="mdc-select__menu"
+      :class="menuClasses"
+      @change="handleChange"
+      @select="handleMenuItemAction"
+    >
+      <slot></slot>
+    </mcw-menu>
   </div>
   <select-helper-text
     ref="helperTextEl"

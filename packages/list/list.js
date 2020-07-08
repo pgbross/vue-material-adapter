@@ -206,6 +206,8 @@ export default {
       keydown: event => handleKeydownEvent(event),
     };
 
+    const typeaheadInProgress = () => foundation.isTypeaheadInProgress();
+
     const adapter = {
       addClassForElementIndex: (index, className) => {
         const element = listElements.value[index];
@@ -405,6 +407,7 @@ export default {
       layout,
       setEnabled,
       typeaheadMatchItem,
+      typeaheadInProgress,
       selIndex,
     };
   },

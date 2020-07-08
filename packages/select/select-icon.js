@@ -1,4 +1,11 @@
 import { MDCSelectIconFoundation } from '@material/select/icon/foundation.js';
+import {
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  toRefs,
+  computed,
+} from '@vue/composition-api';
 import { emitCustomEvent } from '~/base/index.js';
 
 export default {
@@ -6,58 +13,66 @@ export default {
   props: {
     icon: String,
   },
-  data() {
-    return {
+  setup(props, { emit, listeners: $listeners }) {
+    const uiState = reactive({
       classes: {
         'material-icons': true,
         'mdc-select__icon': true,
       },
       styles: {},
-    };
-  },
+      root: null,
+      rootAttrs: {},
+      rootListeners: {},
+    });
 
-  mounted() {
-    this.foundation = new MDCSelectIconFoundation(
-      Object.assign({
-        getAttr: attr => this.$el.getAttribute(attr),
-        setAttr: (attr, value) => this.$el.setAttribute(attr, value),
-        removeAttr: attr => this.$el.removeAttribute(attr),
-        setContent: content => {
-          this.$el.textContent = content;
-        },
-        registerInteractionHandler: (evtType, handler) =>
-          this.$el.addEventListener(evtType, handler),
-        deregisterInteractionHandler: (evtType, handler) =>
-          this.$el.removeEventListener(evtType, handler),
-        notifyIconAction: () => {
-          this.$emit('click');
+    let foundation;
+    const listeners = computed(() => {
+      return { ...$listeners, ...uiState.rootListeners };
+    });
 
-          emitCustomEvent(
-            this.$el,
-            MDCSelectIconFoundation.strings.ICON_EVENT,
-            {},
-            true /* shouldBubble  */,
-          );
-        },
-      }),
-    );
-
-    this.foundation.init();
-  },
-
-  beforeDestroy() {
-    this.foundation.destroy();
-  },
-  render(createElement) {
-    return createElement(
-      'i',
-      {
-        class: this.classes,
-        style: this.styles,
-        attrs: this.$attrs,
-        on: this.$listeners,
+    const adapter = {
+      getAttr: attr => uiState.rootAttrs[attr],
+      setAttr: (attr, value) =>
+        (uiState.rootAttrs = { ...uiState.rootAttrs, [attr]: value }),
+      removeAttr: attr => {
+        // eslint-disable-next-line no-unused-vars
+        const { [attr]: removed, ...rest } = uiState.rootAttrs;
+        uiState.rootAttrs = rest;
       },
-      this.icon,
-    );
+      setContent: content => {
+        uiState.root.textContent = content;
+      },
+      registerInteractionHandler: (evtType, handler) =>
+        (uiState.rootListeners = {
+          ...uiState.rootListeners,
+          [evtType]: handler,
+        }),
+      deregisterInteractionHandler: (evtType, handler) => {
+        // eslint-disable-next-line no-unused-vars
+        const { [evtType]: removed, ...rest } = uiState.rootListeners;
+        uiState.rootListeners = rest;
+      },
+      notifyIconAction: () => {
+        emit('click');
+
+        emitCustomEvent(
+          uiState.root,
+          MDCSelectIconFoundation.strings.ICON_EVENT,
+          {},
+          true /* shouldBubble  */,
+        );
+      },
+    };
+
+    onMounted(() => {
+      foundation = new MDCSelectIconFoundation(adapter);
+      foundation.init();
+    });
+
+    onBeforeUnmount(() => {
+      foundation.destroy();
+    });
+
+    return { ...toRefs(uiState), listeners };
   },
 };

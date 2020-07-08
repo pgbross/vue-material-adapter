@@ -1,67 +1,83 @@
 import { MDCSelectHelperTextFoundation } from '@material/select/helper-text/foundation.js';
-
+import {
+  h,
+  reactive,
+  onMounted,
+  onBeforeUnmount,
+  watch,
+} from '@vue/composition-api';
 export default {
   name: 'select-helper-text',
   props: {
     helptextPersistent: Boolean,
     helptextValidation: Boolean,
   },
-  data() {
-    return {
+  setup(props, { slots }) {
+    const uiState = reactive({
       classes: {
         'mdc-select-helper-text': true,
-        'mdc-select-helper-text--persistent': this.helptextPersistent,
-        'mdc-select-helper-text--validation-msg': this.helptextValidation,
+        'mdc-select-helper-text--persistent': props.helptextPersistent,
+        'mdc-select-helper-text--validation-msg': props.helptextValidation,
       },
       attrs: { 'aria-hidden': 'true' },
-    };
-  },
-  watch: {
-    helptextPersistent() {
-      this.foundation.setPersistent(this.helptextPersistent);
-    },
-    helptextValidation() {
-      this.foundation.setValidation(this.helptextValidation);
-    },
-  },
+    });
 
-  mounted() {
-    this.foundation = new MDCSelectHelperTextFoundation({
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
+    let foundation;
 
-      hasClass: className => Boolean(this.classes[className]),
-
-      setAttr: (attr, value) => {
-        this.$set(this.attrs, attr, value);
-        // this.$el.setAttribute(attr, value);
+    const adapter = {
+      addClass: className =>
+        (uiState.classes = { ...uiState.classes, [className]: true }),
+      removeClass: className => {
+        // eslint-disable-next-line no-unused-vars
+        const { [className]: removed, ...rest } = uiState.classes;
+        uiState.classes = rest;
       },
+
+      hasClass: className => Boolean(uiState.classes[className]),
+
+      setAttr: (attr, value) =>
+        (uiState.attrs = { ...uiState.attrs, [attr]: value }),
+
       removeAttr: attr => {
-        this.$delete(this.attrs, attr);
-        // this.$el.removeAttribute(attr);
+        // eslint-disable-next-line no-unused-vars
+        const { [attr]: removed, ...rest } = uiState.attrs;
+        uiState.attrs = rest;
       },
 
       setContent: (/* content */) => {
         // help text get's updated from {{helptext}}
         // cf. this.$el.textContent = content
       },
+    };
+
+    watch(
+      () => props.helptextPersistent,
+      nv => foundation.setPersistent(nv),
+    );
+
+    watch(
+      () => props.helptextValidation,
+      nv => foundation.setValidation(nv),
+    );
+
+    onMounted(() => {
+      foundation = new MDCSelectHelperTextFoundation(adapter);
+      foundation.init();
     });
 
-    this.foundation.init();
-  },
+    onBeforeUnmount(() => {
+      foundation.destroy();
+    });
 
-  beforeDestroy() {
-    this.foundation.destroy();
-  },
-  render(createElement) {
-    const { $scopedSlots: scopedSlots } = this;
-    return createElement(
-      'p',
-      {
-        class: this.classes,
-        attrs: this.attrs,
-      },
-      scopedSlots.default && scopedSlots.default(),
-    );
+    return () => {
+      return h(
+        'p',
+        {
+          class: uiState.classes,
+          attrs: uiState.attrs,
+        },
+        slots.default?.(),
+      );
+    };
   },
 };

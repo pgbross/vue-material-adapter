@@ -105,7 +105,7 @@ export default {
       foundation.setDefaultFocusState(focusState);
     };
     const setAnchorCorner = corner => {
-      menuSurface.value.foundation.setAnchorCorner(corner);
+      menuSurface.value.setAnchorCorner(corner);
     };
     const setAnchorElement = element => {
       menuSurface.value.setMenuSurfaceAnchorElement(element);
@@ -114,7 +114,7 @@ export default {
       list.value && (list.value.selIndex.value = index);
 
     const setAnchorMargin = margin => {
-      menuSurface.value.foundation.setAnchorMargin(margin);
+      menuSurface.value.setAnchorMargin(margin);
     };
     const getOptionByIndex = index => {
       const itms = items.value;
@@ -147,6 +147,15 @@ export default {
 
     const setAbsolutePosition = (x, y) => {
       menuSurface.value.foundation.setAbsolutePosition(x, y);
+    };
+
+    const typeaheadInProgress = () => list.value.typeAheadInProgress ?? false;
+
+    const typeaheadMatchItem = (nextChar, startingIndex) => {
+      if (list.value) {
+        return list.value.typeaheadMatchItem(nextChar, startingIndex);
+      }
+      return -1;
     };
 
     const adapter = {
@@ -260,6 +269,9 @@ export default {
       layout,
       selectedIndex,
       getPrimaryTextAtIndex,
+      items,
+      typeaheadInProgress,
+      typeaheadMatchItem,
     };
   },
 

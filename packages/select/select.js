@@ -1,5 +1,3 @@
-import { MDCMenuSurfaceFoundation } from '@material/menu-surface/foundation';
-import { MDCMenuFoundation } from '@material/menu/foundation';
 import { MDCSelectFoundation } from '@material/select/foundation';
 import {
   computed,
@@ -12,10 +10,12 @@ import {
 } from '@vue/composition-api';
 import { emitCustomEvent, VMAUniqueIdMixin } from '~/base/index.js';
 import SelectHelperText from './select-helper-text.js';
-import SelectIcon from './select-icon.js';
+import SelectIcon from './select-icon.vue';
 
 const { strings } = MDCSelectFoundation;
 import { useRipplePlugin } from '~/ripple/ripple-plugin';
+
+let uid_ = 0;
 
 export default {
   name: 'mcw-select',
@@ -38,13 +38,7 @@ export default {
   mixins: [VMAUniqueIdMixin],
 
   setup(props, { emit }) {
-    const root = ref(null);
     const anchorEl = ref(null);
-    const helperTextEl = ref(null);
-    const leadingIconEl = ref(null);
-    const lineRippleEl = ref(null);
-    const outlineEl = ref(null);
-    const labelEl = ref(null);
 
     const uiState = reactive({
       styles: {},
@@ -52,7 +46,15 @@ export default {
       selectedTextContent: '',
       selTextAttrs: {},
       selectAnchorAttrs: {},
-      helpId: '',
+      helpId: `help-mcw-select-${uid_++}`,
+      menuClasses: {},
+      root: null,
+      helperTextEl: null,
+      leadingIconEl: null,
+      lineRippleEl: null,
+      outlineEl: null,
+      labelEl: null,
+      menu: null,
     });
 
     let rippleClasses;
@@ -84,60 +86,44 @@ export default {
       };
     });
 
+    const menuItems = computed(() => uiState.menu?.items);
+
     let foundation;
-    let menuElement_;
-    let menu_;
 
     const handleFocus = () => foundation.handleFocus();
-
     const handleBlur = () => foundation.handleBlur();
-
     const handleClick = evt => {
       anchorEl.value.focus();
       handleFocus();
       foundation.handleClick(getNormalizedXCoordinate(evt));
     };
-
     const handleKeydown = evt => foundation.handleKeydown(evt);
-
-    const handleMenuItemAction = evt =>
-      foundation.handleMenuItemAction(evt.detail.index);
-
-    const handleMenuOpened = () => foundation.handleMenuOpened();
-
-    const handleMenuClosed = () => foundation.handleMenuClosed();
-
-    const handleChange = () => foundation.handleChange();
+    const handleMenuItemAction = ({ index }) =>
+      foundation.handleMenuItemAction(index);
+    const handleChange = isOpen =>
+      foundation[`handleMenu${isOpen ? 'Opened' : 'Closed'}`]();
 
     const layout = () => foundation.layout();
-
     const selectedIndex = () => foundation.getSelectedIndex();
 
     const layoutOptions = () => {
       foundation.layoutOptions();
-      menu_.layout();
+      uiState.menu.layout();
     };
 
     const selectedTextAttrs = computed(() => {
-      const helpId = `help-${/* this.vma_uid_*/ 0}`;
-      uiState.helpId = helpId;
-
       const attrs = { ...uiState.selTextAttrs };
       if (props.helptext) {
-        attrs['aria-controls'] = helpId;
-        attrs['aria-describedBy'] = helpId;
+        attrs['aria-controls'] = uiState.helpId;
+        attrs['aria-describedBy'] = uiState.helpId;
       }
       return attrs;
-    });
-
-    const selectAriaControls = computed(() => {
-      return props.helptext ? 'help-' + 0 /* this.vma_uid_  */ : undefined;
     });
 
     const adapter = {
       // select methods
       getSelectedMenuItem: () =>
-        menuElement_.querySelector(strings.SELECTED_ITEM_SELECTOR),
+        uiState.menu.$el.querySelector(strings.SELECTED_ITEM_SELECTOR),
       getMenuItemAttr: (menuItem, attr) => menuItem.getAttribute(attr),
       setSelectedText: text => (uiState.selectedTextContent = text),
       isSelectAnchorFocused: () => document.activeElement === anchorEl.value,
@@ -152,39 +138,46 @@ export default {
         const { [attr]: removed, ...rest } = uiState.selectAnchorAttrs;
         uiState.selectAnchorAttrs = rest;
       },
-      addMenuClass: className => menuElement_.classList.add(className),
-      removeMenuClass: className => menuElement_.classList.remove(className),
-      openMenu: () => (menu_.surfaceOpen = true),
-      closeMenu: () => (menu_.surfaceOpen = false),
+      addMenuClass: className =>
+        (uiState.menuClasses = { ...uiState.menuClasses, [className]: true }),
+
+      removeMenuClass: className => {
+        // eslint-disable-next-line no-unused-vars
+        const { [className]: removed, ...rest } = uiState.menuClasses;
+        uiState.menuClasses = rest;
+      },
+      openMenu: () => (uiState.menu.surfaceOpen = true),
+      closeMenu: () => (uiState.menu.surfaceOpen = false),
       getAnchorElement: () => anchorEl.value,
-      setMenuAnchorElement: anchorEl => menu_.setAnchorElement(anchorEl),
-      setMenuAnchorCorner: anchorCorner => menu_.setAnchorCorner(anchorCorner),
-      setMenuWrapFocus: wrapFocus => (menu_.wrapFocus = wrapFocus),
+      setMenuAnchorElement: anchorEl => uiState.menu.setAnchorElement(anchorEl),
+      setMenuAnchorCorner: anchorCorner =>
+        uiState.menu.setAnchorCorner(anchorCorner),
+      setMenuWrapFocus: wrapFocus => (uiState.menu.wrapFocus = wrapFocus),
       getSelectedIndex: () => {
-        const index = menu_.selectedIndex;
+        const index = uiState.menu.selectedIndex;
         return index instanceof Array ? index[0] : index;
       },
       setSelectedIndex: index => {
-        menu_.selectedIndex = index;
+        uiState.menu.selectedIndex = index;
       },
       setAttributeAtIndex: (index, attributeName, attributeValue) =>
-        menu_.items[index].setAttribute(attributeName, attributeValue),
+        menuItems.value[index].setAttribute(attributeName, attributeValue),
       removeAttributeAtIndex: (index, attributeName) =>
-        menu_.items[index].removeAttribute(attributeName),
-      focusMenuItemAtIndex: index => menu_.items[index].focus(),
-      getMenuItemCount: () => menu_.items.length,
+        menuItems.value[index].removeAttribute(attributeName),
+      focusMenuItemAtIndex: index => menuItems.value[index].focus(),
+      getMenuItemCount: () => menuItems.value.length,
       getMenuItemValues: () =>
-        menu_.items.map(el => el.getAttribute(strings.VALUE_ATTR) || ''),
-      getMenuItemTextAtIndex: index => menu_.items[index].textContent,
+        menuItems.value.map(el => el.getAttribute(strings.VALUE_ATTR) || ''),
+      getMenuItemTextAtIndex: index => menuItems.value[index].textContent,
       addClassAtIndex: (index, className) => {
-        menu_.items[index].classList.add(className);
+        menuItems.value[index].classList.add(className);
       },
       removeClassAtIndex: (index, className) =>
-        menu_.items[index].classList.remove(className),
+        menuItems.value[index].classList.remove(className),
 
-      isTypeaheadInProgress: () => menu_.typeaheadInProgress,
+      isTypeaheadInProgress: () => uiState.menu.typeaheadInProgress(),
       typeaheadMatchItem: (nextChar, startingIndex) =>
-        menu_?.typeaheadMatchItem(nextChar, startingIndex),
+        uiState.menu?.typeaheadMatchItem(nextChar, startingIndex),
 
       // common methods
       addClass: className =>
@@ -196,14 +189,14 @@ export default {
       },
       hasClass: className => Boolean(rootClasses.value[className]),
       setRippleCenter: normalizedX =>
-        lineRippleEl.value?.setRippleCenter(normalizedX),
-      activateBottomLine: () => lineRippleEl.value?.activate(),
-      deactivateBottomLine: () => lineRippleEl.value?.deactivate(),
+        uiState.lineRippleEl?.setRippleCenter(normalizedX),
+      activateBottomLine: () => uiState.lineRippleEl?.activate(),
+      deactivateBottomLine: () => uiState.lineRippleEl?.deactivate(),
 
       notifyChange: value => {
         const index = selectedIndex();
         emitCustomEvent(
-          root.value,
+          uiState.root,
           strings.CHANGE_EVENT,
           { value, index },
           true /* shouldBubble  */,
@@ -213,28 +206,19 @@ export default {
 
       // outline methods
       hasOutline: () => props.outlined,
-      notchOutline: labelWidth => outlineEl.value?.notch(labelWidth),
-      closeOutline: () => outlineEl.value?.closeNotch(),
+      notchOutline: labelWidth => uiState.outlineEl?.notch(labelWidth),
+      closeOutline: () => uiState.outlineEl?.closeNotch(),
 
       // label methods
       hasLabel: () => !!props.label,
       floatLabel: shouldFloat =>
-        (labelEl.value || outlineEl.value).float(shouldFloat),
-      getLabelWidth: () => labelEl.value?.getWidth(),
-      setLabelRequired: isRequired => labelEl.value?.setRequired(isRequired),
-    };
-
-    const menuSetup_ = () => {
-      menuElement_ = root.value.querySelector(
-        MDCSelectFoundation.strings.MENU_SELECTOR,
-      );
-      if (menuElement_) {
-        menu_ = menuElement_.__vue__;
-      }
+        (uiState.labelEl || uiState.outlineEl).float(shouldFloat),
+      getLabelWidth: () => uiState.labelEl?.getWidth(),
+      setLabelRequired: isRequired => uiState.labelEl?.setRequired(isRequired),
     };
 
     const refreshIndex = () => {
-      const items = menu_.items.map(
+      const items = menuItems.value.map(
         el => el.getAttribute(strings.VALUE_ATTR) || '',
       );
 
@@ -257,27 +241,10 @@ export default {
     );
 
     onMounted(() => {
-      menuSetup_();
-
       foundation = new MDCSelectFoundation(adapter, {
-        helperText: helperTextEl.value?.foundation,
-        leadingIcon: leadingIconEl.value?.foundation,
+        helperText: uiState.helperTextEl?.foundation,
+        leadingIcon: uiState.leadingIconEl?.foundation,
       });
-
-      if (menu_) {
-        menu_.listen(
-          MDCMenuSurfaceFoundation.strings.CLOSED_EVENT,
-          handleMenuClosed,
-        );
-        menu_.listen(
-          MDCMenuSurfaceFoundation.strings.OPENED_EVENT,
-          handleMenuOpened,
-        );
-        menu_.listen(
-          MDCMenuFoundation.strings.SELECTED_EVENT,
-          handleMenuItemAction,
-        );
-      }
 
       foundation = new MDCSelectFoundation(adapter);
 
@@ -285,50 +252,22 @@ export default {
 
       // initial sync with DOM
       refreshIndex();
+
+      // do we need a slotObserver here?
       // this.slotObserver = new MutationObserver(() => this.refreshIndex());
       // this.slotObserver.observe(this.$refs.native_control, {
       //   childList: true,
       //   subtree: true,
       // });
-
-      // fixme
-      // if (!props.outlined) {
-      //   this.ripple = new RippleBase(this);
-      //   this.ripple.init();
-      // }
     });
 
     onBeforeUnmount(() => {
-      if (menu_) {
-        menu_.unlisten(
-          MDCMenuSurfaceFoundation.strings.SELECTED_EVENT,
-          handleMenuItemAction,
-        );
-
-        menu_.unlisten(
-          MDCMenuSurfaceFoundation.strings.OPENED_EVENT,
-          handleMenuOpened,
-        );
-
-        menu_.unlisten(
-          MDCMenuSurfaceFoundation.strings.CLOSED_EVENT,
-          handleMenuClosed,
-        );
-      }
-
       foundation.destroy();
     });
 
     return {
       ...toRefs(uiState),
-      root,
       anchorEl,
-      helperTextEl,
-      leadingIconEl,
-      lineRippleEl,
-      outlineEl,
-      labelEl,
-
       rootClasses,
       handleBlur,
       handleFocus,
@@ -340,7 +279,8 @@ export default {
       rippleClasses,
       rippleStyles,
       selectedTextAttrs,
-      selectAriaControls,
+      handleMenuItemAction,
+      refreshIndex,
     };
   },
 
