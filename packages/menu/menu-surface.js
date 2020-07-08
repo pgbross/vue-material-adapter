@@ -29,7 +29,6 @@ export default {
     const root = ref(null);
     const uiState = reactive({
       classes: {
-        'mdc-menu': 1,
         'mdc-menu-surface': 1,
       },
     });

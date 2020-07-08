@@ -3,6 +3,25 @@ import { MDCMenuFoundation } from '@material/menu/foundation';
 import { emitCustomEvent } from '~/base/index.js';
 import { closest } from '@material/dom/ponyfill';
 
+import {
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  ref,
+  toRefs,
+  watch,
+  computed,
+} from '@vue/composition-api';
+
+const { cssClasses, strings } = MDCMenuFoundation;
+
+const DefaultFocusState_ = {
+  NONE: 0,
+  LIST_ROOT: 1,
+  FIRST_ITEM: 2,
+  LAST_ITEM: 3,
+};
+
 export default {
   name: 'mcw-menu',
   model: {
@@ -11,177 +30,245 @@ export default {
   },
   props: {
     open: [Boolean, Object],
-    'quick-open': Boolean,
-    'anchor-corner': [String, Number],
-    'anchor-margin': Object,
+    quickOpen: Boolean,
+    anchorCorner: [String, Number],
+    anchorMargin: Object,
+    fixed: Boolean,
+    absolutePosition: Array,
+    typeAhead: Boolean,
+    singleSelection: Boolean,
+    defaultFocusState: { type: String, default: () => 'LIST_ROOT' },
   },
-  data() {
-    return {
+
+  setup(props, { emit }) {
+    const menuSurface = ref(null);
+    const list = ref(null);
+
+    const uiState = reactive({
       classes: {},
       styles: {},
       menuOpen: false,
       myWrapFocus: true,
+    });
+
+    let foundation;
+    let rootEl;
+
+    const items = computed(() => list.value.listElements ?? []);
+
+    const surfaceOpen = computed({
+      get() {
+        return uiState.menuOpen;
+      },
+      set(value) {
+        uiState.menuOpen = value;
+      },
+    });
+
+    const wrapFocus = computed({
+      get() {
+        return uiState.myWrapFocus;
+      },
+      set(nv) {
+        uiState.myWrapFocus = nv;
+      },
+    });
+
+    const selectedIndex = computed(() => list.value?.selIndex.value);
+
+    const layout = () => list.value?.layout();
+
+    const handleAction = index => {
+      foundation.handleItemAction(items.value[index]);
     };
-  },
-  watch: {
-    open(nv) {
-      this.menuOpen = nv;
-    },
-  },
-  mounted() {
-    this._previousFocus = undefined;
-    const { cssClasses, strings } = MDCMenuFoundation;
+
+    const handleKeydown = evt => foundation.handleKeydown(evt);
+
+    const handleMenuSurfaceOpened = () => foundation.handleMenuSurfaceOpened();
+
+    const onChange = item => {
+      uiState.menuOpen = item;
+      emit('change', item);
+    };
+
+    const listen = (evtType, handler, options) => {
+      menuSurface.value.addEventListener(evtType, handler, options);
+    };
+    const unlisten = (evtType, handler, options) => {
+      menuSurface.value.removeEventListener(evtType, handler, options);
+    };
+
+    const setDefaultFocusState = focusState => {
+      if (typeof focusState == 'string') {
+        focusState = DefaultFocusState_[focusState];
+      }
+      foundation.setDefaultFocusState(focusState);
+    };
+    const setAnchorCorner = corner => {
+      menuSurface.value.foundation.setAnchorCorner(corner);
+    };
+    const setAnchorElement = element => {
+      menuSurface.value.setMenuSurfaceAnchorElement(element);
+    };
+    const setSelectedIndex = index =>
+      list.value && (list.value.selIndex.value = index);
+
+    const setAnchorMargin = margin => {
+      menuSurface.value.foundation.setAnchorMargin(margin);
+    };
+    const getOptionByIndex = index => {
+      const itms = items.value;
+
+      if (index < itms.length) {
+        return itms[index];
+      }
+      return null;
+    };
+
+    const getPrimaryTextAtIndex = index => {
+      const item = getOptionByIndex(index);
+      if (item && list.value) {
+        return list.valie.getPrimaryText(item) || '';
+      }
+      return '';
+    };
+
+    const setFixedPosition = isFixed => {
+      menuSurface.value.foundation.setFixedPosition(isFixed);
+    };
+
+    const hoistMenuToBody = () => {
+      menuSurface.value.foundation.hoistMenuToBody();
+    };
+
+    const setIsHoisted = isHoisted => {
+      menuSurface.value.foundation.setIsHoisted(isHoisted);
+    };
+
+    const setAbsolutePosition = (x, y) => {
+      menuSurface.value.foundation.setAbsolutePosition(x, y);
+    };
 
     const adapter = {
       addClassToElementAtIndex: (index, className) => {
-        const list = this.items;
+        const list = items.value;
         list[index].classList.add(className);
       },
       removeClassFromElementAtIndex: (index, className) => {
-        const list = this.items;
+        const list = items.value;
         list[index].classList.remove(className);
       },
       addAttributeToElementAtIndex: (index, attr, value) => {
-        const list = this.items;
+        const list = items.value;
         list[index].setAttribute(attr, value);
       },
       removeAttributeFromElementAtIndex: (index, attr) => {
-        const list = this.items;
+        const list = items.value;
         list[index].removeAttribute(attr);
       },
       elementContainsClass: (element, className) =>
         element.classList.contains(className),
       closeSurface: skipRestoreFocus => {
-        this.$refs.menuSurface_.close(skipRestoreFocus);
-        this.$emit('change', false);
+        menuSurface.value.close(skipRestoreFocus);
+        emit('change', false);
       },
 
       getElementIndex: element => {
-        return this.items.indexOf(element);
+        return items.value.indexOf(element);
+      },
+      notifySelected: evtData => {
+        emitCustomEvent(rootEl, strings.SELECTED_EVENT, {
+          index: evtData.index,
+          item: items.value[evtData.index],
+        });
+
+        emit('select', {
+          index: evtData.index,
+          item: items.value[evtData.index],
+        });
       },
 
+      getMenuItemCount: () => items.value.length,
+
+      focusItemAtIndex: index => items.value[index].focus(),
+      focusListRoot: () =>
+        menuSurface.value.querySelector(strings.LIST_SELECTOR).focus(),
+
       isSelectableItemAtIndex: index =>
-        !!closest(this.items[index], `.${cssClasses.MENU_SELECTION_GROUP}`),
+        !!closest(items.value[index], `.${cssClasses.MENU_SELECTION_GROUP}`),
       getSelectedSiblingOfItemAtIndex: index => {
         const selectionGroupEl = closest(
-          this.items[index],
+          items.value[index],
           `.${cssClasses.MENU_SELECTION_GROUP}`,
         );
         const selectedItemEl = selectionGroupEl.querySelector(
           `.${cssClasses.MENU_SELECTED_LIST_ITEM}`,
         );
-        return selectedItemEl ? this.items.indexOf(selectedItemEl) : -1;
+        return selectedItemEl ? items.value.indexOf(selectedItemEl) : -1;
       },
-      notifySelected: evtData => {
-        emitCustomEvent(this.$el, strings.SELECTED_EVENT, {
-          index: evtData.index,
-          item: this.items[evtData.index],
-        });
-
-        this.$emit('select', {
-          index: evtData.index,
-          item: this.items[evtData.index],
-        });
-      },
-      getMenuItemCount: () => this.items.length,
-      focusItemAtIndex: index => this.items[index].focus(),
-      focusListRoot: () =>
-        this.$el.querySelector(strings.LIST_SELECTOR).focus(),
     };
 
-    this.menuOpen = this.open;
-    this.foundation = new MDCMenuFoundation(adapter);
-
-    this.foundation.init();
-  },
-  beforeDestroy() {
-    this._previousFocus = null;
-    this.foundation.destroy();
-  },
-
-  computed: {
-    items() {
-      return this.$refs.list ? this.$refs.list.listElements : [];
-    },
-    surfaceOpen: {
-      get() {
-        return this.menuOpen;
+    watch(
+      () => props.open,
+      nv => {
+        uiState.menuOpen = nv;
       },
-      set(value) {
-        this.menuOpen = value;
-      },
-    },
-    wrapFocus: {
-      get() {
-        return this.myWrapFocus;
-      },
-      set(nv) {
-        this.myWrapFocus = nv;
-      },
-    },
-  },
+    );
 
-  methods: {
-    listen(evtType, handler, options) {
-      this.$el.addEventListener(evtType, handler, options);
-    },
-    unlisten(evtType, handler, options) {
-      this.$el.removeEventListener(evtType, handler, options);
-    },
-    handleAction({ detail: { index } }) {
-      this.foundation.handleItemAction(this.items[index]);
-    },
+    onMounted(() => {
+      rootEl = menuSurface.value.$el;
+      uiState.menuOpen = props.open;
+      foundation = new MDCMenuFoundation(adapter);
+      foundation.init();
 
-    handleKeydown(evt) {
-      this.foundation.handleKeydown(evt);
-    },
-    onChange(item) {
-      this.menuOpen = item;
-      this.$emit('change', item);
-    },
-    handleMenuSurfaceOpened() {
-      this.foundation.handleMenuSurfaceOpened();
-    },
-    setDefaultFocusState(focusState) {
-      this.foundation.setDefaultFocusState(focusState);
-    },
-    setAnchorCorner(corner) {
-      this.$refs.menuSurface_.foundation.setAnchorCorner(corner);
-    },
-    setAnchorElement(element) {
-      this.$refs.menuSurface_.setMenuSurfaceAnchorElement(element);
-    },
-    setSelectedIndex(index) {
-      this.foundation.setSelectedIndex(index);
-    },
-    setAnchorMargin(margin) {
-      this.$refs.menuSurface_.foundation.setAnchorMargin(margin);
-    },
-    getOptionByIndex(index) {
-      const items = this.items;
-
-      if (index < items.length) {
-        return items[index];
+      if (props.fixed) {
+        menuSurface.value.setFixedPosition(props.fixed);
       }
-      return null;
-    },
-    setFixedPosition(isFixed) {
-      this.$refs.menuSurface_.foundation.setFixedPosition(isFixed);
-    },
 
-    hoistMenuToBody() {
-      this.$refs.menuSurface_.foundation.hoistMenuToBody();
-    },
+      if (props.absolutePosition) {
+        const [x, y] = props.absolutePosition;
+        menuSurface.value.setAbsolutePosition(x, y);
+      }
+    });
 
-    setIsHoisted(isHoisted) {
-      this.$refs.menuSurface_.foundation.setIsHoisted(isHoisted);
-    },
+    onBeforeUnmount(() => {
+      foundation.destroy();
+    });
 
-    setAbsolutePosition(x, y) {
-      this.$refs.menuSurface_.foundation.setAbsolutePosition(x, y);
-    },
+    return {
+      ...toRefs(uiState),
+      menuSurface,
+      list,
+      handleAction,
+      handleKeydown,
+      onChange,
+      handleMenuSurfaceOpened,
+      setAbsolutePosition,
+      setIsHoisted,
+      hoistMenuToBody,
+      setFixedPosition,
+      getOptionByIndex,
+      setAnchorMargin,
+      setAnchorElement,
+      setAnchorCorner,
+      setSelectedIndex,
+      listen,
+      unlisten,
+      setDefaultFocusState,
+      wrapFocus,
+      surfaceOpen,
+      layout,
+      selectedIndex,
+      getPrimaryTextAtIndex,
+    };
   },
-  render(createElement) {
+
+  watchX: {},
+
+  computedX: {},
+
+  methodsX: {},
+  renderX(createElement) {
     const { $scopedSlots: scopedSlots } = this;
 
     return createElement(

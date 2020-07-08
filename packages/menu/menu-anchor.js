@@ -8,7 +8,6 @@ export default {
         'div',
         {
           class: {
-            'mdc-menu-anchor': 1,
             'mdc-menu-surface--anchor': 1,
           },
         },

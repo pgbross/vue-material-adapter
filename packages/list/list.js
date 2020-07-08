@@ -11,9 +11,6 @@ import {
 } from '@vue/composition-api';
 import { emitCustomEvent } from '~/base/index.js';
 
-const ARIA_ORIENTATION = 'aria-orientation';
-const VERTICAL = 'vertical';
-
 const { strings, cssClasses } = MDCListFoundation;
 
 export default {
@@ -32,7 +29,7 @@ export default {
     textualList: Boolean,
     selectedIndex: { type: [String, Number, Array] },
     tag: { type: String, default: 'ul' },
-    [ARIA_ORIENTATION]: { type: String, default: VERTICAL },
+    ariaOrientation: { type: String, default: 'vertical' },
     thumbnailList: Boolean,
     iconList: Boolean,
     videoList: Boolean,
@@ -55,8 +52,9 @@ export default {
       },
       rootAttrs: { 'aria-orientation': props.ariaOrientation },
       listn: 0,
-      selectedIndex: props.selectedIndex,
     });
+
+    const selectedIndex = ref(props.selectedIndex);
 
     let foundation;
     let slotObserver;
@@ -67,10 +65,10 @@ export default {
 
     const selIndex = computed({
       get() {
-        return uiState.selectedIndex;
+        return selectedIndex.value;
       },
       set(nv) {
-        uiState.selectedIndex = nv;
+        selectedIndex.value = nv;
         emit('change', nv);
       },
     });
@@ -103,7 +101,7 @@ export default {
     };
 
     const layout = () => {
-      foundation.setVerticalOrientation(props.ariaOrientation == VERTICAL);
+      foundation.setVerticalOrientation(props.ariaOrientation == 'vertical');
 
       // List items need to have at least tabindex=-1 to be focusable.
       [].slice
@@ -320,7 +318,7 @@ export default {
         if (Array.isArray(nv)) {
           foundation.setSelectedIndex(nv);
         } else if (props.selectedIndex != nv) {
-          uiState.selectedIndex = nv;
+          selectedIndex.value = nv;
           foundation.setSelectedIndex(nv);
         }
       },
@@ -333,7 +331,7 @@ export default {
 
     watch(
       () => props.ariaOrientation,
-      nv => foundation.setVerticalOrientation(nv === VERTICAL),
+      nv => foundation.setVerticalOrientation(nv === 'vertical'),
     );
 
     watch(
@@ -375,7 +373,7 @@ export default {
       initializeListType();
 
       foundation.setWrapFocus(props.wrapFocus);
-      foundation.setVerticalOrientation(props[ARIA_ORIENTATION] === VERTICAL);
+      foundation.setVerticalOrientation(props.ariaOrientation === 'vertical');
 
       if (props.typeAhead) {
         foundation.setHasTypeahead(props.typeAhead);
@@ -407,6 +405,7 @@ export default {
       layout,
       setEnabled,
       typeaheadMatchItem,
+      selIndex,
     };
   },
 };

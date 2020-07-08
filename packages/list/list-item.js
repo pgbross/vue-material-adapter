@@ -1,7 +1,7 @@
 import { computed } from '@vue/composition-api';
 
 export default {
-  props: { twoLine: String, disabled: Boolean },
+  props: { twoLine: String, disabled: Boolean, icon: String },
   setup(props, { slots }) {
     const isTwoLine = computed(() => {
       return props.twoLine || slots['secondary-text'];
