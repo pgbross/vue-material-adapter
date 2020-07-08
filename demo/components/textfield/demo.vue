@@ -38,15 +38,23 @@
           <div slot="helpText" class="mcw-text-field-helper-line">
             <p class="mcw-text-field-helper-text">Help text 2...</p>
           </div>
-          <i
+          <mcw-textfield-icon
+            slot="leadingIcon"
+            tabindex="0"
+            role="button"
+            @click="ondelete"
+            >delete</mcw-textfield-icon
+          >
+          <!-- <i
             slot="leadingIcon"
             role="button"
             tabindex="0"
             class="material-icons"
             @click="ondelete"
             >delete</i
-          >
-          <i slot="trailingIcon" class="material-icons">favorite</i>
+          > -->
+          <mcw-textfield-icon slot="trailingIcon">favorite</mcw-textfield-icon>
+          <!-- <i slot="trailingIcon" class="material-icons">favorite</i> -->
         </mcw-textfield>
         <mcw-textfield
           v-model="textField"
@@ -55,7 +63,7 @@
         >
           <i
             slot="leadingIcon"
-            class="fa fa-font-awesome"
+            class="fa fa-font-awesome mdc-text-field__icon mdc-text-field__icon--leading"
             role="button"
             tabindex="0"
           ></i>
@@ -71,16 +79,6 @@
             multiline
             rows="15"
             label="multiline"
-          />
-        </p>
-      </mcw-layout-cell>
-      <mcw-layout-cell span="12">
-        <p>
-          <mcw-textfield
-            v-model="textField"
-            :disabled="!enabled"
-            fullwidth
-            label="full width"
           />
         </p>
       </mcw-layout-cell>

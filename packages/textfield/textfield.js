@@ -1,15 +1,22 @@
 /* eslint-disable quote-props */
 import { applyPassive } from '@material/dom/events';
 import { MDCTextFieldFoundation } from '@material/textfield/foundation';
+import {
+  computed,
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  toRefs,
+  watch,
+} from '@vue/composition-api';
 import { DispatchFocusMixin, VMAUniqueIdMixin } from '~/base/index.js';
 import { mcwFloatingLabel } from '~/floating-label/index.js';
 import { mcwLineRipple } from '~/line-ripple/index.js';
 import { mcwNotchedOutline } from '~/notched-outline/index.js';
-import { RippleBase } from '~/ripple/index.js';
 import TextfieldHelperText from './textfield-helper-text.js';
-import TextfieldIcon from './textfield-icon.js';
-import { matches } from '@material/dom/ponyfill';
+import TextfieldIcon from './textfield-icon.vue';
 
+let uid_ = 0;
 export default {
   name: 'mcw-textfield',
   mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
@@ -42,7 +49,6 @@ export default {
     disabled: Boolean,
     required: Boolean,
     valid: { type: Boolean, default: undefined },
-    fullwidth: Boolean,
     multiline: Boolean,
     size: { type: [Number, String], default: 20 },
     minlength: { type: [Number, String], default: undefined },
@@ -54,21 +60,20 @@ export default {
     helptextPersistent: Boolean,
     helptextValidation: Boolean,
   },
-  data: function () {
-    return {
-      text: this.value,
+  setup(props, { emit, slots, listeners }) {
+    const uiState = reactive({
+      text: props.value,
       classes: {
         'mdc-textfield': true,
         'mdc-text-field': true,
         'mdc-text-field--upgraded': true,
-        'mdc-text-field--disabled': this.disabled,
-        'mdc-text-field--fullwidth': this.fullwidth,
-        'mdc-text-field--textarea': this.multiline,
-        'mdc-text-field--outlined': !this.fullwidth && this.outline,
-        'mdc-text-field--with-leading-icon': Boolean(this.$slots.leadingIcon),
-        'mdc-text-field--with-trailing-icon': Boolean(this.$slots.trailingIcon),
-        'mdc-text-field--filled': Boolean(!this.outline),
-        'mdc-text-field--no-label': !this.label,
+        'mdc-text-field--disabled': props.disabled,
+        'mdc-text-field--textarea': props.multiline,
+        'mdc-text-field--outlined': !props.fullwidth && props.outline,
+        'mdc-text-field--with-leading-icon': Boolean(slots.leadingIcon),
+        'mdc-text-field--with-trailing-icon': Boolean(slots.trailingIcon),
+        'mdc-text-field--filled': Boolean(!props.outline),
+        'mdc-text-field--no-label': !props.label,
       },
       styles: {},
       inputClasses: {
@@ -83,220 +88,218 @@ export default {
       lineRippleStyles: {},
       outlineClasses: {},
       notchStyles: {},
+      helpTextId: `mcw-help-${uid_++}`,
+      labelId: `mcw-label-${uid_}`,
+      root: null,
+      helpertext: null,
+      input: null,
+      labelEl: null,
+      lineRippleEl: null,
+    });
+
+    let foundation;
+
+    const inputAriaControls = computed(() => {
+      return props.help ? uiState.helpTextId : undefined;
+    });
+
+    const hasLabel = computed(() => {
+      return !props.outline && props.label;
+    });
+
+    const hasOutlineLabel = computed(() => {
+      return props.outline && props.label;
+    });
+
+    const hasLineRipple = computed(() => {
+      return !props.outline && !props.multiline;
+    });
+
+    const hasHelptext = computed(() => {
+      return slots.helpText || props.helptext;
+    });
+
+    const updateValue = value => {
+      emit('model', value);
+    };
+
+    const inputListeners = {
+      ...listeners,
+      input: evt => updateValue(evt.target.value),
+    };
+
+    const focus = () => uiState.input?.focus();
+
+    const blur = () => uiState.input?.blur();
+
+    const adapter = {
+      addClass: className =>
+        (uiState.classes = { ...uiState.classes, [className]: true }),
+      removeClass: className => {
+        // eslint-disable-next-line no-unused-vars
+        const { [className]: removed, ...rest } = uiState.classes;
+        uiState.classes = rest;
+      },
+      hasClass: className => Boolean(uiState.classes[className]),
+      registerTextFieldInteractionHandler: (evtType, handler) => {
+        uiState.root.addEventListener(evtType, handler);
+      },
+      deregisterTextFieldInteractionHandler: (evtType, handler) => {
+        uiState.root.removeEventListener(evtType, handler);
+      },
+      isFocused: () => {
+        return document.activeElement === uiState.input;
+      },
+
+      registerValidationAttributeChangeHandler: handler => {
+        const getAttributesList = mutationsList =>
+          mutationsList.map(mutation => mutation.attributeName);
+        const observer = new MutationObserver(mutationsList =>
+          handler(getAttributesList(mutationsList)),
+        );
+        const targetNode = uiState.input;
+        const config = { attributes: true };
+        observer.observe(targetNode, config);
+        return observer;
+      },
+      deregisterValidationAttributeChangeHandler: observer => {
+        observer.disconnect();
+      },
+      // input adapter methods
+      registerInputInteractionHandler: (evtType, handler) => {
+        uiState.input.addEventListener(evtType, handler, applyPassive());
+      },
+      deregisterInputInteractionHandler: (evtType, handler) => {
+        uiState.input.removeEventListener(evtType, handler, applyPassive());
+      },
+      getNativeInput: () => {
+        return uiState.input;
+      },
+
+      // label adapter methods
+
+      shakeLabel: shouldShake => {
+        uiState.labelEl?.shake(shouldShake);
+      },
+      floatLabel: shouldFloat => {
+        uiState.labelEl?.float(shouldFloat);
+      },
+      hasLabel: () => {
+        return !!uiState.labelEl || !!uiState.notchedEl;
+      },
+      getLabelWidth: () => {
+        return uiState.labelEl.getWidth();
+      },
+
+      // line ripple adapter methods
+      deactivateLineRipple: () => uiState.lineRippleEl?.deactivate(),
+      activateLineRipple: () => uiState.lineRippleEl?.activate(),
+
+      setLineRippleTransformOrigin: normalizedX =>
+        uiState.lineRippleEl?.setRippleCenter(normalizedX),
+
+      // outline adapter methods
+      hasOutline: () => !!props.outline,
+      notchOutline: (notchWidth, isRtl) =>
+        uiState.labelEl.notch(notchWidth, isRtl),
+      closeOutline: () => uiState.labelEl.closeNotch(),
+    };
+
+    watch(
+      () => props.disabled,
+      nv => foundation?.setDisabled(nv),
+    );
+
+    watch(
+      () => props.required,
+      nv => {
+        uiState.input && (uiState.input.required = nv);
+      },
+    );
+
+    watch(
+      () => props.valid,
+      nv => {
+        if (typeof nv !== 'undefined') {
+          foundation?.setValid(nv);
+        }
+      },
+    );
+
+    watch(
+      () => props.value,
+      nv => {
+        if (foundation) {
+          if (nv !== foundation.getValue()) {
+            foundation.setValue(nv);
+          }
+        }
+      },
+    );
+
+    onMounted(() => {
+      foundation = new MDCTextFieldFoundation(
+        { ...adapter },
+        {
+          helperText: uiState.helpertextEl
+            ? uiState.helpertextEl.foundation
+            : void 0,
+          leadingIcon: uiState.leadingIconEl
+            ? uiState.leadingIconEl.foundation
+            : void 0,
+          trailingIcon: uiState.trailingIconEl
+            ? uiState.trailingIconEl.foundation
+            : void 0,
+        },
+      );
+
+      foundation.init();
+
+      foundation.setValue(props.value);
+      foundation.setDisabled(props.disabled);
+      uiState.input && (uiState.input.required = props.required);
+      if (typeof props.valid !== 'undefined') {
+        foundation.setValid(props.valid);
+      }
+
+      const isTextArea = uiState.root.classList.contains(
+        'mdc-text-field--textarea',
+      );
+      const isOutlined = uiState.root.classList.contains(
+        'mdc-text-field--outlined',
+      );
+
+      if (!isTextArea && !isOutlined) {
+        //   this.ripple = new RippleBase(this, {
+        //     isSurfaceActive: () => matches(uiState.input, ':active'),
+        //     registerInteractionHandler: (evtType, handler) => {
+        //       uiState.input.addEventListener(evtType, handler, applyPassive());
+        //     },
+        //     deregisterInteractionHandler: (evtType, handler) =>
+        //       uiState.input.removeEventListener(evtType, handler, applyPassive()),
+        //   });
+        //   this.ripple.init();
+      }
+    });
+
+    onBeforeUnmount(() => {
+      foundation.destroy();
+    });
+
+    return {
+      ...toRefs(uiState),
+      inputAriaControls,
+      hasLabel,
+      hasOutlineLabel,
+      inputListeners,
+      hasLineRipple,
+      hasHelptext,
     };
   },
 
   components: { TextfieldHelperText, TextfieldIcon },
-  computed: {
-    inputPlaceHolder() {
-      return this.fullwidth ? this.label : undefined;
-    },
-    inputAriaControls() {
-      return this.help ? 'help-' + this.vma_uid_ : undefined;
-    },
-    hasLabel() {
-      return !this.fullwidth && !this.outline && this.label;
-    },
 
-    hasOutlineLabel() {
-      return this.hasOutline && this.label;
-    },
-    hasOutline() {
-      return !this.fullwidth && this.outline;
-    },
-    hasLineRipple() {
-      return !this.hasOutline && !this.multiline;
-    },
-
-    hasHelptext() {
-      const { $scopedSlots: scopedSlots } = this;
-
-      return (scopedSlots.helpText && scopedSlots.helpText()) || this.helptext;
-    },
-  },
-  watch: {
-    disabled() {
-      this.foundation && this.foundation.setDisabled(this.disabled);
-    },
-    required() {
-      this.$refs.input && (this.$refs.input.required = this.required);
-    },
-    valid() {
-      if (typeof this.valid !== 'undefined') {
-        this.foundation && this.foundation.setValid(this.valid);
-      }
-    },
-
-    value(value) {
-      if (this.foundation) {
-        if (value !== this.foundation.getValue()) {
-          this.foundation.setValue(value);
-        }
-      }
-    },
-  },
-  mounted() {
-    this.foundation = new MDCTextFieldFoundation(
-      Object.assign(
-        {
-          addClass: className => {
-            this.$set(this.classes, className, true);
-          },
-          removeClass: className => {
-            this.$delete(this.classes, className);
-          },
-          hasClass: className => {
-            this.$refs.root.classList.contains(className);
-          },
-          registerTextFieldInteractionHandler: (evtType, handler) => {
-            this.$refs.root.addEventListener(evtType, handler);
-          },
-          deregisterTextFieldInteractionHandler: (evtType, handler) => {
-            this.$refs.root.removeEventListener(evtType, handler);
-          },
-          isFocused: () => {
-            return document.activeElement === this.$refs.input;
-          },
-
-          registerValidationAttributeChangeHandler: handler => {
-            const getAttributesList = mutationsList =>
-              mutationsList.map(mutation => mutation.attributeName);
-            const observer = new MutationObserver(mutationsList =>
-              handler(getAttributesList(mutationsList)),
-            );
-            const targetNode = this.$refs.input;
-            const config = { attributes: true };
-            observer.observe(targetNode, config);
-            return observer;
-          },
-          deregisterValidationAttributeChangeHandler: observer => {
-            observer.disconnect();
-          },
-        },
-        this.getInputAdapterMethods(),
-        this.getLabelAdapterMethods(),
-        this.getLineRippleAdapterMethods(),
-        this.getOutlineAdapterMethods(),
-      ),
-      {
-        helperText: this.$refs.helpertextEl
-          ? this.$refs.helpertextEl.foundation
-          : void 0,
-        leadingIcon: this.$refs.leadingIconEl
-          ? this.$refs.leadingIconEl.foundation
-          : void 0,
-        trailingIcon: this.$refs.trailingIconEl
-          ? this.$refs.trailingIconEl.foundation
-          : void 0,
-      },
-    );
-    this.foundation.init();
-    this.foundation.setValue(this.value);
-    this.foundation.setDisabled(this.disabled);
-    this.$refs.input && (this.$refs.input.required = this.required);
-    if (typeof this.valid !== 'undefined') {
-      this.foundation.setValid(this.valid);
-    }
-
-    const isTextArea = this.$refs.root.classList.contains(
-      'mdc-text-field--textarea',
-    );
-    const isOutlined = this.$refs.root.classList.contains(
-      'mdc-text-field--outlined',
-    );
-
-    if (!isTextArea && !isOutlined) {
-      this.ripple = new RippleBase(this, {
-        isSurfaceActive: () => matches(this.$refs.input, ':active'),
-        registerInteractionHandler: (evtType, handler) => {
-          this.$refs.input.addEventListener(evtType, handler, applyPassive());
-        },
-        deregisterInteractionHandler: (evtType, handler) =>
-          this.$refs.input.removeEventListener(
-            evtType,
-            handler,
-            applyPassive(),
-          ),
-      });
-      this.ripple.init();
-    }
-  },
-  beforeDestroy() {
-    this.foundation && this.foundation.destroy();
-    this.ripple && this.ripple.destroy();
-  },
-  methods: {
-    getInputAdapterMethods() {
-      return {
-        registerInputInteractionHandler: (evtType, handler) => {
-          this.$refs.input.addEventListener(evtType, handler, applyPassive());
-        },
-        deregisterInputInteractionHandler: (evtType, handler) => {
-          this.$refs.input.removeEventListener(
-            evtType,
-            handler,
-            applyPassive(),
-          );
-        },
-        getNativeInput: () => {
-          return this.$refs.input;
-        },
-      };
-    },
-    getLabelAdapterMethods() {
-      return {
-        shakeLabel: shouldShake => {
-          this.$refs.labelEl && this.$refs.labelEl.shake(shouldShake);
-        },
-        floatLabel: shouldFloat => {
-          this.$refs.labelEl && this.$refs.labelEl.float(shouldFloat);
-        },
-        hasLabel: () => {
-          return !!this.$refs.labelEl || !!this.$refs.notchedEl;
-        },
-        getLabelWidth: () => {
-          return this.$refs.labelEl.getWidth();
-        },
-      };
-    },
-    getLineRippleAdapterMethods() {
-      return {
-        deactivateLineRipple: () => {
-          if (this.$refs.lineRippleEl) {
-            this.$refs.lineRippleEl.deactivate();
-          }
-        },
-        activateLineRipple: () => {
-          if (this.$refs.lineRippleEl) {
-            this.$refs.lineRippleEl.activate();
-          }
-        },
-        setLineRippleTransformOrigin: normalizedX => {
-          if (this.$refs.lineRippleEl) {
-            this.$refs.lineRippleEl.setRippleCenter(normalizedX);
-          }
-        },
-      };
-    },
-    getOutlineAdapterMethods() {
-      return {
-        hasOutline: () => !!this.hasOutline,
-        notchOutline: (notchWidth, isRtl) =>
-          this.$refs.labelEl.notch(notchWidth, isRtl),
-        closeOutline: () => this.$refs.labelEl.closeNotch(),
-      };
-    },
-    updateValue(value) {
-      this.$emit('model', value);
-    },
-    focus() {
-      this.$refs.input && this.$refs.input.focus();
-    },
-    blur() {
-      this.$refs.input && this.$refs.input.blur();
-    },
-  },
-  render(createElement) {
+  renderX(createElement) {
     const { $scopedSlots: scopedSlots } = this;
 
     const rootNodes = [];
@@ -304,13 +307,7 @@ export default {
     const leadingIconSlot =
       scopedSlots.leadingIcon && scopedSlots.leadingIcon();
     if (leadingIconSlot) {
-      rootNodes.push(
-        createElement(
-          'textfield-icon',
-          { ref: 'leadingIconEl', props: { leading: true } },
-          leadingIconSlot,
-        ),
-      );
+      rootNodes.push(leadingIconSlot);
     }
 
     if (this.multiline) {
@@ -383,13 +380,7 @@ export default {
       scopedSlots.trailingIcon && scopedSlots.trailingIcon();
 
     if (trailingIconSlot) {
-      rootNodes.push(
-        createElement(
-          'textfield-icon',
-          { ref: 'trailingIconEl', props: { leading: false } },
-          trailingIconSlot,
-        ),
-      );
+      rootNodes.push(trailingIconSlot);
     }
 
     if (this.hasOutline) {

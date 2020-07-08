@@ -1,8 +1,10 @@
 import { BasePlugin } from '~/base/index.js';
-import mcwTextfield from './textfield.js';
+import mcwTextfield from './textfield.vue';
+import mcwTextfieldIcon from './textfield-icon.vue';
 
-export { mcwTextfield };
+export { mcwTextfield, mcwTextfieldIcon };
 
 export default BasePlugin({
   mcwTextfield,
+  mcwTextfieldIcon,
 });

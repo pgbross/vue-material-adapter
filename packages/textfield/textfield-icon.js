@@ -1,9 +1,14 @@
 import { MDCTextFieldIconFoundation } from '@material/textfield/icon/foundation.js';
+import {
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  toRefs,
+} from '@vue/composition-api';
 import { emitCustomEvent } from '~/base/index.js';
 
 export default {
   name: 'textfield-icon',
-  functional: true,
   props: {
     disabled: Boolean,
     leading: {
@@ -13,46 +18,56 @@ export default {
       },
     },
   },
+  setup(props, { emit }) {
+    const uiState = reactive({
+      classes: {
+        'mdc-text-field__icon': 1,
+        [`mdc-text-field__icon--${props.leading ? 'leading' : 'trailing'}`]: 1,
+      },
+      rootAttrs: {},
+      textContent: null,
+      root: null,
+    });
 
-  mounted() {
-    this.foundation = new MDCTextFieldIconFoundation(
-      Object.assign({
-        getAttr: attr => this.$el.getAttribute(attr),
-        setAttr: (attr, value) => this.$el.setAttribute(attr, value),
-        removeAttr: attr => this.$el.removeAttribute(attr),
-        setContent: content => {
-          this.$el.textContent = content;
-        },
-        registerInteractionHandler: (evtType, handler) =>
-          this.$el.addEventListener(evtType, handler),
-        deregisterInteractionHandler: (evtType, handler) =>
-          this.$el.removeEventListener(evtType, handler),
-        notifyIconAction: () => {
-          this.$emit('click');
-          emitCustomEvent(
-            this.$el,
-            MDCTextFieldIconFoundation.strings.ICON_EVENT,
-            {},
-            true /* shouldBubble  */,
-          );
-        },
-      }),
-    );
+    let foundation;
 
-    this.foundation.init();
-  },
+    const adapter = {
+      getAttr: attr => uiState.rootAttrs[attr],
+      setAttr: (attr, value) =>
+        (uiState.rootAttrs = { ...uiState.rootAttrs, [attr]: value }),
+      removeAttr: attr => {
+        // eslint-disable-next-line no-unused-vars
+        const { [attr]: removed, ...rest } = uiState.rootAttrs;
+        uiState.rootAttrs = rest;
+      },
+      setContent: content => {
+        uiState.root.textContent = content;
+      },
+      registerInteractionHandler: (evtType, handler) =>
+        uiState.root.addEventListener(evtType, handler),
+      deregisterInteractionHandler: (evtType, handler) =>
+        uiState.root.removeEventListener(evtType, handler),
+      notifyIconAction: () => {
+        emit('click');
+        emitCustomEvent(
+          uiState.root,
+          MDCTextFieldIconFoundation.strings.ICON_EVENT,
+          {},
+          true /* shouldBubble  */,
+        );
+      },
+    };
 
-  beforeDestroy() {
-    this.foundation.destroy();
-  },
-  render(createElement, context) {
-    const node = context.children[0];
-    const {
-      props: { leading },
-    } = context;
-    node.data.class = `mdc-text-field__icon mdc-text-field__icon--${
-      leading ? 'leading' : 'trailing'
-    }`;
-    return node;
+    onMounted(() => {
+      foundation = new MDCTextFieldIconFoundation(adapter);
+
+      foundation.init();
+    });
+
+    onBeforeUnmount(() => {
+      foundation.destroy();
+    });
+
+    return { ...toRefs(uiState) };
   },
 };
