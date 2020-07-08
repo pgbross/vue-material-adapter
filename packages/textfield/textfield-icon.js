@@ -68,6 +68,6 @@ export default {
       foundation.destroy();
     });
 
-    return { ...toRefs(uiState) };
+    return { ...toRefs(uiState), foundation };
   },
 };

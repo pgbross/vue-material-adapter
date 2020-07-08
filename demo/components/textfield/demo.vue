@@ -8,6 +8,8 @@
           label="textfield"
           helptext="Help text 1x..."
           required
+          character-counter
+          maxlength="7"
         />
         <form>
           <mcw-textfield

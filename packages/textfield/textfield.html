@@ -3,6 +3,7 @@
     <span class="mdc-text-field__ripple" v-if="!outline"></span>
     <slot name="leadingIcon"></slot>
 
+    <span class="mdc-text-field__affix mdc-text-field__affix--prefix" v-if="prefix"></span>{{prefix}}</span>
     <input
       ref="input"
       :class="inputClasses"
@@ -15,6 +16,8 @@
       :aria-labelledby="labelId"
       v-on="inputListeners"
     />
+    <span class="mdc-text-field__affix mdc-text-field__affix--suffix" v-if="suffix"></span>{{suffix}}</span>
+
     <mcw-floating-label ref="labelEl" v-if="hasLabel" :id="labelId" :required="required"
       >{{label}}</mcw-floating-label
     >
@@ -26,6 +29,20 @@
   </label>
 
   <label ref="root" :class="classes" :style="styles" v-else>
+    <span class="mdc-text-field__resizer" v-if="resizer">
+      <textarea
+        ref="input"
+        :class="inputClasses"
+        v-bind="$attrs"
+        :minlength="minlength"
+        :maxlength="maxlength"
+        :aria-label="label"
+        :aria-controls="inputAriaControls"
+        :cols="cols"
+        :rows="rows"
+        v-on="inputListeners"
+      ></textarea>
+    </span>
     <textarea
       ref="input"
       :class="inputClasses"
@@ -37,8 +54,12 @@
       :cols="cols"
       :rows="rows"
       v-on="inputListeners"
+      v-else
     ></textarea>
+    <mcw-line-ripple ref="lineRippleEl" v-if="hasLineRipple"></mcw-line-ripple>
+    <mcw-notched-outline ref="labelEl" v-if="outline">label</mcw-notched-outline>
   </label>
+  <mcw-character-counter ref="characterCounterEl" v-if="characterCounter"></mcw-character-counter>
 
   <textfield-helper-text
     ref="helpertext"

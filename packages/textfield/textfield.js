@@ -59,6 +59,10 @@ export default {
     helptext: String,
     helptextPersistent: Boolean,
     helptextValidation: Boolean,
+    resizer: { type: Boolean, default: () => true },
+    prefix: String,
+    suffix: String,
+    characterCounter: Boolean,
   },
   setup(props, { emit, slots, listeners }) {
     const uiState = reactive({
@@ -95,6 +99,10 @@ export default {
       input: null,
       labelEl: null,
       lineRippleEl: null,
+      characterCounterEl: null,
+      leadingIconEl: null,
+      trailingIconEl: null,
+      helpertextEl: null,
     });
 
     let foundation;
@@ -241,6 +249,9 @@ export default {
       foundation = new MDCTextFieldFoundation(
         { ...adapter },
         {
+          characterCounter: uiState.characterCounterEl
+            ? uiState.characterCounterEl.foundation
+            : void 0,
           helperText: uiState.helpertextEl
             ? uiState.helpertextEl.foundation
             : void 0,
