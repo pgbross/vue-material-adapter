@@ -1,5 +1,5 @@
 import { BasePlugin } from '~/base/index.js';
-import mcwTopAppBar from './top-app-bar.js';
+import mcwTopAppBar from './top-app-bar.vue';
 import mcwFixedAdjust from './fixed-adjust.js';
 import mcwTopAppBarIcon from './top-app-bar-icon.js';
 import mcwTopAppBarRow from './top-app-bar-row.js';

@@ -1,3 +1,5 @@
+import { h } from '@vue/composition-api';
+
 export default {
   name: 'mcw-top-app-bar-section',
   props: {
@@ -14,21 +16,15 @@ export default {
       },
     },
   },
-  functional: true,
+  setup(props, { listeners, slots }) {
+    const classes = ['mdc-top-app-bar__section'];
 
-  render(
-    createElement,
-    { props: { tag, align }, scopedSlots, data: { attrs, staticClass } },
-  ) {
-    const classes = ['mdc-top-app-bar__section', staticClass];
+    props.align == 'start' &&
+      classes.push('mdc-top-app-bar__section--align-start');
+    props.align == 'end' && classes.push('mdc-top-app-bar__section--align-end');
 
-    align == 'start' && classes.push('mdc-top-app-bar__section--align-start');
-    align == 'end' && classes.push('mdc-top-app-bar__section--align-end');
-
-    return createElement(
-      tag,
-      { class: classes, attrs },
-      scopedSlots.default?.(),
-    );
+    return () => {
+      return h(props.tag, { class: classes }, slots.default?.());
+    };
   },
 };

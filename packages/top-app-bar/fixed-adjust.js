@@ -1,6 +1,7 @@
+import { h } from '@vue/composition-api';
+
 export default {
   name: 'mcw-fixed-adjust',
-  functional: true,
   props: {
     tag: { type: String, default: 'main' },
     dense: Boolean,
@@ -8,34 +9,28 @@ export default {
     prominent: Boolean,
   },
 
-  render(
-    createElement,
-    {
-      props: { short, dense, prominent, tag },
-      scopedSlots,
-      data: { attrs, staticStyle, staticClass },
-    },
-  ) {
-    const base = 'mdc-top-app-bar';
-    const suffix = '-fixed-adjust';
+  setup(props, { listeners, slots }) {
+    return () => {
+      const base = 'mdc-top-app-bar';
+      const suffix = '-fixed-adjust';
 
-    return createElement(
-      tag,
-      {
-        class: [
-          {
-            [base + '--short' + suffix]: short,
-            [base + '--dense' + suffix]: dense && !prominent,
-            [base + '--dense-prominent' + suffix]: dense && prominent,
-            [base + '--prominent' + suffix]: !dense && prominent,
-            [base + '-' + suffix]: !short && !dense && !prominent,
-          },
-          staticClass,
-        ],
-        style: staticStyle,
-        attrs,
-      },
-      scopedSlots.default?.(),
-    );
+      return h(
+        props.tag,
+        {
+          class: [
+            {
+              [base + '--short' + suffix]: props.short,
+              [base + '--dense' + suffix]: props.dense && !props.prominent,
+              [base + '--dense-prominent' + suffix]:
+                props.dense && props.prominent,
+              [base + '--prominent' + suffix]: !props.dense && props.prominent,
+              [base + '-' + suffix]:
+                !props.short && !props.dense && !props.prominent,
+            },
+          ],
+        },
+        slots.default?.(),
+      );
+    };
   },
 };

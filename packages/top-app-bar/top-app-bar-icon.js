@@ -1,29 +1,23 @@
+import { h } from '@vue/composition-api';
+
 export default {
   name: 'mcw-top-app-bar-icon',
   props: { actionItem: Boolean },
-
-  render(createElement) {
-    const {
-      $attrs: attrs,
-      $scopedSlots: scopedSlots,
-      actionItem,
-      $listeners: listeners,
-    } = this;
-
-    return createElement(
-      'button',
-      {
-        class: {
-          'mdc-icon-button': 1,
-          'material-icons': 1,
-          'mdc-top-app-bar__action-item': actionItem,
-          'mdc-top-app-bar__navigation-icon': !actionItem,
+  setup(props, { listeners, slots }) {
+    return () => {
+      return h(
+        'button',
+        {
+          class: {
+            'mdc-icon-button': 1,
+            'material-icons': 1,
+            'mdc-top-app-bar__action-item': props.actionItem,
+            'mdc-top-app-bar__navigation-icon': !props.actionItem,
+          },
+          on: listeners,
         },
-
-        attrs,
-        on: { ...listeners },
-      },
-      scopedSlots.default?.(),
-    );
+        slots.default?.(),
+      );
+    };
   },
 };
