@@ -34,6 +34,7 @@ export default {
     label: String,
     outlined: Boolean,
     required: Boolean,
+    menuFullwidth: { type: Boolean, default: () => true },
   },
   mixins: [VMAUniqueIdMixin],
 
@@ -47,7 +48,7 @@ export default {
       selTextAttrs: {},
       selectAnchorAttrs: {},
       helpId: `help-mcw-select-${uid_++}`,
-      menuClasses: {},
+      menuClasses: { 'mdc-menu-surface--fullwidth': props.menuFullwidth },
       root: null,
       helperTextEl: null,
       leadingIconEl: null,
@@ -82,6 +83,7 @@ export default {
         'mdc-select--with-leading-icon': props.leadingIcon,
         'mdc-select--disabled': props.disabled,
         'mdc-select--no-label': !props.label,
+
         ...uiState.classes,
       };
     });

@@ -5,34 +5,28 @@
   :value="selectedType"
   label="Food"
   helptext="Pick a food group"
+  leading-icon="restaurant_menu"
   @change="onTypeChanged"
 >
-  <mcw-menu class="mdc-select__menu">
-    <li
-      v-for="type in types"
-      :key="type"
-      class="mdc-list-item"
-      role="menuitem"
-      :data-value="type"
-    >
-      <span class="mdc-list-item__text">{{ type }}</span>
-    </li>
-  </mcw-menu>
+  <mcw-list-item
+    v-for="type in types"
+    :key="type"
+    :data-value="type"
+    role="option"
+    icon
+    >{{ type }}</mcw-list-item
+  >
 </mcw-select>
 
 <br />
 <mcw-select v-if="selectedType" v-model="selectedValue" outlined label="Kind">
-  <mcw-menu class="mdc-select__menu">
-    <li
-      v-for="option of options"
-      :key="option"
-      :data-value="option.toLowerCase()"
-      class="mdc-list-item"
-      role="menuitem"
-    >
-      <span class="mdc-list-item__text">{{ option }}</span>
-    </li>
-  </mcw-menu>
+  <mcw-list-item
+    v-for="option of options"
+    :key="option"
+    :data-value="option.toLowerCase()"
+    role="option"
+    >{{ option }}</mcw-list-item
+  >
 </mcw-select>
 <span>Selected: {{ selected }}</span>
 ```
@@ -71,9 +65,11 @@ var vm = new Vue({
 };
 ```
 
-### mcw-select
+### `mcw-select`
 
-| props                | Type    | Default | Description                     |
+#### Props
+
+| prop                 | Type    | Default | Description                     |
 | -------------------- | ------- | ------- | ------------------------------- |
 | `label`              | String  |         | the selection label             |
 | `value`              | String  |         | the v-model                     |
@@ -85,6 +81,7 @@ var vm = new Vue({
 | `disabled`           | Boolean | false   | Disables control                |
 | `label`              | String  |         | Optional field label            |
 | `outlined`           | Boolean | false   | Use outline variant             |
+| `menu-fullwidth`     | Boolean | true    | Menu is full width              |
 
 | event              | Description                                         |
 | ------------------ | --------------------------------------------------- |

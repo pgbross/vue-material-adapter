@@ -10,6 +10,9 @@
       @focus="handleFocus"
       @blur="handleBlur"
       v-bind="selectAnchorAttrs"
+      role="button"
+      aria-haspopup="listbox"
+      :aria-required="required"
     >
       <select-icon
         ref="leadingIconEl"
@@ -51,6 +54,7 @@
       :class="menuClasses"
       @change="handleChange"
       @select="handleMenuItemAction"
+      role="listbox"
     >
       <slot></slot>
     </mcw-menu>

@@ -1,8 +1,8 @@
 <li :class="classes">
   <span class="mdc-list-item__ripple"></span>
 
-  <span class="mdc-list-item__graphic mdc-menu__selection-group-icon" v-if="icon">
-    <i class="material-icons">{{icon}}</i>
+  <span class="mdc-list-item__graphic" :class="groupClasses" v-if="needGraphic">
+    <slot name="graphic"><i class="material-icons" v-if="listIcon">{{listIcon}}</i></slot>
   </span>
 
   <span class="mdc-list-item__text" v-if="isTwoLine">

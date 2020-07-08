@@ -6,18 +6,17 @@
           :value="selectedType"
           label="Food"
           helptext="Pick a food group"
+          leading-icon="restaurant_menu"
           @change="onTypeChanged"
-          leading-icon="event"
         >
-          <li
+          <mcw-list-item
             v-for="type in types"
             :key="type"
-            class="mdc-list-item"
-            role="menuitem"
             :data-value="type"
+            role="option"
+            icon
+            >{{ type }}</mcw-list-item
           >
-            <span class="mdc-list-item__text">{{ type }}</span>
-          </li>
         </mcw-select>
 
         <br />
@@ -27,15 +26,13 @@
           outlined
           label="Kind"
         >
-          <li
+          <mcw-list-item
             v-for="option of options"
             :key="option"
             :data-value="option.toLowerCase()"
-            class="mdc-list-item"
-            role="menuitem"
+            role="option"
+            >{{ option }}</mcw-list-item
           >
-            <span class="mdc-list-item__text">{{ option }}</span>
-          </li>
         </mcw-select>
       </div>
     </div>

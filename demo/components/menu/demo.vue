@@ -16,8 +16,8 @@
       <mcw-menu v-model="openGroup" @select="onSelect">
         <li>
           <ul class="mdc-menu__selection-group">
-            <mcw-list-item icon="check">Single</mcw-list-item>
-            <mcw-list-item icon="check">1.15</mcw-list-item>
+            <mcw-list-item group-icon="check">Single</mcw-list-item>
+            <mcw-list-item group-icon="check">1.15</mcw-list-item>
           </ul>
         </li>
         <li class="mdc-list-divider" role="separator"></li>
