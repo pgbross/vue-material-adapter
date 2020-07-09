@@ -11,7 +11,7 @@ export default {
   name: 'mcw-floating-label',
 
   props: { required: { type: Boolean } },
-  setup(props, { slots }) {
+  setup(props) {
     const root = ref(null);
 
     const uiState = reactive({

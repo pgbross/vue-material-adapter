@@ -27,9 +27,8 @@ export default {
       rootAttrs: {},
       textContent: null,
       root: null,
+      foundation: {},
     });
-
-    let foundation;
 
     const adapter = {
       getAttr: attr => uiState.rootAttrs[attr],
@@ -48,7 +47,6 @@ export default {
       deregisterInteractionHandler: (evtType, handler) =>
         uiState.root.removeEventListener(evtType, handler),
       notifyIconAction: () => {
-        emit('click');
         emitCustomEvent(
           uiState.root,
           MDCTextFieldIconFoundation.strings.ICON_EVENT,
@@ -59,15 +57,15 @@ export default {
     };
 
     onMounted(() => {
-      foundation = new MDCTextFieldIconFoundation(adapter);
+      uiState.foundation = new MDCTextFieldIconFoundation(adapter);
 
-      foundation.init();
+      uiState.foundation.init();
     });
 
     onBeforeUnmount(() => {
-      foundation.destroy();
+      uiState.foundation.destroy();
     });
 
-    return { ...toRefs(uiState), foundation };
+    return { ...toRefs(uiState) };
   },
 };

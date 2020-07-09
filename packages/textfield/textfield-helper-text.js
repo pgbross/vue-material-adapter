@@ -1,30 +1,30 @@
 import { MDCTextFieldHelperTextFoundation } from '@material/textfield/helper-text/foundation';
 import {
-  h,
   onBeforeUnmount,
   onMounted,
   reactive,
+  toRefs,
   watch,
 } from '@vue/composition-api';
 
 export default {
-  name: 'textfield-helper-text',
+  name: 'mcw-textfield-helper-text',
   props: {
     persistent: Boolean,
     validation: Boolean,
     helptext: String,
   },
-  setup(props, { emit, slots }) {
+  setup(props) {
     const uiState = reactive({
       classes: {
         'mdc-text-field-helper-text': true,
         'mdc-text-field-helper-text--persistent': props.persistent,
         'mdc-text-field-helper-text--validation-msg': props.validation,
       },
-      rootAttrs: {},
+      rootAttrs: { 'aria-hidden': true },
+      helpertext: props.helptext,
+      foundation: {},
     });
-
-    let foundation;
 
     const adapter = {
       addClass: className =>
@@ -45,43 +45,28 @@ export default {
         uiState.rootAttrs = rest;
       },
 
-      setContent: (/* content */) => {
-        // help text get's updated from {{helptext}}
-        // cf. this.$el.textContent = content
-      },
+      setContent: content => (uiState.helpertext = content),
     };
 
     watch(
       () => props.persistent,
-      nv => foundation.setPersistent(nv),
+      nv => uiState.foundation.setPersistent(nv),
     );
 
     watch(
       () => props.validation,
-      nv => foundation.setValidation(nv),
+      nv => uiState.foundation.setValidation(nv),
     );
 
     onMounted(() => {
-      foundation = new MDCTextFieldHelperTextFoundation(adapter);
-
-      foundation.init();
+      uiState.foundation = new MDCTextFieldHelperTextFoundation(adapter);
+      uiState.foundation.init();
     });
 
     onBeforeUnmount(() => {
-      foundation.destroy();
+      uiState.foundation.destroy();
     });
 
-    return () => {
-      if (slots.default) {
-        return slots.default();
-      }
-      return h('div', { class: 'mdc-text-field-helper-line' }, [
-        h(
-          'div',
-          { class: uiState.classes, attrs: uiState.rootAttrs },
-          props.helptext,
-        ),
-      ]);
-    };
+    return { ...toRefs(uiState) };
   },
 };

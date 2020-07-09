@@ -1,45 +1,41 @@
 <template>
   <div class="mcw-demo mcw-demo--container">
     <mcw-layout-grid>
-      <mcw-layout-cell span="6">
+      <mcw-layout-cell span="4">
+        <h3 class="mdc-typography--subtitle1">Filled with character counter</h3>
         <mcw-textfield
           v-model="textField"
           :disabled="!enabled"
           label="textfield"
           helptext="Help text 1x..."
+          helptext-persistent
           required
           character-counter
           maxlength="7"
         />
+        <h3 class="mdc-typography--subtitle1">Password</h3>
         <form>
           <mcw-textfield
             v-model="password"
             type="password"
-            label="Password"
+            label="Enter a password"
             minlength="8"
             maxlength="10"
             autocomplete
+            helptext="password must be 8 to 10 characters."
           >
-            <div slot="helpText" class="mcw-text-field-helper-line">
-              <p
-                class="mcw-text-field-helper-text mcw-text-field-helper-text--persistent mcw-text-field-helper-text--validation-msg"
-              >
-                password must be 8 to 10 characters.
-              </p>
-            </div>
           </mcw-textfield>
         </form>
 
-        <p></p>
+        <h3 class="mdc-typography--subtitle1">Shaped Outlined</h3>
         <mcw-textfield
           v-model="textField"
           :disabled="!enabled"
-          label="outlined"
+          label="Standard"
           outline
+          helptext="Some other help here"
+          class="demo-text-field-outlined-shaped"
         >
-          <div slot="helpText" class="mcw-text-field-helper-line">
-            <p class="mcw-text-field-helper-text">Help text 2...</p>
-          </div>
           <mcw-textfield-icon
             slot="leadingIcon"
             tabindex="0"
@@ -47,42 +43,37 @@
             @click="ondelete"
             >delete</mcw-textfield-icon
           >
-          <!-- <i
-            slot="leadingIcon"
-            role="button"
-            tabindex="0"
-            class="material-icons"
-            @click="ondelete"
-            >delete</i
-          > -->
+
           <mcw-textfield-icon slot="trailingIcon">favorite</mcw-textfield-icon>
-          <!-- <i slot="trailingIcon" class="material-icons">favorite</i> -->
         </mcw-textfield>
+        <h3 class="mdc-typography--subtitle1">Fontawesome icon</h3>
+        <mcw-textfield v-model="textField" :disabled="!enabled" label="Custom">
+          <mcw-textfield-icon
+            slot="leadingIcon"
+            class="fa fa-font-awesome mdc-text-field__icon mdc-text-field__icon--leading"
+            tabindex="0"
+            role="button"
+            @click="ondelete"
+          ></mcw-textfield-icon>
+        </mcw-textfield>
+      </mcw-layout-cell>
+
+      <mcw-layout-cell span="2"> </mcw-layout-cell>
+      <mcw-layout-cell span="6">
+        <h3 class="mdc-typography--subtitle1">Text area with counter</h3>
         <mcw-textfield
           v-model="textField"
           :disabled="!enabled"
-          label="in a box"
-        >
-          <i
-            slot="leadingIcon"
-            class="fa fa-font-awesome mdc-text-field__icon mdc-text-field__icon--leading"
-            role="button"
-            tabindex="0"
-          ></i>
-        </mcw-textfield>
-
-        <mcw-textfield v-model="textField"></mcw-textfield>
-      </mcw-layout-cell>
-      <mcw-layout-cell span="6">
-        <p>
-          <mcw-textfield
-            v-model="textField"
-            :disabled="!enabled"
-            multiline
-            rows="15"
-            label="multiline"
-          />
-        </p>
+          multiline
+          outline
+          :resizer="true"
+          rows="15"
+          maxlength="200"
+          label="multiline"
+          helptext="Textarea help"
+          character-counter
+          character-counter-internal
+        />
       </mcw-layout-cell>
     </mcw-layout-grid>
   </div>
@@ -97,6 +88,7 @@ export default {
       password: '',
     };
   },
+
   methods: {
     ondelete() {
       console.log('ondelete');
@@ -105,6 +97,13 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+@use '@material/textfield/mixins' as textfield;
 @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+.demo-text-field-outlined-shaped label {
+  @include textfield.outline-shape-radius(50%);
+}
+.textfield-container .mdc-text-field {
+  width: 100%;
+}
 </style>

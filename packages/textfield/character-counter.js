@@ -4,15 +4,12 @@ import {
   onMounted,
   reactive,
   toRefs,
-  ref,
 } from '@vue/composition-api';
 
 export default {
   name: 'mcw-character-counter',
   setup() {
-    const uiState = reactive({ textContent: '' });
-
-    const foundation = ref({});
+    const uiState = reactive({ textContent: '', foundation: {} });
 
     const adapter = {
       setContent: content => {
@@ -21,15 +18,14 @@ export default {
     };
 
     onMounted(() => {
-      foundation.value = new MDCTextFieldCharacterCounterFoundation(adapter);
-
-      foundation.value.init();
+      uiState.foundation = new MDCTextFieldCharacterCounterFoundation(adapter);
+      uiState.foundation.init();
     });
 
     onBeforeUnmount(() => {
-      foundation.value.destroy();
+      uiState.foundation.destroy();
     });
 
-    return { ...toRefs(uiState), foundation };
+    return { ...toRefs(uiState) };
   },
 };

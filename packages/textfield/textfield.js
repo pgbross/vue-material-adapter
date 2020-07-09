@@ -6,15 +6,16 @@ import {
   onBeforeUnmount,
   onMounted,
   reactive,
+  toRef,
   toRefs,
   watch,
 } from '@vue/composition-api';
 import { DispatchFocusMixin, VMAUniqueIdMixin } from '~/base/index.js';
-import { mcwFloatingLabel } from '~/floating-label/index.js';
-import { mcwLineRipple } from '~/line-ripple/index.js';
-import { mcwNotchedOutline } from '~/notched-outline/index.js';
+import { useRipplePlugin } from '~/ripple/ripple-plugin';
 import TextfieldHelperText from './textfield-helper-text.js';
 import TextfieldIcon from './textfield-icon.vue';
+
+const { strings } = MDCTextFieldFoundation;
 
 let uid_ = 0;
 export default {
@@ -63,6 +64,7 @@ export default {
     prefix: String,
     suffix: String,
     characterCounter: Boolean,
+    characterCounterInternal: Boolean,
   },
   setup(props, { emit, slots, listeners }) {
     const uiState = reactive({
@@ -79,7 +81,6 @@ export default {
         'mdc-text-field--filled': Boolean(!props.outline),
         'mdc-text-field--no-label': !props.label,
       },
-      styles: {},
       inputClasses: {
         'mdc-text-field__input': true,
       },
@@ -95,17 +96,25 @@ export default {
       helpTextId: `mcw-help-${uid_++}`,
       labelId: `mcw-label-${uid_}`,
       root: null,
+      wrapper: null,
       helpertext: null,
       input: null,
       labelEl: null,
       lineRippleEl: null,
       characterCounterEl: null,
-      leadingIconEl: null,
-      trailingIconEl: null,
       helpertextEl: null,
     });
 
     let foundation;
+
+    let rippleClasses;
+    let rippleStyles;
+
+    if (!props.multiline && !props.outline) {
+      const { classes, styles } = useRipplePlugin(toRef(uiState, 'root'));
+      rippleClasses = classes;
+      rippleStyles = styles;
+    }
 
     const inputAriaControls = computed(() => {
       return props.help ? uiState.helpTextId : undefined;
@@ -120,25 +129,37 @@ export default {
     });
 
     const hasLineRipple = computed(() => {
-      return !props.outline && !props.multiline;
+      return !(props.outline || props.multiline);
     });
 
     const hasHelptext = computed(() => {
       return slots.helpText || props.helptext;
     });
 
-    const updateValue = value => {
-      emit('model', value);
-    };
+    const internalCharacterCounter = computed(
+      () => props.characterCounter && props.characterCounterInternal,
+    );
+    const helperCharacterCounter = computed(
+      () =>
+        props.characterCounter &&
+        !(props.multiline && props.characterCounterInternal),
+    );
+
+    const hasHelpline = computed(() => {
+      return props.helptext || helperCharacterCounter.value;
+    });
+
+    const rootClasses = computed(() => ({
+      ...rippleClasses,
+      ...uiState.classes,
+    }));
 
     const inputListeners = {
       ...listeners,
-      input: evt => updateValue(evt.target.value),
+      input: ({ target: { value } }) => emit('model', value),
     };
 
     const focus = () => uiState.input?.focus();
-
-    const blur = () => uiState.input?.blur();
 
     const adapter = {
       addClass: className =>
@@ -246,21 +267,20 @@ export default {
     );
 
     onMounted(() => {
+      const leadingIconEl = uiState.wrapper.querySelector(
+        strings.LEADING_ICON_SELECTOR,
+      );
+      const trailingIconEl = uiState.wrapper.querySelector(
+        strings.TRAILING_ICON_SELECTOR,
+      );
+
       foundation = new MDCTextFieldFoundation(
         { ...adapter },
         {
-          characterCounter: uiState.characterCounterEl
-            ? uiState.characterCounterEl.foundation
-            : void 0,
-          helperText: uiState.helpertextEl
-            ? uiState.helpertextEl.foundation
-            : void 0,
-          leadingIcon: uiState.leadingIconEl
-            ? uiState.leadingIconEl.foundation
-            : void 0,
-          trailingIcon: uiState.trailingIconEl
-            ? uiState.trailingIconEl.foundation
-            : void 0,
+          characterCounter: uiState.characterCounterEl?.foundation,
+          helperText: uiState.helpertext?.foundation,
+          leadingIcon: leadingIconEl?.__vue__.foundation,
+          trailingIcon: trailingIconEl?.__vue__.foundation,
         },
       );
 
@@ -271,25 +291,6 @@ export default {
       uiState.input && (uiState.input.required = props.required);
       if (typeof props.valid !== 'undefined') {
         foundation.setValid(props.valid);
-      }
-
-      const isTextArea = uiState.root.classList.contains(
-        'mdc-text-field--textarea',
-      );
-      const isOutlined = uiState.root.classList.contains(
-        'mdc-text-field--outlined',
-      );
-
-      if (!isTextArea && !isOutlined) {
-        //   this.ripple = new RippleBase(this, {
-        //     isSurfaceActive: () => matches(uiState.input, ':active'),
-        //     registerInteractionHandler: (evtType, handler) => {
-        //       uiState.input.addEventListener(evtType, handler, applyPassive());
-        //     },
-        //     deregisterInteractionHandler: (evtType, handler) =>
-        //       uiState.input.removeEventListener(evtType, handler, applyPassive()),
-        //   });
-        //   this.ripple.init();
       }
     });
 
@@ -305,154 +306,14 @@ export default {
       inputListeners,
       hasLineRipple,
       hasHelptext,
+      hasHelpline,
+      focus,
+      helperCharacterCounter,
+      internalCharacterCounter,
+      rootClasses,
+      rippleStyles,
     };
   },
 
   components: { TextfieldHelperText, TextfieldIcon },
-
-  renderX(createElement) {
-    const { $scopedSlots: scopedSlots } = this;
-
-    const rootNodes = [];
-
-    const leadingIconSlot =
-      scopedSlots.leadingIcon && scopedSlots.leadingIcon();
-    if (leadingIconSlot) {
-      rootNodes.push(leadingIconSlot);
-    }
-
-    if (this.multiline) {
-      rootNodes.push(
-        createElement('textarea', {
-          class: this.inputClasses,
-          attrs: {
-            ...this.$attrs,
-            id: this.vma_uid_,
-            minlength: this.minlength,
-            maxlength: this.maxlength,
-            placeholder: this.inputPlaceHolder,
-            'aria-label': this.inputPlaceHolder,
-            'aria-controls': this.inputAriaControls,
-            rows: this.rows,
-            cols: this.cols,
-          },
-          ref: 'input',
-          on: {
-            ...this.$listeners,
-            input: evt => this.updateValue(evt.target.value),
-          },
-        }),
-      );
-    } else {
-      rootNodes.push(
-        createElement('span', {
-          class: 'mdc-text-field__ripple',
-
-          ref: 'ripple',
-        }),
-      );
-      rootNodes.push(
-        createElement('input', {
-          class: this.inputClasses,
-          attrs: {
-            ...this.$attrs,
-            id: this.vma_uid_,
-            type: this.type,
-            minlength: this.minlength,
-            maxlength: this.maxlength,
-            placeholder: this.inputPlaceHolder,
-            'aria-label': this.inputPlaceHolder,
-            'aria-controls': this.inputAriaControls,
-            'aria-labelledby': `label-${this.vma_uid_}`,
-          },
-          ref: 'input',
-          on: {
-            ...this.$listeners,
-            input: evt => this.updateValue(evt.target.value),
-          },
-        }),
-      );
-    }
-
-    if (this.hasLabel) {
-      rootNodes.push(
-        createElement(
-          mcwFloatingLabel,
-          {
-            attrs: { id: `label-${this.vma_uid_}`, required: this.required },
-            ref: 'labelEl',
-          },
-          this.label,
-        ),
-      );
-    }
-
-    const trailingIconSlot =
-      scopedSlots.trailingIcon && scopedSlots.trailingIcon();
-
-    if (trailingIconSlot) {
-      rootNodes.push(trailingIconSlot);
-    }
-
-    if (this.hasOutline) {
-      rootNodes.push(
-        createElement(
-          mcwNotchedOutline,
-          {
-            ref: 'labelEl',
-          },
-          this.label,
-        ),
-      );
-    }
-
-    if (this.hasLineRipple) {
-      rootNodes.push(
-        createElement(mcwLineRipple, {
-          ref: 'lineRippleEl',
-        }),
-      );
-    }
-
-    const rootEl = createElement(
-      'label',
-      {
-        class: this.classes,
-        style: this.styles,
-        ref: 'root',
-      },
-      rootNodes,
-    );
-
-    const nodes = [rootEl];
-
-    const helpTextSlot = scopedSlots.helpText && scopedSlots.helpText();
-
-    if (this.hasHelptext) {
-      nodes.push(
-        createElement(
-          'textfield-helper-text',
-          {
-            attrs: {
-              id: `help${this.vma_uid_}`,
-              helptext: this.helptext,
-              persistent: this.helptextPersistent,
-              validation: this.helptextValidation,
-            },
-            ref: 'helpertextEl',
-          },
-          helpTextSlot,
-        ),
-      );
-    }
-
-    return createElement(
-      'div',
-      {
-        style: { width: this.fullwidth ? '100%' : void 0 },
-        attrs: { id: this.id },
-      },
-      nodes,
-    );
-  },
 };

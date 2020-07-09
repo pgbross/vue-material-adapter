@@ -8,6 +8,8 @@ import {
 } from '@vue/composition-api';
 import { mcwFloatingLabel } from '../floating-label/index.js';
 
+const { cssClasses } = MDCNotchedOutlineFoundation;
+
 export default {
   name: 'mcw-notched-outline',
   components: { mcwFloatingLabel },
@@ -21,11 +23,6 @@ export default {
     });
 
     let foundation;
-
-    const {
-      OUTLINE_UPGRADED,
-      NO_LABEL,
-    } = MDCNotchedOutlineFoundation.cssClasses;
 
     const adapter = {
       addClass: className =>
@@ -74,7 +71,9 @@ export default {
       foundation = new MDCNotchedOutlineFoundation(adapter);
       foundation.init();
 
-      const key = slots.default ? OUTLINE_UPGRADED : NO_LABEL;
+      const key = slots.default
+        ? cssClasses.OUTLINE_UPGRADED
+        : cssClasses.NO_LABEL;
 
       uiState.outlinedClasses = { ...uiState.outlinedClasses, [key]: true };
     });
