@@ -3,13 +3,14 @@ import { closest } from '@material/dom/ponyfill';
 import { MDCSnackbarFoundation } from '@material/snackbar/foundation';
 import {
   computed,
-  ref,
-  reactive,
-  toRefs,
-  onMounted,
   onBeforeUnmount,
+  onMounted,
+  reactive,
+  ref,
+  toRefs,
   watch,
 } from '@vue/composition-api';
+
 const { strings, numbers } = MDCSnackbarFoundation;
 
 export default {

@@ -1,5 +1,3 @@
-/* global CustomEvent */
-
 export function emitCustomEvent(el, evtType, evtData, shouldBubble = false) {
   let evt;
   if (typeof CustomEvent === 'function') {

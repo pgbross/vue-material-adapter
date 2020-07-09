@@ -1,12 +1,11 @@
 import { MDCLinearProgressFoundation } from '@material/linear-progress/foundation';
-
 import {
   onBeforeUnmount,
   onMounted,
   reactive,
   ref,
-  watch,
   toRefs,
+  watch,
 } from '@vue/composition-api';
 
 const progressPropType_ = {

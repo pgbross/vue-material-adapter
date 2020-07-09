@@ -2,17 +2,16 @@ import { MDCChipSetFoundation } from '@material/chips/chip-set/foundation';
 import { MDCChipFoundation } from '@material/chips/chip/foundation';
 import { announce } from '@material/dom/announce';
 import {
-  toRefs,
-  reactive,
-  provide,
-  onMounted,
-  onBeforeUnmount,
-  ref,
   computed,
+  onBeforeUnmount,
+  onMounted,
+  provide,
+  reactive,
+  ref,
+  toRefs,
 } from '@vue/composition-api';
 
 const { strings } = MDCChipFoundation;
-
 const { CHIP_SELECTOR } = MDCChipSetFoundation.strings;
 
 let idCounter = 0;

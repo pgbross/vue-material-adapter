@@ -1,17 +1,15 @@
-/* eslint-disable quote-props */
-import { MDCMenuFoundation } from '@material/menu/foundation';
-import { emitCustomEvent } from '~/base/index.js';
 import { closest } from '@material/dom/ponyfill';
-
+import { MDCMenuFoundation } from '@material/menu/foundation';
 import {
+  computed,
   onBeforeUnmount,
   onMounted,
   reactive,
   ref,
   toRefs,
   watch,
-  computed,
 } from '@vue/composition-api';
+import { emitCustomEvent } from '~/base/index.js';
 
 const { cssClasses, strings } = MDCMenuFoundation;
 

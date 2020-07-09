@@ -1,15 +1,15 @@
 import { MDCChipFoundation } from '@material/chips/chip/foundation';
-import { emitCustomEvent } from '~/base/index.js';
 import {
-  toRefs,
-  reactive,
-  onMounted,
-  onBeforeUnmount,
   computed,
-  ref,
   inject,
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  ref,
+  toRefs,
   watch,
 } from '@vue/composition-api';
+import { emitCustomEvent } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin';
 
 const { strings } = MDCChipFoundation;

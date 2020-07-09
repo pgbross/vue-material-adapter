@@ -1,15 +1,11 @@
 import { computed, ref } from '@vue/composition-api';
-import {
-  CustomButton,
-  customButtonProps,
-  useCutomButtonPlugin,
-} from '~/base/index.js';
+import { CustomButton } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/index.js';
 
 export default {
   name: 'mcw-button',
+  inheritAttrs: false,
   props: {
-    ...customButtonProps,
     raised: Boolean,
     unelevated: Boolean,
     outlined: Boolean,
@@ -21,7 +17,6 @@ export default {
     const root = ref(null);
 
     const { classes: rippleClasses, styles } = useRipplePlugin(root);
-    const { link } = useCutomButtonPlugin(props);
 
     const classes = computed(() => {
       return {
@@ -48,7 +43,6 @@ export default {
       root,
       haveIcon,
       haveTrailingIcon,
-      link,
     };
   },
 };

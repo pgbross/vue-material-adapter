@@ -1,18 +1,16 @@
 import { applyPassive } from '@material/dom/events';
 import { MDCFormFieldFoundation } from '@material/form-field/foundation';
 import { MDCRadioFoundation } from '@material/radio/foundation';
-import { DispatchFocusMixin, VMAUniqueIdMixin } from '~/base/index.js';
-
 import {
   computed,
-  ref,
-  reactive,
-  toRefs,
-  onMounted,
   onBeforeUnmount,
+  onMounted,
+  reactive,
+  ref,
+  toRefs,
   watch,
 } from '@vue/composition-api';
-
+import { DispatchFocusMixin, VMAUniqueIdMixin } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin';
 
 export default {

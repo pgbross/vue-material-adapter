@@ -6,8 +6,8 @@ import {
   onBeforeUnmount,
   onMounted,
   ref,
-  toRefs,
   shallowReactive,
+  toRefs,
 } from '@vue/composition-api';
 
 export class RippleElement extends MDCRippleFoundation {

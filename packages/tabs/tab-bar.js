@@ -1,6 +1,5 @@
 import { MDCTabBarFoundation } from '@material/tab-bar/foundation';
 import { MDCTabFoundation } from '@material/tab/foundation';
-
 import {
   computed,
   onBeforeUnmount,

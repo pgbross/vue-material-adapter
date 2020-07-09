@@ -1,11 +1,12 @@
 import { MDCSelectHelperTextFoundation } from '@material/select/helper-text/foundation.js';
 import {
   h,
-  reactive,
-  onMounted,
   onBeforeUnmount,
+  onMounted,
+  reactive,
   watch,
 } from '@vue/composition-api';
+
 export default {
   name: 'select-helper-text',
   props: {

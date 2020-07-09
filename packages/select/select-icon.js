@@ -1,10 +1,10 @@
 import { MDCSelectIconFoundation } from '@material/select/icon/foundation.js';
 import {
+  computed,
   onBeforeUnmount,
   onMounted,
   reactive,
   toRefs,
-  computed,
 } from '@vue/composition-api';
 import { emitCustomEvent } from '~/base/index.js';
 

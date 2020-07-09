@@ -9,11 +9,11 @@ import {
   watch,
 } from '@vue/composition-api';
 import { emitCustomEvent, VMAUniqueIdMixin } from '~/base/index.js';
+import { useRipplePlugin } from '~/ripple/ripple-plugin';
 import SelectHelperText from './select-helper-text.js';
 import SelectIcon from './select-icon.vue';
 
 const { strings } = MDCSelectFoundation;
-import { useRipplePlugin } from '~/ripple/ripple-plugin';
 
 let uid_ = 0;
 

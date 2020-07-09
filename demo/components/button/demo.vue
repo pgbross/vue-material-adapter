@@ -5,7 +5,9 @@
       style="min-height: 40px; padding-bottom: 0;"
     >
       <div ref="buttons" class="mcw-demo-button">
-        <mcw-button v-bind="buttonProps" @click="onClick">Button</mcw-button>
+        <mcw-button v-bind="buttonProps" wiffle @click="onClick"
+          >Button</mcw-button
+        >
         <mcw-button v-bind="buttonProps">
           <mcw-material-icon slot="icon" icon="add"></mcw-material-icon>Button
         </mcw-button>
@@ -84,7 +86,7 @@ export default {
   },
   methods: {
     onClick() {
-      console.log('onClick');
+      console.log('on-click');
     },
   },
 };

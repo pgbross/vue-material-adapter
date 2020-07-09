@@ -1,92 +1,52 @@
-import { computed } from '@vue/composition-api';
+import { h } from '@vue/composition-api';
 
 export const CustomButton = {
   name: 'custom-button',
-  functional: true,
-  props: {
-    link: Object,
-  },
-  render(
-    createElement,
-    { children, data, props: { link, tag }, parent: { $router, $root } },
-  ) {
-    let element;
+  props: { link: Object },
+  setup(props, { root: { $options, $router }, listeners, slots }) {
+    return () => {
+      let element;
 
-    if (link && $router) {
-      // router-link case
-      element = $root.$options.components['RouterLink'];
-      data.props = { tag, ...link };
-      data.attrs.role = 'button';
-      if (data.on.click) {
-        data.nativeOn = { click: data.on.click };
-      }
-    } else if (data.attrs && data.attrs.href) {
-      // href case
-      element = 'a';
-      data.attrs.role = 'button';
-    } else {
-      // button fallback
-      element = 'button';
-    }
+      // destructure the props in the render function so we use the current value
+      // if their value has changed since we were created
+      const { link = {} } = props;
+      const {
+        tag,
+        to,
+        exact,
+        append,
+        replace,
+        activeClass,
+        exactActiveClass,
+        ...rest
+      } = link;
 
-    return createElement(element, data, children);
-  },
-};
+      const data = { attrs: rest, on: listeners };
 
-export const CustomButtonMixin = {
-  props: {
-    href: String,
-    disabled: Boolean,
-    to: [String, Object],
-    exact: Boolean,
-    append: Boolean,
-    replace: Boolean,
-    activeClass: String,
-    exactActiveClass: String,
-  },
-  computed: {
-    link() {
-      return (
-        this.to && {
-          to: this.to,
-          exact: this.exact,
-          append: this.append,
-          replace: this.replace,
-          activeClass: this.activeClass,
-          exactActiveClass: this.exactActiveClass,
+      if (link.to && $router) {
+        element = $options.components['RouterLink'];
+
+        data.props = {
+          to,
+          tag,
+          replace,
+          append,
+          activeClass,
+          exactActiveClass,
+          exact,
+        };
+        data.attrs.role = 'button';
+        if (listeners.click) {
+          data.nativeOn = { click: listeners.click };
         }
-      );
-    },
-  },
-  components: {
-    CustomButton,
-  },
-};
-
-export const customButtonProps = {
-  href: String,
-  disabled: Boolean,
-  to: [String, Object],
-  exact: Boolean,
-  append: Boolean,
-  replace: Boolean,
-  activeClass: String,
-  exactActiveClass: String,
-};
-
-export function useCutomButtonPlugin(props) {
-  const link = computed(() => {
-    return (
-      props.to && {
-        to: props.to,
-        exact: props.exact,
-        append: props.append,
-        replace: props.replace,
-        activeClass: props.activeClass,
-        exactActiveClass: props.exactActiveClass,
+      } else if (link.href) {
+        element = 'a';
+        data.attrs.role = 'button';
+      } else {
+        element = tag ?? 'button';
       }
-    );
-  });
 
-  return { link };
-}
+      return h(element, data, slots.default?.());
+    };
+  },
+};

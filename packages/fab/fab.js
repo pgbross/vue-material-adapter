@@ -1,16 +1,11 @@
 import { computed, reactive, ref, toRefs, watch } from '@vue/composition-api';
+import { CustomButton } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin';
-
-import {
-  CustomButton,
-  customButtonProps,
-  useCutomButtonPlugin,
-} from '~/base/index.js';
 
 export default {
   name: 'mcw-fab',
+  inheritAttrs: false,
   props: {
-    ...customButtonProps,
     icon: String,
     mini: Boolean,
     exited: Boolean,
@@ -27,8 +22,6 @@ export default {
         'mdc-fab--exited': props.exited,
       },
     });
-
-    const { link } = useCutomButtonPlugin(props);
 
     const { classes: rippleClasses, styles } = useRipplePlugin(root);
     const classes = computed(() => {
@@ -56,6 +49,6 @@ export default {
       },
     );
 
-    return { ...toRefs(uiState), classes, root, styles, link, listeners };
+    return { ...toRefs(uiState), classes, root, styles, listeners };
   },
 };

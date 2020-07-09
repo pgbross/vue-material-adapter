@@ -1,14 +1,14 @@
 import { MDCSwitchFoundation } from '@material/switch/foundation';
-import { DispatchFocusMixin, VMAUniqueIdMixin } from '~/base/index.js';
 import {
   computed,
-  ref,
-  reactive,
-  toRefs,
-  onMounted,
   onBeforeUnmount,
+  onMounted,
+  reactive,
+  ref,
+  toRefs,
   watch,
 } from '@vue/composition-api';
+import { DispatchFocusMixin, VMAUniqueIdMixin } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin';
 
 export default {

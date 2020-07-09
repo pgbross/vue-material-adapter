@@ -1,22 +1,21 @@
 /* eslint-disable quote-props */
 import MDCTabFoundation from '@material/tab/foundation';
 import {
+  computed,
+  inject,
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  ref,
+  toRefs,
+} from '@vue/composition-api';
+import {
   CustomLinkMixin,
   DispatchEventMixin,
   emitCustomEvent,
   VMAUniqueIdMixin,
 } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin';
-
-import {
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  ref,
-  toRefs,
-  inject,
-  computed,
-} from '@vue/composition-api';
 
 let tabId_ = 0;
 

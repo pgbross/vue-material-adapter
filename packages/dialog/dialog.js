@@ -14,7 +14,6 @@ import { VMAUniqueIdMixin } from '~/base/index.js';
 import { mcwButton } from '~/button/index.js';
 
 const { cssClasses, strings } = MDCDialogFoundation;
-
 const LAYOUT_EVENTS = ['resize', 'orientationchange'];
 
 export default {

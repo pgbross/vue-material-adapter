@@ -1,6 +1,6 @@
 import { MDCFadingTabIndicatorFoundation } from '@material/tab-indicator/fading-foundation';
-import { MDCSlidingTabIndicatorFoundation } from '@material/tab-indicator/sliding-foundation';
 import { MDCTabIndicatorFoundation } from '@material/tab-indicator/foundation';
+import { MDCSlidingTabIndicatorFoundation } from '@material/tab-indicator/sliding-foundation';
 import {
   onBeforeUnmount,
   onMounted,

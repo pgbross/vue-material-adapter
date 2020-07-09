@@ -1,4 +1,3 @@
-/* eslint-disable quote-props */
 import { MDCMenuSurfaceFoundation } from '@material/menu-surface/foundation';
 import * as util from '@material/menu-surface/util';
 import {

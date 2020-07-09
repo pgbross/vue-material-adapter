@@ -1,12 +1,4 @@
-<custom-button
-  ref="root"
-  :class="classes"
-  :style="styles"
-  :href="href"
-  :link="link"
-  :disabled="disabled"
-  v-on="listeners"
->
+<custom-button ref="root" :class="classes" :style="styles" :link="$attrs" v-on="listeners">
   <div class="mdc-button__ripple"></div>
   <slot name="icon" v-if="haveIcon">
     <i class="material-icons mdc-button__icon" aria-hidden="true">{{icon}}</i>
