@@ -41,21 +41,12 @@ export default {
       return { ...rippleClasses.value, ...uiState.classes };
     });
 
-    const dispatchEvent = evt => {
-      evt && emit(evt.type, evt);
-      if (props.event) {
-        const target = props.eventTarget || $root;
-        const args = props.eventArgs || [];
-        target.$emit(props.event, ...args);
-      }
-    };
-
     const mylisteners = computed(() => {
       return {
         ...listeners,
         click: e => {
           mcwDrawer.isModal && props.modalClose && mcwDrawer.close();
-          dispatchEvent(e);
+          emit(e.type, e);
         },
       };
     });

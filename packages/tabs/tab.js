@@ -9,19 +9,14 @@ import {
   ref,
   toRefs,
 } from '@vue/composition-api';
-import {
-  CustomLinkMixin,
-  DispatchEventMixin,
-  emitCustomEvent,
-  VMAUniqueIdMixin,
-} from '~/base/index.js';
+import { CustomLinkMixin, emitCustomEvent } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin';
 
 let tabId_ = 0;
 
 export default {
   name: 'mcw-tab',
-  mixins: [CustomLinkMixin, DispatchEventMixin, VMAUniqueIdMixin],
+  mixins: [CustomLinkMixin],
   props: {
     active: Boolean,
     icon: [String, Array, Object],
@@ -29,7 +24,7 @@ export default {
   },
   setup(props, { slots }) {
     const content = ref(null);
-    const icon = ref(null);
+    const iconEl = ref(null);
     const tabIndicator = ref(null);
     const root = ref(null);
     const rippleSurface = ref(null);
@@ -143,7 +138,7 @@ export default {
       content,
       root,
       rippleSurface,
-      icon,
+      iconEl,
       tabIndicator,
       hasIcon,
       hasText,
