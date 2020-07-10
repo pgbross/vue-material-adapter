@@ -11,21 +11,21 @@ export default {
   name: 'textfield-icon',
   props: {
     disabled: Boolean,
-    leading: {
-      type: Boolean,
-      default() {
-        return true;
-      },
-    },
+    trailing: Boolean,
+    trailingIcon: Boolean,
   },
   setup(props, { emit }) {
     const uiState = reactive({
       classes: {
         'mdc-text-field__icon': 1,
-        [`mdc-text-field__icon--${props.leading ? 'leading' : 'trailing'}`]: 1,
+        [`mdc-text-field__icon--${
+          props.trailing || props.trailingIcon ? 'trailing' : 'leading'
+        }`]: 1,
       },
-      rootAttrs: {},
-      textContent: null,
+      rootAttrs: {
+        tabindex: props.disabled ? '-1' : '0',
+        role: props.disabled ? void 0 : 'button',
+      },
       root: null,
       foundation: {},
     });
@@ -39,8 +39,10 @@ export default {
         const { [attr]: removed, ...rest } = uiState.rootAttrs;
         uiState.rootAttrs = rest;
       },
-      setContent: content => {
-        uiState.root.textContent = content;
+      setContent: (/* content */) => {
+        // set content is done through vue in templates
+        // so we dont expose a method to set content
+        // thus this is a no-op
       },
       registerInteractionHandler: (evtType, handler) =>
         uiState.root.addEventListener(evtType, handler),
@@ -53,12 +55,12 @@ export default {
           {},
           true /* shouldBubble  */,
         );
+        emit('click');
       },
     };
 
     onMounted(() => {
       uiState.foundation = new MDCTextFieldIconFoundation(adapter);
-
       uiState.foundation.init();
     });
 

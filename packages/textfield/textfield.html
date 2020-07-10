@@ -1,6 +1,8 @@
 <div ref="wrapper" class="textfield-container">
   <label ref="root" :class="rootClasses" :style="rippleStyles" v-if="!multiline">
     <span class="mdc-text-field__ripple" v-if="!outline"></span>
+
+    <slot name="leading"></slot>
     <slot name="leadingIcon"></slot>
 
     <span class="mdc-text-field__affix mdc-text-field__affix--prefix" v-if="prefix"
@@ -28,6 +30,7 @@
     >
 
     <slot name="trailingIcon"></slot>
+    <slot name="trailing"></slot>
 
     <mcw-notched-outline ref="labelEl" v-if="outline">{{label}}</mcw-notched-outline>
     <mcw-line-ripple ref="lineRippleEl" v-if="hasLineRipple"></mcw-line-ripple>

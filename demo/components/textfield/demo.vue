@@ -36,25 +36,25 @@
           helptext="Some other help here"
           class="demo-text-field-outlined-shaped"
         >
-          <mcw-textfield-icon
-            slot="leadingIcon"
-            tabindex="0"
-            role="button"
-            @click="ondelete"
-            >delete</mcw-textfield-icon
+          <template #leading>
+            <mcw-textfield-icon @click="ondelete"
+              >delete</mcw-textfield-icon
+            ></template
           >
-
-          <mcw-textfield-icon slot="trailingIcon">favorite</mcw-textfield-icon>
+          <template #trailing>
+            <mcw-textfield-icon trailing-icon disabled
+              >favorite</mcw-textfield-icon
+            ></template
+          >
         </mcw-textfield>
         <h3 class="mdc-typography--subtitle1">Fontawesome icon</h3>
         <mcw-textfield v-model="textField" :disabled="!enabled" label="Custom">
-          <mcw-textfield-icon
-            slot="leadingIcon"
-            class="fa fa-font-awesome mdc-text-field__icon mdc-text-field__icon--leading"
-            tabindex="0"
-            role="button"
-            @click="ondelete"
-          ></mcw-textfield-icon>
+          <template #leading>
+            <mcw-textfield-icon
+              class="fa fa-font-awesome"
+              @click="ondelete"
+            ></mcw-textfield-icon
+          ></template>
         </mcw-textfield>
       </mcw-layout-cell>
 

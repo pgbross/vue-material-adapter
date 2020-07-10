@@ -1,4 +1,3 @@
-/* eslint-disable quote-props */
 import { applyPassive } from '@material/dom/events';
 import { MDCTextFieldFoundation } from '@material/textfield/foundation';
 import {
@@ -11,8 +10,8 @@ import {
   watch,
 } from '@vue/composition-api';
 import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
-import TextfieldHelperText from './textfield-helper-text.js';
-import TextfieldIcon from './textfield-icon.vue';
+import { mcwLineRipple } from '~/line-ripple/index.js';
+import { mcwNotchedOutline } from '~/notched-outline/index.js';
 
 const { strings } = MDCTextFieldFoundation;
 
@@ -24,6 +23,7 @@ export default {
     prop: 'value',
     event: 'model',
   },
+
   props: {
     value: [String, Number],
     type: {
@@ -64,7 +64,7 @@ export default {
     characterCounter: Boolean,
     characterCounterInternal: Boolean,
   },
-  setup(props, { emit, slots, listeners }) {
+  setup(props, { emit, root: { $root }, slots, listeners }) {
     const uiState = reactive({
       text: props.value,
       classes: {
@@ -74,8 +74,12 @@ export default {
         'mdc-text-field--disabled': props.disabled,
         'mdc-text-field--textarea': props.multiline,
         'mdc-text-field--outlined': !props.fullwidth && props.outline,
-        'mdc-text-field--with-leading-icon': Boolean(slots.leadingIcon),
-        'mdc-text-field--with-trailing-icon': Boolean(slots.trailingIcon),
+        'mdc-text-field--with-leading-icon': Boolean(
+          slots.leadingIcon || slots.leading,
+        ),
+        'mdc-text-field--with-trailing-icon': Boolean(
+          slots.trailingIcon || slots.trailing,
+        ),
         'mdc-text-field--filled': Boolean(!props.outline),
         'mdc-text-field--no-label': !props.label,
       },
@@ -285,7 +289,7 @@ export default {
       foundation.init();
 
       foundation.setValue(props.value);
-      foundation.setDisabled(props.disabled);
+      props.disabled && foundation.setDisabled(props.disabled);
       uiState.input && (uiState.input.required = props.required);
       if (typeof props.valid !== 'undefined') {
         foundation.setValid(props.valid);
@@ -312,6 +316,5 @@ export default {
       rippleStyles,
     };
   },
-
-  components: { TextfieldHelperText, TextfieldIcon },
+  components: { mcwLineRipple, mcwNotchedOutline },
 };
