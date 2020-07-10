@@ -499,7 +499,11 @@ var RippleElement = /*#__PURE__*/function (_MDCRippleFoundation) {
     var $el = (_element$$el = element.$el) !== null && _element$$el !== void 0 ? _element$$el : element;
     _this = _super.call(this, _objectSpread2({
       addClass: function addClass(className) {
-        state.classes = _objectSpread2(_objectSpread2({}, state.classes), {}, _defineProperty({}, className, true));
+        if (state) {
+          state.classes = _objectSpread2(_objectSpread2({}, state.classes), {}, _defineProperty({}, className, true));
+        } else {
+          $el.classList.add(className);
+        }
       },
       browserSupportsCssVars: function browserSupportsCssVars() {
         return supportsCssVariables(window);
@@ -545,15 +549,23 @@ var RippleElement = /*#__PURE__*/function (_MDCRippleFoundation) {
         return window.addEventListener('resize', handler);
       },
       removeClass: function removeClass(className) {
-        // eslint-disable-next-line no-unused-vars
-        var _state$classes = state.classes,
-            removed = _state$classes[className],
-            rest = _objectWithoutProperties(_state$classes, [className].map(_toPropertyKey));
+        if (state) {
+          // eslint-disable-next-line no-unused-vars
+          var _state$classes = state.classes,
+              removed = _state$classes[className],
+              rest = _objectWithoutProperties(_state$classes, [className].map(_toPropertyKey));
 
-        state.classes = rest;
+          state.classes = rest;
+        } else {
+          $el.classList.remove(className);
+        }
       },
       updateCssVariable: function updateCssVariable(varName, value) {
-        state.styles = _objectSpread2(_objectSpread2({}, state.styles), {}, _defineProperty({}, varName, value));
+        if (state) {
+          state.styles = _objectSpread2(_objectSpread2({}, state.styles), {}, _defineProperty({}, varName, value));
+        } else {
+          $el.style.setProperty(varName, value);
+        }
       }
     }, options));
     _this.unbounded_ = unbounded;
@@ -1690,7 +1702,11 @@ var RippleElement$1 = /*#__PURE__*/function (_MDCRippleFoundation) {
     var $el = (_element$$el = element.$el) !== null && _element$$el !== void 0 ? _element$$el : element;
     _this = _super.call(this, _objectSpread2({
       addClass: function addClass(className) {
-        state.classes = _objectSpread2(_objectSpread2({}, state.classes), {}, _defineProperty({}, className, true));
+        if (state) {
+          state.classes = _objectSpread2(_objectSpread2({}, state.classes), {}, _defineProperty({}, className, true));
+        } else {
+          $el.classList.add(className);
+        }
       },
       browserSupportsCssVars: function browserSupportsCssVars() {
         return supportsCssVariables(window);
@@ -1736,15 +1752,23 @@ var RippleElement$1 = /*#__PURE__*/function (_MDCRippleFoundation) {
         return window.addEventListener('resize', handler);
       },
       removeClass: function removeClass(className) {
-        // eslint-disable-next-line no-unused-vars
-        var _state$classes = state.classes,
-            removed = _state$classes[className],
-            rest = _objectWithoutProperties(_state$classes, [className].map(_toPropertyKey));
+        if (state) {
+          // eslint-disable-next-line no-unused-vars
+          var _state$classes = state.classes,
+              removed = _state$classes[className],
+              rest = _objectWithoutProperties(_state$classes, [className].map(_toPropertyKey));
 
-        state.classes = rest;
+          state.classes = rest;
+        } else {
+          $el.classList.remove(className);
+        }
       },
       updateCssVariable: function updateCssVariable(varName, value) {
-        state.styles = _objectSpread2(_objectSpread2({}, state.styles), {}, _defineProperty({}, varName, value));
+        if (state) {
+          state.styles = _objectSpread2(_objectSpread2({}, state.styles), {}, _defineProperty({}, varName, value));
+        } else {
+          $el.style.setProperty(varName, value);
+        }
       }
     }, options));
     _this.unbounded_ = unbounded;

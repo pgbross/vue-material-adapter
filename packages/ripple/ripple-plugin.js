@@ -16,7 +16,11 @@ export class RippleElement extends MDCRippleFoundation {
 
     super({
       addClass: className => {
-        state.classes = { ...state.classes, [className]: true };
+        if (state) {
+          state.classes = { ...state.classes, [className]: true };
+        } else {
+          $el.classList.add(className);
+        }
       },
       browserSupportsCssVars: () => supportsCssVariables(window),
       computeBoundingRect: () => $el.getBoundingClientRect(),
@@ -51,12 +55,20 @@ export class RippleElement extends MDCRippleFoundation {
         return window.addEventListener('resize', handler);
       },
       removeClass: className => {
-        // eslint-disable-next-line no-unused-vars
-        const { [className]: removed, ...rest } = state.classes;
-        state.classes = rest;
+        if (state) {
+          // eslint-disable-next-line no-unused-vars
+          const { [className]: removed, ...rest } = state.classes;
+          state.classes = rest;
+        } else {
+          $el.classList.remove(className);
+        }
       },
       updateCssVariable: (varName, value) => {
-        state.styles = { ...state.styles, [varName]: value };
+        if (state) {
+          state.styles = { ...state.styles, [varName]: value };
+        } else {
+          $el.style.setProperty(varName, value);
+        }
       },
       ...options,
     });
