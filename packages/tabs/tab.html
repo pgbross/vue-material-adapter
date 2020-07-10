@@ -1,15 +1,10 @@
 <custom-link
   :id="tabId"
   ref="root"
-  tag="button"
-  :link="link"
+  :link="linkAttrs"
   :class="classes"
   :style="styles"
-  role="tab"
-  aria-selected="false"
-  tabindex="-1"
   @click="onClick"
-  v-bind="rootAttrs"
 >
   <span ref="content" class="mdc-tab__content">
     <i

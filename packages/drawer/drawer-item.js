@@ -1,5 +1,5 @@
 import { computed, inject, reactive, ref, toRefs } from '@vue/composition-api';
-import { CustomLinkMixin } from '~/base/index.js';
+import { CustomLink } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin';
 
 const dispatchProps = {
@@ -10,7 +10,7 @@ const dispatchProps = {
 
 export default {
   name: 'mcw-drawer-item',
-  mixins: [CustomLinkMixin],
+  inheritAttrs: false,
   props: {
     ...dispatchProps,
     startIcon: String,
@@ -24,7 +24,7 @@ export default {
       default: 'mdc-list-item--activated',
     },
   },
-
+  components: { CustomLink },
   setup(props, { emit, listeners, slots, root: $root }) {
     const root = ref(null);
     const uiState = reactive({

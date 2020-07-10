@@ -1,7 +1,7 @@
 <div :class="formFieldClasses" class="mdc-checkbox-wrapper" v-if="hasLabel">
   <div ref="root" :class="classes" :style="styles">
     <input
-      :id="vma_uid_"
+      :id="checkboxId"
       ref="control"
       :name="name"
       :value="value"
@@ -21,14 +21,14 @@
     </div>
     <div class="mdc-checkbox__ripple"></div>
   </div>
-  <label ref="labelEl" :for="vma_uid_">
+  <label ref="labelEl" :for="checkboxId">
     <slot>{{ label }}</slot>
   </label>
 </div>
 
 <div ref="root" :class="classes" :style="styles" v-else>
   <input
-    :id="vma_uid_"
+    :id="checkboxId"
     ref="control"
     :name="name"
     :value="value"

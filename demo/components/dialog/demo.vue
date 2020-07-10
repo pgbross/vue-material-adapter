@@ -30,8 +30,8 @@
       v-model="openBasic"
       escape-key-action="close"
       scrim-click-action="close"
-      labelled-by="my-basic-title"
-      described-by="my-basic-content"
+      aria-labelledby="my-basic-title"
+      aria-describedby="my-basic-content"
       :auto-stack-buttons="true"
       @MDCDialog:closing="onClosed"
     >

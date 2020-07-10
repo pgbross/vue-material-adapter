@@ -8,12 +8,12 @@ import {
   toRefs,
   watch,
 } from '@vue/composition-api';
-import { DispatchFocusMixin, VMAUniqueIdMixin } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin';
+
+let switchId_ = 0;
 
 export default {
   name: 'mcw-switch',
-  mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
   model: {
     prop: 'checked',
     event: 'change',
@@ -25,6 +25,7 @@ export default {
     label: String,
     alignEnd: Boolean,
     name: String,
+    id: String,
   },
 
   setup(props, { slots, emit }) {
@@ -40,6 +41,7 @@ export default {
     const { classes: rippleClasses, styles } = useRipplePlugin(root);
 
     let foundation;
+    const switchId = props.id ?? `__mcw-switch-${switchId_++}`;
 
     const classes = computed(() => {
       return { ...rippleClasses.value, ...uiState.classes };
@@ -106,6 +108,7 @@ export default {
       control,
       root,
       styles,
+      switchId,
     };
   },
 };

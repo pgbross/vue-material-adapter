@@ -9,11 +9,9 @@ import {
   toRefs,
   watch,
 } from '@vue/composition-api';
-import { DispatchFocusMixin } from '~/base/index.js';
 
 export default {
   name: 'mcw-slider',
-  mixins: [DispatchFocusMixin],
   model: {
     prop: 'value',
     event: 'change',

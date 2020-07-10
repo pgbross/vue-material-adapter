@@ -2,7 +2,7 @@
   <div ref="root" :class="rootClasses" :style="styles">
     <input
       ref="controlEl"
-      :id="vma_uid_"
+      :id="radioId"
       :name="name"
       type="radio"
       class="mdc-radio__native-control"
@@ -19,14 +19,14 @@
     </div>
     <div class="mdc-radio__ripple"></div>
   </div>
-  <label ref="labelEl" :for="vma_uid_">
+  <label ref="labelEl" :for="radioId">
     <slot>{{ label }}</slot>
   </label>
 </div>
 <div ref="root" :class="rootClasses" :style="styles" v-else>
   <input
     ref="controlEl"
-    :id="vma_uid_"
+    :id="radioId"
     :name="name"
     type="radio"
     class="mdc-radio__native-control"

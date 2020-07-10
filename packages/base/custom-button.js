@@ -3,7 +3,7 @@ import { h } from '@vue/composition-api';
 export const CustomButton = {
   name: 'custom-button',
   props: { link: Object },
-  setup(props, { root: { $options, $router }, listeners, slots }) {
+  setup(props, { root: { $router }, listeners, slots }) {
     return () => {
       let element;
 
@@ -24,7 +24,7 @@ export const CustomButton = {
       const data = { attrs: rest, on: listeners };
 
       if (link.to && $router) {
-        element = $options.components['RouterLink'];
+        element = 'router-link';
 
         data.props = {
           to,

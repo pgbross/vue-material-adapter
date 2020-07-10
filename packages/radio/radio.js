@@ -10,12 +10,12 @@ import {
   toRefs,
   watch,
 } from '@vue/composition-api';
-import { DispatchFocusMixin, VMAUniqueIdMixin } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin';
+
+let radioId_ = 0;
 
 export default {
   name: 'mcw-radio',
-  mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
   model: {
     prop: 'picked',
     event: 'change',
@@ -25,14 +25,14 @@ export default {
     alignEnd: Boolean,
     radioClasses: String,
     name: { type: String, required: true },
-    id: { type: String, required: true },
+    id: { type: String },
     value: String,
     picked: String,
     disabled: Boolean,
     checked: Boolean,
   },
 
-  setup(props, { emit }) {
+  setup(props, { emit, attrs }) {
     const controlEl = ref(null);
     const root = ref(null);
     const labelEl = ref(null);
@@ -65,6 +65,7 @@ export default {
 
     let foundation;
     let formField;
+    const radioId = props.id ?? `__mcw-radio-${radioId_++}`;
 
     const rootClasses = computed(() => {
       return {
@@ -174,6 +175,7 @@ export default {
       onChange,
       onPicked,
       setChecked,
+      radioId,
     };
   },
 };

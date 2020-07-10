@@ -10,7 +10,6 @@ import {
   toRefs,
   watch,
 } from '@vue/composition-api';
-import { VMAUniqueIdMixin } from '~/base/index.js';
 import { mcwButton } from '~/button/index.js';
 
 const { cssClasses, strings } = MDCDialogFoundation;
@@ -21,7 +20,6 @@ export default {
   components: {
     mcwButton: mcwButton,
   },
-  mixins: [VMAUniqueIdMixin],
   model: {
     prop: 'open',
     event: 'change',
@@ -34,9 +32,11 @@ export default {
     role: String,
     scrimClickAction: { type: String, default: 'close' },
     tag: { type: String, default: 'div' },
+    ariaLabelledby: String,
+    ariaDescribedby: String,
   },
 
-  setup(props, { emit }) {
+  setup(props, { emit, attrs }) {
     const container = ref(null);
     const root = ref(null);
     const uiState = reactive({ classes: { 'mdc-dialog': 1 }, styles: {} });

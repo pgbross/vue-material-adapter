@@ -1,3 +1,10 @@
-<custom-link ref="root" :class="classes" :style="styles" tabIndex="0" :link="link" v-on="listeners">
+<custom-link
+  ref="root"
+  :class="classes"
+  :style="styles"
+  tabIndex="0"
+  :link="$attrs"
+  v-on="listeners"
+>
   <slot></slot>
 </custom-link>

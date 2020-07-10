@@ -9,20 +9,22 @@ import {
   ref,
   toRefs,
 } from '@vue/composition-api';
-import { CustomLinkMixin, emitCustomEvent } from '~/base/index.js';
+import { emitCustomEvent } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin';
+import { CustomLink } from '~/base/index.js';
 
 let tabId_ = 0;
 
 export default {
   name: 'mcw-tab',
-  mixins: [CustomLinkMixin],
+  inheritAttrs: false,
   props: {
     active: Boolean,
     icon: [String, Array, Object],
     minWidth: Boolean,
   },
-  setup(props, { slots }) {
+  components: { CustomLink },
+  setup(props, { slots, attrs }) {
     const content = ref(null);
     const iconEl = ref(null);
     const tabIndicator = ref(null);
@@ -35,12 +37,16 @@ export default {
 
         'mdc-tab--min-width': props.minWidth,
       },
-      rootAttrs: {},
+      rootAttrs: {
+        role: 'tab',
+        'aria-selected': 'false',
+        tabindex: '-1',
+        tag: 'button',
+      },
       styles: {},
     });
 
     const { classes: rippleClasses, styles } = useRipplePlugin(root);
-
     const { fade, stacked, spanContent, tabList } = inject('mcwTabList');
 
     uiState.classes['mdc-tab--stacked'] = stacked;
@@ -55,6 +61,8 @@ export default {
     const hasText = computed(() => {
       return !!slots.default;
     });
+
+    const linkAttrs = computed(() => ({ ...attrs, ...uiState.rootAttrs }));
 
     let foundation;
     const tabId = `__mcw-tab-${tabId_++}`;
@@ -149,6 +157,7 @@ export default {
       spanContent,
       rippleClasses,
       styles,
+      linkAttrs,
     };
   },
 };

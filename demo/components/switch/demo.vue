@@ -2,7 +2,7 @@
   <div class="mcw-demo mcw-demo--container">
     <div>
       <p>
-        <mcw-switch v-model="checked" label="Property" />
+        <mcw-switch id="property-switch" v-model="checked" label="Property" />
       </p>
       <p>
         <mcw-switch disabled label="Disabled" />

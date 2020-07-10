@@ -12,7 +12,7 @@
       <input
         ref="control"
         :name="name"
-        :id="vma_uid_"
+        :id="switchId"
         :value="value"
         type="checkbox"
         role="switch"
@@ -25,7 +25,7 @@
     </div>
   </div>
 
-  <label v-if="hasLabel" :for="vma_uid_" class="mdc-switch-label">
+  <label v-if="hasLabel" :for="switchId" class="mdc-switch-label">
     <slot>{{ label }}</slot>
   </label>
 </div>

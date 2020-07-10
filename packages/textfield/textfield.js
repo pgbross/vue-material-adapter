@@ -10,7 +10,6 @@ import {
   toRefs,
   watch,
 } from '@vue/composition-api';
-import { DispatchFocusMixin, VMAUniqueIdMixin } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin';
 import TextfieldHelperText from './textfield-helper-text.js';
 import TextfieldIcon from './textfield-icon.vue';
@@ -20,7 +19,6 @@ const { strings } = MDCTextFieldFoundation;
 let uid_ = 0;
 export default {
   name: 'mcw-textfield',
-  mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
   inheritAttrs: false,
   model: {
     prop: 'value',
@@ -117,7 +115,7 @@ export default {
     }
 
     const inputAriaControls = computed(() => {
-      return props.help ? uiState.helpTextId : undefined;
+      return props.helptext ? uiState.helpTextId : undefined;
     });
 
     const hasLabel = computed(() => {

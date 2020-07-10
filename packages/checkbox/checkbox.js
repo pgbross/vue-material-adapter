@@ -11,15 +11,15 @@ import {
   ref,
   watch,
 } from '@vue/composition-api';
-import { DispatchFocusMixin, VMAUniqueIdMixin } from '~/base/index.js';
 import { emitCustomEvent } from '../base/custom-event';
 import { useRipplePlugin } from '../ripple/ripple-plugin';
 
 const CB_PROTO_PROPS = ['checked', 'indeterminate'];
 
+let checkboxId_ = 0;
+
 export default {
   name: 'mcw-checkbox',
-  mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
   model: {
     prop: 'checked',
     event: 'change',
@@ -46,6 +46,7 @@ export default {
 
     let foundation;
     let formField;
+    const checkboxId = `__mcw-checkbox-${checkboxId_++}`;
 
     const {
       classes: rippleClasses,
@@ -259,6 +260,7 @@ export default {
       setChecked,
       setIndeterminate,
       isChecked,
+      checkboxId,
     };
   },
 };

@@ -1,13 +1,16 @@
 export function emitCustomEvent(el, evtType, evtData, shouldBubble = false) {
-  let evt;
-  if (typeof CustomEvent === 'function') {
-    evt = new CustomEvent(evtType, {
-      detail: evtData,
-      bubbles: shouldBubble,
-    });
-  } else {
-    evt = document.createEvent('CustomEvent');
-    evt.initCustomEvent(evtType, shouldBubble, false, evtData);
-  }
+  const createCustomEvent = () => {
+    const evt = document.createEvent('CustomEvent');
+    return evt.initCustomEvent(evtType, shouldBubble, false, evtData);
+  };
+
+  const evt =
+    typeof CustomEvent === 'function'
+      ? new CustomEvent(evtType, {
+          detail: evtData,
+          bubbles: shouldBubble,
+        })
+      : createCustomEvent();
+
   el.dispatchEvent(evt);
 }

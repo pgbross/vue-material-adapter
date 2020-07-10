@@ -3,6 +3,7 @@
     <div class="mcw-demo mcw-demo--container">
       <div>
         <mcw-select
+          id="food-group"
           :value="selectedType"
           label="Food"
           helptext="Pick a food group"

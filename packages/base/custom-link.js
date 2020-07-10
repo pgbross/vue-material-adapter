@@ -1,4 +1,4 @@
-import { computed, h } from '@vue/composition-api';
+import { h } from '@vue/composition-api';
 
 export const CustomLink = {
   name: 'custom-link',
@@ -10,76 +10,44 @@ export const CustomLink = {
     return () => {
       let element;
 
-      const data = { on: listeners };
+      // destructure the props in the render function so we use the current value
+      // if their value has changed since we were created
+      const { link = {} } = props;
+      const {
+        tag,
+        to,
+        exact,
+        append,
+        replace,
+        activeClass,
+        exactActiveClass,
+        ...rest
+      } = link;
 
-      if (props.link && $router) {
-        // router-link case
+      const data = { attrs: rest, on: listeners };
+
+      if (link.to && $router) {
         element = 'router-link';
-        data.props = { tag: props.tag, ...props.link };
+
+        data.props = {
+          to,
+          tag,
+          replace,
+          append,
+          activeClass,
+          exactActiveClass,
+          exact,
+        };
 
         // we add the native click so it can bubble and be detected in a menu/drawer
-        if (data.on.click) {
-          data.nativeOn = { click: data.on.click };
+        if (listeners.click) {
+          data.nativeOn = { click: listeners.click };
         }
       } else {
-        element = props.tag;
+        element = props.tag ?? 'a';
       }
 
       return h(element, data, [slots.default?.()]);
     };
   },
-};
-
-export const CustomLinkMixin = {
-  props: {
-    to: [String, Object],
-    exact: Boolean,
-    append: Boolean,
-    replace: Boolean,
-    activeClass: String,
-    exactActiveClass: String,
-  },
-  computed: {
-    link() {
-      return (
-        this.to && {
-          to: this.to,
-          exact: this.exact,
-          append: this.append,
-          replace: this.replace,
-          activeClass: this.activeClass,
-          exactActiveClass: this.exactActiveClass,
-        }
-      );
-    },
-  },
-  components: {
-    CustomLink,
-  },
-};
-
-export function useCustomLink(props) {
-  const link = computed(() => {
-    return (
-      props.to && {
-        to: props.to,
-        exact: props.exact,
-        append: props.append,
-        replace: props.replace,
-        activeClass: props.activeClass,
-        exactActiveClass: props.exactActiveClass,
-      }
-    );
-  });
-
-  return { link };
-}
-
-export const customLinkProps = {
-  to: [String, Object],
-  exact: Boolean,
-  append: Boolean,
-  replace: Boolean,
-  activeClass: String,
-  exactActiveClass: String,
 };

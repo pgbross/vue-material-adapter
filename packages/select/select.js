@@ -8,7 +8,7 @@ import {
   toRefs,
   watch,
 } from '@vue/composition-api';
-import { emitCustomEvent, VMAUniqueIdMixin } from '~/base/index.js';
+import { emitCustomEvent } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin';
 import SelectHelperText from './select-helper-text.js';
 import SelectIcon from './select-icon.vue';
@@ -36,7 +36,6 @@ export default {
     required: Boolean,
     menuFullwidth: { type: Boolean, default: () => true },
   },
-  mixins: [VMAUniqueIdMixin],
 
   setup(props, { emit }) {
     const anchorEl = ref(null);
