@@ -4,7 +4,6 @@ import {
   onBeforeUnmount,
   onMounted,
   reactive,
-  ref,
   toRefs,
   watch,
 } from '@vue/composition-api';
@@ -24,12 +23,12 @@ export default {
     'anchor-corner': [String, Number],
     'anchor-margin': Object,
   },
-  setup(props, { emit, slots }) {
-    const root = ref(null);
+  setup(props, { emit }) {
     const uiState = reactive({
       classes: {
         'mdc-menu-surface': 1,
       },
+      root: null,
     });
 
     let foundation;
@@ -51,12 +50,12 @@ export default {
     };
     const getFocusAdapterMethods = () => {
       return {
-        isFocused: () => document.activeElement === root.value,
+        isFocused: () => document.activeElement === uiState.root,
         saveFocus: () => {
           previousFocus_ = document.activeElement;
         },
         restoreFocus: () => {
-          if (root.value.contains(document.activeElement)) {
+          if (uiState.root.contains(document.activeElement)) {
             if (previousFocus_ && previousFocus_.focus) {
               previousFocus_.focus();
             }
@@ -68,8 +67,8 @@ export default {
       return {
         getInnerDimensions: () => {
           return {
-            width: root.value.offsetWidth,
-            height: root.value.offsetHeight,
+            width: uiState.root.offsetWidth,
+            height: uiState.root.offsetHeight,
           };
         },
         getAnchorDimensions: () =>
@@ -87,16 +86,17 @@ export default {
           return { x: window.pageXOffset, y: window.pageYOffset };
         },
         setPosition: position => {
-          root.value.style.left =
+          uiState.root.style.left =
             'left' in position ? `${position.left}px` : null;
-          root.value.style.right =
+          uiState.root.style.right =
             'right' in position ? `${position.right}px` : null;
-          root.value.style.top = 'top' in position ? `${position.top}px` : null;
-          root.value.style.bottom =
+          uiState.root.style.top =
+            'top' in position ? `${position.top}px` : null;
+          uiState.root.style.bottom =
             'bottom' in position ? `${position.bottom}px` : null;
         },
         setMaxHeight: height => {
-          root.value.style.maxHeight = height;
+          uiState.root.style.maxHeight = height;
         },
       };
     };
@@ -118,7 +118,7 @@ export default {
 
     const hoistMenuToBody = () => {
       document.body.appendChild(
-        root.value.parentElement.removeChild(root.value),
+        uiState.root.parentElement.removeChild(uiState.root),
       );
       setIsHoisted(true);
     };
@@ -171,23 +171,23 @@ export default {
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
-      hasClass: className => root.value.classList.contains(className),
+      hasClass: className => uiState.root.classList.contains(className),
       hasAnchor: () => !!anchorElement,
       notifyClose: () => {
-        emitCustomEvent(root.value, strings.CLOSED_EVENT, {});
+        emitCustomEvent(uiState.root, strings.CLOSED_EVENT, {});
 
         emit('change', false);
       },
       notifyOpen: () => {
-        emitCustomEvent(root.value, strings.OPENED_EVENT, {});
+        emitCustomEvent(uiState.root, strings.OPENED_EVENT, {});
 
         emit('change', true);
       },
-      isElementInContainer: el => root.value.contains(el),
+      isElementInContainer: el => uiState.root.contains(el),
       isRtl: () =>
-        getComputedStyle(root.value).getPropertyValue('direction') === 'rtl',
+        getComputedStyle(uiState.root).getPropertyValue('direction') === 'rtl',
       setTransformOrigin: origin => {
-        root.value.style.setProperty(
+        uiState.root.style.setProperty(
           `${util.getTransformPropertyName(window)}-origin`,
           origin,
         );
@@ -214,10 +214,10 @@ export default {
       foundation.init();
 
       if (
-        root.value.parentElement &&
-        root.value.parentElement.classList.contains(cssClasses.ANCHOR)
+        uiState.root.parentElement &&
+        uiState.root.parentElement.classList.contains(cssClasses.ANCHOR)
       ) {
-        anchorElement = root.value.parentElement;
+        anchorElement = uiState.root.parentElement;
       }
     });
 
@@ -227,7 +227,6 @@ export default {
     });
     return {
       ...toRefs(uiState),
-      root,
       rootListeners,
       hoistMenuToBody,
       setFixedPosition,

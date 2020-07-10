@@ -37,7 +37,6 @@ export default {
   },
 
   setup(props, { emit }) {
-    const listRoot = ref(null);
     const uiState = reactive({
       classes: {
         'mdc-list': 1,
@@ -52,6 +51,7 @@ export default {
       },
       rootAttrs: { 'aria-orientation': props.ariaOrientation },
       listn: 0,
+      listRoot: null,
     });
 
     const selectedIndex = ref(props.selectedIndex);
@@ -78,7 +78,7 @@ export default {
       const xx = uiState.listn; // for dependency
 
       return [].slice.call(
-        listRoot.value.querySelectorAll(`.${cssClasses.LIST_ITEM_CLASS}`),
+        uiState.listRoot.querySelectorAll(`.${cssClasses.LIST_ITEM_CLASS}`),
       );
     });
 
@@ -105,30 +105,34 @@ export default {
 
       // List items need to have at least tabindex=-1 to be focusable.
       [].slice
-        .call(listRoot.value.querySelectorAll('.mdc-list-item:not([tabindex])'))
+        .call(
+          uiState.listRoot.querySelectorAll('.mdc-list-item:not([tabindex])'),
+        )
         .forEach(ele => {
           ele.setAttribute('tabindex', -1);
         });
 
       // Child button/a elements are not tabbable until the list item is focused.
       [].slice
-        .call(listRoot.value.querySelectorAll(strings.FOCUSABLE_CHILD_ELEMENTS))
+        .call(
+          uiState.listRoot.querySelectorAll(strings.FOCUSABLE_CHILD_ELEMENTS),
+        )
         .forEach(ele => ele.setAttribute('tabindex', -1));
 
       foundation.layout();
     };
 
     const initializeListType = () => {
-      const checkboxListItems = listRoot.value.querySelectorAll(
+      const checkboxListItems = uiState.listRoot.querySelectorAll(
         strings.ARIA_ROLE_CHECKBOX_SELECTOR,
       );
 
-      const radioSelectedListItem = listRoot.value.querySelector(
+      const radioSelectedListItem = uiState.listRoot.querySelector(
         strings.ARIA_CHECKED_RADIO_SELECTOR,
       );
 
       if (checkboxListItems.length) {
-        const preselectedItems = listRoot.value.querySelectorAll(
+        const preselectedItems = uiState.listRoot.querySelectorAll(
           strings.ARIA_CHECKED_CHECKBOX_SELECTOR,
         );
 
@@ -248,10 +252,10 @@ export default {
       },
 
       isFocusInsideList: () => {
-        return listRoot.value.contains(document.activeElement);
+        return uiState.listRoot.contains(document.activeElement);
       },
 
-      isRootFocused: () => document.activeElement === listRoot.value,
+      isRootFocused: () => document.activeElement === uiState.listRoot,
 
       listItemAtIndexHasClass: (index, className) => {
         listElements.value[index].classList.contains(className);
@@ -259,7 +263,7 @@ export default {
 
       notifyAction: index => {
         emitCustomEvent(
-          listRoot.value,
+          uiState.listRoot,
           strings.ACTION_EVENT,
           { index },
           /** shouldBubble */ true,
@@ -388,7 +392,7 @@ export default {
       slotObserver = new MutationObserver((mutationList, observer) => {
         uiState.listn++;
       });
-      slotObserver.observe(listRoot.value, {
+      slotObserver.observe(uiState.listRoot, {
         childList: true,
         // subtree: true,
       });
@@ -401,7 +405,6 @@ export default {
 
     return {
       ...toRefs(uiState),
-      listRoot,
       listElements,
       rootListeners,
       layout,

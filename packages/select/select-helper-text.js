@@ -12,6 +12,7 @@ export default {
   props: {
     helptextPersistent: Boolean,
     helptextValidation: Boolean,
+    helptext: String,
   },
   setup(props, { slots }) {
     const uiState = reactive({
@@ -21,6 +22,7 @@ export default {
         'mdc-select-helper-text--validation-msg': props.helptextValidation,
       },
       attrs: { 'aria-hidden': 'true' },
+      myHelptext: props.helptext,
     });
 
     let foundation;
@@ -45,9 +47,8 @@ export default {
         uiState.attrs = rest;
       },
 
-      setContent: (/* content */) => {
-        // help text get's updated from {{helptext}}
-        // cf. this.$el.textContent = content
+      setContent: content => {
+        uiState.myHelptext = content;
       },
     };
 
@@ -59,6 +60,11 @@ export default {
     watch(
       () => props.helptextValidation,
       nv => foundation.setValidation(nv),
+    );
+
+    watch(
+      () => props.helptext,
+      nv => (uiState.myHelptext = nv),
     );
 
     onMounted(() => {
@@ -77,7 +83,7 @@ export default {
           class: uiState.classes,
           attrs: uiState.attrs,
         },
-        slots.default?.(),
+        [uiState.myHelptext],
       );
     };
   },

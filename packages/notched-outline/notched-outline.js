@@ -3,7 +3,6 @@ import {
   onBeforeUnmount,
   onMounted,
   reactive,
-  ref,
   toRefs,
 } from '@vue/composition-api';
 import { mcwFloatingLabel } from '../floating-label/index.js';
@@ -15,11 +14,10 @@ export default {
   components: { mcwFloatingLabel },
 
   setup(props, { slots }) {
-    const labelEl = ref(null);
-
     const uiState = reactive({
       outlinedClasses: { 'mdc-notched-outline': true },
       notchStyles: {},
+      labelEl: null,
     });
 
     let foundation;
@@ -56,15 +54,15 @@ export default {
     };
 
     const float = shouldFloat => {
-      labelEl.value?.float(shouldFloat);
+      uiState.labelEl?.float(shouldFloat);
     };
 
     const shake = shouldShake => {
-      labelEl.value?.shake(shouldShake);
+      uiState.labelEl?.shake(shouldShake);
     };
 
     const getWidth = () => {
-      return labelEl.value?.getWidth();
+      return uiState.labelEl?.getWidth();
     };
 
     onMounted(() => {
@@ -84,7 +82,6 @@ export default {
 
     return {
       ...toRefs(uiState),
-      labelEl,
       getWidth,
       shake,
       float,

@@ -43,11 +43,8 @@ export default {
 
     const onClick = evt => foundation.handleClick(evt);
     const onKeydown = evt => foundation.handleKeydown(evt);
-
     const isNavigable = () => foundation.isNavigable();
-
     const focus = () => foundation.focus();
-
     const removeFocus = () => foundation.removeFocus();
 
     onMounted(() => {

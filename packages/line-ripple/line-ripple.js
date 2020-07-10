@@ -8,17 +8,14 @@ import {
 
 export default {
   name: 'mcw-line-ripple',
-
-  props: {
-    rippleCenter: { type: [Number, String], default: 0 },
-    active: Boolean,
-  },
-  setup(props, { slots }) {
+  setup() {
     const uiState = reactive({
       lineClasses: { 'mdc-line-ripple': 1 },
       lineStyles: {},
     });
 
+    // note: do not call the property 'foundation' as the tests will then
+    // expect all methods to be implemented, and we handle transitionend locally.
     let foundation_;
 
     const adapter = {
@@ -59,8 +56,6 @@ export default {
     const onTransitionEnd = evt => foundation_.handleTransitionEnd(evt);
 
     onMounted(() => {
-      // note: do not call the property 'foundation' as the tests will then
-      // expext all methods to be implemented, and we handle transitionend locally
       foundation_ = new MDCLineRippleFoundation(adapter);
       foundation_.init();
     });

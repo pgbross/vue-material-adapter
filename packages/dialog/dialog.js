@@ -6,7 +6,6 @@ import {
   onBeforeUnmount,
   onMounted,
   reactive,
-  ref,
   toRefs,
   watch,
 } from '@vue/composition-api';
@@ -37,9 +36,12 @@ export default {
   },
 
   setup(props, { emit, attrs }) {
-    const container = ref(null);
-    const root = ref(null);
-    const uiState = reactive({ classes: { 'mdc-dialog': 1 }, styles: {} });
+    const uiState = reactive({
+      classes: { 'mdc-dialog': 1 },
+      styles: {},
+      container: null,
+      root: null,
+    });
 
     let foundation;
     let content_;
@@ -71,11 +73,11 @@ export default {
       foundation.handleKeydown(evt);
     };
 
-    const onOpen_ = nv => {
+    const onOpen = nv => {
       if (nv) {
-        if (container.value) {
+        if (uiState.container) {
           focusTrap = util.createFocusTrapInstance(
-            root.value,
+            uiState.root,
             focusTrapFactory_,
             getInitialFocusEl_() || void 0,
           );
@@ -94,7 +96,7 @@ export default {
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
-      hasClass: className => root.value.classList.contains(className),
+      hasClass: className => uiState.root.classList.contains(className),
       addBodyClass: className => document.body.classList.add(className),
       removeBodyClass: className => document.body.classList.remove(className),
       eventTargetMatches: (target, selector) => matches(target, selector),
@@ -145,7 +147,7 @@ export default {
     watch(
       () => props.open,
       nv => {
-        onOpen_(nv);
+        onOpen(nv);
       },
     );
 
@@ -157,19 +159,21 @@ export default {
         scrimClickAction,
       } = props;
 
-      buttons_ = [].slice.call(root.value.querySelectorAll(cssClasses.BUTTON));
-      defaultButton = root.value.querySelector(
+      buttons_ = [].slice.call(
+        uiState.root.querySelectorAll(cssClasses.BUTTON),
+      );
+      defaultButton = uiState.root.querySelector(
         `[${strings.BUTTON_DEFAULT_ATTRIBUTE}]`,
       );
 
-      const container = root.value.querySelector(strings.CONTAINER_SELECTOR);
+      const container = uiState.root.querySelector(strings.CONTAINER_SELECTOR);
       if (!container) {
         throw new Error(
           `Dialog component requires a ${strings.CONTAINER_SELECTOR} container element`,
         );
       }
 
-      content_ = root.value.querySelector(strings.CONTENT_SELECTOR);
+      content_ = uiState.root.querySelector(strings.CONTENT_SELECTOR);
 
       foundation = new MDCDialogFoundation(adapter);
 
@@ -188,7 +192,7 @@ export default {
         // set even if empty string
         foundation.setScrimClickAction(scrimClickAction);
       }
-      onOpen_(open);
+      onOpen(open);
     });
 
     onBeforeUnmount(() => {
@@ -197,8 +201,6 @@ export default {
 
     return {
       ...toRefs(uiState),
-      container,
-      root,
       handleLayout,
       handleDocumentKeyDown,
       onKeydown,

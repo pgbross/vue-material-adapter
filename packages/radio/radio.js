@@ -6,9 +6,9 @@ import {
   onBeforeUnmount,
   onMounted,
   reactive,
-  ref,
   toRefs,
   watch,
+  toRef,
 } from '@vue/composition-api';
 import { useRipplePlugin } from '~/ripple/ripple-plugin';
 
@@ -33,12 +33,11 @@ export default {
   },
 
   setup(props, { emit, attrs }) {
-    const controlEl = ref(null);
-    const root = ref(null);
-    const labelEl = ref(null);
-
     const uiState = reactive({
       classes: { 'mdc-radio': 1 },
+      controlEl: null,
+      labelEl: null,
+      root: null,
     });
 
     const {
@@ -46,20 +45,20 @@ export default {
       styles,
       activate,
       deactivate,
-    } = useRipplePlugin(root, {
+    } = useRipplePlugin(toRef(uiState, 'root'), {
       isUnbounded: () => true,
 
       // Radio buttons technically go "active" whenever there is *any* keyboard interaction. This is not the
       // UI we desire.
       isSurfaceActive: () => false,
       registerInteractionHandler: (evt, handler) => {
-        controlEl.value.addEventListener(evt, handler, applyPassive());
+        uiState.controlEl.addEventListener(evt, handler, applyPassive());
       },
       deregisterInteractionHandler: (evt, handler) => {
-        controlEl.value.removeEventListener(evt, handler, applyPassive());
+        uiState.controlEl.removeEventListener(evt, handler, applyPassive());
       },
       computeBoundingRect: () => {
-        return root.value.getBoundingClientRect();
+        return uiState.root.getBoundingClientRect();
       },
     });
 
@@ -83,16 +82,16 @@ export default {
     });
 
     const onChange = () => {
-      const nativeValue = controlEl.value.value;
-      nativeValue != props.picked && emit('change', controlEl.value.value);
+      const nativeValue = uiState.controlEl.value;
+      nativeValue != props.picked && emit('change', uiState.controlEl.value);
     };
 
     const setChecked = checked => {
-      controlEl.value.checked = checked;
+      uiState.controlEl.checked = checked;
     };
 
     const onPicked = nv => {
-      setChecked(nv == controlEl.value.value);
+      setChecked(nv == uiState.controlEl.value);
     };
 
     const adapter = {
@@ -105,7 +104,7 @@ export default {
       },
 
       setNativeControlDisabled: disabled =>
-        controlEl.value && controlEl.value.disabled == disabled,
+        uiState.controlEl && uiState.controlEl.disabled == disabled,
     };
 
     watch(
@@ -133,12 +132,10 @@ export default {
       foundation = new MDCRadioFoundation(adapter);
 
       formField = new MDCFormFieldFoundation({
-        registerInteractionHandler: (type, handler) => {
-          labelEl.value && labelEl.value.addEventListener(type, handler);
-        },
-        deregisterInteractionHandler: (type, handler) => {
-          labelEl.value && labelEl.value.removeEventListener(type, handler);
-        },
+        registerInteractionHandler: (type, handler) =>
+          uiState.labelEl?.addEventListener(type, handler),
+        deregisterInteractionHandler: (type, handler) =>
+          uiState.labelEl?.removeEventListener(type, handler),
         activateInputRipple: () => {
           activate();
         },
@@ -168,9 +165,6 @@ export default {
       ...toRefs(uiState),
       rootClasses,
       formFieldClasses,
-      controlEl,
-      labelEl,
-      root,
       styles,
       onChange,
       onPicked,

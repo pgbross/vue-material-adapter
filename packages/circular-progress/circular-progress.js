@@ -3,7 +3,6 @@ import {
   onBeforeUnmount,
   onMounted,
   reactive,
-  ref,
   toRefs,
   watch,
 } from '@vue/composition-api';
@@ -14,24 +13,6 @@ const ProgressPropType = {
     return Number(value) >= 0 && Number(value) <= 1;
   },
 };
-
-function getCircleAttrs(medium = false, indeterminate = true) {
-  return medium
-    ? {
-        cx: '16',
-        cy: '16',
-        r: '12.5',
-        'stroke-dasharray': '78.54',
-        'stroke-dashoffset': indeterminate ? '39.27' : '78.54',
-      }
-    : {
-        cx: '24',
-        cy: '24',
-        r: '18',
-        'stroke-dasharray': '113.097',
-        'stroke-dashoffset': indeterminate ? '56.549' : '113.097',
-      };
-}
 
 export default {
   name: 'mcw-circular-progress',
@@ -53,9 +34,9 @@ export default {
       rootAttrs: {},
       circleAttrs: getCircleAttrs(props.medium, false),
       indeterminateAttrs: getCircleAttrs(props.medium, true),
+      root: null,
     });
 
-    const root = ref(null);
     let foundation;
 
     const adapter = {
@@ -67,7 +48,7 @@ export default {
         return uiState.circleAttrs[attributeName];
       },
 
-      hasClass: className => root.value.classList.contains(className),
+      hasClass: className => uiState.root.classList.contains(className),
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.classes;
@@ -132,6 +113,28 @@ export default {
 
     onBeforeUnmount(() => foundation.destroy());
 
-    return { ...toRefs(uiState), root };
+    return { ...toRefs(uiState) };
   },
 };
+
+// ===
+// Private functions
+// ===
+
+function getCircleAttrs(medium = false, indeterminate = true) {
+  return medium
+    ? {
+        cx: '16',
+        cy: '16',
+        r: '12.5',
+        'stroke-dasharray': '78.54',
+        'stroke-dashoffset': indeterminate ? '39.27' : '78.54',
+      }
+    : {
+        cx: '24',
+        cy: '24',
+        r: '18',
+        'stroke-dasharray': '113.097',
+        'stroke-dashoffset': indeterminate ? '56.549' : '113.097',
+      };
+}

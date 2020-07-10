@@ -1,4 +1,3 @@
-/* eslint-disable quote-props */
 import { closest } from '@material/dom/ponyfill';
 import { MDCSnackbarFoundation } from '@material/snackbar/foundation';
 import {
@@ -6,7 +5,6 @@ import {
   onBeforeUnmount,
   onMounted,
   reactive,
-  ref,
   toRefs,
   watch,
 } from '@vue/composition-api';
@@ -31,14 +29,12 @@ export default {
     reason: String,
   },
   setup(props, { emit }) {
-    const root = ref(null);
-    const labelEl = ref(null);
-
     const uiState = reactive({
       classes: {},
       hidden: false,
       actionHidden: false,
       showMessage: true,
+      labelEl: null,
     });
 
     let foundation;
@@ -122,7 +118,7 @@ export default {
     const adapter = {
       addClass: className =>
         (uiState.classes = { ...uiState.classes, [className]: true }),
-      announce: () => announce(labelEl.value),
+      announce: () => announce(uiState.labelEl),
       notifyClosed: reason => {
         emit(strings.CLOSED_EVENT, reason ? { reason } : {});
         emit('change', false);
@@ -198,8 +194,6 @@ export default {
     return {
       ...toRefs(uiState),
       rootClasses,
-      root,
-      labelEl,
       showDismissAction,
       surfaceClickHandler,
     };

@@ -10,7 +10,7 @@ export default {
       },
     },
   },
-  setup(props, { listeners, slots }) {
+  setup(props, { slots }) {
     return () => {
       return h(
         props.tag,

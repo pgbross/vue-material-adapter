@@ -6,12 +6,11 @@ import {
   onBeforeUnmount,
   onMounted,
   reactive,
-  ref,
   toRefs,
+  toRef,
 } from '@vue/composition-api';
-import { emitCustomEvent } from '~/base/index.js';
+import { CustomLink, emitCustomEvent } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin';
-import { CustomLink } from '~/base/index.js';
 
 let tabId_ = 0;
 
@@ -25,12 +24,6 @@ export default {
   },
   components: { CustomLink },
   setup(props, { slots, attrs }) {
-    const content = ref(null);
-    const iconEl = ref(null);
-    const tabIndicator = ref(null);
-    const root = ref(null);
-    const rippleSurface = ref(null);
-
     const uiState = reactive({
       classes: {
         'mdc-tab': 1,
@@ -44,9 +37,17 @@ export default {
         tag: 'button',
       },
       styles: {},
+
+      content: null,
+      iconEl: null,
+      tabIndicator: null,
+      root: null,
+      rippleSurface: null,
     });
 
-    const { classes: rippleClasses, styles } = useRipplePlugin(root);
+    const { classes: rippleClasses, styles } = useRipplePlugin(
+      toRef(uiState, 'root'),
+    );
     const { fade, stacked, spanContent, tabList } = inject('mcwTabList');
 
     uiState.classes['mdc-tab--stacked'] = stacked;
@@ -78,12 +79,12 @@ export default {
     const setActive = isActive => {
       if (isActive) {
         (uiState.classes = { ...uiState.classes, 'mdc-tab--active': true }),
-          tabIndicator.value.activate();
+          uiState.tabIndicator.activate();
       }
     };
 
     const computeIndicatorClientRect = () =>
-      tabIndicator.value.computeContentClientRect();
+      uiState.tabIndicator.computeContentClientRect();
 
     const computeDimensions = () => foundation.computeDimensions();
 
@@ -103,8 +104,8 @@ export default {
       },
       hasClass: className => !!uiState.classes[className],
       activateIndicator: previousIndicatorClientRect =>
-        tabIndicator.value.activate(previousIndicatorClientRect),
-      deactivateIndicator: () => tabIndicator.value.deactivate(),
+        uiState.tabIndicator.activate(previousIndicatorClientRect),
+      deactivateIndicator: () => uiState.tabIndicator.deactivate(),
       notifyInteracted: () =>
         emitCustomEvent(
           rootEl,
@@ -114,15 +115,13 @@ export default {
         ),
       getOffsetLeft: () => rootEl.offsetLeft,
       getOffsetWidth: () => rootEl.offsetWidth,
-      getContentOffsetLeft: () => content.value.offsetLeft,
-      getContentOffsetWidth: () => content.value.offsetWidth,
+      getContentOffsetLeft: () => uiState.content.offsetLeft,
+      getContentOffsetWidth: () => uiState.content.offsetWidth,
       focus: () => rootEl.focus(),
     };
 
     onMounted(() => {
-      // this.id = this.vma_uid_;
-
-      rootEl = root.value.$el;
+      rootEl = uiState.root.$el;
       foundation = new MDCTabFoundation(adapter);
       foundation.init();
 
@@ -143,11 +142,6 @@ export default {
 
     return {
       ...toRefs(uiState),
-      content,
-      root,
-      rippleSurface,
-      iconEl,
-      tabIndicator,
       hasIcon,
       hasText,
       onClick,

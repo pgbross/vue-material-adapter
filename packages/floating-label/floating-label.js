@@ -3,7 +3,6 @@ import {
   onBeforeUnmount,
   onMounted,
   reactive,
-  ref,
   toRefs,
 } from '@vue/composition-api';
 
@@ -12,13 +11,12 @@ export default {
 
   props: { required: { type: Boolean } },
   setup(props) {
-    const root = ref(null);
-
     const uiState = reactive({
       labelClasses: {
         'mdc-floating-label': true,
         'mdc-floating-label--required': props.required,
       },
+      root: null,
     });
 
     let foundation;
@@ -36,12 +34,12 @@ export default {
         uiState.labelClasses = rest;
       },
 
-      getWidth: () => root.value.scrollWidth,
+      getWidth: () => uiState.root.scrollWidth,
       registerInteractionHandler: (evtType, handler) => {
-        root.value.addEventListener(evtType, handler);
+        uiState.root.addEventListener(evtType, handler);
       },
       deregisterInteractionHandler: (evtType, handler) => {
-        root.value.removeEventListener(evtType, handler);
+        uiState.root.removeEventListener(evtType, handler);
       },
     };
 
@@ -71,7 +69,6 @@ export default {
     });
     return {
       ...toRefs(uiState),
-      root,
       getWidth,
       float,
       shake,

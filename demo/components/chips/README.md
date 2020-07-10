@@ -9,7 +9,7 @@
 <br />
 
 <mcw-chip-set>
-  <mcw-chip id="wiffle" leading-icon="face" trailing-icon="clear"
+  <mcw-chip id="jane-chip" leading-icon="face" trailing-icon="clear"
     >Jane Smith</mcw-chip
   >
   <mcw-chip leading-icon="face" trailing-icon="clear">John Doe</mcw-chip>
@@ -56,7 +56,7 @@
 
 ```html
 <mcw-chip-set input>
-  <mcw-chip id="wiffle" leading-icon="face" trailing-icon="clear"
+  <mcw-chip id="jane-chip" leading-icon="face" trailing-icon="clear"
     >Jane Smith</mcw-chip
   >
   <mcw-chip leading-icon="face" trailing-icon="clear">John Doe</mcw-chip>

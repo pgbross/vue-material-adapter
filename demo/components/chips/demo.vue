@@ -10,7 +10,7 @@
     <section class="mcw-demo">
       <div class="mdc-typography--headline6">Input Chips</div>
       <mcw-chip-set input>
-        <mcw-chip id="wiffle" leading-icon="face" trailing-icon="clear"
+        <mcw-chip id="jane-chip" leading-icon="face" trailing-icon="clear"
           >Jane Smith</mcw-chip
         >
         <mcw-chip leading-icon="face" trailing-icon="clear">John Doe</mcw-chip>
@@ -76,16 +76,16 @@
 
 <style lang="scss" scoped>
 // @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
-// @import '@material/chips/mixins';
+@use '@material/chips/mixins' as chips;
 
-// .custom-chip-primary {
-//   @include mdc-chip-fill-color(#6200ee);
-//   @include mdc-chip-ink-color(white);
-// }
+.custom-chip-primary {
+  @include chips.fill-color(#6200ee);
+  @include chips.ink-color(white);
+}
 
-// .custom-chip-secondary {
-//   @include mdc-chip-fill-color(white);
-//   @include mdc-chip-ink-color(#018786);
-//   @include mdc-chip-outline(2px, solid, #018786);
-// }
+.custom-chip-secondary {
+  @include chips.fill-color(white);
+  @include chips.ink-color(#018786);
+  @include chips.outline(2px, solid, #018786);
+}
 </style>

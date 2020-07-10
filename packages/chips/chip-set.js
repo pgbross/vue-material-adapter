@@ -7,7 +7,6 @@ import {
   onMounted,
   provide,
   reactive,
-  ref,
   toRefs,
 } from '@vue/composition-api';
 
@@ -25,7 +24,6 @@ export default {
   },
 
   setup(props) {
-    const root = ref(null);
     const uiState = reactive({
       classes: {
         'mdc-chip-set': true,
@@ -35,6 +33,7 @@ export default {
       },
       listn: 0,
       myListeners: null,
+      root: null,
     });
 
     let foundation;
@@ -44,7 +43,7 @@ export default {
       // eslint-disable-next-line no-unused-vars
       const xx = uiState.listn; // for dependency
 
-      return [].slice.call(root.value.querySelectorAll(CHIP_SELECTOR));
+      return [].slice.call(uiState.root.querySelectorAll(CHIP_SELECTOR));
     });
 
     const chips_ = computed(() => {
@@ -74,9 +73,9 @@ export default {
       getIndexOfChipById: chipId => {
         return chips_.value.findIndex(({ id }) => id == chipId);
       },
-      hasClass: className => root.value.classList.contains(className),
+      hasClass: className => uiState.root.classList.contains(className),
       isRTL: () =>
-        window.getComputedStyle(root.value).getPropertyValue('direction') ===
+        window.getComputedStyle(uiState.root).getPropertyValue('direction') ===
         'rtl',
       removeChipAtIndex: index => {
         if (index >= 0 && index < chips_.value.length) {
@@ -125,7 +124,7 @@ export default {
         (slotObserver = new MutationObserver((mutationList, observer) => {
           uiState.listn++;
         }));
-      slotObserver.observe(root.value, {
+      slotObserver.observe(uiState.root, {
         childList: true,
         // subtree: true,
       });
@@ -135,6 +134,6 @@ export default {
       slotObserver.disconnect();
       foundation.destroy();
     });
-    return { ...toRefs(uiState), root };
+    return { ...toRefs(uiState) };
   },
 };

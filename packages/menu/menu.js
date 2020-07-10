@@ -5,14 +5,12 @@ import {
   onBeforeUnmount,
   onMounted,
   reactive,
-  ref,
   toRefs,
   watch,
 } from '@vue/composition-api';
 import { emitCustomEvent } from '~/base/index.js';
 
 const { cssClasses, strings } = MDCMenuFoundation;
-
 const DefaultFocusState_ = {
   NONE: 0,
   LIST_ROOT: 1,
@@ -39,20 +37,19 @@ export default {
   },
 
   setup(props, { emit }) {
-    const menuSurface = ref(null);
-    const list = ref(null);
-
     const uiState = reactive({
       classes: {},
       styles: {},
       menuOpen: false,
       myWrapFocus: true,
+      menuSurface: null,
+      list: null,
     });
 
     let foundation;
     let rootEl;
 
-    const items = computed(() => list.value.listElements ?? []);
+    const items = computed(() => uiState.list.listElements ?? []);
 
     const surfaceOpen = computed({
       get() {
@@ -72,9 +69,9 @@ export default {
       },
     });
 
-    const selectedIndex = computed(() => list.value?.selIndex.value);
+    const selectedIndex = computed(() => uiState.list?.selIndex.value);
 
-    const layout = () => list.value?.layout();
+    const layout = () => uiState.list?.layout();
 
     const handleAction = index => {
       foundation.handleItemAction(items.value[index]);
@@ -90,10 +87,10 @@ export default {
     };
 
     const listen = (evtType, handler, options) => {
-      menuSurface.value.addEventListener(evtType, handler, options);
+      uiState.menuSurface.addEventListener(evtType, handler, options);
     };
     const unlisten = (evtType, handler, options) => {
-      menuSurface.value.removeEventListener(evtType, handler, options);
+      uiState.menuSurface.removeEventListener(evtType, handler, options);
     };
 
     const setDefaultFocusState = focusState => {
@@ -103,16 +100,16 @@ export default {
       foundation.setDefaultFocusState(focusState);
     };
     const setAnchorCorner = corner => {
-      menuSurface.value.setAnchorCorner(corner);
+      uiState.menuSurface.setAnchorCorner(corner);
     };
     const setAnchorElement = element => {
-      menuSurface.value.setMenuSurfaceAnchorElement(element);
+      uiState.menuSurface.setMenuSurfaceAnchorElement(element);
     };
     const setSelectedIndex = index =>
-      list.value && (list.value.selIndex.value = index);
+      uiState.list && (uiState.list.selIndex.value = index);
 
     const setAnchorMargin = margin => {
-      menuSurface.value.setAnchorMargin(margin);
+      uiState.menuSurface.setAnchorMargin(margin);
     };
     const getOptionByIndex = index => {
       const itms = items.value;
@@ -125,33 +122,33 @@ export default {
 
     const getPrimaryTextAtIndex = index => {
       const item = getOptionByIndex(index);
-      if (item && list.value) {
-        return list.valie.getPrimaryText(item) || '';
+      if (item && uiState.list) {
+        return uiState.list.getPrimaryText(item) || '';
       }
       return '';
     };
 
     const setFixedPosition = isFixed => {
-      menuSurface.value.foundation.setFixedPosition(isFixed);
+      uiState.menuSurface.foundation.setFixedPosition(isFixed);
     };
 
     const hoistMenuToBody = () => {
-      menuSurface.value.foundation.hoistMenuToBody();
+      uiState.menuSurface.foundation.hoistMenuToBody();
     };
 
     const setIsHoisted = isHoisted => {
-      menuSurface.value.foundation.setIsHoisted(isHoisted);
+      uiState.menuSurface.foundation.setIsHoisted(isHoisted);
     };
 
     const setAbsolutePosition = (x, y) => {
-      menuSurface.value.foundation.setAbsolutePosition(x, y);
+      uiState.menuSurface.foundation.setAbsolutePosition(x, y);
     };
 
-    const typeaheadInProgress = () => list.value.typeAheadInProgress ?? false;
+    const typeaheadInProgress = () => uiState.list.typeAheadInProgress ?? false;
 
     const typeaheadMatchItem = (nextChar, startingIndex) => {
-      if (list.value) {
-        return list.value.typeaheadMatchItem(nextChar, startingIndex);
+      if (uiState.list) {
+        return uiState.list.typeaheadMatchItem(nextChar, startingIndex);
       }
       return -1;
     };
@@ -176,7 +173,7 @@ export default {
       elementContainsClass: (element, className) =>
         element.classList.contains(className),
       closeSurface: skipRestoreFocus => {
-        menuSurface.value.close(skipRestoreFocus);
+        uiState.menuSurface.close(skipRestoreFocus);
         emit('change', false);
       },
 
@@ -199,7 +196,7 @@ export default {
 
       focusItemAtIndex: index => items.value[index].focus(),
       focusListRoot: () =>
-        menuSurface.value.querySelector(strings.LIST_SELECTOR).focus(),
+        uiState.menuSurface.querySelector(strings.LIST_SELECTOR).focus(),
 
       isSelectableItemAtIndex: index =>
         !!closest(items.value[index], `.${cssClasses.MENU_SELECTION_GROUP}`),
@@ -223,18 +220,18 @@ export default {
     );
 
     onMounted(() => {
-      rootEl = menuSurface.value.$el;
+      rootEl = uiState.menuSurface.$el;
       uiState.menuOpen = props.open;
       foundation = new MDCMenuFoundation(adapter);
       foundation.init();
 
       if (props.fixed) {
-        menuSurface.value.setFixedPosition(props.fixed);
+        uiState.menuSurface.setFixedPosition(props.fixed);
       }
 
       if (props.absolutePosition) {
         const [x, y] = props.absolutePosition;
-        menuSurface.value.setAbsolutePosition(x, y);
+        uiState.menuSurface.setAbsolutePosition(x, y);
       }
     });
 
@@ -244,8 +241,6 @@ export default {
 
     return {
       ...toRefs(uiState),
-      menuSurface,
-      list,
       handleAction,
       handleKeydown,
       onChange,
@@ -271,39 +266,5 @@ export default {
       typeaheadInProgress,
       typeaheadMatchItem,
     };
-  },
-
-  watchX: {},
-
-  computedX: {},
-
-  methodsX: {},
-  renderX(createElement) {
-    const { $scopedSlots: scopedSlots } = this;
-
-    return createElement(
-      'mcw-menu-surface',
-      {
-        class: { 'mdc-menu': 1 },
-        ref: 'menuSurface_',
-        attrs: { 'quick-open': this.quickOpen, open: this.menuOpen },
-        on: {
-          change: evt => this.onChange(evt),
-          keydown: evt => this.handleKeydown(evt),
-          'MDCMenuSurface:opened': evt => this.handleMenuSurfaceOpened(evt),
-        },
-      },
-      [
-        createElement(
-          'mcw-list',
-          {
-            ref: 'list',
-            props: { wrapFocus: this.myWrapFocus },
-            on: { change: index => this.handleAction({ detail: { index } }) },
-          },
-          scopedSlots.default?.(),
-        ),
-      ],
-    );
   },
 };

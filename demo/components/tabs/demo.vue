@@ -11,7 +11,7 @@
     <br />
     <div class="mdc-typography--headline6">Span content</div>
     <section class="mcw-demo mcw-demo--container">
-      <mcw-tab-bar active-tab-index="1" span-content @change="onSelected">
+      <mcw-tab-bar active-tab-index="1" span-content fade @change="onSelected">
         <mcw-tab v-for="item in filteredItems" :key="item.label">{{
           item
         }}</mcw-tab>

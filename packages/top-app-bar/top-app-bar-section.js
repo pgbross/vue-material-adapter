@@ -16,7 +16,7 @@ export default {
       },
     },
   },
-  setup(props, { listeners, slots }) {
+  setup(props, { slots }) {
     const classes = ['mdc-top-app-bar__section'];
 
     props.align == 'start' &&

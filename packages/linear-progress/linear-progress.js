@@ -3,7 +3,6 @@ import {
   onBeforeUnmount,
   onMounted,
   reactive,
-  ref,
   toRefs,
   watch,
 } from '@vue/composition-api';
@@ -35,15 +34,15 @@ export default {
       bufferbarStyles: {},
       primaryStyles: {},
       rootAttrs: {},
+      root: null,
     });
 
-    const root = ref(null);
     let foundation;
 
     const adapter = {
       addClass: className =>
         (uiState.classes = { ...uiState.classes, [className]: true }),
-      forceLayout: () => root.value.offsetWidth,
+      forceLayout: () => uiState.root.offsetWidth,
       setBufferBarStyle: (styleProperty, value) =>
         (uiState.bufferbarStyles = {
           ...uiState.bufferbarStyles,
@@ -55,7 +54,7 @@ export default {
           [styleProperty]: value,
         }),
 
-      hasClass: className => root.value.classList.contains(className),
+      hasClass: className => uiState.root.classList.contains(className),
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.classes;
@@ -127,6 +126,6 @@ export default {
 
     onBeforeUnmount(() => foundation.destroy());
 
-    return { ...toRefs(uiState), root };
+    return { ...toRefs(uiState) };
   },
 };

@@ -6,7 +6,6 @@ import {
   onBeforeUnmount,
   onMounted,
   reactive,
-  ref,
   toRefs,
 } from '@vue/composition-api';
 import { CheckboxAdapter } from './checkbox-adapter';
@@ -15,10 +14,9 @@ export default {
   name: 'mcw-data-table',
   props: { sticky: { type: Boolean } },
   setup(props, { emit }) {
-    const root = ref(null);
-
     const uiState = reactive({
       classes: { 'mdc-data-table--sticky-header': props.sticky },
+      root: null,
     });
 
     const checkboxFactory = el => {
@@ -52,7 +50,9 @@ export default {
     };
 
     const getHeaderCells = () => {
-      return [].slice.call(root.value.querySelectorAll(selectors.HEADER_CELL));
+      return [].slice.call(
+        uiState.root.querySelectorAll(selectors.HEADER_CELL),
+      );
     };
 
     const getRowByIndex_ = index => {
@@ -129,7 +129,7 @@ export default {
         );
       },
       getTableContainerHeight: () => {
-        const tableContainer = root.value
+        const tableContainer = uiState.root
           .querySelector`.${cssClasses.CONTAINER}`;
 
         if (!tableContainer) {
@@ -139,7 +139,7 @@ export default {
         return tableContainer.getBoundingClientRect().height;
       },
       getTableHeaderHeight: () => {
-        const tableHeader = root.value.querySelector(selectors.HEADER_ROW);
+        const tableHeader = uiState.root.querySelector(selectors.HEADER_ROW);
 
         if (!tableHeader) {
           throw new Error('MDCDataTable: Table header element not found.');
@@ -148,7 +148,7 @@ export default {
         return tableHeader.getBoundingClientRect().height;
       },
       setProgressIndicatorStyles: styles => {
-        const progressIndicator = root.value.querySelector(
+        const progressIndicator = uiState.root.querySelector(
           selectors.PROGRESS_INDICATOR,
         );
         if (!progressIndicator) {
@@ -164,19 +164,19 @@ export default {
         getRows()[rowIndex].classList.add(className),
       getRowCount: () => getRows().length,
       getRowElements: () =>
-        [].slice.call(root.value.querySelectorAll(selectors.ROW)),
+        [].slice.call(uiState.root.querySelectorAll(selectors.ROW)),
       getRowIdAtIndex: rowIndex =>
         getRows()[rowIndex].getAttribute(dataAttributes.ROW_ID),
       getRowIndexByChildElement: el => {
         return getRows().indexOf(closest(el, selectors.ROW));
       },
       getSelectedRowCount: () =>
-        root.value.querySelectorAll(selectors.ROW_SELECTED).length,
+        uiState.root.querySelectorAll(selectors.ROW_SELECTED).length,
       isCheckboxAtRowIndexChecked: rowIndex =>
         rowCheckboxList[rowIndex].checked,
       isHeaderRowCheckboxChecked: () => headerRowCheckbox.checked,
       isRowsSelectable: () =>
-        !!root.value.querySelector(selectors.ROW_CHECKBOX),
+        !!uiState.root.querySelector(selectors.ROW_CHECKBOX),
       notifyRowSelectionChanged: data => {
         emit(
           events.ROW_SELECTION_CHANGED,
@@ -196,7 +196,7 @@ export default {
       registerHeaderRowCheckbox: () => {
         headerRowCheckbox?.destroy();
 
-        const checkboxEl = root.value.querySelector(
+        const checkboxEl = uiState.root.querySelector(
           selectors.HEADER_ROW_CHECKBOX,
         );
         headerRowCheckbox = checkboxFactory(checkboxEl);
@@ -243,7 +243,7 @@ export default {
     };
 
     onMounted(() => {
-      headerRow = root.value.querySelector(`.${cssClasses.HEADER_ROW}`);
+      headerRow = uiState.root.querySelector(`.${cssClasses.HEADER_ROW}`);
 
       handleHeaderRowCheckboxChange = () =>
         foundation.handleHeaderRowCheckboxChange();
@@ -256,7 +256,7 @@ export default {
 
       headerRow.addEventListener('click', headerRowClickListener);
 
-      content = root.value.querySelector(`.${cssClasses.CONTENT}`);
+      content = uiState.root.querySelector(`.${cssClasses.CONTENT}`);
 
       handleRowCheckboxChange = event =>
         foundation.handleRowCheckboxChange(event);
@@ -282,6 +282,6 @@ export default {
       foundation.destroy();
     });
 
-    return { ...toRefs(uiState), root, getSelectedRowIds, layout };
+    return { ...toRefs(uiState), getSelectedRowIds, layout };
   },
 };

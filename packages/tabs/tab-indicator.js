@@ -5,7 +5,6 @@ import {
   onBeforeUnmount,
   onMounted,
   reactive,
-  ref,
   toRefs,
 } from '@vue/composition-api';
 
@@ -14,8 +13,7 @@ const { cssClasses } = MDCTabIndicatorFoundation;
 export default {
   name: 'mcw-tab-indicator',
   props: { fade: { type: Boolean }, icon: { type: String } },
-  setup(props, { root: $root }) {
-    const contentEl = ref(null);
+  setup(props) {
     const uiState = reactive({
       classes: { 'mdc-tab-indicator--fade': props.fade },
       contentClasses: {
@@ -25,6 +23,7 @@ export default {
       },
       contentAttrs: { 'aria-hidden': !!props.icon },
       styles: {},
+      contentEl: null,
     });
 
     let foundation;
@@ -37,7 +36,7 @@ export default {
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
-      computeContentClientRect: () => contentEl.value.getBoundingClientRect(),
+      computeContentClientRect: () => uiState.contentEl.getBoundingClientRect(),
       setContentStyleProperty: (prop, value) =>
         (uiState.styles = { ...uiState.styles, [prop]: value }),
     };
@@ -91,7 +90,6 @@ export default {
 
     return {
       ...toRefs(uiState),
-      contentEl,
       activate,
       deactivate,
       computeContentClientRect,

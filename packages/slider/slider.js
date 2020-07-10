@@ -5,7 +5,6 @@ import {
   onBeforeUnmount,
   onMounted,
   reactive,
-  ref,
   toRefs,
   watch,
 } from '@vue/composition-api';
@@ -28,9 +27,6 @@ export default {
     layoutOnSource: { type: Object, required: false },
   },
   setup(props, { emit, root: $root }) {
-    const root = ref(null);
-    const thumbContainer = ref(null);
-
     let stepSize = props.step;
     if (props.discrete && !stepSize) {
       stepSize = 1;
@@ -50,6 +46,8 @@ export default {
       markerValue: '',
       numMarkers: 0,
       stepSize,
+      root: null,
+      thumbContainer: null,
     });
 
     let foundation;
@@ -60,7 +58,7 @@ export default {
     });
 
     const adapter = {
-      hasClass: className => root.value.classList.contains(className),
+      hasClass: className => uiState.root.classList.contains(className),
       addClass: className =>
         (uiState.classes = { ...uiState.classes, [className]: true }),
       removeClass: className => {
@@ -68,7 +66,7 @@ export default {
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
-      getAttribute: name => root.value.getAttribute(name),
+      getAttribute: name => uiState.root.getAttribute(name),
       setAttribute: (name, value) =>
         (uiState.sliderAttrs = { ...uiState.sliderAttrs, [name]: value }),
 
@@ -78,19 +76,23 @@ export default {
         uiState.sliderAttrs = rest;
       },
 
-      computeBoundingRect: () => root.value.getBoundingClientRect(),
-      getTabIndex: () => root.value.tabIndex,
+      computeBoundingRect: () => uiState.root.getBoundingClientRect(),
+      getTabIndex: () => uiState.root.tabIndex,
       registerInteractionHandler: (type, handler) => {
-        root.value.addEventListener(type, handler, applyPassive());
+        uiState.root.addEventListener(type, handler, applyPassive());
       },
       deregisterInteractionHandler: (type, handler) => {
-        root.value.removeEventListener(type, handler, applyPassive());
+        uiState.root.removeEventListener(type, handler, applyPassive());
       },
       registerThumbContainerInteractionHandler: (type, handler) => {
-        thumbContainer.value.addEventListener(type, handler, applyPassive());
+        uiState.thumbContainer.addEventListener(type, handler, applyPassive());
       },
       deregisterThumbContainerInteractionHandler: (type, handler) => {
-        thumbContainer.value.removeEventListener(type, handler, applyPassive());
+        uiState.thumbContainer.removeEventListener(
+          type,
+          handler,
+          applyPassive(),
+        );
       },
       registerBodyInteractionHandler: (type, handler) => {
         document.body.addEventListener(type, handler);
@@ -141,7 +143,7 @@ export default {
         };
       },
 
-      isRTL: () => getComputedStyle(root.value).direction === 'rtl',
+      isRTL: () => getComputedStyle(uiState.root).direction === 'rtl',
     };
 
     const layout = () => {
@@ -223,8 +225,6 @@ export default {
       foundation.destroy();
     });
 
-    return { ...toRefs(uiState), root, thumbContainer, hasMarkers };
+    return { ...toRefs(uiState), hasMarkers };
   },
-
-  watchX: {},
 };

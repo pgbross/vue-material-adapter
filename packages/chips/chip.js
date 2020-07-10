@@ -5,7 +5,7 @@ import {
   onBeforeUnmount,
   onMounted,
   reactive,
-  ref,
+  toRef,
   toRefs,
   watch,
 } from '@vue/composition-api';
@@ -26,13 +26,7 @@ export default {
       },
     },
   },
-  inject: ['mcwChipSet'],
-
   setup(props, { slots }) {
-    const root = ref(null);
-    const checkmarkEl = ref(null);
-    const trailingAction = ref(null);
-
     const uiState = reactive({
       classes: {
         'mdc-chip': true,
@@ -46,12 +40,15 @@ export default {
       primaryAttrs: {},
       trailingAttrs: {},
       myListeners: null,
+      root: null,
+      checkmarkEl: null,
+      trailingAction: null,
     });
 
     const mcwChipSet = inject('mcwChipSet');
 
     const { classes: rippleClasses, styles: rippleStyles } = useRipplePlugin(
-      root,
+      toRef(uiState, 'root'),
     );
 
     let foundation;
@@ -68,7 +65,7 @@ export default {
     let leadingIcon_;
 
     const id = computed(() => {
-      return root.value.id;
+      return uiState.root.id;
     });
 
     const selected = computed({
@@ -107,33 +104,33 @@ export default {
       eventTargetHasClass: (target, className) =>
         target.classList.contains(className),
       focusPrimaryAction: () => {
-        root.value.querySelector(strings.PRIMARY_ACTION_SELECTOR)?.focus();
+        uiState.root.querySelector(strings.PRIMARY_ACTION_SELECTOR)?.focus();
       },
       focusTrailingAction: () => {
         trailingAction_?.focus();
       },
-      getAttribute: attr => root.value.getAttribute(attr),
+      getAttribute: attr => uiState.root.getAttribute(attr),
       getCheckmarkBoundingClientRect: () => {
-        return checkmarkEl.value?.getBoundingClientRect();
+        return uiState.checkmarkEl?.getBoundingClientRect();
       },
       getComputedStyleValue: propertyName =>
-        window.getComputedStyle(root.value).getPropertyValue(propertyName),
-      getRootBoundingClientRect: () => root.value.getBoundingClientRect(),
-      hasClass: className => root.value.classList.contains(className),
+        window.getComputedStyle(uiState.root).getPropertyValue(propertyName),
+      getRootBoundingClientRect: () => uiState.root.getBoundingClientRect(),
+      hasClass: className => uiState.root.classList.contains(className),
       hasLeadingIcon: () => !!haveleadingIcon.value,
       isRTL: () =>
-        window.getComputedStyle(root.value).getPropertyValue('direction') ===
+        window.getComputedStyle(uiState.root).getPropertyValue('direction') ===
         'rtl',
       isTrailingActionNavigable: () => {
         if (trailingAction_) {
-          return trailingAction.value?.isNavigable();
+          return uiState.trailingAction?.isNavigable();
         }
         return false;
       },
 
       notifyInteraction: () => {
         emitCustomEvent(
-          root.value,
+          uiState.root,
           strings.INTERACTION_EVENT,
           {
             chipId: id.value,
@@ -143,7 +140,7 @@ export default {
       },
       notifyNavigation: (key, source) =>
         emitCustomEvent(
-          root.value,
+          uiState.root,
           strings.NAVIGATION_EVENT,
           {
             chipId: id.value,
@@ -154,7 +151,7 @@ export default {
         ),
       notifyRemoval: removedAnnouncement => {
         emitCustomEvent(
-          root.value,
+          uiState.root,
           strings.REMOVAL_EVENT,
           { chipId: id.value, removedAnnouncement },
           true,
@@ -162,14 +159,14 @@ export default {
       },
       notifySelection: (selected, shouldIgnore) =>
         emitCustomEvent(
-          root.value,
+          uiState.root,
           strings.SELECTION_EVENT,
           { chipId: id.value, selected: selected, shouldIgnore },
           true /* shouldBubble */,
         ),
       notifyTrailingIconInteraction: () => {
         emitCustomEvent(
-          root.value,
+          uiState.root,
           strings.TRAILING_ICON_INTERACTION_EVENT,
           {
             chipId: id.value,
@@ -188,7 +185,7 @@ export default {
         }
       },
       removeTrailingActionFocus: () => {
-        trailingAction.value?.removeFocus();
+        uiState.trailingAction?.removeFocus();
       },
       setPrimaryActionAttr: (attr, value) =>
         (uiState.primaryAttrs = { ...uiState.primaryAttrs, [attr]: value }),
@@ -212,9 +209,9 @@ export default {
     const isSelected = () => foundation.isSelected();
 
     const remove = () => {
-      const parent = root.value.parentNode;
+      const parent = uiState.root.parentNode;
       if (parent != null) {
-        parent.removeChild(root.value);
+        parent.removeChild(uiState.root);
       }
     };
 
@@ -226,9 +223,9 @@ export default {
     );
 
     onMounted(() => {
-      leadingIcon_ = root.value.querySelector(strings.LEADING_ICON_SELECTOR);
+      leadingIcon_ = uiState.root.querySelector(strings.LEADING_ICON_SELECTOR);
 
-      trailingAction_ = root.value.querySelector(
+      trailingAction_ = uiState.root.querySelector(
         strings.TRAILING_ACTION_SELECTOR,
       );
 
@@ -270,8 +267,6 @@ export default {
 
     return {
       ...toRefs(uiState),
-      root,
-      checkmarkEl,
       classes,
       styles,
       id,
@@ -287,9 +282,6 @@ export default {
       focusPrimaryAction,
       focusTrailingAction,
       setSelectedFromChipSet,
-      trailingAction,
     };
   },
-
-  watchX: {},
 };

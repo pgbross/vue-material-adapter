@@ -4,9 +4,9 @@ import {
   onBeforeUnmount,
   onMounted,
   reactive,
-  ref,
   toRefs,
   watch,
+  toRef,
 } from '@vue/composition-api';
 import { useRipplePlugin } from '~/ripple/ripple-plugin';
 
@@ -29,16 +29,17 @@ export default {
   },
 
   setup(props, { slots, emit }) {
-    const control = ref(null);
-    const root = ref(null);
     const uiState = reactive({
       classes: { 'mdc-switch': 1 },
       nativeControlChecked: props.checked,
       nativeControlDisabled: props.disabled,
       nativeAttrs: {},
+      root: null,
     });
 
-    const { classes: rippleClasses, styles } = useRipplePlugin(root);
+    const { classes: rippleClasses, styles } = useRipplePlugin(
+      toRef(uiState, 'root'),
+    );
 
     let foundation;
     const switchId = props.id ?? `__mcw-switch-${switchId_++}`;
@@ -105,8 +106,6 @@ export default {
       classes,
       hasLabel,
       onChanged,
-      control,
-      root,
       styles,
       switchId,
     };

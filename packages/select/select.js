@@ -4,9 +4,9 @@ import {
   onBeforeUnmount,
   onMounted,
   reactive,
-  ref,
   toRefs,
   watch,
+  toRef,
 } from '@vue/composition-api';
 import { emitCustomEvent } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin';
@@ -38,8 +38,6 @@ export default {
   },
 
   setup(props, { emit }) {
-    const anchorEl = ref(null);
-
     const uiState = reactive({
       styles: {},
       classes: {},
@@ -55,18 +53,19 @@ export default {
       outlineEl: null,
       labelEl: null,
       menu: null,
+      anchorEl: null,
     });
 
     let rippleClasses;
     let rippleStyles;
 
     if (props.outlined) {
-      const { classes, styles } = useRipplePlugin(anchorEl, {
+      const { classes, styles } = useRipplePlugin(toRef(uiState, 'anchorEl'), {
         registerInteractionHandler: (evtType, handler) => {
-          anchorEl.value.addEventListener(evtType, handler);
+          uiState.anchorEl.addEventListener(evtType, handler);
         },
         deregisterInteractionHandler: (evtType, handler) => {
-          anchorEl.value.removeEventListener(evtType, handler);
+          uiState.anchorEl.removeEventListener(evtType, handler);
         },
       });
       rippleClasses = classes;
@@ -94,7 +93,7 @@ export default {
     const handleFocus = () => foundation.handleFocus();
     const handleBlur = () => foundation.handleBlur();
     const handleClick = evt => {
-      anchorEl.value.focus();
+      uiState.anchorEl.focus();
       handleFocus();
       foundation.handleClick(getNormalizedXCoordinate(evt));
     };
@@ -127,7 +126,7 @@ export default {
         uiState.menu.$el.querySelector(strings.SELECTED_ITEM_SELECTOR),
       getMenuItemAttr: (menuItem, attr) => menuItem.getAttribute(attr),
       setSelectedText: text => (uiState.selectedTextContent = text),
-      isSelectAnchorFocused: () => document.activeElement === anchorEl.value,
+      isSelectAnchorFocused: () => document.activeElement === uiState.anchorEl,
       getSelectAnchorAttr: attr => uiState.selectAnchorAttrs[attr],
       setSelectAnchorAttr: (attr, value) =>
         (uiState.selectAnchorAttrs = {
@@ -149,7 +148,7 @@ export default {
       },
       openMenu: () => (uiState.menu.surfaceOpen = true),
       closeMenu: () => (uiState.menu.surfaceOpen = false),
-      getAnchorElement: () => anchorEl.value,
+      getAnchorElement: () => uiState.anchorEl,
       setMenuAnchorElement: anchorEl => uiState.menu.setAnchorElement(anchorEl),
       setMenuAnchorCorner: anchorCorner =>
         uiState.menu.setAnchorCorner(anchorCorner),
@@ -268,7 +267,6 @@ export default {
 
     return {
       ...toRefs(uiState),
-      anchorEl,
       rootClasses,
       handleBlur,
       handleFocus,

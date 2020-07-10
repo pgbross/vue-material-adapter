@@ -8,7 +8,6 @@ import {
   onMounted,
   provide,
   reactive,
-  ref,
   toRefs,
   watch,
 } from '@vue/composition-api';
@@ -41,16 +40,15 @@ export default {
   },
 
   setup(props, { emit, root: $root }) {
-    const root = ref(null);
-    const drawer = ref(null);
     const uiState = reactive({
       classes: {
         'mdc-drawer': 1,
         'mdc-drawer--modal': 1,
       },
+      root: null,
+      drawer: null,
     });
 
-    // const type = computed(() => {});
     const focusTrapFactory_ = el => new FocusTrap(el);
 
     const show = () => foundation.open();
@@ -69,13 +67,15 @@ export default {
     const initialSyncWithDOM = () => {
       const { MODAL } = MDCDismissibleDrawerFoundation.cssClasses;
 
-      if (drawer.value.classList.contains(MODAL)) {
+      if (uiState.drawer.classList.contains(MODAL)) {
         const { SCRIM_SELECTOR } = MDCDismissibleDrawerFoundation.strings;
-        const scrim_ = drawer.value.parentElement.querySelector(SCRIM_SELECTOR);
+        const scrim_ = uiState.drawer.parentElement.querySelector(
+          SCRIM_SELECTOR,
+        );
         const handleScrimClick_ = () => foundation.handleScrimClick();
         scrim_.addEventListener('click', handleScrimClick_);
         focusTrap_ = util.createFocusTrapInstance(
-          drawer.value,
+          uiState.drawer,
           focusTrapFactory_,
         );
       }
@@ -83,8 +83,8 @@ export default {
       const handleKeydown_ = evt => foundation.handleKeydown(evt);
       const handleTransitionEnd_ = evt => foundation.handleTransitionEnd(evt);
 
-      root.value.addEventListener('keydown', handleKeydown_);
-      root.value.addEventListener('transitionend', handleTransitionEnd_);
+      uiState.root.addEventListener('keydown', handleKeydown_);
+      uiState.root.addEventListener('transitionend', handleTransitionEnd_);
     };
 
     const onOpen_ = value => {
@@ -108,7 +108,7 @@ export default {
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
-      hasClass: className => drawer.value.classList.contains(className),
+      hasClass: className => uiState.drawer.classList.contains(className),
       elementHasClass: (element, className) =>
         element.classList.contains(className),
       saveFocus: () => {
@@ -116,12 +116,12 @@ export default {
       },
       restoreFocus: () => {
         const previousFocus = previousFocus_?.focus;
-        if (drawer.value.contains(document.activeElement) && previousFocus) {
+        if (uiState.drawer.contains(document.activeElement) && previousFocus) {
           previousFocus_.focus();
         }
       },
       focusActiveNavigationItem: () => {
-        const activeNavItemEl = drawer.value.querySelector(
+        const activeNavItemEl = uiState.drawer.querySelector(
           `.${MDCListFoundation.cssClasses.LIST_ITEM_ACTIVATED_CLASS}`,
         );
         if (activeNavItemEl) {
@@ -146,7 +146,7 @@ export default {
     );
 
     onMounted(() => {
-      const listEl = root.value.querySelector(
+      const listEl = uiState.root.querySelector(
         `.${MDCListFoundation.cssClasses.ROOT}`,
       );
       if (listEl) {
@@ -155,9 +155,9 @@ export default {
       }
 
       const { DISMISSIBLE, MODAL } = MDCDismissibleDrawerFoundation.cssClasses;
-      if (drawer.value.classList.contains(DISMISSIBLE)) {
+      if (uiState.drawer.classList.contains(DISMISSIBLE)) {
         foundation = new MDCDismissibleDrawerFoundation(adapter);
-      } else if (drawer.value.classList.contains(MODAL)) {
+      } else if (uiState.drawer.classList.contains(MODAL)) {
         foundation = new MDCModalDrawerFoundation(adapter);
       } else {
         throw new Error(
@@ -199,8 +199,6 @@ export default {
 
     return {
       ...toRefs(uiState),
-      drawer,
-      root,
       onChange,
       show,
       close,

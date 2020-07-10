@@ -1,5 +1,5 @@
 <div :class="formFieldClasses" class="mdc-checkbox-wrapper" v-if="hasLabel">
-  <div ref="root" :class="classes" :style="styles">
+  <div ref="root" :class="rootClasses" :style="styles">
     <input
       :id="checkboxId"
       ref="control"
@@ -26,7 +26,7 @@
   </label>
 </div>
 
-<div ref="root" :class="classes" :style="styles" v-else>
+<div ref="root" :class="rootClasses" :style="styles" v-else>
   <input
     :id="checkboxId"
     ref="control"
