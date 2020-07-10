@@ -1,6 +1,6 @@
 import { computed, inject, reactive, ref, toRefs } from '@vue/composition-api';
 import { CustomLink } from '~/base/index.js';
-import { useRipplePlugin } from '~/ripple/ripple-plugin';
+import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 
 const dispatchProps = {
   event: String,

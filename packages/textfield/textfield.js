@@ -10,7 +10,7 @@ import {
   toRefs,
   watch,
 } from '@vue/composition-api';
-import { useRipplePlugin } from '~/ripple/ripple-plugin';
+import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 import TextfieldHelperText from './textfield-helper-text.js';
 import TextfieldIcon from './textfield-icon.vue';
 

@@ -9,7 +9,7 @@ import {
   toRef,
 } from '@vue/composition-api';
 import { emitCustomEvent } from '~/base/index.js';
-import { useRipplePlugin } from '~/ripple/ripple-plugin';
+import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 import SelectHelperText from './select-helper-text.js';
 import SelectIcon from './select-icon.vue';
 

@@ -1,6 +1,6 @@
 import { computed, reactive, ref, toRefs, watch } from '@vue/composition-api';
 import { CustomLink } from '~/base/index.js';
-import { useRipplePlugin } from '~/ripple/ripple-plugin';
+import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 
 export default {
   name: 'mcw-fab',

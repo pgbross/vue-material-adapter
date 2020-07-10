@@ -1,7 +1,7 @@
 import { MDCChipTrailingActionFoundation } from '@material/chips/trailingaction/foundation';
 import { onBeforeUnmount, onMounted, ref } from '@vue/composition-api';
 import { emitCustomEvent } from '~/base/index.js';
-import { useRipplePlugin } from '~/ripple/ripple-plugin';
+import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 
 const { strings } = MDCChipTrailingActionFoundation;
 

@@ -10,7 +10,7 @@ import {
   watch,
 } from '@vue/composition-api';
 import { emitCustomEvent } from '~/base/index.js';
-import { useRipplePlugin } from '~/ripple/ripple-plugin';
+import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 
 const { strings } = MDCChipFoundation;
 

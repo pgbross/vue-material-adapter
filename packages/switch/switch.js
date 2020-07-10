@@ -8,7 +8,7 @@ import {
   watch,
   toRef,
 } from '@vue/composition-api';
-import { useRipplePlugin } from '~/ripple/ripple-plugin';
+import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 
 let switchId_ = 0;
 

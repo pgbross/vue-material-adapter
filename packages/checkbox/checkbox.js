@@ -13,7 +13,7 @@ import {
   watch,
 } from '@vue/composition-api';
 import { emitCustomEvent } from '../base/custom-event';
-import { useRipplePlugin } from '../ripple/ripple-plugin';
+import { useRipplePlugin } from '../ripple/ripple-plugin.js';
 
 const CB_PROTO_PROPS = ['checked', 'indeterminate'];
 let checkboxId_ = 0;

@@ -1,1 +1,1 @@
-export { useRipplePlugin, RippleElement } from './ripple-plugin';
+export { useRipplePlugin, RippleElement } from './ripple-plugin.js';

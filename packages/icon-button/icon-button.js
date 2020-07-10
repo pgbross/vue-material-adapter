@@ -8,7 +8,7 @@ import {
   toRefs,
   watch,
 } from '@vue/composition-api';
-import { useRipplePlugin } from '~/ripple/ripple-plugin';
+import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 
 export default {
   name: 'mcw-icon-button',

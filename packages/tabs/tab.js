@@ -10,7 +10,7 @@ import {
   toRef,
 } from '@vue/composition-api';
 import { CustomLink, emitCustomEvent } from '~/base/index.js';
-import { useRipplePlugin } from '~/ripple/ripple-plugin';
+import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 
 let tabId_ = 0;
 
