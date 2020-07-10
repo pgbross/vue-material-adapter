@@ -1,5 +1,5 @@
 import { computed, ref } from '@vue/composition-api';
-import { CustomButton } from '~/base/index.js';
+import { CustomLink } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/index.js';
 
 export default {
@@ -12,7 +12,7 @@ export default {
     icon: String,
     trailingIcon: String,
   },
-  components: { CustomButton },
+  components: { CustomLink },
   setup(props, { listeners, slots }) {
     const root = ref(null);
 

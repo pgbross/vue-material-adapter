@@ -1,5 +1,5 @@
 import { computed, reactive, ref, toRefs, watch } from '@vue/composition-api';
-import { CustomButton } from '~/base/index.js';
+import { CustomLink } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin';
 
 export default {
@@ -11,7 +11,7 @@ export default {
     exited: Boolean,
     label: String,
   },
-  components: { CustomButton },
+  components: { CustomLink },
   setup(props, { slots, listeners }) {
     const root = ref(null);
     const uiState = reactive({

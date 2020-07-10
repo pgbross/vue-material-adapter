@@ -1,4 +1,11 @@
-<custom-button ref="root" :class="classes" :style="styles" :link="$attrs" v-on="listeners">
+<custom-link
+  ref="root"
+  :class="classes"
+  :style="styles"
+  :link="$attrs"
+  tag="button"
+  v-on="listeners"
+>
   <div class="mdc-button__ripple"></div>
   <slot name="icon" v-if="haveIcon">
     <i class="material-icons mdc-button__icon" aria-hidden="true">{{icon}}</i>
@@ -9,4 +16,4 @@
   <slot name="trailingIcon" v-if="haveTrailingIcon"
     ><i class="material-icons mdc-button__icon" aria-hidden="true">{{trailingIcon}}</i></slot
   >
-</custom-button>
+</custom-link>

@@ -3,8 +3,8 @@ import { h } from '@vue/composition-api';
 export const CustomLink = {
   name: 'custom-link',
   props: {
-    tag: { type: String, default: 'a' },
     link: Object,
+    tag: String,
   },
   setup(props, { listeners, root: { $router }, slots }) {
     return () => {
@@ -31,7 +31,7 @@ export const CustomLink = {
 
         data.props = {
           to,
-          tag,
+          tag: tag ?? props.tag,
           replace,
           append,
           activeClass,
@@ -43,8 +43,14 @@ export const CustomLink = {
         if (listeners.click) {
           data.nativeOn = { click: listeners.click };
         }
+      } else if (link.href) {
+        element = 'a';
+        data.attrs.role = 'button';
       } else {
-        element = props.tag ?? 'a';
+        element = tag ?? props.tag ?? 'a';
+        if (element !== 'button') {
+          data.attrs.role = 'button';
+        }
       }
 
       return h(element, data, [slots.default?.()]);
