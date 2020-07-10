@@ -380,9 +380,13 @@ function BasePlugin(components) {
 
         var mdcName = ['mdc'].concat(_toConsumableArray(rest)).join('-');
         var mcwName = ['mcw'].concat(_toConsumableArray(rest)).join('-');
-        var definition = vm.extend(component);
-        vm.component(mcwName, definition);
-        vm.component(mdcName, definition);
+        var haveComponent = vm.options.components[mcwName];
+
+        if (!haveComponent) {
+          var definition = vm.extend(component);
+          vm.component(mcwName, definition);
+          vm.component(mdcName, definition);
+        }
       });
     },
     components: components
@@ -6183,7 +6187,8 @@ var menu = BasePlugin({
   mcwMenu: __vue_component__$n,
   mcwMenuSurface: __vue_component__$m,
   mcwMenuItem: mcwMenuItem,
-  mcwMenuAnchor: mcwMenuAnchor
+  mcwMenuAnchor: mcwMenuAnchor,
+  mcwList: __vue_component__$l
 });
 
 var cssClasses$4 = MDCNotchedOutlineFoundation.cssClasses;
@@ -7393,7 +7398,10 @@ __vue_render__$r._withStripped = true;
   );
 
 var select = BasePlugin({
-  mcwSelect: __vue_component__$r
+  mcwSelect: __vue_component__$r,
+  mcwNotchedOutline: __vue_component__$o,
+  mcwLineRipple: __vue_component__$i,
+  mcwFloatingLabel: __vue_component__$d
 });
 
 var script$s = {
@@ -9301,7 +9309,7 @@ __vue_render__$A._withStripped = true;
     undefined
   );
 
-var TextfieldHelperText = {
+var script$B = {
   name: 'mcw-textfield-helper-text',
   props: {
     persistent: Boolean,
@@ -9373,7 +9381,7 @@ var TextfieldHelperText = {
 };
 
 /* script */
-const __vue_script__$B = TextfieldHelperText;
+const __vue_script__$B = script$B;
 
 /* template */
 var __vue_render__$B = function() {
@@ -9418,25 +9426,23 @@ __vue_render__$B._withStripped = true;
     undefined
   );
 
-var script$B = {
+var script$C = {
   name: 'textfield-icon',
   props: {
     disabled: Boolean,
-    leading: {
-      type: Boolean,
-      default: function _default() {
-        return true;
-      }
-    }
+    trailing: Boolean,
+    trailingIcon: Boolean
   },
   setup: function setup(props, _ref) {
     var emit = _ref.emit;
     var uiState = reactive({
       classes: _defineProperty({
         'mdc-text-field__icon': 1
-      }, "mdc-text-field__icon--".concat(props.leading ? 'leading' : 'trailing'), 1),
-      rootAttrs: {},
-      textContent: null,
+      }, "mdc-text-field__icon--".concat(props.trailing || props.trailingIcon ? 'trailing' : 'leading'), 1),
+      rootAttrs: {
+        tabindex: props.disabled ? '-1' : '0',
+        role: props.disabled ? void 0 : 'button'
+      },
       root: null,
       foundation: {}
     });
@@ -9455,8 +9461,11 @@ var script$B = {
 
         uiState.rootAttrs = rest;
       },
-      setContent: function setContent(content) {
-        uiState.root.textContent = content;
+      setContent: function setContent()
+      /* content */
+      {// set content is done through vue in templates
+        // so we dont expose a method to set content
+        // thus this is a no-op
       },
       registerInteractionHandler: function registerInteractionHandler(evtType, handler) {
         return uiState.root.addEventListener(evtType, handler);
@@ -9468,6 +9477,7 @@ var script$B = {
         emitCustomEvent(uiState.root, MDCTextFieldIconFoundation.strings.ICON_EVENT, {}, true
         /* shouldBubble  */
         );
+        emit('click');
       }
     };
     onMounted(function () {
@@ -9482,7 +9492,7 @@ var script$B = {
 };
 
 /* script */
-const __vue_script__$C = script$B;
+const __vue_script__$C = script$C;
 
 /* template */
 var __vue_render__$C = function() {
@@ -9497,7 +9507,7 @@ var __vue_render__$C = function() {
       _vm.rootAttrs,
       false
     ),
-    [_vm.textContent ? [_vm._v(_vm._s(_vm.textContent))] : _vm._t("default")],
+    [_vm._t("default")],
     2
   )
 };
@@ -9535,7 +9545,7 @@ __vue_render__$C._withStripped = true;
 
 var strings$a = MDCTextFieldFoundation.strings;
 var uid_$1 = 0;
-var script$C = {
+var script$D = {
   name: 'mcw-textfield',
   inheritAttrs: false,
   model: {
@@ -9599,6 +9609,7 @@ var script$C = {
   },
   setup: function setup(props, _ref) {
     var emit = _ref.emit,
+        $root = _ref.root.$root,
         slots = _ref.slots,
         listeners = _ref.listeners;
     var uiState = reactive({
@@ -9610,8 +9621,8 @@ var script$C = {
         'mdc-text-field--disabled': props.disabled,
         'mdc-text-field--textarea': props.multiline,
         'mdc-text-field--outlined': !props.fullwidth && props.outline,
-        'mdc-text-field--with-leading-icon': Boolean(slots.leadingIcon),
-        'mdc-text-field--with-trailing-icon': Boolean(slots.trailingIcon),
+        'mdc-text-field--with-leading-icon': Boolean(slots.leadingIcon || slots.leading),
+        'mdc-text-field--with-trailing-icon': Boolean(slots.trailingIcon || slots.trailing),
         'mdc-text-field--filled': Boolean(!props.outline),
         'mdc-text-field--no-label': !props.label
       },
@@ -9833,7 +9844,7 @@ var script$C = {
       });
       foundation.init();
       foundation.setValue(props.value);
-      foundation.setDisabled(props.disabled);
+      props.disabled && foundation.setDisabled(props.disabled);
       uiState.input && (uiState.input.required = props.required);
 
       if (typeof props.valid !== 'undefined') {
@@ -9859,13 +9870,13 @@ var script$C = {
     });
   },
   components: {
-    TextfieldHelperText: TextfieldHelperText,
-    TextfieldIcon: __vue_component__$C
+    mcwLineRipple: __vue_component__$i,
+    mcwNotchedOutline: __vue_component__$o
   }
 };
 
 /* script */
-const __vue_script__$D = script$C;
+const __vue_script__$D = script$D;
 
 /* template */
 var __vue_render__$D = function() {
@@ -9881,6 +9892,8 @@ var __vue_render__$D = function() {
             !_vm.outline
               ? _c("span", { staticClass: "mdc-text-field__ripple" })
               : _vm._e(),
+            _vm._v(" "),
+            _vm._t("leading"),
             _vm._v(" "),
             _vm._t("leadingIcon"),
             _vm._v(" "),
@@ -9943,6 +9956,8 @@ var __vue_render__$D = function() {
               : _vm._e(),
             _vm._v(" "),
             _vm._t("trailingIcon"),
+            _vm._v(" "),
+            _vm._t("trailing"),
             _vm._v(" "),
             _vm.outline
               ? _c("mcw-notched-outline", { ref: "labelEl" }, [
@@ -10085,7 +10100,10 @@ var textfield = BasePlugin({
   mcwTextfield: __vue_component__$D,
   mcwTextfieldIcon: __vue_component__$C,
   mcwCharacterCounter: __vue_component__$A,
-  mcwTextfieldHelperText: __vue_component__$B
+  mcwTextfieldHelperText: __vue_component__$B,
+  mcwLineRipple: __vue_component__$i,
+  mcwNotchedOutline: __vue_component__$o,
+  mcwFloatingLabel: __vue_component__$d
 });
 
 var mcwFixedAdjust = {
@@ -10215,7 +10233,7 @@ var mcwTopAppBarTitle = {
 
 var cssClasses$6 = MDCTopAppBarFoundation.cssClasses,
     strings$b = MDCTopAppBarFoundation.strings;
-var script$D = {
+var script$E = {
   name: 'mcw-top-app-bar',
   props: {
     short: Boolean,
@@ -10370,7 +10388,7 @@ var script$D = {
 };
 
 /* script */
-const __vue_script__$E = script$D;
+const __vue_script__$E = script$E;
 
 /* template */
 var __vue_render__$E = function() {
