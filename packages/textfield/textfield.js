@@ -163,6 +163,8 @@ export default {
 
     const focus = () => uiState.input?.focus();
 
+    const isValid = () => foundation.isValid();
+
     const adapter = {
       addClass: className =>
         (uiState.classes = { ...uiState.classes, [className]: true }),
@@ -314,6 +316,7 @@ export default {
       internalCharacterCounter,
       rootClasses,
       rippleStyles,
+      isValid,
     };
   },
   components: { mcwLineRipple, mcwNotchedOutline },
