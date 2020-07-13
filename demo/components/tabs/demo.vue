@@ -2,7 +2,7 @@
   <div class>
     <div class="mdc-typography--headline6">Simple</div>
     <section class="mcw-demo mcw-demo--container">
-      <mcw-tab-bar active-tab-index="1" @change="onSelected">
+      <mcw-tab-bar ref="firstExample" @change="onSelected">
         <mcw-tab v-for="item in filteredItems" :key="item.label">{{
           item
         }}</mcw-tab>
@@ -11,7 +11,7 @@
     <br />
     <div class="mdc-typography--headline6">Span content</div>
     <section class="mcw-demo mcw-demo--container">
-      <mcw-tab-bar active-tab-index="1" span-content fade @change="onSelected">
+      <mcw-tab-bar span-content fade @change="onSelected">
         <mcw-tab v-for="item in filteredItems" :key="item.label">{{
           item
         }}</mcw-tab>
@@ -64,12 +64,16 @@ export default {
     return {
       selectedItem: items[0],
       items,
+      activeTabIndex: 1,
     };
   },
   computed: {
     filteredItems() {
       return this.items.slice(0, 3);
     },
+  },
+  mounted() {
+    this.$refs.firstExample.activateTab(1);
   },
   methods: {
     onSelected(idx) {
