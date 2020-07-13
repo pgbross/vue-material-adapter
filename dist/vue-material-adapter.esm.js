@@ -1,4 +1,4 @@
-import { h, toRefs, ref, shallowReactive, onMounted, onBeforeUnmount, computed, reactive, toRef, watch, provide, inject } from '@vue/composition-api';
+import { h, toRefs, ref, shallowReactive, onMounted, onBeforeUnmount, computed, reactive, toRef, watch, provide, inject, watchEffect } from '@vue/composition-api';
 import { applyPassive } from '@material/dom/events';
 import { matches, closest } from '@material/dom/ponyfill';
 import { MDCRippleFoundation } from '@material/ripple';
@@ -8411,11 +8411,15 @@ var switchControl = BasePlugin({
 var strings$9 = MDCTabBarFoundation.strings;
 var script$w = {
   name: 'mcw-tab-bar',
+  model: {
+    prop: 'value',
+    event: 'change'
+  },
   props: {
-    activeTabIndex: [Number, String],
     fade: Boolean,
     stacked: Boolean,
-    spanContent: Boolean
+    spanContent: Boolean,
+    value: Number
   },
   setup: function setup(props, _ref) {
     var emit = _ref.emit,
@@ -8442,6 +8446,10 @@ var script$w = {
 
     var getTabElements_ = function getTabElements_() {
       return [].slice.call(root.value.querySelectorAll(strings$9.TAB_SELECTOR));
+    };
+
+    var activateTab = function activateTab(index) {
+      return foundation.activateTab(index);
     };
 
     var adapter = {
@@ -8515,14 +8523,15 @@ var script$w = {
         emitCustomEvent(root.value, strings$9.TAB_ACTIVATED_EVENT, {
           index: index
         }, true);
-        emit('change', index);
+        emit('change', Number(index));
       }
     };
     onMounted(function () {
       foundation = foundation = new MDCTabBarFoundation(adapter);
       foundation.init(); // ensure active tab
 
-      foundation.activateTab(props.activeTabIndex || 0);
+      props.value !== void 0;
+      foundation.activateTab(Number(props.value) || 0);
 
       for (var i = 0; i < tabList.value.length; i++) {
         if (tabList.value[i].active) {
@@ -8530,6 +8539,10 @@ var script$w = {
           break;
         }
       }
+
+      watchEffect(function () {
+        foundation.activateTab(Number(props.value));
+      });
     });
     onBeforeUnmount(function () {
       foundation.destroy();
@@ -8537,7 +8550,8 @@ var script$w = {
     return {
       root: root,
       scroller: scroller,
-      listeners: listeners
+      listeners: listeners,
+      activateTab: activateTab
     };
   }
 };
