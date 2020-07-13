@@ -9717,6 +9717,10 @@ var script$D = {
       return (_uiState$input = uiState.input) === null || _uiState$input === void 0 ? void 0 : _uiState$input.focus();
     };
 
+    var isValid = function isValid() {
+      return foundation.isValid();
+    };
+
     var adapter = {
       addClass: function addClass(className) {
         return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
@@ -9880,7 +9884,8 @@ var script$D = {
       helperCharacterCounter: helperCharacterCounter,
       internalCharacterCounter: internalCharacterCounter,
       rootClasses: rootClasses,
-      rippleStyles: rippleStyles
+      rippleStyles: rippleStyles,
+      isValid: isValid
     });
   },
   components: {
