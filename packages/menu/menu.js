@@ -129,19 +129,19 @@ export default {
     };
 
     const setFixedPosition = isFixed => {
-      uiState.menuSurface.foundation.setFixedPosition(isFixed);
+      uiState.menuSurface.setFixedPosition(isFixed);
     };
 
     const hoistMenuToBody = () => {
-      uiState.menuSurface.foundation.hoistMenuToBody();
+      uiState.menuSurface.hoistMenuToBody();
     };
 
     const setIsHoisted = isHoisted => {
-      uiState.menuSurface.foundation.setIsHoisted(isHoisted);
+      uiState.menuSurface.setIsHoisted(isHoisted);
     };
 
     const setAbsolutePosition = (x, y) => {
-      uiState.menuSurface.foundation.setAbsolutePosition(x, y);
+      uiState.menuSurface.setAbsolutePosition(x, y);
     };
 
     const typeaheadInProgress = () => uiState.list.typeAheadInProgress ?? false;
