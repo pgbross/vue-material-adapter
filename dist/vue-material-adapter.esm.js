@@ -5970,19 +5970,19 @@ var script$n = {
     };
 
     var setFixedPosition = function setFixedPosition(isFixed) {
-      uiState.menuSurface.foundation.setFixedPosition(isFixed);
+      uiState.menuSurface.setFixedPosition(isFixed);
     };
 
     var hoistMenuToBody = function hoistMenuToBody() {
-      uiState.menuSurface.foundation.hoistMenuToBody();
+      uiState.menuSurface.hoistMenuToBody();
     };
 
     var setIsHoisted = function setIsHoisted(isHoisted) {
-      uiState.menuSurface.foundation.setIsHoisted(isHoisted);
+      uiState.menuSurface.setIsHoisted(isHoisted);
     };
 
     var setAbsolutePosition = function setAbsolutePosition(x, y) {
-      uiState.menuSurface.foundation.setAbsolutePosition(x, y);
+      uiState.menuSurface.setAbsolutePosition(x, y);
     };
 
     var typeaheadInProgress = function typeaheadInProgress() {
