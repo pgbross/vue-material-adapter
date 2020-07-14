@@ -217,6 +217,8 @@ export default {
       setLabelRequired: isRequired => uiState.labelEl?.setRequired(isRequired),
     };
 
+    const setFixedPosition = isFixed => uiState.menu.setFixedPosition(isFixed);
+
     const refreshIndex = () => {
       const items = menuItems.value.map(
         el => el.getAttribute(strings.VALUE_ATTR) || '',
@@ -280,6 +282,7 @@ export default {
       selectedTextAttrs,
       handleMenuItemAction,
       refreshIndex,
+      setFixedPosition,
     };
   },
 
