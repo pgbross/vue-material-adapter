@@ -7156,6 +7156,10 @@ var script$r = {
       }
     };
 
+    var setFixedPosition = function setFixedPosition(isFixed) {
+      return uiState.menu.setFixedPosition(isFixed);
+    };
+
     var refreshIndex = function refreshIndex() {
       var items = menuItems.value.map(function (el) {
         return el.getAttribute(strings$7.VALUE_ATTR) || '';
@@ -7211,7 +7215,8 @@ var script$r = {
       rippleStyles: rippleStyles,
       selectedTextAttrs: selectedTextAttrs,
       handleMenuItemAction: handleMenuItemAction,
-      refreshIndex: refreshIndex
+      refreshIndex: refreshIndex,
+      setFixedPosition: setFixedPosition
     });
   },
   components: {
