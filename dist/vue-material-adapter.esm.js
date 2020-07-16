@@ -8142,7 +8142,7 @@ var __vue_render__$u = function() {
                   _c("div", { staticClass: "mdc-button__ripple" }),
                   _vm._v(" "),
                   _c("span", { staticClass: "mdc-button__label" }, [
-                    _vm._v("Retry")
+                    _vm._v(_vm._s(_vm.actionText))
                   ])
                 ]
               )
