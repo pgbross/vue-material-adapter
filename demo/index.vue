@@ -8,17 +8,20 @@
       class="primary-drawer"
       toolbar-spacer
     >
-      <mcw-drawer-header></mcw-drawer-header>
-      <mcw-drawer-list dense>
-        <mcw-drawer-item to="/">Home</mcw-drawer-item>
-        <mcw-drawer-item to="/docs/getting-started"
-          >Getting Started</mcw-drawer-item
-        >
-        <mcw-drawer-divider />
-        <mcw-drawer-item v-for="link in links" :key="link.id" :to="link.to">{{
-          link.name
-        }}</mcw-drawer-item>
-      </mcw-drawer-list>
+      <template #header>
+        <div class="mdc-drawer__header"></div>
+      </template>
+
+      <!-- <mcw-list-item to="/" tabindex="0">Home</mcw-list-item>
+      <mcw-list-item :to="{ name: 'component', params: { id: 'button' } }"
+        >Button</mcw-list-item
+      > -->
+      <mcw-list-item to="/" tabindex="0">Home</mcw-list-item>
+      <mcw-list-item to="/docs/getting-started">Getting Started</mcw-list-item>
+      <mcw-drawer-divider />
+      <mcw-list-item v-for="link in links" :key="link.id" :to="link.to">{{
+        link.name
+      }}</mcw-list-item>
     </mcw-drawer>
     <main class="content">
       <router-view />

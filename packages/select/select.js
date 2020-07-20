@@ -13,7 +13,7 @@ import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 import SelectHelperText from './select-helper-text.js';
 import SelectIcon from './select-icon.vue';
 
-const { strings } = MDCSelectFoundation;
+const { strings, cssClasses } = MDCSelectFoundation;
 
 let uid_ = 0;
 
@@ -98,13 +98,18 @@ export default {
       foundation.handleClick(getNormalizedXCoordinate(evt));
     };
     const handleKeydown = evt => foundation.handleKeydown(evt);
-    const handleMenuItemAction = ({ index }) =>
-      foundation.handleMenuItemAction(index);
+
     const handleChange = isOpen =>
       foundation[`handleMenu${isOpen ? 'Opened' : 'Closed'}`]();
 
     const layout = () => foundation.layout();
     const selectedIndex = () => foundation.getSelectedIndex();
+
+    const handleMenuOpened = () => foundation.handleMenuOpened();
+    const handleMenuClosed = () => foundation.handleMenuClosed();
+
+    const handleMenuItemAction = ({ index }) =>
+      foundation.handleMenuItemAction(index);
 
     const layoutOptions = () => {
       foundation.layoutOptions();
@@ -122,10 +127,18 @@ export default {
 
     const adapter = {
       // select methods
-      getSelectedMenuItem: () =>
-        uiState.menu.$el.querySelector(strings.SELECTED_ITEM_SELECTOR),
+      getSelectedMenuItem: () => {
+        const x = menuItems.value.find(item =>
+          item.classList.contains(cssClasses.SELECTED_ITEM_CLASS),
+        );
+        return x?.$el;
+      },
+
       getMenuItemAttr: (menuItem, attr) => menuItem.getAttribute(attr),
-      setSelectedText: text => (uiState.selectedTextContent = text),
+
+      setSelectedText: text => {
+        uiState.selectedTextContent = text;
+      },
       isSelectAnchorFocused: () => document.activeElement === uiState.anchorEl,
       getSelectAnchorAttr: attr => uiState.selectAnchorAttrs[attr],
       setSelectAnchorAttr: (attr, value) =>
@@ -164,11 +177,13 @@ export default {
         menuItems.value[index].setAttribute(attributeName, attributeValue),
       removeAttributeAtIndex: (index, attributeName) =>
         menuItems.value[index].removeAttribute(attributeName),
-      focusMenuItemAtIndex: index => menuItems.value[index].focus(),
+      focusMenuItemAtIndex: index => menuItems.value[index].$el.focus(),
       getMenuItemCount: () => menuItems.value.length,
       getMenuItemValues: () =>
         menuItems.value.map(el => el.getAttribute(strings.VALUE_ATTR) || ''),
-      getMenuItemTextAtIndex: index => menuItems.value[index].textContent,
+      getMenuItemTextAtIndex: index => {
+        return menuItems.value[index].$el.textContent;
+      },
       addClassAtIndex: (index, className) => {
         menuItems.value[index].classList.add(className);
       },
@@ -249,7 +264,6 @@ export default {
       });
 
       foundation = new MDCSelectFoundation(adapter);
-
       foundation.init();
 
       // initial sync with DOM
@@ -283,6 +297,8 @@ export default {
       handleMenuItemAction,
       refreshIndex,
       setFixedPosition,
+      handleMenuOpened,
+      handleMenuClosed,
     };
   },
 

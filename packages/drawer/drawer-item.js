@@ -25,7 +25,7 @@ export default {
     },
   },
   components: { CustomLink },
-  setup(props, { emit, listeners, slots, root: $root }) {
+  setup(props, { emit, listeners, slots }) {
     const root = ref(null);
     const uiState = reactive({
       classes: {

@@ -36,7 +36,7 @@ export default {
     typeAhead: Boolean,
   },
 
-  setup(props, { emit }) {
+  setup(props, { emit, slots }) {
     const uiState = reactive({
       classes: {
         'mdc-list': 1,
@@ -77,12 +77,26 @@ export default {
       // eslint-disable-next-line no-unused-vars
       const xx = uiState.listn; // for dependency
 
-      return [].slice.call(
-        uiState.listRoot.querySelectorAll(`.${cssClasses.LIST_ITEM_CLASS}`),
-      );
+      // const elements = [].slice.call(
+      //   uiState.listRoot.querySelectorAll(`.${cssClasses.LIST_ITEM_CLASS}`),
+      // );
+      // return elements.map(el => el.__vue__ ?? el);
+
+      const items = slots
+        .default?.()
+        .filter(({ componentInstance }) => componentInstance?.setAttribute)
+        .map(({ componentInstance }) => componentInstance);
+
+      return items;
     });
 
     const getListItemIndex = evt => {
+      if (evt.__itemId) {
+        return listElements.value.findIndex(
+          ({ itemId }) => itemId === evt.__itemId,
+        );
+      }
+
       const eventTarget = evt.target;
       const nearestParent = closest(
         eventTarget,
@@ -94,7 +108,7 @@ export default {
         nearestParent &&
         matches(nearestParent, `.${cssClasses.LIST_ITEM_CLASS}`)
       ) {
-        return listElements.value.indexOf(nearestParent);
+        return listElements.value.indexOf(nearestParent.__vue__);
       }
 
       return -1;
@@ -137,10 +151,12 @@ export default {
         );
 
         selIndex.value = [].map.call(preselectedItems, listItem =>
-          listElements.value.indexOf(listItem),
+          listElements.value.indexOf(listItem.__vue__),
         );
       } else if (radioSelectedListItem) {
-        selIndex.value = listElements.value.indexOf(radioSelectedListItem);
+        selIndex.value = listElements.value.indexOf(
+          radioSelectedListItem.__vue__,
+        );
       }
     };
 
@@ -215,9 +231,8 @@ export default {
     const adapter = {
       addClassForElementIndex: (index, className) => {
         const element = listElements.value[index];
-        if (element) {
-          element.classList.add(className);
-        }
+
+        element.classList.add(className);
       },
       focusItemAtIndex: index => {
         const element = listElements.value[index];
@@ -225,8 +240,10 @@ export default {
           element.focus();
         }
       },
-      getAttributeForElementIndex: (index, attr) =>
-        listElements.value[index].getAttribute(attr),
+      getAttributeForElementIndex: (index, attr) => {
+        const listItem = listElements.value[index];
+        return listItem.getAttribute(attr);
+      },
 
       getFocusedElementIndex: () =>
         listElements.value.indexOf(document.activeElement),
@@ -237,17 +254,23 @@ export default {
 
       hasCheckboxAtIndex: index => {
         const listItem = listElements.value[index];
-        return !!listItem.querySelector(strings.CHECKBOX_SELECTOR);
+        return !!(listItem.$el ?? listItem).querySelector(
+          strings.CHECKBOX_SELECTOR,
+        );
       },
 
       hasRadioAtIndex: index => {
         const listItem = listElements.value[index];
-        return !!listItem.querySelector(strings.RADIO_SELECTOR);
+        return !!(listItem.$el ?? listItem).querySelector(
+          strings.RADIO_SELECTOR,
+        );
       },
 
       isCheckboxCheckedAtIndex: index => {
         const listItem = listElements.value[index];
-        const toggleEl = listItem.querySelector(strings.CHECKBOX_SELECTOR);
+        const toggleEl = (listItem.$el ?? listItem).querySelector(
+          strings.CHECKBOX_SELECTOR,
+        );
         return toggleEl.checked;
       },
 
@@ -258,7 +281,9 @@ export default {
       isRootFocused: () => document.activeElement === uiState.listRoot,
 
       listItemAtIndexHasClass: (index, className) => {
-        listElements.value[index].classList.contains(className);
+        const listItem = listElements.value[index];
+
+        listItem.classList.contains(className);
       },
 
       notifyAction: index => {
@@ -277,22 +302,19 @@ export default {
       },
 
       removeClassForElementIndex: (index, className) => {
-        const element = listElements.value[index];
-        if (element) {
-          element.classList.remove(className);
-        }
+        const listItem = listElements.value[index];
+
+        listItem.classList.remove(className);
       },
 
       setAttributeForElementIndex: (index, attr, value) => {
-        const element = listElements.value[index];
-        if (element) {
-          element.setAttribute(attr, value);
-        }
+        const listItem = listElements.value[index];
+        listItem.setAttribute(attr, value);
       },
 
       setCheckedCheckboxOrRadioAtIndex: (index, isChecked) => {
         const listItem = listElements.value[index];
-        const toggleEl = listItem.querySelector(
+        const toggleEl = listItem.$el.querySelector(
           strings.CHECKBOX_RADIO_SELECTOR,
         );
         toggleEl && (toggleEl.checked = isChecked);
@@ -303,7 +325,7 @@ export default {
       },
 
       setTabIndexForListItemChildren: (listItemIndex, tabIndexValue) => {
-        const element = listElements.value[listItemIndex];
+        const element = listElements.value[listItemIndex].$el;
         const listItemChildren = [].slice.call(
           element.querySelectorAll(strings.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX),
         );
@@ -412,6 +434,7 @@ export default {
       typeaheadMatchItem,
       typeaheadInProgress,
       selIndex,
+      getPrimaryText,
     };
   },
 };

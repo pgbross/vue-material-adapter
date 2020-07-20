@@ -37,6 +37,7 @@ export default {
       type: Object,
       required: false,
     },
+    modalClose: { type: Boolean, default: () => true },
   },
 
   setup(props, { emit, root: $root }) {
@@ -98,6 +99,10 @@ export default {
     const onChange = event => {
       emit('change', event);
       $root.$emit('vma:layout');
+    };
+
+    const onListAction = () => {
+      props.modal && props.modalClose && close();
     };
 
     const adapter = {
@@ -204,6 +209,7 @@ export default {
       close,
       toggle,
       isOpen,
+      onListAction,
     };
   },
 };

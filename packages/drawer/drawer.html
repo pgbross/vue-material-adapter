@@ -1,7 +1,11 @@
 <div ref="root">
-  <aside ref="drawer" :class="classes">
+  <aside ref="drawer" :class="classes" @MDCList:action="onListAction">
     <slot name="header"></slot>
-    <div class="mdc-drawer__content"><slot></slot></div>
+    <div class="mdc-drawer__content">
+      <mcw-list>
+        <slot></slot>
+      </mcw-list>
+    </div>
   </aside>
   <div class="mdc-drawer-scrim"></div>
   <div class="mdc-top-app-bar--fixed-adjust" v-if="toolbarSpacer"></div>

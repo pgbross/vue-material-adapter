@@ -54,6 +54,8 @@
       :class="menuClasses"
       @change="handleChange"
       @select="handleMenuItemAction"
+      @MDCMenuSurface:opened.native="handleMenuOpened"
+      @MDCMenuSurface:closed.native="handleMenuClosed"
       role="listbox"
     >
       <slot></slot>

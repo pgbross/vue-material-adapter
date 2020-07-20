@@ -74,7 +74,7 @@ export default {
     const layout = () => uiState.list?.layout();
 
     const handleAction = index => {
-      foundation.handleItemAction(items.value[index]);
+      foundation.handleItemAction(items.value[index].$el);
     };
 
     const handleKeydown = evt => foundation.handleKeydown(evt);
@@ -155,31 +155,33 @@ export default {
 
     const adapter = {
       addClassToElementAtIndex: (index, className) => {
-        const list = items.value;
-        list[index].classList.add(className);
+        const item = items.value[index];
+        item.classList.add(className);
       },
       removeClassFromElementAtIndex: (index, className) => {
-        const list = items.value;
-        list[index].classList.remove(className);
+        const item = items.value[index];
+        item.classList.remove(className);
       },
       addAttributeToElementAtIndex: (index, attr, value) => {
-        const list = items.value;
-        list[index].setAttribute(attr, value);
+        const item = items.value[index];
+        item.setAttribute(attr, value);
       },
       removeAttributeFromElementAtIndex: (index, attr) => {
-        const list = items.value;
-        list[index].removeAttribute(attr);
+        const item = items.value[index];
+        item.removeAttribute(attr);
       },
       elementContainsClass: (element, className) =>
         element.classList.contains(className),
+
       closeSurface: skipRestoreFocus => {
         uiState.menuSurface.close(skipRestoreFocus);
         emit('change', false);
       },
 
       getElementIndex: element => {
-        return items.value.indexOf(element);
+        return items.value.findIndex(({ $el }) => $el == element);
       },
+
       notifySelected: evtData => {
         emitCustomEvent(rootEl, strings.SELECTED_EVENT, {
           index: evtData.index,
@@ -194,21 +196,27 @@ export default {
 
       getMenuItemCount: () => items.value.length,
 
-      focusItemAtIndex: index => items.value[index].focus(),
+      focusItemAtIndex: index => items.value[index].$el.focus(),
       focusListRoot: () =>
         uiState.menuSurface.querySelector(strings.LIST_SELECTOR).focus(),
 
       isSelectableItemAtIndex: index =>
-        !!closest(items.value[index], `.${cssClasses.MENU_SELECTION_GROUP}`),
+        !!closest(
+          items.value[index].$el,
+          `.${cssClasses.MENU_SELECTION_GROUP}`,
+        ),
+
       getSelectedSiblingOfItemAtIndex: index => {
         const selectionGroupEl = closest(
-          items.value[index],
+          items.value[index].$el,
           `.${cssClasses.MENU_SELECTION_GROUP}`,
         );
         const selectedItemEl = selectionGroupEl.querySelector(
           `.${cssClasses.MENU_SELECTED_LIST_ITEM}`,
         );
-        return selectedItemEl ? items.value.indexOf(selectedItemEl) : -1;
+        return selectedItemEl
+          ? items.value.findIndex(({ $el }) => $el == selectedItemEl)
+          : -1;
       },
     };
 

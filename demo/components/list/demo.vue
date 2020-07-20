@@ -22,13 +22,10 @@
           >Two-line item
         </mcw-list-item>
 
-        <li class="mdc-list-item">
-          <span class="mdc-list-item__ripple"></span>
-          <span class="mdc-list-item__text">
-            <span class="mdc-list-item__primary-text">Two-line item</span>
-            <span class="mdc-list-item__secondary-text">Secondary text</span>
-          </span>
-        </li>
+        <mcw-list-item
+          >Two-line item
+          <span slot="secondary-text">More secondary text</span>
+        </mcw-list-item>
       </mcw-list>
     </div>
 
@@ -78,54 +75,6 @@
     </div>
 
     <div class="demo-list-example">
-      <h3 class="mdc-typography--subtitle1">List with radio group</h3>
-      <mcw-list v-model="radioSelected" role="radiogroup" class="demo-list">
-        <li class="mdc-list-item" role="radio" aria-checked="false">
-          <span class="mdc-list-item__ripple"></span>
-          <span class="mdc-list-item__graphic">
-            <mcw-radio
-              id="demo-list-radio-item-1"
-              v-model="picked"
-              value="1"
-              name="demo-list-radio"
-            ></mcw-radio>
-          </span>
-          <label class="mdc-list-item__text" for="demo-list-radio-item-1"
-            >Option 1</label
-          >
-        </li>
-        <li class="mdc-list-item" role="radio" aria-checked="false">
-          <span class="mdc-list-item__ripple"></span>
-          <span class="mdc-list-item__graphic">
-            <mcw-radio
-              id="demo-list-radio-item-2"
-              v-model="picked"
-              value="2"
-              name="demo-list-radio"
-            ></mcw-radio>
-          </span>
-          <label class="mdc-list-item__text" for="demo-list-radio-item-2"
-            >Option 2</label
-          >
-        </li>
-        <li class="mdc-list-item" role="radio" aria-checked="false">
-          <span class="mdc-list-item__ripple"></span>
-          <span class="mdc-list-item__graphic">
-            <mcw-radio
-              id="demo-list-radio-item-3"
-              v-model="picked"
-              value="3"
-              name="demo-list-radio"
-            ></mcw-radio>
-          </span>
-          <label class="mdc-list-item__text" for="demo-list-radio-item-3"
-            >Option 3</label
-          >
-        </li>
-      </mcw-list>
-    </div>
-
-    <div class="demo-list-example">
       <h3 class="mdc-typography--subtitle1">List with checkbox items</h3>
       <mcw-list
         v-model="listSelected"
@@ -133,38 +82,43 @@
         aria-label="List with checkbox items"
         class="demo-list"
       >
-        <li class="mdc-list-item" role="checkbox" aria-checked="false">
-          <span class="mdc-list-item__graphic">
-            <span class="mdc-list-item__ripple"></span>
-            <mcw-checkbox id="demo-list-checkbox-item-1"></mcw-checkbox>
-          </span>
+        <mcw-list-item role="checkbox" aria-checked="true">
           <label class="mdc-list-item__text" for="demo-list-checkbox-item-1"
             >Option 1</label
           >
-        </li>
-        <li
-          class="mdc-list-item"
-          role="checkbox"
-          aria-checked="true"
-          tabindex="0"
-        >
-          <span class="mdc-list-item__graphic">
-            <span class="mdc-list-item__ripple"></span>
-            <mcw-checkbox id="demo-list-checkbox-item-2" checked></mcw-checkbox>
-          </span>
+        </mcw-list-item>
+        <mcw-list-item role="checkbox" tabindex="0">
           <label class="mdc-list-item__text" for="demo-list-checkbox-item-2"
             >Option 2</label
           >
-        </li>
-        <li class="mdc-list-item" role="checkbox" aria-checked="false">
-          <span class="mdc-list-item__graphic">
-            <span class="mdc-list-item__ripple"></span>
-            <mcw-checkbox id="demo-list-checkbox-item-3"></mcw-checkbox>
-          </span>
-          <label class="mdc-list-item__text" for="demo-list-checkbox-item-2"
+        </mcw-list-item>
+        <mcw-list-item role="checkbox">
+          <label class="mdc-list-item__text" for="demo-list-checkbox-item-3"
             >Option 3</label
           >
-        </li>
+        </mcw-list-item>
+      </mcw-list>
+    </div>
+
+    <div class="demo-list-example">
+      <h3 class="mdc-typography--subtitle1">List with radio group</h3>
+      <mcw-list v-model="radioSelected" role="radiogroup" class="demo-list">
+        <mcw-list-item role="radio" name="demo-group">
+          <label class="mdc-list-item__text" for="demo-list-radio-item-1"
+            >Option 1</label
+          ></mcw-list-item
+        >
+
+        <mcw-list-item role="radio" aria-checked="true" name="demo-group">
+          <label class="mdc-list-item__text" for="demo-list-radio-item-2"
+            >Option 2</label
+          >
+        </mcw-list-item>
+        <mcw-list-item role="radio" name="demo-group">
+          <label class="mdc-list-item__text" for="demo-list-radio-item-3"
+            >Option 3</label
+          >
+        </mcw-list-item>
       </mcw-list>
     </div>
 
@@ -191,7 +145,18 @@ export default {
       listSelected: [],
       radioSelected: null,
       picked: '1',
+      test_: true,
     };
+  },
+  computed: {
+    test: {
+      set(nv) {
+        this.test_ = nv;
+      },
+      get() {
+        return this.test_;
+      },
+    },
   },
   methods: {
     onAction(index) {
