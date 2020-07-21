@@ -1,7 +1,12 @@
 <template>
   <div id="root">
     <div class="draw-frame">
-      <mcw-drawer ref="drawer" v-model="open" modal class="primary-drawer">
+      <mcw-drawer
+        ref="drawer"
+        v-model="open"
+        dismissible
+        class="primary-drawer"
+      >
         <template #header>
           <div class="mdc-drawer__header"></div>
         </template>
@@ -59,6 +64,8 @@ body {
   padding: 0 18px;
 }
 .mdc-drawer-app-content {
-  width: 100%;
+  flex: auto;
+  overflow: auto;
+  position: relative;
 }
 </style>

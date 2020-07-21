@@ -22,7 +22,7 @@ export default {
   },
   props: {
     modal: Boolean,
-    dismissable: Boolean,
+    dismissible: Boolean,
     open: Boolean,
     toolbarSpacer: Boolean,
     toggleOn: String,
@@ -47,11 +47,9 @@ export default {
       classes: {
         'mdc-drawer': 1,
         'mdc-drawer--modal': props.modal,
-        'mdc-drawer--dismissible': props.dismissable && !props.modal,
+        'mdc-drawer--dismissible': props.dismissible && !props.modal,
       },
-      root: null,
       drawer: null,
-      scrim: null,
     });
 
     const focusTrapFactory_ = el => new FocusTrap(el);
@@ -143,7 +141,7 @@ export default {
 
     onMounted(() => {
       const { DISMISSIBLE, MODAL } = MDCDismissibleDrawerFoundation.cssClasses;
-      if (props.dismissable) {
+      if (props.dismissible) {
         foundation = new MDCDismissibleDrawerFoundation(adapter);
       } else if (props.modal) {
         foundation = new MDCModalDrawerFoundation(adapter);
