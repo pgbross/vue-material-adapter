@@ -1,12 +1,18 @@
-<div ref="root">
-  <aside ref="drawer" :class="classes" @MDCList:action="onListAction">
-    <slot name="header"></slot>
-    <div class="mdc-drawer__content">
-      <mcw-list>
-        <slot></slot>
-      </mcw-list>
-    </div>
-  </aside>
-  <div class="mdc-drawer-scrim"></div>
-  <div class="mdc-top-app-bar--fixed-adjust" v-if="toolbarSpacer"></div>
-</div>
+<!-- <div ref="root"> -->
+<aside
+  ref="drawer"
+  :class="classes"
+  @MDCList:action="onListAction"
+  @keydown="handleKeydown"
+  @transitionend="handleTransitionEnd"
+>
+  <slot name="header"></slot>
+  <div class="mdc-drawer__content">
+    <mcw-list :wrap-focus="true" tag="nav" single-selection :selected-index="0">
+      <slot></slot>
+    </mcw-list>
+  </div>
+</aside>
+<!-- <div ref="scrim" class="mdc-drawer-scrim" @click="handleScrimClick" v-if="modal"></div>
+  <div class="mdc-top-app-bar--fixed-adjust" v-if="toolbarSpacer"></div> -->
+<!-- </div> -->

@@ -6,11 +6,13 @@ import { MDCListFoundation } from '@material/list/foundation';
 import {
   onBeforeUnmount,
   onMounted,
-  provide,
   reactive,
   toRefs,
   watch,
 } from '@vue/composition-api';
+import { emitCustomEvent } from '~/base/index.js';
+
+const { strings } = MDCDismissibleDrawerFoundation;
 
 export default {
   name: 'mcw-drawer',
@@ -20,6 +22,7 @@ export default {
   },
   props: {
     modal: Boolean,
+    dismissable: Boolean,
     open: Boolean,
     toolbarSpacer: Boolean,
     toggleOn: String,
@@ -37,17 +40,18 @@ export default {
       type: Object,
       required: false,
     },
-    modalClose: { type: Boolean, default: () => true },
   },
 
   setup(props, { emit, root: $root }) {
     const uiState = reactive({
       classes: {
         'mdc-drawer': 1,
-        'mdc-drawer--modal': 1,
+        'mdc-drawer--modal': props.modal,
+        'mdc-drawer--dismissible': props.dismissable && !props.modal,
       },
       root: null,
       drawer: null,
+      scrim: null,
     });
 
     const focusTrapFactory_ = el => new FocusTrap(el);
@@ -56,54 +60,23 @@ export default {
     const close = () => foundation.close();
     const toggle = () =>
       foundation.isOpen() ? foundation.close() : foundation.open();
-    const isOpen = () => foundation.isOpen();
 
-    provide('mcwDrawer', { isModal: props.modal, close });
+    const isOpen = () => foundation.isOpen();
 
     let foundation;
     let focusTrap_;
-    let list_;
     let previousFocus_;
 
-    const initialSyncWithDOM = () => {
-      const { MODAL } = MDCDismissibleDrawerFoundation.cssClasses;
-
-      if (uiState.drawer.classList.contains(MODAL)) {
-        const { SCRIM_SELECTOR } = MDCDismissibleDrawerFoundation.strings;
-        const scrim_ = uiState.drawer.parentElement.querySelector(
-          SCRIM_SELECTOR,
-        );
-        const handleScrimClick_ = () => foundation.handleScrimClick();
-        scrim_.addEventListener('click', handleScrimClick_);
-        focusTrap_ = util.createFocusTrapInstance(
-          uiState.drawer,
-          focusTrapFactory_,
-        );
-      }
-
-      const handleKeydown_ = evt => foundation.handleKeydown(evt);
-      const handleTransitionEnd_ = evt => foundation.handleTransitionEnd(evt);
-
-      uiState.root.addEventListener('keydown', handleKeydown_);
-      uiState.root.addEventListener('transitionend', handleTransitionEnd_);
-    };
-
-    const onOpen_ = value => {
-      if (props.open) {
-        foundation?.open();
-      } else {
-        foundation?.close();
-      }
-    };
+    const handleScrimClick = () => foundation.handleScrimClick();
+    const handleKeydown = evt => foundation.handleKeydown(evt);
+    const handleTransitionEnd = evt => foundation.handleTransitionEnd(evt);
 
     const onChange = event => {
       emit('change', event);
       $root.$emit('vma:layout');
     };
 
-    const onListAction = () => {
-      props.modal && props.modalClose && close();
-    };
+    const onListAction = () => props.modal && close();
 
     const adapter = {
       addClass: className =>
@@ -113,7 +86,7 @@ export default {
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
-      hasClass: className => uiState.drawer.classList.contains(className),
+      hasClass: className => !!uiState.classes[className],
       elementHasClass: (element, className) =>
         element.classList.contains(className),
       saveFocus: () => {
@@ -121,7 +94,7 @@ export default {
       },
       restoreFocus: () => {
         const previousFocus = previousFocus_?.focus;
-        if (uiState.drawer.contains(document.activeElement) && previousFocus) {
+        if (previousFocus && uiState.drawer.contains(document.activeElement)) {
           previousFocus_.focus();
         }
       },
@@ -134,10 +107,22 @@ export default {
         }
       },
       notifyClose: () => {
+        emitCustomEvent(
+          uiState.drawer,
+          strings.CLOSE_EVENT,
+          {},
+          true /* shouldBubble */,
+        );
         emit('change', false);
         emit('close');
       },
       notifyOpen: () => {
+        emitCustomEvent(
+          uiState.drawer,
+          strings.OPEN_EVENT,
+          {},
+          true /* shouldBubble */,
+        );
         emit('change', true);
         emit('open');
       },
@@ -147,30 +132,34 @@ export default {
 
     watch(
       () => props.open,
-      nv => onOpen_(nv),
+      nv => {
+        if (nv) {
+          foundation?.open();
+        } else {
+          foundation?.close();
+        }
+      },
     );
 
     onMounted(() => {
-      const listEl = uiState.root.querySelector(
-        `.${MDCListFoundation.cssClasses.ROOT}`,
-      );
-      if (listEl) {
-        list_ = listEl;
-        list_.wrapFocus = true;
-      }
-
       const { DISMISSIBLE, MODAL } = MDCDismissibleDrawerFoundation.cssClasses;
-      if (uiState.drawer.classList.contains(DISMISSIBLE)) {
+      if (props.dismissable) {
         foundation = new MDCDismissibleDrawerFoundation(adapter);
-      } else if (uiState.drawer.classList.contains(MODAL)) {
+      } else if (props.modal) {
         foundation = new MDCModalDrawerFoundation(adapter);
       } else {
         throw new Error(
           `mcwDrawer: Failed to instantiate component. Supported variants are ${DISMISSIBLE} and ${MODAL}.`,
         );
       }
-      foundation?.init();
-      initialSyncWithDOM();
+      foundation.init();
+
+      if (props.modal) {
+        focusTrap_ = util.createFocusTrapInstance(
+          uiState.drawer,
+          focusTrapFactory_,
+        );
+      }
 
       if (props.toggleOn) {
         props.toggleOnEventSource = props.toggleOnSource || $root;
@@ -187,6 +176,7 @@ export default {
     });
 
     onBeforeUnmount(() => {
+      foundation.close();
       foundation.destroy();
 
       foundation = null;
@@ -210,6 +200,9 @@ export default {
       toggle,
       isOpen,
       onListAction,
+      handleScrimClick,
+      handleKeydown,
+      handleTransitionEnd,
     };
   },
 };

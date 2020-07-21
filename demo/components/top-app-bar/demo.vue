@@ -54,15 +54,15 @@ export default {
       scrollTarget: null,
     };
   },
+  mounted() {
+    const demoEl = this.$el.querySelector('.mcw-demo');
+    this.scrollTarget = demoEl;
+  },
   methods: {
     onNav(event) {
       this.navigation = true;
       this.navigationCount += 1;
     },
-  },
-  mounted() {
-    const demoEl = this.$el.querySelector('.mcw-demo');
-    this.scrollTarget = demoEl;
   },
 };
 </script>

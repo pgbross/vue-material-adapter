@@ -14,6 +14,7 @@ export default {
     selected: Boolean,
     checked: Boolean,
     name: String,
+    to: [String, Object],
   },
   components: { CustomLink },
   setup(props, { slots, listeners, attrs }) {
@@ -29,7 +30,7 @@ export default {
     });
 
     const myAttrs = computed(() => {
-      return { ...attrs, ...uiState.attrs };
+      return { ...attrs, ...uiState.attrs, to: props.to };
     });
 
     const radioChecked = computed(() => {
