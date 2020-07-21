@@ -3,9 +3,60 @@
     <div class="demo-list-example">
       <h3 class="mdc-typography--subtitle1">Single-Line</h3>
       <mcw-list v-model="selected" class="demo-list">
-        <mcw-list-item tabindex="0">One Single-line item 1</mcw-list-item>
-        <mcw-list-item>Two Single-line item 2</mcw-list-item>
-        <mcw-list-item>Three Single-line item 3</mcw-list-item>
+        <mcw-list-item tabindex="0" role="radio" no-auto-role
+          >One Single-line item 1
+          <template #meta>
+            <div class="mdc-radio">
+              <input
+                class="mdc-radio__native-control"
+                type="radio"
+                value="0"
+                name="name"
+                checked
+              />
+              <div class="mdc-radio__background">
+                <div class="mdc-radio__outer-circle"></div>
+                <div class="mdc-radio__inner-circle"></div>
+              </div>
+            </div>
+          </template>
+        </mcw-list-item>
+        <mcw-list-item
+          >Two Single-line item 2
+
+          <template #meta>
+            <div class="mdc-radio">
+              <input
+                class="mdc-radio__native-control"
+                type="radio"
+                value="1"
+                name="name"
+                checked
+              />
+              <div class="mdc-radio__background">
+                <div class="mdc-radio__outer-circle"></div>
+                <div class="mdc-radio__inner-circle"></div>
+              </div>
+            </div>
+          </template>
+        </mcw-list-item>
+        <mcw-list-item
+          >Three Single-line item 3
+          <template #meta>
+            <div class="mdc-radio">
+              <input
+                class="mdc-radio__native-control"
+                type="radio"
+                value="2"
+                name="name"
+              />
+              <div class="mdc-radio__background">
+                <div class="mdc-radio__outer-circle"></div>
+                <div class="mdc-radio__inner-circle"></div>
+              </div>
+            </div>
+          </template>
+        </mcw-list-item>
       </mcw-list>
     </div>
 

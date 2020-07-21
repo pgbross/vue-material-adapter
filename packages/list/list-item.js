@@ -15,6 +15,7 @@ export default {
     checked: Boolean,
     name: String,
     to: [String, Object],
+    noAutoRole: Boolean,
   },
   components: { CustomLink },
   setup(props, { slots, listeners, attrs }) {
@@ -37,9 +38,11 @@ export default {
       return attrs?.['aria-checked'] == 'true';
     });
 
-    const checkbox = computed(() => attrs?.role == 'checkbox');
+    const checkbox = computed(
+      () => !props.noAutoRole && attrs?.role == 'checkbox',
+    );
 
-    const radio = computed(() => attrs?.role == 'radio');
+    const radio = computed(() => !props.noAutoRole && attrs?.role == 'radio');
 
     const itemId = listItemId_++;
 
