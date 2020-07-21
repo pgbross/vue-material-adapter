@@ -16,11 +16,6 @@ const { cssClasses, strings } = MDCTopAppBarFoundation;
 export default {
   name: 'mcw-top-app-bar',
   props: {
-    short: Boolean,
-    shortCollapsed: Boolean,
-    prominent: Boolean,
-    fixed: Boolean,
-    dense: Boolean,
     tag: { type: String, default: 'header' },
     scrollTarget: HTMLElement,
   },
@@ -29,11 +24,6 @@ export default {
       rootStyles: { top: '0' },
       rootClasses: {
         'mdc-top-app-bar': true,
-        'mdc-top-app-bar--dense': props.dense,
-        'mdc-top-app-bar--short': props.short,
-        'mdc-top-app-bar--short-collapsed': props.shortCollapsed,
-        'mdc-top-app-bar--prominent': props.prominent,
-        'mdc-top-app-bar--fixed': props.fixed,
       },
       myScrollTarget: props.scrollTarget || window,
       root: null,
@@ -77,7 +67,7 @@ export default {
         return st.pageYOffset ? st.pageYOffset : st.scrollTop;
       },
       getTotalActionItems: () =>
-        uiState.root.querySelectorAll(`.${cssClasses.ACTION_ITEM}`).length,
+        uiState.root.querySelectorAll(strings.ACTION_ITEM_SELECTOR).length,
     };
 
     watch(
@@ -98,10 +88,12 @@ export default {
     );
 
     onMounted(() => {
-      const { short, shortCollapsed, fixed } = props;
-      if (short || shortCollapsed) {
+      const isFixed = uiState.root.classList.contains(cssClasses.FIXED_CLASS);
+      const isShort = uiState.root.classList.contains(cssClasses.SHORT_CLASS);
+
+      if (isShort) {
         foundation = new MDCShortTopAppBarFoundation(adapter);
-      } else if (fixed) {
+      } else if (isFixed) {
         foundation = new MDCFixedTopAppBarFoundation(adapter);
       } else {
         foundation = new MDCTopAppBarFoundation(adapter);
@@ -133,8 +125,6 @@ export default {
 
       uiState.myScrollTarget.addEventListener('scroll', handleTargetScroll);
 
-      const isFixed = uiState.root.classList.contains(cssClasses.FIXED_CLASS);
-      const isShort = uiState.root.classList.contains(cssClasses.SHORT_CLASS);
       if (!isShort && !isFixed) {
         window.addEventListener('resize', handleWindowResize);
       }

@@ -1,23 +1,32 @@
 <template>
-  <mcw-top-app-bar class="main-toolbar">
-    <mcw-top-app-bar-row>
-      <mcw-top-app-bar-section align="start">
-        <mcw-top-app-bar-icon @click="$emit('nav')">menu</mcw-top-app-bar-icon>
-        <mcw-top-app-bar-title>vue material adapter</mcw-top-app-bar-title>
-      </mcw-top-app-bar-section>
+  <mcw-top-app-bar class="main-toolbar" @nav="$emit('nav')">
+    <div class="mdc-top-app-bar__row">
+      <section
+        class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start"
+      >
+        <button
+          class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button"
+          aria-label="Open navigation menu"
+        >
+          menu
+        </button>
+        <span class="mdc-top-app-bar__title">vue material adapter</span>
+      </section>
 
-      <mcw-top-app-bar-section align="end">
-        <mcw-top-app-bar-icon
-          aria-label="Help"
+      <section
+        class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end"
+      >
+        <button
           target="_blank"
-          title="Vue-material-adapter"
-          action-item
+          title="vue-material-adapter"
+          class="mdc-top-app-bar__action-item mdc-icon-button"
+          aria-label="Open github project"
           @click="goto('https://github.com/pgbross/vue-material-adapter')"
         >
           <img :src="githubLogo" />
-        </mcw-top-app-bar-icon>
-      </mcw-top-app-bar-section>
-    </mcw-top-app-bar-row>
+        </button>
+      </section>
+    </div>
   </mcw-top-app-bar>
 </template>
 
