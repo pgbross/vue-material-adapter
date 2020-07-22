@@ -12,7 +12,7 @@ import { announce } from '@material/dom/announce';
 import { MDCChipTrailingActionFoundation } from '@material/chips/trailingaction/foundation';
 import { MDCCircularProgressFoundation } from '@material/circular-progress/foundation';
 import { MDCCheckbox } from '@material/checkbox';
-import { cssClasses as cssClasses$7, events, selectors, dataAttributes, SortValue, messages } from '@material/data-table';
+import { cssClasses as cssClasses$8, events, selectors, dataAttributes, SortValue, messages } from '@material/data-table';
 import { MDCDataTableFoundation } from '@material/data-table/foundation';
 import { MDCDialogFoundation } from '@material/dialog/foundation';
 import { createFocusTrapInstance, isScrollable, areTopsMisaligned } from '@material/dialog/util';
@@ -2707,7 +2707,7 @@ var script$8 = {
       return el.__vue__ ? new CheckboxAdapter(el.__vue__) : new MDCCheckbox(el);
     };
 
-    var cssClasses = cssClasses$7,
+    var cssClasses = cssClasses$8,
         events$1 = events,
         selectors$1 = selectors,
         dataAttributes$1 = dataAttributes,
@@ -3433,6 +3433,7 @@ var dialog = BasePlugin({
   mcwDialogContent: mcwDialogContent
 });
 
+var strings$4 = MDCDismissibleDrawerFoundation.strings;
 var script$a = {
   name: 'mcw-drawer',
   model: {
@@ -3441,6 +3442,7 @@ var script$a = {
   },
   props: {
     modal: Boolean,
+    dismissible: Boolean,
     open: Boolean,
     toolbarSpacer: Boolean,
     toggleOn: String,
@@ -3465,9 +3467,9 @@ var script$a = {
     var uiState = reactive({
       classes: {
         'mdc-drawer': 1,
-        'mdc-drawer--modal': 1
+        'mdc-drawer--modal': props.modal,
+        'mdc-drawer--dismissible': props.dismissible && !props.modal
       },
-      root: null,
       drawer: null
     });
 
@@ -3491,57 +3493,29 @@ var script$a = {
       return foundation.isOpen();
     };
 
-    provide('mcwDrawer', {
-      isModal: props.modal,
-      close: close
-    });
     var foundation;
     var focusTrap_;
-    var list_;
     var previousFocus_;
 
-    var initialSyncWithDOM = function initialSyncWithDOM() {
-      var MODAL = MDCDismissibleDrawerFoundation.cssClasses.MODAL;
-
-      if (uiState.drawer.classList.contains(MODAL)) {
-        var SCRIM_SELECTOR = MDCDismissibleDrawerFoundation.strings.SCRIM_SELECTOR;
-        var scrim_ = uiState.drawer.parentElement.querySelector(SCRIM_SELECTOR);
-
-        var handleScrimClick_ = function handleScrimClick_() {
-          return foundation.handleScrimClick();
-        };
-
-        scrim_.addEventListener('click', handleScrimClick_);
-        focusTrap_ = createFocusTrapInstance$1(uiState.drawer, focusTrapFactory_);
-      }
-
-      var handleKeydown_ = function handleKeydown_(evt) {
-        return foundation.handleKeydown(evt);
-      };
-
-      var handleTransitionEnd_ = function handleTransitionEnd_(evt) {
-        return foundation.handleTransitionEnd(evt);
-      };
-
-      uiState.root.addEventListener('keydown', handleKeydown_);
-      uiState.root.addEventListener('transitionend', handleTransitionEnd_);
+    var handleScrimClick = function handleScrimClick() {
+      return foundation.handleScrimClick();
     };
 
-    var onOpen_ = function onOpen_(value) {
-      if (props.open) {
-        var _foundation;
+    var handleKeydown = function handleKeydown(evt) {
+      return foundation.handleKeydown(evt);
+    };
 
-        (_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.open();
-      } else {
-        var _foundation2;
-
-        (_foundation2 = foundation) === null || _foundation2 === void 0 ? void 0 : _foundation2.close();
-      }
+    var handleTransitionEnd = function handleTransitionEnd(evt) {
+      return foundation.handleTransitionEnd(evt);
     };
 
     var onChange = function onChange(event) {
       emit('change', event);
       $root.$emit('vma:layout');
+    };
+
+    var onListAction = function onListAction() {
+      return props.modal && close();
     };
 
     var adapter = {
@@ -3557,7 +3531,7 @@ var script$a = {
         uiState.classes = rest;
       },
       hasClass: function hasClass(className) {
-        return uiState.drawer.classList.contains(className);
+        return !!uiState.classes[className];
       },
       elementHasClass: function elementHasClass(element, className) {
         return element.classList.contains(className);
@@ -3570,7 +3544,7 @@ var script$a = {
 
         var previousFocus = (_previousFocus_ = previousFocus_) === null || _previousFocus_ === void 0 ? void 0 : _previousFocus_.focus;
 
-        if (uiState.drawer.contains(document.activeElement) && previousFocus) {
+        if (previousFocus && uiState.drawer.contains(document.activeElement)) {
           previousFocus_.focus();
         }
       },
@@ -3582,10 +3556,16 @@ var script$a = {
         }
       },
       notifyClose: function notifyClose() {
+        emitCustomEvent(uiState.drawer, strings$4.CLOSE_EVENT, {}, true
+        /* shouldBubble */
+        );
         emit('change', false);
         emit('close');
       },
       notifyOpen: function notifyOpen() {
+        emitCustomEvent(uiState.drawer, strings$4.OPEN_EVENT, {}, true
+        /* shouldBubble */
+        );
         emit('change', true);
         emit('open');
       },
@@ -3599,32 +3579,34 @@ var script$a = {
     watch(function () {
       return props.open;
     }, function (nv) {
-      return onOpen_();
+      if (nv) {
+        var _foundation;
+
+        (_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.open();
+      } else {
+        var _foundation2;
+
+        (_foundation2 = foundation) === null || _foundation2 === void 0 ? void 0 : _foundation2.close();
+      }
     });
     onMounted(function () {
-      var _foundation3;
-
-      var listEl = uiState.root.querySelector(".".concat(MDCListFoundation.cssClasses.ROOT));
-
-      if (listEl) {
-        list_ = listEl;
-        list_.wrapFocus = true;
-      }
-
       var _MDCDismissibleDrawer = MDCDismissibleDrawerFoundation.cssClasses,
           DISMISSIBLE = _MDCDismissibleDrawer.DISMISSIBLE,
           MODAL = _MDCDismissibleDrawer.MODAL;
 
-      if (uiState.drawer.classList.contains(DISMISSIBLE)) {
+      if (props.dismissible) {
         foundation = new MDCDismissibleDrawerFoundation(adapter);
-      } else if (uiState.drawer.classList.contains(MODAL)) {
+      } else if (props.modal) {
         foundation = new MDCModalDrawerFoundation(adapter);
       } else {
         throw new Error("mcwDrawer: Failed to instantiate component. Supported variants are ".concat(DISMISSIBLE, " and ").concat(MODAL, "."));
       }
 
-      (_foundation3 = foundation) === null || _foundation3 === void 0 ? void 0 : _foundation3.init();
-      initialSyncWithDOM();
+      foundation.init();
+
+      if (props.modal) {
+        focusTrap_ = createFocusTrapInstance$1(uiState.drawer, focusTrapFactory_);
+      }
 
       if (props.toggleOn) {
         props.toggleOnEventSource = props.toggleOnSource || $root;
@@ -3642,6 +3624,7 @@ var script$a = {
       }
     });
     onBeforeUnmount(function () {
+      foundation.close();
       foundation.destroy();
       foundation = null;
 
@@ -3662,7 +3645,11 @@ var script$a = {
       show: show,
       close: close,
       toggle: toggle,
-      isOpen: isOpen
+      isOpen: isOpen,
+      onListAction: onListAction,
+      handleScrimClick: handleScrimClick,
+      handleKeydown: handleKeydown,
+      handleTransitionEnd: handleTransitionEnd
     });
   }
 };
@@ -3675,29 +3662,90 @@ var __vue_render__$a = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c("div", { ref: "root" }, [
-    _c(
-      "aside",
-      { ref: "drawer", class: _vm.classes },
-      [
-        _vm._t("header"),
-        _vm._v(" "),
+  return !_vm.modal
+    ? _c(
+        "aside",
+        {
+          ref: "drawer",
+          class: _vm.classes,
+          on: {
+            "MDCList:action": _vm.onListAction,
+            keydown: _vm.handleKeydown,
+            transitionend: _vm.handleTransitionEnd
+          }
+        },
+        [
+          _vm._t("header"),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "mdc-drawer__content" },
+            [
+              _c(
+                "mcw-list",
+                {
+                  attrs: {
+                    "wrap-focus": true,
+                    tag: "nav",
+                    "single-selection": "",
+                    "selected-index": 0
+                  }
+                },
+                [_vm._t("default")],
+                2
+              )
+            ],
+            1
+          )
+        ],
+        2
+      )
+    : _c("div", { staticClass: "drawer-wrapper" }, [
         _c(
-          "div",
-          { staticClass: "mdc-drawer__content" },
-          [_vm._t("default")],
+          "aside",
+          {
+            ref: "drawer",
+            class: _vm.classes,
+            on: {
+              "MDCList:action": _vm.onListAction,
+              keydown: _vm.handleKeydown,
+              transitionend: _vm.handleTransitionEnd
+            }
+          },
+          [
+            _vm._t("header"),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "mdc-drawer__content" },
+              [
+                _c(
+                  "mcw-list",
+                  {
+                    attrs: {
+                      "wrap-focus": true,
+                      tag: "nav",
+                      "single-selection": "",
+                      "selected-index": 0
+                    }
+                  },
+                  [_vm._t("default")],
+                  2
+                )
+              ],
+              1
+            )
+          ],
           2
-        )
-      ],
-      2
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "mdc-drawer-scrim" }),
-    _vm._v(" "),
-    _vm.toolbarSpacer
-      ? _c("div", { staticClass: "mdc-top-app-bar--fixed-adjust" })
-      : _vm._e()
-  ])
+        ),
+        _vm._v(" "),
+        _vm.modal
+          ? _c("div", {
+              staticClass: "mdc-drawer-scrim",
+              on: { click: _vm.handleScrimClick }
+            })
+          : _vm._e()
+      ])
 };
 var __vue_staticRenderFns__$a = [];
 __vue_render__$a._withStripped = true;
@@ -3731,211 +3779,11 @@ __vue_render__$a._withStripped = true;
     undefined
   );
 
-var mcwDrawerDivider = {
-  name: 'mcw-drawer-divider',
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots;
-    return function () {
-      return h('hr', {
-        class: {
-          'mdc-list-divider': 1
-        }
-      });
-    };
-  }
-};
-
-var mcwDrawerHeader = {
-  name: 'mcw-drawer-header',
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots;
-    return function () {
-      var _slots$default;
-
-      return h('div', {
-        class: 'mdc-drawer__header'
-      }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
-    };
-  }
-};
-
-var dispatchProps = {
-  event: String,
-  'event-target': Object,
-  'event-args': Array
-};
-var script$b = {
-  name: 'mcw-drawer-item',
-  inheritAttrs: false,
-  props: _objectSpread2(_objectSpread2({}, dispatchProps), {}, {
-    startIcon: String,
-    modalClose: {
-      type: Boolean,
-      default: true
-    },
-    activated: Boolean,
-    exactActiveClass: {
-      type: String,
-      default: 'mdc-list-item--activated'
-    }
-  }),
-  components: {
-    CustomLink: CustomLink
-  },
-  setup: function setup(props, _ref) {
-    var emit = _ref.emit,
-        listeners = _ref.listeners,
-        slots = _ref.slots,
-        $root = _ref.root;
-    var root = ref(null);
-    var uiState = reactive({
-      classes: {
-        'mdc-list-item': 1,
-        'mdc-drawer-item': 1
-      }
-    });
-
-    var _useRipplePlugin = useRipplePlugin$1(root),
-        rippleClasses = _useRipplePlugin.classes,
-        styles = _useRipplePlugin.styles;
-
-    var mcwDrawer = inject('mcwDrawer');
-    var classes = computed(function () {
-      return _objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes);
-    });
-    var mylisteners = computed(function () {
-      return _objectSpread2(_objectSpread2({}, listeners), {}, {
-        click: function click(e) {
-          mcwDrawer.isModal && props.modalClose && mcwDrawer.close();
-          emit(e.type, e);
-        }
-      });
-    });
-    var itemClasses = computed(function () {
-      return {
-        'mdc-list-item--activated': props.activated
-      };
-    });
-    var hasStartDetail = computed(function () {
-      return props.startIcon || slots['start-detail'];
-    });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      classes: classes,
-      root: root,
-      styles: styles,
-      mylisteners: mylisteners,
-      itemClasses: itemClasses,
-      hasStartDetail: hasStartDetail
-    });
-  }
-};
-
-/* script */
-const __vue_script__$b = script$b;
-
-/* template */
-var __vue_render__$b = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "custom-link",
-    _vm._g(
-      {
-        ref: "root",
-        class: [_vm.classes, _vm.itemClasses],
-        style: _vm.styles,
-        attrs: { link: _vm.$attrs }
-      },
-      _vm.mylisteners
-    ),
-    [
-      _vm.hasStartDetail
-        ? _c(
-            "span",
-            { staticClass: "mdc-list-item__graphic" },
-            [
-              _vm._t("start-detail", [
-                _c(
-                  "i",
-                  {
-                    staticClass: "material-icons",
-                    attrs: { "aria-hidden": "true" }
-                  },
-                  [_vm._v(_vm._s(_vm.startIcon))]
-                )
-              ])
-            ],
-            2
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _c("span", { staticClass: "mdc-list-item__text" }, [_vm._t("default")], 2)
-    ]
-  )
-};
-var __vue_staticRenderFns__$b = [];
-__vue_render__$b._withStripped = true;
-
-  /* style */
-  const __vue_inject_styles__$b = undefined;
-  /* scoped */
-  const __vue_scope_id__$b = undefined;
-  /* module identifier */
-  const __vue_module_identifier__$b = undefined;
-  /* functional template */
-  const __vue_is_functional_template__$b = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  const __vue_component__$b = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$b, staticRenderFns: __vue_staticRenderFns__$b },
-    __vue_inject_styles__$b,
-    __vue_script__$b,
-    __vue_scope_id__$b,
-    __vue_is_functional_template__$b,
-    __vue_module_identifier__$b,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-var mcwDrawerList = {
-  name: 'mcw-drawer-list',
-  props: {
-    dense: Boolean
-  },
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots;
-    return function () {
-      var _slots$default;
-
-      return h('nav', {
-        class: {
-          'mdc-drawer-list': 1,
-          'mdc-list': 1,
-          'mdc-list--dense': props.dense
-        }
-      }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
-    };
-  }
-};
-
 var drawer = BasePlugin({
-  mcwDrawer: __vue_component__$a,
-  mcwDrawerHeader: mcwDrawerHeader,
-  mcwDrawerList: mcwDrawerList,
-  mcwDrawerItem: __vue_component__$b,
-  mcwDrawerDivider: mcwDrawerDivider
+  mcwDrawer: __vue_component__$a
 });
 
-var script$c = {
+var script$b = {
   name: 'mcw-fab',
   inheritAttrs: false,
   props: {
@@ -3998,10 +3846,10 @@ var script$c = {
 };
 
 /* script */
-const __vue_script__$c = script$c;
+const __vue_script__$b = script$b;
 
 /* template */
-var __vue_render__$c = function() {
+var __vue_render__$b = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -4035,17 +3883,17 @@ var __vue_render__$c = function() {
     2
   )
 };
-var __vue_staticRenderFns__$c = [];
-__vue_render__$c._withStripped = true;
+var __vue_staticRenderFns__$b = [];
+__vue_render__$b._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$c = undefined;
+  const __vue_inject_styles__$b = undefined;
   /* scoped */
-  const __vue_scope_id__$c = undefined;
+  const __vue_scope_id__$b = undefined;
   /* module identifier */
-  const __vue_module_identifier__$c = undefined;
+  const __vue_module_identifier__$b = undefined;
   /* functional template */
-  const __vue_is_functional_template__$c = false;
+  const __vue_is_functional_template__$b = false;
   /* style inject */
   
   /* style inject SSR */
@@ -4054,13 +3902,13 @@ __vue_render__$c._withStripped = true;
   
 
   
-  const __vue_component__$c = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$c, staticRenderFns: __vue_staticRenderFns__$c },
-    __vue_inject_styles__$c,
-    __vue_script__$c,
-    __vue_scope_id__$c,
-    __vue_is_functional_template__$c,
-    __vue_module_identifier__$c,
+  const __vue_component__$b = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$b, staticRenderFns: __vue_staticRenderFns__$b },
+    __vue_inject_styles__$b,
+    __vue_script__$b,
+    __vue_scope_id__$b,
+    __vue_is_functional_template__$b,
+    __vue_module_identifier__$b,
     false,
     undefined,
     undefined,
@@ -4068,10 +3916,10 @@ __vue_render__$c._withStripped = true;
   );
 
 var fab = BasePlugin({
-  mcwFAB: __vue_component__$c
+  mcwFAB: __vue_component__$b
 });
 
-var script$d = {
+var script$c = {
   name: 'mcw-floating-label',
   props: {
     required: {
@@ -4143,10 +3991,10 @@ var script$d = {
 };
 
 /* script */
-const __vue_script__$d = script$d;
+const __vue_script__$c = script$c;
 
 /* template */
-var __vue_render__$d = function() {
+var __vue_render__$c = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -4157,17 +4005,17 @@ var __vue_render__$d = function() {
     2
   )
 };
-var __vue_staticRenderFns__$d = [];
-__vue_render__$d._withStripped = true;
+var __vue_staticRenderFns__$c = [];
+__vue_render__$c._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$d = undefined;
+  const __vue_inject_styles__$c = undefined;
   /* scoped */
-  const __vue_scope_id__$d = undefined;
+  const __vue_scope_id__$c = undefined;
   /* module identifier */
-  const __vue_module_identifier__$d = undefined;
+  const __vue_module_identifier__$c = undefined;
   /* functional template */
-  const __vue_is_functional_template__$d = false;
+  const __vue_is_functional_template__$c = false;
   /* style inject */
   
   /* style inject SSR */
@@ -4176,13 +4024,13 @@ __vue_render__$d._withStripped = true;
   
 
   
-  const __vue_component__$d = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$d, staticRenderFns: __vue_staticRenderFns__$d },
-    __vue_inject_styles__$d,
-    __vue_script__$d,
-    __vue_scope_id__$d,
-    __vue_is_functional_template__$d,
-    __vue_module_identifier__$d,
+  const __vue_component__$c = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$c, staticRenderFns: __vue_staticRenderFns__$c },
+    __vue_inject_styles__$c,
+    __vue_script__$c,
+    __vue_scope_id__$c,
+    __vue_is_functional_template__$c,
+    __vue_module_identifier__$c,
     false,
     undefined,
     undefined,
@@ -4190,10 +4038,10 @@ __vue_render__$d._withStripped = true;
   );
 
 var floatingLabel = BasePlugin({
-  mcwFloatingLabel: __vue_component__$d
+  mcwFloatingLabel: __vue_component__$c
 });
 
-var script$e = {
+var script$d = {
   name: 'mcw-icon-button',
   model: {
     prop: 'isOn',
@@ -4288,10 +4136,10 @@ var script$e = {
 };
 
 /* script */
-const __vue_script__$e = script$e;
+const __vue_script__$d = script$d;
 
 /* template */
-var __vue_render__$e = function() {
+var __vue_render__$d = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -4309,17 +4157,17 @@ var __vue_render__$e = function() {
     2
   )
 };
-var __vue_staticRenderFns__$e = [];
-__vue_render__$e._withStripped = true;
+var __vue_staticRenderFns__$d = [];
+__vue_render__$d._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$e = undefined;
+  const __vue_inject_styles__$d = undefined;
   /* scoped */
-  const __vue_scope_id__$e = undefined;
+  const __vue_scope_id__$d = undefined;
   /* module identifier */
-  const __vue_module_identifier__$e = undefined;
+  const __vue_module_identifier__$d = undefined;
   /* functional template */
-  const __vue_is_functional_template__$e = false;
+  const __vue_is_functional_template__$d = false;
   /* style inject */
   
   /* style inject SSR */
@@ -4328,13 +4176,13 @@ __vue_render__$e._withStripped = true;
   
 
   
-  const __vue_component__$e = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$e, staticRenderFns: __vue_staticRenderFns__$e },
-    __vue_inject_styles__$e,
-    __vue_script__$e,
-    __vue_scope_id__$e,
-    __vue_is_functional_template__$e,
-    __vue_module_identifier__$e,
+  const __vue_component__$d = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$d, staticRenderFns: __vue_staticRenderFns__$d },
+    __vue_inject_styles__$d,
+    __vue_script__$d,
+    __vue_scope_id__$d,
+    __vue_is_functional_template__$d,
+    __vue_module_identifier__$d,
     false,
     undefined,
     undefined,
@@ -4363,7 +4211,7 @@ var mcwIconToggle = {
 };
 
 var iconButton = BasePlugin({
-  mcwIconButton: __vue_component__$e,
+  mcwIconButton: __vue_component__$d,
   mcwIconToggle: mcwIconToggle
 });
 
@@ -4375,7 +4223,7 @@ var spanOptions_ = {
     return isFinite(num) && num <= 12 && num > 0;
   }
 };
-var script$f = {
+var script$e = {
   name: 'mcw-layout-cell',
   props: {
     span: spanOptions_,
@@ -4427,10 +4275,10 @@ var script$f = {
 };
 
 /* script */
-const __vue_script__$f = script$f;
+const __vue_script__$e = script$e;
 
 /* template */
-var __vue_render__$f = function() {
+var __vue_render__$e = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -4443,6 +4291,72 @@ var __vue_render__$f = function() {
     [_vm._t("default")],
     2
   )
+};
+var __vue_staticRenderFns__$e = [];
+__vue_render__$e._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$e = undefined;
+  /* scoped */
+  const __vue_scope_id__$e = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$e = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$e = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$e = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$e, staticRenderFns: __vue_staticRenderFns__$e },
+    __vue_inject_styles__$e,
+    __vue_script__$e,
+    __vue_scope_id__$e,
+    __vue_is_functional_template__$e,
+    __vue_module_identifier__$e,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var script$f = {
+  name: 'mcw-layout-grid',
+  props: {
+    fixedColumWidth: Boolean,
+    alignLeft: Boolean,
+    alignRight: Boolean
+  },
+  setup: function setup(props) {
+    var classes = computed(function () {
+      return {
+        'mdc-layout-grid': true,
+        'mdc-layout-grid--fixed-column-width': props.fixedColumnWidth,
+        'mdc-layout-grid--align-left': props.alignLeft,
+        'mdc-layout-grid--align-right': props.alignRight
+      };
+    });
+    return {
+      classes: classes
+    };
+  }
+};
+
+/* script */
+const __vue_script__$f = script$f;
+
+/* template */
+var __vue_render__$f = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { class: _vm.classes }, [
+    _c("div", { staticClass: "mdc-layout-grid__inner" }, [_vm._t("default")], 2)
+  ])
 };
 var __vue_staticRenderFns__$f = [];
 __vue_render__$f._withStripped = true;
@@ -4477,25 +4391,7 @@ __vue_render__$f._withStripped = true;
   );
 
 var script$g = {
-  name: 'mcw-layout-grid',
-  props: {
-    fixedColumWidth: Boolean,
-    alignLeft: Boolean,
-    alignRight: Boolean
-  },
-  setup: function setup(props) {
-    var classes = computed(function () {
-      return {
-        'mdc-layout-grid': true,
-        'mdc-layout-grid--fixed-column-width': props.fixedColumnWidth,
-        'mdc-layout-grid--align-left': props.alignLeft,
-        'mdc-layout-grid--align-right': props.alignRight
-      };
-    });
-    return {
-      classes: classes
-    };
-  }
+  name: 'mcw-layout-inner-grid'
 };
 
 /* script */
@@ -4506,9 +4402,12 @@ var __vue_render__$g = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c("div", { class: _vm.classes }, [
-    _c("div", { staticClass: "mdc-layout-grid__inner" }, [_vm._t("default")], 2)
-  ])
+  return _c(
+    "div",
+    { staticClass: "mdc-layout-inner-grid mdc-layout-grid__inner" },
+    [_vm._t("default")],
+    2
+  )
 };
 var __vue_staticRenderFns__$g = [];
 __vue_render__$g._withStripped = true;
@@ -4542,64 +4441,13 @@ __vue_render__$g._withStripped = true;
     undefined
   );
 
-var script$h = {
-  name: 'mcw-layout-inner-grid'
-};
-
-/* script */
-const __vue_script__$h = script$h;
-
-/* template */
-var __vue_render__$h = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    { staticClass: "mdc-layout-inner-grid mdc-layout-grid__inner" },
-    [_vm._t("default")],
-    2
-  )
-};
-var __vue_staticRenderFns__$h = [];
-__vue_render__$h._withStripped = true;
-
-  /* style */
-  const __vue_inject_styles__$h = undefined;
-  /* scoped */
-  const __vue_scope_id__$h = undefined;
-  /* module identifier */
-  const __vue_module_identifier__$h = undefined;
-  /* functional template */
-  const __vue_is_functional_template__$h = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  const __vue_component__$h = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$h, staticRenderFns: __vue_staticRenderFns__$h },
-    __vue_inject_styles__$h,
-    __vue_script__$h,
-    __vue_scope_id__$h,
-    __vue_is_functional_template__$h,
-    __vue_module_identifier__$h,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
 var layoutGrid = BasePlugin({
-  mcwLayoutGrid: __vue_component__$g,
-  mcwLayoutCell: __vue_component__$f,
-  mcwLayoutInnerGrid: __vue_component__$h
+  mcwLayoutGrid: __vue_component__$f,
+  mcwLayoutCell: __vue_component__$e,
+  mcwLayoutInnerGrid: __vue_component__$g
 });
 
-var script$i = {
+var script$h = {
   name: 'mcw-line-ripple',
   setup: function setup() {
     var uiState = reactive({
@@ -4664,10 +4512,10 @@ var script$i = {
 };
 
 /* script */
-const __vue_script__$i = script$i;
+const __vue_script__$h = script$h;
 
 /* template */
-var __vue_render__$i = function() {
+var __vue_render__$h = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -4677,17 +4525,17 @@ var __vue_render__$i = function() {
     on: { transitionend: _vm.onTransitionEnd }
   })
 };
-var __vue_staticRenderFns__$i = [];
-__vue_render__$i._withStripped = true;
+var __vue_staticRenderFns__$h = [];
+__vue_render__$h._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$i = undefined;
+  const __vue_inject_styles__$h = undefined;
   /* scoped */
-  const __vue_scope_id__$i = undefined;
+  const __vue_scope_id__$h = undefined;
   /* module identifier */
-  const __vue_module_identifier__$i = undefined;
+  const __vue_module_identifier__$h = undefined;
   /* functional template */
-  const __vue_is_functional_template__$i = false;
+  const __vue_is_functional_template__$h = false;
   /* style inject */
   
   /* style inject SSR */
@@ -4696,13 +4544,13 @@ __vue_render__$i._withStripped = true;
   
 
   
-  const __vue_component__$i = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$i, staticRenderFns: __vue_staticRenderFns__$i },
-    __vue_inject_styles__$i,
-    __vue_script__$i,
-    __vue_scope_id__$i,
-    __vue_is_functional_template__$i,
-    __vue_module_identifier__$i,
+  const __vue_component__$h = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$h, staticRenderFns: __vue_staticRenderFns__$h },
+    __vue_inject_styles__$h,
+    __vue_script__$h,
+    __vue_scope_id__$h,
+    __vue_is_functional_template__$h,
+    __vue_module_identifier__$h,
     false,
     undefined,
     undefined,
@@ -4710,7 +4558,7 @@ __vue_render__$i._withStripped = true;
   );
 
 var lineRipple = BasePlugin({
-  mcwLineRipple: __vue_component__$i
+  mcwLineRipple: __vue_component__$h
 });
 
 var progressPropType_ = {
@@ -4719,7 +4567,7 @@ var progressPropType_ = {
     return Number(value) >= 0 && Number(value) <= 1;
   }
 };
-var script$j = {
+var script$i = {
   name: 'mcw-linear-progress',
   props: {
     open: {
@@ -4837,10 +4685,10 @@ var script$j = {
 };
 
 /* script */
-const __vue_script__$j = script$j;
+const __vue_script__$i = script$i;
 
 /* template */
-var __vue_render__$j = function() {
+var __vue_render__$i = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -4885,6 +4733,388 @@ var __vue_render__$j = function() {
     ]
   )
 };
+var __vue_staticRenderFns__$i = [];
+__vue_render__$i._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$i = undefined;
+  /* scoped */
+  const __vue_scope_id__$i = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$i = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$i = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$i = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$i, staticRenderFns: __vue_staticRenderFns__$i },
+    __vue_inject_styles__$i,
+    __vue_script__$i,
+    __vue_scope_id__$i,
+    __vue_is_functional_template__$i,
+    __vue_module_identifier__$i,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var linearProgress = BasePlugin({
+  mcwLinearProgress: __vue_component__$i
+});
+
+var listItemId_ = 0;
+var script$j = {
+  name: 'mcw-list-item',
+  props: {
+    twoLine: String,
+    disabled: Boolean,
+    icon: [String, Boolean],
+    groupIcon: String,
+    selected: Boolean,
+    checked: Boolean,
+    name: String,
+    to: [String, Object],
+    noAutoRole: Boolean,
+    trailing: Boolean
+  },
+  components: {
+    CustomLink: CustomLink
+  },
+  setup: function setup(props, _ref) {
+    var slots = _ref.slots,
+        listeners = _ref.listeners,
+        attrs = _ref.attrs;
+    var root = ref(null);
+    var uiState = reactive({
+      classes: {
+        'mdc-list-item': 1,
+        'mdc-list-item--disabled': props.disabled
+      },
+      attrs: {},
+      styles: {}
+    });
+    var myAttrs = computed(function () {
+      return _objectSpread2(_objectSpread2(_objectSpread2({}, attrs), uiState.attrs), {}, {
+        to: props.to
+      });
+    });
+    var radioChecked = computed(function () {
+      return (attrs === null || attrs === void 0 ? void 0 : attrs['aria-checked']) == 'true';
+    });
+    var checkbox = computed(function () {
+      return !props.trailing && (attrs === null || attrs === void 0 ? void 0 : attrs.role) == 'checkbox';
+    });
+    var radio = computed(function () {
+      return !props.trailing && (attrs === null || attrs === void 0 ? void 0 : attrs.role) == 'radio';
+    });
+    var trailingRadio = computed(function () {
+      return props.trailing && (attrs === null || attrs === void 0 ? void 0 : attrs.role) == 'radio';
+    });
+    var trailingCheckbox = computed(function () {
+      return props.trailing && (attrs === null || attrs === void 0 ? void 0 : attrs.role) == 'checkbox';
+    });
+    var itemId = listItemId_++;
+
+    var _useRipplePlugin = useRipplePlugin(root),
+        rippleClasses = _useRipplePlugin.classes,
+        styles = _useRipplePlugin.styles;
+
+    var classes = computed(function () {
+      return _objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes);
+    });
+    var isTwoLine = computed(function () {
+      return props.twoLine || slots['secondary-text'];
+    });
+    var groupClasses = computed(function () {
+      return {
+        'mdc-menu__selection-group-icon': props.groupIcon
+      };
+    });
+    var needGraphic = computed(function () {
+      return typeof props.icon == 'string' || !!props.groupIcon;
+    });
+    var listIcon = computed(function () {
+      return typeof props.icon === 'string' && props.icon || props.groupIcon;
+    });
+
+    var addClass = function addClass(className) {
+      return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+    };
+
+    var removeClass = function removeClass(className) {
+      // eslint-disable-next-line no-unused-vars
+      var _uiState$classes = uiState.classes,
+          removed = _uiState$classes[className],
+          rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+
+      uiState.classes = rest;
+    };
+
+    var removeAttribute = function removeAttribute(attr) {
+      // eslint-disable-next-line no-unused-vars
+      var _uiState$attrs = uiState.attrs,
+          removed = _uiState$attrs[attr],
+          rest = _objectWithoutProperties(_uiState$attrs, [attr].map(_toPropertyKey));
+
+      uiState.attrs = rest;
+    };
+
+    var setAttribute = function setAttribute(attr, value) {
+      return uiState.attrs = _objectSpread2(_objectSpread2({}, uiState.attrs), {}, _defineProperty({}, attr, value));
+    };
+
+    var getAttribute = function getAttribute(attr) {
+      return myAttrs.value[attr];
+    };
+
+    var addItemId = function addItemId(evt) {
+      return evt.__itemId = itemId;
+    };
+
+    var classList = {
+      add: addClass,
+      remove: removeClass,
+      contains: function contains(className) {
+        return !!uiState.classes[className];
+      }
+    };
+
+    var focus = function focus() {
+      var _root$value$$el;
+
+      ((_root$value$$el = root.value.$el) !== null && _root$value$$el !== void 0 ? _root$value$$el : root.value).focus();
+    };
+
+    var myListeners = _objectSpread2(_objectSpread2({}, listeners), {}, {
+      click: addItemId,
+      focusin: addItemId
+    });
+
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      myListeners: myListeners,
+      styles: styles,
+      focus: focus,
+      root: root,
+      classes: classes,
+      isTwoLine: isTwoLine,
+      needGraphic: needGraphic,
+      listIcon: listIcon,
+      groupClasses: groupClasses,
+      addClass: addClass,
+      removeClass: removeClass,
+      setAttribute: setAttribute,
+      getAttribute: getAttribute,
+      removeAttribute: removeAttribute,
+      itemId: itemId,
+      checkbox: checkbox,
+      radio: radio,
+      radioChecked: radioChecked,
+      classList: classList,
+      myAttrs: myAttrs,
+      trailingRadio: trailingRadio,
+      trailingCheckbox: trailingCheckbox
+    });
+  }
+};
+
+/* script */
+const __vue_script__$j = script$j;
+
+/* template */
+var __vue_render__$j = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "custom-link",
+    _vm._g(
+      {
+        ref: "root",
+        class: _vm.classes,
+        style: _vm.styles,
+        attrs: { link: _vm.myAttrs, tag: "a" }
+      },
+      _vm.myListeners
+    ),
+    [
+      _c("span", { staticClass: "mdc-list-item__ripple" }),
+      _vm._v(" "),
+      _vm.needGraphic
+        ? _c(
+            "span",
+            { staticClass: "mdc-list-item__graphic", class: _vm.groupClasses },
+            [
+              _vm._t("graphic", [
+                _vm.listIcon
+                  ? _c("i", { staticClass: "material-icons" }, [
+                      _vm._v(_vm._s(_vm.listIcon))
+                    ])
+                  : _vm._e()
+              ])
+            ],
+            2
+          )
+        : _vm.checkbox
+        ? _c(
+            "span",
+            { staticClass: "mdc-list-item__graphic" },
+            [
+              _vm._t("graphic", [
+                _c("div", { staticClass: "mdc-checkbox" }, [
+                  _c("input", {
+                    staticClass: "mdc-checkbox__native-control",
+                    attrs: { type: "checkbox" }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mdc-checkbox__background" }, [
+                    _c(
+                      "svg",
+                      {
+                        staticClass: "mdc-checkbox__checkmark",
+                        attrs: { viewBox: "0 0 24 24" }
+                      },
+                      [
+                        _c("path", {
+                          staticClass: "mdc-checkbox__checkmark-path",
+                          attrs: {
+                            fill: "none",
+                            d: "M1.73,12.91 8.1,19.28 22.79,4.59"
+                          }
+                        })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "mdc-checkbox__mixedmark" })
+                  ])
+                ])
+              ])
+            ],
+            2
+          )
+        : _vm.radio
+        ? _c(
+            "span",
+            { staticClass: "mdc-list-item__graphic" },
+            [
+              _vm._t("graphic", [
+                _c("div", { staticClass: "mdc-radio" }, [
+                  _c("input", {
+                    staticClass: "mdc-radio__native-control",
+                    attrs: { type: "radio", value: "1", name: _vm.name },
+                    domProps: { checked: _vm.radioChecked }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mdc-radio__background" }, [
+                    _c("div", { staticClass: "mdc-radio__outer-circle" }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "mdc-radio__inner-circle" })
+                  ])
+                ])
+              ])
+            ],
+            2
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.isTwoLine
+        ? _c("span", { staticClass: "mdc-list-item__text" }, [
+            _c(
+              "span",
+              { staticClass: "mdc-list-item__primary-text" },
+              [_vm._t("default")],
+              2
+            ),
+            _vm._v(" "),
+            _c(
+              "span",
+              { staticClass: "mdc-list-item__secondary-text" },
+              [_vm._t("secondary-text", [_vm._v(_vm._s(_vm.twoLine))])],
+              2
+            )
+          ])
+        : _c(
+            "span",
+            { staticClass: "mdc-list-item__text" },
+            [_vm._t("default")],
+            2
+          ),
+      _vm._v(" "),
+      _vm.trailingRadio
+        ? _c(
+            "span",
+            { staticClass: "mdc-list-item__meta" },
+            [
+              _vm._t("meta", [
+                _c("div", { staticClass: "mdc-radio" }, [
+                  _c("input", {
+                    staticClass: "mdc-radio__native-control",
+                    attrs: { type: "radio", value: "1", name: _vm.name },
+                    domProps: { checked: _vm.radioChecked }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mdc-radio__background" }, [
+                    _c("div", { staticClass: "mdc-radio__outer-circle" }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "mdc-radio__inner-circle" })
+                  ])
+                ])
+              ])
+            ],
+            2
+          )
+        : _vm.trailingCheckbox
+        ? _c(
+            "span",
+            { staticClass: "mdc-list-item__meta" },
+            [
+              _vm._t("meta"),
+              _vm._v(" "),
+              _c("div", { staticClass: "mdc-checkbox" }, [
+                _c("input", {
+                  staticClass: "mdc-checkbox__native-control",
+                  attrs: { type: "checkbox" }
+                }),
+                _vm._v(" "),
+                _c("div", { staticClass: "mdc-checkbox__background" }, [
+                  _c(
+                    "svg",
+                    {
+                      staticClass: "mdc-checkbox__checkmark",
+                      attrs: { viewBox: "0 0 24 24" }
+                    },
+                    [
+                      _c("path", {
+                        staticClass: "mdc-checkbox__checkmark-path",
+                        attrs: {
+                          fill: "none",
+                          d: "M1.73,12.91 8.1,19.28 22.79,4.59"
+                        }
+                      })
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mdc-checkbox__mixedmark" })
+                ])
+              ])
+            ],
+            2
+          )
+        : _c(
+            "span",
+            { staticClass: "mdc-list-item__meta" },
+            [_vm._t("meta")],
+            2
+          )
+    ]
+  )
+};
 var __vue_staticRenderFns__$j = [];
 __vue_render__$j._withStripped = true;
 
@@ -4917,136 +5147,9 @@ __vue_render__$j._withStripped = true;
     undefined
   );
 
-var linearProgress = BasePlugin({
-  mcwLinearProgress: __vue_component__$j
-});
-
-var script$k = {
-  props: {
-    twoLine: String,
-    disabled: Boolean,
-    icon: [String, Boolean],
-    groupIcon: String
-  },
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots;
-    var isTwoLine = computed(function () {
-      return props.twoLine || slots['secondary-text'];
-    });
-    var classes = computed(function () {
-      return {
-        'mdc-list-item': 1,
-        'mdc-list-item--disabled': props.disabled
-      };
-    });
-    var groupClasses = computed(function () {
-      return {
-        'mdc-menu__selection-group-icon': props.groupIcon
-      };
-    });
-    var needGraphic = computed(function () {
-      return typeof props.icon == 'string' || !!props.groupIcon;
-    });
-    var listIcon = computed(function () {
-      return typeof props.icon === 'string' && props.icon || props.groupIcon;
-    });
-    return {
-      isTwoLine: isTwoLine,
-      classes: classes,
-      needGraphic: needGraphic,
-      listIcon: listIcon,
-      groupClasses: groupClasses
-    };
-  }
-};
-
-/* script */
-const __vue_script__$k = script$k;
-
-/* template */
-var __vue_render__$k = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("li", { class: _vm.classes }, [
-    _c("span", { staticClass: "mdc-list-item__ripple" }),
-    _vm._v(" "),
-    _vm.needGraphic
-      ? _c(
-          "span",
-          { staticClass: "mdc-list-item__graphic", class: _vm.groupClasses },
-          [
-            _vm._t("graphic", [
-              _vm.listIcon
-                ? _c("i", { staticClass: "material-icons" }, [
-                    _vm._v(_vm._s(_vm.listIcon))
-                  ])
-                : _vm._e()
-            ])
-          ],
-          2
-        )
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.isTwoLine
-      ? _c("span", { staticClass: "mdc-list-item__text" }, [
-          _c(
-            "span",
-            { staticClass: "mdc-list-item__primary-text" },
-            [_vm._t("default")],
-            2
-          ),
-          _vm._v(" "),
-          _c(
-            "span",
-            { staticClass: "mdc-list-item__secondary-text" },
-            [_vm._t("secondary-text", [_vm._v(_vm._s(_vm.twoLine))])],
-            2
-          )
-        ])
-      : _c(
-          "span",
-          { staticClass: "mdc-list-item__text" },
-          [_vm._t("default")],
-          2
-        )
-  ])
-};
-var __vue_staticRenderFns__$k = [];
-__vue_render__$k._withStripped = true;
-
-  /* style */
-  const __vue_inject_styles__$k = undefined;
-  /* scoped */
-  const __vue_scope_id__$k = undefined;
-  /* module identifier */
-  const __vue_module_identifier__$k = undefined;
-  /* functional template */
-  const __vue_is_functional_template__$k = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  const __vue_component__$k = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$k, staticRenderFns: __vue_staticRenderFns__$k },
-    __vue_inject_styles__$k,
-    __vue_script__$k,
-    __vue_scope_id__$k,
-    __vue_is_functional_template__$k,
-    __vue_module_identifier__$k,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-var strings$4 = MDCListFoundation.strings,
+var strings$5 = MDCListFoundation.strings,
     cssClasses$1 = MDCListFoundation.cssClasses;
-var script$l = {
+var script$k = {
   name: 'mcw-list',
   model: {
     prop: 'selectedIndex',
@@ -5080,7 +5183,8 @@ var script$l = {
     typeAhead: Boolean
   },
   setup: function setup(props, _ref) {
-    var emit = _ref.emit;
+    var emit = _ref.emit,
+        slots = _ref.slots;
     var uiState = reactive({
       classes: {
         'mdc-list': 1,
@@ -5117,18 +5221,49 @@ var script$l = {
       }
     });
     var listElements = computed(function () {
+      var _slots$default;
+
       // eslint-disable-next-line no-unused-vars
       var xx = uiState.listn; // for dependency
 
-      return [].slice.call(uiState.listRoot.querySelectorAll(".".concat(cssClasses$1.LIST_ITEM_CLASS)));
+      var processItem = function processItem(item) {
+        var _item$componentInstan;
+
+        var items = [];
+
+        if ((_item$componentInstan = item.componentInstance) === null || _item$componentInstan === void 0 ? void 0 : _item$componentInstan.setAttribute) {
+          items.push(item.componentInstance);
+        }
+
+        if (item.children) {
+          return item.children.reduce(function (p, v) {
+            return p.concat(processItem(v));
+          }, items);
+        }
+
+        return items;
+      }; // search depth first down the tree for vue components that match the signature of a mcw-list-item
+
+
+      var topList = (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots).reduce(function (p, v) {
+        return p.concat(processItem(v));
+      }, []);
+      return topList;
     });
 
     var getListItemIndex = function getListItemIndex(evt) {
+      if (evt.__itemId) {
+        return listElements.value.findIndex(function (_ref2) {
+          var itemId = _ref2.itemId;
+          return itemId === evt.__itemId;
+        });
+      }
+
       var eventTarget = evt.target;
       var nearestParent = closest(eventTarget, ".".concat(cssClasses$1.LIST_ITEM_CLASS, ", .").concat(cssClasses$1.ROOT)); // Get the index of the element if it is a list item.
 
       if (nearestParent && matches(nearestParent, ".".concat(cssClasses$1.LIST_ITEM_CLASS))) {
-        return listElements.value.indexOf(nearestParent);
+        return listElements.value.indexOf(nearestParent.__vue__);
       }
 
       return -1;
@@ -5141,23 +5276,23 @@ var script$l = {
         ele.setAttribute('tabindex', -1);
       }); // Child button/a elements are not tabbable until the list item is focused.
 
-      [].slice.call(uiState.listRoot.querySelectorAll(strings$4.FOCUSABLE_CHILD_ELEMENTS)).forEach(function (ele) {
+      [].slice.call(uiState.listRoot.querySelectorAll(strings$5.FOCUSABLE_CHILD_ELEMENTS)).forEach(function (ele) {
         return ele.setAttribute('tabindex', -1);
       });
       foundation.layout();
     };
 
     var initializeListType = function initializeListType() {
-      var checkboxListItems = uiState.listRoot.querySelectorAll(strings$4.ARIA_ROLE_CHECKBOX_SELECTOR);
-      var radioSelectedListItem = uiState.listRoot.querySelector(strings$4.ARIA_CHECKED_RADIO_SELECTOR);
+      var checkboxListItems = uiState.listRoot.querySelectorAll(strings$5.ARIA_ROLE_CHECKBOX_SELECTOR);
+      var radioSelectedListItem = uiState.listRoot.querySelector(strings$5.ARIA_CHECKED_RADIO_SELECTOR);
 
       if (checkboxListItems.length) {
-        var preselectedItems = uiState.listRoot.querySelectorAll(strings$4.ARIA_CHECKED_CHECKBOX_SELECTOR);
+        var preselectedItems = uiState.listRoot.querySelectorAll(strings$5.ARIA_CHECKED_CHECKBOX_SELECTOR);
         selIndex.value = [].map.call(preselectedItems, function (listItem) {
-          return listElements.value.indexOf(listItem);
+          return listElements.value.indexOf(listItem.__vue__);
         });
       } else if (radioSelectedListItem) {
-        selIndex.value = listElements.value.indexOf(radioSelectedListItem);
+        selIndex.value = listElements.value.indexOf(radioSelectedListItem.__vue__);
       }
     };
 
@@ -5202,7 +5337,7 @@ var script$l = {
       var index = getListItemIndex(evt);
       var target = evt.target; // Toggle the checkbox only if it's not the target of the event, or the checkbox will have 2 change events.
 
-      var toggleCheckbox = !matches(target, strings$4.CHECKBOX_RADIO_SELECTOR);
+      var toggleCheckbox = !matches(target, strings$5.CHECKBOX_RADIO_SELECTOR);
       foundation.handleClick(index, toggleCheckbox);
     };
 
@@ -5228,10 +5363,7 @@ var script$l = {
     var adapter = {
       addClassForElementIndex: function addClassForElementIndex(index, className) {
         var element = listElements.value[index];
-
-        if (element) {
-          element.classList.add(className);
-        }
+        element.classList.add(className);
       },
       focusItemAtIndex: function focusItemAtIndex(index) {
         var element = listElements.value[index];
@@ -5241,7 +5373,8 @@ var script$l = {
         }
       },
       getAttributeForElementIndex: function getAttributeForElementIndex(index, attr) {
-        return listElements.value[index].getAttribute(attr);
+        var listItem = listElements.value[index];
+        return listItem.getAttribute(attr);
       },
       getFocusedElementIndex: function getFocusedElementIndex() {
         return listElements.value.indexOf(document.activeElement);
@@ -5253,16 +5386,22 @@ var script$l = {
         return getPrimaryText(listElements.value[index]);
       },
       hasCheckboxAtIndex: function hasCheckboxAtIndex(index) {
+        var _listItem$$el;
+
         var listItem = listElements.value[index];
-        return !!listItem.querySelector(strings$4.CHECKBOX_SELECTOR);
+        return !!((_listItem$$el = listItem.$el) !== null && _listItem$$el !== void 0 ? _listItem$$el : listItem).querySelector(strings$5.CHECKBOX_SELECTOR);
       },
       hasRadioAtIndex: function hasRadioAtIndex(index) {
+        var _listItem$$el2;
+
         var listItem = listElements.value[index];
-        return !!listItem.querySelector(strings$4.RADIO_SELECTOR);
+        return !!((_listItem$$el2 = listItem.$el) !== null && _listItem$$el2 !== void 0 ? _listItem$$el2 : listItem).querySelector(strings$5.RADIO_SELECTOR);
       },
       isCheckboxCheckedAtIndex: function isCheckboxCheckedAtIndex(index) {
+        var _listItem$$el3;
+
         var listItem = listElements.value[index];
-        var toggleEl = listItem.querySelector(strings$4.CHECKBOX_SELECTOR);
+        var toggleEl = ((_listItem$$el3 = listItem.$el) !== null && _listItem$$el3 !== void 0 ? _listItem$$el3 : listItem).querySelector(strings$5.CHECKBOX_SELECTOR);
         return toggleEl.checked;
       },
       isFocusInsideList: function isFocusInsideList() {
@@ -5272,10 +5411,11 @@ var script$l = {
         return document.activeElement === uiState.listRoot;
       },
       listItemAtIndexHasClass: function listItemAtIndexHasClass(index, className) {
-        listElements.value[index].classList.contains(className);
+        var listItem = listElements.value[index];
+        listItem.classList.contains(className);
       },
       notifyAction: function notifyAction(index) {
-        emitCustomEvent(uiState.listRoot, strings$4.ACTION_EVENT, {
+        emitCustomEvent(uiState.listRoot, strings$5.ACTION_EVENT, {
           index: index
         },
         /** shouldBubble */
@@ -5288,30 +5428,24 @@ var script$l = {
         }
       },
       removeClassForElementIndex: function removeClassForElementIndex(index, className) {
-        var element = listElements.value[index];
-
-        if (element) {
-          element.classList.remove(className);
-        }
+        var listItem = listElements.value[index];
+        listItem.classList.remove(className);
       },
       setAttributeForElementIndex: function setAttributeForElementIndex(index, attr, value) {
-        var element = listElements.value[index];
-
-        if (element) {
-          element.setAttribute(attr, value);
-        }
+        var listItem = listElements.value[index];
+        listItem.setAttribute(attr, value);
       },
       setCheckedCheckboxOrRadioAtIndex: function setCheckedCheckboxOrRadioAtIndex(index, isChecked) {
         var listItem = listElements.value[index];
-        var toggleEl = listItem.querySelector(strings$4.CHECKBOX_RADIO_SELECTOR);
+        var toggleEl = listItem.$el.querySelector(strings$5.CHECKBOX_RADIO_SELECTOR);
         toggleEl && (toggleEl.checked = isChecked);
         var event = document.createEvent('Event');
         event.initEvent('change', true, true);
         toggleEl === null || toggleEl === void 0 ? void 0 : toggleEl.dispatchEvent(event);
       },
       setTabIndexForListItemChildren: function setTabIndexForListItemChildren(listItemIndex, tabIndexValue) {
-        var element = listElements.value[listItemIndex];
-        var listItemChildren = [].slice.call(element.querySelectorAll(strings$4.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX));
+        var element = listElements.value[listItemIndex].$el;
+        var listItemChildren = [].slice.call(element.querySelectorAll(strings$5.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX));
         listItemChildren.forEach(function (el) {
           return el.setAttribute('tabindex', tabIndexValue);
         });
@@ -5397,16 +5531,17 @@ var script$l = {
       setEnabled: setEnabled,
       typeaheadMatchItem: typeaheadMatchItem,
       typeaheadInProgress: typeaheadInProgress,
-      selIndex: selIndex
+      selIndex: selIndex,
+      getPrimaryText: getPrimaryText
     });
   }
 };
 
 /* script */
-const __vue_script__$l = script$l;
+const __vue_script__$k = script$k;
 
 /* template */
-var __vue_render__$l = function() {
+var __vue_render__$k = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -5425,17 +5560,17 @@ var __vue_render__$l = function() {
     2
   )
 };
-var __vue_staticRenderFns__$l = [];
-__vue_render__$l._withStripped = true;
+var __vue_staticRenderFns__$k = [];
+__vue_render__$k._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$l = undefined;
+  const __vue_inject_styles__$k = undefined;
   /* scoped */
-  const __vue_scope_id__$l = undefined;
+  const __vue_scope_id__$k = undefined;
   /* module identifier */
-  const __vue_module_identifier__$l = undefined;
+  const __vue_module_identifier__$k = undefined;
   /* functional template */
-  const __vue_is_functional_template__$l = false;
+  const __vue_is_functional_template__$k = false;
   /* style inject */
   
   /* style inject SSR */
@@ -5444,13 +5579,13 @@ __vue_render__$l._withStripped = true;
   
 
   
-  const __vue_component__$l = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$l, staticRenderFns: __vue_staticRenderFns__$l },
-    __vue_inject_styles__$l,
-    __vue_script__$l,
-    __vue_scope_id__$l,
-    __vue_is_functional_template__$l,
-    __vue_module_identifier__$l,
+  const __vue_component__$k = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$k, staticRenderFns: __vue_staticRenderFns__$k },
+    __vue_inject_styles__$k,
+    __vue_script__$k,
+    __vue_scope_id__$k,
+    __vue_is_functional_template__$k,
+    __vue_module_identifier__$k,
     false,
     undefined,
     undefined,
@@ -5458,8 +5593,8 @@ __vue_render__$l._withStripped = true;
   );
 
 var list = BasePlugin({
-  mcwList: __vue_component__$l,
-  mcwListItem: __vue_component__$k
+  mcwList: __vue_component__$k,
+  mcwListItem: __vue_component__$j
 });
 
 var mcwMaterialIcon = {
@@ -5527,9 +5662,9 @@ var mcwMenuItem = {
   }
 };
 
-var strings$5 = MDCMenuSurfaceFoundation.strings,
+var strings$6 = MDCMenuSurfaceFoundation.strings,
     cssClasses$2 = MDCMenuSurfaceFoundation.cssClasses;
-var script$m = {
+var script$l = {
   name: 'mcw-menu-surface',
   model: {
     prop: 'open',
@@ -5723,11 +5858,11 @@ var script$m = {
         return !!anchorElement;
       },
       notifyClose: function notifyClose() {
-        emitCustomEvent(uiState.root, strings$5.CLOSED_EVENT, {});
+        emitCustomEvent(uiState.root, strings$6.CLOSED_EVENT, {});
         emit('change', false);
       },
       notifyOpen: function notifyOpen() {
-        emitCustomEvent(uiState.root, strings$5.OPENED_EVENT, {});
+        emitCustomEvent(uiState.root, strings$6.OPENED_EVENT, {});
         emit('change', true);
       },
       isElementInContainer: function isElementInContainer(el) {
@@ -5779,10 +5914,10 @@ var script$m = {
 };
 
 /* script */
-const __vue_script__$m = script$m;
+const __vue_script__$l = script$l;
 
 /* template */
-var __vue_render__$m = function() {
+var __vue_render__$l = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -5793,17 +5928,17 @@ var __vue_render__$m = function() {
     2
   )
 };
-var __vue_staticRenderFns__$m = [];
-__vue_render__$m._withStripped = true;
+var __vue_staticRenderFns__$l = [];
+__vue_render__$l._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$m = undefined;
+  const __vue_inject_styles__$l = undefined;
   /* scoped */
-  const __vue_scope_id__$m = undefined;
+  const __vue_scope_id__$l = undefined;
   /* module identifier */
-  const __vue_module_identifier__$m = undefined;
+  const __vue_module_identifier__$l = undefined;
   /* functional template */
-  const __vue_is_functional_template__$m = false;
+  const __vue_is_functional_template__$l = false;
   /* style inject */
   
   /* style inject SSR */
@@ -5812,13 +5947,13 @@ __vue_render__$m._withStripped = true;
   
 
   
-  const __vue_component__$m = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$m, staticRenderFns: __vue_staticRenderFns__$m },
-    __vue_inject_styles__$m,
-    __vue_script__$m,
-    __vue_scope_id__$m,
-    __vue_is_functional_template__$m,
-    __vue_module_identifier__$m,
+  const __vue_component__$l = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$l, staticRenderFns: __vue_staticRenderFns__$l },
+    __vue_inject_styles__$l,
+    __vue_script__$l,
+    __vue_scope_id__$l,
+    __vue_is_functional_template__$l,
+    __vue_module_identifier__$l,
     false,
     undefined,
     undefined,
@@ -5826,14 +5961,14 @@ __vue_render__$m._withStripped = true;
   );
 
 var cssClasses$3 = MDCMenuFoundation.cssClasses,
-    strings$6 = MDCMenuFoundation.strings;
+    strings$7 = MDCMenuFoundation.strings;
 var DefaultFocusState_ = {
   NONE: 0,
   LIST_ROOT: 1,
   FIRST_ITEM: 2,
   LAST_ITEM: 3
 };
-var script$n = {
+var script$m = {
   name: 'mcw-menu',
   model: {
     prop: 'open',
@@ -5901,7 +6036,7 @@ var script$n = {
     };
 
     var handleAction = function handleAction(index) {
-      foundation.handleItemAction(items.value[index]);
+      foundation.handleItemAction(items.value[index].$el);
     };
 
     var handleKeydown = function handleKeydown(evt) {
@@ -6001,20 +6136,20 @@ var script$n = {
 
     var adapter = {
       addClassToElementAtIndex: function addClassToElementAtIndex(index, className) {
-        var list = items.value;
-        list[index].classList.add(className);
+        var item = items.value[index];
+        item.classList.add(className);
       },
       removeClassFromElementAtIndex: function removeClassFromElementAtIndex(index, className) {
-        var list = items.value;
-        list[index].classList.remove(className);
+        var item = items.value[index];
+        item.classList.remove(className);
       },
       addAttributeToElementAtIndex: function addAttributeToElementAtIndex(index, attr, value) {
-        var list = items.value;
-        list[index].setAttribute(attr, value);
+        var item = items.value[index];
+        item.setAttribute(attr, value);
       },
       removeAttributeFromElementAtIndex: function removeAttributeFromElementAtIndex(index, attr) {
-        var list = items.value;
-        list[index].removeAttribute(attr);
+        var item = items.value[index];
+        item.removeAttribute(attr);
       },
       elementContainsClass: function elementContainsClass(element, className) {
         return element.classList.contains(className);
@@ -6024,10 +6159,13 @@ var script$n = {
         emit('change', false);
       },
       getElementIndex: function getElementIndex(element) {
-        return items.value.indexOf(element);
+        return items.value.findIndex(function (_ref2) {
+          var $el = _ref2.$el;
+          return $el == element;
+        });
       },
       notifySelected: function notifySelected(evtData) {
-        emitCustomEvent(rootEl, strings$6.SELECTED_EVENT, {
+        emitCustomEvent(rootEl, strings$7.SELECTED_EVENT, {
           index: evtData.index,
           item: items.value[evtData.index]
         });
@@ -6040,18 +6178,21 @@ var script$n = {
         return items.value.length;
       },
       focusItemAtIndex: function focusItemAtIndex(index) {
-        return items.value[index].focus();
+        return items.value[index].$el.focus();
       },
       focusListRoot: function focusListRoot() {
-        return uiState.menuSurface.querySelector(strings$6.LIST_SELECTOR).focus();
+        return uiState.menuSurface.querySelector(strings$7.LIST_SELECTOR).focus();
       },
       isSelectableItemAtIndex: function isSelectableItemAtIndex(index) {
-        return !!closest(items.value[index], ".".concat(cssClasses$3.MENU_SELECTION_GROUP));
+        return !!closest(items.value[index].$el, ".".concat(cssClasses$3.MENU_SELECTION_GROUP));
       },
       getSelectedSiblingOfItemAtIndex: function getSelectedSiblingOfItemAtIndex(index) {
-        var selectionGroupEl = closest(items.value[index], ".".concat(cssClasses$3.MENU_SELECTION_GROUP));
+        var selectionGroupEl = closest(items.value[index].$el, ".".concat(cssClasses$3.MENU_SELECTION_GROUP));
         var selectedItemEl = selectionGroupEl.querySelector(".".concat(cssClasses$3.MENU_SELECTED_LIST_ITEM));
-        return selectedItemEl ? items.value.indexOf(selectedItemEl) : -1;
+        return selectedItemEl ? items.value.findIndex(function (_ref3) {
+          var $el = _ref3.$el;
+          return $el == selectedItemEl;
+        }) : -1;
       }
     };
     watch(function () {
@@ -6110,10 +6251,10 @@ var script$n = {
 };
 
 /* script */
-const __vue_script__$n = script$n;
+const __vue_script__$m = script$m;
 
 /* template */
-var __vue_render__$n = function() {
+var __vue_render__$m = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -6151,17 +6292,17 @@ var __vue_render__$n = function() {
     1
   )
 };
-var __vue_staticRenderFns__$n = [];
-__vue_render__$n._withStripped = true;
+var __vue_staticRenderFns__$m = [];
+__vue_render__$m._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$n = undefined;
+  const __vue_inject_styles__$m = undefined;
   /* scoped */
-  const __vue_scope_id__$n = undefined;
+  const __vue_scope_id__$m = undefined;
   /* module identifier */
-  const __vue_module_identifier__$n = undefined;
+  const __vue_module_identifier__$m = undefined;
   /* functional template */
-  const __vue_is_functional_template__$n = false;
+  const __vue_is_functional_template__$m = false;
   /* style inject */
   
   /* style inject SSR */
@@ -6170,13 +6311,13 @@ __vue_render__$n._withStripped = true;
   
 
   
-  const __vue_component__$n = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$n, staticRenderFns: __vue_staticRenderFns__$n },
-    __vue_inject_styles__$n,
-    __vue_script__$n,
-    __vue_scope_id__$n,
-    __vue_is_functional_template__$n,
-    __vue_module_identifier__$n,
+  const __vue_component__$m = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$m, staticRenderFns: __vue_staticRenderFns__$m },
+    __vue_inject_styles__$m,
+    __vue_script__$m,
+    __vue_scope_id__$m,
+    __vue_is_functional_template__$m,
+    __vue_module_identifier__$m,
     false,
     undefined,
     undefined,
@@ -6184,18 +6325,18 @@ __vue_render__$n._withStripped = true;
   );
 
 var menu = BasePlugin({
-  mcwMenu: __vue_component__$n,
-  mcwMenuSurface: __vue_component__$m,
+  mcwMenu: __vue_component__$m,
+  mcwMenuSurface: __vue_component__$l,
   mcwMenuItem: mcwMenuItem,
   mcwMenuAnchor: mcwMenuAnchor,
-  mcwList: __vue_component__$l
+  mcwList: __vue_component__$k
 });
 
 var cssClasses$4 = MDCNotchedOutlineFoundation.cssClasses;
-var script$o = {
+var script$n = {
   name: 'mcw-notched-outline',
   components: {
-    mcwFloatingLabel: __vue_component__$d
+    mcwFloatingLabel: __vue_component__$c
   },
   setup: function setup(props, _ref) {
     var slots = _ref.slots;
@@ -6280,10 +6421,10 @@ var script$o = {
 };
 
 /* script */
-const __vue_script__$o = script$o;
+const __vue_script__$n = script$n;
 
 /* template */
-var __vue_render__$o = function() {
+var __vue_render__$n = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -6304,17 +6445,17 @@ var __vue_render__$o = function() {
     _c("span", { staticClass: "mdc-notched-outline__trailing" })
   ])
 };
-var __vue_staticRenderFns__$o = [];
-__vue_render__$o._withStripped = true;
+var __vue_staticRenderFns__$n = [];
+__vue_render__$n._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$o = undefined;
+  const __vue_inject_styles__$n = undefined;
   /* scoped */
-  const __vue_scope_id__$o = undefined;
+  const __vue_scope_id__$n = undefined;
   /* module identifier */
-  const __vue_module_identifier__$o = undefined;
+  const __vue_module_identifier__$n = undefined;
   /* functional template */
-  const __vue_is_functional_template__$o = false;
+  const __vue_is_functional_template__$n = false;
   /* style inject */
   
   /* style inject SSR */
@@ -6323,13 +6464,13 @@ __vue_render__$o._withStripped = true;
   
 
   
-  const __vue_component__$o = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$o, staticRenderFns: __vue_staticRenderFns__$o },
-    __vue_inject_styles__$o,
-    __vue_script__$o,
-    __vue_scope_id__$o,
-    __vue_is_functional_template__$o,
-    __vue_module_identifier__$o,
+  const __vue_component__$n = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$n, staticRenderFns: __vue_staticRenderFns__$n },
+    __vue_inject_styles__$n,
+    __vue_script__$n,
+    __vue_scope_id__$n,
+    __vue_is_functional_template__$n,
+    __vue_module_identifier__$n,
     false,
     undefined,
     undefined,
@@ -6337,11 +6478,11 @@ __vue_render__$o._withStripped = true;
   );
 
 var notchedOutline = BasePlugin({
-  mcwNotchedOutline: __vue_component__$o
+  mcwNotchedOutline: __vue_component__$n
 });
 
 var radioId_ = 0;
-var script$p = {
+var script$o = {
   name: 'mcw-radio',
   model: {
     prop: 'picked',
@@ -6506,10 +6647,10 @@ var script$p = {
 };
 
 /* script */
-const __vue_script__$p = script$p;
+const __vue_script__$o = script$o;
 
 /* template */
-var __vue_render__$p = function() {
+var __vue_render__$o = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -6587,7 +6728,7 @@ var __vue_render__$p = function() {
         _c("div", { staticClass: "mdc-radio__ripple" })
       ])
 };
-var __vue_staticRenderFns__$p = [
+var __vue_staticRenderFns__$o = [
   function() {
     var _vm = this;
     var _h = _vm.$createElement;
@@ -6609,16 +6750,16 @@ var __vue_staticRenderFns__$p = [
     ])
   }
 ];
-__vue_render__$p._withStripped = true;
+__vue_render__$o._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$p = undefined;
+  const __vue_inject_styles__$o = undefined;
   /* scoped */
-  const __vue_scope_id__$p = undefined;
+  const __vue_scope_id__$o = undefined;
   /* module identifier */
-  const __vue_module_identifier__$p = undefined;
+  const __vue_module_identifier__$o = undefined;
   /* functional template */
-  const __vue_is_functional_template__$p = false;
+  const __vue_is_functional_template__$o = false;
   /* style inject */
   
   /* style inject SSR */
@@ -6627,13 +6768,13 @@ __vue_render__$p._withStripped = true;
   
 
   
-  const __vue_component__$p = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$p, staticRenderFns: __vue_staticRenderFns__$p },
-    __vue_inject_styles__$p,
-    __vue_script__$p,
-    __vue_scope_id__$p,
-    __vue_is_functional_template__$p,
-    __vue_module_identifier__$p,
+  const __vue_component__$o = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$o, staticRenderFns: __vue_staticRenderFns__$o },
+    __vue_inject_styles__$o,
+    __vue_script__$o,
+    __vue_scope_id__$o,
+    __vue_is_functional_template__$o,
+    __vue_module_identifier__$o,
     false,
     undefined,
     undefined,
@@ -6641,7 +6782,7 @@ __vue_render__$p._withStripped = true;
   );
 
 var radio = BasePlugin({
-  mcwRadio: __vue_component__$p
+  mcwRadio: __vue_component__$o
 });
 
 var SelectHelperText = {
@@ -6726,7 +6867,7 @@ var SelectHelperText = {
   }
 };
 
-var script$q = {
+var script$p = {
   name: 'select-icon',
   props: {
     icon: String
@@ -6798,10 +6939,10 @@ var script$q = {
 };
 
 /* script */
-const __vue_script__$q = script$q;
+const __vue_script__$p = script$p;
 
 /* template */
-var __vue_render__$q = function() {
+var __vue_render__$p = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -6819,17 +6960,17 @@ var __vue_render__$q = function() {
     [_vm._v(_vm._s(_vm.icon))]
   )
 };
-var __vue_staticRenderFns__$q = [];
-__vue_render__$q._withStripped = true;
+var __vue_staticRenderFns__$p = [];
+__vue_render__$p._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$q = undefined;
+  const __vue_inject_styles__$p = undefined;
   /* scoped */
-  const __vue_scope_id__$q = undefined;
+  const __vue_scope_id__$p = undefined;
   /* module identifier */
-  const __vue_module_identifier__$q = undefined;
+  const __vue_module_identifier__$p = undefined;
   /* functional template */
-  const __vue_is_functional_template__$q = false;
+  const __vue_is_functional_template__$p = false;
   /* style inject */
   
   /* style inject SSR */
@@ -6838,22 +6979,23 @@ __vue_render__$q._withStripped = true;
   
 
   
-  const __vue_component__$q = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$q, staticRenderFns: __vue_staticRenderFns__$q },
-    __vue_inject_styles__$q,
-    __vue_script__$q,
-    __vue_scope_id__$q,
-    __vue_is_functional_template__$q,
-    __vue_module_identifier__$q,
+  const __vue_component__$p = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$p, staticRenderFns: __vue_staticRenderFns__$p },
+    __vue_inject_styles__$p,
+    __vue_script__$p,
+    __vue_scope_id__$p,
+    __vue_is_functional_template__$p,
+    __vue_module_identifier__$p,
     false,
     undefined,
     undefined,
     undefined
   );
 
-var strings$7 = MDCSelectFoundation.strings;
+var strings$8 = MDCSelectFoundation.strings,
+    cssClasses$5 = MDCSelectFoundation.cssClasses;
 var uid_ = 0;
-var script$r = {
+var script$q = {
   name: 'mcw-select',
   inheritAttrs: false,
   model: {
@@ -6953,11 +7095,6 @@ var script$r = {
       return foundation.handleKeydown(evt);
     };
 
-    var handleMenuItemAction = function handleMenuItemAction(_ref2) {
-      var index = _ref2.index;
-      return foundation.handleMenuItemAction(index);
-    };
-
     var handleChange = function handleChange(isOpen) {
       return foundation["handleMenu".concat(isOpen ? 'Opened' : 'Closed')]();
     };
@@ -6968,6 +7105,19 @@ var script$r = {
 
     var selectedIndex = function selectedIndex() {
       return foundation.getSelectedIndex();
+    };
+
+    var handleMenuOpened = function handleMenuOpened() {
+      return foundation.handleMenuOpened();
+    };
+
+    var handleMenuClosed = function handleMenuClosed() {
+      return foundation.handleMenuClosed();
+    };
+
+    var handleMenuItemAction = function handleMenuItemAction(_ref2) {
+      var index = _ref2.index;
+      return foundation.handleMenuItemAction(index);
     };
 
     var layoutOptions = function layoutOptions() {
@@ -6988,13 +7138,16 @@ var script$r = {
     var adapter = {
       // select methods
       getSelectedMenuItem: function getSelectedMenuItem() {
-        return uiState.menu.$el.querySelector(strings$7.SELECTED_ITEM_SELECTOR);
+        var x = menuItems.value.find(function (item) {
+          return item.classList.contains(cssClasses$5.SELECTED_ITEM_CLASS);
+        });
+        return x === null || x === void 0 ? void 0 : x.$el;
       },
       getMenuItemAttr: function getMenuItemAttr(menuItem, attr) {
         return menuItem.getAttribute(attr);
       },
       setSelectedText: function setSelectedText(text) {
-        return uiState.selectedTextContent = text;
+        uiState.selectedTextContent = text;
       },
       isSelectAnchorFocused: function isSelectAnchorFocused() {
         return document.activeElement === uiState.anchorEl;
@@ -7056,18 +7209,18 @@ var script$r = {
         return menuItems.value[index].removeAttribute(attributeName);
       },
       focusMenuItemAtIndex: function focusMenuItemAtIndex(index) {
-        return menuItems.value[index].focus();
+        return menuItems.value[index].$el.focus();
       },
       getMenuItemCount: function getMenuItemCount() {
         return menuItems.value.length;
       },
       getMenuItemValues: function getMenuItemValues() {
         return menuItems.value.map(function (el) {
-          return el.getAttribute(strings$7.VALUE_ATTR) || '';
+          return el.getAttribute(strings$8.VALUE_ATTR) || '';
         });
       },
       getMenuItemTextAtIndex: function getMenuItemTextAtIndex(index) {
-        return menuItems.value[index].textContent;
+        return menuItems.value[index].$el.textContent;
       },
       addClassAtIndex: function addClassAtIndex(index, className) {
         menuItems.value[index].classList.add(className);
@@ -7115,7 +7268,7 @@ var script$r = {
       },
       notifyChange: function notifyChange(value) {
         var index = selectedIndex();
-        emitCustomEvent(uiState.root, strings$7.CHANGE_EVENT, {
+        emitCustomEvent(uiState.root, strings$8.CHANGE_EVENT, {
           value: value,
           index: index
         }, true
@@ -7162,7 +7315,7 @@ var script$r = {
 
     var refreshIndex = function refreshIndex() {
       var items = menuItems.value.map(function (el) {
-        return el.getAttribute(strings$7.VALUE_ATTR) || '';
+        return el.getAttribute(strings$8.VALUE_ATTR) || '';
       });
       var idx = items.findIndex(function (value) {
         return props.value === value;
@@ -7216,12 +7369,14 @@ var script$r = {
       selectedTextAttrs: selectedTextAttrs,
       handleMenuItemAction: handleMenuItemAction,
       refreshIndex: refreshIndex,
-      setFixedPosition: setFixedPosition
+      setFixedPosition: setFixedPosition,
+      handleMenuOpened: handleMenuOpened,
+      handleMenuClosed: handleMenuClosed
     });
   },
   components: {
     SelectHelperText: SelectHelperText,
-    SelectIcon: __vue_component__$q
+    SelectIcon: __vue_component__$p
   }
 }; // ===
 // Private functions
@@ -7234,10 +7389,10 @@ function getNormalizedXCoordinate(evt) {
 }
 
 /* script */
-const __vue_script__$r = script$r;
+const __vue_script__$q = script$q;
 
 /* template */
-var __vue_render__$r = function() {
+var __vue_render__$q = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -7346,7 +7501,18 @@ var __vue_render__$r = function() {
               staticClass: "mdc-select__menu",
               class: _vm.menuClasses,
               attrs: { role: "listbox" },
-              on: { change: _vm.handleChange, select: _vm.handleMenuItemAction }
+              on: {
+                change: _vm.handleChange,
+                select: _vm.handleMenuItemAction
+              },
+              nativeOn: {
+                "MDCMenuSurface:opened": function($event) {
+                  return _vm.handleMenuOpened($event)
+                },
+                "MDCMenuSurface:closed": function($event) {
+                  return _vm.handleMenuClosed($event)
+                }
+              }
             },
             [_vm._t("default")],
             2
@@ -7370,17 +7536,17 @@ var __vue_render__$r = function() {
     1
   )
 };
-var __vue_staticRenderFns__$r = [];
-__vue_render__$r._withStripped = true;
+var __vue_staticRenderFns__$q = [];
+__vue_render__$q._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$r = undefined;
+  const __vue_inject_styles__$q = undefined;
   /* scoped */
-  const __vue_scope_id__$r = undefined;
+  const __vue_scope_id__$q = undefined;
   /* module identifier */
-  const __vue_module_identifier__$r = undefined;
+  const __vue_module_identifier__$q = undefined;
   /* functional template */
-  const __vue_is_functional_template__$r = false;
+  const __vue_is_functional_template__$q = false;
   /* style inject */
   
   /* style inject SSR */
@@ -7389,13 +7555,13 @@ __vue_render__$r._withStripped = true;
   
 
   
-  const __vue_component__$r = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$r, staticRenderFns: __vue_staticRenderFns__$r },
-    __vue_inject_styles__$r,
-    __vue_script__$r,
-    __vue_scope_id__$r,
-    __vue_is_functional_template__$r,
-    __vue_module_identifier__$r,
+  const __vue_component__$q = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$q, staticRenderFns: __vue_staticRenderFns__$q },
+    __vue_inject_styles__$q,
+    __vue_script__$q,
+    __vue_scope_id__$q,
+    __vue_is_functional_template__$q,
+    __vue_module_identifier__$q,
     false,
     undefined,
     undefined,
@@ -7403,13 +7569,13 @@ __vue_render__$r._withStripped = true;
   );
 
 var select = BasePlugin({
-  mcwSelect: __vue_component__$r,
-  mcwNotchedOutline: __vue_component__$o,
-  mcwLineRipple: __vue_component__$i,
-  mcwFloatingLabel: __vue_component__$d
+  mcwSelect: __vue_component__$q,
+  mcwNotchedOutline: __vue_component__$n,
+  mcwLineRipple: __vue_component__$h,
+  mcwFloatingLabel: __vue_component__$c
 });
 
-var script$s = {
+var script$r = {
   name: 'mcw-slider',
   model: {
     prop: 'value',
@@ -7640,10 +7806,10 @@ var script$s = {
 };
 
 /* script */
-const __vue_script__$s = script$s;
+const __vue_script__$r = script$r;
 
 /* template */
-var __vue_render__$s = function() {
+var __vue_render__$r = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -7703,17 +7869,17 @@ var __vue_render__$s = function() {
     ]
   )
 };
-var __vue_staticRenderFns__$s = [];
-__vue_render__$s._withStripped = true;
+var __vue_staticRenderFns__$r = [];
+__vue_render__$r._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$s = undefined;
+  const __vue_inject_styles__$r = undefined;
   /* scoped */
-  const __vue_scope_id__$s = undefined;
+  const __vue_scope_id__$r = undefined;
   /* module identifier */
-  const __vue_module_identifier__$s = undefined;
+  const __vue_module_identifier__$r = undefined;
   /* functional template */
-  const __vue_is_functional_template__$s = false;
+  const __vue_is_functional_template__$r = false;
   /* style inject */
   
   /* style inject SSR */
@@ -7722,13 +7888,13 @@ __vue_render__$s._withStripped = true;
   
 
   
-  const __vue_component__$s = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$s, staticRenderFns: __vue_staticRenderFns__$s },
-    __vue_inject_styles__$s,
-    __vue_script__$s,
-    __vue_scope_id__$s,
-    __vue_is_functional_template__$s,
-    __vue_module_identifier__$s,
+  const __vue_component__$r = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$r, staticRenderFns: __vue_staticRenderFns__$r },
+    __vue_inject_styles__$r,
+    __vue_script__$r,
+    __vue_scope_id__$r,
+    __vue_is_functional_template__$r,
+    __vue_module_identifier__$r,
     false,
     undefined,
     undefined,
@@ -7736,12 +7902,12 @@ __vue_render__$s._withStripped = true;
   );
 
 var slider = BasePlugin({
-  mcwSlider: __vue_component__$s
+  mcwSlider: __vue_component__$r
 });
 
 var noop = function noop() {};
 
-var script$t = {
+var script$s = {
   name: 'mcw-snackbar-queue',
   setup: function setup(props, _ref) {
     var emit = _ref.emit,
@@ -7833,10 +7999,10 @@ var script$t = {
 };
 
 /* script */
-const __vue_script__$t = script$t;
+const __vue_script__$s = script$s;
 
 /* template */
-var __vue_render__$t = function() {
+var __vue_render__$s = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -7848,17 +8014,17 @@ var __vue_render__$t = function() {
     )
   )
 };
-var __vue_staticRenderFns__$t = [];
-__vue_render__$t._withStripped = true;
+var __vue_staticRenderFns__$s = [];
+__vue_render__$s._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$t = undefined;
+  const __vue_inject_styles__$s = undefined;
   /* scoped */
-  const __vue_scope_id__$t = undefined;
+  const __vue_scope_id__$s = undefined;
   /* module identifier */
-  const __vue_module_identifier__$t = undefined;
+  const __vue_module_identifier__$s = undefined;
   /* functional template */
-  const __vue_is_functional_template__$t = false;
+  const __vue_is_functional_template__$s = false;
   /* style inject */
   
   /* style inject SSR */
@@ -7867,22 +8033,22 @@ __vue_render__$t._withStripped = true;
   
 
   
-  const __vue_component__$t = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$t, staticRenderFns: __vue_staticRenderFns__$t },
-    __vue_inject_styles__$t,
-    __vue_script__$t,
-    __vue_scope_id__$t,
-    __vue_is_functional_template__$t,
-    __vue_module_identifier__$t,
+  const __vue_component__$s = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$s, staticRenderFns: __vue_staticRenderFns__$s },
+    __vue_inject_styles__$s,
+    __vue_script__$s,
+    __vue_scope_id__$s,
+    __vue_is_functional_template__$s,
+    __vue_module_identifier__$s,
     false,
     undefined,
     undefined,
     undefined
   );
 
-var strings$8 = MDCSnackbarFoundation.strings,
+var strings$9 = MDCSnackbarFoundation.strings,
     numbers = MDCSnackbarFoundation.numbers;
-var script$u = {
+var script$t = {
   name: 'mcw-snackbar',
   model: {
     prop: 'open',
@@ -7974,12 +8140,12 @@ var script$u = {
       // (except in IE 11; see https://tink.uk/accessibility-support-for-css-generated-content/);
       // however, `aria-live` is turned off, so this DOM update will be ignored by screen readers.
 
-      labelEl.setAttribute(strings$8.ARIA_LIVE_LABEL_TEXT_ATTR, props.message);
+      labelEl.setAttribute(strings$9.ARIA_LIVE_LABEL_TEXT_ATTR, props.message);
       setTimeout(function () {
         // Allow screen readers to announce changes to the DOM again.
         ariaEl.setAttribute('aria-live', priority); // Remove the message from the ::before pseudo-element.
 
-        labelEl.removeAttribute(strings$8.ARIA_LIVE_LABEL_TEXT_ATTR); // Restore the original label text, which will be announced by screen readers.
+        labelEl.removeAttribute(strings$9.ARIA_LIVE_LABEL_TEXT_ATTR); // Restore the original label text, which will be announced by screen readers.
 
         uiState.showMessage = true;
       }, numbers.ARIA_LIVE_DELAY_MS);
@@ -7993,25 +8159,25 @@ var script$u = {
         return _announce(uiState.labelEl);
       },
       notifyClosed: function notifyClosed(reason) {
-        emit(strings$8.CLOSED_EVENT, reason ? {
+        emit(strings$9.CLOSED_EVENT, reason ? {
           reason: reason
         } : {});
         emit('change', false);
         emit('hide');
       },
       notifyClosing: function notifyClosing(reason) {
-        emit(strings$8.CLOSING_EVENT, reason ? {
+        emit(strings$9.CLOSING_EVENT, reason ? {
           reason: reason
         } : {});
         emit('update:reason', reason);
       },
       notifyOpened: function notifyOpened() {
-        emit(strings$8.OPENED_EVENT, {});
+        emit(strings$9.OPENED_EVENT, {});
         emit('change', true);
         emit('show', {});
       },
       notifyOpening: function notifyOpening() {
-        return emit(strings$8.OPENING_EVENT, {});
+        return emit(strings$9.OPENING_EVENT, {});
       },
       removeClass: function removeClass(className) {
         // eslint-disable-next-line no-unused-vars
@@ -8078,18 +8244,18 @@ var script$u = {
 // ===
 
 function isActionButton_(target) {
-  return Boolean(closest(target, strings$8.ACTION_SELECTOR));
+  return Boolean(closest(target, strings$9.ACTION_SELECTOR));
 }
 
 function isActionIcon_(target) {
-  return Boolean(closest(target, strings$8.DISMISS_SELECTOR));
+  return Boolean(closest(target, strings$9.DISMISS_SELECTOR));
 }
 
 /* script */
-const __vue_script__$u = script$u;
+const __vue_script__$t = script$t;
 
 /* template */
-var __vue_render__$u = function() {
+var __vue_render__$t = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -8164,17 +8330,17 @@ var __vue_render__$u = function() {
     )
   ])
 };
-var __vue_staticRenderFns__$u = [];
-__vue_render__$u._withStripped = true;
+var __vue_staticRenderFns__$t = [];
+__vue_render__$t._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$u = undefined;
+  const __vue_inject_styles__$t = undefined;
   /* scoped */
-  const __vue_scope_id__$u = undefined;
+  const __vue_scope_id__$t = undefined;
   /* module identifier */
-  const __vue_module_identifier__$u = undefined;
+  const __vue_module_identifier__$t = undefined;
   /* functional template */
-  const __vue_is_functional_template__$u = false;
+  const __vue_is_functional_template__$t = false;
   /* style inject */
   
   /* style inject SSR */
@@ -8183,13 +8349,13 @@ __vue_render__$u._withStripped = true;
   
 
   
-  const __vue_component__$u = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$u, staticRenderFns: __vue_staticRenderFns__$u },
-    __vue_inject_styles__$u,
-    __vue_script__$u,
-    __vue_scope_id__$u,
-    __vue_is_functional_template__$u,
-    __vue_module_identifier__$u,
+  const __vue_component__$t = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$t, staticRenderFns: __vue_staticRenderFns__$t },
+    __vue_inject_styles__$t,
+    __vue_script__$t,
+    __vue_scope_id__$t,
+    __vue_is_functional_template__$t,
+    __vue_module_identifier__$t,
     false,
     undefined,
     undefined,
@@ -8197,12 +8363,12 @@ __vue_render__$u._withStripped = true;
   );
 
 var snackbar = BasePlugin({
-  mcwSnackbar: __vue_component__$u,
-  mcwSnackbarQueue: __vue_component__$t
+  mcwSnackbar: __vue_component__$t,
+  mcwSnackbarQueue: __vue_component__$s
 });
 
 var switchId_ = 0;
-var script$v = {
+var script$u = {
   name: 'mcw-switch',
   model: {
     prop: 'checked',
@@ -8308,10 +8474,10 @@ var script$v = {
 };
 
 /* script */
-const __vue_script__$v = script$v;
+const __vue_script__$u = script$u;
 
 /* template */
-var __vue_render__$v = function() {
+var __vue_render__$u = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -8377,17 +8543,17 @@ var __vue_render__$v = function() {
     ]
   )
 };
-var __vue_staticRenderFns__$v = [];
-__vue_render__$v._withStripped = true;
+var __vue_staticRenderFns__$u = [];
+__vue_render__$u._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$v = undefined;
+  const __vue_inject_styles__$u = undefined;
   /* scoped */
-  const __vue_scope_id__$v = undefined;
+  const __vue_scope_id__$u = undefined;
   /* module identifier */
-  const __vue_module_identifier__$v = undefined;
+  const __vue_module_identifier__$u = undefined;
   /* functional template */
-  const __vue_is_functional_template__$v = false;
+  const __vue_is_functional_template__$u = false;
   /* style inject */
   
   /* style inject SSR */
@@ -8396,13 +8562,13 @@ __vue_render__$v._withStripped = true;
   
 
   
-  const __vue_component__$v = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$v, staticRenderFns: __vue_staticRenderFns__$v },
-    __vue_inject_styles__$v,
-    __vue_script__$v,
-    __vue_scope_id__$v,
-    __vue_is_functional_template__$v,
-    __vue_module_identifier__$v,
+  const __vue_component__$u = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$u, staticRenderFns: __vue_staticRenderFns__$u },
+    __vue_inject_styles__$u,
+    __vue_script__$u,
+    __vue_scope_id__$u,
+    __vue_is_functional_template__$u,
+    __vue_module_identifier__$u,
     false,
     undefined,
     undefined,
@@ -8410,11 +8576,11 @@ __vue_render__$v._withStripped = true;
   );
 
 var switchControl = BasePlugin({
-  mcwSwitch: __vue_component__$v
+  mcwSwitch: __vue_component__$u
 });
 
-var strings$9 = MDCTabBarFoundation.strings;
-var script$w = {
+var strings$a = MDCTabBarFoundation.strings;
+var script$v = {
   name: 'mcw-tab-bar',
   model: {
     prop: 'value',
@@ -8450,7 +8616,7 @@ var script$w = {
     var foundation;
 
     var getTabElements_ = function getTabElements_() {
-      return [].slice.call(root.value.querySelectorAll(strings$9.TAB_SELECTOR));
+      return [].slice.call(root.value.querySelectorAll(strings$a.TAB_SELECTOR));
     };
 
     var activateTab = function activateTab(index) {
@@ -8525,7 +8691,7 @@ var script$w = {
         return tabList.value.length;
       },
       notifyTabActivated: function notifyTabActivated(index) {
-        emitCustomEvent(root.value, strings$9.TAB_ACTIVATED_EVENT, {
+        emitCustomEvent(root.value, strings$a.TAB_ACTIVATED_EVENT, {
           index: index
         }, true);
         emit('change', Number(index));
@@ -8562,10 +8728,10 @@ var script$w = {
 };
 
 /* script */
-const __vue_script__$w = script$w;
+const __vue_script__$v = script$v;
 
 /* template */
-var __vue_render__$w = function() {
+var __vue_render__$v = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -8579,17 +8745,17 @@ var __vue_render__$w = function() {
     1
   )
 };
-var __vue_staticRenderFns__$w = [];
-__vue_render__$w._withStripped = true;
+var __vue_staticRenderFns__$v = [];
+__vue_render__$v._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$w = undefined;
+  const __vue_inject_styles__$v = undefined;
   /* scoped */
-  const __vue_scope_id__$w = undefined;
+  const __vue_scope_id__$v = undefined;
   /* module identifier */
-  const __vue_module_identifier__$w = undefined;
+  const __vue_module_identifier__$v = undefined;
   /* functional template */
-  const __vue_is_functional_template__$w = false;
+  const __vue_is_functional_template__$v = false;
   /* style inject */
   
   /* style inject SSR */
@@ -8598,21 +8764,21 @@ __vue_render__$w._withStripped = true;
   
 
   
-  const __vue_component__$w = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$w, staticRenderFns: __vue_staticRenderFns__$w },
-    __vue_inject_styles__$w,
-    __vue_script__$w,
-    __vue_scope_id__$w,
-    __vue_is_functional_template__$w,
-    __vue_module_identifier__$w,
+  const __vue_component__$v = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$v, staticRenderFns: __vue_staticRenderFns__$v },
+    __vue_inject_styles__$v,
+    __vue_script__$v,
+    __vue_scope_id__$v,
+    __vue_is_functional_template__$v,
+    __vue_module_identifier__$v,
     false,
     undefined,
     undefined,
     undefined
   );
 
-var cssClasses$5 = MDCTabIndicatorFoundation.cssClasses;
-var script$x = {
+var cssClasses$6 = MDCTabIndicatorFoundation.cssClasses;
+var script$w = {
   name: 'mcw-tab-indicator',
   props: {
     fade: {
@@ -8671,7 +8837,7 @@ var script$x = {
       // Early exit if no indicator is present to handle cases where an indicator
       // may be activated without a prior indicator state
       if (!previousIndicatorClientRect) {
-        adapter.addClass(cssClasses$5.ACTIVE);
+        adapter.addClass(cssClasses$6.ACTIVE);
         return;
       }
 
@@ -8680,11 +8846,11 @@ var script$x = {
       var xPosition = previousIndicatorClientRect.left - currentClientRect.left; // THE FIX - use request animation frame to ensure framework has rendered DOM
 
       requestAnimationFrame(function () {
-        adapter.addClass(cssClasses$5.NO_TRANSITION);
+        adapter.addClass(cssClasses$6.NO_TRANSITION);
         adapter.setContentStyleProperty('transform', "translateX(".concat(xPosition, "px) scaleX(").concat(widthDelta, ")"));
         requestAnimationFrame(function () {
-          adapter.removeClass(cssClasses$5.NO_TRANSITION);
-          adapter.addClass(cssClasses$5.ACTIVE);
+          adapter.removeClass(cssClasses$6.NO_TRANSITION);
+          adapter.addClass(cssClasses$6.ACTIVE);
           adapter.setContentStyleProperty('transform', '');
         });
       });
@@ -8706,10 +8872,10 @@ var script$x = {
 };
 
 /* script */
-const __vue_script__$x = script$x;
+const __vue_script__$w = script$w;
 
 /* template */
-var __vue_render__$x = function() {
+var __vue_render__$w = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -8731,17 +8897,17 @@ var __vue_render__$x = function() {
     )
   ])
 };
-var __vue_staticRenderFns__$x = [];
-__vue_render__$x._withStripped = true;
+var __vue_staticRenderFns__$w = [];
+__vue_render__$w._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$x = undefined;
+  const __vue_inject_styles__$w = undefined;
   /* scoped */
-  const __vue_scope_id__$x = undefined;
+  const __vue_scope_id__$w = undefined;
   /* module identifier */
-  const __vue_module_identifier__$x = undefined;
+  const __vue_module_identifier__$w = undefined;
   /* functional template */
-  const __vue_is_functional_template__$x = false;
+  const __vue_is_functional_template__$w = false;
   /* style inject */
   
   /* style inject SSR */
@@ -8750,20 +8916,20 @@ __vue_render__$x._withStripped = true;
   
 
   
-  const __vue_component__$x = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$x, staticRenderFns: __vue_staticRenderFns__$x },
-    __vue_inject_styles__$x,
-    __vue_script__$x,
-    __vue_scope_id__$x,
-    __vue_is_functional_template__$x,
-    __vue_module_identifier__$x,
+  const __vue_component__$w = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$w, staticRenderFns: __vue_staticRenderFns__$w },
+    __vue_inject_styles__$w,
+    __vue_script__$w,
+    __vue_scope_id__$w,
+    __vue_is_functional_template__$w,
+    __vue_module_identifier__$w,
     false,
     undefined,
     undefined,
     undefined
   );
 
-var script$y = {
+var script$x = {
   name: 'mcw-tab-scroller',
   setup: function setup() {
     var uiState = reactive({
@@ -8885,10 +9051,10 @@ var script$y = {
 };
 
 /* script */
-const __vue_script__$y = script$y;
+const __vue_script__$x = script$x;
 
 /* template */
-var __vue_render__$y = function() {
+var __vue_render__$x = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -8915,17 +9081,17 @@ var __vue_render__$y = function() {
     )
   ])
 };
-var __vue_staticRenderFns__$y = [];
-__vue_render__$y._withStripped = true;
+var __vue_staticRenderFns__$x = [];
+__vue_render__$x._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$y = undefined;
+  const __vue_inject_styles__$x = undefined;
   /* scoped */
-  const __vue_scope_id__$y = undefined;
+  const __vue_scope_id__$x = undefined;
   /* module identifier */
-  const __vue_module_identifier__$y = undefined;
+  const __vue_module_identifier__$x = undefined;
   /* functional template */
-  const __vue_is_functional_template__$y = false;
+  const __vue_is_functional_template__$x = false;
   /* style inject */
   
   /* style inject SSR */
@@ -8934,13 +9100,13 @@ __vue_render__$y._withStripped = true;
   
 
   
-  const __vue_component__$y = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$y, staticRenderFns: __vue_staticRenderFns__$y },
-    __vue_inject_styles__$y,
-    __vue_script__$y,
-    __vue_scope_id__$y,
-    __vue_is_functional_template__$y,
-    __vue_module_identifier__$y,
+  const __vue_component__$x = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$x, staticRenderFns: __vue_staticRenderFns__$x },
+    __vue_inject_styles__$x,
+    __vue_script__$x,
+    __vue_scope_id__$x,
+    __vue_is_functional_template__$x,
+    __vue_module_identifier__$x,
     false,
     undefined,
     undefined,
@@ -8948,7 +9114,7 @@ __vue_render__$y._withStripped = true;
   );
 
 var tabId_ = 0;
-var script$z = {
+var script$y = {
   name: 'mcw-tab',
   inheritAttrs: false,
   props: {
@@ -9151,10 +9317,10 @@ function extractIconProp(iconProp) {
 }
 
 /* script */
-const __vue_script__$z = script$z;
+const __vue_script__$y = script$y;
 
 /* template */
-var __vue_render__$z = function() {
+var __vue_render__$y = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -9222,6 +9388,80 @@ var __vue_render__$z = function() {
     1
   )
 };
+var __vue_staticRenderFns__$y = [];
+__vue_render__$y._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$y = undefined;
+  /* scoped */
+  const __vue_scope_id__$y = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$y = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$y = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$y = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$y, staticRenderFns: __vue_staticRenderFns__$y },
+    __vue_inject_styles__$y,
+    __vue_script__$y,
+    __vue_scope_id__$y,
+    __vue_is_functional_template__$y,
+    __vue_module_identifier__$y,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var tabs = BasePlugin({
+  mcwTab: __vue_component__$y,
+  mcwTabBar: __vue_component__$v,
+  mcwTabScroller: __vue_component__$x,
+  mcwTabIndicator: __vue_component__$w
+});
+
+var script$z = {
+  name: 'mcw-character-counter',
+  setup: function setup() {
+    var uiState = reactive({
+      textContent: '',
+      foundation: {}
+    });
+    var adapter = {
+      setContent: function setContent(content) {
+        uiState.textContent = content;
+      }
+    };
+    onMounted(function () {
+      uiState.foundation = new MDCTextFieldCharacterCounterFoundation(adapter);
+      uiState.foundation.init();
+    });
+    onBeforeUnmount(function () {
+      uiState.foundation.destroy();
+    });
+    return _objectSpread2({}, toRefs(uiState));
+  }
+};
+
+/* script */
+const __vue_script__$z = script$z;
+
+/* template */
+var __vue_render__$z = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { staticClass: "mdc-text-field-character-counter" }, [
+    _vm._v(_vm._s(_vm.textContent))
+  ])
+};
 var __vue_staticRenderFns__$z = [];
 __vue_render__$z._withStripped = true;
 
@@ -9254,81 +9494,7 @@ __vue_render__$z._withStripped = true;
     undefined
   );
 
-var tabs = BasePlugin({
-  mcwTab: __vue_component__$z,
-  mcwTabBar: __vue_component__$w,
-  mcwTabScroller: __vue_component__$y,
-  mcwTabIndicator: __vue_component__$x
-});
-
 var script$A = {
-  name: 'mcw-character-counter',
-  setup: function setup() {
-    var uiState = reactive({
-      textContent: '',
-      foundation: {}
-    });
-    var adapter = {
-      setContent: function setContent(content) {
-        uiState.textContent = content;
-      }
-    };
-    onMounted(function () {
-      uiState.foundation = new MDCTextFieldCharacterCounterFoundation(adapter);
-      uiState.foundation.init();
-    });
-    onBeforeUnmount(function () {
-      uiState.foundation.destroy();
-    });
-    return _objectSpread2({}, toRefs(uiState));
-  }
-};
-
-/* script */
-const __vue_script__$A = script$A;
-
-/* template */
-var __vue_render__$A = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", { staticClass: "mdc-text-field-character-counter" }, [
-    _vm._v(_vm._s(_vm.textContent))
-  ])
-};
-var __vue_staticRenderFns__$A = [];
-__vue_render__$A._withStripped = true;
-
-  /* style */
-  const __vue_inject_styles__$A = undefined;
-  /* scoped */
-  const __vue_scope_id__$A = undefined;
-  /* module identifier */
-  const __vue_module_identifier__$A = undefined;
-  /* functional template */
-  const __vue_is_functional_template__$A = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  const __vue_component__$A = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$A, staticRenderFns: __vue_staticRenderFns__$A },
-    __vue_inject_styles__$A,
-    __vue_script__$A,
-    __vue_scope_id__$A,
-    __vue_is_functional_template__$A,
-    __vue_module_identifier__$A,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-var script$B = {
   name: 'mcw-textfield-helper-text',
   props: {
     persistent: Boolean,
@@ -9400,10 +9566,10 @@ var script$B = {
 };
 
 /* script */
-const __vue_script__$B = script$B;
+const __vue_script__$A = script$A;
 
 /* template */
-var __vue_render__$B = function() {
+var __vue_render__$A = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -9413,17 +9579,17 @@ var __vue_render__$B = function() {
     [_vm._v(_vm._s(_vm.helpertext))]
   )
 };
-var __vue_staticRenderFns__$B = [];
-__vue_render__$B._withStripped = true;
+var __vue_staticRenderFns__$A = [];
+__vue_render__$A._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$B = undefined;
+  const __vue_inject_styles__$A = undefined;
   /* scoped */
-  const __vue_scope_id__$B = undefined;
+  const __vue_scope_id__$A = undefined;
   /* module identifier */
-  const __vue_module_identifier__$B = undefined;
+  const __vue_module_identifier__$A = undefined;
   /* functional template */
-  const __vue_is_functional_template__$B = false;
+  const __vue_is_functional_template__$A = false;
   /* style inject */
   
   /* style inject SSR */
@@ -9432,20 +9598,20 @@ __vue_render__$B._withStripped = true;
   
 
   
-  const __vue_component__$B = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$B, staticRenderFns: __vue_staticRenderFns__$B },
-    __vue_inject_styles__$B,
-    __vue_script__$B,
-    __vue_scope_id__$B,
-    __vue_is_functional_template__$B,
-    __vue_module_identifier__$B,
+  const __vue_component__$A = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$A, staticRenderFns: __vue_staticRenderFns__$A },
+    __vue_inject_styles__$A,
+    __vue_script__$A,
+    __vue_scope_id__$A,
+    __vue_is_functional_template__$A,
+    __vue_module_identifier__$A,
     false,
     undefined,
     undefined,
     undefined
   );
 
-var script$C = {
+var script$B = {
   name: 'textfield-icon',
   props: {
     disabled: Boolean,
@@ -9511,10 +9677,10 @@ var script$C = {
 };
 
 /* script */
-const __vue_script__$C = script$C;
+const __vue_script__$B = script$B;
 
 /* template */
-var __vue_render__$C = function() {
+var __vue_render__$B = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -9530,17 +9696,17 @@ var __vue_render__$C = function() {
     2
   )
 };
-var __vue_staticRenderFns__$C = [];
-__vue_render__$C._withStripped = true;
+var __vue_staticRenderFns__$B = [];
+__vue_render__$B._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$C = undefined;
+  const __vue_inject_styles__$B = undefined;
   /* scoped */
-  const __vue_scope_id__$C = undefined;
+  const __vue_scope_id__$B = undefined;
   /* module identifier */
-  const __vue_module_identifier__$C = undefined;
+  const __vue_module_identifier__$B = undefined;
   /* functional template */
-  const __vue_is_functional_template__$C = false;
+  const __vue_is_functional_template__$B = false;
   /* style inject */
   
   /* style inject SSR */
@@ -9549,22 +9715,22 @@ __vue_render__$C._withStripped = true;
   
 
   
-  const __vue_component__$C = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$C, staticRenderFns: __vue_staticRenderFns__$C },
-    __vue_inject_styles__$C,
-    __vue_script__$C,
-    __vue_scope_id__$C,
-    __vue_is_functional_template__$C,
-    __vue_module_identifier__$C,
+  const __vue_component__$B = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$B, staticRenderFns: __vue_staticRenderFns__$B },
+    __vue_inject_styles__$B,
+    __vue_script__$B,
+    __vue_scope_id__$B,
+    __vue_is_functional_template__$B,
+    __vue_module_identifier__$B,
     false,
     undefined,
     undefined,
     undefined
   );
 
-var strings$a = MDCTextFieldFoundation.strings;
+var strings$b = MDCTextFieldFoundation.strings;
 var uid_$1 = 0;
-var script$D = {
+var script$C = {
   name: 'mcw-textfield',
   inheritAttrs: false,
   model: {
@@ -9857,8 +10023,8 @@ var script$D = {
     onMounted(function () {
       var _uiState$characterCou, _uiState$helpertext;
 
-      var leadingIconEl = uiState.wrapper.querySelector(strings$a.LEADING_ICON_SELECTOR);
-      var trailingIconEl = uiState.wrapper.querySelector(strings$a.TRAILING_ICON_SELECTOR);
+      var leadingIconEl = uiState.wrapper.querySelector(strings$b.LEADING_ICON_SELECTOR);
+      var trailingIconEl = uiState.wrapper.querySelector(strings$b.TRAILING_ICON_SELECTOR);
       foundation = new MDCTextFieldFoundation(_objectSpread2({}, adapter), {
         characterCounter: (_uiState$characterCou = uiState.characterCounterEl) === null || _uiState$characterCou === void 0 ? void 0 : _uiState$characterCou.foundation,
         helperText: (_uiState$helpertext = uiState.helpertext) === null || _uiState$helpertext === void 0 ? void 0 : _uiState$helpertext.foundation,
@@ -9894,16 +10060,16 @@ var script$D = {
     });
   },
   components: {
-    mcwLineRipple: __vue_component__$i,
-    mcwNotchedOutline: __vue_component__$o
+    mcwLineRipple: __vue_component__$h,
+    mcwNotchedOutline: __vue_component__$n
   }
 };
 
 /* script */
-const __vue_script__$D = script$D;
+const __vue_script__$C = script$C;
 
 /* template */
-var __vue_render__$D = function() {
+var __vue_render__$C = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -10088,17 +10254,17 @@ var __vue_render__$D = function() {
       : _vm._e()
   ])
 };
-var __vue_staticRenderFns__$D = [];
-__vue_render__$D._withStripped = true;
+var __vue_staticRenderFns__$C = [];
+__vue_render__$C._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$D = undefined;
+  const __vue_inject_styles__$C = undefined;
   /* scoped */
-  const __vue_scope_id__$D = undefined;
+  const __vue_scope_id__$C = undefined;
   /* module identifier */
-  const __vue_module_identifier__$D = undefined;
+  const __vue_module_identifier__$C = undefined;
   /* functional template */
-  const __vue_is_functional_template__$D = false;
+  const __vue_is_functional_template__$C = false;
   /* style inject */
   
   /* style inject SSR */
@@ -10107,13 +10273,13 @@ __vue_render__$D._withStripped = true;
   
 
   
-  const __vue_component__$D = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$D, staticRenderFns: __vue_staticRenderFns__$D },
-    __vue_inject_styles__$D,
-    __vue_script__$D,
-    __vue_scope_id__$D,
-    __vue_is_functional_template__$D,
-    __vue_module_identifier__$D,
+  const __vue_component__$C = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$C, staticRenderFns: __vue_staticRenderFns__$C },
+    __vue_inject_styles__$C,
+    __vue_script__$C,
+    __vue_scope_id__$C,
+    __vue_is_functional_template__$C,
+    __vue_module_identifier__$C,
     false,
     undefined,
     undefined,
@@ -10121,150 +10287,20 @@ __vue_render__$D._withStripped = true;
   );
 
 var textfield = BasePlugin({
-  mcwTextfield: __vue_component__$D,
-  mcwTextfieldIcon: __vue_component__$C,
-  mcwCharacterCounter: __vue_component__$A,
-  mcwTextfieldHelperText: __vue_component__$B,
-  mcwLineRipple: __vue_component__$i,
-  mcwNotchedOutline: __vue_component__$o,
-  mcwFloatingLabel: __vue_component__$d
+  mcwTextfield: __vue_component__$C,
+  mcwTextfieldIcon: __vue_component__$B,
+  mcwCharacterCounter: __vue_component__$z,
+  mcwTextfieldHelperText: __vue_component__$A,
+  mcwLineRipple: __vue_component__$h,
+  mcwNotchedOutline: __vue_component__$n,
+  mcwFloatingLabel: __vue_component__$c
 });
 
-var mcwFixedAdjust = {
-  name: 'mcw-fixed-adjust',
-  props: {
-    tag: {
-      type: String,
-      default: 'main'
-    },
-    dense: Boolean,
-    short: Boolean,
-    prominent: Boolean
-  },
-  setup: function setup(props, _ref) {
-    var listeners = _ref.listeners,
-        slots = _ref.slots;
-    return function () {
-      var _ref2, _slots$default;
-
-      var base = 'mdc-top-app-bar';
-      var suffix = '-fixed-adjust';
-      return h(props.tag, {
-        class: [(_ref2 = {}, _defineProperty(_ref2, base + '--short' + suffix, props.short), _defineProperty(_ref2, base + '--dense' + suffix, props.dense && !props.prominent), _defineProperty(_ref2, base + '--dense-prominent' + suffix, props.dense && props.prominent), _defineProperty(_ref2, base + '--prominent' + suffix, !props.dense && props.prominent), _defineProperty(_ref2, base + '-' + suffix, !props.short && !props.dense && !props.prominent), _ref2)]
-      }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
-    };
-  }
-};
-
-var mcwTopAppBarIcon = {
-  name: 'mcw-top-app-bar-icon',
-  props: {
-    actionItem: Boolean
-  },
-  setup: function setup(props, _ref) {
-    var listeners = _ref.listeners,
-        slots = _ref.slots;
-    return function () {
-      var _slots$default;
-
-      return h('button', {
-        class: {
-          'mdc-icon-button': 1,
-          'material-icons': 1,
-          'mdc-top-app-bar__action-item': props.actionItem,
-          'mdc-top-app-bar__navigation-icon': !props.actionItem
-        },
-        on: listeners
-      }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
-    };
-  }
-};
-
-var mcwTopAppBarRow = {
-  name: 'mcw-top-app-bar-row',
-  props: {
-    tag: {
-      type: String,
-      default: function _default() {
-        return 'div';
-      }
-    }
-  },
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots;
-    return function () {
-      var _slots$default;
-
-      return h(props.tag, {
-        class: ['mdc-top-app-bar__row']
-      }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
-    };
-  }
-};
-
-var mcwTopAppBarSection = {
-  name: 'mcw-top-app-bar-section',
-  props: {
-    align: {
-      type: String,
-      default: function _default() {
-        return 'start';
-      }
-    },
-    tag: {
-      type: String,
-      default: function _default() {
-        return 'div';
-      }
-    }
-  },
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots;
-    var classes = ['mdc-top-app-bar__section'];
-    props.align == 'start' && classes.push('mdc-top-app-bar__section--align-start');
-    props.align == 'end' && classes.push('mdc-top-app-bar__section--align-end');
-    return function () {
-      var _slots$default;
-
-      return h(props.tag, {
-        class: classes
-      }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
-    };
-  }
-};
-
-var mcwTopAppBarTitle = {
-  name: 'mcw-top-app-bar-title',
-  props: {
-    tag: {
-      type: String,
-      default: function _default() {
-        return 'span';
-      }
-    }
-  },
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots;
-    return function () {
-      var _slots$default;
-
-      return h(props.tag, {
-        class: ['mdc-top-app-bar__title']
-      }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
-    };
-  }
-};
-
-var cssClasses$6 = MDCTopAppBarFoundation.cssClasses,
-    strings$b = MDCTopAppBarFoundation.strings;
-var script$E = {
+var cssClasses$7 = MDCTopAppBarFoundation.cssClasses,
+    strings$c = MDCTopAppBarFoundation.strings;
+var script$D = {
   name: 'mcw-top-app-bar',
   props: {
-    short: Boolean,
-    shortCollapsed: Boolean,
-    prominent: Boolean,
-    fixed: Boolean,
-    dense: Boolean,
     tag: {
       type: String,
       default: 'header'
@@ -10279,12 +10315,7 @@ var script$E = {
         top: '0'
       },
       rootClasses: {
-        'mdc-top-app-bar': true,
-        'mdc-top-app-bar--dense': props.dense,
-        'mdc-top-app-bar--short': props.short,
-        'mdc-top-app-bar--short-collapsed': props.shortCollapsed,
-        'mdc-top-app-bar--prominent': props.prominent,
-        'mdc-top-app-bar--fixed': props.fixed
+        'mdc-top-app-bar': true
       },
       myScrollTarget: props.scrollTarget || window,
       root: null
@@ -10322,7 +10353,7 @@ var script$E = {
       },
       notifyNavigationIconClicked: function notifyNavigationIconClicked() {
         emit('nav', {});
-        emitCustomEvent(uiState.root, strings$b.NAVIGATION_EVENT, {},
+        emitCustomEvent(uiState.root, strings$c.NAVIGATION_EVENT, {},
         /** shouldBubble */
         true);
       },
@@ -10331,7 +10362,7 @@ var script$E = {
         return st.pageYOffset ? st.pageYOffset : st.scrollTop;
       },
       getTotalActionItems: function getTotalActionItems() {
-        return uiState.root.querySelectorAll(".".concat(cssClasses$6.ACTION_ITEM)).length;
+        return uiState.root.querySelectorAll(strings$c.ACTION_ITEM_SELECTOR).length;
       }
     };
     watch(function () {
@@ -10344,13 +10375,12 @@ var script$E = {
       }
     });
     onMounted(function () {
-      var short = props.short,
-          shortCollapsed = props.shortCollapsed,
-          fixed = props.fixed;
+      var isFixed = uiState.root.classList.contains(cssClasses$7.FIXED_CLASS);
+      var isShort = uiState.root.classList.contains(cssClasses$7.SHORT_CLASS);
 
-      if (short || shortCollapsed) {
+      if (isShort) {
         foundation = new MDCShortTopAppBarFoundation(adapter);
-      } else if (fixed) {
+      } else if (isFixed) {
         foundation = new MDCFixedTopAppBarFoundation(adapter);
       } else {
         foundation = new MDCTopAppBarFoundation(adapter);
@@ -10359,9 +10389,9 @@ var script$E = {
       handleWindowResize = foundation.handleWindowResize.bind(foundation);
       handleTargetScroll = foundation.handleWindowResize.bind(foundation); // todo: hunt down icons for ripples
 
-      navIcon = uiState.root.querySelector(strings$b.NAVIGATION_ICON_SELECTOR); // Get all icons in the toolbar and instantiate the ripples
+      navIcon = uiState.root.querySelector(strings$c.NAVIGATION_ICON_SELECTOR); // Get all icons in the toolbar and instantiate the ripples
 
-      var icons = [].slice.call(uiState.root.querySelectorAll(strings$b.ACTION_ITEM_SELECTOR));
+      var icons = [].slice.call(uiState.root.querySelectorAll(strings$c.ACTION_ITEM_SELECTOR));
 
       if (navIcon) {
         navIcon.addEventListener('click', handleNavigationClick);
@@ -10375,8 +10405,6 @@ var script$E = {
         return ripple;
       });
       uiState.myScrollTarget.addEventListener('scroll', handleTargetScroll);
-      var isFixed = uiState.root.classList.contains(cssClasses$6.FIXED_CLASS);
-      var isShort = uiState.root.classList.contains(cssClasses$6.SHORT_CLASS);
 
       if (!isShort && !isFixed) {
         window.addEventListener('resize', handleWindowResize);
@@ -10396,8 +10424,8 @@ var script$E = {
       });
       uiState.myScrollTarget.removeEventListener('scroll', handleTargetScroll);
       (_uiState$myScrollTarg = uiState.myScrollTarget) === null || _uiState$myScrollTarg === void 0 ? void 0 : _uiState$myScrollTarg.removeEventListener('scroll', foundation.handleTargetScroll);
-      var isFixed = uiState.root.classList.contains(cssClasses$6.FIXED_CLASS);
-      var isShort = uiState.root.classList.contains(cssClasses$6.SHORT_CLASS);
+      var isFixed = uiState.root.classList.contains(cssClasses$7.FIXED_CLASS);
+      var isShort = uiState.root.classList.contains(cssClasses$7.SHORT_CLASS);
 
       if (!isShort && !isFixed) {
         window.removeEventListener('resize', handleWindowResize);
@@ -10412,10 +10440,10 @@ var script$E = {
 };
 
 /* script */
-const __vue_script__$E = script$E;
+const __vue_script__$D = script$D;
 
 /* template */
-var __vue_render__$E = function() {
+var __vue_render__$D = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -10434,17 +10462,17 @@ var __vue_render__$E = function() {
     2
   )
 };
-var __vue_staticRenderFns__$E = [];
-__vue_render__$E._withStripped = true;
+var __vue_staticRenderFns__$D = [];
+__vue_render__$D._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$E = undefined;
+  const __vue_inject_styles__$D = undefined;
   /* scoped */
-  const __vue_scope_id__$E = undefined;
+  const __vue_scope_id__$D = undefined;
   /* module identifier */
-  const __vue_module_identifier__$E = undefined;
+  const __vue_module_identifier__$D = undefined;
   /* functional template */
-  const __vue_is_functional_template__$E = false;
+  const __vue_is_functional_template__$D = false;
   /* style inject */
   
   /* style inject SSR */
@@ -10453,13 +10481,13 @@ __vue_render__$E._withStripped = true;
   
 
   
-  const __vue_component__$E = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$E, staticRenderFns: __vue_staticRenderFns__$E },
-    __vue_inject_styles__$E,
-    __vue_script__$E,
-    __vue_scope_id__$E,
-    __vue_is_functional_template__$E,
-    __vue_module_identifier__$E,
+  const __vue_component__$D = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$D, staticRenderFns: __vue_staticRenderFns__$D },
+    __vue_inject_styles__$D,
+    __vue_script__$D,
+    __vue_scope_id__$D,
+    __vue_is_functional_template__$D,
+    __vue_module_identifier__$D,
     false,
     undefined,
     undefined,
@@ -10467,12 +10495,12 @@ __vue_render__$E._withStripped = true;
   );
 
 var topAppBar = BasePlugin({
-  mcwTopAppBar: __vue_component__$E,
-  mcwFixedAdjust: mcwFixedAdjust,
-  mcwTopAppBarIcon: mcwTopAppBarIcon,
-  mcwTopAppBarRow: mcwTopAppBarRow,
-  mcwTopAppBarSection: mcwTopAppBarSection,
-  mcwTopAppBarTitle: mcwTopAppBarTitle
+  mcwTopAppBar: __vue_component__$D // mcwFixedAdjust,
+  // mcwTopAppBarIcon,
+  // mcwTopAppBarRow,
+  // mcwTopAppBarSection,
+  // mcwTopAppBarTitle,
+
 });
 
 var index$1 = {
