@@ -65,23 +65,12 @@
       <mcw-dialog-title>Select user</mcw-dialog-title>
       <mcw-dialog-content>
         <mcw-list avatar-list>
-          <li
-            class="mdc-list-item"
-            role="checkbox"
-            aria-checked="false"
-            data-mdc-dialog-action="test"
-            tabindex="0"
-          >
+          <mcw-list-item data-mdc-dialog-action="test" tabindex="0">
             test
-          </li>
-          <li
-            class="mdc-list-item"
-            role="checkbox"
-            aria-checked="false"
-            data-mdc-dialog-action="help"
-          >
+          </mcw-list-item>
+          <mcw-list-item data-mdc-dialog-action="help">
             help
-          </li>
+          </mcw-list-item>
         </mcw-list>
       </mcw-dialog-content>
     </mcw-dialog>
@@ -117,24 +106,16 @@
     >
       <mcw-dialog-title>Chose a Phone Ringtone</mcw-dialog-title>
       <mcw-dialog-content>
-        <mcw-list single-selection>
-          <li
+        <mcw-list v-model="picked">
+          <mcw-list-item
             v-for="(choice, i) in choices"
             :key="i"
-            class="mdc-list-item"
             role="checkbox"
+            name="ringtone"
             aria-checked="false"
           >
-            <span class="mdc-list-item__graphic">
-              <mcw-radio
-                :id="choice | clean"
-                v-model="picked"
-                name="ringtone"
-                :value="choice"
-              ></mcw-radio>
-            </span>
-            <label :for="choice | clean">{{ choice }}</label>
-          </li>
+            <span :for="choice | clean">{{ choice }}</span>
+          </mcw-list-item>
         </mcw-list>
       </mcw-dialog-content>
       <mcw-dialog-footer>
@@ -283,7 +264,7 @@ export default {
       this.hasBeenOpened = true;
       this.action =
         action !== 'dismiss'
-          ? 'Accepted, thanks!'
+          ? ('Accepted, thanks!', console.log(action))
           : 'Declined... Maybe next time?';
     },
     checkValidationAndClose() {

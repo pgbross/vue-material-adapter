@@ -11,17 +11,18 @@ By default the drawer component is responsive and will switch from temporary to 
   class="primary-drawer"
   toolbar-spacer
 >
-  <mcw-drawer-header></mcw-drawer-header>
-  <mcw-drawer-list dense>
-    <mcw-drawer-item to="/">Home</mcw-drawer-item>
-    <mcw-drawer-item to="/docs/getting-started"
-      >Getting Started</mcw-drawer-item
-    >
-    <mcw-drawer-divider />
-    <mcw-drawer-item v-for="link in links" :key="link.id" :to="link.to"
-      >{{ link.name }}</mcw-drawer-item
-    >
-  </mcw-drawer-list>
+  <template #header>
+    <div class="mdc-drawer__header"></div>
+  </template>
+
+  <mcw-list-item to="/" tabindex="0">Home</mcw-list-item>
+  <mcw-list-item to="/docs/getting-started">Getting Started</mcw-list-item>
+
+  <hr class="mdc-list-divider" />
+
+  <mcw-list-item v-for="link in links" :key="link.id" :to="link.to"
+    >{{ link.name }}</mcw-list-item
+  >
 </mcw-drawer>
 ```
 
@@ -46,21 +47,6 @@ By default the drawer component is responsive and will switch from temporary to 
 | `@close`      |         | on drawer close                                         |
 | `@vma:layout` | Boolean | notify listeners on vm.\$root layout has changed.       |
 
-### Drawer Item
-
-| prop                 | Type           | Default                  | Description                              |
-| -------------------- | -------------- | ------------------------ | ---------------------------------------- |
-| `start-icon`         | String         | undefined                | material start icon                      |
-| `modal-close`        | Boolean        | true                     | whether temporary drawer closes on click |
-| `to`                 | String, Object | undefined                | router-link property _(\*)_              |
-| `replace`            | Boolean        | false                    | router-link property _(\*)_              |
-| `append`             | Boolean        | false                    | router-link property _(\*)_              |
-| `exact`              | Boolean        | false                    | router-link property _(\*)_              |
-| `active-class`       | String         | router-link-active       | router-link property _(\*)_              |
-| `exact-active-class` | String         | router-link-exact-active | router-link property _(\*)_              |
-| `activated`          | Boolean        | undefined                | whether this item is selected            |
-|                      |                |                          | (not needed if router-link mode is used) |
-
 > _(\*)_ Requires [vue-router](https://router.vuejs.org)
 > If the `to` property is defined, the item behaves as a
 > [router-link](https://router.vuejs.org/en/api/router-link.html)
@@ -70,20 +56,20 @@ By default the drawer component is responsive and will switch from temporary to 
 - A simple link
 
 ```html
-<mcw-drawer-item href="#">Inbox</mcw-drawer-item>
+<mcw-list-item href="#">Inbox</mcw-list-item>
 ```
 
 or with vue-router
 
 ```html
-<mcw-drawer-item to="/path">Inbox</mcw-drawer-item>
-<mcw-drawer-item :to="folder" append>Inbox</mcw-drawer-item>
+<mcw-list-item to="/path">Inbox</mcw-list-item>
+<mcw-list-item :to="folder" append>Inbox</mcw-list-item>
 ```
 
 > Customize the active links style with vue-router active or exact-active classes:
 
 ```css
-.mcw-drawer-item.router-link-exact-active {
+.mcw-list-item.router-link-exact-active {
   color: red;
 }
 ```
@@ -91,13 +77,13 @@ or with vue-router
 - Trigger an event
 
 ```html
-<mcw-drawer-item event="my-event">Inbox</mcw-drawer-item>
+<mcw-list-item event="my-event">Inbox</mcw-list-item>
 ```
 
 - Click handler
 
 ```html
-<mcw-drawer-item @click="handler">Inbox</mcw-drawer-item>
+<mcw-list-item @click="handler">Inbox</mcw-list-item>
 ```
 
 ### Reference

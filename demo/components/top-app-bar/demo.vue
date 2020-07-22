@@ -6,29 +6,39 @@
         :scroll-target="scrollTarget"
         @nav="onNav"
       >
-        <mcw-top-app-bar-row>
-          <mcw-top-app-bar-section align="start">
-            <mcw-top-app-bar-icon nav-icon>
-              <mcw-material-icon icon="menu"></mcw-material-icon>
-            </mcw-top-app-bar-icon>
-            <mcw-top-app-bar-title>vue material adapter</mcw-top-app-bar-title>
-          </mcw-top-app-bar-section>
+        <div class="mdc-top-app-bar__row">
+          <section
+            class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start"
+          >
+            <button
+              class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button"
+              aria-label="Open navigation menu"
+            >
+              menu
+            </button>
+            <span class="mdc-top-app-bar__title">vue material adapter</span>
+          </section>
+          <section
+            class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end"
+          >
+            <button
+              target="_blank"
+              title="Help"
+              class="mdc-top-app-bar__action-item mdc-icon-button material-icons"
+              aria-label="Help"
+            >
+              help
+            </button>
 
-          <mcw-top-app-bar-section align="end">
-            <mcw-top-app-bar-icon action-item aria-label="Help">
-              <mcw-material-icon
-                icon="help"
-                @click="buttonText = 'show help'"
-              ></mcw-material-icon>
-            </mcw-top-app-bar-icon>
-            <mcw-top-app-bar-icon action-item aria-label="Help">
-              <mcw-material-icon
-                icon="info_outline"
-                @click="buttonText = 'show information'"
-              ></mcw-material-icon>
-            </mcw-top-app-bar-icon>
-          </mcw-top-app-bar-section>
-        </mcw-top-app-bar-row>
+            <button
+              title="About"
+              class="mdc-top-app-bar__action-item mdc-icon-button material-icons"
+              aria-label="About"
+            >
+              info_outline
+            </button>
+          </section>
+        </div>
       </mcw-top-app-bar>
 
       <br />
