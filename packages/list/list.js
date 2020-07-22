@@ -77,17 +77,27 @@ export default {
       // eslint-disable-next-line no-unused-vars
       const xx = uiState.listn; // for dependency
 
-      // const elements = [].slice.call(
-      //   uiState.listRoot.querySelectorAll(`.${cssClasses.LIST_ITEM_CLASS}`),
-      // );
-      // return elements.map(el => el.__vue__ ?? el);
+      const processItem = item => {
+        const items = [];
+        if (item.componentInstance?.setAttribute) {
+          items.push(item.componentInstance);
+        }
 
-      const items = slots
-        .default?.()
-        .filter(({ componentInstance }) => componentInstance?.setAttribute)
-        .map(({ componentInstance }) => componentInstance);
+        if (item.children) {
+          return item.children.reduce((p, v) => {
+            return p.concat(processItem(v));
+          }, items);
+        }
 
-      return items;
+        return items;
+      };
+
+      // search depth first down the tree for vue components that match the signature of a mcw-list-item
+      const topList = slots.default?.().reduce((p, v) => {
+        return p.concat(processItem(v));
+      }, []);
+
+      return topList;
     });
 
     const getListItemIndex = evt => {
