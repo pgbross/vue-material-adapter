@@ -47,7 +47,41 @@
 
   <span class="mdc-list-item__text" v-else><slot></slot></span>
 
-  <span class="mdc-list-item__meta">
+  <span class="mdc-list-item__meta" v-if="trailingRadio">
+    <slot name="meta"
+      ><div class="mdc-radio">
+        <input
+          class="mdc-radio__native-control"
+          type="radio"
+          value="1"
+          :name="name"
+          :checked="radioChecked"
+        />
+        <div class="mdc-radio__background">
+          <div class="mdc-radio__outer-circle"></div>
+          <div class="mdc-radio__inner-circle"></div>
+        </div></div
+    ></slot>
+  </span>
+
+  <span class="mdc-list-item__meta" v-else-if="trailingCheckbox">
+    <slot name="meta"></slot>
+      <div class="mdc-checkbox">
+        <input type="checkbox" class="mdc-checkbox__native-control" />
+        <div class="mdc-checkbox__background">
+          <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
+            <path
+              class="mdc-checkbox__checkmark-path"
+              fill="none"
+              d="M1.73,12.91 8.1,19.28 22.79,4.59"
+            />
+          </svg>
+          <div class="mdc-checkbox__mixedmark"></div>
+        </div></div
+    ></slot>
+  </span>
+
+  <span class="mdc-list-item__meta" v-else>
     <slot name="meta"></slot>
   </span>
 </custom-link>

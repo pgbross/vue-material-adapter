@@ -16,6 +16,7 @@ export default {
     name: String,
     to: [String, Object],
     noAutoRole: Boolean,
+    trailing: Boolean,
   },
   components: { CustomLink },
   setup(props, { slots, listeners, attrs }) {
@@ -39,10 +40,17 @@ export default {
     });
 
     const checkbox = computed(
-      () => !props.noAutoRole && attrs?.role == 'checkbox',
+      () => !props.trailing && attrs?.role == 'checkbox',
     );
 
-    const radio = computed(() => !props.noAutoRole && attrs?.role == 'radio');
+    const radio = computed(() => !props.trailing && attrs?.role == 'radio');
+    const trailingRadio = computed(
+      () => props.trailing && attrs?.role == 'radio',
+    );
+
+    const trailingCheckbox = computed(
+      () => props.trailing && attrs?.role == 'checkbox',
+    );
 
     const itemId = listItemId_++;
 
@@ -129,6 +137,8 @@ export default {
       radioChecked,
       classList,
       myAttrs,
+      trailingRadio,
+      trailingCheckbox,
     };
   },
 };

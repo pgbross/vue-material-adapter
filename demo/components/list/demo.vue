@@ -3,60 +3,9 @@
     <div class="demo-list-example">
       <h3 class="mdc-typography--subtitle1">Single-Line</h3>
       <mcw-list v-model="selected" class="demo-list">
-        <mcw-list-item tabindex="0" role="radio" no-auto-role
-          >One Single-line item 1
-          <template #meta>
-            <div class="mdc-radio">
-              <input
-                class="mdc-radio__native-control"
-                type="radio"
-                value="0"
-                name="name"
-                checked
-              />
-              <div class="mdc-radio__background">
-                <div class="mdc-radio__outer-circle"></div>
-                <div class="mdc-radio__inner-circle"></div>
-              </div>
-            </div>
-          </template>
-        </mcw-list-item>
-        <mcw-list-item
-          >Two Single-line item 2
-
-          <template #meta>
-            <div class="mdc-radio">
-              <input
-                class="mdc-radio__native-control"
-                type="radio"
-                value="1"
-                name="name"
-                checked
-              />
-              <div class="mdc-radio__background">
-                <div class="mdc-radio__outer-circle"></div>
-                <div class="mdc-radio__inner-circle"></div>
-              </div>
-            </div>
-          </template>
-        </mcw-list-item>
-        <mcw-list-item
-          >Three Single-line item 3
-          <template #meta>
-            <div class="mdc-radio">
-              <input
-                class="mdc-radio__native-control"
-                type="radio"
-                value="2"
-                name="name"
-              />
-              <div class="mdc-radio__background">
-                <div class="mdc-radio__outer-circle"></div>
-                <div class="mdc-radio__inner-circle"></div>
-              </div>
-            </div>
-          </template>
-        </mcw-list-item>
+        <mcw-list-item tabindex="0">One Single-line item 1 </mcw-list-item>
+        <mcw-list-item>Two Single-line item 2 </mcw-list-item>
+        <mcw-list-item>Three Single-line item 3 </mcw-list-item>
       </mcw-list>
     </div>
 
@@ -152,6 +101,32 @@
     </div>
 
     <div class="demo-list-example">
+      <h3 class="mdc-typography--subtitle1">List with trailing checkbox</h3>
+      <mcw-list
+        v-model="listSelected"
+        role="group"
+        aria-label="List with checkbox items"
+        class="demo-list"
+      >
+        <mcw-list-item role="checkbox" aria-checked="true" trailing>
+          <label class="mdc-list-item__text" for="demo-list-checkbox-item-1"
+            >Option 1</label
+          >
+        </mcw-list-item>
+        <mcw-list-item role="checkbox" tabindex="0" trailing>
+          <label class="mdc-list-item__text" for="demo-list-checkbox-item-2"
+            >Option 2</label
+          >
+        </mcw-list-item>
+        <mcw-list-item role="checkbox" trailing>
+          <label class="mdc-list-item__text" for="demo-list-checkbox-item-3"
+            >Option 3</label
+          >
+        </mcw-list-item>
+      </mcw-list>
+    </div>
+
+    <div class="demo-list-example">
       <h3 class="mdc-typography--subtitle1">List with radio group</h3>
       <mcw-list v-model="radioSelected" role="radiogroup" class="demo-list">
         <mcw-list-item role="radio" name="demo-group">
@@ -169,6 +144,26 @@
           <label class="mdc-list-item__text" for="demo-list-radio-item-3"
             >Option 3</label
           >
+        </mcw-list-item>
+      </mcw-list>
+    </div>
+
+    <div class="demo-list-example">
+      <h3 class="mdc-typography--subtitle1">Single-Line trailing radio</h3>
+      <mcw-list v-model="radioSelected" class="demo-list">
+        <mcw-list-item
+          tabindex="0"
+          role="radio"
+          aria-checked="true"
+          trailing
+          name="mydemo"
+          >One Single-line item 1
+        </mcw-list-item>
+        <mcw-list-item role="radio" trailing name="mydemo"
+          >Two Single-line item 2
+        </mcw-list-item>
+        <mcw-list-item role="radio" trailing name="mydemo"
+          >Three Single-line item 3
         </mcw-list-item>
       </mcw-list>
     </div>
