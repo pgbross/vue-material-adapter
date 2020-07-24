@@ -21,7 +21,7 @@ export default {
   },
   setup(props, { emit, listeners }) {
     const uiState = reactive({
-      rootStyles: { top: '0' },
+      rootStyles: {},
       rootClasses: {
         'mdc-top-app-bar': true,
       },
@@ -36,16 +36,16 @@ export default {
     const handleNavigationClick = event =>
       foundation.handleNavigationClick(event);
 
-    let handleWindowResize;
-    let handleTargetScroll;
+    const handleTargetScroll = evt => foundation.handleTargetScroll(evt);
+    const handleWindowResize = evt => foundation.handleWindowResize(evt);
 
     const adapter = {
       addClass: className =>
-        (uiState.classes = { ...uiState.classes, [className]: true }),
+        (uiState.rootClasses = { ...uiState.rootClasses, [className]: true }),
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const { [className]: removed, ...rest } = uiState.classes;
-        uiState.classes = rest;
+        const { [className]: removed, ...rest } = uiState.rootClasses;
+        uiState.rootClasses = rest;
       },
       hasClass: className => Boolean(uiState.rootClasses[className]),
       setStyle: (property, value) =>
@@ -64,7 +64,7 @@ export default {
 
       getViewportScrollY: () => {
         const st = uiState.myScrollTarget;
-        return st.pageYOffset ? st.pageYOffset : st.scrollTop;
+        return st.pageYOffset !== void 0 ? st.pageYOffset : st.scrollTop;
       },
       getTotalActionItems: () =>
         uiState.root.querySelectorAll(strings.ACTION_ITEM_SELECTOR).length,
@@ -76,16 +76,19 @@ export default {
         if (nv !== ov) {
           uiState.myScrollTarget.removeEventListener(
             'scroll',
-            foundation.handleTargetScroll,
+            handleTargetScroll,
           );
           uiState.myScrollTarget = nv;
-          uiState.myScrollTarget.addEventListener(
-            'scroll',
-            foundation.handleTargetScroll,
-          );
+          uiState.myScrollTarget.addEventListener('scroll', handleTargetScroll);
         }
       },
     );
+
+    const setScrollTarget = nv => {
+      uiState.myScrollTarget.removeEventListener('scroll', handleTargetScroll);
+      uiState.myScrollTarget = nv;
+      uiState.myScrollTarget.addEventListener('scroll', handleTargetScroll);
+    };
 
     onMounted(() => {
       const isFixed = uiState.root.classList.contains(cssClasses.FIXED_CLASS);
@@ -98,9 +101,6 @@ export default {
       } else {
         foundation = new MDCTopAppBarFoundation(adapter);
       }
-
-      handleWindowResize = foundation.handleWindowResize.bind(foundation);
-      handleTargetScroll = foundation.handleWindowResize.bind(foundation);
 
       // todo: hunt down icons for ripples
 
@@ -154,6 +154,6 @@ export default {
       foundation.destroy();
     });
 
-    return { ...toRefs(uiState), listeners };
+    return { ...toRefs(uiState), listeners, setScrollTarget };
   },
 };

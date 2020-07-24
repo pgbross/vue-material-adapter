@@ -21,8 +21,8 @@
           link.name
         }}</mcw-list-item>
       </mcw-drawer>
-      <div class="mdc-drawer-app-content">
-        <top-app-bar @nav="onNav"></top-app-bar>
+      <div ref="app-content" class="mdc-drawer-app-content">
+        <top-app-bar :scroll-target="scrollTarget" @nav="onNav"></top-app-bar>
         <div class="drawer-main-content">
           <div class="mdc-top-app-bar--fixed-adjust"></div>
           <router-view />
@@ -40,9 +40,11 @@ export default {
     topAppBar,
   },
   data() {
-    return { open: false, links };
+    return { open: false, links, scrollTarget: null };
   },
-
+  mounted() {
+    this.scrollTarget = this.$refs['app-content'];
+  },
   methods: {
     onNav() {
       this.open = !this.open;
@@ -59,7 +61,6 @@ body {
   height: 100vh;
 }
 .drawer-main-content {
-  overflow: auto;
   height: 100%;
   padding: 0 18px;
 }

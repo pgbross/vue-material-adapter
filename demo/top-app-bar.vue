@@ -1,5 +1,9 @@
 <template>
-  <mcw-top-app-bar class="main-toolbar" @nav="$emit('nav')">
+  <mcw-top-app-bar
+    class="main-toolbar"
+    :scroll-target="scrollTarget"
+    @nav="$emit('nav')"
+  >
     <div class="mdc-top-app-bar__row">
       <section
         class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start"
@@ -34,6 +38,7 @@
 import githubLogo from './assets/github-logo.svg';
 
 export default {
+  props: { scrollTarget: HTMLElement },
   data() {
     return {
       githubLogo,
