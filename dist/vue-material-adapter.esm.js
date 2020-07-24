@@ -5106,12 +5106,14 @@ var __vue_render__$j = function() {
             ],
             2
           )
-        : _c(
+        : _vm.$slots.meta
+        ? _c(
             "span",
             { staticClass: "mdc-list-item__meta" },
             [_vm._t("meta")],
             2
           )
+        : _vm._e()
     ]
   )
 };
@@ -10311,9 +10313,7 @@ var script$D = {
     var emit = _ref.emit,
         listeners = _ref.listeners;
     var uiState = reactive({
-      rootStyles: {
-        top: '0'
-      },
+      rootStyles: {},
       rootClasses: {
         'mdc-top-app-bar': true
       },
@@ -10328,19 +10328,25 @@ var script$D = {
       return foundation.handleNavigationClick(event);
     };
 
-    var handleWindowResize;
-    var handleTargetScroll;
+    var handleTargetScroll = function handleTargetScroll(evt) {
+      return foundation.handleTargetScroll(evt);
+    };
+
+    var handleWindowResize = function handleWindowResize(evt) {
+      return foundation.handleWindowResize(evt);
+    };
+
     var adapter = {
       addClass: function addClass(className) {
-        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+        return uiState.rootClasses = _objectSpread2(_objectSpread2({}, uiState.rootClasses), {}, _defineProperty({}, className, true));
       },
       removeClass: function removeClass(className) {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes = uiState.classes,
-            removed = _uiState$classes[className],
-            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+        var _uiState$rootClasses = uiState.rootClasses,
+            removed = _uiState$rootClasses[className],
+            rest = _objectWithoutProperties(_uiState$rootClasses, [className].map(_toPropertyKey));
 
-        uiState.classes = rest;
+        uiState.rootClasses = rest;
       },
       hasClass: function hasClass(className) {
         return Boolean(uiState.rootClasses[className]);
@@ -10359,7 +10365,7 @@ var script$D = {
       },
       getViewportScrollY: function getViewportScrollY() {
         var st = uiState.myScrollTarget;
-        return st.pageYOffset ? st.pageYOffset : st.scrollTop;
+        return st.pageYOffset !== void 0 ? st.pageYOffset : st.scrollTop;
       },
       getTotalActionItems: function getTotalActionItems() {
         return uiState.root.querySelectorAll(strings$c.ACTION_ITEM_SELECTOR).length;
@@ -10369,11 +10375,18 @@ var script$D = {
       return props.scrollTarget;
     }, function (nv, ov) {
       if (nv !== ov) {
-        uiState.myScrollTarget.removeEventListener('scroll', foundation.handleTargetScroll);
+        uiState.myScrollTarget.removeEventListener('scroll', handleTargetScroll);
         uiState.myScrollTarget = nv;
-        uiState.myScrollTarget.addEventListener('scroll', foundation.handleTargetScroll);
+        uiState.myScrollTarget.addEventListener('scroll', handleTargetScroll);
       }
     });
+
+    var setScrollTarget = function setScrollTarget(nv) {
+      uiState.myScrollTarget.removeEventListener('scroll', handleTargetScroll);
+      uiState.myScrollTarget = nv;
+      uiState.myScrollTarget.addEventListener('scroll', handleTargetScroll);
+    };
+
     onMounted(function () {
       var isFixed = uiState.root.classList.contains(cssClasses$7.FIXED_CLASS);
       var isShort = uiState.root.classList.contains(cssClasses$7.SHORT_CLASS);
@@ -10384,10 +10397,8 @@ var script$D = {
         foundation = new MDCFixedTopAppBarFoundation(adapter);
       } else {
         foundation = new MDCTopAppBarFoundation(adapter);
-      }
+      } // todo: hunt down icons for ripples
 
-      handleWindowResize = foundation.handleWindowResize.bind(foundation);
-      handleTargetScroll = foundation.handleWindowResize.bind(foundation); // todo: hunt down icons for ripples
 
       navIcon = uiState.root.querySelector(strings$c.NAVIGATION_ICON_SELECTOR); // Get all icons in the toolbar and instantiate the ripples
 
@@ -10434,7 +10445,8 @@ var script$D = {
       foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      listeners: listeners
+      listeners: listeners,
+      setScrollTarget: setScrollTarget
     });
   }
 };
