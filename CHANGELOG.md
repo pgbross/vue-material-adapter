@@ -1,3 +1,87 @@
+# [0.17.0-beta.10](https://github.com/pgbross/vue-material-adapter/compare/v0.17.0-beta.9...v0.17.0-beta.10) (2020-07-24)
+
+
+### Bug Fixes
+
+* list-item dont render meta if not defined ([122cd0b](https://github.com/pgbross/vue-material-adapter/commit/122cd0b76cb5e441d824bd8c8925bf87da81b8c6))
+* top-app-bar scroll target ([d976a7a](https://github.com/pgbross/vue-material-adapter/commit/d976a7ada3c960b05d7523bcfd3a78db4511a8f3))
+
+
+
+# [0.17.0-beta.9](https://github.com/pgbross/vue-material-adapter/compare/v0.17.0-beta.8...v0.17.0-beta.9) (2020-07-22)
+
+
+### Bug Fixes
+
+* drawer support scrim with drawer-wrapper ([8bd1cea](https://github.com/pgbross/vue-material-adapter/commit/8bd1cea979398bd56832636cfbe90d8f415481a3))
+* search for list items depth first ([7450aa4](https://github.com/pgbross/vue-material-adapter/commit/7450aa48d7a70723c3cb69b9b578abbd61f6dd45))
+* top-app-bar action item counting ([fa27628](https://github.com/pgbross/vue-material-adapter/commit/fa276283a0e7bd5d3e265abfbcd4714b0a32f77c))
+* working on lists and dependencies ([49c9e65](https://github.com/pgbross/vue-material-adapter/commit/49c9e652a9d4fb2925feb53f74fc264e3e2d4a7c))
+
+
+### Features
+
+* show svg icon dynamically loaded  in button demo ([7e88084](https://github.com/pgbross/vue-material-adapter/commit/7e880844ac43c573a5ab584b667547ef6bf95bf9))
+* support list meta ([9c82fea](https://github.com/pgbross/vue-material-adapter/commit/9c82fea15364fe0f83f3a3927479307fb867aa4d))
+* support trailing modifier for list items ([ae42a8f](https://github.com/pgbross/vue-material-adapter/commit/ae42a8f3bc6716fd93cde4f8a4b7238188743495))
+* working on drawer ([d6f50aa](https://github.com/pgbross/vue-material-adapter/commit/d6f50aabce6a1890772f17443f30553f2c369fec))
+
+
+
+# [0.17.0-beta.8](https://github.com/pgbross/vue-material-adapter/compare/v0.17.0-beta.7...v0.17.0-beta.8) (2020-07-16)
+
+
+### Bug Fixes
+
+* snackbar action text ([245c38f](https://github.com/pgbross/vue-material-adapter/commit/245c38f4033a1a18808d08d9ef0ceee147b3e7b0))
+
+
+
+# [0.17.0-beta.7](https://github.com/pgbross/vue-material-adapter/compare/v0.17.0-beta.6...v0.17.0-beta.7) (2020-07-14)
+
+
+### Bug Fixes
+
+* menu calls to menu-surface methods ([5c91c04](https://github.com/pgbross/vue-material-adapter/commit/5c91c0428fb837d15a30f5da58591d750c74f0fa))
+
+
+
+# [0.17.0-beta.6](https://github.com/pgbross/vue-material-adapter/compare/v0.17.0-beta.5...v0.17.0-beta.6) (2020-07-14)
+
+
+### Features
+
+* expose setFixedPosition on select that proxies ([e87390c](https://github.com/pgbross/vue-material-adapter/commit/e87390c1359ceed504eeca74bd2101ca493f5386))
+
+
+
+# [0.17.0-beta.5](https://github.com/pgbross/vue-material-adapter/compare/v0.17.0-beta.4...v0.17.0-beta.5) (2020-07-13)
+
+
+### Features
+
+* isValid method on text field ([0f7c896](https://github.com/pgbross/vue-material-adapter/commit/0f7c896e4c6fb4500dab3b7164d8d7d81727ab73))
+
+
+
+# [0.17.0-beta.4](https://github.com/pgbross/vue-material-adapter/compare/v0.17.0-beta.3...v0.17.0-beta.4) (2020-07-13)
+
+
+### Features
+
+* add v-model to tabs-bar ([c285bc7](https://github.com/pgbross/vue-material-adapter/commit/c285bc72e1d0eef9b5b1afb76c340c81c0e70d7f))
+
+
+
+# [0.17.0-beta.3](https://github.com/pgbross/vue-material-adapter/compare/v0.17.0-beta.2...v0.17.0-beta.3) (2020-07-10)
+
+
+### Bug Fixes
+
+* textfield icon ([f1fb4cf](https://github.com/pgbross/vue-material-adapter/commit/f1fb4cfba002407c8889f20dfbd3c24089f99316))
+
+
+
 # [0.17.0-beta.9](https://github.com/pgbross/vue-material-adapter/compare/v0.17.0-beta.8...v0.17.0-beta.9) (2020-07-22)
 
 ### Bug Fixes
