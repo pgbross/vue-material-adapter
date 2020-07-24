@@ -81,7 +81,7 @@
     ></slot>
   </span>
 
-  <span class="mdc-list-item__meta" v-else>
+  <span class="mdc-list-item__meta" v-else-if="$slots.meta">
     <slot name="meta"></slot>
   </span>
 </custom-link>
