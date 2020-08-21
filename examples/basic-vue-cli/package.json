@@ -9,8 +9,8 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
-    "vue": "^2.6.11",
-    "vue-material-adapter": "^0.16.8"
+    "vue": "^2.6.12",
+    "vue-material-adapter": "^0.16.9"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.4.6",
