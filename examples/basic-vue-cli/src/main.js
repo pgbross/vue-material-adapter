@@ -1,4 +1,3 @@
-import './styles'
 import Vue from 'vue'
 import VueMaterialAdapter from "vue-material-adapter";
 import App from './App.vue'
