@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import VueMaterialAdapter from "vue-material-adapter";
 import App from './App.vue'
+import VueMaterialAdapter from "vue-material-adapter";
 
 Vue.config.productionTip = false
 Vue.use(VueMaterialAdapter);
