@@ -35,8 +35,12 @@ export default {
   },
   methods: {
     onClosed() {
-      this.$refs.snackbar.handleSnack({ message: "Dialog closed" });
+      this.$refs.snackbar.handleSnack({ message: "Dialog closed", dismissAction: false, actionText: "close" });
     }
   },
 }
 </script>
+
+<style lang="scss">
+@use "styles";
+</style>
