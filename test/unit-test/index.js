@@ -23,25 +23,25 @@ export function pluginSanityCheck(pluginName, plugin, options) {
             key.toLocaleLowerCase(),
           );
         });
+        // const wrapper = mount(
+        //   component,
+        //   (options && options[key]) || undefined,
+        // );
 
-        const wrapper = mount(
-          component,
-          (options && options[key]) || undefined,
-        );
-        if (component.functional) {
-          if (!options || !options[key]) {
-            // if there are stubs then the wrapper doesnt match the component so ignore
-            test('is a functional component', () => {
-              expect(wrapper.isFunctionalComponent).toBeTruthy();
-            });
-          }
-          checkValidFunctionalComponent(component);
-        } else {
-          test('is a Vue instance', () => {
-            expect(wrapper).toBeTruthy();
-          });
-          checkValidMcwAdapter(wrapper.vm);
-        }
+        // if (component.functional) {
+        //   if (!options || !options[key]) {
+        //     // if there are stubs then the wrapper doesnt match the component so ignore
+        //     test('is a functional component', () => {
+        //       expect(wrapper.isFunctionalComponent).toBeTruthy();
+        //     });
+        //   }
+        //   checkValidFunctionalComponent(component);
+        // } else {
+        //   test('is a Vue instance', () => {
+        //     expect(wrapper).toBeTruthy();
+        //   });
+        //   checkValidMcwAdapter(wrapper.vm);
+        // }
       });
     });
   });
