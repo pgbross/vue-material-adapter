@@ -1,105 +1,72 @@
 import { MDCTextFieldHelperTextFoundation } from '@material/textfield/helper-text/foundation';
+import {
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  toRefs,
+  watch,
+} from '@vue/composition-api';
 
 export default {
-  name: 'textfield-helper-text',
+  name: 'mcw-textfield-helper-text',
   props: {
     persistent: Boolean,
     validation: Boolean,
     helptext: String,
   },
-  data() {
-    return {
+  setup(props) {
+    const uiState = reactive({
       classes: {
         'mdc-text-field-helper-text': true,
-        'mdc-text-field-helper-text--persistent': this.persistent,
-        'mdc-text-field-helper-text--validation-msg': this.validation,
+        'mdc-text-field-helper-text--persistent': props.persistent,
+        'mdc-text-field-helper-text--validation-msg': props.validation,
       },
-    };
-  },
-
-  watch: {
-    persistent() {
-      this.foundation.setPersistent(this.persistent);
-    },
-    validation() {
-      this.foundation.setValidation(this.validation);
-    },
-  },
-  mounted() {
-    this.foundation = new MDCTextFieldHelperTextFoundation({
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-
-      hasClass: className => Boolean(this.classes[className]),
-
-      setAttr: (attr, value) => {
-        this.$el.setAttribute(attr, value);
-      },
-      removeAttr: attr => {
-        this.$el.removeAttribute(attr);
-      },
-      setContent: (/* content */) => {
-        // help text get's updated from {{helptext}}
-        // cf. this.$el.textContent = content
-      },
+      rootAttrs: { 'aria-hidden': true },
+      helpertext: props.helptext,
+      foundation: {},
     });
 
-    this.foundation.init();
-  },
+    const adapter = {
+      addClass: className =>
+        (uiState.classes = { ...uiState.classes, [className]: true }),
+      removeClass: className => {
+        // eslint-disable-next-line no-unused-vars
+        const { [className]: removed, ...rest } = uiState.classes;
+        uiState.classes = rest;
+      },
+      hasClass: className => Boolean(uiState.classes[className]),
 
-  beforeDestroy() {
-    this.foundation.destroy();
-  },
-  render(createElement) {
-    const { $scopedSlots: scopedSlots } = this;
-    const defaultSlot = scopedSlots.default && scopedSlots.default();
+      setAttr: (attr, value) =>
+        (uiState.rootAttrs = { ...uiState.rootAttrs, [attr]: value }),
 
-    const classes = classNames(this.classes);
-    if (defaultSlot) {
-      return defaultSlot[0];
-    }
-    return createElement('div', { class: 'mdc-text-field-helper-line' }, [
-      createElement(
-        'div',
-        { class: classes, attrs: this.$attrs },
-        this.helptext,
-      ),
-    ]);
+      removeAttr: attr => {
+        // eslint-disable-next-line no-unused-vars
+        const { [attr]: removed, ...rest } = uiState.rootAttrs;
+        uiState.rootAttrs = rest;
+      },
+
+      setContent: content => (uiState.helpertext = content),
+    };
+
+    watch(
+      () => props.persistent,
+      nv => uiState.foundation.setPersistent(nv),
+    );
+
+    watch(
+      () => props.validation,
+      nv => uiState.foundation.setValidation(nv),
+    );
+
+    onMounted(() => {
+      uiState.foundation = new MDCTextFieldHelperTextFoundation(adapter);
+      uiState.foundation.init();
+    });
+
+    onBeforeUnmount(() => {
+      uiState.foundation.destroy();
+    });
+
+    return { ...toRefs(uiState) };
   },
 };
-
-// ===
-// Private functions
-// ===
-
-const hasOwn = {}.hasOwnProperty;
-
-function classNames() {
-  const classes = [];
-
-  for (let i = 0; i < arguments.length; i++) {
-    // eslint-disable-next-line prefer-rest-params
-    const arg = arguments[i];
-    if (!arg) continue;
-
-    const argType = typeof arg;
-
-    if (argType === 'string' || argType === 'number') {
-      classes.push(arg);
-    } else if (Array.isArray(arg) && arg.length) {
-      // eslint-disable-next-line prefer-spread
-      const inner = classNames.apply(null, arg);
-      if (inner) {
-        classes.push(inner);
-      }
-    } else if (argType === 'object') {
-      for (const key in arg) {
-        if (hasOwn.call(arg, key) && arg[key]) {
-          classes.push(key);
-        }
-      }
-    }
-  }
-
-  return classes.join(' ');
-}

@@ -1,175 +1,158 @@
 /* eslint-disable quote-props */
 import MDCTabFoundation from '@material/tab/foundation';
 import {
-  CustomLinkMixin,
-  DispatchEventMixin,
-  emitCustomEvent,
-  VMAUniqueIdMixin,
-} from '~/base/index.js';
+  computed,
+  inject,
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  toRefs,
+  toRef,
+} from '@vue/composition-api';
+import { CustomLink, emitCustomEvent } from '~/base/index.js';
+import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
+
+let tabId_ = 0;
 
 export default {
   name: 'mcw-tab',
-  mixins: [CustomLinkMixin, DispatchEventMixin, VMAUniqueIdMixin],
+  inheritAttrs: false,
   props: {
     active: Boolean,
     icon: [String, Array, Object],
-    stacked: Boolean,
     minWidth: Boolean,
   },
-  data() {
-    return {
+  components: { CustomLink },
+  setup(props, { slots, attrs }) {
+    const uiState = reactive({
       classes: {
         'mdc-tab': 1,
-        'mdc-tab--stacked': this.stacked,
-        'mdc-tab--min-width': this.minWidth,
+
+        'mdc-tab--min-width': props.minWidth,
+      },
+      rootAttrs: {
+        role: 'tab',
+        'aria-selected': 'false',
+        tabindex: '-1',
+        tag: 'button',
       },
       styles: {},
-    };
-  },
 
-  inject: ['mcwTabBar'],
-  computed: {
-    hasIcon() {
-      const { $scopedSlots: scopedSlots } = this;
-      if (this.icon || (scopedSlots.icon && scopedSlots.icon())) {
-        return this.icon ? extractIconProp(this.icon) : {};
+      content: null,
+      iconEl: null,
+      tabIndicator: null,
+      root: null,
+      rippleSurface: null,
+    });
+
+    const { classes: rippleClasses, styles } = useRipplePlugin(
+      toRef(uiState, 'root'),
+    );
+    const { fade, stacked, spanContent, tabList } = inject('mcwTabList');
+
+    uiState.classes['mdc-tab--stacked'] = stacked;
+
+    const hasIcon = computed(() => {
+      if (props.icon || slots.icon) {
+        return props.icon ? extractIconProp(props.icon) : {};
       }
       return false;
-    },
-    hasText() {
-      const { $scopedSlots: scopedSlots } = this;
-      return !!(scopedSlots.default && scopedSlots.default());
-    },
-  },
-  watch: {
-    active(value) {},
-  },
+    });
 
-  mounted() {
-    this.id = this.vma_uid_;
-    this.foundation = new MDCTabFoundation({
-      setAttr: (attr, value) => this.$el.setAttribute(attr, value),
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      hasClass: className => this.$el.classList.contains(className),
-      activateIndicator: previousIndicatorClientRect => {
-        this.$refs.tabIndicator.activate(previousIndicatorClientRect);
+    const hasText = computed(() => {
+      return !!slots.default;
+    });
+
+    const linkAttrs = computed(() => ({ ...attrs, ...uiState.rootAttrs }));
+
+    let foundation;
+    const tabId = `__mcw-tab-${tabId_++}`;
+
+    let rootEl;
+
+    const activate = computeIndicatorClientRect =>
+      foundation.activate(computeIndicatorClientRect);
+
+    const deactivate = () => foundation.deactivate();
+    const isActive = () => foundation.isActive();
+
+    const setActive = isActive => {
+      if (isActive) {
+        (uiState.classes = { ...uiState.classes, 'mdc-tab--active': true }),
+          uiState.tabIndicator.activate();
+      }
+    };
+
+    const computeIndicatorClientRect = () =>
+      uiState.tabIndicator.computeContentClientRect();
+
+    const computeDimensions = () => foundation.computeDimensions();
+
+    const focus = () => rootEl.focus();
+
+    const onClick = evt => foundation.handleClick(evt);
+
+    const adapter = {
+      setAttr: (attr, value) =>
+        (uiState.rootAttrs = { ...uiState.rootAttrs, [attr]: value }),
+      addClass: className =>
+        (uiState.classes = { ...uiState.classes, [className]: true }),
+      removeClass: className => {
+        // eslint-disable-next-line no-unused-vars
+        const { [className]: removed, ...rest } = uiState.classes;
+        uiState.classes = rest;
       },
-      deactivateIndicator: () => {
-        this.$refs.tabIndicator.deactivate();
-      },
+      hasClass: className => !!uiState.classes[className],
+      activateIndicator: previousIndicatorClientRect =>
+        uiState.tabIndicator.activate(previousIndicatorClientRect),
+      deactivateIndicator: () => uiState.tabIndicator.deactivate(),
       notifyInteracted: () =>
         emitCustomEvent(
-          this.$el,
+          rootEl,
           MDCTabFoundation.strings.INTERACTED_EVENT,
-          { tabId: this.id },
+          { tabId },
           true /* bubble */,
         ),
-      getOffsetLeft: () => this.$el.offsetLeft,
-      getOffsetWidth: () => this.$el.offsetWidth,
-      getContentOffsetLeft: () => this.$refs.content.offsetLeft,
-      getContentOffsetWidth: () => this.$refs.content.offsetWidth,
-      focus: () => this.$el.focus(),
+      getOffsetLeft: () => rootEl.offsetLeft,
+      getOffsetWidth: () => rootEl.offsetWidth,
+      getContentOffsetLeft: () => uiState.content.offsetLeft,
+      getContentOffsetWidth: () => uiState.content.offsetWidth,
+      focus: () => rootEl.focus(),
+    };
+
+    onMounted(() => {
+      rootEl = uiState.root.$el;
+      foundation = new MDCTabFoundation(adapter);
+      foundation.init();
+
+      tabList.value.push({
+        id: tabId,
+        activate,
+        deactivate,
+        focus,
+        computeIndicatorClientRect,
+        computeDimensions,
+        isActive,
+      });
     });
-    this.foundation.init();
 
-    // console.log('tab mounted')
+    onBeforeUnmount(() => {
+      foundation.destroy();
+    });
 
-    this.mcwTabBar.tabList.push(this);
-
-    // this.setActive(this.active)
-  },
-  beforeDestroy() {
-    this.foundation.destroy();
-  },
-  methods: {
-    activate(computeIndicatorClientRect) {
-      this.foundation.activate(computeIndicatorClientRect);
-    },
-
-    deactivate() {
-      this.foundation.deactivate();
-    },
-
-    isActive() {
-      return this.foundation.isActive();
-    },
-    setActive(isActive) {
-      if (isActive) {
-        this.$set(this.classes, 'mdc-tab--active', true),
-          this.$refs.tabIndicator.activate();
-      }
-    },
-    computeIndicatorClientRect() {
-      return this.$refs.tabIndicator.computeContentClientRect();
-    },
-
-    computeDimensions() {
-      return this.foundation.computeDimensions();
-    },
-
-    focus() {
-      this.$el.focus();
-    },
-  },
-  render(createElement) {
-    const { $scopedSlots: scopedSlots } = this;
-
-    const contentNodes = [];
-
-    if (this.hasIcon) {
-      contentNodes.push(
-        createElement(
-          'i',
-          {
-            class: { ...this.hasIcon.classes, 'mdc-tab__icon': 1 },
-            attrs: { tabindex: '0', 'aria-hidden': 'true' },
-            ref: 'icon',
-          },
-          (scopedSlots.icon && scopedSlots.icon()) || this.hasIcon.content,
-        ),
-      );
-    }
-    if (this.hasText) {
-      contentNodes.push(
-        createElement(
-          'span',
-          { class: { 'mdc-tab__text-label': 1 } },
-          scopedSlots.default && scopedSlots.default(),
-        ),
-      );
-    }
-
-    const spanEl = createElement(
-      'span',
-      {
-        class: { 'mdc-tab__content': 1 },
-        ref: 'content',
-      },
-      contentNodes,
-    );
-
-    const nodes = [
-      spanEl,
-      createElement('mdc-tab-indicator', { ref: 'tabIndicator' }),
-      createElement('mdc-tab-ripple'),
-    ];
-
-    return createElement(
-      'custom-link',
-      {
-        class: this.classes,
-        style: this.styles,
-        attrs: {
-          link: this.link,
-          role: 'tab',
-          'aria-selected': 'false',
-          tabindex: '-1',
-        },
-        on: { click: evt => this.foundation.handleClick(evt) },
-      },
-      nodes,
-    );
+    return {
+      ...toRefs(uiState),
+      hasIcon,
+      hasText,
+      onClick,
+      setActive,
+      tabId,
+      fade,
+      spanContent,
+      rippleClasses,
+      styles,
+      linkAttrs,
+    };
   },
 };
 

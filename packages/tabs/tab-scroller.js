@@ -1,97 +1,92 @@
+import { matches } from '@material/dom/ponyfill';
 import { MDCTabScrollerFoundation } from '@material/tab-scroller/foundation';
 import * as util from '@material/tab-scroller/util';
-import { matches } from '@material/dom/ponyfill';
+import {
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  toRefs,
+} from '@vue/composition-api';
 
 export default {
   name: 'mcw-tab-scroller',
-  data() {
-    return {
+
+  setup() {
+    const uiState = reactive({
       classes: { 'mdc-tab-scroller': 1 },
       areaClasses: { 'mdc-tab-scroller__scroll-area': 1 },
       areaStyles: {},
       contentStyles: {},
-    };
-  },
+      content: null,
+      area: null,
+    });
+    let foundation;
 
-  mounted() {
-    this.foundation = new MDCTabScrollerFoundation({
+    const getScrollPosition = () => foundation.getScrollPosition();
+    const getScrollContentWidth = () => uiState.content.offsetWidth;
+
+    const incrementScroll = scrollXIncrement =>
+      foundation.incrementScroll(scrollXIncrement);
+
+    const scrollTo = scrollX => foundation.scrollTo(scrollX);
+    const onTransitionEnd = evt => foundation.handleTransitionEnd(evt);
+
+    const areaListeners = {
+      mousedown: evt => foundation.handleInteraction(evt),
+      wheel: evt => foundation.handleInteraction(evt),
+      pointerdown: evt => foundation.handleInteraction(evt),
+      touchstart: evt => foundation.handleInteraction(evt),
+      keydown: evt => foundation.handleInteraction(evt),
+    };
+
+    const adapter = {
       eventTargetMatchesSelector: (evtTarget, selector) => {
         return matches(evtTarget, selector);
       },
-      addClass: className => this.$set(this.classes, className, true),
+      addClass: className =>
+        (uiState.classes = { ...uiState.classes, [className]: true }),
 
-      removeClass: className => this.$delete(this.classes, className),
+      removeClass: className => {
+        // eslint-disable-next-line no-unused-vars
+        const { [className]: removed, ...rest } = uiState.classes;
+        uiState.classes = rest;
+      },
       addScrollAreaClass: className =>
-        this.$set(this.areaClasses, className, true),
+        (uiState.areaClasses = { ...uiState.areaClasses, [className]: true }),
       setScrollAreaStyleProperty: (prop, value) =>
-        this.$set(this.areaStyles, prop, value),
+        (uiState.areaStyles = { ...uiState.areaStyles, [prop]: value }),
       setScrollContentStyleProperty: (prop, value) =>
-        this.$set(this.contentStyles, prop, value),
+        (uiState.contentStyles = { ...uiState.contentStyles, [prop]: value }),
       getScrollContentStyleValue: propName =>
-        window.getComputedStyle(this.$refs.content).getPropertyValue(propName),
-      setScrollAreaScrollLeft: scrollX =>
-        (this.$refs.area.scrollLeft = scrollX),
-      getScrollAreaScrollLeft: () => this.$refs.area.scrollLeft,
-      getScrollContentOffsetWidth: () => this.$refs.content.offsetWidth,
-      getScrollAreaOffsetWidth: () => this.$refs.area.offsetWidth,
-      computeScrollAreaClientRect: () =>
-        this.$refs.area.getBoundingClientRect(),
+        window.getComputedStyle(uiState.content).getPropertyValue(propName),
+      setScrollAreaScrollLeft: scrollX => (uiState.area.scrollLeft = scrollX),
+      getScrollAreaScrollLeft: () => uiState.area.scrollLeft,
+      getScrollContentOffsetWidth: () => uiState.content.offsetWidth,
+      getScrollAreaOffsetWidth: () => uiState.area.offsetWidth,
+      computeScrollAreaClientRect: () => uiState.area.getBoundingClientRect(),
       computeScrollContentClientRect: () =>
-        this.$refs.content.getBoundingClientRect(),
+        uiState.content.getBoundingClientRect(),
       computeHorizontalScrollbarHeight: () =>
         util.computeHorizontalScrollbarHeight(document),
-    });
-    this.foundation.init();
-  },
-  beforeDestroy() {
-    this.foundation.destroy();
-  },
-  methods: {
-    getScrollPosition() {
-      return this.foundation.getScrollPosition();
-    },
-    getScrollContentWidth() {
-      return this.$refs.content.offsetWidth;
-    },
-    incrementScroll(scrollXIncrement) {
-      this.foundation.incrementScroll(scrollXIncrement);
-    },
-    scrollTo(scrollX) {
-      this.foundation.scrollTo(scrollX);
-    },
-  },
-  render(createElement) {
-    const { $scopedSlots: scopedSlots } = this;
-    const areaEl = createElement(
-      'div',
-      {
-        class: this.areaClasses,
-        style: this.areaStyles,
-        ref: 'area',
-        on: {
-          mousedown: evt => this.foundation.handleInteraction(evt),
-          wheel: evt => this.foundation.handleInteraction(evt),
-          pointerdown: evt => this.foundation.handleInteraction(evt),
-          touchstart: evt => this.foundation.handleInteraction(evt),
-          keydown: evt => this.foundation.handleInteraction(evt),
-        },
-      },
-      [
-        createElement(
-          'div',
-          {
-            class: { 'mdc-tab-scroller__scroll-content': 1 },
-            style: this.contentStyles,
-            ref: 'content',
-            on: {
-              transitionend: evt => this.foundation.handleTransitionEnd(evt),
-            },
-          },
-          scopedSlots.default && scopedSlots.default(),
-        ),
-      ],
-    );
+    };
 
-    return createElement('div', { class: this.classes }, [areaEl]);
+    onMounted(() => {
+      foundation = new MDCTabScrollerFoundation(adapter);
+
+      foundation.init();
+    });
+
+    onBeforeUnmount(() => {
+      foundation.destroy();
+    });
+    return {
+      ...toRefs(uiState),
+      scrollTo,
+      incrementScroll,
+      getScrollPosition,
+      getScrollContentWidth,
+      areaListeners,
+      onTransitionEnd,
+    };
   },
 };

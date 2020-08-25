@@ -1,29 +1,48 @@
 <template>
   <div class>
-    <mcw-headline6>Simple</mcw-headline6>
+    <div class="mdc-typography--headline6">Simple</div>
     <section class="mcw-demo mcw-demo--container">
-      <mcw-tab-bar @change="onSelected" activeTabIndex="1">
-        <mcw-tab v-for="item in filteredItems" :key="item.label">{{ item }}</mcw-tab>
+      <mcw-tab-bar ref="firstExample" @change="onSelected">
+        <mcw-tab v-for="item in filteredItems" :key="item.label">{{
+          item
+        }}</mcw-tab>
       </mcw-tab-bar>
     </section>
-    <br>
-    <div v-if="selectedItem" style="text-align: right">
-      <mcw-caption>
+    <br />
+    <div class="mdc-typography--headline6">Span content</div>
+    <section class="mcw-demo mcw-demo--container">
+      <mcw-tab-bar span-content fade @change="onSelected">
+        <mcw-tab v-for="item in filteredItems" :key="item.label">{{
+          item
+        }}</mcw-tab>
+      </mcw-tab-bar>
+    </section>
+    <br />
+    <div v-if="selectedItem" style="text-align: right;">
+      <div class="mdc-typography--caption">
         Selected:
         <span class="demo-tabs-selected">{{ selectedItem }}</span>
-      </mcw-caption>
+      </div>
     </div>
-    <mcw-headline6>With icons and text</mcw-headline6>
+    <div class="mdc-typography--headline6">With icons and text</div>
     <section class="mcw-demo mcw-demo--container">
       <mcw-tab-bar>
         <mcw-tab icon="phone">Recents</mcw-tab>
-        <mcw-tab icon="favorite" stacked>Favorites</mcw-tab>
+        <mcw-tab icon="favorite">Favorites</mcw-tab>
         <mcw-tab icon="personal_pin">Nearby</mcw-tab>
       </mcw-tab-bar>
     </section>
-    <mcw-headline6>Scrollable</mcw-headline6>
+    <div class="mdc-typography--headline6">With stacked icons and text</div>
+    <section class="mcw-demo mcw-demo--container">
+      <mcw-tab-bar stacked>
+        <mcw-tab icon="phone">Recents</mcw-tab>
+        <mcw-tab icon="favorite">Favorites</mcw-tab>
+        <mcw-tab icon="personal_pin">Nearby</mcw-tab>
+      </mcw-tab-bar>
+    </section>
+    <div class="mdc-typography--headline6">Scrollable</div>
     <section class="mcw-demo mcw-demo--container mcw-demo--container-narrow">
-      <mcw-tab-bar @change="onSelected" activeTabIndex="1">
+      <mcw-tab-bar active-tab-index="1" @change="onSelected">
         <mcw-tab v-for="item in items" :key="item.label">{{ item }}</mcw-tab>
       </mcw-tab-bar>
     </section>
@@ -45,12 +64,16 @@ export default {
     return {
       selectedItem: items[0],
       items,
+      activeTabIndex: 1,
     };
   },
   computed: {
     filteredItems() {
       return this.items.slice(0, 3);
     },
+  },
+  mounted() {
+    this.$refs.firstExample.activateTab(1);
   },
   methods: {
     onSelected(idx) {

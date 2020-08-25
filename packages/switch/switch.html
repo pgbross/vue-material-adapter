@@ -5,14 +5,13 @@
 }"
   class="mdc-switch-wrapper"
 >
-  <div :class="classes" :style="styles" class="mdc-switch">
-    <div class="mdc-switch__track" />
+  <div ref="root" :class="classes" :style="styles" class="mdc-switch">
+    <div class="mdc-switch__track"></div>
     <div class="mdc-switch__thumb-underlay">
       <div class="mdc-switch__thumb"></div>
       <input
-        ref="control"
         :name="name"
-        :id="vma_uid_"
+        :id="switchId"
         :value="value"
         type="checkbox"
         role="switch"
@@ -25,7 +24,7 @@
     </div>
   </div>
 
-  <label v-if="hasLabel" :for="vma_uid_" class="mdc-switch-label">
+  <label v-if="hasLabel" :for="switchId" class="mdc-switch-label">
     <slot>{{ label }}</slot>
   </label>
 </div>

@@ -1,28 +1,34 @@
 <template>
-  <div>
-    <top-app-bar @nav="open = true" />
-    <mcw-drawer
-      ref="drawer"
-      v-model="open"
-      modal
-      class="primary-drawer"
-      toolbar-spacer
-    >
-      <mcw-drawer-header></mcw-drawer-header>
-      <mcw-drawer-list dense>
-        <mcw-drawer-item to="/">Home</mcw-drawer-item>
-        <mcw-drawer-item to="/docs/getting-started"
-          >Getting Started</mcw-drawer-item
+  <div id="root">
+    <div class="draw-frame">
+      <mcw-drawer
+        ref="drawer"
+        v-model="open"
+        dismissible
+        class="primary-drawer"
+      >
+        <template #header>
+          <div class="mdc-drawer__header"></div>
+        </template>
+
+        <mcw-list-item to="/" tabindex="0">Home</mcw-list-item>
+        <mcw-list-item to="/docs/getting-started"
+          >Getting Started</mcw-list-item
         >
-        <mcw-drawer-divider />
-        <mcw-drawer-item v-for="link in links" :key="link.id" :to="link.to">{{
+        <hr class="mdc-list-divider" />
+        <h6 class="mdc-list-group__subheader">Components</h6>
+        <mcw-list-item v-for="link in links" :key="link.id" :to="link.to">{{
           link.name
-        }}</mcw-drawer-item>
-      </mcw-drawer-list>
-    </mcw-drawer>
-    <main class="content">
-      <router-view />
-    </main>
+        }}</mcw-list-item>
+      </mcw-drawer>
+      <div ref="app-content" class="mdc-drawer-app-content">
+        <top-app-bar :scroll-target="scrollTarget" @nav="onNav"></top-app-bar>
+        <div class="drawer-main-content">
+          <div class="mdc-top-app-bar--fixed-adjust"></div>
+          <router-view />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -34,7 +40,33 @@ export default {
     topAppBar,
   },
   data() {
-    return { open: false, links };
+    return { open: false, links, scrollTarget: null };
+  },
+  mounted() {
+    this.scrollTarget = this.$refs['app-content'];
+  },
+  methods: {
+    onNav() {
+      this.open = !this.open;
+    },
   },
 };
 </script>
+<style lang="css">
+body {
+  margin: 0;
+}
+.draw-frame {
+  display: flex;
+  height: 100vh;
+}
+.drawer-main-content {
+  height: 100%;
+  padding: 0 18px;
+}
+.mdc-drawer-app-content {
+  flex: auto;
+  overflow: auto;
+  position: relative;
+}
+</style>

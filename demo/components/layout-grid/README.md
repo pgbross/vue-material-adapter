@@ -2,36 +2,30 @@
 
 ### Grid
 
-A grid is a container that consists of a group of cells.
-Cells get positioned in a sequence according to a predefined number of columns.
-The grid and cells are not styled in any way, serving only for alignment and
-positioning of elements.
+Material design’s responsive UI is based on a column-variate grid layout. It has 12 columns on desktop, 8 columns on tablet and 4 columns on phone.
 
 ```html
-<mcw-layout-grid>
-  <mcw-layout-cell>
-    <p>Cell 1</p>
+<mcw-layout-grid class="my-grid">
+  <mcw-layout-cell class="cell cell1" desktop="3" tablet="3" />
+  <mcw-layout-cell class="cell cell2" desktop="3" tablet="5" align="top">
+    <div class="mdc-typeography--body1">align="top"</div>
   </mcw-layout-cell>
-  <mcw-layout-cell>
-    <p>Cell 2</p>
+  <mcw-layout-cell class="cell cell3" desktop="3" tablet="5" align="middle">
+    <div class="mdc-typeography--body1">align="middle"</div>
   </mcw-layout-cell>
-  <mcw-layout-cell>
-    <p>Cell 3</p>
+  <mcw-layout-cell class="cell cell4" desktop="3" tablet="3" align="bottom">
+    <div class="mdc-typeography--body1">align="bottom"</div>
   </mcw-layout-cell>
 </mcw-layout-grid>
 ```
 
 Grid can define its own max-width or designate its columns to be a certain width.
 
-| prop                 | Type    | Default | Description                      |
-| -------------------- | ------- | ------- | -------------------------------- |
-| `fixed-column-width` | Boolean |         | whether columns have fixed width |
-
-The grid has 12 columns in desktop mode (>= 840px), 8 columns in tablet mode
-(>= 480px), and 4 columns in phone mode (< 480px).
-
-In accordance with the Material Design spec, layout grids set default margins and gutters to 24px on desktop and 16px on tablet
-and phone.
+| prop                 | Type    | Default | Description                             |
+| -------------------- | ------- | ------- | --------------------------------------- |
+| `fixed-column-width` | Boolean |         | The grid should have fixed column width |
+| `align-left`         | Boolean |         | Left aligned                            |
+| `align-right`        | Boolean |         | Right aligned                           |
 
 ### Cells
 
@@ -91,9 +85,6 @@ layout grid, you can nest layout grid within each other with `mcw-layout-inner-g
 </mcw-layout-grid>
 ```
 
-> However, the Material Design guidelines do not recommend a deeply nested grid since
-> it could indicate an overly complicated UX.
-
 ### Customizing the Grid
 
 The max width, fixed column width, margins, gutters and spans can be customized
@@ -121,4 +112,4 @@ or SASS mixins:
 ```
 
 see MDC reference documentation for more:
-<https://material.io/components/web/catalog/layout-grids>
+<https://github.com/material-components/material-components-web/tree/master/packages/mdc-layout-grid>

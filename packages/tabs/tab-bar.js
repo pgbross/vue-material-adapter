@@ -1,123 +1,141 @@
 import { MDCTabBarFoundation } from '@material/tab-bar/foundation';
+import { MDCTabFoundation } from '@material/tab/foundation';
+import {
+  computed,
+  onBeforeUnmount,
+  onMounted,
+  provide,
+  ref,
+  watchEffect,
+} from '@vue/composition-api';
 import { emitCustomEvent } from '~/base/index.js';
+
+const { strings } = MDCTabBarFoundation;
 
 export default {
   name: 'mcw-tab-bar',
-  data() {
-    return {
-      classes: { 'mdc-tab-bar': 1 },
-      indicatorStyles: {},
-      tabList: [],
-    };
+  model: {
+    prop: 'value',
+    event: 'change',
   },
-  props: { activeTabIndex: [Number, String] },
-  provide() {
-    return { mcwTabBar: this };
+  props: {
+    fade: Boolean,
+    stacked: Boolean,
+    spanContent: Boolean,
+    value: Number,
   },
 
-  mounted() {
-    this.foundation = new MDCTabBarFoundation({
-      scrollTo: scrollX => this.$refs.scroller.scrollTo(scrollX),
+  setup(props, { emit, listeners: $listeners }) {
+    const scroller = ref(null);
+    const root = ref(null);
+
+    const tabList = ref([]);
+
+    provide('mcwTabList', {
+      fade: props.fade,
+      stacked: props.stacked,
+      spanContent: props.spanContent,
+      tabList,
+    });
+
+    const listeners = computed(() => {
+      return {
+        ...$listeners,
+        [MDCTabFoundation.strings.INTERACTED_EVENT]: evt =>
+          foundation.handleTabInteraction(evt),
+        keydown: evt => foundation.handleKeyDown(evt),
+      };
+    });
+
+    let foundation;
+
+    const getTabElements_ = () => {
+      return [].slice.call(root.value.querySelectorAll(strings.TAB_SELECTOR));
+    };
+
+    const activateTab = index => foundation.activateTab(index);
+
+    const adapter = {
+      scrollTo: scrollX => scroller.value.scrollTo(scrollX),
       incrementScroll: scrollXIncrement =>
-        this.$refs.scroller.incrementScroll(scrollXIncrement),
-      getScrollPosition: () => this.$refs.scroller.getScrollPosition(),
-      getScrollContentWidth: () => this.$refs.scroller.getScrollContentWidth(),
-      getOffsetWidth: () => this.$el.offsetWidth,
+        scroller.value.incrementScroll(scrollXIncrement),
+      getScrollPosition: () => scroller.value.getScrollPosition(),
+      getScrollContentWidth: () => scroller.value.getScrollContentWidth(),
+      getOffsetWidth: () => root.value.offsetWidth,
       isRTL: () =>
-        window.getComputedStyle(this.$el).getPropertyValue('direction') ===
+        window.getComputedStyle(root.value).getPropertyValue('direction') ===
         'rtl',
       setActiveTab: index => {
-        this.foundation.activateTab(index);
+        foundation.activateTab(index);
       },
       activateTabAtIndex: (index, clientRect) => {
-        this.tabList[index].activate(clientRect);
+        tabList.value[index].activate(clientRect);
       },
-      deactivateTabAtIndex: index => {
-        this.tabList[index] && this.tabList[index].deactivate();
-      },
-      focusTabAtIndex: index => this.tabList[index].focus(),
-      getTabIndicatorClientRectAtIndex: index => {
-        return (
-          this.tabList[index] &&
-          this.tabList[index].computeIndicatorClientRect()
-        );
-      },
-      getTabDimensionsAtIndex: index => {
-        return this.tabList[index].computeDimensions();
-      },
+      deactivateTabAtIndex: index => tabList.value[index]?.deactivate(),
+
+      focusTabAtIndex: index => tabList.value[index].focus(),
+      getTabIndicatorClientRectAtIndex: index =>
+        tabList.value[index]?.computeIndicatorClientRect(),
+      getTabDimensionsAtIndex: index =>
+        tabList.value[index].computeDimensions(),
       getPreviousActiveTabIndex: () => {
-        for (let i = 0; i < this.tabList.length; i++) {
-          if (this.tabList[i].isActive()) {
+        for (let i = 0; i < tabList.value.length; i++) {
+          if (tabList.value[i].isActive()) {
             return i;
           }
         }
         return -1;
       },
       getFocusedTabIndex: () => {
-        const tabElements = this.getTabElements_();
+        const tabElements = getTabElements_();
         const activeElement = document.activeElement;
         return tabElements.indexOf(activeElement);
       },
       getIndexOfTabById: id => {
-        for (let i = 0; i < this.tabList.length; i++) {
-          if (this.tabList[i].id === id) {
+        for (let i = 0; i < tabList.value.length; i++) {
+          if (tabList.value[i].id === id) {
             return i;
           }
         }
         return -1;
       },
-      getTabListLength: () => this.tabList.length,
+      getTabListLength: () => tabList.value.length,
       notifyTabActivated: index => {
         emitCustomEvent(
-          this.$el,
-          MDCTabBarFoundation.strings.TAB_ACTIVATED_EVENT,
+          root.value,
+          strings.TAB_ACTIVATED_EVENT,
           { index },
           true,
         );
 
-        this.$emit('change', index);
+        emit('change', Number(index));
       },
-    });
-    this.foundation.init();
-    // ensure active tab
-    this.foundation.activateTab(this.activeTabIndex || 0);
-  },
-  beforeDestroy() {
-    this.foundation.destroy();
-  },
-  computed: {
-    listeners() {
-      return {
-        ...this.$listeners,
-        'MDCTab:interacted': event => this.handleInteraction(event),
-        // eslint-disable-next-line quote-props
-        keydown: event => this.handleKeyDown(event),
-      };
-    },
-  },
-  methods: {
-    handleInteraction(evt) {
-      this.foundation.handleTabInteraction(evt);
-    },
+    };
 
-    handleKeyDown(evt) {
-      this.foundation.handleKeyDown(evt);
-    },
-  },
-  render(createElement) {
-    const { $scopedSlots: scopedSlots } = this;
-    return createElement(
-      'div',
-      { class: this.classes, on: this.listeners, attrs: { role: 'tablist' } },
-      [
-        createElement(
-          'mdc-tab-scroller',
-          {
-            ref: 'scroller',
-          },
-          scopedSlots.default && scopedSlots.default(),
-        ),
-      ],
-    );
+    onMounted(() => {
+      foundation = foundation = new MDCTabBarFoundation(adapter);
+      foundation.init();
+
+      // ensure active tab
+      props.value !== void 0;
+      foundation.activateTab(Number(props.value) || 0);
+
+      for (let i = 0; i < tabList.value.length; i++) {
+        if (tabList.value[i].active) {
+          foundation.scrollIntoView(i);
+          break;
+        }
+      }
+
+      watchEffect(() => {
+        foundation.activateTab(Number(props.value));
+      });
+    });
+
+    onBeforeUnmount(() => {
+      foundation.destroy();
+    });
+
+    return { root, scroller, listeners, activateTab };
   },
 };

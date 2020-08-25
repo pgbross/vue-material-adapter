@@ -1,1 +1,1 @@
-export { RippleBase, RippleElement, RippleMixin } from './ripple-base.js';
+export { useRipplePlugin, RippleElement } from './ripple-plugin.js';

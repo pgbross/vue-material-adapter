@@ -1,6 +1,8 @@
-> This Guide assumes you are familiar with [Vue.js](https://vuejs.org/v2/guide/index.html)
-> components and plugin system.  
-> Vue.js version `^2.6` is required as a peer dependency.  
+This Guide assumes you are familiar with [Vue.js](https://vuejs.org/v2/guide/index.html)
+components and plugin system.  
+`Vue.js` 2.6 or greater and `@vue/composition-api` 1.0 or greater are required as peer dependencies.
+
+> Note: Applications must install `Vue.use(VueCompositionApi)` but have no requirement to use the composition style of programming.
 > Material Components Web are not bundled and need to be installed.  
 > Material Icons and Fonts are not bundled and need to be fetched.
 
@@ -8,7 +10,7 @@
 
 #### Examples
 
-There are now examples of using `vue-material-adapter` both as a `basic-global` and a `basic-webpack` project [examples](https://github.com/pgbross/vue-material-adapter/tree/master/examples).
+There are examples of using `vue-material-adapter` both as a `basic-vue-cli` and a `basic-webpack` project [examples](https://github.com/pgbross/vue-material-adapter/tree/master/examples).
 
 #### Playground
 
@@ -16,110 +18,32 @@ See demo in the source distribution for examples of how vue-material-adapter can
 
 ## Getting Serious
 
-### UMD Distribution
+The distribution comes in a tree-shakeable ES (ESM) as well as the older AMD/CJS variants.
 
-Install via npm:
+#### Standalone plugin
 
-```bash
-npm install vue-material-adapter
-```
-
-The UMD distribution is also available through CDN at
-[unpkg.com/vue-material-adapter/dist](https://unpkg.com/vue-material-adapter/dist/)
-or [cdn.jsdelivr.net/npm/vue-material-adapter/dist](https://cdn.jsdelivr.net/npm/vue-material-adapter@latest/dist/)
-
-The distribution comes in two flavors:
-
-#### standalone plugin
-
-| distribution                      | env        | description               |
-| --------------------------------- | ---------- | ------------------------- |
-| dist/vue-material-adapter.min.js  | production | minified plugin (ES5)     |
-| dist/vue-material-adapter.min.css | production | minified stylesheet (CSS) |
-
-#### _a la carte_ plugins
-
-| distribution                   | env        | description               |
-| ------------------------------ | ---------- | ------------------------- |
-| dist/[plugin]/[plugin].min.js  | production | minified plugin (ES5)     |
-| dist/[plugin]/[plugin].min.css | production | minified stylesheet (CCS) |
-
-#### Using the CDN
-
-```html
-<head>
-  <!-- import reset and material stylesheets -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css"
-  />
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/icon?family=Material+Icons"
-  />
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
-    type="text/css"
-  />
-
-  <!-- import vue and then vue-material-adapter -->
-  <script src="https://unpkg.com/vue"></script>
-  <script src="https://unpkg.com/vue-material-adapter"></script>
-</head>
-<body>
-  <body></body>
-</body>
-```
-
-> You may want to use the split distribution and freeze the version used:
-
-```html
-<head>
-  <!-- import reset and material stylesheets -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css"
-  />
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/icon?family=Material+Icons"
-  />
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
-    type="text/css"
-  />
-
-  <!-- import vue-material-adapter stylesheet -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/vue-material-adapter@^0.6.0/dist/vue-material-adapter.min.css"
-    type="text/css"
-  />
-
-  <!-- import vue and then vue-material-adapter -->
-  <script src="https://unpkg.com/vue@^2.5.9/dist/vue.min.js"></script>
-  <script src="https://unpkg.com/vue-material-adapter@^0.6.0/dist/vue-material-adapter.min.js"></script>
-</head>
-```
+| distribution                         | env        | description                |
+| ------------------------------------ | ---------- | -------------------------- |
+| dist/vue-material-adapter.amd.min.js | production | minified plugin (AMD)      |
+| dist/vue-material-adapter.cjs.min.js | production | minified plugin (CommonJS) |
+| dist/vue-material-adapter.esm.js     | production | tree shakeable ES(ESM)     |
 
 ## Webpack/Rollup
 
 ### ESM Distribution
 
 > The following guide assumes you have a valid Vue.js/Webpack config.
-> refer to [vuejs-templates/webpack](https://github.com/vuejs-templates/webpack) for more.
+> refer to [vuejs-templates/webpack](https://github.com/vuejs-templates/webpack) for more info.
 
 | module                      | type |
 | --------------------------- | ---- |
-| vue-material-adapter        | ESM  |
-| vue-material-adapter/styles | SASS |
+| vue-material-adapter.esm.js | ESM  |
 
-#### install vue, vue-material-adapter and eventually vue-router
+#### Install vue, @vue/composition-api, vue-material-adapter (and eventually vue-router).
 
 ```bash
 npm install vue
+npm install @vue/composition-api
 npm install vue-router # optional
 npm install vue-material-adapter
 ```
@@ -130,10 +54,6 @@ npm install vue-material-adapter
 <!-- index.html template -->
 <head>
   <!-- import reset material icons, fonts and vue-material-adapter stylesheets -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css"
-  />
   <link
     rel="stylesheet"
     href="https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -151,22 +71,6 @@ npm install vue-material-adapter
   <div id="app"></div>
   <!-- built files will be auto injected -->
 </body>
-```
-
-#### import _standalone_ plugin
-
-```javascript
-import Vue from 'vue';
-import VueMaterialAdapter from 'vue-material-adapter';
-Vue.use(VueMaterialAdapter);
-```
-
-#### import _a la carte_ plugins
-
-```javascript
-import Vue from 'vue';
-import mcwButton from '@mcwv/button/index.js';
-Vue.use(mcwButton);
 ```
 
 ### Create your own SASS Theme
@@ -243,26 +147,4 @@ import `./theme.scss`
 import Vue from 'vue'
 import VueMaterialAdapter from 'vue-material-adapter'
 Vue.use(VueMaterialAdapter)
-```
-
-#### or cherry pick _a la carte_ plugins
-
-```scss
-/* theme.scss */
-$mdc-theme-primary: #212121;
-$mdc-theme-accent: #41b883;
-$mdc-theme-background: #fff;
-
-@import '@mcwv/button/index.scss';
-@import '@mcwv/fab/index.scss';
-```
-
-```javascript
-// main.js
-import `./theme.scss`
-import Vue from 'vue'
-import mcwButton from '@mcwv/button/index.js'
-import mcwFAB from '@mcwv/fab/index.js'
-Vue.use(mcwButton)
-Vue.use(mcwFAB)
 ```

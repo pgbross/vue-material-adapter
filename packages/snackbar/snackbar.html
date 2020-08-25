@@ -1,0 +1,29 @@
+<div :class="rootClasses">
+  <div class="mdc-snackbar__surface" @click="surfaceClickHandler">
+    <div ref="labelEl" class="mdc-snackbar__label" role="status" aria-live="polite">
+      <template v-if="showMessage">{{message}}</template>
+      <span style="display: inline-block; width: 0; height: '1px';" v-else>&nbsp;</span>
+    </div>
+    <div class="mdc-snackbar__actions">
+      <button
+        ref="actionEl"
+        type="button"
+        v-on="$listeners"
+        class="mdc-button mdc-snackbar__action"
+        v-if="actionText"
+      >
+        <div class="mdc-button__ripple"></div>
+        <span class="mdc-button__label">{{actionText}}</span>
+      </button>
+
+      <button
+        type="button"
+        class="mdc-icon-button mdc-snackbar__dismiss material-icons"
+        title="Dismiss"
+        v-if="showDismissAction"
+      >
+        close
+      </button>
+    </div>
+  </div>
+</div>

@@ -15,23 +15,22 @@
 </mcw-icon-button>
 ```
 
-### events
+### Props
 
-| event                         | args            | Description       |
-| ----------------------------- | --------------- | ----------------- |
-| `@change`                     |                 | emitted on click  |
-| `@MDCIconButtonToggle:change` | {isOn: Boolean} | emitted on change |
+| prop       | Type    | Default | Description                         |
+| ---------- | ------- | ------- | ----------------------------------- |
+| `isOn`     | Boolean | false   | Model value for icon-toggle variant |
+| `disabled` | Boolean | false   | Disables button if true             |
 
-### props
+> If there is an `href` attribute, element is rendered as anchor, else button.
 
-| prop       | Type    | Default | Description                                             |
-| ---------- | ------- | ------- | ------------------------------------------------------- |
-| `isOn`     | Boolean | false   | Model value for icon-toggle variant                     |
-| `href`     | String  |         | Changes root element to an anchor tag (default button). |
-| `disabled` | Boolean | false   | Disables button if true                                 |
+### Events
 
-> Note: Icon buttons that use the <a> tag cannot be disabled. Disabled icon buttons cannot be interacted with and have no visual interaction effect.
+| event                         | args            | Description |
+| ----------------------------- | --------------- | ----------- |
+| `@change`                     |                 | On click    |
+| `@MDCIconButtonToggle:change` | {isOn: Boolean} | On change   |
 
 ### Reference
 
-- <https://material.io/components/web/catalog/icon-button>
+- <https://github.com/material-components/material-components-web/tree/master/packages/mdc-icon-button>

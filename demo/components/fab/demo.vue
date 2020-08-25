@@ -1,7 +1,7 @@
 <template>
   <div class="mcw-demo mcw-demo--container fab-demo">
     <div>
-      <mcw-fab icon="favorite" />
+      <mcw-fab icon="favorite" @click="onClick" />
       <mcw-fab mini icon="favorite" />
       <mcw-fab icon="favorite" label="wiffle" />
       <mcw-fab>
@@ -16,6 +16,16 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    onClick() {
+      console.log('onClick');
+    },
+  },
+};
+</script>
 
 <style scoped>
 @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');

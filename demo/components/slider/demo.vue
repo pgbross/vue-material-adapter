@@ -1,22 +1,20 @@
 <template>
   <div class="mcw-demo mcw-demo--container">
     <div class="slider-demo">
-      <p>
-        <mcw-caption>Continuous</mcw-caption>
-      </p>
-      <mcw-slider v-model="sliderValue1" max="10"/>
-      <p>
-        <mcw-caption>Continuous Rtl</mcw-caption>
-      </p>
-      <mcw-slider v-model="sliderValue1" max="10" dir="rtl"/>
-      <p>
-        <mcw-caption>Discrete</mcw-caption>
-      </p>
-      <mcw-slider v-model="sliderValue1" discrete max="10"/>
-      <p>
-        <mcw-caption>Discreete with markers</mcw-caption>
-      </p>
-      <mcw-slider v-model="sliderValue2" discrete step="2" max="10" display-markers/>
+      <div class="mdc-typography--caption">Continuous</div>
+      <mcw-slider v-model="sliderValue1" max="10" />
+      <div class="mdc-typography--caption">Continuous Rtl</div>
+      <mcw-slider v-model="sliderValue1" max="10" dir="rtl" />
+      <div class="mdc-typography--caption">Discrete</div>
+      <mcw-slider v-model="sliderValue1" discrete max="10" />
+      <div class="mdc-typography--caption">Discreete with markers</div>
+      <mcw-slider
+        v-model="sliderValue2"
+        discrete
+        step="2"
+        max="10"
+        display-markers
+      />
     </div>
   </div>
 </template>

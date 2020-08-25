@@ -1,58 +1,188 @@
-import { MDCDataTableFoundation } from '@material/data-table/foundation';
 import { MDCCheckbox } from '@material/checkbox';
 import * as test from '@material/data-table';
+import { MDCDataTableFoundation } from '@material/data-table/foundation';
 import { closest } from '@material/dom/ponyfill';
+import {
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  toRefs,
+} from '@vue/composition-api';
+import { CheckboxAdapter } from './checkbox-adapter';
 
 export default {
   name: 'mcw-data-table',
-  data() {
-    return {};
-  },
-  methods: {
-    getRows() {
-      return this.foundation.getRows();
-    },
-    layout() {
-      this.foundation.layout();
-    },
-    getRowByIndex_(index) {
-      return this.getRows()[index];
-    },
+  props: { sticky: { type: Boolean } },
+  setup(props, { emit }) {
+    const uiState = reactive({
+      classes: { 'mdc-data-table--sticky-header': props.sticky },
+      root: null,
+    });
 
-    getRowIdByIndex_(index) {
-      return this.getRowByIndex_(index).getAttribute(
-        test.strings.DATA_ROW_ID_ATTR,
+    const checkboxFactory = el => {
+      return el.__vue__ ? new CheckboxAdapter(el.__vue__) : new MDCCheckbox(el);
+    };
+
+    const {
+      cssClasses,
+      events,
+      selectors,
+      dataAttributes,
+      SortValue,
+      messages,
+    } = test;
+
+    let foundation;
+    let headerRow;
+    let rowCheckboxList;
+    let content;
+    let headerRowCheckbox;
+    let handleHeaderRowCheckboxChange;
+    let handleRowCheckboxChange;
+    let headerRowClickListener;
+
+    const getRows = () => {
+      return foundation.getRows();
+    };
+
+    const layout = () => {
+      foundation.layout();
+    };
+
+    const getHeaderCells = () => {
+      return [].slice.call(
+        uiState.root.querySelectorAll(selectors.HEADER_CELL),
       );
-    },
-  },
-  mounted() {
-    this.checkboxFactory_ = el => new MDCCheckbox(el);
+    };
 
-    const { cssClasses, events, strings } = test;
+    const getRowByIndex_ = index => {
+      return getRows()[index];
+    };
+
+    const getRowIdByIndex_ = index => {
+      return getRowByIndex_(index).getAttribute(dataAttributes.ROW_ID);
+    };
+
+    const getSelectedRowIds = () => {
+      return foundation.getSelectedRowIds();
+    };
+
+    const getSortStatusMessageBySortValue = sortValue => {
+      switch (sortValue) {
+        case SortValue.ASCENDING:
+          return messages.SORTED_IN_ASCENDING;
+        case SortValue.DESCENDING:
+          return messages.SORTED_IN_DESCENDING;
+        default:
+          return '';
+      }
+    };
+
+    const handleHeaderRowClick = event => {
+      const headerCell = closest(event.target, selectors.HEADER_CELL_WITH_SORT);
+
+      if (!headerCell) {
+        return;
+      }
+
+      const columnId = headerCell.getAttribute(dataAttributes.COLUMN_ID);
+      const columnIndex = getHeaderCells().indexOf(headerCell);
+      if (columnIndex === -1) {
+        return;
+      }
+
+      foundation.handleSortAction({ columnId, columnIndex, headerCell });
+    };
+
     const adapter = {
+      addClass: className =>
+        (uiState.classes = { ...uiState.classes, [className]: true }),
+      removeClass: className => {
+        // eslint-disable-next-line no-unused-vars
+        const { [className]: removed, ...rest } = uiState.classes;
+        uiState.classes = rest;
+      },
+      getHeaderCellElements: () => getHeaderCells(),
+      getHeaderCellCount: () => getHeaderCells().length,
+
+      getAttributeByHeaderCellIndex: (index, attribute) => {
+        return getHeaderCells()[index].getAttribute(attribute);
+      },
+      setAttributeByHeaderCellIndex: (index, attribute, value) => {
+        getHeaderCells()[index].setAttribute(attribute, value);
+      },
+
+      setClassNameByHeaderCellIndex: (index, className) => {
+        getHeaderCells()[index].classList.add(className);
+      },
+      removeClassNameByHeaderCellIndex: (index, className) => {
+        getHeaderCells()[index].classList.remove(className);
+      },
+
+      notifySortAction: data => {
+        emit(
+          events.SORTED,
+          {
+            data,
+          },
+          true,
+        );
+      },
+      getTableContainerHeight: () => {
+        const tableContainer = uiState.root
+          .querySelector`.${cssClasses.CONTAINER}`;
+
+        if (!tableContainer) {
+          throw new Error('MDCDataTable: Table container element not found.');
+        }
+
+        return tableContainer.getBoundingClientRect().height;
+      },
+      getTableHeaderHeight: () => {
+        const tableHeader = uiState.root.querySelector(selectors.HEADER_ROW);
+
+        if (!tableHeader) {
+          throw new Error('MDCDataTable: Table header element not found.');
+        }
+
+        return tableHeader.getBoundingClientRect().height;
+      },
+      setProgressIndicatorStyles: styles => {
+        const progressIndicator = uiState.root.querySelector(
+          selectors.PROGRESS_INDICATOR,
+        );
+        if (!progressIndicator) {
+          throw new Error(
+            'MDCDataTable: Progress indicator element not found.',
+          );
+        }
+
+        Object.assign(progressIndicator.style, styles);
+      },
+
       addClassAtRowIndex: (rowIndex, className) =>
-        this.getRows()[rowIndex].classList.add(className),
-      getRowCount: () => this.getRows().length,
+        getRows()[rowIndex].classList.add(className),
+      getRowCount: () => getRows().length,
       getRowElements: () =>
-        [].slice.call(this.$el.querySelectorAll(strings.ROW_SELECTOR)),
+        [].slice.call(uiState.root.querySelectorAll(selectors.ROW)),
       getRowIdAtIndex: rowIndex =>
-        this.getRows()[rowIndex].getAttribute(strings.DATA_ROW_ID_ATTR),
+        getRows()[rowIndex].getAttribute(dataAttributes.ROW_ID),
       getRowIndexByChildElement: el => {
-        return this.getRows().indexOf(closest(el, strings.ROW_SELECTOR));
+        return getRows().indexOf(closest(el, selectors.ROW));
       },
       getSelectedRowCount: () =>
-        this.$el.querySelectorAll(strings.ROW_SELECTED_SELECTOR).length,
+        uiState.root.querySelectorAll(selectors.ROW_SELECTED).length,
       isCheckboxAtRowIndexChecked: rowIndex =>
-        this.rowCheckboxList_[rowIndex].checked,
-      isHeaderRowCheckboxChecked: () => this.headerRowCheckbox_.checked,
+        rowCheckboxList[rowIndex].checked,
+      isHeaderRowCheckboxChecked: () => headerRowCheckbox.checked,
       isRowsSelectable: () =>
-        !!this.$el.querySelector(strings.ROW_CHECKBOX_SELECTOR),
+        !!uiState.root.querySelector(selectors.ROW_CHECKBOX),
       notifyRowSelectionChanged: data => {
-        this.$emit(
+        emit(
           events.ROW_SELECTION_CHANGED,
           {
-            row: this.getRowByIndex_(data.rowIndex),
-            rowId: this.getRowIdByIndex_(data.rowIndex),
+            row: getRowByIndex_(data.rowIndex),
+            rowId: getRowIdByIndex_(data.rowIndex),
             rowIndex: data.rowIndex,
             selected: data.selected,
           },
@@ -60,82 +190,98 @@ export default {
         );
       },
       notifySelectedAll: () =>
-        this.$emit(events.SELECTED_ALL, {}, /** shouldBubble */ true),
+        emit(events.SELECTED_ALL, {}, /** shouldBubble */ true),
       notifyUnselectedAll: () =>
-        this.$emit(events.UNSELECTED_ALL, {}, /** shouldBubble */ true),
+        emit(events.UNSELECTED_ALL, {}, /** shouldBubble */ true),
       registerHeaderRowCheckbox: () => {
-        if (this.headerRowCheckbox_) {
-          this.headerRowCheckbox_.destroy();
-        }
+        headerRowCheckbox?.destroy();
 
-        const checkboxEl = this.$el.querySelector(
-          strings.HEADER_ROW_CHECKBOX_SELECTOR,
+        const checkboxEl = uiState.root.querySelector(
+          selectors.HEADER_ROW_CHECKBOX,
         );
-        this.headerRowCheckbox_ = this.checkboxFactory_(checkboxEl);
+        headerRowCheckbox = checkboxFactory(checkboxEl);
       },
       registerRowCheckboxes: () => {
-        if (this.rowCheckboxList_) {
-          this.rowCheckboxList_.forEach(checkbox => checkbox.destroy());
+        if (rowCheckboxList) {
+          rowCheckboxList.forEach(checkbox => checkbox.destroy());
         }
 
-        this.rowCheckboxList_ = [];
-        this.getRows().forEach(rowEl => {
-          const checkbox = this.checkboxFactory_(
-            rowEl.querySelector(strings.ROW_CHECKBOX_SELECTOR),
-          );
-          this.rowCheckboxList_.push(checkbox);
+        rowCheckboxList = [];
+        getRows().forEach(rowEl => {
+          const el = rowEl.querySelector(selectors.ROW_CHECKBOX);
+          const checkbox = checkboxFactory(el);
+
+          rowCheckboxList.push(checkbox);
         });
       },
       removeClassAtRowIndex: (rowIndex, className) => {
-        this.getRows()[rowIndex].classList.remove(className);
+        getRows()[rowIndex].classList.remove(className);
       },
       setAttributeAtRowIndex: (rowIndex, attr, value) => {
-        this.getRows()[rowIndex].setAttribute(attr, value);
+        getRows()[rowIndex].setAttribute(attr, value);
       },
-      setHeaderRowCheckboxChecked: checked => {
-        this.headerRowCheckbox_.checked = checked;
-      },
-      setHeaderRowCheckboxIndeterminate: indeterminate => {
-        this.headerRowCheckbox_.indeterminate = indeterminate;
-      },
-      setRowCheckboxCheckedAtIndex: (rowIndex, checked) => {
-        this.rowCheckboxList_[rowIndex].checked = checked;
+      setHeaderRowCheckboxChecked: checked =>
+        (headerRowCheckbox.checked = checked),
+      setHeaderRowCheckboxIndeterminate: indeterminate =>
+        (headerRowCheckbox.indeterminate = indeterminate),
+      setRowCheckboxCheckedAtIndex: (rowIndex, checked) =>
+        (rowCheckboxList[rowIndex].checked = checked),
+      setSortStatusLabelByHeaderCellIndex: (columnIndex, sortValue) => {
+        const headerCell = getHeaderCells()[columnIndex];
+        const sortStatusLabel = headerCell.querySelector(
+          selectors.SORT_STATUS_LABEL,
+        );
+
+        if (!sortStatusLabel) {
+          return;
+        }
+
+        sortStatusLabel.textContent = getSortStatusMessageBySortValue(
+          sortValue,
+        );
       },
     };
 
-    this.foundation = new MDCDataTableFoundation(adapter);
-    this.foundation.init();
+    onMounted(() => {
+      headerRow = uiState.root.querySelector(`.${cssClasses.HEADER_ROW}`);
 
-    this.headerRow_ = this.$el.querySelector(`.${cssClasses.HEADER_ROW}`);
+      handleHeaderRowCheckboxChange = () =>
+        foundation.handleHeaderRowCheckboxChange();
 
-    this.handleHeaderRowCheckboxChange_ = () =>
-      this.foundation.handleHeaderRowCheckboxChange();
+      headerRow.addEventListener('change', handleHeaderRowCheckboxChange);
 
-    this.headerRow_.addEventListener(
-      'change',
-      this.handleHeaderRowCheckboxChange_,
-    );
+      headerRowClickListener = event => {
+        handleHeaderRowClick(event);
+      };
 
-    this.content_ = this.$el.querySelector(`.${cssClasses.CONTENT}`);
-    this.handleRowCheckboxChange_ = event =>
-      this.foundation.handleRowCheckboxChange(event);
-    this.content_.addEventListener('change', this.handleRowCheckboxChange_);
+      headerRow.addEventListener('click', headerRowClickListener);
 
-    this.layout();
-  },
-  beforeDestroy() {
-    this.headerRow_.removeEventListener(
-      'change',
-      this.handleHeaderRowCheckboxChange_,
-    );
-    this.content_.removeEventListener('change', this.handleRowCheckboxChange_);
+      content = uiState.root.querySelector(`.${cssClasses.CONTENT}`);
 
-    if (this.headerRowCheckbox_) {
-      this.headerRowCheckbox_.destroy();
-    }
-    if (this.rowCheckboxList_) {
-      this.rowCheckboxList_.forEach(checkbox => checkbox.destroy());
-    }
-    this.foundation.destroy();
+      handleRowCheckboxChange = event =>
+        foundation.handleRowCheckboxChange(event);
+
+      content.addEventListener('change', handleRowCheckboxChange);
+
+      foundation = new MDCDataTableFoundation(adapter);
+      foundation.init();
+
+      layout();
+    });
+
+    onBeforeUnmount(() => {
+      headerRow.removeEventListener('change', handleHeaderRowCheckboxChange);
+      headerRow.removeEventListener('click', headerRowClickListener);
+
+      content.removeEventListener('change', handleRowCheckboxChange);
+
+      headerRowCheckbox?.destroy?.();
+      rowCheckboxList?.forEach(checkbox => {
+        checkbox.destroy?.();
+      });
+      foundation.destroy();
+    });
+
+    return { ...toRefs(uiState), getSelectedRowIds, layout };
   },
 };

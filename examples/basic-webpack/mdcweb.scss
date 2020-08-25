@@ -1,7 +1,22 @@
 @use '@material/theme'  with (
-  $primary: #312782,
-  $on-primary: white,
+    $primary: #be6c35,
+    $on-primary: white,
 );
 
-@use '@material/button/mdc-button';
-@use '@material/snackbar/mdc-snackbar';
+@use '@material/shape' with (
+  $small-component-radius: 8px,
+  $medium-component-radius: 16px,
+);
+
+@use '@material/button' with (
+  $height: 48px
+);
+
+@use '@material/icon-button';
+@use '@material/snackbar';
+
+@include button.core-styles;
+@include icon-button.core-styles;
+
+@include snackbar.core-styles;
+@include snackbar.fill-color(#542d11);

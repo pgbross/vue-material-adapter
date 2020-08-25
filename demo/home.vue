@@ -1,7 +1,7 @@
 <template>
   <div class="demo-home">
-    <mcw-headline4 ref="title">{{ title }}</mcw-headline4>
-    <about class="markdown"/>
+    <div ref="title" class="mdc-typography--headline4">{{ title }}</div>
+    <about class="markdown" />
   </div>
 </template>
 

@@ -1,56 +1,64 @@
 ## Usage
 
 ```html
-<mcw-tab-bar @change="onSelected">
-  <mcw-tab>item one</mcw-tab>
-  <mcw-tab>item two</mcw-tab>
-  <mcw-tab>item three</mcw-tab>
+<mcw-tab-bar active-tab-index="1" @change="onSelected">
+  <mcw-tab v-for="item in filteredItems" :key="item.label">{{ item }}</mcw-tab>
 </mcw-tab-bar>
 ```
 
 ```javascript
 var vm = new Vue({
+  data() {
+    const items = [
+      'item one',
+      'item two',
+      'item three',
+      'item four',
+      'item five',
+      'item six',
+      'item seven',
+    ];
+    return {
+      selectedItem: items[0],
+      items,
+    };
+  },
+  computed: {
+    filteredItems() {
+      return this.items.slice(0, 3);
+    },
+  },
   methods: {
     onSelected(idx) {
-      console.log(`selected index: ${idx}`);
+      this.selectedItem = this.items[idx];
     },
+  },
   },
 });
 ```
 
-### props
+### `mcw-tab-bar`
 
-#### mcw-tab
+#### Props
 
-mcw-tab behaves as a navigational link. Add an `href` for simple link behavior
-or the `to` property for router-link behavior. mcw-tab dispatches `@click` event.
+`mcw-tab` behaves as a navigational link. Add an `href` for simple link behavior
+or the `to` property for router-link behavior. `mcw-tab` dispatches `@click` event.
 
-| prop                 | Type           | Default                  | Description                                 |
-| -------------------- | -------------- | ------------------------ | ------------------------------------------- |
-| `active`             | Boolean        | false                    | set the tab active                          |
-| `event`              | String         | optional                 | optional event to emit on click             |
-| `event-target`       | Object         | vm.\$root                | optional event target, defaults to root bus |
-| `event-args`         | Array          | []                       | optional event args                         |
-| `to`                 | String, Object | undefined                | router-link property _(\*)_                 |
-| `replace`            | Boolean        | false                    | router-link property _(\*)_                 |
-| `append`             | Boolean        | false                    | router-link property _(\*)_                 |
-| `exact`              | Boolean        | false                    | router-link property _(\*)_                 |
-| `active-class`       | String         | router-link-active       | router-link property _(\*)_                 |
-| `exact-active-class` | String         | router-link-exact-active | router-link property _(\*)_                 |
+| prop             | Type    | Default | Description                                                        |
+| ---------------- | ------- | ------- | ------------------------------------------------------------------ |
+| `activeTabIndex` | Number  |         | set the tab active                                                 |
+| `fade`           | Boolean | false   | Use fade transition, else slide                                    |
+| `stacked`        | Boolean | false   | Tab icon and label should flow vertically instead of horizontally. |
+| `spanContent`    | Boolean | false   | Tab indicator will span only the content of the tab                |
 
-> _(\*)_ Requires [vue-router](https://router.vuejs.org)
-> If the `to` property is defined, the item behaves as a
-> [router-link](https://router.vuejs.org/en/api/router-link.html)
+#### Events
 
-#### mcw-tab-bar
+| props                 | args   | Description                   |
+| --------------------- | ------ | ----------------------------- |
+| `MDCTabBar:activated` | number | Native event on index update. |
+| `@change`             | number | On active index update.       |
 
-### events
-
-| props     | args   | Description                                          |
-| --------- | ------ | ---------------------------------------------------- |
-| `@change` | number | notify listeners with the active index as parameter. |
-
-### Tabs with icons
+#### Tabs with icons
 
 ```html
 <mcw-tab-bar>
@@ -62,7 +70,7 @@ or the `to` property for router-link behavior. mcw-tab dispatches `@click` event
 
 > use `icon` slot for custom icon markup
 
-### Tabs with icons and text
+#### Tabs with icons and text
 
 ```html
 <mcw-tab-bar>
@@ -71,6 +79,25 @@ or the `to` property for router-link behavior. mcw-tab dispatches `@click` event
   <mcw-tab icon="personal_pin">Nearby</mcw-tab>
 </mcw-tab-bar>
 ```
+
+### `mcw-tab`
+
+#### Props
+
+`mcw-tab` behaves as a navigational link. Add an `href` for simple link behavior
+or the `to` property for router-link behavior. `mcw-tab` dispatches `@click` event.
+
+| prop                 | Type           | Default                  | Description                 |
+| -------------------- | -------------- | ------------------------ | --------------------------- |
+| `active`             | Boolean        | false                    | set the tab active          |
+| `to`                 | String, Object | undefined                | router-link property _(\*)_ |
+| `replace`            | Boolean        | false                    | router-link property _(\*)_ |
+| `append`             | Boolean        | false                    | router-link property _(\*)_ |
+| `exact`              | Boolean        | false                    | router-link property _(\*)_ |
+| `active-class`       | String         | router-link-active       | router-link property _(\*)_ |
+| `exact-active-class` | String         | router-link-exact-active | router-link property _(\*)_ |
+
+> _(\*)_ Requires [vue-router](https://router.vuejs.org)
 
 ### reference
 

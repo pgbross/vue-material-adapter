@@ -1,3 +1,5 @@
+import { h } from '@vue/composition-api';
+
 export default {
   name: 'mcw-dialog-content',
   props: {
@@ -9,15 +11,15 @@ export default {
     },
   },
 
-  render(createElement, context) {
-    const { $scopedSlots: slots, tag } = this;
-
-    return createElement(
-      tag,
-      {
-        class: ['mdc-dialog__content'],
-      },
-      slots.default?.(),
-    );
+  setup(props, { slots }) {
+    return () => {
+      return h(
+        props.tag,
+        {
+          class: ['mdc-dialog__content'],
+        },
+        slots.default?.(),
+      );
+    };
   },
 };

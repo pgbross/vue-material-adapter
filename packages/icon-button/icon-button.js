@@ -1,6 +1,14 @@
-/* eslint-disable quote-props */
 import { MDCIconButtonToggleFoundation } from '@material/icon-button/foundation';
-import { RippleBase } from '~/ripple/index.js';
+import {
+  computed,
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  ref,
+  toRefs,
+  watch,
+} from '@vue/composition-api';
+import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 
 export default {
   name: 'mcw-icon-button',
@@ -12,73 +20,74 @@ export default {
     isOn: Boolean,
     disabled: Boolean,
   },
-  data() {
-    return {
+
+  setup(props, { emit, attrs, refs, slots }) {
+    const uiState = reactive({
       classes: {
         'mdc-icon-button': 1,
         'material-icons': 1,
       },
-      styles: {},
-    };
-  },
+    });
 
-  watch: {
-    isOn: 'onOn_',
-  },
-
-  mounted() {
+    const root = ref(null);
     const { CHANGE_EVENT } = MDCIconButtonToggleFoundation.strings;
-    const adapter = {
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      hasClass: className => Boolean(this.classes[className]),
-      setAttr: (attrName, attrValue) =>
-        this.$el.setAttribute(attrName, attrValue),
-      getAttr: attrName => this.$el.getAttribute(attrName),
-      notifyChange: evtData => {
-        this.$emit(CHANGE_EVENT, evtData);
-        this.$emit('change', evtData.isOn);
-      },
-    };
 
-    this.foundation = new MDCIconButtonToggleFoundation(adapter);
-    this.foundation.init();
-
-    this.ripple = new RippleBase(this, {
+    const { classes: rippleClasses, styles } = useRipplePlugin(root, {
       isUnbounded: () => true,
     });
-    this.ripple.init();
-    this.foundation.toggle(this.isOn);
-  },
 
-  beforeDestroy() {
-    this.ripple.destroy();
-    this.foundation.destroy();
-  },
-  methods: {
-    onOn_(isOn) {
-      if (this.isOn !== isOn) {
-        this.foundation.toggle(isOn);
-      }
-    },
-  },
-  render(createElement) {
-    const { $scopedSlots: scopedSlots } = this;
-    const isLink = Boolean(this.$attrs.href);
-    const tag = isLink ? 'a' : 'button';
-    return createElement(
-      tag,
-      {
-        class: this.classes,
-        style: this.styles,
-        on: { click: evt => this.foundation.handleClick(evt) },
-        attrs: {
-          ...this.$attrs,
-          'aria-pressed': 'false',
-          disabled: this.disabled,
-        },
+    let foundation;
+
+    const adapter = {
+      addClass: className =>
+        (uiState.classes = { ...uiState.classes, [className]: true }),
+      removeClass: className => {
+        // eslint-disable-next-line no-unused-vars
+        const { [className]: removed, ...rest } = uiState.classes;
+        uiState.classes = rest;
       },
-      scopedSlots.default?.(),
+      hasClass: className => Boolean(uiState.classes[className]),
+      setAttr: (attrName, attrValue) =>
+        refs.root.setAttribute(attrName, attrValue),
+      getAttr: attrName => refs.root.getAttribute(attrName),
+      notifyChange: evtData => {
+        emit(CHANGE_EVENT, evtData);
+        emit('change', evtData.isOn);
+      },
+    };
+
+    const classes = computed(() => {
+      return {
+        ...rippleClasses.value,
+        ...uiState.classes,
+      };
+    });
+
+    watch(
+      () => props.isOn,
+      nv => {
+        foundation.toggle(nv);
+      },
     );
+
+    const tag = computed(() => {
+      const isLink = Boolean(attrs.href);
+      return isLink ? 'a' : 'button';
+    });
+
+    const onClick = evt => foundation.handleClick(evt);
+
+    onMounted(() => {
+      foundation = new MDCIconButtonToggleFoundation(adapter);
+      foundation.init();
+
+      foundation.toggle(props.isOn);
+    });
+
+    onBeforeUnmount(() => {
+      foundation.destroy();
+    });
+
+    return { ...toRefs(uiState), classes, styles, root, tag, onClick };
   },
 };

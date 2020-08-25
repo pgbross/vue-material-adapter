@@ -1,10 +1,13 @@
 import Vue from 'vue';
+import VueCompositionApi from '@vue/composition-api';
 import VueMaterialAdapter from 'vue-material-adapter';
 import VueRouter from 'vue-router';
 import index from './index.vue';
 import './polyfill.js';
 import routes from './routes.js';
 import './styles';
+
+Vue.use(VueCompositionApi);
 
 Vue.config.productionTip = true;
 Vue.use(VueRouter);

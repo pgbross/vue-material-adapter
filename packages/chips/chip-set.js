@@ -1,14 +1,16 @@
 import { MDCChipSetFoundation } from '@material/chips/chip-set/foundation';
 import { MDCChipFoundation } from '@material/chips/chip/foundation';
 import { announce } from '@material/dom/announce';
+import {
+  computed,
+  onBeforeUnmount,
+  onMounted,
+  provide,
+  reactive,
+  toRefs,
+} from '@vue/composition-api';
 
-const {
-  INTERACTION_EVENT,
-  SELECTION_EVENT,
-  REMOVAL_EVENT,
-  NAVIGATION_EVENT,
-} = MDCChipFoundation.strings;
-
+const { strings } = MDCChipFoundation;
 const { CHIP_SELECTOR } = MDCChipSetFoundation.strings;
 
 let idCounter = 0;
@@ -20,125 +22,118 @@ export default {
     filter: [Boolean],
     input: [Boolean],
   },
-  provide() {
-    return { mcwChipSet: this };
-  },
-  data() {
-    return {
+
+  setup(props) {
+    const uiState = reactive({
       classes: {
         'mdc-chip-set': true,
-        'mdc-chip-set--choice': this.choice,
-        'mdc-chip-set--filter': this.filter,
-        'mdc-chip-set--input': this.input,
+        'mdc-chip-set--choice': props.choice,
+        'mdc-chip-set--filter': props.filter,
+        'mdc-chip-set--input': props.input,
       },
       listn: 0,
-    };
-  },
+      myListeners: null,
+      root: null,
+    });
 
-  computed: {
-    chipElements() {
+    let foundation;
+    let slotObserver;
+
+    const chipElements = computed(() => {
       // eslint-disable-next-line no-unused-vars
-      const xx = this.listn; // for dependency
+      const xx = uiState.listn; // for dependency
 
-      return [].slice.call(this.$el.querySelectorAll(CHIP_SELECTOR));
-    },
-    chips_() {
-      return this.chipElements.map(el => {
+      return [].slice.call(uiState.root.querySelectorAll(CHIP_SELECTOR));
+    });
+
+    const chips_ = computed(() => {
+      return chipElements.value.map(el => {
         el.id = el.id || `mdc-chip-${++idCounter}`;
 
         return el.__vue__;
       });
-    },
-  },
+    });
 
-  mounted() {
-    // do not delete this reference as it triggers initial chip list instantiation.
-    this.chips_;
-    this.foundation = new MDCChipSetFoundation({
+    const adapter = {
       announceMessage: message => {
         announce(message);
       },
       focusChipPrimaryActionAtIndex: index => {
-        const chip = this.chips_[index];
+        const chip = chips_.value[index];
 
         chip && chip.focusPrimaryAction();
       },
       focusChipTrailingActionAtIndex: index => {
-        const chip = this.chips_[index];
+        const chip = chips_.value[index];
         chip && chip.focusTrailingAction();
       },
       getChipListCount: () => {
-        return this.chips_.length;
+        return chips_.value.length;
       },
       getIndexOfChipById: chipId => {
-        return this.chips_.findIndex(({ id }) => id == chipId);
+        return chips_.value.findIndex(({ id }) => id == chipId);
       },
-      hasClass: className => this.$el.classList.contains(className),
+      hasClass: className => uiState.root.classList.contains(className),
       isRTL: () =>
-        window.getComputedStyle(this.$el).getPropertyValue('direction') ===
+        window.getComputedStyle(uiState.root).getPropertyValue('direction') ===
         'rtl',
       removeChipAtIndex: index => {
-        if (index >= 0 && index < this.chips_.length) {
+        if (index >= 0 && index < chips_.value.length) {
           // tell chip to remove itself from the DOM
-          this.chips_[index].remove();
-          this.chips_.splice(index, 1);
+          chips_.value[index].remove();
+          chips_.value.splice(index, 1);
         }
       },
 
       removeFocusFromChipAtIndex: index => {
-        this.chips_[index].removeFocus();
+        chips_.value[index].removeFocus();
       },
 
       selectChipAtIndex: (index, selected, shouldNotifyClients) => {
-        if (index >= 0 && index < this.chips_.length) {
-          this.chips_[index].setSelectedFromChipSet(
+        if (index >= 0 && index < chips_.value.length) {
+          chips_.value[index].setSelectedFromChipSet(
             selected,
             shouldNotifyClients,
           );
         }
       },
+    };
+
+    provide('mcwChipSet', { filter: props.filter, input: props.input });
+
+    onMounted(() => {
+      // trigger computed
+      chips_.value;
+      foundation = new MDCChipSetFoundation(adapter);
+      foundation.init();
+
+      (uiState.myListeners = {
+        [strings.INTERACTION_EVENT]: ({ detail }) =>
+          foundation.handleChipInteraction(detail),
+        [strings.SELECTION_EVENT]: ({ detail }) =>
+          foundation.handleChipSelection(detail),
+        [strings.REMOVAL_EVENT]: ({ detail }) =>
+          foundation.handleChipRemoval(detail),
+        [strings.NAVIGATION_EVENT]: ({ detail }) =>
+          foundation.handleChipNavigation(detail),
+      }),
+        // the chips could change outside of this component
+        // so use a mutation observer to trigger an update by
+        // incrementing the dependency variable "listn" referenced
+        // in the computed that selects the chip elements
+        (slotObserver = new MutationObserver((mutationList, observer) => {
+          uiState.listn++;
+        }));
+      slotObserver.observe(uiState.root, {
+        childList: true,
+        // subtree: true,
+      });
     });
 
-    this.foundation.init();
-
-    // the chips could change outside of this component
-    // so use a mutation observer to trigger an update by
-    // incrementing the dependency variable "listn" referenced
-    // in the computed that selects the chip elements
-    this.slotObserver = new MutationObserver((mutationList, observer) => {
-      this.listn++;
+    onBeforeUnmount(() => {
+      slotObserver.disconnect();
+      foundation.destroy();
     });
-    this.slotObserver.observe(this.$refs.listRoot, {
-      childList: true,
-      // subtree: true,
-    });
-  },
-
-  beforeDestroy() {
-    this.slotObserver.disconnect();
-    this.foundation.destroy();
-  },
-
-  render(createElement) {
-    const { $scopedSlots: scopedSlots } = this;
-    return createElement(
-      'div',
-      {
-        class: this.classes,
-        attrs: { role: 'grid' },
-        on: {
-          [INTERACTION_EVENT]: ({ detail }) =>
-            this.foundation.handleChipInteraction(detail),
-          [SELECTION_EVENT]: ({ detail }) =>
-            this.foundation.handleChipSelection(detail),
-          [REMOVAL_EVENT]: ({ detail }) =>
-            this.foundation.handleChipRemoval(detail),
-          [NAVIGATION_EVENT]: ({ detail }) =>
-            this.foundation.handleChipNavigation(detail),
-        },
-        ref: 'listRoot',
-      },
-      scopedSlots.default && scopedSlots.default(),
-    );
+    return { ...toRefs(uiState) };
   },
 };

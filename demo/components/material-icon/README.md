@@ -8,10 +8,10 @@
 
 ### props
 
-| props       | Type    | Default | Description                                                   |
-| ----------- | ------- | ------- | ------------------------------------------------------------- |
-| `icon`      | String  |         | Type of icon to be displayed                                  |
-| `hasRipple` | Boolean | false   | If present on element, it will enable the ripple on the icon. |
+| props  | Type   | Default | Description                  |
+| ------ | ------ | ------- | ---------------------------- |
+| `icon` | String |         | Type of icon to be displayed |
+| `tag`  | String | i       | Custom element type          |
 
 ### Reference -
 

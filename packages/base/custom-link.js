@@ -1,61 +1,59 @@
+import { h } from '@vue/composition-api';
+
 export const CustomLink = {
   name: 'custom-link',
-  functional: true,
   props: {
-    tag: { type: String, default: 'a' },
     link: Object,
+    tag: String,
   },
-  render(
-    createElement,
-    {
-      data,
-      children,
-      props: { link, tag },
-      parent: { $router, $root },
-    },
-  ) {
-    let element;
+  setup(props, { listeners, root: { $router }, slots }) {
+    return () => {
+      let element;
 
-    if (link && $router) {
-      // router-link case
-      element = $root.$options.components['RouterLink'];
-      data.props = { tag, ...link };
-      if (data.on.click) {
-        data.nativeOn = { click: data.on.click };
-      }
-    } else {
-      // element fallback
-      element = tag;
-    }
+      // destructure the props in the render function so we use the current value
+      // if their value has changed since we were created
+      const { link = {} } = props;
+      const {
+        tag,
+        to,
+        exact,
+        append,
+        replace,
+        activeClass,
+        exactActiveClass,
+        ...rest
+      } = link;
 
-    return createElement(element, data, children);
-  },
-};
+      const data = { attrs: rest, on: listeners };
 
-export const CustomLinkMixin = {
-  props: {
-    to: [String, Object],
-    exact: Boolean,
-    append: Boolean,
-    replace: Boolean,
-    activeClass: String,
-    exactActiveClass: String,
-  },
-  computed: {
-    link() {
-      return (
-        this.to && {
-          to: this.to,
-          exact: this.exact,
-          append: this.append,
-          replace: this.replace,
-          activeClass: this.activeClass,
-          exactActiveClass: this.exactActiveClass,
+      if (link.to && $router) {
+        element = 'router-link';
+
+        data.props = {
+          to,
+          tag: tag ?? props.tag,
+          replace,
+          append,
+          activeClass,
+          exactActiveClass,
+          exact,
+        };
+
+        // we add the native click so it can bubble and be detected in a menu/drawer
+        if (listeners.click) {
+          data.nativeOn = { click: listeners.click };
         }
-      );
-    },
-  },
-  components: {
-    CustomLink,
+      } else if (link.href) {
+        element = 'a';
+        data.attrs.role = 'button';
+      } else {
+        element = tag ?? props.tag ?? 'a';
+        if (element !== 'button') {
+          data.attrs.role = 'button';
+        }
+      }
+
+      return h(element, data, [slots.default?.()]);
+    };
   },
 };

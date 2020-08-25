@@ -1,10 +1,16 @@
-import { MDCSliderFoundation } from '@material/slider/foundation';
-import { DispatchFocusMixin } from '~/base/index.js';
 import { applyPassive } from '@material/dom/events';
+import { MDCSliderFoundation } from '@material/slider/foundation';
+import {
+  computed,
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  toRefs,
+  watch,
+} from '@vue/composition-api';
 
 export default {
   name: 'mcw-slider',
-  mixins: [DispatchFocusMixin],
   model: {
     prop: 'value',
     event: 'change',
@@ -20,16 +26,17 @@ export default {
     layoutOn: String,
     layoutOnSource: { type: Object, required: false },
   },
-  data() {
-    let stepSize = this.step;
-    if (this.discrete && !stepSize) {
+  setup(props, { emit, root: $root }) {
+    let stepSize = props.step;
+    if (props.discrete && !stepSize) {
       stepSize = 1;
     }
-    return {
+
+    const uiState = reactive({
       classes: {
         'mdc-slider': 1,
-        'mdc-slider--discrete': this.discrete,
-        'mdc-slider--display-markers': this.discrete && this.displayMarkers,
+        'mdc-slider--discrete': props.discrete,
+        'mdc-slider--display-markers': props.discrete && props.displayMarkers,
       },
       sliderAttrs: {},
       trackStyles: {},
@@ -39,63 +46,49 @@ export default {
       markerValue: '',
       numMarkers: 0,
       stepSize,
-    };
-  },
+      root: null,
+      thumbContainer: null,
+    });
 
-  computed: {
-    hasMarkers() {
-      return this.discrete && this.displayMarkers;
-    },
-  },
-  watch: {
-    value(nv) {
-      if (this.foundation.getValue() !== Number(nv)) {
-        this.foundation.setValue(nv);
-      }
-    },
-    min(nv) {
-      this.foundation.setMin(Number(nv));
-    },
-    max(nv) {
-      this.foundation.setMax(Number(nv));
-    },
-    step(nv) {
-      this.foundation.setStep(Number(nv));
-    },
-    disabled(nv) {
-      this.foundation.setDisabled(nv);
-    },
-  },
-  mounted() {
+    let foundation;
+    let layoutOnEventSource;
+
+    const hasMarkers = computed(() => {
+      return props.discrete && props.displayMarkers;
+    });
+
     const adapter = {
-      hasClass: className => this.$el.classList.contains(className),
-      addClass: className => {
-        this.$set(this.classes, className, true);
-      },
+      hasClass: className => uiState.root.classList.contains(className),
+      addClass: className =>
+        (uiState.classes = { ...uiState.classes, [className]: true }),
       removeClass: className => {
-        this.$delete(this.classes, className, true);
+        // eslint-disable-next-line no-unused-vars
+        const { [className]: removed, ...rest } = uiState.classes;
+        uiState.classes = rest;
       },
-      getAttribute: name => this.$el.getAttribute(name),
-      setAttribute: (name, value) => this.$set(this.sliderAttrs, name, value),
-      removeAttribute: name => this.$delete(this.sliderAttrs, name),
+      getAttribute: name => uiState.root.getAttribute(name),
+      setAttribute: (name, value) =>
+        (uiState.sliderAttrs = { ...uiState.sliderAttrs, [name]: value }),
 
-      computeBoundingRect: () => this.$el.getBoundingClientRect(),
-      getTabIndex: () => this.$el.tabIndex,
+      removeAttribute: name => {
+        // eslint-disable-next-line no-unused-vars
+        const { [name]: removed, ...rest } = uiState.sliderAttrs;
+        uiState.sliderAttrs = rest;
+      },
+
+      computeBoundingRect: () => uiState.root.getBoundingClientRect(),
+      getTabIndex: () => uiState.root.tabIndex,
       registerInteractionHandler: (type, handler) => {
-        this.$el.addEventListener(type, handler, applyPassive());
+        uiState.root.addEventListener(type, handler, applyPassive());
       },
       deregisterInteractionHandler: (type, handler) => {
-        this.$el.removeEventListener(type, handler, applyPassive());
+        uiState.root.removeEventListener(type, handler, applyPassive());
       },
       registerThumbContainerInteractionHandler: (type, handler) => {
-        this.$refs.thumbContainer.addEventListener(
-          type,
-          handler,
-          applyPassive(),
-        );
+        uiState.thumbContainer.addEventListener(type, handler, applyPassive());
       },
       deregisterThumbContainerInteractionHandler: (type, handler) => {
-        this.$refs.thumbContainer.removeEventListener(
+        uiState.thumbContainer.removeEventListener(
           type,
           handler,
           applyPassive(),
@@ -114,29 +107,26 @@ export default {
         window.removeEventListener('resize', handler);
       },
       notifyInput: () => {
-        this.$emit('input', this.foundation.getValue());
+        emit('input', foundation.getValue());
       },
       notifyChange: () => {
-        this.$emit('change', this.foundation.getValue());
+        emit('change', foundation.getValue());
       },
-      setThumbContainerStyleProperty: (propertyName, value) => {
-        this.$set(this.thumbStyles, propertyName, value);
-      },
-      setTrackStyleProperty: (propertyName, value) => {
-        this.$set(this.trackStyles, propertyName, value);
-      },
+      setThumbContainerStyleProperty: (propertyName, value) =>
+        (uiState.thumbStyles = {
+          ...uiState.thumbStyles,
+          [propertyName]: value,
+        }),
+
+      setTrackStyleProperty: (propertyName, value) =>
+        (uiState.trackStyles = {
+          ...uiState.trackStyles,
+          [propertyName]: value,
+        }),
       setMarkerValue: value => {
-        this.markerValue = value;
+        uiState.markerValue = value;
       },
-      // appendTrackMarkers: numMarkers => {
-      //   this.numMarkers = numMarkers;
-      // },
-      // removeTrackMarkers: () => {
-      //   this.numMarkers = 0;
-      // },
-      // setLastTrackMarkersStyleProperty: (propertyName, value) => {
-      //   this.$set(this.lastTrackMarkersStyles, propertyName, value);
-      // },
+
       setTrackMarkers: (step, max, min) => {
         const stepStr = step.toLocaleString();
         const maxStr = max.toLocaleString();
@@ -147,49 +137,94 @@ export default {
         const markerBkgdImage = `linear-gradient(to right, currentColor ${markerWidth}, transparent 0)`;
         const markerBkgdLayout = `0 center / calc((100% - ${markerWidth}) / ${markerAmount}) 100% repeat-x`;
         const markerBkgdShorthand = `${markerBkgdImage} ${markerBkgdLayout}`;
-        this.$set(this.markerBkgdShorthand, 'background', markerBkgdShorthand);
+        uiState.markerBkgdShorthand = {
+          ...uiState.markerBkgdShorthand,
+          ['background']: markerBkgdShorthand,
+        };
       },
-      isRTL: () => getComputedStyle(this.$el).direction === 'rtl',
+
+      isRTL: () => getComputedStyle(uiState.root).direction === 'rtl',
     };
 
-    this.foundation = new MDCSliderFoundation(adapter);
-    this.foundation.init();
-
-    this.foundation.setDisabled(this.disabled);
-
-    if (Number(this.min) <= this.foundation.getMax()) {
-      this.foundation.setMin(Number(this.min));
-      this.foundation.setMax(Number(this.max));
-    } else {
-      this.foundation.setMax(Number(this.max));
-      this.foundation.setMin(Number(this.min));
-    }
-    this.foundation.setStep(Number(this.stepSize));
-    this.foundation.setValue(Number(this.value));
-
-    if (this.hasMarkers) {
-      this.foundation.setupTrackMarker();
-    }
-
-    this.$root.$on('vma:layout', this.layout);
-
-    if (this.layoutOn) {
-      this.layoutOnEventSource = this.layoutOnSource || this.$root;
-      this.layoutOnEventSource.$on(this.layoutOn, this.layout);
-    }
-  },
-  beforeDestroy() {
-    this.$root.$off('vma:layout', this.layout);
-    if (this.layoutOnEventSource) {
-      this.layoutOnEventSource.$off(this.layoutOn, this.layout);
-    }
-    this.foundation.destroy();
-  },
-  methods: {
-    layout() {
-      this.$nextTick(() => {
-        this.foundation && this.foundation.layout();
+    const layout = () => {
+      $root.$nextTick(() => {
+        foundation?.layout();
       });
-    },
+    };
+
+    watch(
+      () => props.value,
+      nv => {
+        if (foundation.getValue() !== Number(nv)) {
+          foundation.setValue(nv);
+        }
+      },
+    );
+
+    watch(
+      () => props.min,
+      nv => {
+        foundation.setMin(Number(nv));
+      },
+    );
+
+    watch(
+      () => props.max,
+      nv => {
+        foundation.setMax(Number(nv));
+      },
+    );
+
+    watch(
+      () => props.step,
+      nv => {
+        foundation.setStep(Number(nv));
+      },
+    );
+
+    watch(
+      () => props.disabled,
+      nv => {
+        foundation.setDisabled(nv);
+      },
+    );
+
+    onMounted(() => {
+      foundation = new MDCSliderFoundation(adapter);
+      foundation.init();
+
+      foundation.setDisabled(props.disabled);
+
+      if (Number(props.min) <= foundation.getMax()) {
+        foundation.setMin(Number(props.min));
+        foundation.setMax(Number(props.max));
+      } else {
+        foundation.setMax(Number(props.max));
+        foundation.setMin(Number(props.min));
+      }
+      foundation.setStep(Number(uiState.stepSize));
+      foundation.setValue(Number(props.value));
+
+      if (hasMarkers.value) {
+        foundation.setupTrackMarker();
+      }
+
+      $root.$on('vma:layout', layout);
+
+      if (props.layoutOn) {
+        layoutOnEventSource = props.layoutOnSource ?? $root;
+        layoutOnEventSource.$on(props.layoutOn, layout);
+      }
+    });
+
+    onBeforeUnmount(() => {
+      $root.$off('vma:layout', layout);
+      if (layoutOnEventSource) {
+        layoutOnEventSource.$off(props.layoutOn, layout);
+      }
+      foundation.destroy();
+    });
+
+    return { ...toRefs(uiState), hasMarkers };
   },
 };

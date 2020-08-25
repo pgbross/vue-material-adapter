@@ -1,46 +1,78 @@
 import { MDCFloatingLabelFoundation } from '@material/floating-label/foundation';
+import {
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  toRefs,
+} from '@vue/composition-api';
 
 export default {
   name: 'mcw-floating-label',
-  data() {
-    return {
-      labelClasses: { 'mdc-floating-label': true },
-    };
-  },
 
-  mounted() {
-    this.foundation = new MDCFloatingLabelFoundation({
-      addClass: className => {
-        this.$set(this.labelClasses, className, true);
+  props: { required: { type: Boolean } },
+  setup(props) {
+    const uiState = reactive({
+      labelClasses: {
+        'mdc-floating-label': true,
+        'mdc-floating-label--required': props.required,
       },
+      root: null,
+    });
+
+    let foundation;
+
+    const adapter = {
+      addClass: className =>
+        (uiState.labelClasses = {
+          ...uiState.labelClasses,
+          [className]: true,
+        }),
+
       removeClass: className => {
-        this.$delete(this.labelClasses, className);
+        // eslint-disable-next-line no-unused-vars
+        const { [className]: removed, ...rest } = uiState.labelClasses;
+        uiState.labelClasses = rest;
       },
-      getWidth: () => this.$el.scrollWidth,
+
+      getWidth: () => uiState.root.scrollWidth,
       registerInteractionHandler: (evtType, handler) => {
-        this.$el.addEventListener(evtType, handler);
+        uiState.root.addEventListener(evtType, handler);
       },
       deregisterInteractionHandler: (evtType, handler) => {
-        this.$el.removeEventListener(evtType, handler);
+        uiState.root.removeEventListener(evtType, handler);
       },
+    };
+
+    const getWidth = () => {
+      return foundation.getWidth();
+    };
+
+    const setRequired = isRequired => {
+      return foundation.setRequired(isRequired);
+    };
+
+    const float = shouldFloat => {
+      foundation.float(shouldFloat);
+    };
+
+    const shake = shouldShake => {
+      foundation.shake(shouldShake);
+    };
+
+    onMounted(() => {
+      foundation = new MDCFloatingLabelFoundation(adapter);
+      foundation.init();
     });
-    this.foundation.init();
-  },
-  beforeDestroy() {
-    this.foundation.destroy();
-  },
 
-  methods: {
-    getWidth() {
-      return this.foundation.getWidth();
-    },
-
-    float(shouldFloat) {
-      this.foundation.float(shouldFloat);
-    },
-
-    shake(shouldShake) {
-      this.foundation.shake(shouldShake);
-    },
+    onBeforeUnmount(() => {
+      foundation.destroy();
+    });
+    return {
+      ...toRefs(uiState),
+      getWidth,
+      float,
+      shake,
+      setRequired,
+    };
   },
 };

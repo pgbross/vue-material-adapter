@@ -1,34 +1,35 @@
+import { h, toRefs, ref, shallowReactive, onMounted, onBeforeUnmount, computed, reactive, toRef, watch, provide, inject, watchEffect } from '@vue/composition-api';
 import { applyPassive } from '@material/dom/events';
 import { matches, closest } from '@material/dom/ponyfill';
 import { MDCRippleFoundation } from '@material/ripple';
 import { supportsCssVariables } from '@material/ripple/util';
-import { MDCCircularProgressFoundation } from '@material/circular-progress/foundation';
 import { getCorrectEventName } from '@material/animation';
 import { MDCCheckboxFoundation } from '@material/checkbox/foundation';
 import { MDCFormFieldFoundation } from '@material/form-field/foundation';
 import { MDCChipSetFoundation } from '@material/chips/chip-set/foundation';
 import { MDCChipFoundation } from '@material/chips/chip/foundation';
 import { announce } from '@material/dom/announce';
-import { MDCDataTableFoundation } from '@material/data-table/foundation';
+import { MDCChipTrailingActionFoundation } from '@material/chips/trailingaction/foundation';
+import { MDCCircularProgressFoundation } from '@material/circular-progress/foundation';
 import { MDCCheckbox } from '@material/checkbox';
-import * as test from '@material/data-table';
-import { strings as strings$5 } from '@material/data-table';
+import { cssClasses as cssClasses$8, events, selectors, dataAttributes, SortValue, messages } from '@material/data-table';
+import { MDCDataTableFoundation } from '@material/data-table/foundation';
 import { MDCDialogFoundation } from '@material/dialog/foundation';
 import { createFocusTrapInstance, isScrollable, areTopsMisaligned } from '@material/dialog/util';
-import { matches as matches$1, closest as closest$1 } from '@material/dom/ponyfill.js';
 import { FocusTrap } from '@material/dom/focus-trap.js';
-import { createFocusTrapInstance as createFocusTrapInstance$1 } from '@material/drawer/util';
+import { matches as matches$1, closest as closest$1 } from '@material/dom/ponyfill.js';
+import { FocusTrap as FocusTrap$1 } from '@material/dom/focus-trap';
 import { MDCDismissibleDrawerFoundation } from '@material/drawer/dismissible/foundation';
 import { MDCModalDrawerFoundation } from '@material/drawer/modal/foundation';
+import { createFocusTrapInstance as createFocusTrapInstance$1 } from '@material/drawer/util';
 import { MDCListFoundation } from '@material/list/foundation';
-import { FocusTrap as FocusTrap$1 } from '@material/dom/focus-trap';
 import { MDCFloatingLabelFoundation } from '@material/floating-label/foundation';
 import { MDCIconButtonToggleFoundation } from '@material/icon-button/foundation';
 import { MDCLineRippleFoundation } from '@material/line-ripple/foundation';
 import { MDCLinearProgressFoundation } from '@material/linear-progress/foundation';
-import { MDCMenuFoundation } from '@material/menu/foundation';
 import { MDCMenuSurfaceFoundation } from '@material/menu-surface/foundation';
 import { getTransformPropertyName } from '@material/menu-surface/util';
+import { MDCMenuFoundation } from '@material/menu/foundation';
 import { MDCNotchedOutlineFoundation } from '@material/notched-outline/foundation';
 import { MDCRadioFoundation } from '@material/radio/foundation';
 import { MDCSelectFoundation } from '@material/select/foundation';
@@ -38,487 +39,591 @@ import { MDCSliderFoundation } from '@material/slider/foundation';
 import { MDCSnackbarFoundation } from '@material/snackbar/foundation';
 import { MDCSwitchFoundation } from '@material/switch/foundation';
 import { MDCTabBarFoundation } from '@material/tab-bar/foundation';
+import MDCTabFoundation$1, { MDCTabFoundation } from '@material/tab/foundation';
+import { MDCFadingTabIndicatorFoundation } from '@material/tab-indicator/fading-foundation';
 import { MDCTabIndicatorFoundation } from '@material/tab-indicator/foundation';
+import { MDCSlidingTabIndicatorFoundation } from '@material/tab-indicator/sliding-foundation';
 import { MDCTabScrollerFoundation } from '@material/tab-scroller/foundation';
 import { computeHorizontalScrollbarHeight } from '@material/tab-scroller/util';
-import MDCTabFoundation from '@material/tab/foundation';
-import { MDCTextFieldFoundation } from '@material/textfield/foundation';
+import { MDCTextFieldCharacterCounterFoundation } from '@material/textfield/character-counter/foundation';
 import { MDCTextFieldHelperTextFoundation } from '@material/textfield/helper-text/foundation';
 import { MDCTextFieldIconFoundation } from '@material/textfield/icon/foundation.js';
+import { MDCTextFieldFoundation } from '@material/textfield/foundation';
 import { MDCFixedTopAppBarFoundation } from '@material/top-app-bar/fixed/foundation';
 import { MDCShortTopAppBarFoundation } from '@material/top-app-bar/short/foundation';
 import { MDCTopAppBarFoundation } from '@material/top-app-bar/standard/foundation';
 
-function BasePlugin(components) {
-  return {
-    version: '__VERSION__',
-    install: vm => {
-      Object.entries(components).forEach(([key, component]) => {
-        const name = key.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase(); // eslint-disable-next-line no-unused-vars
+function _typeof(obj) {
+  "@babel/helpers - typeof";
 
-        const [pfx, ...rest] = name.split('-');
-        const mdcName = ['mdc', ...rest].join('-');
-        const mcwName = ['mcw', ...rest].join('-');
-        const definition = vm.extend(component);
-        vm.component(mcwName, definition);
-        vm.component(mdcName, definition);
+  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+    _typeof = function (obj) {
+      return typeof obj;
+    };
+  } else {
+    _typeof = function (obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    };
+  }
+
+  return _typeof(obj);
+}
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _objectSpread2(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      ownKeys(Object(source), true).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
       });
-    },
-    components
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function");
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) _setPrototypeOf(subClass, superClass);
+}
+
+function _getPrototypeOf(o) {
+  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  };
+  return _getPrototypeOf(o);
+}
+
+function _setPrototypeOf(o, p) {
+  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+
+  return _setPrototypeOf(o, p);
+}
+
+function _isNativeReflectConstruct() {
+  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+  if (Reflect.construct.sham) return false;
+  if (typeof Proxy === "function") return true;
+
+  try {
+    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+function _objectWithoutProperties(source, excluded) {
+  if (source == null) return {};
+
+  var target = _objectWithoutPropertiesLoose(source, excluded);
+
+  var key, i;
+
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+
+    for (i = 0; i < sourceSymbolKeys.length; i++) {
+      key = sourceSymbolKeys[i];
+      if (excluded.indexOf(key) >= 0) continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+      target[key] = source[key];
+    }
+  }
+
+  return target;
+}
+
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return self;
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (call && (typeof call === "object" || typeof call === "function")) {
+    return call;
+  }
+
+  return _assertThisInitialized(self);
+}
+
+function _createSuper(Derived) {
+  var hasNativeReflectConstruct = _isNativeReflectConstruct();
+
+  return function _createSuperInternal() {
+    var Super = _getPrototypeOf(Derived),
+        result;
+
+    if (hasNativeReflectConstruct) {
+      var NewTarget = _getPrototypeOf(this).constructor;
+
+      result = Reflect.construct(Super, arguments, NewTarget);
+    } else {
+      result = Super.apply(this, arguments);
+    }
+
+    return _possibleConstructorReturn(this, result);
   };
 }
 
-const CustomButton = {
-  name: 'custom-button',
-  functional: true,
-  props: {
-    link: Object
-  },
+function _taggedTemplateLiteral(strings, raw) {
+  if (!raw) {
+    raw = strings.slice(0);
+  }
 
-  render(createElement, {
-    children,
-    data,
-    props: {
-      link,
-      tag
+  return Object.freeze(Object.defineProperties(strings, {
+    raw: {
+      value: Object.freeze(raw)
+    }
+  }));
+}
+
+function _slicedToArray(arr, i) {
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+}
+
+function _toArray(arr) {
+  return _arrayWithHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableRest();
+}
+
+function _toConsumableArray(arr) {
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
+}
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) return _arrayLikeToArray(arr);
+}
+
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+
+function _iterableToArray(iter) {
+  if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+}
+
+function _iterableToArrayLimit(arr, i) {
+  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _e = undefined;
+
+  try {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
+
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+  return arr2;
+}
+
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+function _toPrimitive(input, hint) {
+  if (typeof input !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (typeof res !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+
+  return (hint === "string" ? String : Number)(input);
+}
+
+function _toPropertyKey(arg) {
+  var key = _toPrimitive(arg, "string");
+
+  return typeof key === "symbol" ? key : String(key);
+}
+
+function BasePlugin(components) {
+  return {
+    version: '__VERSION__',
+    install: function install(vm) {
+      Object.entries(components).forEach(function (_ref) {
+        var _ref2 = _slicedToArray(_ref, 2),
+            key = _ref2[0],
+            component = _ref2[1];
+
+        var name = key.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase(); // eslint-disable-next-line no-unused-vars
+
+        var _name$split = name.split('-'),
+            _name$split2 = _toArray(_name$split),
+            pfx = _name$split2[0],
+            rest = _name$split2.slice(1);
+
+        var mdcName = ['mdc'].concat(_toConsumableArray(rest)).join('-');
+        var mcwName = ['mcw'].concat(_toConsumableArray(rest)).join('-');
+        var haveComponent = vm.options.components[mcwName];
+
+        if (!haveComponent) {
+          var definition = vm.extend(component);
+          vm.component(mcwName, definition);
+          vm.component(mdcName, definition);
+        }
+      });
     },
-    parent: {
-      $router,
-      $root
-    }
-  }) {
-    let element;
+    components: components
+  };
+}
 
-    if (link && $router) {
-      // router-link case
-      element = $root.$options.components['RouterLink'];
-      data.props = {
-        tag,
-        ...link
-      };
-      data.attrs.role = 'button';
+function emitCustomEvent(el, evtType, evtData) {
+  var shouldBubble = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
 
-      if (data.on.click) {
-        data.nativeOn = {
-          click: data.on.click
-        };
-      }
-    } else if (data.attrs && data.attrs.href) {
-      // href case
-      element = 'a';
-      data.attrs.role = 'button';
-    } else {
-      // button fallback
-      element = 'button';
-    }
+  var createCustomEvent = function createCustomEvent() {
+    var evt = document.createEvent('CustomEvent');
+    return evt.initCustomEvent(evtType, shouldBubble, false, evtData);
+  };
 
-    return createElement(element, data, children);
-  }
-
-};
-const CustomButtonMixin = {
-  props: {
-    href: String,
-    disabled: Boolean,
-    to: [String, Object],
-    exact: Boolean,
-    append: Boolean,
-    replace: Boolean,
-    activeClass: String,
-    exactActiveClass: String
-  },
-  computed: {
-    link() {
-      return this.to && {
-        to: this.to,
-        exact: this.exact,
-        append: this.append,
-        replace: this.replace,
-        activeClass: this.activeClass,
-        exactActiveClass: this.exactActiveClass
-      };
-    }
-
-  },
-  components: {
-    CustomButton
-  }
-};
-
-/* global CustomEvent */
-function emitCustomEvent(el, evtType, evtData, shouldBubble = false) {
-  let evt;
-
-  if (typeof CustomEvent === 'function') {
-    evt = new CustomEvent(evtType, {
-      detail: evtData,
-      bubbles: shouldBubble
-    });
-  } else {
-    evt = document.createEvent('CustomEvent');
-    evt.initCustomEvent(evtType, shouldBubble, false, evtData);
-  }
-
+  var evt = typeof CustomEvent === 'function' ? new CustomEvent(evtType, {
+    detail: evtData,
+    bubbles: shouldBubble
+  }) : createCustomEvent();
   el.dispatchEvent(evt);
 }
 
-const CustomLink = {
+var CustomLink = {
   name: 'custom-link',
-  functional: true,
   props: {
-    tag: {
-      type: String,
-      default: 'a'
-    },
-    link: Object
+    link: Object,
+    tag: String
   },
+  setup: function setup(props, _ref) {
+    var listeners = _ref.listeners,
+        $router = _ref.root.$router,
+        slots = _ref.slots;
+    return function () {
+      var _slots$default;
 
-  render(createElement, {
-    data,
-    children,
-    props: {
-      link,
-      tag
-    },
-    parent: {
-      $router,
-      $root
-    }
-  }) {
-    let element;
+      var element; // destructure the props in the render function so we use the current value
+      // if their value has changed since we were created
 
-    if (link && $router) {
-      // router-link case
-      element = $root.$options.components['RouterLink'];
-      data.props = {
-        tag,
-        ...link
+      var _props$link = props.link,
+          link = _props$link === void 0 ? {} : _props$link;
+
+      var tag = link.tag,
+          to = link.to,
+          exact = link.exact,
+          append = link.append,
+          replace = link.replace,
+          activeClass = link.activeClass,
+          exactActiveClass = link.exactActiveClass,
+          rest = _objectWithoutProperties(link, ["tag", "to", "exact", "append", "replace", "activeClass", "exactActiveClass"]);
+
+      var data = {
+        attrs: rest,
+        on: listeners
       };
 
-      if (data.on.click) {
-        data.nativeOn = {
-          click: data.on.click
-        };
+      if (link.to && $router) {
+        element = 'router-link';
+        data.props = {
+          to: to,
+          tag: tag !== null && tag !== void 0 ? tag : props.tag,
+          replace: replace,
+          append: append,
+          activeClass: activeClass,
+          exactActiveClass: exactActiveClass,
+          exact: exact
+        }; // we add the native click so it can bubble and be detected in a menu/drawer
+
+        if (listeners.click) {
+          data.nativeOn = {
+            click: listeners.click
+          };
+        }
+      } else if (link.href) {
+        element = 'a';
+        data.attrs.role = 'button';
+      } else {
+        var _ref2;
+
+        element = (_ref2 = tag !== null && tag !== void 0 ? tag : props.tag) !== null && _ref2 !== void 0 ? _ref2 : 'a';
+
+        if (element !== 'button') {
+          data.attrs.role = 'button';
+        }
       }
-    } else {
-      // element fallback
-      element = tag;
-    }
 
-    return createElement(element, data, children);
-  }
-
-};
-const CustomLinkMixin = {
-  props: {
-    to: [String, Object],
-    exact: Boolean,
-    append: Boolean,
-    replace: Boolean,
-    activeClass: String,
-    exactActiveClass: String
-  },
-  computed: {
-    link() {
-      return this.to && {
-        to: this.to,
-        exact: this.exact,
-        append: this.append,
-        replace: this.replace,
-        activeClass: this.activeClass,
-        exactActiveClass: this.exactActiveClass
-      };
-    }
-
-  },
-  components: {
-    CustomLink
-  }
-};
-
-/* eslint-disable quote-props */
-const DispatchEventMixin = {
-  props: {
-    event: String,
-    'event-target': Object,
-    'event-args': Array
-  },
-  methods: {
-    dispatchEvent(evt) {
-      evt && this.$emit(evt.type, evt);
-
-      if (this.event) {
-        const target = this.eventTarget || this.$root;
-        const args = this.eventArgs || [];
-        target.$emit(this.event, ...args);
-      }
-    }
-
-  },
-  computed: {
-    listeners() {
-      return { ...this.$listeners,
-        click: e => this.dispatchEvent(e)
-      };
-    }
-
-  }
-};
-
-const DispatchFocusMixin = {
-  data() {
-    return {
-      hasFocus: false
+      return h(element, data, [(_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots)]);
     };
-  },
-
-  methods: {
-    onMouseDown() {
-      this._active = true;
-    },
-
-    onMouseUp() {
-      this._active = false;
-    },
-
-    onFocusEvent() {
-      // dispatch async to let time to other focus event to propagate
-      setTimeout(() => this.dispatchFocusEvent(), 0);
-    },
-
-    onBlurEvent() {
-      // dispatch async to let time to other focus event to propagate
-      // also filtur blur if mousedown
-      this._active || setTimeout(() => this.dispatchFocusEvent(), 0);
-    },
-
-    dispatchFocusEvent() {
-      const hasFocus = this.$el === document.activeElement || this.$el.contains(document.activeElement);
-
-      if (hasFocus != this.hasFocus) {
-        this.$emit(hasFocus ? 'focus' : 'blur');
-        this.hasFocus = hasFocus;
-      }
-    }
-
-  },
-
-  mounted() {
-    this.$el.addEventListener('focusin', this.onFocusEvent);
-    this.$el.addEventListener('focusout', this.onBlurEvent);
-    this.$el.addEventListener('mousedown', this.onMouseDown);
-    this.$el.addEventListener('mouseup', this.onMouseUp);
-  },
-
-  beforeDestroy() {
-    this.$el.removeEventListener('focusin', this.onFocusEvent);
-    this.$el.removeEventListener('focusout', this.onBlurEvent);
-    this.$el.removeEventListener('mousedown', this.onMouseDown);
-    this.$el.removeEventListener('mouseup', this.onMouseUp);
   }
-
-};
-
-const scope = Math.floor(Math.random() * Math.floor(0x10000000)).toString() + '-';
-const VMAUniqueIdMixin = {
-  beforeCreate() {
-    this.vma_uid_ = scope + this._uid;
-  }
-
 };
 
 var index = /*#__PURE__*/Object.freeze({
   __proto__: null,
   BasePlugin: BasePlugin,
-  CustomButton: CustomButton,
-  CustomButtonMixin: CustomButtonMixin,
   emitCustomEvent: emitCustomEvent,
-  CustomLink: CustomLink,
-  CustomLinkMixin: CustomLinkMixin,
-  DispatchEventMixin: DispatchEventMixin,
-  DispatchFocusMixin: DispatchFocusMixin,
-  VMAUniqueIdMixin: VMAUniqueIdMixin
+  CustomLink: CustomLink
 });
 
-class RippleBase extends MDCRippleFoundation {
-  constructor(vm, options) {
-    super({
-      addClass(className) {
-        vm.$set(vm.classes, className, true);
-      },
+var RippleElement = /*#__PURE__*/function (_MDCRippleFoundation) {
+  _inherits(RippleElement, _MDCRippleFoundation);
 
-      browserSupportsCssVars: () => {
+  var _super = _createSuper(RippleElement);
+
+  function RippleElement(element, state) {
+    var _element$$el;
+
+    var _this;
+
+    var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+        _ref$unbounded = _ref.unbounded,
+        unbounded = _ref$unbounded === void 0 ? false : _ref$unbounded,
+        options = _objectWithoutProperties(_ref, ["unbounded"]);
+
+    _classCallCheck(this, RippleElement);
+
+    var $el = (_element$$el = element.$el) !== null && _element$$el !== void 0 ? _element$$el : element;
+    _this = _super.call(this, _objectSpread2({
+      addClass: function addClass(className) {
+        if (state) {
+          state.classes = _objectSpread2(_objectSpread2({}, state.classes), {}, _defineProperty({}, className, true));
+        } else {
+          $el.classList.add(className);
+        }
+      },
+      browserSupportsCssVars: function browserSupportsCssVars() {
         return supportsCssVariables(window);
       },
-      computeBoundingRect: () => {
-        return vm.$el.getBoundingClientRect();
+      computeBoundingRect: function computeBoundingRect() {
+        return $el.getBoundingClientRect();
       },
-      containsEventTarget: target => vm.$el.contains(target),
-      deregisterDocumentInteractionHandler: (evtType, handler) => document.documentElement.removeEventListener(evtType, handler, applyPassive()),
-      deregisterInteractionHandler: (evt, handler) => {
-        vm.$el.removeEventListener(evt, handler, applyPassive());
+      containsEventTarget: function containsEventTarget(target) {
+        return $el.contains(target);
       },
-      deregisterResizeHandler: handler => {
+      deregisterDocumentInteractionHandler: function deregisterDocumentInteractionHandler(evtType, handler) {
+        return document.documentElement.removeEventListener(evtType, handler, applyPassive());
+      },
+      deregisterInteractionHandler: function deregisterInteractionHandler(evt, handler) {
+        return $el.removeEventListener(evt, handler, applyPassive());
+      },
+      deregisterResizeHandler: function deregisterResizeHandler(handler) {
         return window.removeEventListener('resize', handler);
       },
-      getWindowPageOffset: () => {
+      getWindowPageOffset: function getWindowPageOffset() {
         return {
           x: window.pageXOffset,
           y: window.pageYOffset
         };
       },
-      isSurfaceActive: () => {
-        return matches(vm.$el, ':active');
+      isSurfaceActive: function isSurfaceActive() {
+        return matches($el, ':active');
       },
-      isSurfaceDisabled: () => {
-        return vm.disabled;
-      },
-      isUnbounded: () => {
+      isSurfaceDisabled: function isSurfaceDisabled() {
         return false;
       },
-      registerDocumentInteractionHandler: (evtType, handler) => document.documentElement.addEventListener(evtType, handler, applyPassive()),
-      registerInteractionHandler: (evt, handler) => {
-        vm.$el.addEventListener(evt, handler, applyPassive());
-      },
-      registerResizeHandler: handler => {
-        return window.addEventListener('resize', handler);
-      },
-
-      removeClass(className) {
-        vm.$delete(vm.classes, className);
-      },
-
-      updateCssVariable: (varName, value) => {
-        vm.$set(vm.styles, varName, value);
-      },
-      ...options
-    });
-  }
-
-} // todo: can this be combined with the ripplebase implementation depending on whether a vm or element is passed?
-
-class RippleElement extends MDCRippleFoundation {
-  constructor(element, options) {
-    const $el = element;
-    super({
-      addClass: className => $el.classList.add(className),
-      browserSupportsCssVars: () => supportsCssVariables(window),
-      computeBoundingRect: () => $el.getBoundingClientRect(),
-      containsEventTarget: target => $el.contains(target),
-      deregisterDocumentInteractionHandler: (evtType, handler) => document.documentElement.removeEventListener(evtType, handler, applyPassive()),
-      deregisterInteractionHandler: (evt, handler) => $el.removeEventListener(evt, handler, applyPassive()),
-      deregisterResizeHandler: handler => window.removeEventListener('resize', handler),
-      getWindowPageOffset: () => ({
-        x: window.pageXOffset,
-        y: window.pageYOffset
-      }),
-      isSurfaceActive: () => matches($el, ':active'),
-      isSurfaceDisabled: () => false,
       // todo: consider if this is right
-      isUnbounded: () => this.unbounded_,
-      registerDocumentInteractionHandler: (evtType, handler) => document.documentElement.addEventListener(evtType, handler, applyPassive()),
-      registerInteractionHandler: (evt, handler) => {
+      isUnbounded: function isUnbounded() {
+        return _this.unbounded_;
+      },
+      registerDocumentInteractionHandler: function registerDocumentInteractionHandler(evtType, handler) {
+        return document.documentElement.addEventListener(evtType, handler, applyPassive());
+      },
+      registerInteractionHandler: function registerInteractionHandler(evt, handler) {
         $el.addEventListener(evt, handler, applyPassive());
       },
-      registerResizeHandler: handler => {
+      registerResizeHandler: function registerResizeHandler(handler) {
         return window.addEventListener('resize', handler);
       },
-      removeClass: className => $el.classList.remove(className),
-      updateCssVariable: (varName, value) => $el.style.setProperty(varName, value),
-      ...options
-    });
-    this.unbounded_ = false;
+      removeClass: function removeClass(className) {
+        if (state) {
+          // eslint-disable-next-line no-unused-vars
+          var _state$classes = state.classes,
+              removed = _state$classes[className],
+              rest = _objectWithoutProperties(_state$classes, [className].map(_toPropertyKey));
+
+          state.classes = rest;
+        } else {
+          $el.classList.remove(className);
+        }
+      },
+      updateCssVariable: function updateCssVariable(varName, value) {
+        if (state) {
+          state.styles = _objectSpread2(_objectSpread2({}, state.styles), {}, _defineProperty({}, varName, value));
+        } else {
+          $el.style.setProperty(varName, value);
+        }
+      }
+    }, options));
+    _this.unbounded_ = unbounded;
+    return _this;
   }
 
-  get unbounded() {
-    return this.unbounded_;
-  }
+  _createClass(RippleElement, [{
+    key: "unbounded",
+    get: function get() {
+      return this.unbounded_;
+    },
+    set: function set(unbounded) {
+      this.unbounded_ = Boolean(unbounded);
+      this.setUnbounded(this.unbounded_);
+    }
+  }]);
 
-  set unbounded(unbounded) {
-    this.unbounded_ = Boolean(unbounded);
-    this.setUnbounded(this.unbounded_);
-  }
+  return RippleElement;
+}(MDCRippleFoundation);
+function useRipplePlugin(root, options) {
+  var ripple = ref(null);
+  var state = shallowReactive({
+    classes: {},
+    styles: {}
+  });
 
+  var activate = function activate() {
+    var _ripple$value;
+
+    return (_ripple$value = ripple.value) === null || _ripple$value === void 0 ? void 0 : _ripple$value.activate();
+  };
+
+  var deactivate = function deactivate() {
+    var _ripple$value2;
+
+    return (_ripple$value2 = ripple.value) === null || _ripple$value2 === void 0 ? void 0 : _ripple$value2.deactivate();
+  };
+
+  onMounted(function () {
+    ripple.value = new RippleElement(root.value, state, options);
+    ripple.value.init();
+  });
+  onBeforeUnmount(function () {
+    ripple.value.destroy();
+  });
+  return _objectSpread2(_objectSpread2({}, toRefs(state)), {}, {
+    activate: activate,
+    deactivate: deactivate
+  });
 }
-const RippleMixin = {
-  data() {
-    return {
-      classes: {},
-      styles: {}
-    };
-  },
 
-  mounted() {
-    this.ripple = new RippleBase(this);
-    this.ripple.init();
-  },
-
-  beforeDestroy() {
-    this.ripple.destroy();
-  }
-
-};
-
-var mcwButtonBase = {
-  name: 'mcw-button-base',
-  mixins: [DispatchEventMixin, CustomButtonMixin, RippleMixin],
-
-  // note RippleMixin defines data(){ return {classes:{}, styles: {} }; }
-  render(createElement) {
-    const nodes = [createElement('div', {
-      class: {
-        'mdc-button__ripple': 1
-      }
-    }), createElement('span', {
-      class: {
-        'mdc-button__label': 1
-      }
-    }, this.$slots.default)];
-
-    if (this.$slots.icon || this.icon) {
-      nodes.unshift(this.$slots.icon || createElement('i', {
-        class: {
-          'material-icons': 1,
-          'mdc-button__icon': 1
-        },
-        attrs: {
-          'aria-hidden': true
-        }
-      }, this.icon));
-    }
-
-    if (this.$slots.trailingIcon || this.trailingIcon) {
-      nodes.push(this.$slots.trailingIcon || createElement('i', {
-        class: {
-          'material-icons': 1,
-          'mdc-button__icon': 1
-        },
-        attrs: {
-          'aria-hidden': true
-        }
-      }, this.trailingIcon));
-    }
-
-    return createElement('custom-button', {
-      class: this.classes,
-      style: this.styles,
-      attrs: {
-        disabled: this.disabled
-      },
-      props: {
-        href: this.href,
-        link: this.link
-      },
-      on: this.listeners,
-      ref: 'root'
-    }, nodes);
-  }
-
-};
-
-var mcwButton = {
+var script = {
   name: 'mcw-button',
-  extends: mcwButtonBase,
+  inheritAttrs: false,
   props: {
     raised: Boolean,
     unelevated: Boolean,
@@ -526,369 +631,45 @@ var mcwButton = {
     icon: String,
     trailingIcon: String
   },
+  components: {
+    CustomLink: CustomLink
+  },
+  setup: function setup(props, _ref) {
+    var listeners = _ref.listeners,
+        slots = _ref.slots;
+    var root = ref(null);
 
-  data() {
-    return {
-      classes: {
+    var _useRipplePlugin = useRipplePlugin(root),
+        rippleClasses = _useRipplePlugin.classes,
+        styles = _useRipplePlugin.styles;
+
+    var classes = computed(function () {
+      return _objectSpread2(_objectSpread2({}, rippleClasses.value), {}, {
         'mdc-button': true,
-        'mdc-button--raised': this.raised,
-        'mdc-button--unelevated': this.unelevated && !this.raised,
-        'mdc-button--outlined': this.outlined
-      }
-    };
-  },
-
-  watch: {
-    raised() {
-      this.$set(this.classes, 'mdc-button--raised', this.raised);
-    },
-
-    unelevated() {
-      this.$set(this.classes, 'mdc-button--unelevated', this.unelevated);
-    },
-
-    outlined() {
-      this.$set(this.classes, 'mdc-button--outlined', this.outlined);
-    }
-
-  }
-};
-
-var button = BasePlugin({
-  mcwButton
-});
-
-var mcwCard = {
-  name: 'mcw-card',
-  props: {
-    outlined: Boolean
-  },
-  functional: true,
-
-  render(createElement, {
-    props: {
-      outlined
-    },
-    data: {
-      attrs,
-      staticClass
-    },
-    scopedSlots
-  }) {
-    return createElement('div', {
-      class: [{
-        'mdc-card': 1,
-        'mdc-card--outlined': outlined
-      }, staticClass],
-      attrs
-    }, scopedSlots.default && scopedSlots.default());
-  }
-
-};
-
-var mcwCardActionButtons = {
-  name: 'mcw-card-action-buttons',
-  functional: true,
-
-  render(createElement, {
-    scopedSlots,
-    data: {
-      attrs,
-      staticClass,
-      staticStyle
-    }
-  }) {
-    const vNodes = scopedSlots.default && scopedSlots.default() || [];
-
-    if (vNodes) {
-      // add icon class to children
-      vNodes.forEach(vNode => {
-        if (vNode.tag && vNode.data) {
-          vNode.data.staticClass = `mdc-card__action mdc-card__action--button ${vNode.data.staticClass || ''}`;
-        }
+        'mdc-button--raised': props.raised,
+        'mdc-button--unelevated': props.unelevated && !props.raised,
+        'mdc-button--outlined': props.outlined
       });
-    }
+    });
+    var haveIcon = computed(function () {
+      var _slots$icon;
 
-    return createElement('div', {
-      class: ['mdc-card__action-buttons', staticClass],
-      style: staticStyle,
-      attrs
-    }, vNodes);
-  }
+      return (_slots$icon = slots.icon) !== null && _slots$icon !== void 0 ? _slots$icon : props.icon;
+    });
+    var haveTrailingIcon = computed(function () {
+      var _slots$trailingIcon;
 
-};
-
-var mcwCardActionIcons = {
-  name: 'mcw-card-action-icons',
-  functional: true,
-
-  render(createElement, {
-    scopedSlots,
-    data: {
-      attrs,
-      staticClass,
-      staticStyle
-    }
-  }) {
-    const vNodes = scopedSlots.default && scopedSlots.default() || [];
-
-    if (vNodes) {
-      // add icon class to children
-      vNodes.forEach(vNode => {
-        if (vNode.tag && vNode.data) {
-          vNode.data.staticClass = `mdc-card__action mdc-card__action--icon ${vNode.data.staticClass || ''}`;
-        }
-      });
-    }
-
-    return createElement('div', {
-      class: ['mdc-card__action-icons', staticClass],
-      style: staticStyle,
-      attrs
-    }, vNodes);
-  }
-
-};
-
-var mcwCardActions = {
-  name: 'mcw-card-actions',
-  functional: true,
-  props: {
-    fullBleed: Boolean
-  },
-
-  render(createElement, {
-    props: {
-      fullBleed
-    },
-    data: {
-      staticClass,
-      attrs
-    },
-    scopedSlots
-  }) {
-    return createElement('section', {
-      class: [{
-        'mdc-card__actions': 1,
-        'mdc-card__actions--full-bleed': fullBleed
-      }, staticClass],
-      attrs
-    }, scopedSlots.default && scopedSlots.default());
-  }
-
-};
-
-var mcwCardMedia = {
-  name: 'mcw-card-media',
-  functional: true,
-  props: {
-    src: String,
-    square: {
-      type: Boolean,
-
-      default() {
-        return false;
-      }
-
-    },
-    wide: {
-      type: Boolean,
-
-      default() {
-        return false;
-      }
-
-    },
-    contentClass: String
-  },
-
-  render(createElement, {
-    props: {
-      src,
-      square,
-      wide,
-      contentClass
-    },
-    data: {
-      staticStyle
-    },
-    scopedSlots
-  }) {
-    const nodes = [];
-    const content = scopedSlots.default && scopedSlots.default();
-
-    if (content) {
-      nodes.push(createElement('div', {
-        class: ['mdc-card__media-content', contentClass]
-      }, content));
-    }
-
-    return createElement('section', {
-      class: {
-        'mdc-card__media': 1,
-        'mdc-card__media--square': square,
-        'mdc-card__media--16-9': wide && !square
-      },
-      style: {
-        backgroundImage: `url(${src})`,
-        ...staticStyle
-      }
-    }, nodes);
-  }
-
-};
-
-var mcwCardPrimaryAction = {
-  name: 'mcw-card-primary-action',
-  mixins: [DispatchEventMixin, CustomLinkMixin, RippleMixin],
-
-  data() {
+      return (_slots$trailingIcon = slots.trailingIcon) !== null && _slots$trailingIcon !== void 0 ? _slots$trailingIcon : props.trailingIcon;
+    });
     return {
-      classes: {
-        'mdc-card__primary-action': 1
-      }
+      styles: styles,
+      classes: classes,
+      listeners: listeners,
+      root: root,
+      haveIcon: haveIcon,
+      haveTrailingIcon: haveTrailingIcon
     };
-  },
-
-  render(createElement) {
-    var _slots$default;
-
-    const {
-      $scopedSlots: slots
-    } = this;
-    return createElement('custom-link', {
-      class: this.classes,
-      style: this.styles,
-      // from RippleMixin
-      attrs: {
-        tabIndex: 0,
-        ...this.$attrs
-      },
-      props: {
-        link: this.link
-      },
-      on: this.listeners
-    }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
   }
-
-};
-
-var card = BasePlugin({
-  mcwCard,
-  mcwCardPrimaryAction,
-  mcwCardMedia,
-  mcwCardActions,
-  mcwCardActionButtons,
-  mcwCardActionIcons
-});
-
-const ProgressPropType = {
-  type: [Number, String],
-
-  validator(value) {
-    return Number(value) >= 0 && Number(value) <= 1;
-  }
-
-};
-
-function getCircleAttrs(medium = false, indeterminate = true) {
-  return medium ? {
-    cx: '16',
-    cy: '16',
-    r: '12.5',
-    'stroke-dasharray': '78.54',
-    'stroke-dashoffset': indeterminate ? '39.27' : '78.54'
-  } : {
-    cx: '24',
-    cy: '24',
-    r: '18',
-    'stroke-dasharray': '113.097',
-    'stroke-dashoffset': indeterminate ? '56.549' : '113.097'
-  };
-}
-
-var script = {
-  name: 'mcw-circular-progress',
-  props: {
-    open: {
-      type: Boolean,
-      default: true
-    },
-    indeterminate: Boolean,
-    medium: Boolean,
-    progress: ProgressPropType,
-    tag: {
-      type: String,
-      default: 'div'
-    }
-  },
-
-  data() {
-    return {
-      classes: {
-        'mdc-circular-progress': 1,
-        'mdc-circular-progress--medium': this.medium,
-        'mdc-circular-progress--large': !this.medium
-      },
-      rootAttrs: {},
-      circleAttrs: getCircleAttrs(this.medium, false),
-      indeterminateAttrs: getCircleAttrs(this.medium, true)
-    };
-  },
-
-  watch: {
-    open(nv) {
-      if (nv) {
-        this.foundation.open();
-      } else {
-        this.foundation.close();
-      }
-    },
-
-    progress(nv) {
-      this.foundation.setProgress(Number(nv));
-    },
-
-    indeterminate(nv) {
-      this.foundation.setDeterminate(!nv);
-    }
-
-  },
-
-  mounted() {
-    const adapter = {
-      addClass: className => {
-        this.$set(this.classes, className, true);
-      },
-      getDeterminateCircleAttribute: attributeName => {
-        return this.circleAttrs[attributeName];
-      },
-      hasClass: className => this.$el.classList.contains(className),
-      removeClass: className => this.$delete(this.classes, className),
-      removeAttribute: attributeName => {
-        this.$delete(this.rootAttrs, attributeName);
-      },
-      setAttribute: (attributeName, value) => {
-        this.$set(this.rootAttrs, attributeName, value);
-      },
-      setDeterminateCircleAttribute: (attributeName, value) => this.$set(this.circleAttrs, attributeName, value)
-    };
-    this.foundation = new MDCCircularProgressFoundation(adapter);
-    this.foundation.init();
-    this.foundation.setProgress(Number(this.progress));
-    this.foundation.setDeterminate(!this.indeterminate);
-
-    if (this.open) {
-      this.foundation.open();
-    } else {
-      this.foundation.close();
-    }
-  },
-
-  beforeDestroy() {
-    this.foundation.destroy();
-  }
-
 };
 
 function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier
@@ -901,7 +682,7 @@ function normalizeComponent(template, style, script, scopeId, isFunctionalTempla
   } // Vue.extend constructor export interop.
 
 
-  const options = typeof script === 'function' ? script.options : script; // render functions
+  var options = typeof script === 'function' ? script.options : script; // render functions
 
   if (template && template.render) {
     options.render = template.render;
@@ -918,11 +699,11 @@ function normalizeComponent(template, style, script, scopeId, isFunctionalTempla
     options._scopeId = scopeId;
   }
 
-  let hook;
+  var hook;
 
   if (moduleIdentifier) {
     // server build
-    hook = function (context) {
+    hook = function hook(context) {
       // 2.3 injection
       context = context || // cached call
       this.$vnode && this.$vnode.ssrContext || // stateful
@@ -958,7 +739,7 @@ function normalizeComponent(template, style, script, scopeId, isFunctionalTempla
   if (hook) {
     if (options.functional) {
       // register for functional component in vue file
-      const originalRender = options.render;
+      var originalRender = options.render;
 
       options.render = function renderWithStyleInjection(h, context) {
         hook.call(context);
@@ -966,7 +747,7 @@ function normalizeComponent(template, style, script, scopeId, isFunctionalTempla
       };
     } else {
       // inject component registration as beforeCreate hook
-      const existing = options.beforeCreate;
+      var existing = options.beforeCreate;
       options.beforeCreate = existing ? [].concat(existing, hook) : [hook];
     }
   }
@@ -983,9 +764,1737 @@ var __vue_render__ = function() {
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
   return _c(
+    "custom-link",
+    _vm._g(
+      {
+        ref: "root",
+        class: _vm.classes,
+        style: _vm.styles,
+        attrs: { link: _vm.$attrs, tag: "button" }
+      },
+      _vm.listeners
+    ),
+    [
+      _c("div", { staticClass: "mdc-button__ripple" }),
+      _vm._v(" "),
+      _vm.haveIcon
+        ? _vm._t("icon", [
+            _c(
+              "i",
+              {
+                staticClass: "material-icons mdc-button__icon",
+                attrs: { "aria-hidden": "true" }
+              },
+              [_vm._v(_vm._s(_vm.icon))]
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c("span", { staticClass: "mdc-button__label" }, [_vm._t("default")], 2),
+      _vm._v(" "),
+      _vm.haveTrailingIcon
+        ? _vm._t("trailingIcon", [
+            _c(
+              "i",
+              {
+                staticClass: "material-icons mdc-button__icon",
+                attrs: { "aria-hidden": "true" }
+              },
+              [_vm._v(_vm._s(_vm.trailingIcon))]
+            )
+          ])
+        : _vm._e()
+    ],
+    2
+  )
+};
+var __vue_staticRenderFns__ = [];
+__vue_render__._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__ = undefined;
+  /* scoped */
+  const __vue_scope_id__ = undefined;
+  /* module identifier */
+  const __vue_module_identifier__ = undefined;
+  /* functional template */
+  const __vue_is_functional_template__ = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__ = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ },
+    __vue_inject_styles__,
+    __vue_script__,
+    __vue_scope_id__,
+    __vue_is_functional_template__,
+    __vue_module_identifier__,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var button = BasePlugin({
+  mcwButton: __vue_component__
+});
+
+var mcwCardActionButtons = {
+  name: 'mcw-card-action-buttons',
+  setup: function setup(props, _ref) {
+    var slots = _ref.slots;
+    return function () {
+      var _slots$default;
+
+      return h('div', {
+        class: ['mdc-card__action-buttons']
+      }, [(_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots)]);
+    };
+  }
+};
+
+var mcwCardActionIcons = {
+  name: 'mcw-card-action-icons',
+  setup: function setup(props, _ref) {
+    var slots = _ref.slots;
+    return function () {
+      var _slots$default;
+
+      return h('div', {
+        class: ['mdc-card__action-icons']
+      }, [(_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots)]);
+    };
+  }
+};
+
+var mcwCardActions = {
+  name: 'mcw-card-actions',
+  props: {
+    fullBleed: Boolean
+  },
+  setup: function setup(props, _ref) {
+    var slots = _ref.slots;
+    return function () {
+      var _slots$default;
+
+      return h('section', {
+        class: [{
+          'mdc-card__actions': 1,
+          'mdc-card__actions--full-bleed': props.fullBleed
+        }]
+      }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
+    };
+  }
+};
+
+var mcwCardMedia = {
+  name: 'mcw-card-media',
+  props: {
+    src: String,
+    square: {
+      type: Boolean,
+      default: function _default() {
+        return false;
+      }
+    },
+    wide: {
+      type: Boolean,
+      default: function _default() {
+        return false;
+      }
+    },
+    contentClass: String
+  },
+  setup: function setup(props, _ref) {
+    var slots = _ref.slots;
+    return function () {
+      var _slots$default;
+
+      var nodes = [];
+      var content = (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots);
+
+      if (content) {
+        nodes.push(h('div', {
+          class: ['mdc-card__media-content', props.contentClass]
+        }, content));
+      }
+
+      return h('section', {
+        class: {
+          'mdc-card__media': 1,
+          'mdc-card__media--square': props.square,
+          'mdc-card__media--16-9': props.wide && !props.square
+        },
+        style: {
+          backgroundImage: "url(".concat(props.src, ")")
+        }
+      }, nodes);
+    };
+  }
+};
+
+var script$1 = {
+  name: 'mcw-card-primary-action',
+  inheritAttrs: false,
+  components: {
+    CustomLink: CustomLink
+  },
+  setup: function setup(props, _ref) {
+    var listeners = _ref.listeners;
+    var root = ref(null);
+
+    var _useRipplePlugin = useRipplePlugin(root),
+        rippleClasses = _useRipplePlugin.classes,
+        styles = _useRipplePlugin.styles;
+
+    var classes = computed(function () {
+      return _objectSpread2(_objectSpread2({}, rippleClasses.value), {}, {
+        'mdc-card__primary-action': 1
+      });
+    });
+    return {
+      classes: classes,
+      styles: styles,
+      root: root,
+      listeners: listeners
+    };
+  }
+};
+
+/* script */
+const __vue_script__$1 = script$1;
+
+/* template */
+var __vue_render__$1 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "custom-link",
+    _vm._g(
+      {
+        ref: "root",
+        class: _vm.classes,
+        style: _vm.styles,
+        attrs: { tabIndex: "0", link: _vm.$attrs }
+      },
+      _vm.listeners
+    ),
+    [_vm._t("default")],
+    2
+  )
+};
+var __vue_staticRenderFns__$1 = [];
+__vue_render__$1._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$1 = undefined;
+  /* scoped */
+  const __vue_scope_id__$1 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$1 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$1 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$1 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$1, staticRenderFns: __vue_staticRenderFns__$1 },
+    __vue_inject_styles__$1,
+    __vue_script__$1,
+    __vue_scope_id__$1,
+    __vue_is_functional_template__$1,
+    __vue_module_identifier__$1,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var mcwCard = {
+  name: 'mcw-card',
+  props: {
+    outlined: Boolean
+  },
+  setup: function setup(props, _ref) {
+    var attrs = _ref.attrs,
+        slots = _ref.slots;
+    return function () {
+      var _slots$default;
+
+      var outlined = props.outlined;
+      return h('div', {
+        class: [{
+          'mdc-card': 1,
+          'mdc-card--outlined': outlined
+        }],
+        attrs: attrs
+      }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
+    };
+  }
+};
+
+var card = BasePlugin({
+  mcwCard: mcwCard,
+  mcwCardPrimaryAction: __vue_component__$1,
+  mcwCardMedia: mcwCardMedia,
+  mcwCardActions: mcwCardActions,
+  mcwCardActionButtons: mcwCardActionButtons,
+  mcwCardActionIcons: mcwCardActionIcons
+});
+
+var CB_PROTO_PROPS = ['checked', 'indeterminate'];
+var checkboxId_ = 0;
+var script$2 = {
+  name: 'mcw-checkbox',
+  model: {
+    prop: 'checked',
+    event: 'change'
+  },
+  props: {
+    checked: [Boolean, Array],
+    indeterminate: Boolean,
+    disabled: Boolean,
+    label: String,
+    alignEnd: Boolean,
+    value: {
+      type: [String, Number],
+      default: function _default() {
+        return 'on';
+      }
+    },
+    name: String
+  },
+  setup: function setup(props, _ref) {
+    var emit = _ref.emit,
+        slots = _ref.slots;
+    var uiState = reactive({
+      classes: {
+        'mdc-checkbox': 1
+      },
+      control: null,
+      labelEl: null,
+      root: null
+    });
+    var foundation;
+    var formField;
+    var checkboxId = "__mcw-checkbox-".concat(checkboxId_++);
+
+    var _useRipplePlugin = useRipplePlugin(toRef(uiState, 'root'), {
+      isUnbounded: function isUnbounded() {
+        return true;
+      },
+      isSurfaceActive: function isSurfaceActive() {
+        return matches(uiState.control, ':active');
+      },
+      registerInteractionHandler: function registerInteractionHandler(evt, handler) {
+        uiState.control.addEventListener(evt, handler, applyPassive());
+      },
+      deregisterInteractionHandler: function deregisterInteractionHandler(evt, handler) {
+        uiState.control.removeEventListener(evt, handler, applyPassive());
+      },
+      computeBoundingRect: function computeBoundingRect() {
+        return uiState.root.getBoundingClientRect();
+      }
+    }),
+        rippleClasses = _useRipplePlugin.classes,
+        styles = _useRipplePlugin.styles,
+        activate = _useRipplePlugin.activate,
+        deactivate = _useRipplePlugin.deactivate;
+
+    var rootClasses = computed(function () {
+      return _objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes);
+    });
+    var hasLabel = computed(function () {
+      var _props$label;
+
+      return (_props$label = props.label) !== null && _props$label !== void 0 ? _props$label : slots.default;
+    });
+    var formFieldClasses = computed(function () {
+      return {
+        'mdc-form-field': hasLabel.value,
+        'mdc-form-field--align-end': hasLabel.value && props.alignEnd
+      };
+    });
+
+    var onChange = function onChange(_ref2) {
+      var _ref2$target = _ref2.target,
+          indeterminate = _ref2$target.indeterminate,
+          checked = _ref2$target.checked;
+      // note indeterminate will not currently work with the array model
+      emit('update:indeterminate', indeterminate);
+
+      if (Array.isArray(props.checked)) {
+        var idx = props.checked.indexOf(props.value);
+
+        if (checked) {
+          idx < 0 && emit('change', props.checked.concat(props.value));
+        } else {
+          idx > -1 && emit('change', props.checked.slice(0, idx).concat(props.checked.slice(idx + 1)));
+        }
+      } else {
+        // emit a native event so that it bubbles to parent elements
+        // e.g. data table row
+        emitCustomEvent(uiState.root, 'change', true);
+        emit('change', checked);
+      }
+    };
+
+    var isChecked = function isChecked() {
+      return uiState.control.checked;
+    };
+
+    var adapter = {
+      addClass: function addClass(className) {
+        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+      },
+      forceLayout: function forceLayout() {
+        return uiState.root.offsetWidth;
+      },
+      hasNativeControl: function hasNativeControl() {
+        return true;
+      },
+      isAttachedToDOM: function isAttachedToDOM() {
+        return true;
+      },
+      isChecked: function isChecked() {
+        return uiState.control.checked;
+      },
+      isIndeterminate: function isIndeterminate() {
+        return uiState.control.indeterminate;
+      },
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$classes = uiState.classes,
+            removed = _uiState$classes[className],
+            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+
+        uiState.classes = rest;
+      },
+      removeNativeControlAttr: function removeNativeControlAttr(attr) {
+        uiState.control.removeAttribute(attr);
+      },
+      setNativeControlAttr: function setNativeControlAttr(attr, value) {
+        uiState.control.setAttribute(attr, value);
+      },
+      setNativeControlDisabled: function setNativeControlDisabled(disabled) {
+        return uiState.control.disabled = disabled;
+      }
+    };
+
+    var handleAnimationEnd = function handleAnimationEnd() {
+      return foundation.handleAnimationEnd();
+    };
+
+    var setChecked = function setChecked(checked) {
+      uiState.control.checked = Array.isArray(checked) ? checked.indexOf(props.value) > -1 : checked;
+    };
+
+    var setIndeterminate = function setIndeterminate(indeterminate) {
+      uiState.control && (uiState.control.indeterminate = indeterminate);
+    };
+
+    var installPropertyChangeHooks_ = function installPropertyChangeHooks_() {
+      var nativeCb = uiState.control;
+      var cbProto = Object.getPrototypeOf(nativeCb);
+      CB_PROTO_PROPS.forEach(function (controlState) {
+        var desc = Object.getOwnPropertyDescriptor(cbProto, controlState); // We have to check for this descriptor, since some browsers (Safari) don't support its return.
+        // See: https://bugs.webkit.org/show_bug.cgi?id=49739
+
+        if (validDescriptor(desc)) {
+          var nativeCbDesc =
+          /** @type {!ObjectPropertyDescriptor} */
+          {
+            get: desc.get,
+            set: function set(state) {
+              desc.set.call(nativeCb, state);
+              foundation.handleChange();
+            },
+            configurable: desc.configurable,
+            enumerable: desc.enumerable
+          };
+          Object.defineProperty(nativeCb, controlState, nativeCbDesc);
+        }
+      });
+    };
+
+    var uninstallPropertyChangeHooks_ = function uninstallPropertyChangeHooks_() {
+      var nativeCb = uiState.control;
+      var cbProto = Object.getPrototypeOf(nativeCb);
+      CB_PROTO_PROPS.forEach(function (controlState) {
+        var desc =
+        /** @type {!ObjectPropertyDescriptor} */
+        Object.getOwnPropertyDescriptor(cbProto, controlState);
+
+        if (validDescriptor(desc)) {
+          Object.defineProperty(nativeCb, controlState, desc);
+        }
+      });
+    };
+
+    watch(function () {
+      return props.disabled;
+    }, function (nv, ov) {
+      var _foundation;
+
+      nv != ov && ((_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.setDisabled(nv));
+    });
+    watch(function () {
+      return props.checked;
+    }, function (nv, ov) {
+      nv != ov && setChecked(nv);
+    });
+    watch(function () {
+      return props.indeterminate;
+    }, function (nv, ov) {
+      nv != ov && setIndeterminate(nv);
+    });
+    onMounted(function () {
+      foundation = new MDCCheckboxFoundation(adapter);
+      uiState.root.addEventListener(getCorrectEventName(window, 'animationend'), handleAnimationEnd);
+      installPropertyChangeHooks_();
+
+      if (hasLabel.value) {
+        formField = new MDCFormFieldFoundation({
+          registerInteractionHandler: function registerInteractionHandler(type, handler) {
+            uiState.labelEl.addEventListener(type, handler);
+          },
+          deregisterInteractionHandler: function deregisterInteractionHandler(type, handler) {
+            uiState.labelEl.removeEventListener(type, handler);
+          },
+          activateInputRipple: function activateInputRipple() {
+            activate();
+          },
+          deactivateInputRipple: function deactivateInputRipple() {
+            deactivate();
+          }
+        });
+        formField.init();
+      }
+
+      foundation.init();
+      setChecked(props.checked);
+      foundation.setDisabled(props.disabled);
+      setIndeterminate(props.indeterminate);
+    });
+    onBeforeUnmount(function () {
+      var _formField;
+
+      uiState.root.removeEventListener(getCorrectEventName(window, 'animationend'), handleAnimationEnd);
+      (_formField = formField) === null || _formField === void 0 ? void 0 : _formField.destroy();
+      uninstallPropertyChangeHooks_();
+      foundation.destroy();
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      rootClasses: rootClasses,
+      formFieldClasses: formFieldClasses,
+      onChange: onChange,
+      styles: styles,
+      hasLabel: hasLabel,
+      setChecked: setChecked,
+      setIndeterminate: setIndeterminate,
+      isChecked: isChecked,
+      checkboxId: checkboxId
+    });
+  }
+}; // ===
+// Private functions
+// ===
+
+function validDescriptor(inputPropDesc) {
+  return !!inputPropDesc && typeof inputPropDesc.set === 'function';
+}
+
+/* script */
+const __vue_script__$2 = script$2;
+
+/* template */
+var __vue_render__$2 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _vm.hasLabel
+    ? _c(
+        "div",
+        { staticClass: "mdc-checkbox-wrapper", class: _vm.formFieldClasses },
+        [
+          _c(
+            "div",
+            { ref: "root", class: _vm.rootClasses, style: _vm.styles },
+            [
+              _c("input", {
+                ref: "control",
+                staticClass: "mdc-checkbox__native-control",
+                attrs: { id: _vm.checkboxId, name: _vm.name, type: "checkbox" },
+                domProps: { value: _vm.value },
+                on: { change: _vm.onChange }
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "mdc-checkbox__background" }, [
+                _c(
+                  "svg",
+                  {
+                    staticClass: "mdc-checkbox__checkmark",
+                    attrs: { viewBox: "0 0 24 24" }
+                  },
+                  [
+                    _c("path", {
+                      staticClass: "mdc-checkbox__checkmark-path",
+                      attrs: {
+                        fill: "none",
+                        d: "M1.73,12.91 8.1,19.28 22.79,4.59"
+                      }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "mdc-checkbox__mixedmark" })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "mdc-checkbox__ripple" })
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "label",
+            { ref: "labelEl", attrs: { for: _vm.checkboxId } },
+            [_vm._t("default", [_vm._v(_vm._s(_vm.label))])],
+            2
+          )
+        ]
+      )
+    : _c("div", { ref: "root", class: _vm.rootClasses, style: _vm.styles }, [
+        _c("input", {
+          ref: "control",
+          staticClass: "mdc-checkbox__native-control",
+          attrs: { id: _vm.checkboxId, name: _vm.name, type: "checkbox" },
+          domProps: { value: _vm.value },
+          on: { change: _vm.onChange }
+        }),
+        _vm._v(" "),
+        _c("div", { staticClass: "mdc-checkbox__background" }, [
+          _c(
+            "svg",
+            {
+              staticClass: "mdc-checkbox__checkmark",
+              attrs: { viewBox: "0 0 24 24" }
+            },
+            [
+              _c("path", {
+                staticClass: "mdc-checkbox__checkmark-path",
+                attrs: { fill: "none", d: "M1.73,12.91 8.1,19.28 22.79,4.59" }
+              })
+            ]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "mdc-checkbox__mixedmark" })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "mdc-checkbox__ripple" })
+      ])
+};
+var __vue_staticRenderFns__$2 = [];
+__vue_render__$2._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$2 = undefined;
+  /* scoped */
+  const __vue_scope_id__$2 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$2 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$2 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$2 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$2, staticRenderFns: __vue_staticRenderFns__$2 },
+    __vue_inject_styles__$2,
+    __vue_script__$2,
+    __vue_scope_id__$2,
+    __vue_is_functional_template__$2,
+    __vue_module_identifier__$2,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var checkbox = BasePlugin({
+  mcwCheckbox: __vue_component__$2
+});
+
+var script$3 = {
+  name: 'mcw-chip-checkmark',
+  setup: function setup() {
+    var width = ref(0);
+    var root = ref(null);
+    onMounted(function () {
+      return width.value = root.value.getBoundingClientRect().height;
+    });
+    return {
+      width: width,
+      root: root
+    };
+  }
+};
+
+/* script */
+const __vue_script__$3 = script$3;
+
+/* template */
+var __vue_render__$3 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("span", { ref: "root", staticClass: "mdc-chip__checkmark" }, [
+    _c(
+      "svg",
+      {
+        staticClass: "mdc-chip__checkmark-svg",
+        attrs: { viewBox: "-2 -3 30 30" }
+      },
+      [
+        _c("path", {
+          staticClass: "mdc-chip__checkmark-path",
+          attrs: {
+            fill: "none",
+            stroke: "black",
+            d: "M1.73,12.91 8.1,19.28 22.79,4.59"
+          }
+        })
+      ]
+    )
+  ])
+};
+var __vue_staticRenderFns__$3 = [];
+__vue_render__$3._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$3 = undefined;
+  /* scoped */
+  const __vue_scope_id__$3 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$3 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$3 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$3 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$3, staticRenderFns: __vue_staticRenderFns__$3 },
+    __vue_inject_styles__$3,
+    __vue_script__$3,
+    __vue_scope_id__$3,
+    __vue_is_functional_template__$3,
+    __vue_module_identifier__$3,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var strings = MDCChipFoundation.strings;
+var CHIP_SELECTOR = MDCChipSetFoundation.strings.CHIP_SELECTOR;
+var idCounter = 0;
+var script$4 = {
+  name: 'mcw-chip-set',
+  props: {
+    choice: [Boolean],
+    filter: [Boolean],
+    input: [Boolean]
+  },
+  setup: function setup(props) {
+    var uiState = reactive({
+      classes: {
+        'mdc-chip-set': true,
+        'mdc-chip-set--choice': props.choice,
+        'mdc-chip-set--filter': props.filter,
+        'mdc-chip-set--input': props.input
+      },
+      listn: 0,
+      myListeners: null,
+      root: null
+    });
+    var foundation;
+    var slotObserver;
+    var chipElements = computed(function () {
+      // eslint-disable-next-line no-unused-vars
+      var xx = uiState.listn; // for dependency
+
+      return [].slice.call(uiState.root.querySelectorAll(CHIP_SELECTOR));
+    });
+    var chips_ = computed(function () {
+      return chipElements.value.map(function (el) {
+        el.id = el.id || "mdc-chip-".concat(++idCounter);
+        return el.__vue__;
+      });
+    });
+    var adapter = {
+      announceMessage: function announceMessage(message) {
+        announce(message);
+      },
+      focusChipPrimaryActionAtIndex: function focusChipPrimaryActionAtIndex(index) {
+        var chip = chips_.value[index];
+        chip && chip.focusPrimaryAction();
+      },
+      focusChipTrailingActionAtIndex: function focusChipTrailingActionAtIndex(index) {
+        var chip = chips_.value[index];
+        chip && chip.focusTrailingAction();
+      },
+      getChipListCount: function getChipListCount() {
+        return chips_.value.length;
+      },
+      getIndexOfChipById: function getIndexOfChipById(chipId) {
+        return chips_.value.findIndex(function (_ref) {
+          var id = _ref.id;
+          return id == chipId;
+        });
+      },
+      hasClass: function hasClass(className) {
+        return uiState.root.classList.contains(className);
+      },
+      isRTL: function isRTL() {
+        return window.getComputedStyle(uiState.root).getPropertyValue('direction') === 'rtl';
+      },
+      removeChipAtIndex: function removeChipAtIndex(index) {
+        if (index >= 0 && index < chips_.value.length) {
+          // tell chip to remove itself from the DOM
+          chips_.value[index].remove();
+          chips_.value.splice(index, 1);
+        }
+      },
+      removeFocusFromChipAtIndex: function removeFocusFromChipAtIndex(index) {
+        chips_.value[index].removeFocus();
+      },
+      selectChipAtIndex: function selectChipAtIndex(index, selected, shouldNotifyClients) {
+        if (index >= 0 && index < chips_.value.length) {
+          chips_.value[index].setSelectedFromChipSet(selected, shouldNotifyClients);
+        }
+      }
+    };
+    provide('mcwChipSet', {
+      filter: props.filter,
+      input: props.input
+    });
+    onMounted(function () {
+      var _uiState$myListeners;
+
+      // trigger computed
+      chips_.value;
+      foundation = new MDCChipSetFoundation(adapter);
+      foundation.init();
+      uiState.myListeners = (_uiState$myListeners = {}, _defineProperty(_uiState$myListeners, strings.INTERACTION_EVENT, function (_ref2) {
+        var detail = _ref2.detail;
+        return foundation.handleChipInteraction(detail);
+      }), _defineProperty(_uiState$myListeners, strings.SELECTION_EVENT, function (_ref3) {
+        var detail = _ref3.detail;
+        return foundation.handleChipSelection(detail);
+      }), _defineProperty(_uiState$myListeners, strings.REMOVAL_EVENT, function (_ref4) {
+        var detail = _ref4.detail;
+        return foundation.handleChipRemoval(detail);
+      }), _defineProperty(_uiState$myListeners, strings.NAVIGATION_EVENT, function (_ref5) {
+        var detail = _ref5.detail;
+        return foundation.handleChipNavigation(detail);
+      }), _uiState$myListeners), // the chips could change outside of this component
+      // so use a mutation observer to trigger an update by
+      // incrementing the dependency variable "listn" referenced
+      // in the computed that selects the chip elements
+      slotObserver = new MutationObserver(function (mutationList, observer) {
+        uiState.listn++;
+      });
+      slotObserver.observe(uiState.root, {
+        childList: true // subtree: true,
+
+      });
+    });
+    onBeforeUnmount(function () {
+      slotObserver.disconnect();
+      foundation.destroy();
+    });
+    return _objectSpread2({}, toRefs(uiState));
+  }
+};
+
+/* script */
+const __vue_script__$4 = script$4;
+
+/* template */
+var __vue_render__$4 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    _vm._g(
+      { ref: "root", class: _vm.classes, attrs: { role: "grid" } },
+      _vm.myListeners
+    ),
+    [_vm._t("default")],
+    2
+  )
+};
+var __vue_staticRenderFns__$4 = [];
+__vue_render__$4._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$4 = undefined;
+  /* scoped */
+  const __vue_scope_id__$4 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$4 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$4 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$4 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$4, staticRenderFns: __vue_staticRenderFns__$4 },
+    __vue_inject_styles__$4,
+    __vue_script__$4,
+    __vue_scope_id__$4,
+    __vue_is_functional_template__$4,
+    __vue_module_identifier__$4,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var RippleElement$1 = /*#__PURE__*/function (_MDCRippleFoundation) {
+  _inherits(RippleElement, _MDCRippleFoundation);
+
+  var _super = _createSuper(RippleElement);
+
+  function RippleElement(element, state) {
+    var _element$$el;
+
+    var _this;
+
+    var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+        _ref$unbounded = _ref.unbounded,
+        unbounded = _ref$unbounded === void 0 ? false : _ref$unbounded,
+        options = _objectWithoutProperties(_ref, ["unbounded"]);
+
+    _classCallCheck(this, RippleElement);
+
+    var $el = (_element$$el = element.$el) !== null && _element$$el !== void 0 ? _element$$el : element;
+    _this = _super.call(this, _objectSpread2({
+      addClass: function addClass(className) {
+        if (state) {
+          state.classes = _objectSpread2(_objectSpread2({}, state.classes), {}, _defineProperty({}, className, true));
+        } else {
+          $el.classList.add(className);
+        }
+      },
+      browserSupportsCssVars: function browserSupportsCssVars() {
+        return supportsCssVariables(window);
+      },
+      computeBoundingRect: function computeBoundingRect() {
+        return $el.getBoundingClientRect();
+      },
+      containsEventTarget: function containsEventTarget(target) {
+        return $el.contains(target);
+      },
+      deregisterDocumentInteractionHandler: function deregisterDocumentInteractionHandler(evtType, handler) {
+        return document.documentElement.removeEventListener(evtType, handler, applyPassive());
+      },
+      deregisterInteractionHandler: function deregisterInteractionHandler(evt, handler) {
+        return $el.removeEventListener(evt, handler, applyPassive());
+      },
+      deregisterResizeHandler: function deregisterResizeHandler(handler) {
+        return window.removeEventListener('resize', handler);
+      },
+      getWindowPageOffset: function getWindowPageOffset() {
+        return {
+          x: window.pageXOffset,
+          y: window.pageYOffset
+        };
+      },
+      isSurfaceActive: function isSurfaceActive() {
+        return matches($el, ':active');
+      },
+      isSurfaceDisabled: function isSurfaceDisabled() {
+        return false;
+      },
+      // todo: consider if this is right
+      isUnbounded: function isUnbounded() {
+        return _this.unbounded_;
+      },
+      registerDocumentInteractionHandler: function registerDocumentInteractionHandler(evtType, handler) {
+        return document.documentElement.addEventListener(evtType, handler, applyPassive());
+      },
+      registerInteractionHandler: function registerInteractionHandler(evt, handler) {
+        $el.addEventListener(evt, handler, applyPassive());
+      },
+      registerResizeHandler: function registerResizeHandler(handler) {
+        return window.addEventListener('resize', handler);
+      },
+      removeClass: function removeClass(className) {
+        if (state) {
+          // eslint-disable-next-line no-unused-vars
+          var _state$classes = state.classes,
+              removed = _state$classes[className],
+              rest = _objectWithoutProperties(_state$classes, [className].map(_toPropertyKey));
+
+          state.classes = rest;
+        } else {
+          $el.classList.remove(className);
+        }
+      },
+      updateCssVariable: function updateCssVariable(varName, value) {
+        if (state) {
+          state.styles = _objectSpread2(_objectSpread2({}, state.styles), {}, _defineProperty({}, varName, value));
+        } else {
+          $el.style.setProperty(varName, value);
+        }
+      }
+    }, options));
+    _this.unbounded_ = unbounded;
+    return _this;
+  }
+
+  _createClass(RippleElement, [{
+    key: "unbounded",
+    get: function get() {
+      return this.unbounded_;
+    },
+    set: function set(unbounded) {
+      this.unbounded_ = Boolean(unbounded);
+      this.setUnbounded(this.unbounded_);
+    }
+  }]);
+
+  return RippleElement;
+}(MDCRippleFoundation);
+function useRipplePlugin$1(root, options) {
+  var ripple = ref(null);
+  var state = shallowReactive({
+    classes: {},
+    styles: {}
+  });
+
+  var activate = function activate() {
+    var _ripple$value;
+
+    return (_ripple$value = ripple.value) === null || _ripple$value === void 0 ? void 0 : _ripple$value.activate();
+  };
+
+  var deactivate = function deactivate() {
+    var _ripple$value2;
+
+    return (_ripple$value2 = ripple.value) === null || _ripple$value2 === void 0 ? void 0 : _ripple$value2.deactivate();
+  };
+
+  onMounted(function () {
+    ripple.value = new RippleElement$1(root.value, state, options);
+    ripple.value.init();
+  });
+  onBeforeUnmount(function () {
+    ripple.value.destroy();
+  });
+  return _objectSpread2(_objectSpread2({}, toRefs(state)), {}, {
+    activate: activate,
+    deactivate: deactivate
+  });
+}
+
+var strings$1 = MDCChipFoundation.strings;
+var script$5 = {
+  name: 'mcw-chip',
+  props: {
+    leadingIcon: [String],
+    trailingIcon: [String],
+    shouldRemoveOnTrailingIconClick: {
+      type: Boolean,
+      default: function _default() {
+        return true;
+      }
+    }
+  },
+  setup: function setup(props, _ref) {
+    var slots = _ref.slots;
+    var uiState = reactive({
+      classes: {
+        'mdc-chip': true
+      },
+      leadingClasses: {
+        'mdc-chip__icon': 1,
+        'mdc-chip__icon--leading': 1,
+        'material-icons': 1
+      },
+      styles: {},
+      primaryAttrs: {},
+      trailingAttrs: {},
+      myListeners: null,
+      root: null,
+      checkmarkEl: null,
+      trailingAction: null
+    });
+    var mcwChipSet = inject('mcwChipSet');
+
+    var _useRipplePlugin = useRipplePlugin$1(toRef(uiState, 'root')),
+        rippleClasses = _useRipplePlugin.classes,
+        rippleStyles = _useRipplePlugin.styles;
+
+    var foundation;
+    var classes = computed(function () {
+      return _objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes);
+    });
+    var styles = computed(function () {
+      return _objectSpread2(_objectSpread2({}, rippleStyles.value), uiState.styles);
+    });
+    var trailingAction_;
+    var leadingIcon_;
+    var id = computed(function () {
+      return uiState.root.id;
+    });
+    var selected = computed({
+      get: function get() {
+        return foundation.isSelected();
+      },
+      set: function set(nv) {
+        foundation.setSelected(nv);
+      }
+    });
+    var isFilter = computed(function () {
+      return mcwChipSet === null || mcwChipSet === void 0 ? void 0 : mcwChipSet.filter;
+    });
+    var isInput = computed(function () {
+      return mcwChipSet === null || mcwChipSet === void 0 ? void 0 : mcwChipSet.input;
+    });
+    var haveleadingIcon = computed(function () {
+      var slot = slots['leading-icon'];
+      return slot && slot[0] || !!props.leadingIcon;
+    });
+    var havetrailingIcon = computed(function () {
+      var slot = slots['trailing-icon'];
+      return isInput.value && (slot && slot[0] || !!props.trailingIcon);
+    });
+    var adapter = {
+      addClass: function addClass(className) {
+        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+      },
+      addClassToLeadingIcon: function addClassToLeadingIcon(className) {
+        if (leadingIcon_) {
+          leadingIcon_.classList.add(className);
+        }
+      },
+      eventTargetHasClass: function eventTargetHasClass(target, className) {
+        return target.classList.contains(className);
+      },
+      focusPrimaryAction: function focusPrimaryAction() {
+        var _uiState$root$querySe;
+
+        (_uiState$root$querySe = uiState.root.querySelector(strings$1.PRIMARY_ACTION_SELECTOR)) === null || _uiState$root$querySe === void 0 ? void 0 : _uiState$root$querySe.focus();
+      },
+      focusTrailingAction: function focusTrailingAction() {
+        var _trailingAction_;
+
+        (_trailingAction_ = trailingAction_) === null || _trailingAction_ === void 0 ? void 0 : _trailingAction_.focus();
+      },
+      getAttribute: function getAttribute(attr) {
+        return uiState.root.getAttribute(attr);
+      },
+      getCheckmarkBoundingClientRect: function getCheckmarkBoundingClientRect() {
+        var _uiState$checkmarkEl;
+
+        return (_uiState$checkmarkEl = uiState.checkmarkEl) === null || _uiState$checkmarkEl === void 0 ? void 0 : _uiState$checkmarkEl.getBoundingClientRect();
+      },
+      getComputedStyleValue: function getComputedStyleValue(propertyName) {
+        return window.getComputedStyle(uiState.root).getPropertyValue(propertyName);
+      },
+      getRootBoundingClientRect: function getRootBoundingClientRect() {
+        return uiState.root.getBoundingClientRect();
+      },
+      hasClass: function hasClass(className) {
+        return uiState.root.classList.contains(className);
+      },
+      hasLeadingIcon: function hasLeadingIcon() {
+        return !!haveleadingIcon.value;
+      },
+      isRTL: function isRTL() {
+        return window.getComputedStyle(uiState.root).getPropertyValue('direction') === 'rtl';
+      },
+      isTrailingActionNavigable: function isTrailingActionNavigable() {
+        if (trailingAction_) {
+          var _uiState$trailingActi;
+
+          return (_uiState$trailingActi = uiState.trailingAction) === null || _uiState$trailingActi === void 0 ? void 0 : _uiState$trailingActi.isNavigable();
+        }
+
+        return false;
+      },
+      notifyInteraction: function notifyInteraction() {
+        emitCustomEvent(uiState.root, strings$1.INTERACTION_EVENT, {
+          chipId: id.value
+        }, true);
+      },
+      notifyNavigation: function notifyNavigation(key, source) {
+        return emitCustomEvent(uiState.root, strings$1.NAVIGATION_EVENT, {
+          chipId: id.value,
+          key: key,
+          source: source
+        }, true);
+      },
+      notifyRemoval: function notifyRemoval(removedAnnouncement) {
+        emitCustomEvent(uiState.root, strings$1.REMOVAL_EVENT, {
+          chipId: id.value,
+          removedAnnouncement: removedAnnouncement
+        }, true);
+      },
+      notifySelection: function notifySelection(selected, shouldIgnore) {
+        return emitCustomEvent(uiState.root, strings$1.SELECTION_EVENT, {
+          chipId: id.value,
+          selected: selected,
+          shouldIgnore: shouldIgnore
+        }, true
+        /* shouldBubble */
+        );
+      },
+      notifyTrailingIconInteraction: function notifyTrailingIconInteraction() {
+        emitCustomEvent(uiState.root, strings$1.TRAILING_ICON_INTERACTION_EVENT, {
+          chipId: id.value
+        }, true);
+      },
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$classes = uiState.classes,
+            removed = _uiState$classes[className],
+            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+
+        uiState.classes = rest;
+      },
+      removeClassFromLeadingIcon: function removeClassFromLeadingIcon(className) {
+        if (leadingIcon_) {
+          leadingIcon_.classList.remove(className);
+        }
+      },
+      removeTrailingActionFocus: function removeTrailingActionFocus() {
+        var _uiState$trailingActi2;
+
+        (_uiState$trailingActi2 = uiState.trailingAction) === null || _uiState$trailingActi2 === void 0 ? void 0 : _uiState$trailingActi2.removeFocus();
+      },
+      setPrimaryActionAttr: function setPrimaryActionAttr(attr, value) {
+        return uiState.primaryAttrs = _objectSpread2(_objectSpread2({}, uiState.primaryAttrs), {}, _defineProperty({}, attr, value));
+      },
+      setStyleProperty: function setStyleProperty(property, value) {
+        return uiState.styles = _objectSpread2(_objectSpread2({}, uiState.styles), {}, _defineProperty({}, property, value));
+      }
+    };
+
+    var setSelectedFromChipSet = function setSelectedFromChipSet(selected, shouldNotifyClients) {
+      foundation.setSelectedFromChipSet(selected, shouldNotifyClients);
+    };
+
+    var focusPrimaryAction = function focusPrimaryAction() {
+      return foundation.focusPrimaryAction();
+    };
+
+    var focusTrailingAction = function focusTrailingAction() {
+      return foundation.focusTrailingAction();
+    };
+
+    var removeFocus = function removeFocus() {
+      return foundation.removeFocus();
+    };
+
+    var toggleSelected = function toggleSelected() {
+      return foundation.toggleSelected();
+    };
+
+    var isSelected = function isSelected() {
+      return foundation.isSelected();
+    };
+
+    var remove = function remove() {
+      var parent = uiState.root.parentNode;
+
+      if (parent != null) {
+        parent.removeChild(uiState.root);
+      }
+    };
+
+    watch(function () {
+      return props.shouldRemoveOnTrailingIconClick;
+    }, function (nv) {
+      foundation.setShouldRemoveOnTrailingIconClick(nv);
+    });
+    onMounted(function () {
+      leadingIcon_ = uiState.root.querySelector(strings$1.LEADING_ICON_SELECTOR);
+      trailingAction_ = uiState.root.querySelector(strings$1.TRAILING_ACTION_SELECTOR);
+      foundation = new MDCChipFoundation(adapter);
+      uiState.myListeners = {
+        click: function click(evt) {
+          return foundation.handleClick(evt);
+        },
+        keydown: function keydown(evt) {
+          return foundation.handleKeydown(evt);
+        },
+        transitionend: function transitionend(evt) {
+          return foundation.handleTransitionEnd(evt);
+        },
+        focusin: function focusin(evt) {
+          return foundation.handleFocusIn(evt);
+        },
+        focusout: function focusout(evt) {
+          return foundation.handleFocusOut(evt);
+        }
+      };
+
+      if (trailingAction_) {
+        uiState.myListeners[strings$1.INTERACTION_EVENT] = function (evt) {
+          return foundation.handleTrailingActionInteraction(evt);
+        };
+
+        uiState.myListeners[strings$1.NAVIGATION_EVENT] = function (evt) {
+          return foundation.handleTrailingActionNavigation(evt);
+        };
+      }
+
+      foundation.init();
+      uiState.primaryAttrs.tabindex = isFilter.value ? 0 : -1;
+
+      if (props.shouldRemoveOnTrailingIconClick !== foundation.getShouldRemoveOnTrailingIconClick()) {
+        foundation.setShouldRemoveOnTrailingIconClick(props.shouldRemoveOnTrailingIconClick);
+      }
+    });
+    onBeforeUnmount(function () {
+      foundation.destroy();
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      classes: classes,
+      styles: styles,
+      id: id,
+      isInput: isInput,
+      isFilter: isFilter,
+      selected: selected,
+      haveleadingIcon: haveleadingIcon,
+      havetrailingIcon: havetrailingIcon,
+      remove: remove,
+      isSelected: isSelected,
+      toggleSelected: toggleSelected,
+      removeFocus: removeFocus,
+      focusPrimaryAction: focusPrimaryAction,
+      focusTrailingAction: focusTrailingAction,
+      setSelectedFromChipSet: setSelectedFromChipSet
+    });
+  }
+};
+
+/* script */
+const __vue_script__$5 = script$5;
+
+/* template */
+var __vue_render__$5 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    _vm._g(
+      {
+        ref: "root",
+        staticClass: "mdc-chip",
+        class: _vm.classes,
+        style: _vm.styles,
+        attrs: { role: "row" }
+      },
+      _vm.myListeners
+    ),
+    [
+      _c("div", { staticClass: "mdc-chip__ripple" }),
+      _vm._v(" "),
+      _vm._t("leading-icon", [
+        _vm.haveleadingIcon
+          ? _c(
+              "i",
+              {
+                ref: "leading-icon",
+                staticClass:
+                  "material-icons mdc-chip__icon mdc-chip__icon--leading"
+              },
+              [_vm._v(_vm._s(_vm.leadingIcon))]
+            )
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _vm.isFilter
+        ? _c("mcw-chip-checkmark", { ref: "checkmarkEl" })
+        : _vm._e(),
+      _vm._v(" "),
+      _c("span", { attrs: { role: "gridcell" } }, [
+        _c(
+          "span",
+          {
+            staticClass: "mdc-chip__primary-action",
+            attrs: { role: _vm.isFilter ? "checkbox" : "button", tabindex: "0" }
+          },
+          [
+            _c(
+              "span",
+              { staticClass: "mdc-chip__text" },
+              [_vm._t("default")],
+              2
+            )
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _vm._t("trailing-icon", [
+        _vm.havetrailingIcon
+          ? _c(
+              "span",
+              { attrs: { role: "gridcell" } },
+              [
+                _c("mcw-chip-trailing-action", { ref: "trailingAction" }, [
+                  _vm._v(_vm._s(_vm.trailingIcon))
+                ])
+              ],
+              1
+            )
+          : _vm._e()
+      ])
+    ],
+    2
+  )
+};
+var __vue_staticRenderFns__$5 = [];
+__vue_render__$5._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$5 = undefined;
+  /* scoped */
+  const __vue_scope_id__$5 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$5 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$5 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$5 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$5, staticRenderFns: __vue_staticRenderFns__$5 },
+    __vue_inject_styles__$5,
+    __vue_script__$5,
+    __vue_scope_id__$5,
+    __vue_is_functional_template__$5,
+    __vue_module_identifier__$5,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var strings$2 = MDCChipTrailingActionFoundation.strings;
+var script$6 = {
+  name: 'mcw-chip-trailing-action',
+  setup: function setup() {
+    var root = ref(null);
+    var foundation;
+
+    var _useRipplePlugin = useRipplePlugin$1(root),
+        classes = _useRipplePlugin.classes,
+        styles = _useRipplePlugin.styles;
+
+    var adapter = {
+      focus: function focus() {
+        root.value.focus();
+      },
+      getAttribute: function getAttribute(attr) {
+        return root.value.getAttribute(attr);
+      },
+      notifyInteraction: function notifyInteraction(trigger) {
+        return emitCustomEvent(root.value, strings$2.INTERACTION_EVENT, {
+          trigger: trigger
+        }, true);
+      },
+      notifyNavigation: function notifyNavigation(key) {
+        return emitCustomEvent(root.value, strings$2.INTERACTION_EVENT, {
+          key: key
+        }, true);
+      },
+      setAttribute: function setAttribute(attr, value) {
+        root.value.setAttribute(attr, value);
+      }
+    };
+
+    var onClick = function onClick(evt) {
+      return foundation.handleClick(evt);
+    };
+
+    var onKeydown = function onKeydown(evt) {
+      return foundation.handleKeydown(evt);
+    };
+
+    var isNavigable = function isNavigable() {
+      return foundation.isNavigable();
+    };
+
+    var focus = function focus() {
+      return foundation.focus();
+    };
+
+    var removeFocus = function removeFocus() {
+      return foundation.removeFocus();
+    };
+
+    onMounted(function () {
+      foundation = new MDCChipTrailingActionFoundation(adapter);
+      foundation.init();
+    });
+    onBeforeUnmount(function () {
+      foundation.destroy();
+    });
+    return {
+      root: root,
+      styles: styles,
+      classes: classes,
+      onClick: onClick,
+      onKeydown: onKeydown,
+      isNavigable: isNavigable,
+      focus: focus,
+      removeFocus: removeFocus
+    };
+  }
+};
+
+/* script */
+const __vue_script__$6 = script$6;
+
+/* template */
+var __vue_render__$6 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "button",
+    {
+      ref: "root",
+      staticClass: "mdc-chip-trailing-action",
+      class: _vm.classes,
+      style: _vm.styles,
+      attrs: { "aria-label": "Remove chip", tabindex: "-1" },
+      on: { click: _vm.onClick, keydown: _vm.onKeydown }
+    },
+    [
+      _c("span", { staticClass: "mdc-chip-trailing-action__ripple" }),
+      _vm._v(" "),
+      _c(
+        "span",
+        { staticClass: "mdc-chip-trailing-action__icon material-icons" },
+        [_vm._t("default")],
+        2
+      )
+    ]
+  )
+};
+var __vue_staticRenderFns__$6 = [];
+__vue_render__$6._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$6 = undefined;
+  /* scoped */
+  const __vue_scope_id__$6 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$6 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$6 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$6 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$6, staticRenderFns: __vue_staticRenderFns__$6 },
+    __vue_inject_styles__$6,
+    __vue_script__$6,
+    __vue_scope_id__$6,
+    __vue_is_functional_template__$6,
+    __vue_module_identifier__$6,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var chips = BasePlugin({
+  mcwChip: __vue_component__$5,
+  mcwChipSet: __vue_component__$4,
+  mcwChipCheckmark: __vue_component__$3,
+  mcwChipTrailingAction: __vue_component__$6
+});
+
+var ProgressPropType = {
+  type: [Number, String],
+  validator: function validator(value) {
+    return Number(value) >= 0 && Number(value) <= 1;
+  }
+};
+var script$7 = {
+  name: 'mcw-circular-progress',
+  props: {
+    open: {
+      type: Boolean,
+      default: true
+    },
+    indeterminate: Boolean,
+    medium: Boolean,
+    progress: ProgressPropType,
+    tag: {
+      type: String,
+      default: 'div'
+    }
+  },
+  setup: function setup(props) {
+    var uiState = reactive({
+      classes: {
+        'mdc-circular-progress': 1,
+        'mdc-circular-progress--medium': props.medium,
+        'mdc-circular-progress--large': !props.medium
+      },
+      rootAttrs: {},
+      circleAttrs: getCircleAttrs(props.medium, false),
+      indeterminateAttrs: getCircleAttrs(props.medium, true),
+      root: null
+    });
+    var foundation;
+    var adapter = {
+      addClass: function addClass(className) {
+        uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+      },
+      getDeterminateCircleAttribute: function getDeterminateCircleAttribute(attributeName) {
+        return uiState.circleAttrs[attributeName];
+      },
+      hasClass: function hasClass(className) {
+        return uiState.root.classList.contains(className);
+      },
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$classes = uiState.classes,
+            removed = _uiState$classes[className],
+            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+
+        uiState.classes = rest;
+      },
+      removeAttribute: function removeAttribute(attributeName) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$rootAttrs = uiState.rootAttrs,
+            removed = _uiState$rootAttrs[attributeName],
+            rest = _objectWithoutProperties(_uiState$rootAttrs, [attributeName].map(_toPropertyKey));
+
+        uiState.rootAttrs = rest;
+      },
+      setAttribute: function setAttribute(attributeName, value) {
+        uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, _defineProperty({}, attributeName, value));
+      },
+      setDeterminateCircleAttribute: function setDeterminateCircleAttribute(attributeName, value) {
+        return uiState.circleAttrs = _objectSpread2(_objectSpread2({}, uiState.circleAttrs), {}, _defineProperty({}, attributeName, value));
+      }
+    };
+    watch(function () {
+      return props.open;
+    }, function (nv) {
+      if (nv) {
+        foundation.open();
+      } else {
+        foundation.close();
+      }
+    });
+    watch(function () {
+      return props.progress;
+    }, function (nv) {
+      foundation.setProgress(Number(nv));
+    });
+    watch(function () {
+      return props.indeterminate;
+    }, function (nv) {
+      foundation.setDeterminate(!nv);
+    });
+    onMounted(function () {
+      foundation = new MDCCircularProgressFoundation(adapter);
+      foundation.init();
+      foundation.setProgress(Number(props.progress));
+      foundation.setDeterminate(!props.indeterminate);
+
+      if (props.open) {
+        foundation.open();
+      } else {
+        foundation.close();
+      }
+    });
+    onBeforeUnmount(function () {
+      return foundation.destroy();
+    });
+    return _objectSpread2({}, toRefs(uiState));
+  }
+}; // ===
+// Private functions
+// ===
+
+function getCircleAttrs() {
+  var medium = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+  var indeterminate = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+  return medium ? {
+    cx: '16',
+    cy: '16',
+    r: '12.5',
+    'stroke-dasharray': '78.54',
+    'stroke-dashoffset': indeterminate ? '39.27' : '78.54'
+  } : {
+    cx: '24',
+    cy: '24',
+    r: '18',
+    'stroke-dasharray': '113.097',
+    'stroke-dashoffset': indeterminate ? '56.549' : '113.097'
+  };
+}
+
+/* script */
+const __vue_script__$7 = script$7;
+
+/* template */
+var __vue_render__$7 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
     "div",
     _vm._b(
-      { class: _vm.classes, attrs: { role: "progressbar" } },
+      { ref: "root", class: _vm.classes, attrs: { role: "progressbar" } },
       "div",
       _vm.rootAttrs,
       false
@@ -1101,2249 +2610,6 @@ var __vue_render__ = function() {
     ]
   )
 };
-var __vue_staticRenderFns__ = [];
-__vue_render__._withStripped = true;
-
-  /* style */
-  const __vue_inject_styles__ = undefined;
-  /* scoped */
-  const __vue_scope_id__ = undefined;
-  /* module identifier */
-  const __vue_module_identifier__ = undefined;
-  /* functional template */
-  const __vue_is_functional_template__ = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  const __vue_component__ = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ },
-    __vue_inject_styles__,
-    __vue_script__,
-    __vue_scope_id__,
-    __vue_is_functional_template__,
-    __vue_module_identifier__,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-var circularProgress = BasePlugin({
-  mcwCircularProgress: __vue_component__
-});
-
-/* eslint-disable quote-props */
-const CB_PROTO_PROPS = ['checked', 'indeterminate'];
-var script$1 = {
-  name: 'mcw-checkbox',
-  mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
-  model: {
-    prop: 'checked',
-    event: 'change'
-  },
-  props: {
-    checked: [Boolean, Array],
-    indeterminate: Boolean,
-    disabled: Boolean,
-    label: String,
-    alignEnd: Boolean,
-    value: {
-      type: [String, Number],
-
-      default() {
-        return 'on';
-      }
-
-    },
-    name: String
-  },
-
-  data() {
-    return {
-      styles: {},
-      classes: {
-        'mdc-checkbox': 1
-      }
-    };
-  },
-
-  computed: {
-    hasLabel() {
-      return this.label || this.$slots.default;
-    },
-
-    formFieldClasses() {
-      return {
-        'mdc-form-field': this.hasLabel,
-        'mdc-form-field--align-end': this.hasLabel && this.alignEnd
-      };
-    }
-
-  },
-  watch: {
-    checked: 'setChecked',
-
-    disabled(value) {
-      this.foundation.setDisabled(value);
-    },
-
-    indeterminate: 'setIndeterminate'
-  },
-
-  mounted() {
-    const adapter = {
-      addClass: className => this.$set(this.classes, className, true),
-      forceLayout: () => this.$refs.root.offsetWidth,
-      hasNativeControl: () => true,
-      isAttachedToDOM: () => true,
-      isChecked: () => this.$refs.control.checked,
-      isIndeterminate: () => this.$refs.control.indeterminate,
-      removeClass: className => this.$delete(this.classes, className),
-      removeNativeControlAttr: attr => {
-        this.$refs.control.removeAttribute(attr);
-      },
-      setNativeControlAttr: (attr, value) => {
-        this.$refs.control.setAttribute(attr, value);
-      },
-      setNativeControlDisabled: disabled => this.$refs.control.disabled = disabled
-    };
-    this.foundation = new MDCCheckboxFoundation(adapter);
-
-    this.handleAnimationEnd_ = () => this.foundation.handleAnimationEnd();
-
-    this.$el.addEventListener(getCorrectEventName(window, 'animationend'), this.handleAnimationEnd_);
-    this.installPropertyChangeHooks_();
-    this.ripple = new RippleBase(this, {
-      isUnbounded: () => true,
-      isSurfaceActive: () => RippleBase.isSurfaceActive(this.$refs.control),
-      registerInteractionHandler: (evt, handler) => {
-        this.$refs.control.addEventListener(evt, handler, applyPassive());
-      },
-      deregisterInteractionHandler: (evt, handler) => {
-        this.$refs.control.removeEventListener(evt, handler, applyPassive());
-      },
-      computeBoundingRect: () => {
-        return this.$refs.root.getBoundingClientRect();
-      }
-    });
-    this.formField = new MDCFormFieldFoundation({
-      registerInteractionHandler: (type, handler) => {
-        this.$refs.label.addEventListener(type, handler);
-      },
-      deregisterInteractionHandler: (type, handler) => {
-        this.$refs.label.removeEventListener(type, handler);
-      },
-      activateInputRipple: () => {
-        this.ripple && this.ripple.activate();
-      },
-      deactivateInputRipple: () => {
-        this.ripple && this.ripple.deactivate();
-      }
-    });
-    this.foundation.init();
-    this.ripple.init();
-    this.formField.init();
-    this.setChecked(this.checked);
-    this.foundation.setDisabled(this.disabled);
-    this.setIndeterminate(this.indeterminate);
-  },
-
-  beforeDestroy() {
-    this.$el.removeEventListener(getCorrectEventName(window, 'animationend'), this.handleAnimationEnd_);
-    this.formField.destroy();
-    this.ripple.destroy();
-    this.uninstallPropertyChangeHooks_();
-    this.foundation.destroy();
-  },
-
-  methods: {
-    setChecked(checked) {
-      this.$refs.control.checked = Array.isArray(checked) ? checked.indexOf(this.value) > -1 : checked;
-    },
-
-    setIndeterminate(indeterminate) {
-      this.$refs.control.indeterminate = indeterminate;
-    },
-
-    onChange({
-      target: {
-        indeterminate,
-        checked
-      }
-    }) {
-      // note indeterminate will not currently work with the array model
-      this.$emit('update:indeterminate', indeterminate);
-
-      if (Array.isArray(this.checked)) {
-        const idx = this.checked.indexOf(this.value);
-
-        if (checked) {
-          idx < 0 && this.$emit('change', this.checked.concat(this.value));
-        } else {
-          idx > -1 && this.$emit('change', this.checked.slice(0, idx).concat(this.checked.slice(idx + 1)));
-        }
-      } else {
-        this.$emit('change', checked);
-      }
-    },
-
-    installPropertyChangeHooks_() {
-      const nativeCb = this.$refs.control;
-      const cbProto = Object.getPrototypeOf(nativeCb);
-      CB_PROTO_PROPS.forEach(controlState => {
-        const desc = Object.getOwnPropertyDescriptor(cbProto, controlState); // We have to check for this descriptor, since some browsers (Safari) don't support its return.
-        // See: https://bugs.webkit.org/show_bug.cgi?id=49739
-
-        if (validDescriptor(desc)) {
-          const nativeCbDesc =
-          /** @type {!ObjectPropertyDescriptor} */
-          {
-            get: desc.get,
-            set: state => {
-              desc.set.call(nativeCb, state);
-              this.foundation.handleChange();
-            },
-            configurable: desc.configurable,
-            enumerable: desc.enumerable
-          };
-          Object.defineProperty(nativeCb, controlState, nativeCbDesc);
-        }
-      });
-    },
-
-    uninstallPropertyChangeHooks_() {
-      const nativeCb = this.$refs.control;
-      const cbProto = Object.getPrototypeOf(nativeCb);
-      CB_PROTO_PROPS.forEach(controlState => {
-        const desc =
-        /** @type {!ObjectPropertyDescriptor} */
-        Object.getOwnPropertyDescriptor(cbProto, controlState);
-
-        if (validDescriptor(desc)) {
-          Object.defineProperty(nativeCb, controlState, desc);
-        }
-      });
-    }
-
-  }
-}; // ===
-// Private functions
-// ===
-
-function validDescriptor(inputPropDesc) {
-  return !!inputPropDesc && typeof inputPropDesc.set === 'function';
-}
-
-/* script */
-const __vue_script__$1 = script$1;
-
-/* template */
-var __vue_render__$1 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    { staticClass: "mdc-checkbox-wrapper", class: _vm.formFieldClasses },
-    [
-      _c("div", { ref: "root", class: _vm.classes, style: _vm.styles }, [
-        _c("input", {
-          ref: "control",
-          staticClass: "mdc-checkbox__native-control",
-          attrs: { id: _vm.vma_uid_, name: _vm.name, type: "checkbox" },
-          domProps: { value: _vm.value },
-          on: { change: _vm.onChange }
-        }),
-        _vm._v(" "),
-        _c("div", { staticClass: "mdc-checkbox__background" }, [
-          _c(
-            "svg",
-            {
-              staticClass: "mdc-checkbox__checkmark",
-              attrs: { viewBox: "0 0 24 24" }
-            },
-            [
-              _c("path", {
-                staticClass: "mdc-checkbox__checkmark-path",
-                attrs: { fill: "none", d: "M1.73,12.91 8.1,19.28 22.79,4.59" }
-              })
-            ]
-          ),
-          _vm._v(" "),
-          _c("div", { staticClass: "mdc-checkbox__mixedmark" })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "mdc-checkbox__ripple" })
-      ]),
-      _vm._v(" "),
-      _c(
-        "label",
-        { ref: "label", attrs: { for: _vm.vma_uid_ } },
-        [_vm._t("default", [_vm._v(_vm._s(_vm.label))])],
-        2
-      )
-    ]
-  )
-};
-var __vue_staticRenderFns__$1 = [];
-__vue_render__$1._withStripped = true;
-
-  /* style */
-  const __vue_inject_styles__$1 = undefined;
-  /* scoped */
-  const __vue_scope_id__$1 = undefined;
-  /* module identifier */
-  const __vue_module_identifier__$1 = undefined;
-  /* functional template */
-  const __vue_is_functional_template__$1 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  const __vue_component__$1 = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$1, staticRenderFns: __vue_staticRenderFns__$1 },
-    __vue_inject_styles__$1,
-    __vue_script__$1,
-    __vue_scope_id__$1,
-    __vue_is_functional_template__$1,
-    __vue_module_identifier__$1,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-var checkbox = BasePlugin({
-  mcwCheckbox: __vue_component__$1
-});
-
-var mcwChipCheckmark = {
-  name: 'mcw-chip-checkmark',
-
-  data() {
-    return {
-      width: 0
-    };
-  },
-
-  render(createElement) {
-    return createElement('div', {
-      class: {
-        'mdc-chip__checkmark': 1
-      }
-    }, [createElement('svg', {
-      class: {
-        'mdc-chip__checkmark-svg': 1
-      },
-      attrs: {
-        viewBox: '-2 -3 30 30'
-      }
-    }, [createElement('path', {
-      class: {
-        'mdc-chip__checkmark-path': 1
-      },
-      attrs: {
-        fill: 'none',
-        stroke: 'black',
-        d: 'M1.73,12.91 8.1,19.28 22.79,4.59'
-      }
-    })])]);
-  },
-
-  mounted() {
-    this.width = this.$el.getBoundingClientRect().height;
-  }
-
-};
-
-const {
-  INTERACTION_EVENT,
-  SELECTION_EVENT,
-  REMOVAL_EVENT,
-  NAVIGATION_EVENT
-} = MDCChipFoundation.strings;
-const {
-  CHIP_SELECTOR
-} = MDCChipSetFoundation.strings;
-let idCounter = 0;
-var mcwChipSet = {
-  name: 'mcw-chip-set',
-  props: {
-    choice: [Boolean],
-    filter: [Boolean],
-    input: [Boolean]
-  },
-
-  provide() {
-    return {
-      mcwChipSet: this
-    };
-  },
-
-  data() {
-    return {
-      classes: {
-        'mdc-chip-set': true,
-        'mdc-chip-set--choice': this.choice,
-        'mdc-chip-set--filter': this.filter,
-        'mdc-chip-set--input': this.input
-      },
-      listn: 0
-    };
-  },
-
-  computed: {
-    chipElements() {
-      // eslint-disable-next-line no-unused-vars
-      const xx = this.listn; // for dependency
-
-      return [].slice.call(this.$el.querySelectorAll(CHIP_SELECTOR));
-    },
-
-    chips_() {
-      return this.chipElements.map(el => {
-        el.id = el.id || `mdc-chip-${++idCounter}`;
-        return el.__vue__;
-      });
-    }
-
-  },
-
-  mounted() {
-    // do not delete this reference as it triggers initial chip list instantiation.
-    this.chips_;
-    this.foundation = new MDCChipSetFoundation({
-      announceMessage: message => {
-        announce(message);
-      },
-      focusChipPrimaryActionAtIndex: index => {
-        const chip = this.chips_[index];
-        chip && chip.focusPrimaryAction();
-      },
-      focusChipTrailingActionAtIndex: index => {
-        const chip = this.chips_[index];
-        chip && chip.focusTrailingAction();
-      },
-      getChipListCount: () => {
-        return this.chips_.length;
-      },
-      getIndexOfChipById: chipId => {
-        return this.chips_.findIndex(({
-          id
-        }) => id == chipId);
-      },
-      hasClass: className => this.$el.classList.contains(className),
-      isRTL: () => window.getComputedStyle(this.$el).getPropertyValue('direction') === 'rtl',
-      removeChipAtIndex: index => {
-        if (index >= 0 && index < this.chips_.length) {
-          // tell chip to remove itself from the DOM
-          this.chips_[index].remove();
-          this.chips_.splice(index, 1);
-        }
-      },
-      removeFocusFromChipAtIndex: index => {
-        this.chips_[index].removeFocus();
-      },
-      selectChipAtIndex: (index, selected, shouldNotifyClients) => {
-        if (index >= 0 && index < this.chips_.length) {
-          this.chips_[index].setSelectedFromChipSet(selected, shouldNotifyClients);
-        }
-      }
-    });
-    this.foundation.init(); // the chips could change outside of this component
-    // so use a mutation observer to trigger an update by
-    // incrementing the dependency variable "listn" referenced
-    // in the computed that selects the chip elements
-
-    this.slotObserver = new MutationObserver((mutationList, observer) => {
-      this.listn++;
-    });
-    this.slotObserver.observe(this.$refs.listRoot, {
-      childList: true // subtree: true,
-
-    });
-  },
-
-  beforeDestroy() {
-    this.slotObserver.disconnect();
-    this.foundation.destroy();
-  },
-
-  render(createElement) {
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
-    return createElement('div', {
-      class: this.classes,
-      attrs: {
-        role: 'grid'
-      },
-      on: {
-        [INTERACTION_EVENT]: ({
-          detail
-        }) => this.foundation.handleChipInteraction(detail),
-        [SELECTION_EVENT]: ({
-          detail
-        }) => this.foundation.handleChipSelection(detail),
-        [REMOVAL_EVENT]: ({
-          detail
-        }) => this.foundation.handleChipRemoval(detail),
-        [NAVIGATION_EVENT]: ({
-          detail
-        }) => this.foundation.handleChipNavigation(detail)
-      },
-      ref: 'listRoot'
-    }, scopedSlots.default && scopedSlots.default());
-  }
-
-};
-
-const {
-  INTERACTION_EVENT: INTERACTION_EVENT$1,
-  SELECTION_EVENT: SELECTION_EVENT$1,
-  REMOVAL_EVENT: REMOVAL_EVENT$1,
-  TRAILING_ICON_INTERACTION_EVENT,
-  PRIMARY_ACTION_SELECTOR,
-  TRAILING_ACTION_SELECTOR,
-  NAVIGATION_EVENT: NAVIGATION_EVENT$1
-} = MDCChipFoundation.strings;
-var mcwChip = {
-  name: 'mcw-chip',
-  mixins: [CustomLinkMixin],
-  props: {
-    leadingIcon: [String],
-    trailingIcon: [String],
-    shouldRemoveOnTrailingIconClick: {
-      type: Boolean,
-
-      default() {
-        return true;
-      }
-
-    }
-  },
-  inject: ['mcwChipSet'],
-
-  data() {
-    return {
-      classes: {
-        'mdc-chip': true
-      },
-      leadingClasses: {
-        'mdc-chip__icon': 1,
-        'mdc-chip__icon--leading': 1,
-        'material-icons': 1
-      },
-      styles: {},
-      primaryAttrs: {},
-      trailingAttrs: {}
-    };
-  },
-
-  watch: {
-    shouldRemoveOnTrailingIconClick(shouldRemove) {
-      this.foundation.setShouldRemoveOnTrailingIconClick(shouldRemove);
-    }
-
-  },
-  computed: {
-    id() {
-      return this.$el.id;
-    },
-
-    selected: {
-      get() {
-        return this.foundation.isSelected();
-      },
-
-      set(nv) {
-        this.foundation.setSelected(nv);
-      }
-
-    },
-
-    isFilter() {
-      return this.mcwChipSet && this.mcwChipSet.filter;
-    },
-
-    isInput() {
-      return this.mcwChipSet && this.mcwChipSet.input;
-    },
-
-    haveleadingIcon() {
-      const slot = this.$slots['leading-icon'];
-      return slot && slot[0] || !!this.leadingIcon;
-    },
-
-    havetrailingIcon() {
-      const slot = this.$slots['trailing-icon'];
-      return this.isInput && (slot && slot[0] || !!this.trailingIcon);
-    }
-
-  },
-  methods: {
-    setSelectedFromChipSet(selected, shouldNotifyClients) {
-      this.foundation.setSelectedFromChipSet(selected, shouldNotifyClients);
-    },
-
-    focusPrimaryAction() {
-      this.foundation.focusPrimaryAction();
-    },
-
-    focusTrailingAction() {
-      this.foundation.focusTrailingAction();
-    },
-
-    removeFocus() {
-      this.foundation.removeFocus();
-    },
-
-    toggleSelected() {
-      this.foundation.toggleSelected();
-    },
-
-    isSelected() {
-      return this.foundation.isSelected();
-    },
-
-    remove() {
-      const parent = this.$el.parentNode;
-
-      if (parent != null) {
-        parent.removeChild(this.$el);
-      }
-    },
-
-    renderLeadingIcon(createElement) {
-      const {
-        $slots: {
-          ['leading-icon']: slot
-        }
-      } = this;
-      const v0 = slot && slot[0];
-
-      if (v0) {
-        const {
-          staticClass = ''
-        } = v0.data;
-        const haveClasses = staticClass && staticClass.indexOf('mdc-chip__icon') > -1;
-
-        if (!haveClasses) {
-          v0.data.staticClass = `mdc-chip__icon mdc-chip__icon--leading ${staticClass}`;
-        }
-
-        return slot;
-      }
-
-      return createElement('i', {
-        class: this.leadingClasses,
-        ref: 'leading-icon'
-      }, this.leadingIcon);
-    },
-
-    renderTrailingIcon(createElement) {
-      const {
-        $slots: {
-          ['trailing-icon']: slot
-        }
-      } = this;
-      const v0 = slot && slot[0];
-
-      if (v0) {
-        const {
-          staticClass = ''
-        } = v0.data;
-        const haveClasses = staticClass && staticClass.indexOf('mdc-chip__icon') > -1;
-
-        if (!haveClasses) {
-          v0.data.staticClass = `mdc-chip__icon mdc-chip__icon--trailing mdc-chip__trailing-action${staticClass}`;
-          v0.data.on = { ...v0.data.on,
-            click: evt => {
-              this.foundation.handleTrailingIconInteraction(evt);
-            },
-            keydown: evt => this.foundation.handleTrailingIconInteraction(evt)
-          };
-        }
-
-        return slot;
-      }
-
-      return createElement('span', {
-        attrs: {
-          role: 'gridcell'
-        }
-      }, [createElement('i', {
-        class: {
-          'mdc-chip__icon': 1,
-          'mdc-chip__icon--trailing': 1,
-          'material-icons': 1 // 'mdc-chip__trailing-action': 1,
-
-        },
-        attrs: { ...this.trailingAttrs
-        },
-        ref: 'trailing-icon',
-        on: {
-          click: evt => this.foundation.handleTrailingIconInteraction(evt),
-          keydown: evt => this.foundation.handleTrailingIconInteraction(evt)
-        }
-      }, this.trailingIcon)]);
-    }
-
-  },
-
-  mounted() {
-    this.trailingAction_ = this.$el.querySelector(TRAILING_ACTION_SELECTOR);
-    this.foundation = new MDCChipFoundation({
-      addClass: className => this.$set(this.classes, className, true),
-      addClassToLeadingIcon: className => {
-        this.$set(this.leadingClasses, className, true); // if no ref, then using slot, so just add class directly
-
-        if (!this.$refs['leading-icon'] && this.haveleadingIcon) {
-          const item = this.$slots['leading-icon'][0];
-          (item.elm || item).classList.add(className);
-        }
-      },
-      eventTargetHasClass: (target, className) => target.classList.contains(className),
-      focusPrimaryAction: () => {
-        const {
-          $refs: {
-            primaryAction = this.$el.querySelector(PRIMARY_ACTION_SELECTOR)
-          }
-        } = this;
-        primaryAction && primaryAction.focus();
-      },
-      focusTrailingAction: () => {
-        this.trailingAction_ && this.trailingAction_.focus();
-      },
-      getAttribute: attr => this.$el.getAttribute(attr),
-      getCheckmarkBoundingClientRect: () => {
-        return this.$refs.checkmarkEl ? this.$refs.checkmarkEl.$el.getBoundingClientRect() : null;
-      },
-      getComputedStyleValue: propertyName => window.getComputedStyle(this.$el).getPropertyValue(propertyName),
-      getRootBoundingClientRect: () => this.$el.getBoundingClientRect(),
-      hasClass: className => this.$el.classList.contains(className),
-      hasLeadingIcon: () => !!this.haveleadingIcon,
-      hasTrailingAction: () => !!this.trailingAction_,
-      isRTL: () => window.getComputedStyle(this.$el).getPropertyValue('direction') === 'rtl',
-      notifyInteraction: () => {
-        emitCustomEvent(this.$el, INTERACTION_EVENT$1, {
-          chipId: this.id
-        }, true);
-      },
-      notifyNavigation: (key, source) => emitCustomEvent(this.$el, NAVIGATION_EVENT$1, {
-        chipId: this.id,
-        key,
-        source
-      }, true),
-      notifyRemoval: removedAnnouncement => {
-        emitCustomEvent(this.$el, REMOVAL_EVENT$1, {
-          chipId: this.id,
-          root: this.$el,
-          removedAnnouncement
-        }, true);
-      },
-      notifySelection: selected => emitCustomEvent(this.$el, SELECTION_EVENT$1, {
-        chipId: this.id,
-        selected: selected
-      }, true
-      /* shouldBubble */
-      ),
-      notifyTrailingIconInteraction: () => {
-        emitCustomEvent(this.$el, TRAILING_ICON_INTERACTION_EVENT, {
-          chipId: this.id
-        }, true);
-      },
-      removeClass: className => this.$delete(this.classes, className),
-      removeClassFromLeadingIcon: className => {
-        this.$delete(this.leadingClasses, className); // if no ref, then using slot, so just remove class directly
-
-        if (!this.$refs['leading-icon'] && this.haveleadingIcon) {
-          const item = this.$slots['leading-icon'][0];
-          (item.elm || item).classList.remove(className);
-        }
-      },
-      setPrimaryActionAttr: (attr, value) => {
-        this.$set(this.primaryAttrs, attr, value);
-      },
-      setStyleProperty: (property, value) => this.$set(this.styles, property, value),
-      setTrailingActionAttr: (attr, value) => {
-        if (this.trailingAction_) {
-          this.trailingAction_.setAttribute(attr, value);
-        }
-      }
-    });
-    this.foundation.init();
-    this.primaryAttrs.tabindex = this.isFilter ? 0 : -1;
-
-    if (this.shouldRemoveOnTrailingIconClick !== this.foundation.getShouldRemoveOnTrailingIconClick()) {
-      this.foundation.setShouldRemoveOnTrailingIconClick(this.shouldRemoveOnTrailingIconClick);
-    }
-
-    this.ripple = new RippleBase(this, {
-      computeBoundingRect: () => this.foundation.getDimensions()
-    });
-    this.ripple.init();
-  },
-
-  beforeDestroy() {
-    this.ripple.destroy();
-    this.foundation.destroy();
-  },
-
-  render(createElement) {
-    var _scopedSlots$default;
-
-    const {
-      $scopedSlots: scopedSlots,
-      haveleadingIcon,
-      havetrailingIcon,
-      isFilter,
-      primaryAttrs
-    } = this;
-    const role = isFilter ? 'checkbox' : 'button';
-    const on = {
-      click: evt => this.foundation.handleInteraction(evt),
-      keydown: evt => this.foundation.handleInteraction(evt),
-      transitionend: evt => this.foundation.handleTransitionEnd(evt),
-      focusin: evt => this.foundation.handleFocusIn(evt),
-      focusout: evt => this.foundation.handleFocusOut(evt)
-    };
-
-    if (this.trailingAction_) {
-      on[INTERACTION_EVENT$1] = evt => this.foundation.handleTrailingIconInteraction(evt);
-    }
-
-    return createElement('div', {
-      class: this.classes,
-      style: this.styles,
-      attrs: {
-        role: 'row'
-      },
-      on
-    }, [createElement('div', {
-      class: {
-        'mdc-chip__ripple': 1
-      }
-    }), haveleadingIcon && this.renderLeadingIcon(createElement), isFilter && createElement(mcwChipCheckmark, {
-      ref: 'checkmarkEl'
-    }), createElement('span', {
-      attrs: {
-        role: 'gridcell'
-      }
-    }, [createElement('span', {
-      attrs: {
-        role,
-        tabindex: 0,
-        ...primaryAttrs
-      },
-      class: {
-        'mdc-chip__primary-action': 1
-      },
-      ref: 'primaryAction'
-    }, [createElement('span', {
-      class: ['mdc-chip__text']
-    }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots))])]), havetrailingIcon && this.renderTrailingIcon(createElement)]);
-  }
-
-};
-
-var chips = BasePlugin({
-  mcwChip,
-  mcwChipSet,
-  mcwChipCheckmark
-});
-
-var script$2 = {
-  name: 'mcw-data-table',
-
-  data() {
-    return {};
-  },
-
-  methods: {
-    getRows() {
-      return this.foundation.getRows();
-    },
-
-    layout() {
-      this.foundation.layout();
-    },
-
-    getRowByIndex_(index) {
-      return this.getRows()[index];
-    },
-
-    getRowIdByIndex_(index) {
-      return this.getRowByIndex_(index).getAttribute(strings$5.DATA_ROW_ID_ATTR);
-    }
-
-  },
-
-  mounted() {
-    this.checkboxFactory_ = el => new MDCCheckbox(el);
-
-    const {
-      cssClasses,
-      events,
-      strings
-    } = test;
-    const adapter = {
-      addClassAtRowIndex: (rowIndex, className) => this.getRows()[rowIndex].classList.add(className),
-      getRowCount: () => this.getRows().length,
-      getRowElements: () => [].slice.call(this.$el.querySelectorAll(strings.ROW_SELECTOR)),
-      getRowIdAtIndex: rowIndex => this.getRows()[rowIndex].getAttribute(strings.DATA_ROW_ID_ATTR),
-      getRowIndexByChildElement: el => {
-        return this.getRows().indexOf(closest(el, strings.ROW_SELECTOR));
-      },
-      getSelectedRowCount: () => this.$el.querySelectorAll(strings.ROW_SELECTED_SELECTOR).length,
-      isCheckboxAtRowIndexChecked: rowIndex => this.rowCheckboxList_[rowIndex].checked,
-      isHeaderRowCheckboxChecked: () => this.headerRowCheckbox_.checked,
-      isRowsSelectable: () => !!this.$el.querySelector(strings.ROW_CHECKBOX_SELECTOR),
-      notifyRowSelectionChanged: data => {
-        this.$emit(events.ROW_SELECTION_CHANGED, {
-          row: this.getRowByIndex_(data.rowIndex),
-          rowId: this.getRowIdByIndex_(data.rowIndex),
-          rowIndex: data.rowIndex,
-          selected: data.selected
-        },
-        /** shouldBubble */
-        true);
-      },
-      notifySelectedAll: () => this.$emit(events.SELECTED_ALL, {},
-      /** shouldBubble */
-      true),
-      notifyUnselectedAll: () => this.$emit(events.UNSELECTED_ALL, {},
-      /** shouldBubble */
-      true),
-      registerHeaderRowCheckbox: () => {
-        if (this.headerRowCheckbox_) {
-          this.headerRowCheckbox_.destroy();
-        }
-
-        const checkboxEl = this.$el.querySelector(strings.HEADER_ROW_CHECKBOX_SELECTOR);
-        this.headerRowCheckbox_ = this.checkboxFactory_(checkboxEl);
-      },
-      registerRowCheckboxes: () => {
-        if (this.rowCheckboxList_) {
-          this.rowCheckboxList_.forEach(checkbox => checkbox.destroy());
-        }
-
-        this.rowCheckboxList_ = [];
-        this.getRows().forEach(rowEl => {
-          const checkbox = this.checkboxFactory_(rowEl.querySelector(strings.ROW_CHECKBOX_SELECTOR));
-          this.rowCheckboxList_.push(checkbox);
-        });
-      },
-      removeClassAtRowIndex: (rowIndex, className) => {
-        this.getRows()[rowIndex].classList.remove(className);
-      },
-      setAttributeAtRowIndex: (rowIndex, attr, value) => {
-        this.getRows()[rowIndex].setAttribute(attr, value);
-      },
-      setHeaderRowCheckboxChecked: checked => {
-        this.headerRowCheckbox_.checked = checked;
-      },
-      setHeaderRowCheckboxIndeterminate: indeterminate => {
-        this.headerRowCheckbox_.indeterminate = indeterminate;
-      },
-      setRowCheckboxCheckedAtIndex: (rowIndex, checked) => {
-        this.rowCheckboxList_[rowIndex].checked = checked;
-      }
-    };
-    this.foundation = new MDCDataTableFoundation(adapter);
-    this.foundation.init();
-    this.headerRow_ = this.$el.querySelector(`.${cssClasses.HEADER_ROW}`);
-
-    this.handleHeaderRowCheckboxChange_ = () => this.foundation.handleHeaderRowCheckboxChange();
-
-    this.headerRow_.addEventListener('change', this.handleHeaderRowCheckboxChange_);
-    this.content_ = this.$el.querySelector(`.${cssClasses.CONTENT}`);
-
-    this.handleRowCheckboxChange_ = event => this.foundation.handleRowCheckboxChange(event);
-
-    this.content_.addEventListener('change', this.handleRowCheckboxChange_);
-    this.layout();
-  },
-
-  beforeDestroy() {
-    this.headerRow_.removeEventListener('change', this.handleHeaderRowCheckboxChange_);
-    this.content_.removeEventListener('change', this.handleRowCheckboxChange_);
-
-    if (this.headerRowCheckbox_) {
-      this.headerRowCheckbox_.destroy();
-    }
-
-    if (this.rowCheckboxList_) {
-      this.rowCheckboxList_.forEach(checkbox => checkbox.destroy());
-    }
-
-    this.foundation.destroy();
-  }
-
-};
-
-/* script */
-const __vue_script__$2 = script$2;
-
-/* template */
-var __vue_render__$2 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", { staticClass: "mdc-data-table" }, [_vm._t("default")], 2)
-};
-var __vue_staticRenderFns__$2 = [];
-__vue_render__$2._withStripped = true;
-
-  /* style */
-  const __vue_inject_styles__$2 = undefined;
-  /* scoped */
-  const __vue_scope_id__$2 = undefined;
-  /* module identifier */
-  const __vue_module_identifier__$2 = undefined;
-  /* functional template */
-  const __vue_is_functional_template__$2 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  const __vue_component__$2 = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$2, staticRenderFns: __vue_staticRenderFns__$2 },
-    __vue_inject_styles__$2,
-    __vue_script__$2,
-    __vue_scope_id__$2,
-    __vue_is_functional_template__$2,
-    __vue_module_identifier__$2,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-var dataTable = BasePlugin({
-  mcwDataTable: __vue_component__$2
-});
-
-const {
-  cssClasses
-} = MDCDialogFoundation;
-var script$3 = {
-  name: 'mcw-dialog',
-  components: {
-    mcwButton: mcwButton
-  },
-  mixins: [VMAUniqueIdMixin],
-  model: {
-    prop: 'open',
-    event: 'change'
-  },
-  props: {
-    autoStackButtons: Boolean,
-    escapeKeyAction: String,
-    scrollable: Boolean,
-    open: Boolean,
-    role: String,
-    scrimClickAction: {
-      type: String,
-      default: 'close'
-    },
-    tag: {
-      type: String,
-      default: 'div'
-    },
-    labelledBy: String,
-    describedBy: String
-  },
-
-  data() {
-    return {
-      classes: {
-        'mdc-dialog': 1
-      },
-      styles: {}
-    };
-  },
-
-  watch: {
-    open: 'onOpen_'
-  },
-
-  mounted() {
-    const LAYOUT_EVENTS = ['resize', 'orientationchange'];
-    const strings = MDCDialogFoundation.strings;
-    const {
-      open,
-      autoStackButtons,
-      escapeKeyAction,
-      scrimClickAction
-    } = this;
-    this.buttons_ = [].slice.call(this.$el.querySelectorAll(cssClasses.BUTTON));
-    this.defaultButton = this.$el.querySelector(`[${strings.BUTTON_DEFAULT_ATTRIBUTE}]`);
-    const container = this.$el.querySelector(strings.CONTAINER_SELECTOR);
-
-    if (!container) {
-      throw new Error(`Dialog component requires a ${strings.CONTAINER_SELECTOR} container element`);
-    }
-
-    this.content_ = this.$el.querySelector(strings.CONTENT_SELECTOR);
-
-    this.focusTrapFactory_ = el => new FocusTrap(el);
-
-    const adapter = {
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      hasClass: className => this.$el.classList.contains(className),
-      addBodyClass: className => document.body.classList.add(className),
-      removeBodyClass: className => document.body.classList.remove(className),
-      eventTargetMatches: (target, selector) => matches$1(target, selector),
-      trapFocus: initialFocusEl => this.focusTrap && this.focusTrap.trapFocus(),
-      releaseFocus: () => this.focusTrap && this.focusTrap.releaseFocus(),
-      getInitialFocusEl: () => this.getInitialFocusEl_(),
-      isContentScrollable: () => isScrollable(this.content_),
-      areButtonsStacked: () => areTopsMisaligned(this.buttons_),
-      getActionFromEvent: event => {
-        const elem = closest$1(event.target, `[${strings.ACTION_ATTRIBUTE}]`);
-        return elem === null || elem === void 0 ? void 0 : elem.getAttribute(strings.ACTION_ATTRIBUTE);
-      },
-      clickDefaultButton: () => {
-        var _this$defaultButton;
-
-        (_this$defaultButton = this.defaultButton) === null || _this$defaultButton === void 0 ? void 0 : _this$defaultButton.click();
-      },
-      reverseButtons: () => {
-        const buttons = this.buttons_;
-        return buttons && buttons.reverse().forEach(button => {
-          var _button$parentElement;
-
-          return (_button$parentElement = button.parentElement) === null || _button$parentElement === void 0 ? void 0 : _button$parentElement.appendChild(button);
-        });
-      },
-      notifyOpening: () => {
-        this.$emit(strings.OPENING_EVENT, {});
-        LAYOUT_EVENTS.forEach(evt => window.addEventListener(evt, this.handleLayout));
-        document.addEventListener('keydown', this.handleDocumentKeyDown);
-      },
-      notifyOpened: () => this.$emit(strings.OPENED_EVENT, {}),
-      notifyClosing: action => {
-        this.$emit('change', false);
-        this.$emit(strings.CLOSING_EVENT, action ? {
-          action
-        } : {});
-        LAYOUT_EVENTS.forEach(evt => window.removeEventListener(evt, this.handleLayout));
-        document.removeEventListener('keydown', this.handleDocumentKeyDown);
-      },
-      notifyClosed: action => {
-        this.$emit(strings.CLOSED_EVENT, action ? {
-          action
-        } : {});
-      }
-    };
-    this.foundation = new MDCDialogFoundation(adapter);
-    this.foundation.init();
-
-    if (!autoStackButtons) {
-      this.foundation.setAutoStackButtons(autoStackButtons);
-    }
-
-    if (typeof escapeKeyAction === 'string') {
-      // set even if empty string
-      this.foundation.setEscapeKeyAction(escapeKeyAction);
-    }
-
-    if (typeof scrimClickAction === 'string') {
-      // set even if empty string
-      this.foundation.setScrimClickAction(scrimClickAction);
-    }
-
-    this.onOpen_(open);
-  },
-
-  beforeDestroy() {
-    this.foundation.destroy();
-  },
-
-  methods: {
-    handleLayout() {
-      this.foundation.layout();
-    },
-
-    handleDocumentKeyDown(e) {
-      this.foundation.handleDocumentKeydown(e);
-    },
-
-    getInitialFocusEl_() {
-      return document.querySelector(`[${MDCDialogFoundation.strings.INITIAL_FOCUS_ATTRIBUTE}]`);
-    },
-
-    onOpen_(value) {
-      if (value) {
-        if (this.$refs.container) {
-          this.focusTrap = createFocusTrapInstance(this.$el, this.focusTrapFactory_, this.getInitialFocusEl_() || void 0);
-        }
-
-        this.foundation.open();
-      } else {
-        this.foundation.close();
-      }
-    },
-
-    onClick(evt) {
-      this.foundation.handleClick(evt);
-    },
-
-    onKeydown(evt) {
-      this.foundation.handleKeydown(evt);
-    }
-
-  }
-};
-
-/* script */
-const __vue_script__$3 = script$3;
-
-/* template */
-var __vue_render__$3 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    {
-      ref: "root",
-      class: _vm.classes,
-      style: _vm.styles,
-      on: { click: _vm.onClick, keydown: _vm.onKeydown }
-    },
-    [
-      _c("div", { ref: "container", staticClass: "mdc-dialog__container" }, [
-        _c(
-          "div",
-          {
-            ref: "surface",
-            staticClass: "mdc-dialog__surface",
-            attrs: {
-              role: "alertdialog",
-              "aria-modal": "true",
-              "aria-labelledby": _vm.labelledBy,
-              "aria-describedby": _vm.describedBy
-            }
-          },
-          [_vm._t("default")],
-          2
-        )
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "mdc-dialog__scrim" })
-    ]
-  )
-};
-var __vue_staticRenderFns__$3 = [];
-__vue_render__$3._withStripped = true;
-
-  /* style */
-  const __vue_inject_styles__$3 = undefined;
-  /* scoped */
-  const __vue_scope_id__$3 = undefined;
-  /* module identifier */
-  const __vue_module_identifier__$3 = undefined;
-  /* functional template */
-  const __vue_is_functional_template__$3 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  const __vue_component__$3 = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$3, staticRenderFns: __vue_staticRenderFns__$3 },
-    __vue_inject_styles__$3,
-    __vue_script__$3,
-    __vue_scope_id__$3,
-    __vue_is_functional_template__$3,
-    __vue_module_identifier__$3,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-var mcwDialogButton = {
-  name: 'mcw-dialog-button',
-  props: {
-    action: String,
-    isDefault: Boolean,
-    isInitialFocus: Boolean
-  },
-
-  render(createElement) {
-    var _this$$scopedSlots$de, _this$$scopedSlots;
-
-    const {
-      action,
-      isDefault,
-      isInitialFocus
-    } = this;
-
-    const onClick = this.$listeners['click'] || (() => {});
-
-    return createElement('mcw-button', {
-      class: ['mdc-dialog__button'],
-      attrs: {
-        'data-mdc-dialog-action': action,
-        'data-mdc-dialog-button-default': isDefault,
-        'data-mdc-dialog-initial-focus': isInitialFocus
-      },
-      on: {
-        click: onClick
-      }
-    }, (_this$$scopedSlots$de = (_this$$scopedSlots = this.$scopedSlots).default) === null || _this$$scopedSlots$de === void 0 ? void 0 : _this$$scopedSlots$de.call(_this$$scopedSlots));
-  }
-
-};
-
-var mcwDialogContent = {
-  name: 'mcw-dialog-content',
-  props: {
-    tag: {
-      type: String,
-
-      default() {
-        return 'div';
-      }
-
-    }
-  },
-
-  render(createElement, context) {
-    var _slots$default;
-
-    const {
-      $scopedSlots: slots,
-      tag
-    } = this;
-    return createElement(tag, {
-      class: ['mdc-dialog__content']
-    }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
-  }
-
-};
-
-var mcwDialogFooter = {
-  name: 'mcw-dialog-footer',
-  props: {
-    tag: {
-      type: String,
-
-      default() {
-        return 'div';
-      }
-
-    }
-  },
-
-  render(createElement) {
-    var _this$$scopedSlots$de, _this$$scopedSlots;
-
-    return createElement(this.tag, {
-      class: ['mdc-dialog__actions']
-    }, (_this$$scopedSlots$de = (_this$$scopedSlots = this.$scopedSlots).default) === null || _this$$scopedSlots$de === void 0 ? void 0 : _this$$scopedSlots$de.call(_this$$scopedSlots));
-  }
-
-};
-
-var mcwDialogTitle = {
-  name: 'mcw-dialog-title',
-  props: {
-    tag: {
-      type: String,
-
-      default() {
-        return 'h2';
-      }
-
-    }
-  },
-
-  render(createElement) {
-    var _slots$default;
-
-    const {
-      $scopedSlots: slots,
-      tag
-    } = this;
-    return createElement(tag, {
-      class: ['mdc-dialog__title']
-    }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
-  }
-
-};
-
-var dialog = BasePlugin({
-  mcwDialog: __vue_component__$3,
-  mcwDialogTitle,
-  mcwDialogFooter,
-  mcwDialogButton,
-  mcwDialogContent
-});
-
-var mcwDrawer = {
-  name: 'mcw-drawer',
-  model: {
-    prop: 'open',
-    event: 'change'
-  },
-  props: {
-    modal: Boolean,
-    open: Boolean,
-    toolbarSpacer: Boolean,
-    toggleOn: String,
-    toggleOnSource: {
-      type: Object,
-      required: false
-    },
-    openOn: String,
-    openOnSource: {
-      type: Object,
-      required: false
-    },
-    closeOn: String,
-    closeOnSource: {
-      type: Object,
-      required: false
-    }
-  },
-
-  provide() {
-    return {
-      mcwDrawer: this
-    };
-  },
-
-  data() {
-    return {
-      classes: {
-        'mdc-drawer': 1,
-        'mdc-drawer--modal': 1
-      }
-    };
-  },
-
-  computed: {
-    type() {},
-
-    isModal() {
-      return this.modal;
-    }
-
-  },
-  watch: {
-    open: 'onOpen_'
-  },
-
-  mounted() {
-    this.drawer_ = this.$refs.drawer;
-    const listEl = this.$el.querySelector(`.${MDCListFoundation.cssClasses.ROOT}`);
-
-    if (listEl) {
-      this.list_ = listEl;
-      this.list_.wrapFocus = true;
-    }
-
-    this.focusTrapFactory_ = el => new FocusTrap$1(el);
-
-    const adapter = {
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      hasClass: className => this.drawer_.classList.contains(className),
-      elementHasClass: (element, className) => element.classList.contains(className),
-      saveFocus: () => {
-        this.previousFocus_ = document.activeElement;
-      },
-      restoreFocus: () => {
-        const previousFocus = this.previousFocus_ && this.previousFocus_.focus;
-
-        if (this.drawer_.contains(document.activeElement) && previousFocus) {
-          this.previousFocus_.focus();
-        }
-      },
-      focusActiveNavigationItem: () => {
-        const activeNavItemEl = this.drawer_.querySelector(`.${MDCListFoundation.cssClasses.LIST_ITEM_ACTIVATED_CLASS}`);
-
-        if (activeNavItemEl) {
-          activeNavItemEl.focus();
-        }
-      },
-      notifyClose: () => {
-        this.$emit('change', false);
-        this.$emit('close');
-      },
-      notifyOpen: () => {
-        this.$emit('change', true);
-        this.$emit('open');
-      },
-      trapFocus: () => this.focusTrap_.trapFocus(),
-      releaseFocus: () => this.focusTrap_.releaseFocus()
-    };
-    const {
-      DISMISSIBLE,
-      MODAL
-    } = MDCDismissibleDrawerFoundation.cssClasses;
-
-    if (this.drawer_.classList.contains(DISMISSIBLE)) {
-      this.foundation = new MDCDismissibleDrawerFoundation(adapter);
-    } else if (this.drawer_.classList.contains(MODAL)) {
-      this.foundation = new MDCModalDrawerFoundation(adapter);
-    } else {
-      throw new Error(`mcwDrawer: Failed to instantiate component. Supported variants are ${DISMISSIBLE} and ${MODAL}.`);
-    }
-
-    this.foundation && this.foundation.init();
-    this.initialSyncWithDOM();
-
-    if (this.toggleOn) {
-      this.toggleOnEventSource = this.toggleOnSource || this.$root;
-      this.toggleOnEventSource.$on(this.toggleOn, this.toggle);
-    }
-
-    if (this.openOn) {
-      this.openOnEventSource = this.openOnSource || this.$root;
-      this.openOnEventSource.$on(this.openOn, this.show);
-    }
-
-    if (this.closeOn) {
-      this.closeOnEventSource = this.closeOnSource || this.$root;
-      this.closeOnEventSource.$on(this.closeOn, this.close);
-    }
-  },
-
-  beforeDestroy() {
-    this.foundation && this.foundation.destroy();
-    this.foundation = null;
-
-    if (this.toggleOnEventSource) {
-      this.toggleOnEventSource.$off(this.toggleOn, this.toggle);
-    }
-
-    if (this.openOnEventSource) {
-      this.openOnEventSource.$off(this.openOn, this.show);
-    }
-
-    if (this.closeOnEventSource) {
-      this.closeOnEventSource.$off(this.closeOn, this.close);
-    }
-  },
-
-  methods: {
-    initialSyncWithDOM() {
-      const {
-        MODAL
-      } = MDCDismissibleDrawerFoundation.cssClasses;
-
-      if (this.drawer_.classList.contains(MODAL)) {
-        const {
-          SCRIM_SELECTOR
-        } = MDCDismissibleDrawerFoundation.strings;
-        this.scrim_ = this.drawer_.parentElement.querySelector(SCRIM_SELECTOR);
-
-        this.handleScrimClick_ = () => this.foundation.handleScrimClick();
-
-        this.scrim_.addEventListener('click', this.handleScrimClick_);
-        this.focusTrap_ = createFocusTrapInstance$1(this.drawer_, this.focusTrapFactory_);
-      }
-
-      this.handleKeydown_ = evt => this.foundation.handleKeydown(evt);
-
-      this.handleTransitionEnd_ = evt => this.foundation.handleTransitionEnd(evt);
-
-      this.$el.addEventListener('keydown', this.handleKeydown_);
-      this.$el.addEventListener('transitionend', this.handleTransitionEnd_);
-    },
-
-    onOpen_(value) {
-      if (this.open) {
-        this.foundation && this.foundation.open();
-      } else {
-        this.foundation && this.foundation.close();
-      }
-    },
-
-    onChange(event) {
-      this.$emit('change', event);
-      this.$root.$emit('vma:layout');
-    },
-
-    show() {
-      this.foundation.open();
-    },
-
-    close() {
-      this.foundation.close();
-    },
-
-    toggle() {
-      this.foundation.isOpen() ? this.foundation.close() : this.foundation.open();
-    },
-
-    isOpen() {
-      return this.foundation.isOpen();
-    }
-
-  },
-
-  render(createElement) {
-    var _scopedSlots$default, _scopedSlots$header;
-
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
-    const asideNodes = [createElement('div', {
-      class: {
-        'mdc-drawer__content': 1
-      }
-    }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots))];
-    const headerSlot = (_scopedSlots$header = scopedSlots.header) === null || _scopedSlots$header === void 0 ? void 0 : _scopedSlots$header.call(scopedSlots);
-
-    if (headerSlot) {
-      asideNodes.unshift(headerSlot);
-    }
-
-    const asideElement = createElement('aside', {
-      class: this.classes,
-      ref: 'drawer'
-    }, asideNodes);
-    const nodes = [asideElement, createElement('div', {
-      class: {
-        'mdc-drawer-scrim': 1
-      }
-    })];
-
-    if (this.toolbarSpacer) {
-      nodes.push(createElement('div', {
-        class: {
-          'mdc-top-app-bar--fixed-adjust': 1
-        }
-      }));
-    }
-
-    return createElement('div', {}, nodes);
-  }
-
-};
-
-var mcwDrawerDivider = {
-  name: 'mcw-drawer-divider',
-  functional: true,
-
-  render(createElement) {
-    return createElement('hr', {
-      class: {
-        'mdc-list-divider': 1
-      }
-    });
-  }
-
-};
-
-var mcwDrawerHeader = {
-  name: 'mcw-drawer-header',
-  functional: true,
-
-  render(createElement, {
-    scopedSlots
-  }) {
-    var _scopedSlots$default;
-
-    return createElement('div', {
-      class: 'mdc-drawer__header'
-    }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots));
-  }
-
-};
-
-var script$4 = {
-  name: 'mcw-drawer-item',
-  inject: ['mcwDrawer'],
-  mixins: [DispatchEventMixin, CustomLinkMixin],
-  props: {
-    startIcon: String,
-    modalClose: {
-      type: Boolean,
-      default: true
-    },
-    activated: Boolean,
-    exactActiveClass: {
-      type: String,
-      default: 'mdc-list-item--activated'
-    }
-  },
-
-  data() {
-    return {
-      classes: {
-        'mdc-list-item': 1,
-        'mdc-drawer-item': 1
-      },
-      styles: {}
-    };
-  },
-
-  computed: {
-    mylisteners() {
-      return { ...this.$listeners,
-        click: e => {
-          this.mcwDrawer.isModal && this.modalClose && this.mcwDrawer.close();
-          this.dispatchEvent(e);
-        }
-      };
-    },
-
-    itemClasses() {
-      return {
-        'mdc-list-item--activated': this.activated
-      };
-    },
-
-    hasStartDetail() {
-      return this.startIcon || this.$slots['start-detail'];
-    }
-
-  },
-
-  mounted() {
-    this.ripple = new RippleBase(this);
-    this.ripple.init();
-  },
-
-  beforeDestroy() {
-    this.ripple && this.ripple.destroy();
-    this.ripple = null;
-  }
-
-};
-
-/* script */
-const __vue_script__$4 = script$4;
-
-/* template */
-var __vue_render__$4 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "custom-link",
-    _vm._g(
-      {
-        class: [_vm.classes, _vm.itemClasses],
-        style: _vm.styles,
-        attrs: { link: _vm.link }
-      },
-      _vm.mylisteners
-    ),
-    [
-      _vm.hasStartDetail
-        ? _c(
-            "span",
-            { staticClass: "mdc-list-item__graphic" },
-            [
-              _vm._t("start-detail", [
-                _c(
-                  "i",
-                  {
-                    staticClass: "material-icons",
-                    attrs: { "aria-hidden": "true" }
-                  },
-                  [_vm._v(_vm._s(_vm.startIcon))]
-                )
-              ])
-            ],
-            2
-          )
-        : _vm._e(),
-      _vm._v(" "),
-      _c("span", { staticClass: "mdc-list-item__text" }, [_vm._t("default")], 2)
-    ]
-  )
-};
-var __vue_staticRenderFns__$4 = [];
-__vue_render__$4._withStripped = true;
-
-  /* style */
-  const __vue_inject_styles__$4 = undefined;
-  /* scoped */
-  const __vue_scope_id__$4 = undefined;
-  /* module identifier */
-  const __vue_module_identifier__$4 = undefined;
-  /* functional template */
-  const __vue_is_functional_template__$4 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  const __vue_component__$4 = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$4, staticRenderFns: __vue_staticRenderFns__$4 },
-    __vue_inject_styles__$4,
-    __vue_script__$4,
-    __vue_scope_id__$4,
-    __vue_is_functional_template__$4,
-    __vue_module_identifier__$4,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-var mcwDrawerList = {
-  name: 'mcw-drawer-list',
-  functional: true,
-  props: {
-    dense: Boolean
-  },
-
-  render(createElement, {
-    props: {
-      dense
-    },
-    scopedSlots
-  }) {
-    var _scopedSlots$default;
-
-    return createElement('nav', {
-      class: {
-        'mdc-drawer-list': 1,
-        'mdc-list': 1,
-        'mdc-list--dense': dense
-      }
-    }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots));
-  }
-
-};
-
-var drawer = BasePlugin({
-  mcwDrawer,
-  mcwDrawerHeader,
-  mcwDrawerList,
-  mcwDrawerItem: __vue_component__$4,
-  mcwDrawerDivider
-});
-
-var script$5 = {
-  name: 'mcw-fab',
-  mixins: [DispatchEventMixin, CustomButtonMixin, RippleMixin],
-  props: {
-    icon: String,
-    mini: Boolean,
-    exited: Boolean,
-    label: String
-  },
-
-  data() {
-    return {
-      classes: {
-        'mdc-fab': 1,
-        'mdc-fab--mini': this.mini,
-        'mdc-fab--extended': this.label || this.$slots.default,
-        'mdc-fab--exited': this.exited
-      }
-    };
-  },
-
-  watch: {
-    icon() {
-      this.$set(this.classes, 'material-icons', this.icon);
-    },
-
-    mini() {
-      this.$set(this.classes, 'mdc-fab--mini', this.mini);
-    },
-
-    exited() {
-      this.$set(this.classes, 'mdc-fab--exited', this.exited);
-    }
-
-  }
-};
-
-/* script */
-const __vue_script__$5 = script$5;
-
-/* template */
-var __vue_render__$5 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "custom-button",
-    _vm._g(
-      {
-        class: _vm.classes,
-        style: _vm.styles,
-        attrs: { href: _vm.href, link: _vm.link }
-      },
-      _vm.listeners
-    ),
-    [
-      _c("div", { staticClass: "mdc-fab__ripple" }),
-      _vm._v(" "),
-      _vm._t("icon", [
-        _c("span", { staticClass: "mdc-fab__icon material-icons" }, [
-          _vm._v(_vm._s(_vm.icon))
-        ])
-      ]),
-      _vm._v(" "),
-      _c(
-        "span",
-        { staticClass: "mdc-fab__label" },
-        [_vm._t("default", [_vm._v(_vm._s(_vm.label))])],
-        2
-      )
-    ],
-    2
-  )
-};
-var __vue_staticRenderFns__$5 = [];
-__vue_render__$5._withStripped = true;
-
-  /* style */
-  const __vue_inject_styles__$5 = undefined;
-  /* scoped */
-  const __vue_scope_id__$5 = undefined;
-  /* module identifier */
-  const __vue_module_identifier__$5 = undefined;
-  /* functional template */
-  const __vue_is_functional_template__$5 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  const __vue_component__$5 = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$5, staticRenderFns: __vue_staticRenderFns__$5 },
-    __vue_inject_styles__$5,
-    __vue_script__$5,
-    __vue_scope_id__$5,
-    __vue_is_functional_template__$5,
-    __vue_module_identifier__$5,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-var fab = BasePlugin({
-  mcwFAB: __vue_component__$5
-});
-
-var script$6 = {
-  name: 'mcw-floating-label',
-
-  data() {
-    return {
-      labelClasses: {
-        'mdc-floating-label': true
-      }
-    };
-  },
-
-  mounted() {
-    this.foundation = new MDCFloatingLabelFoundation({
-      addClass: className => {
-        this.$set(this.labelClasses, className, true);
-      },
-      removeClass: className => {
-        this.$delete(this.labelClasses, className);
-      },
-      getWidth: () => this.$el.scrollWidth,
-      registerInteractionHandler: (evtType, handler) => {
-        this.$el.addEventListener(evtType, handler);
-      },
-      deregisterInteractionHandler: (evtType, handler) => {
-        this.$el.removeEventListener(evtType, handler);
-      }
-    });
-    this.foundation.init();
-  },
-
-  beforeDestroy() {
-    this.foundation.destroy();
-  },
-
-  methods: {
-    getWidth() {
-      return this.foundation.getWidth();
-    },
-
-    float(shouldFloat) {
-      this.foundation.float(shouldFloat);
-    },
-
-    shake(shouldShake) {
-      this.foundation.shake(shouldShake);
-    }
-
-  }
-};
-
-/* script */
-const __vue_script__$6 = script$6;
-
-/* template */
-var __vue_render__$6 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("span", { class: _vm.labelClasses }, [_vm._t("default")], 2)
-};
-var __vue_staticRenderFns__$6 = [];
-__vue_render__$6._withStripped = true;
-
-  /* style */
-  const __vue_inject_styles__$6 = undefined;
-  /* scoped */
-  const __vue_scope_id__$6 = undefined;
-  /* module identifier */
-  const __vue_module_identifier__$6 = undefined;
-  /* functional template */
-  const __vue_is_functional_template__$6 = false;
-  /* style inject */
-  
-  /* style inject SSR */
-  
-  /* style inject shadow dom */
-  
-
-  
-  const __vue_component__$6 = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$6, staticRenderFns: __vue_staticRenderFns__$6 },
-    __vue_inject_styles__$6,
-    __vue_script__$6,
-    __vue_scope_id__$6,
-    __vue_is_functional_template__$6,
-    __vue_module_identifier__$6,
-    false,
-    undefined,
-    undefined,
-    undefined
-  );
-
-var floatingLabel = BasePlugin({
-  mcwFloatingLabel: __vue_component__$6
-});
-
-/* eslint-disable quote-props */
-var mcwIconButton = {
-  name: 'mcw-icon-button',
-  model: {
-    prop: 'isOn',
-    event: 'change'
-  },
-  props: {
-    isOn: Boolean,
-    disabled: Boolean
-  },
-
-  data() {
-    return {
-      classes: {
-        'mdc-icon-button': 1,
-        'material-icons': 1
-      },
-      styles: {}
-    };
-  },
-
-  watch: {
-    isOn: 'onOn_'
-  },
-
-  mounted() {
-    const {
-      CHANGE_EVENT
-    } = MDCIconButtonToggleFoundation.strings;
-    const adapter = {
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      hasClass: className => Boolean(this.classes[className]),
-      setAttr: (attrName, attrValue) => this.$el.setAttribute(attrName, attrValue),
-      getAttr: attrName => this.$el.getAttribute(attrName),
-      notifyChange: evtData => {
-        this.$emit(CHANGE_EVENT, evtData);
-        this.$emit('change', evtData.isOn);
-      }
-    };
-    this.foundation = new MDCIconButtonToggleFoundation(adapter);
-    this.foundation.init();
-    this.ripple = new RippleBase(this, {
-      isUnbounded: () => true
-    });
-    this.ripple.init();
-    this.foundation.toggle(this.isOn);
-  },
-
-  beforeDestroy() {
-    this.ripple.destroy();
-    this.foundation.destroy();
-  },
-
-  methods: {
-    onOn_(isOn) {
-      if (this.isOn !== isOn) {
-        this.foundation.toggle(isOn);
-      }
-    }
-
-  },
-
-  render(createElement) {
-    var _scopedSlots$default;
-
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
-    const isLink = Boolean(this.$attrs.href);
-    const tag = isLink ? 'a' : 'button';
-    return createElement(tag, {
-      class: this.classes,
-      style: this.styles,
-      on: {
-        click: evt => this.foundation.handleClick(evt)
-      },
-      attrs: { ...this.$attrs,
-        'aria-pressed': 'false',
-        disabled: this.disabled
-      }
-    }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots));
-  }
-
-};
-
-var mcwIconToggle = {
-  name: 'mcw-icon-toggle',
-  functional: true,
-  props: {
-    isOn: Boolean
-  },
-
-  render(createElement, {
-    props: {
-      isOn
-    },
-    scopedSlots
-  }) {
-    var _scopedSlots$default;
-
-    return createElement('i', {
-      class: {
-        'material-icons': 1,
-        'mdc-icon-button__icon': true,
-        'mdc-icon-button__icon--on': isOn
-      }
-    }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots));
-  }
-
-};
-
-var iconButton = BasePlugin({
-  mcwIconButton,
-  mcwIconToggle
-});
-
-const spanOptions = {
-  type: [String, Number],
-  default: null,
-  validator: function (value) {
-    const num = Number(value);
-    return isFinite(num) && num <= 12 && num > 0;
-  }
-};
-var script$7 = {
-  name: 'mcw-layout-cell',
-  props: {
-    span: spanOptions,
-    order: spanOptions,
-    phone: spanOptions,
-    tablet: spanOptions,
-    desktop: spanOptions,
-    align: {
-      type: String,
-      validator: function (value) {
-        return ['top', 'bottom', 'middle'].indexOf(value) !== -1;
-      }
-    }
-  },
-  computed: {
-    classes() {
-      const cssClasses = [];
-
-      if (this.span) {
-        cssClasses.push(`mdc-layout-grid__cell--span-${this.span}`);
-      }
-
-      if (this.order) {
-        cssClasses.push(`mdc-layout-grid__cell--order-${this.order}`);
-      }
-
-      if (this.phone) {
-        cssClasses.push(`mdc-layout-grid__cell--span-${this.phone}-phone`);
-      }
-
-      if (this.tablet) {
-        cssClasses.push(`mdc-layout-grid__cell--span-${this.tablet}-tablet`);
-      }
-
-      if (this.desktop) {
-        cssClasses.push(`mdc-layout-grid__cell--span-${this.desktop}-desktop`);
-      }
-
-      if (this.align) {
-        cssClasses.push(`mdc-layout-grid__cell--align-${this.align}`);
-      }
-
-      return cssClasses;
-    }
-
-  }
-};
-
-/* script */
-const __vue_script__$7 = script$7;
-
-/* template */
-var __vue_render__$7 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    {
-      staticClass: "mdc-layout-cell mdc-layout-grid__cell",
-      class: _vm.classes
-    },
-    [_vm._t("default")],
-    2
-  )
-};
 var __vue_staticRenderFns__$7 = [];
 __vue_render__$7._withStripped = true;
 
@@ -3376,23 +2642,343 @@ __vue_render__$7._withStripped = true;
     undefined
   );
 
-var script$8 = {
-  name: 'mcw-layout-grid',
-  props: {
-    fixedColumWidth: Boolean,
-    alignLeft: Boolean,
-    alignRight: Boolean
-  },
-  computed: {
-    classes() {
-      return {
-        'mdc-layout-grid': true,
-        'mdc-layout-grid--fixed-column-width': this.fixedColumnWidth,
-        'mdc-layout-grid--align-left': this.alignLeft,
-        'mdc-layout-grid--align-right': this.alignRight
-      };
-    }
+var circularProgress = BasePlugin({
+  mcwCircularProgress: __vue_component__$7
+});
 
+var CheckboxAdapter = /*#__PURE__*/function () {
+  function CheckboxAdapter(mcwCheckbox) {
+    _classCallCheck(this, CheckboxAdapter);
+
+    this.checkbox = mcwCheckbox;
+  }
+
+  _createClass(CheckboxAdapter, [{
+    key: "destroy",
+    value: function destroy() {// noop
+    }
+  }, {
+    key: "checked",
+    get: function get() {
+      return this.checkbox.isChecked();
+    },
+    set: function set(checked) {
+      this.checkbox.setChecked(checked);
+    }
+  }, {
+    key: "indeterminate",
+    get: function get() {
+      return this.checkbox.isIndeterminate();
+    },
+    set: function set(indeterminate) {
+      this.checkbox.setIndeterminate(indeterminate);
+    }
+  }]);
+
+  return CheckboxAdapter;
+}();
+
+function _templateObject() {
+  var data = _taggedTemplateLiteral([".", ""]);
+
+  _templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+var script$8 = {
+  name: 'mcw-data-table',
+  props: {
+    sticky: {
+      type: Boolean
+    }
+  },
+  setup: function setup(props, _ref) {
+    var emit = _ref.emit;
+    var uiState = reactive({
+      classes: {
+        'mdc-data-table--sticky-header': props.sticky
+      },
+      root: null
+    });
+
+    var checkboxFactory = function checkboxFactory(el) {
+      return el.__vue__ ? new CheckboxAdapter(el.__vue__) : new MDCCheckbox(el);
+    };
+
+    var cssClasses = cssClasses$8,
+        events$1 = events,
+        selectors$1 = selectors,
+        dataAttributes$1 = dataAttributes,
+        SortValue$1 = SortValue,
+        messages$1 = messages;
+    var foundation;
+    var headerRow;
+    var rowCheckboxList;
+    var content;
+    var headerRowCheckbox;
+    var handleHeaderRowCheckboxChange;
+    var handleRowCheckboxChange;
+    var headerRowClickListener;
+
+    var getRows = function getRows() {
+      return foundation.getRows();
+    };
+
+    var layout = function layout() {
+      foundation.layout();
+    };
+
+    var getHeaderCells = function getHeaderCells() {
+      return [].slice.call(uiState.root.querySelectorAll(selectors$1.HEADER_CELL));
+    };
+
+    var getRowByIndex_ = function getRowByIndex_(index) {
+      return getRows()[index];
+    };
+
+    var getRowIdByIndex_ = function getRowIdByIndex_(index) {
+      return getRowByIndex_(index).getAttribute(dataAttributes$1.ROW_ID);
+    };
+
+    var getSelectedRowIds = function getSelectedRowIds() {
+      return foundation.getSelectedRowIds();
+    };
+
+    var getSortStatusMessageBySortValue = function getSortStatusMessageBySortValue(sortValue) {
+      switch (sortValue) {
+        case SortValue$1.ASCENDING:
+          return messages$1.SORTED_IN_ASCENDING;
+
+        case SortValue$1.DESCENDING:
+          return messages$1.SORTED_IN_DESCENDING;
+
+        default:
+          return '';
+      }
+    };
+
+    var handleHeaderRowClick = function handleHeaderRowClick(event) {
+      var headerCell = closest(event.target, selectors$1.HEADER_CELL_WITH_SORT);
+
+      if (!headerCell) {
+        return;
+      }
+
+      var columnId = headerCell.getAttribute(dataAttributes$1.COLUMN_ID);
+      var columnIndex = getHeaderCells().indexOf(headerCell);
+
+      if (columnIndex === -1) {
+        return;
+      }
+
+      foundation.handleSortAction({
+        columnId: columnId,
+        columnIndex: columnIndex,
+        headerCell: headerCell
+      });
+    };
+
+    var adapter = {
+      addClass: function addClass(className) {
+        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+      },
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$classes = uiState.classes,
+            removed = _uiState$classes[className],
+            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+
+        uiState.classes = rest;
+      },
+      getHeaderCellElements: function getHeaderCellElements() {
+        return getHeaderCells();
+      },
+      getHeaderCellCount: function getHeaderCellCount() {
+        return getHeaderCells().length;
+      },
+      getAttributeByHeaderCellIndex: function getAttributeByHeaderCellIndex(index, attribute) {
+        return getHeaderCells()[index].getAttribute(attribute);
+      },
+      setAttributeByHeaderCellIndex: function setAttributeByHeaderCellIndex(index, attribute, value) {
+        getHeaderCells()[index].setAttribute(attribute, value);
+      },
+      setClassNameByHeaderCellIndex: function setClassNameByHeaderCellIndex(index, className) {
+        getHeaderCells()[index].classList.add(className);
+      },
+      removeClassNameByHeaderCellIndex: function removeClassNameByHeaderCellIndex(index, className) {
+        getHeaderCells()[index].classList.remove(className);
+      },
+      notifySortAction: function notifySortAction(data) {
+        emit(events$1.SORTED, {
+          data: data
+        }, true);
+      },
+      getTableContainerHeight: function getTableContainerHeight() {
+        var tableContainer = uiState.root.querySelector(_templateObject(), cssClasses.CONTAINER);
+
+        if (!tableContainer) {
+          throw new Error('MDCDataTable: Table container element not found.');
+        }
+
+        return tableContainer.getBoundingClientRect().height;
+      },
+      getTableHeaderHeight: function getTableHeaderHeight() {
+        var tableHeader = uiState.root.querySelector(selectors$1.HEADER_ROW);
+
+        if (!tableHeader) {
+          throw new Error('MDCDataTable: Table header element not found.');
+        }
+
+        return tableHeader.getBoundingClientRect().height;
+      },
+      setProgressIndicatorStyles: function setProgressIndicatorStyles(styles) {
+        var progressIndicator = uiState.root.querySelector(selectors$1.PROGRESS_INDICATOR);
+
+        if (!progressIndicator) {
+          throw new Error('MDCDataTable: Progress indicator element not found.');
+        }
+
+        Object.assign(progressIndicator.style, styles);
+      },
+      addClassAtRowIndex: function addClassAtRowIndex(rowIndex, className) {
+        return getRows()[rowIndex].classList.add(className);
+      },
+      getRowCount: function getRowCount() {
+        return getRows().length;
+      },
+      getRowElements: function getRowElements() {
+        return [].slice.call(uiState.root.querySelectorAll(selectors$1.ROW));
+      },
+      getRowIdAtIndex: function getRowIdAtIndex(rowIndex) {
+        return getRows()[rowIndex].getAttribute(dataAttributes$1.ROW_ID);
+      },
+      getRowIndexByChildElement: function getRowIndexByChildElement(el) {
+        return getRows().indexOf(closest(el, selectors$1.ROW));
+      },
+      getSelectedRowCount: function getSelectedRowCount() {
+        return uiState.root.querySelectorAll(selectors$1.ROW_SELECTED).length;
+      },
+      isCheckboxAtRowIndexChecked: function isCheckboxAtRowIndexChecked(rowIndex) {
+        return rowCheckboxList[rowIndex].checked;
+      },
+      isHeaderRowCheckboxChecked: function isHeaderRowCheckboxChecked() {
+        return headerRowCheckbox.checked;
+      },
+      isRowsSelectable: function isRowsSelectable() {
+        return !!uiState.root.querySelector(selectors$1.ROW_CHECKBOX);
+      },
+      notifyRowSelectionChanged: function notifyRowSelectionChanged(data) {
+        emit(events$1.ROW_SELECTION_CHANGED, {
+          row: getRowByIndex_(data.rowIndex),
+          rowId: getRowIdByIndex_(data.rowIndex),
+          rowIndex: data.rowIndex,
+          selected: data.selected
+        },
+        /** shouldBubble */
+        true);
+      },
+      notifySelectedAll: function notifySelectedAll() {
+        return emit(events$1.SELECTED_ALL, {},
+        /** shouldBubble */
+        true);
+      },
+      notifyUnselectedAll: function notifyUnselectedAll() {
+        return emit(events$1.UNSELECTED_ALL, {},
+        /** shouldBubble */
+        true);
+      },
+      registerHeaderRowCheckbox: function registerHeaderRowCheckbox() {
+        var _headerRowCheckbox;
+
+        (_headerRowCheckbox = headerRowCheckbox) === null || _headerRowCheckbox === void 0 ? void 0 : _headerRowCheckbox.destroy();
+        var checkboxEl = uiState.root.querySelector(selectors$1.HEADER_ROW_CHECKBOX);
+        headerRowCheckbox = checkboxFactory(checkboxEl);
+      },
+      registerRowCheckboxes: function registerRowCheckboxes() {
+        if (rowCheckboxList) {
+          rowCheckboxList.forEach(function (checkbox) {
+            return checkbox.destroy();
+          });
+        }
+
+        rowCheckboxList = [];
+        getRows().forEach(function (rowEl) {
+          var el = rowEl.querySelector(selectors$1.ROW_CHECKBOX);
+          var checkbox = checkboxFactory(el);
+          rowCheckboxList.push(checkbox);
+        });
+      },
+      removeClassAtRowIndex: function removeClassAtRowIndex(rowIndex, className) {
+        getRows()[rowIndex].classList.remove(className);
+      },
+      setAttributeAtRowIndex: function setAttributeAtRowIndex(rowIndex, attr, value) {
+        getRows()[rowIndex].setAttribute(attr, value);
+      },
+      setHeaderRowCheckboxChecked: function setHeaderRowCheckboxChecked(checked) {
+        return headerRowCheckbox.checked = checked;
+      },
+      setHeaderRowCheckboxIndeterminate: function setHeaderRowCheckboxIndeterminate(indeterminate) {
+        return headerRowCheckbox.indeterminate = indeterminate;
+      },
+      setRowCheckboxCheckedAtIndex: function setRowCheckboxCheckedAtIndex(rowIndex, checked) {
+        return rowCheckboxList[rowIndex].checked = checked;
+      },
+      setSortStatusLabelByHeaderCellIndex: function setSortStatusLabelByHeaderCellIndex(columnIndex, sortValue) {
+        var headerCell = getHeaderCells()[columnIndex];
+        var sortStatusLabel = headerCell.querySelector(selectors$1.SORT_STATUS_LABEL);
+
+        if (!sortStatusLabel) {
+          return;
+        }
+
+        sortStatusLabel.textContent = getSortStatusMessageBySortValue(sortValue);
+      }
+    };
+    onMounted(function () {
+      headerRow = uiState.root.querySelector(".".concat(cssClasses.HEADER_ROW));
+
+      handleHeaderRowCheckboxChange = function handleHeaderRowCheckboxChange() {
+        return foundation.handleHeaderRowCheckboxChange();
+      };
+
+      headerRow.addEventListener('change', handleHeaderRowCheckboxChange);
+
+      headerRowClickListener = function headerRowClickListener(event) {
+        handleHeaderRowClick(event);
+      };
+
+      headerRow.addEventListener('click', headerRowClickListener);
+      content = uiState.root.querySelector(".".concat(cssClasses.CONTENT));
+
+      handleRowCheckboxChange = function handleRowCheckboxChange(event) {
+        return foundation.handleRowCheckboxChange(event);
+      };
+
+      content.addEventListener('change', handleRowCheckboxChange);
+      foundation = new MDCDataTableFoundation(adapter);
+      foundation.init();
+      layout();
+    });
+    onBeforeUnmount(function () {
+      var _headerRowCheckbox2, _headerRowCheckbox2$d, _rowCheckboxList;
+
+      headerRow.removeEventListener('change', handleHeaderRowCheckboxChange);
+      headerRow.removeEventListener('click', headerRowClickListener);
+      content.removeEventListener('change', handleRowCheckboxChange);
+      (_headerRowCheckbox2 = headerRowCheckbox) === null || _headerRowCheckbox2 === void 0 ? void 0 : (_headerRowCheckbox2$d = _headerRowCheckbox2.destroy) === null || _headerRowCheckbox2$d === void 0 ? void 0 : _headerRowCheckbox2$d.call(_headerRowCheckbox2);
+      (_rowCheckboxList = rowCheckboxList) === null || _rowCheckboxList === void 0 ? void 0 : _rowCheckboxList.forEach(function (checkbox) {
+        var _checkbox$destroy;
+
+        (_checkbox$destroy = checkbox.destroy) === null || _checkbox$destroy === void 0 ? void 0 : _checkbox$destroy.call(checkbox);
+      });
+      foundation.destroy();
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      getSelectedRowIds: getSelectedRowIds,
+      layout: layout
+    });
   }
 };
 
@@ -3404,9 +2990,18 @@ var __vue_render__$8 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c("div", { class: _vm.classes }, [
-    _c("div", { staticClass: "mdc-layout-grid__inner" }, [_vm._t("default")], 2)
-  ])
+  return _c(
+    "div",
+    { ref: "root", staticClass: "mdc-data-table", class: _vm.classes },
+    [
+      _c(
+        "div",
+        { staticClass: "mdc-data-table__table-container" },
+        [_vm._t("default")],
+        2
+      )
+    ]
+  )
 };
 var __vue_staticRenderFns__$8 = [];
 __vue_render__$8._withStripped = true;
@@ -3440,8 +3035,323 @@ __vue_render__$8._withStripped = true;
     undefined
   );
 
+var dataTable = BasePlugin({
+  mcwDataTable: __vue_component__$8
+});
+
+var mcwDialogButton = {
+  name: 'mcw-dialog-button',
+  props: {
+    action: String,
+    isDefault: Boolean,
+    isInitialFocus: Boolean
+  },
+  setup: function setup(props, _ref) {
+    var listeners = _ref.listeners,
+        slots = _ref.slots;
+
+    var onClick = listeners['click'] || function () {};
+
+    return function () {
+      var _slots$default;
+
+      return h('mcw-button', {
+        class: ['mdc-dialog__button'],
+        attrs: {
+          'data-mdc-dialog-action': props.action,
+          'data-mdc-dialog-button-default': props.isDefault,
+          'data-mdc-dialog-initial-focus': props.isInitialFocus
+        },
+        on: {
+          click: onClick
+        }
+      }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
+    };
+  }
+};
+
+var mcwDialogContent = {
+  name: 'mcw-dialog-content',
+  props: {
+    tag: {
+      type: String,
+      default: function _default() {
+        return 'div';
+      }
+    }
+  },
+  setup: function setup(props, _ref) {
+    var slots = _ref.slots;
+    return function () {
+      var _slots$default;
+
+      return h(props.tag, {
+        class: ['mdc-dialog__content']
+      }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
+    };
+  }
+};
+
+var mcwDialogFooter = {
+  name: 'mcw-dialog-footer',
+  props: {
+    tag: {
+      type: String,
+      default: function _default() {
+        return 'div';
+      }
+    }
+  },
+  setup: function setup(props, _ref) {
+    var slots = _ref.slots;
+    return function () {
+      var _slots$default;
+
+      return h(props.tag, {
+        class: ['mdc-dialog__actions']
+      }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
+    };
+  }
+};
+
+var mcwDialogTitle = {
+  name: 'mcw-dialog-title',
+  props: {
+    tag: {
+      type: String,
+      default: function _default() {
+        return 'h2';
+      }
+    }
+  },
+  setup: function setup(props, _ref) {
+    var slots = _ref.slots;
+    return function () {
+      var _slots$default;
+
+      return h(props.tag, {
+        class: ['mdc-dialog__title']
+      }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
+    };
+  }
+};
+
+var cssClasses = MDCDialogFoundation.cssClasses,
+    strings$3 = MDCDialogFoundation.strings;
+var LAYOUT_EVENTS = ['resize', 'orientationchange'];
 var script$9 = {
-  name: 'mcw-layout-inner-grid'
+  name: 'mcw-dialog',
+  components: {
+    mcwButton: __vue_component__
+  },
+  model: {
+    prop: 'open',
+    event: 'change'
+  },
+  props: {
+    autoStackButtons: Boolean,
+    escapeKeyAction: String,
+    scrollable: Boolean,
+    open: Boolean,
+    role: String,
+    scrimClickAction: {
+      type: String,
+      default: 'close'
+    },
+    tag: {
+      type: String,
+      default: 'div'
+    },
+    ariaLabelledby: String,
+    ariaDescribedby: String
+  },
+  setup: function setup(props, _ref) {
+    var emit = _ref.emit,
+        attrs = _ref.attrs;
+    var uiState = reactive({
+      classes: {
+        'mdc-dialog': 1
+      },
+      styles: {},
+      container: null,
+      root: null
+    });
+    var foundation;
+    var content_;
+    var buttons_;
+    var focusTrap;
+    var defaultButton;
+
+    var focusTrapFactory_ = function focusTrapFactory_(el) {
+      return new FocusTrap(el);
+    };
+
+    var handleLayout = function handleLayout() {
+      foundation.layout();
+    };
+
+    var handleDocumentKeyDown = function handleDocumentKeyDown(e) {
+      foundation.handleDocumentKeydown(e);
+    };
+
+    var getInitialFocusEl_ = function getInitialFocusEl_() {
+      return document.querySelector("[".concat(MDCDialogFoundation.strings.INITIAL_FOCUS_ATTRIBUTE, "]"));
+    };
+
+    var onClick = function onClick(evt) {
+      foundation.handleClick(evt);
+    };
+
+    var onKeydown = function onKeydown(evt) {
+      foundation.handleKeydown(evt);
+    };
+
+    var onOpen = function onOpen(nv) {
+      if (nv) {
+        if (uiState.container) {
+          focusTrap = createFocusTrapInstance(uiState.root, focusTrapFactory_, getInitialFocusEl_() || void 0);
+        }
+
+        foundation.open();
+      } else {
+        foundation.close();
+      }
+    };
+
+    var adapter = {
+      addClass: function addClass(className) {
+        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+      },
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$classes = uiState.classes,
+            removed = _uiState$classes[className],
+            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+
+        uiState.classes = rest;
+      },
+      hasClass: function hasClass(className) {
+        return uiState.root.classList.contains(className);
+      },
+      addBodyClass: function addBodyClass(className) {
+        return document.body.classList.add(className);
+      },
+      removeBodyClass: function removeBodyClass(className) {
+        return document.body.classList.remove(className);
+      },
+      eventTargetMatches: function eventTargetMatches(target, selector) {
+        return matches$1(target, selector);
+      },
+      trapFocus: function trapFocus(initialFocusEl) {
+        var _focusTrap;
+
+        return (_focusTrap = focusTrap) === null || _focusTrap === void 0 ? void 0 : _focusTrap.trapFocus();
+      },
+      releaseFocus: function releaseFocus() {
+        var _focusTrap2;
+
+        return (_focusTrap2 = focusTrap) === null || _focusTrap2 === void 0 ? void 0 : _focusTrap2.releaseFocus();
+      },
+      getInitialFocusEl: function getInitialFocusEl() {
+        return getInitialFocusEl_();
+      },
+      isContentScrollable: function isContentScrollable() {
+        return isScrollable(content_);
+      },
+      areButtonsStacked: function areButtonsStacked() {
+        return areTopsMisaligned(buttons_);
+      },
+      getActionFromEvent: function getActionFromEvent(event) {
+        var elem = closest$1(event.target, "[".concat(strings$3.ACTION_ATTRIBUTE, "]"));
+        return elem === null || elem === void 0 ? void 0 : elem.getAttribute(strings$3.ACTION_ATTRIBUTE);
+      },
+      clickDefaultButton: function clickDefaultButton() {
+        var _defaultButton;
+
+        (_defaultButton = defaultButton) === null || _defaultButton === void 0 ? void 0 : _defaultButton.click();
+      },
+      reverseButtons: function reverseButtons() {
+        var buttons = buttons_;
+        return buttons && buttons.reverse().forEach(function (button) {
+          var _button$parentElement;
+
+          return (_button$parentElement = button.parentElement) === null || _button$parentElement === void 0 ? void 0 : _button$parentElement.appendChild(button);
+        });
+      },
+      notifyOpening: function notifyOpening() {
+        emit(strings$3.OPENING_EVENT, {});
+        LAYOUT_EVENTS.forEach(function (evt) {
+          return window.addEventListener(evt, handleLayout);
+        });
+        document.addEventListener('keydown', handleDocumentKeyDown);
+      },
+      notifyOpened: function notifyOpened() {
+        return emit(strings$3.OPENED_EVENT, {});
+      },
+      notifyClosing: function notifyClosing(action) {
+        emit('change', false);
+        emit(strings$3.CLOSING_EVENT, action ? {
+          action: action
+        } : {});
+        LAYOUT_EVENTS.forEach(function (evt) {
+          return window.removeEventListener(evt, handleLayout);
+        });
+        document.removeEventListener('keydown', handleDocumentKeyDown);
+      },
+      notifyClosed: function notifyClosed(action) {
+        emit(strings$3.CLOSED_EVENT, action ? {
+          action: action
+        } : {});
+      }
+    };
+    watch(function () {
+      return props.open;
+    }, function (nv) {
+      onOpen(nv);
+    });
+    onMounted(function () {
+      var open = props.open,
+          autoStackButtons = props.autoStackButtons,
+          escapeKeyAction = props.escapeKeyAction,
+          scrimClickAction = props.scrimClickAction;
+      buttons_ = [].slice.call(uiState.root.querySelectorAll(cssClasses.BUTTON));
+      defaultButton = uiState.root.querySelector("[".concat(strings$3.BUTTON_DEFAULT_ATTRIBUTE, "]"));
+      var container = uiState.root.querySelector(strings$3.CONTAINER_SELECTOR);
+
+      if (!container) {
+        throw new Error("Dialog component requires a ".concat(strings$3.CONTAINER_SELECTOR, " container element"));
+      }
+
+      content_ = uiState.root.querySelector(strings$3.CONTENT_SELECTOR);
+      foundation = new MDCDialogFoundation(adapter);
+      foundation.init();
+
+      if (!autoStackButtons) {
+        foundation.setAutoStackButtons(autoStackButtons);
+      }
+
+      if (typeof escapeKeyAction === 'string') {
+        // set even if empty string
+        foundation.setEscapeKeyAction(escapeKeyAction);
+      }
+
+      if (typeof scrimClickAction === 'string') {
+        // set even if empty string
+        foundation.setScrimClickAction(scrimClickAction);
+      }
+
+      onOpen(open);
+    });
+    onBeforeUnmount(function () {
+      foundation.destroy();
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      handleLayout: handleLayout,
+      handleDocumentKeyDown: handleDocumentKeyDown,
+      onKeydown: onKeydown,
+      onClick: onClick
+    });
+  }
 };
 
 /* script */
@@ -3454,9 +3364,33 @@ var __vue_render__$9 = function() {
   var _c = _vm._self._c || _h;
   return _c(
     "div",
-    { staticClass: "mdc-layout-inner-grid mdc-layout-grid__inner" },
-    [_vm._t("default")],
-    2
+    {
+      ref: "root",
+      class: _vm.classes,
+      style: _vm.styles,
+      on: { click: _vm.onClick, keydown: _vm.onKeydown }
+    },
+    [
+      _c("div", { ref: "container", staticClass: "mdc-dialog__container" }, [
+        _c(
+          "div",
+          {
+            ref: "surface",
+            staticClass: "mdc-dialog__surface",
+            attrs: {
+              role: "alertdialog",
+              "aria-modal": "true",
+              "aria-labelledby": _vm.ariaLabelledby,
+              "aria-describedby": _vm.ariaDescribedby
+            }
+          },
+          [_vm._t("default")],
+          2
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "mdc-dialog__scrim" })
+    ]
   )
 };
 var __vue_staticRenderFns__$9 = [];
@@ -3491,193 +3425,233 @@ __vue_render__$9._withStripped = true;
     undefined
   );
 
-var layoutGrid = BasePlugin({
-  mcwLayoutGrid: __vue_component__$8,
-  mcwLayoutCell: __vue_component__$7,
-  mcwLayoutInnerGrid: __vue_component__$9
+var dialog = BasePlugin({
+  mcwDialog: __vue_component__$9,
+  mcwDialogTitle: mcwDialogTitle,
+  mcwDialogFooter: mcwDialogFooter,
+  mcwDialogButton: mcwDialogButton,
+  mcwDialogContent: mcwDialogContent
 });
 
-var mcwLineRipple = {
-  name: 'mcw-line-ripple',
+var strings$4 = MDCDismissibleDrawerFoundation.strings;
+var script$a = {
+  name: 'mcw-drawer',
+  model: {
+    prop: 'open',
+    event: 'change'
+  },
   props: {
-    rippleCenter: {
-      type: [Number, String],
-      default: 0
+    modal: Boolean,
+    dismissible: Boolean,
+    open: Boolean,
+    toolbarSpacer: Boolean,
+    toggleOn: String,
+    toggleOnSource: {
+      type: Object,
+      required: false
     },
-    active: Boolean
-  },
-
-  data() {
-    return {
-      lineClasses: {
-        'mdc-line-ripple': 1
-      },
-      lineStyles: {}
-    };
-  },
-
-  mounted() {
-    const adapter = {
-      addClass: className => {
-        this.$set(this.lineClasses, className, true);
-      },
-      removeClass: className => {
-        this.$delete(this.lineClasses, className);
-      },
-      hasClass: className => {
-        return Boolean(this.lineClasses[className]);
-      },
-      setStyle: (name, value) => {
-        this.$set(this.lineStyles, name, value);
-      }
-    }; // note: do not call the property 'foundation' as the tests will then
-    // expext all methods to be implemented, and we handle transitionend locally
-
-    this.foundation_ = new MDCLineRippleFoundation(adapter);
-    this.foundation_.init();
-  },
-
-  beforeDestroy() {
-    this.foundation_.destroy();
-  },
-
-  methods: {
-    setRippleCenter(xCoordinate) {
-      this.foundation_.setRippleCenter(xCoordinate);
+    openOn: String,
+    openOnSource: {
+      type: Object,
+      required: false
     },
-
-    activate() {
-      this.foundation_.activate();
-    },
-
-    deactivate() {
-      this.foundation_.deactivate();
+    closeOn: String,
+    closeOnSource: {
+      type: Object,
+      required: false
     }
-
   },
+  setup: function setup(props, _ref) {
+    var emit = _ref.emit,
+        $root = _ref.root;
+    var uiState = reactive({
+      classes: {
+        'mdc-drawer': 1,
+        'mdc-drawer--modal': props.modal,
+        'mdc-drawer--dismissible': props.dismissible && !props.modal
+      },
+      drawer: null
+    });
 
-  render(createElement) {
-    return createElement('span', {
-      class: this.lineClasses,
-      style: this.lineStyles,
-      on: {
-        transitionend: evt => this.foundation_.handleTransitionEnd(evt)
+    var focusTrapFactory_ = function focusTrapFactory_(el) {
+      return new FocusTrap$1(el);
+    };
+
+    var show = function show() {
+      return foundation.open();
+    };
+
+    var close = function close() {
+      return foundation.close();
+    };
+
+    var toggle = function toggle() {
+      return foundation.isOpen() ? foundation.close() : foundation.open();
+    };
+
+    var isOpen = function isOpen() {
+      return foundation.isOpen();
+    };
+
+    var foundation;
+    var focusTrap_;
+    var previousFocus_;
+
+    var handleScrimClick = function handleScrimClick() {
+      return foundation.handleScrimClick();
+    };
+
+    var handleKeydown = function handleKeydown(evt) {
+      return foundation.handleKeydown(evt);
+    };
+
+    var handleTransitionEnd = function handleTransitionEnd(evt) {
+      return foundation.handleTransitionEnd(evt);
+    };
+
+    var onChange = function onChange(event) {
+      emit('change', event);
+      $root.$emit('vma:layout');
+    };
+
+    var onListAction = function onListAction() {
+      return props.modal && close();
+    };
+
+    var adapter = {
+      addClass: function addClass(className) {
+        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+      },
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$classes = uiState.classes,
+            removed = _uiState$classes[className],
+            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+
+        uiState.classes = rest;
+      },
+      hasClass: function hasClass(className) {
+        return !!uiState.classes[className];
+      },
+      elementHasClass: function elementHasClass(element, className) {
+        return element.classList.contains(className);
+      },
+      saveFocus: function saveFocus() {
+        previousFocus_ = document.activeElement;
+      },
+      restoreFocus: function restoreFocus() {
+        var _previousFocus_;
+
+        var previousFocus = (_previousFocus_ = previousFocus_) === null || _previousFocus_ === void 0 ? void 0 : _previousFocus_.focus;
+
+        if (previousFocus && uiState.drawer.contains(document.activeElement)) {
+          previousFocus_.focus();
+        }
+      },
+      focusActiveNavigationItem: function focusActiveNavigationItem() {
+        var activeNavItemEl = uiState.drawer.querySelector(".".concat(MDCListFoundation.cssClasses.LIST_ITEM_ACTIVATED_CLASS));
+
+        if (activeNavItemEl) {
+          activeNavItemEl.focus();
+        }
+      },
+      notifyClose: function notifyClose() {
+        emitCustomEvent(uiState.drawer, strings$4.CLOSE_EVENT, {}, true
+        /* shouldBubble */
+        );
+        emit('change', false);
+        emit('close');
+      },
+      notifyOpen: function notifyOpen() {
+        emitCustomEvent(uiState.drawer, strings$4.OPEN_EVENT, {}, true
+        /* shouldBubble */
+        );
+        emit('change', true);
+        emit('open');
+      },
+      trapFocus: function trapFocus() {
+        return focusTrap_.trapFocus();
+      },
+      releaseFocus: function releaseFocus() {
+        return focusTrap_.releaseFocus();
+      }
+    };
+    watch(function () {
+      return props.open;
+    }, function (nv) {
+      if (nv) {
+        var _foundation;
+
+        (_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.open();
+      } else {
+        var _foundation2;
+
+        (_foundation2 = foundation) === null || _foundation2 === void 0 ? void 0 : _foundation2.close();
       }
     });
-  }
+    onMounted(function () {
+      var _MDCDismissibleDrawer = MDCDismissibleDrawerFoundation.cssClasses,
+          DISMISSIBLE = _MDCDismissibleDrawer.DISMISSIBLE,
+          MODAL = _MDCDismissibleDrawer.MODAL;
 
-};
-
-var lineRipple = BasePlugin({
-  mcwLineRipple
-});
-
-const ProgressPropType$1 = {
-  type: [Number, String],
-
-  validator(value) {
-    return Number(value) >= 0 && Number(value) <= 1;
-  }
-
-};
-var script$a = {
-  name: 'mcw-linear-progress',
-  props: {
-    open: {
-      type: Boolean,
-      default: true
-    },
-    indeterminate: Boolean,
-    reversed: Boolean,
-    progress: ProgressPropType$1,
-    buffer: ProgressPropType$1,
-    bufferingDots: {
-      type: Boolean,
-      default: true
-    },
-    tag: {
-      type: String,
-      default: 'div'
-    }
-  },
-
-  data() {
-    return {
-      classes: {
-        'mdc-linear-progress': 1
-      },
-      bufferbarStyles: {},
-      primaryStyles: {},
-      rootAttrs: {}
-    };
-  },
-
-  watch: {
-    open(nv) {
-      if (nv) {
-        this.foundation.open();
+      if (props.dismissible) {
+        foundation = new MDCDismissibleDrawerFoundation(adapter);
+      } else if (props.modal) {
+        foundation = new MDCModalDrawerFoundation(adapter);
       } else {
-        this.foundation.close();
+        throw new Error("mcwDrawer: Failed to instantiate component. Supported variants are ".concat(DISMISSIBLE, " and ").concat(MODAL, "."));
       }
-    },
 
-    progress(nv) {
-      this.foundation.setProgress(Number(nv));
-    },
+      foundation.init();
 
-    buffer(nv) {
-      this.foundation.setBuffer(Number(nv));
-    },
-
-    indeterminate(nv) {
-      this.foundation.setDeterminate(!nv);
-    },
-
-    reversed(nv) {
-      this.foundation.setReverse(nv);
-    }
-
-  },
-
-  mounted() {
-    const adapter = {
-      addClass: className => {
-        this.$set(this.classes, className, true);
-      },
-      forceLayout: () => this.$el.offsetWidth,
-      setBufferBarStyle: (styleProperty, value) => {
-        this.$set(this.bufferbarStyles, styleProperty, value);
-      },
-      setPrimaryBarStyle: (styleProperty, value) => {
-        this.$set(this.primaryStyles, styleProperty, value);
-      },
-      hasClass: className => this.$el.classList.contains(className),
-      removeClass: className => this.$delete(this.classes, className),
-      setAttribute: (attributeName, value) => {
-        this.$set(this.rootAttrs, attributeName, value);
-      },
-      removeAttribute: attributeName => {
-        this.$delete(this.rootAttrs, attributeName);
+      if (props.modal) {
+        focusTrap_ = createFocusTrapInstance$1(uiState.drawer, focusTrapFactory_);
       }
-    };
-    this.foundation = new MDCLinearProgressFoundation(adapter);
-    this.foundation.init();
-    this.foundation.setReverse(this.reversed);
-    this.foundation.setProgress(Number(this.progress));
-    this.foundation.setBuffer(Number(this.buffer));
-    this.foundation.setDeterminate(!this.indeterminate);
 
-    if (this.open) {
-      this.foundation.open();
-    } else {
-      this.foundation.close();
-    }
-  },
+      if (props.toggleOn) {
+        props.toggleOnEventSource = props.toggleOnSource || $root;
+        props.toggleOnEventSource.$on(props.toggleOn, props.toggle);
+      }
 
-  beforeDestroy() {
-    this.foundation.destroy();
+      if (props.openOn) {
+        props.openOnEventSource = props.openOnSource || $root;
+        props.openOnEventSource.$on(props.openOn, props.show);
+      }
+
+      if (props.closeOn) {
+        props.closeOnEventSource = props.closeOnSource || $root;
+        props.closeOnEventSource.$on(props.closeOn, props.close);
+      }
+    });
+    onBeforeUnmount(function () {
+      foundation.close();
+      foundation.destroy();
+      foundation = null;
+
+      if (props.toggleOnEventSource) {
+        props.toggleOnEventSource.$off(props.toggleOn, props.toggle);
+      }
+
+      if (props.openOnEventSource) {
+        props.openOnEventSource.$off(props.openOn, props.show);
+      }
+
+      if (props.closeOnEventSource) {
+        props.closeOnEventSource.$off(props.closeOn, props.close);
+      }
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      onChange: onChange,
+      show: show,
+      close: close,
+      toggle: toggle,
+      isOpen: isOpen,
+      onListAction: onListAction,
+      handleScrimClick: handleScrimClick,
+      handleKeydown: handleKeydown,
+      handleTransitionEnd: handleTransitionEnd
+    });
   }
-
 };
 
 /* script */
@@ -3688,10 +3662,1040 @@ var __vue_render__$a = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
+  return !_vm.modal
+    ? _c(
+        "aside",
+        {
+          ref: "drawer",
+          class: _vm.classes,
+          on: {
+            "MDCList:action": _vm.onListAction,
+            keydown: _vm.handleKeydown,
+            transitionend: _vm.handleTransitionEnd
+          }
+        },
+        [
+          _vm._t("header"),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "mdc-drawer__content" },
+            [
+              _c(
+                "mcw-list",
+                {
+                  attrs: {
+                    "wrap-focus": true,
+                    tag: "nav",
+                    "single-selection": "",
+                    "selected-index": 0
+                  }
+                },
+                [_vm._t("default")],
+                2
+              )
+            ],
+            1
+          )
+        ],
+        2
+      )
+    : _c("div", { staticClass: "drawer-wrapper" }, [
+        _c(
+          "aside",
+          {
+            ref: "drawer",
+            class: _vm.classes,
+            on: {
+              "MDCList:action": _vm.onListAction,
+              keydown: _vm.handleKeydown,
+              transitionend: _vm.handleTransitionEnd
+            }
+          },
+          [
+            _vm._t("header"),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "mdc-drawer__content" },
+              [
+                _c(
+                  "mcw-list",
+                  {
+                    attrs: {
+                      "wrap-focus": true,
+                      tag: "nav",
+                      "single-selection": "",
+                      "selected-index": 0
+                    }
+                  },
+                  [_vm._t("default")],
+                  2
+                )
+              ],
+              1
+            )
+          ],
+          2
+        ),
+        _vm._v(" "),
+        _vm.modal
+          ? _c("div", {
+              staticClass: "mdc-drawer-scrim",
+              on: { click: _vm.handleScrimClick }
+            })
+          : _vm._e()
+      ])
+};
+var __vue_staticRenderFns__$a = [];
+__vue_render__$a._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$a = undefined;
+  /* scoped */
+  const __vue_scope_id__$a = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$a = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$a = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$a = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$a, staticRenderFns: __vue_staticRenderFns__$a },
+    __vue_inject_styles__$a,
+    __vue_script__$a,
+    __vue_scope_id__$a,
+    __vue_is_functional_template__$a,
+    __vue_module_identifier__$a,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var drawer = BasePlugin({
+  mcwDrawer: __vue_component__$a
+});
+
+var script$b = {
+  name: 'mcw-fab',
+  inheritAttrs: false,
+  props: {
+    icon: String,
+    mini: Boolean,
+    exited: Boolean,
+    label: String
+  },
+  components: {
+    CustomLink: CustomLink
+  },
+  setup: function setup(props, _ref) {
+    var slots = _ref.slots,
+        listeners = _ref.listeners;
+    var root = ref(null);
+    var uiState = reactive({
+      classes: {
+        'mdc-fab': 1,
+        'mdc-fab--mini': props.mini,
+        'mdc-fab--extended': props.label || slots.default,
+        'mdc-fab--exited': props.exited
+      }
+    });
+
+    var _useRipplePlugin = useRipplePlugin$1(root),
+        rippleClasses = _useRipplePlugin.classes,
+        styles = _useRipplePlugin.styles;
+
+    var classes = computed(function () {
+      return _objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes);
+    });
+    watch(function () {
+      return props.icon;
+    }, function (nv) {
+      uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        'material-icons': nv
+      });
+    });
+    watch(function () {
+      return props.mini;
+    }, function (nv) {
+      uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        'mdc-fab--mini': nv
+      });
+    });
+    watch(function () {
+      return props.exited;
+    }, function (nv) {
+      uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        'mdc-fab--exited': nv
+      });
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      classes: classes,
+      root: root,
+      styles: styles,
+      listeners: listeners
+    });
+  }
+};
+
+/* script */
+const __vue_script__$b = script$b;
+
+/* template */
+var __vue_render__$b = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "custom-link",
+    _vm._g(
+      {
+        ref: "root",
+        class: _vm.classes,
+        style: _vm.styles,
+        attrs: { role: "button", link: _vm.$attrs, tag: "button" }
+      },
+      _vm.listeners
+    ),
+    [
+      _c("div", { staticClass: "mdc-fab__ripple" }),
+      _vm._v(" "),
+      _vm._t("icon", [
+        _c("span", { staticClass: "mdc-fab__icon material-icons" }, [
+          _vm._v(_vm._s(_vm.icon))
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "span",
+        { staticClass: "mdc-fab__label" },
+        [_vm._t("default", [_vm._v(_vm._s(_vm.label))])],
+        2
+      )
+    ],
+    2
+  )
+};
+var __vue_staticRenderFns__$b = [];
+__vue_render__$b._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$b = undefined;
+  /* scoped */
+  const __vue_scope_id__$b = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$b = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$b = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$b = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$b, staticRenderFns: __vue_staticRenderFns__$b },
+    __vue_inject_styles__$b,
+    __vue_script__$b,
+    __vue_scope_id__$b,
+    __vue_is_functional_template__$b,
+    __vue_module_identifier__$b,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var fab = BasePlugin({
+  mcwFAB: __vue_component__$b
+});
+
+var script$c = {
+  name: 'mcw-floating-label',
+  props: {
+    required: {
+      type: Boolean
+    }
+  },
+  setup: function setup(props) {
+    var uiState = reactive({
+      labelClasses: {
+        'mdc-floating-label': true,
+        'mdc-floating-label--required': props.required
+      },
+      root: null
+    });
+    var foundation;
+    var adapter = {
+      addClass: function addClass(className) {
+        return uiState.labelClasses = _objectSpread2(_objectSpread2({}, uiState.labelClasses), {}, _defineProperty({}, className, true));
+      },
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$labelClasses = uiState.labelClasses,
+            removed = _uiState$labelClasses[className],
+            rest = _objectWithoutProperties(_uiState$labelClasses, [className].map(_toPropertyKey));
+
+        uiState.labelClasses = rest;
+      },
+      getWidth: function getWidth() {
+        return uiState.root.scrollWidth;
+      },
+      registerInteractionHandler: function registerInteractionHandler(evtType, handler) {
+        uiState.root.addEventListener(evtType, handler);
+      },
+      deregisterInteractionHandler: function deregisterInteractionHandler(evtType, handler) {
+        uiState.root.removeEventListener(evtType, handler);
+      }
+    };
+
+    var getWidth = function getWidth() {
+      return foundation.getWidth();
+    };
+
+    var setRequired = function setRequired(isRequired) {
+      return foundation.setRequired(isRequired);
+    };
+
+    var float = function float(shouldFloat) {
+      foundation.float(shouldFloat);
+    };
+
+    var shake = function shake(shouldShake) {
+      foundation.shake(shouldShake);
+    };
+
+    onMounted(function () {
+      foundation = new MDCFloatingLabelFoundation(adapter);
+      foundation.init();
+    });
+    onBeforeUnmount(function () {
+      foundation.destroy();
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      getWidth: getWidth,
+      float: float,
+      shake: shake,
+      setRequired: setRequired
+    });
+  }
+};
+
+/* script */
+const __vue_script__$c = script$c;
+
+/* template */
+var __vue_render__$c = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "span",
+    { ref: "root", class: _vm.labelClasses },
+    [_vm._t("default")],
+    2
+  )
+};
+var __vue_staticRenderFns__$c = [];
+__vue_render__$c._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$c = undefined;
+  /* scoped */
+  const __vue_scope_id__$c = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$c = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$c = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$c = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$c, staticRenderFns: __vue_staticRenderFns__$c },
+    __vue_inject_styles__$c,
+    __vue_script__$c,
+    __vue_scope_id__$c,
+    __vue_is_functional_template__$c,
+    __vue_module_identifier__$c,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var floatingLabel = BasePlugin({
+  mcwFloatingLabel: __vue_component__$c
+});
+
+var script$d = {
+  name: 'mcw-icon-button',
+  model: {
+    prop: 'isOn',
+    event: 'change'
+  },
+  props: {
+    isOn: Boolean,
+    disabled: Boolean
+  },
+  setup: function setup(props, _ref) {
+    var emit = _ref.emit,
+        attrs = _ref.attrs,
+        refs = _ref.refs,
+        slots = _ref.slots;
+    var uiState = reactive({
+      classes: {
+        'mdc-icon-button': 1,
+        'material-icons': 1
+      }
+    });
+    var root = ref(null);
+    var CHANGE_EVENT = MDCIconButtonToggleFoundation.strings.CHANGE_EVENT;
+
+    var _useRipplePlugin = useRipplePlugin$1(root, {
+      isUnbounded: function isUnbounded() {
+        return true;
+      }
+    }),
+        rippleClasses = _useRipplePlugin.classes,
+        styles = _useRipplePlugin.styles;
+
+    var foundation;
+    var adapter = {
+      addClass: function addClass(className) {
+        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+      },
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$classes = uiState.classes,
+            removed = _uiState$classes[className],
+            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+
+        uiState.classes = rest;
+      },
+      hasClass: function hasClass(className) {
+        return Boolean(uiState.classes[className]);
+      },
+      setAttr: function setAttr(attrName, attrValue) {
+        return refs.root.setAttribute(attrName, attrValue);
+      },
+      getAttr: function getAttr(attrName) {
+        return refs.root.getAttribute(attrName);
+      },
+      notifyChange: function notifyChange(evtData) {
+        emit(CHANGE_EVENT, evtData);
+        emit('change', evtData.isOn);
+      }
+    };
+    var classes = computed(function () {
+      return _objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes);
+    });
+    watch(function () {
+      return props.isOn;
+    }, function (nv) {
+      foundation.toggle(nv);
+    });
+    var tag = computed(function () {
+      var isLink = Boolean(attrs.href);
+      return isLink ? 'a' : 'button';
+    });
+
+    var onClick = function onClick(evt) {
+      return foundation.handleClick(evt);
+    };
+
+    onMounted(function () {
+      foundation = new MDCIconButtonToggleFoundation(adapter);
+      foundation.init();
+      foundation.toggle(props.isOn);
+    });
+    onBeforeUnmount(function () {
+      foundation.destroy();
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      classes: classes,
+      styles: styles,
+      root: root,
+      tag: tag,
+      onClick: onClick
+    });
+  }
+};
+
+/* script */
+const __vue_script__$d = script$d;
+
+/* template */
+var __vue_render__$d = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    _vm.tag,
+    {
+      ref: "root",
+      tag: "component",
+      class: _vm.classes,
+      style: _vm.styles,
+      attrs: { "aria-pressed": "false", disabled: _vm.disabled },
+      on: { click: _vm.onClick }
+    },
+    [_vm._t("default")],
+    2
+  )
+};
+var __vue_staticRenderFns__$d = [];
+__vue_render__$d._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$d = undefined;
+  /* scoped */
+  const __vue_scope_id__$d = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$d = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$d = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$d = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$d, staticRenderFns: __vue_staticRenderFns__$d },
+    __vue_inject_styles__$d,
+    __vue_script__$d,
+    __vue_scope_id__$d,
+    __vue_is_functional_template__$d,
+    __vue_module_identifier__$d,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var mcwIconToggle = {
+  name: 'mcw-icon-toggle',
+  props: {
+    isOn: Boolean
+  },
+  setup: function setup(props, _ref) {
+    var slots = _ref.slots;
+    return function () {
+      var _slots$default;
+
+      return h('i', {
+        class: {
+          'material-icons': 1,
+          'mdc-icon-button__icon': true,
+          'mdc-icon-button__icon--on': props.isOn
+        }
+      }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
+    };
+  }
+};
+
+var iconButton = BasePlugin({
+  mcwIconButton: __vue_component__$d,
+  mcwIconToggle: mcwIconToggle
+});
+
+var spanOptions_ = {
+  type: [String, Number],
+  default: null,
+  validator: function validator(value) {
+    var num = Number(value);
+    return isFinite(num) && num <= 12 && num > 0;
+  }
+};
+var script$e = {
+  name: 'mcw-layout-cell',
+  props: {
+    span: spanOptions_,
+    order: spanOptions_,
+    phone: spanOptions_,
+    tablet: spanOptions_,
+    desktop: spanOptions_,
+    align: {
+      type: String,
+      validator: function validator(value) {
+        return ['top', 'bottom', 'middle'].indexOf(value) !== -1;
+      }
+    }
+  },
+  setup: function setup(props) {
+    var classes = computed(function () {
+      var cssClasses = [];
+
+      if (props.span) {
+        cssClasses.push("mdc-layout-grid__cell--span-".concat(props.span));
+      }
+
+      if (props.order) {
+        cssClasses.push("mdc-layout-grid__cell--order-".concat(props.order));
+      }
+
+      if (props.phone) {
+        cssClasses.push("mdc-layout-grid__cell--span-".concat(props.phone, "-phone"));
+      }
+
+      if (props.tablet) {
+        cssClasses.push("mdc-layout-grid__cell--span-".concat(props.tablet, "-tablet"));
+      }
+
+      if (props.desktop) {
+        cssClasses.push("mdc-layout-grid__cell--span-".concat(props.desktop, "-desktop"));
+      }
+
+      if (props.align) {
+        cssClasses.push("mdc-layout-grid__cell--align-".concat(props.align));
+      }
+
+      return cssClasses;
+    });
+    return {
+      classes: classes
+    };
+  }
+};
+
+/* script */
+const __vue_script__$e = script$e;
+
+/* template */
+var __vue_render__$e = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    {
+      staticClass: "mdc-layout-cell mdc-layout-grid__cell",
+      class: _vm.classes
+    },
+    [_vm._t("default")],
+    2
+  )
+};
+var __vue_staticRenderFns__$e = [];
+__vue_render__$e._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$e = undefined;
+  /* scoped */
+  const __vue_scope_id__$e = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$e = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$e = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$e = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$e, staticRenderFns: __vue_staticRenderFns__$e },
+    __vue_inject_styles__$e,
+    __vue_script__$e,
+    __vue_scope_id__$e,
+    __vue_is_functional_template__$e,
+    __vue_module_identifier__$e,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var script$f = {
+  name: 'mcw-layout-grid',
+  props: {
+    fixedColumWidth: Boolean,
+    alignLeft: Boolean,
+    alignRight: Boolean
+  },
+  setup: function setup(props) {
+    var classes = computed(function () {
+      return {
+        'mdc-layout-grid': true,
+        'mdc-layout-grid--fixed-column-width': props.fixedColumnWidth,
+        'mdc-layout-grid--align-left': props.alignLeft,
+        'mdc-layout-grid--align-right': props.alignRight
+      };
+    });
+    return {
+      classes: classes
+    };
+  }
+};
+
+/* script */
+const __vue_script__$f = script$f;
+
+/* template */
+var __vue_render__$f = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { class: _vm.classes }, [
+    _c("div", { staticClass: "mdc-layout-grid__inner" }, [_vm._t("default")], 2)
+  ])
+};
+var __vue_staticRenderFns__$f = [];
+__vue_render__$f._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$f = undefined;
+  /* scoped */
+  const __vue_scope_id__$f = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$f = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$f = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$f = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$f, staticRenderFns: __vue_staticRenderFns__$f },
+    __vue_inject_styles__$f,
+    __vue_script__$f,
+    __vue_scope_id__$f,
+    __vue_is_functional_template__$f,
+    __vue_module_identifier__$f,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var script$g = {
+  name: 'mcw-layout-inner-grid'
+};
+
+/* script */
+const __vue_script__$g = script$g;
+
+/* template */
+var __vue_render__$g = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    { staticClass: "mdc-layout-inner-grid mdc-layout-grid__inner" },
+    [_vm._t("default")],
+    2
+  )
+};
+var __vue_staticRenderFns__$g = [];
+__vue_render__$g._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$g = undefined;
+  /* scoped */
+  const __vue_scope_id__$g = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$g = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$g = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$g = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$g, staticRenderFns: __vue_staticRenderFns__$g },
+    __vue_inject_styles__$g,
+    __vue_script__$g,
+    __vue_scope_id__$g,
+    __vue_is_functional_template__$g,
+    __vue_module_identifier__$g,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var layoutGrid = BasePlugin({
+  mcwLayoutGrid: __vue_component__$f,
+  mcwLayoutCell: __vue_component__$e,
+  mcwLayoutInnerGrid: __vue_component__$g
+});
+
+var script$h = {
+  name: 'mcw-line-ripple',
+  setup: function setup() {
+    var uiState = reactive({
+      lineClasses: {
+        'mdc-line-ripple': 1
+      },
+      lineStyles: {}
+    }); // note: do not call the property 'foundation' as the tests will then
+    // expect all methods to be implemented, and we handle transitionend locally.
+
+    var foundation_;
+    var adapter = {
+      addClass: function addClass(className) {
+        return uiState.lineClasses = _objectSpread2(_objectSpread2({}, uiState.lineClasses), {}, _defineProperty({}, className, true));
+      },
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$lineClasses = uiState.lineClasses,
+            removed = _uiState$lineClasses[className],
+            rest = _objectWithoutProperties(_uiState$lineClasses, [className].map(_toPropertyKey));
+
+        uiState.lineClasses = rest;
+      },
+      hasClass: function hasClass(className) {
+        return Boolean(uiState.lineClasses[className]);
+      },
+      setStyle: function setStyle(name, value) {
+        return uiState.lineStyles = _objectSpread2(_objectSpread2({}, uiState.lineStyles), {}, _defineProperty({}, name, value));
+      }
+    };
+
+    var setRippleCenter = function setRippleCenter(xCoordinate) {
+      foundation_.setRippleCenter(xCoordinate);
+    };
+
+    var activate = function activate() {
+      foundation_.activate();
+    };
+
+    var deactivate = function deactivate() {
+      foundation_.deactivate();
+    };
+
+    var onTransitionEnd = function onTransitionEnd(evt) {
+      return foundation_.handleTransitionEnd(evt);
+    };
+
+    onMounted(function () {
+      foundation_ = new MDCLineRippleFoundation(adapter);
+      foundation_.init();
+    });
+    onBeforeUnmount(function () {
+      foundation_.destroy();
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      setRippleCenter: setRippleCenter,
+      activate: activate,
+      deactivate: deactivate,
+      onTransitionEnd: onTransitionEnd
+    });
+  }
+};
+
+/* script */
+const __vue_script__$h = script$h;
+
+/* template */
+var __vue_render__$h = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("span", {
+    class: _vm.lineClasses,
+    style: _vm.lineStyles,
+    on: { transitionend: _vm.onTransitionEnd }
+  })
+};
+var __vue_staticRenderFns__$h = [];
+__vue_render__$h._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$h = undefined;
+  /* scoped */
+  const __vue_scope_id__$h = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$h = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$h = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$h = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$h, staticRenderFns: __vue_staticRenderFns__$h },
+    __vue_inject_styles__$h,
+    __vue_script__$h,
+    __vue_scope_id__$h,
+    __vue_is_functional_template__$h,
+    __vue_module_identifier__$h,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var lineRipple = BasePlugin({
+  mcwLineRipple: __vue_component__$h
+});
+
+var progressPropType_ = {
+  type: [Number, String],
+  validator: function validator(value) {
+    return Number(value) >= 0 && Number(value) <= 1;
+  }
+};
+var script$i = {
+  name: 'mcw-linear-progress',
+  props: {
+    open: {
+      type: Boolean,
+      default: true
+    },
+    indeterminate: Boolean,
+    reversed: Boolean,
+    progress: progressPropType_,
+    buffer: progressPropType_,
+    bufferingDots: {
+      type: Boolean,
+      default: true
+    },
+    tag: {
+      type: String,
+      default: 'div'
+    }
+  },
+  setup: function setup(props) {
+    var uiState = reactive({
+      classes: {
+        'mdc-linear-progress': 1
+      },
+      bufferbarStyles: {},
+      primaryStyles: {},
+      rootAttrs: {},
+      root: null
+    });
+    var foundation;
+    var adapter = {
+      addClass: function addClass(className) {
+        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+      },
+      forceLayout: function forceLayout() {
+        return uiState.root.offsetWidth;
+      },
+      setBufferBarStyle: function setBufferBarStyle(styleProperty, value) {
+        return uiState.bufferbarStyles = _objectSpread2(_objectSpread2({}, uiState.bufferbarStyles), {}, _defineProperty({}, styleProperty, value));
+      },
+      setPrimaryBarStyle: function setPrimaryBarStyle(styleProperty, value) {
+        return uiState.primaryStyles = _objectSpread2(_objectSpread2({}, uiState.primaryStyles), {}, _defineProperty({}, styleProperty, value));
+      },
+      hasClass: function hasClass(className) {
+        return uiState.root.classList.contains(className);
+      },
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$classes = uiState.classes,
+            removed = _uiState$classes[className],
+            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+
+        uiState.classes = rest;
+      },
+      setAttribute: function setAttribute(attributeName, value) {
+        return uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, _defineProperty({}, attributeName, value));
+      },
+      removeAttribute: function removeAttribute(attributeName) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$rootAttrs = uiState.rootAttrs,
+            removed = _uiState$rootAttrs[attributeName],
+            rest = _objectWithoutProperties(_uiState$rootAttrs, [attributeName].map(_toPropertyKey));
+
+        uiState.rootAttrs = rest;
+      }
+    };
+    watch(function () {
+      return props.open;
+    }, function (nv) {
+      if (nv) {
+        foundation.open();
+      } else {
+        foundation.close();
+      }
+    });
+    watch(function () {
+      return props.progress;
+    }, function (nv) {
+      foundation.setProgress(Number(nv));
+    });
+    watch(function () {
+      return props.buffer;
+    }, function (nv) {
+      foundation.setBuffer(Number(nv));
+    });
+    watch(function () {
+      return props.indeterminate;
+    }, function (nv) {
+      foundation.setDeterminate(!nv);
+    });
+    watch(function () {
+      return props.reversed;
+    }, function (nv) {
+      foundation.setReverse(nv);
+    });
+    onMounted(function () {
+      foundation = new MDCLinearProgressFoundation(adapter);
+      foundation.init();
+      foundation.setReverse(props.reversed);
+      foundation.setProgress(Number(props.progress));
+      foundation.setBuffer(Number(props.buffer));
+      foundation.setDeterminate(!props.indeterminate);
+
+      if (props.open) {
+        foundation.open();
+      } else {
+        foundation.close();
+      }
+    });
+    onBeforeUnmount(function () {
+      return foundation.destroy();
+    });
+    return _objectSpread2({}, toRefs(uiState));
+  }
+};
+
+/* script */
+const __vue_script__$i = script$i;
+
+/* template */
+var __vue_render__$i = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
   return _c(
     "div",
     _vm._b(
-      { class: _vm.classes, attrs: { role: "progressbar" } },
+      { ref: "root", class: _vm.classes, attrs: { role: "progressbar" } },
       "div",
       _vm.rootAttrs,
       false
@@ -3729,17 +4733,17 @@ var __vue_render__$a = function() {
     ]
   )
 };
-var __vue_staticRenderFns__$a = [];
-__vue_render__$a._withStripped = true;
+var __vue_staticRenderFns__$i = [];
+__vue_render__$i._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$a = undefined;
+  const __vue_inject_styles__$i = undefined;
   /* scoped */
-  const __vue_scope_id__$a = undefined;
+  const __vue_scope_id__$i = undefined;
   /* module identifier */
-  const __vue_module_identifier__$a = undefined;
+  const __vue_module_identifier__$i = undefined;
   /* functional template */
-  const __vue_is_functional_template__$a = false;
+  const __vue_is_functional_template__$i = false;
   /* style inject */
   
   /* style inject SSR */
@@ -3748,13 +4752,13 @@ __vue_render__$a._withStripped = true;
   
 
   
-  const __vue_component__$a = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$a, staticRenderFns: __vue_staticRenderFns__$a },
-    __vue_inject_styles__$a,
-    __vue_script__$a,
-    __vue_scope_id__$a,
-    __vue_is_functional_template__$a,
-    __vue_module_identifier__$a,
+  const __vue_component__$i = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$i, staticRenderFns: __vue_staticRenderFns__$i },
+    __vue_inject_styles__$i,
+    __vue_script__$i,
+    __vue_scope_id__$i,
+    __vue_is_functional_template__$i,
+    __vue_module_identifier__$i,
     false,
     undefined,
     undefined,
@@ -3762,17 +4766,392 @@ __vue_render__$a._withStripped = true;
   );
 
 var linearProgress = BasePlugin({
-  mcwLinearProgress: __vue_component__$a
+  mcwLinearProgress: __vue_component__$i
 });
 
-const ARIA_ORIENTATION = 'aria-orientation';
-const VERTICAL = 'vertical';
-const RADIO_CHECKED_RADIO_SELECTOR = `input[type="radio"][checked="checked"]`;
-const {
-  strings,
-  cssClasses: cssClasses$1
-} = MDCListFoundation;
-var mcwList = {
+var listItemId_ = 0;
+var script$j = {
+  name: 'mcw-list-item',
+  props: {
+    twoLine: String,
+    disabled: Boolean,
+    icon: [String, Boolean],
+    groupIcon: String,
+    selected: Boolean,
+    checked: Boolean,
+    name: String,
+    to: [String, Object],
+    noAutoRole: Boolean,
+    trailing: Boolean
+  },
+  components: {
+    CustomLink: CustomLink
+  },
+  setup: function setup(props, _ref) {
+    var slots = _ref.slots,
+        listeners = _ref.listeners,
+        attrs = _ref.attrs;
+    var root = ref(null);
+    var uiState = reactive({
+      classes: {
+        'mdc-list-item': 1,
+        'mdc-list-item--disabled': props.disabled
+      },
+      attrs: {},
+      styles: {}
+    });
+    var myAttrs = computed(function () {
+      return _objectSpread2(_objectSpread2(_objectSpread2({}, attrs), uiState.attrs), {}, {
+        to: props.to
+      });
+    });
+    var radioChecked = computed(function () {
+      return (attrs === null || attrs === void 0 ? void 0 : attrs['aria-checked']) == 'true';
+    });
+    var checkbox = computed(function () {
+      return !props.trailing && (attrs === null || attrs === void 0 ? void 0 : attrs.role) == 'checkbox';
+    });
+    var radio = computed(function () {
+      return !props.trailing && (attrs === null || attrs === void 0 ? void 0 : attrs.role) == 'radio';
+    });
+    var trailingRadio = computed(function () {
+      return props.trailing && (attrs === null || attrs === void 0 ? void 0 : attrs.role) == 'radio';
+    });
+    var trailingCheckbox = computed(function () {
+      return props.trailing && (attrs === null || attrs === void 0 ? void 0 : attrs.role) == 'checkbox';
+    });
+    var itemId = listItemId_++;
+
+    var _useRipplePlugin = useRipplePlugin(root),
+        rippleClasses = _useRipplePlugin.classes,
+        styles = _useRipplePlugin.styles;
+
+    var classes = computed(function () {
+      return _objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes);
+    });
+    var isTwoLine = computed(function () {
+      return props.twoLine || slots['secondary-text'];
+    });
+    var groupClasses = computed(function () {
+      return {
+        'mdc-menu__selection-group-icon': props.groupIcon
+      };
+    });
+    var needGraphic = computed(function () {
+      return typeof props.icon == 'string' || !!props.groupIcon;
+    });
+    var listIcon = computed(function () {
+      return typeof props.icon === 'string' && props.icon || props.groupIcon;
+    });
+
+    var addClass = function addClass(className) {
+      return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+    };
+
+    var removeClass = function removeClass(className) {
+      // eslint-disable-next-line no-unused-vars
+      var _uiState$classes = uiState.classes,
+          removed = _uiState$classes[className],
+          rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+
+      uiState.classes = rest;
+    };
+
+    var removeAttribute = function removeAttribute(attr) {
+      // eslint-disable-next-line no-unused-vars
+      var _uiState$attrs = uiState.attrs,
+          removed = _uiState$attrs[attr],
+          rest = _objectWithoutProperties(_uiState$attrs, [attr].map(_toPropertyKey));
+
+      uiState.attrs = rest;
+    };
+
+    var setAttribute = function setAttribute(attr, value) {
+      return uiState.attrs = _objectSpread2(_objectSpread2({}, uiState.attrs), {}, _defineProperty({}, attr, value));
+    };
+
+    var getAttribute = function getAttribute(attr) {
+      return myAttrs.value[attr];
+    };
+
+    var addItemId = function addItemId(evt) {
+      return evt.__itemId = itemId;
+    };
+
+    var classList = {
+      add: addClass,
+      remove: removeClass,
+      contains: function contains(className) {
+        return !!uiState.classes[className];
+      }
+    };
+
+    var focus = function focus() {
+      var _root$value$$el;
+
+      ((_root$value$$el = root.value.$el) !== null && _root$value$$el !== void 0 ? _root$value$$el : root.value).focus();
+    };
+
+    var myListeners = _objectSpread2(_objectSpread2({}, listeners), {}, {
+      click: addItemId,
+      focusin: addItemId
+    });
+
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      myListeners: myListeners,
+      styles: styles,
+      focus: focus,
+      root: root,
+      classes: classes,
+      isTwoLine: isTwoLine,
+      needGraphic: needGraphic,
+      listIcon: listIcon,
+      groupClasses: groupClasses,
+      addClass: addClass,
+      removeClass: removeClass,
+      setAttribute: setAttribute,
+      getAttribute: getAttribute,
+      removeAttribute: removeAttribute,
+      itemId: itemId,
+      checkbox: checkbox,
+      radio: radio,
+      radioChecked: radioChecked,
+      classList: classList,
+      myAttrs: myAttrs,
+      trailingRadio: trailingRadio,
+      trailingCheckbox: trailingCheckbox
+    });
+  }
+};
+
+/* script */
+const __vue_script__$j = script$j;
+
+/* template */
+var __vue_render__$j = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "custom-link",
+    _vm._g(
+      {
+        ref: "root",
+        class: _vm.classes,
+        style: _vm.styles,
+        attrs: { link: _vm.myAttrs, tag: "a" }
+      },
+      _vm.myListeners
+    ),
+    [
+      _c("span", { staticClass: "mdc-list-item__ripple" }),
+      _vm._v(" "),
+      _vm.needGraphic
+        ? _c(
+            "span",
+            { staticClass: "mdc-list-item__graphic", class: _vm.groupClasses },
+            [
+              _vm._t("graphic", [
+                _vm.listIcon
+                  ? _c("i", { staticClass: "material-icons" }, [
+                      _vm._v(_vm._s(_vm.listIcon))
+                    ])
+                  : _vm._e()
+              ])
+            ],
+            2
+          )
+        : _vm.checkbox
+        ? _c(
+            "span",
+            { staticClass: "mdc-list-item__graphic" },
+            [
+              _vm._t("graphic", [
+                _c("div", { staticClass: "mdc-checkbox" }, [
+                  _c("input", {
+                    staticClass: "mdc-checkbox__native-control",
+                    attrs: { type: "checkbox" }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mdc-checkbox__background" }, [
+                    _c(
+                      "svg",
+                      {
+                        staticClass: "mdc-checkbox__checkmark",
+                        attrs: { viewBox: "0 0 24 24" }
+                      },
+                      [
+                        _c("path", {
+                          staticClass: "mdc-checkbox__checkmark-path",
+                          attrs: {
+                            fill: "none",
+                            d: "M1.73,12.91 8.1,19.28 22.79,4.59"
+                          }
+                        })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "mdc-checkbox__mixedmark" })
+                  ])
+                ])
+              ])
+            ],
+            2
+          )
+        : _vm.radio
+        ? _c(
+            "span",
+            { staticClass: "mdc-list-item__graphic" },
+            [
+              _vm._t("graphic", [
+                _c("div", { staticClass: "mdc-radio" }, [
+                  _c("input", {
+                    staticClass: "mdc-radio__native-control",
+                    attrs: { type: "radio", value: "1", name: _vm.name },
+                    domProps: { checked: _vm.radioChecked }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mdc-radio__background" }, [
+                    _c("div", { staticClass: "mdc-radio__outer-circle" }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "mdc-radio__inner-circle" })
+                  ])
+                ])
+              ])
+            ],
+            2
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.isTwoLine
+        ? _c("span", { staticClass: "mdc-list-item__text" }, [
+            _c(
+              "span",
+              { staticClass: "mdc-list-item__primary-text" },
+              [_vm._t("default")],
+              2
+            ),
+            _vm._v(" "),
+            _c(
+              "span",
+              { staticClass: "mdc-list-item__secondary-text" },
+              [_vm._t("secondary-text", [_vm._v(_vm._s(_vm.twoLine))])],
+              2
+            )
+          ])
+        : _c(
+            "span",
+            { staticClass: "mdc-list-item__text" },
+            [_vm._t("default")],
+            2
+          ),
+      _vm._v(" "),
+      _vm.trailingRadio
+        ? _c(
+            "span",
+            { staticClass: "mdc-list-item__meta" },
+            [
+              _vm._t("meta", [
+                _c("div", { staticClass: "mdc-radio" }, [
+                  _c("input", {
+                    staticClass: "mdc-radio__native-control",
+                    attrs: { type: "radio", value: "1", name: _vm.name },
+                    domProps: { checked: _vm.radioChecked }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mdc-radio__background" }, [
+                    _c("div", { staticClass: "mdc-radio__outer-circle" }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "mdc-radio__inner-circle" })
+                  ])
+                ])
+              ])
+            ],
+            2
+          )
+        : _vm.trailingCheckbox
+        ? _c(
+            "span",
+            { staticClass: "mdc-list-item__meta" },
+            [
+              _vm._t("meta"),
+              _vm._v(" "),
+              _c("div", { staticClass: "mdc-checkbox" }, [
+                _c("input", {
+                  staticClass: "mdc-checkbox__native-control",
+                  attrs: { type: "checkbox" }
+                }),
+                _vm._v(" "),
+                _c("div", { staticClass: "mdc-checkbox__background" }, [
+                  _c(
+                    "svg",
+                    {
+                      staticClass: "mdc-checkbox__checkmark",
+                      attrs: { viewBox: "0 0 24 24" }
+                    },
+                    [
+                      _c("path", {
+                        staticClass: "mdc-checkbox__checkmark-path",
+                        attrs: {
+                          fill: "none",
+                          d: "M1.73,12.91 8.1,19.28 22.79,4.59"
+                        }
+                      })
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mdc-checkbox__mixedmark" })
+                ])
+              ])
+            ],
+            2
+          )
+        : _vm.$slots.meta
+        ? _c(
+            "span",
+            { staticClass: "mdc-list-item__meta" },
+            [_vm._t("meta")],
+            2
+          )
+        : _vm._e()
+    ]
+  )
+};
+var __vue_staticRenderFns__$j = [];
+__vue_render__$j._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$j = undefined;
+  /* scoped */
+  const __vue_scope_id__$j = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$j = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$j = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$j = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$j, staticRenderFns: __vue_staticRenderFns__$j },
+    __vue_inject_styles__$j,
+    __vue_script__$j,
+    __vue_scope_id__$j,
+    __vue_is_functional_template__$j,
+    __vue_module_identifier__$j,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var strings$5 = MDCListFoundation.strings,
+    cssClasses$1 = MDCListFoundation.cssClasses;
+var script$k = {
   name: 'mcw-list',
   model: {
     prop: 'selectedIndex',
@@ -3788,757 +5167,506 @@ var mcwList = {
     twoLine: Boolean,
     singleSelection: Boolean,
     wrapFocus: Boolean,
+    textualList: Boolean,
     selectedIndex: {
-      type: [Number, Array]
+      type: [String, Number, Array]
     },
     tag: {
       type: String,
       default: 'ul'
     },
-    [ARIA_ORIENTATION]: {
+    ariaOrientation: {
       type: String,
-      default: VERTICAL
-    }
+      default: 'vertical'
+    },
+    thumbnailList: Boolean,
+    iconList: Boolean,
+    videoList: Boolean,
+    typeAhead: Boolean
   },
-
-  data() {
-    return {
-      listn: 0
-    };
-  },
-
-  watch: {
-    singleSelection(nv) {
-      this.foundation.setSingleSelection(nv);
-    },
-
-    selectedIndex(nv) {
-      if (Array.isArray(nv)) {
-        this.foundation.setSelectedIndex(nv);
-      } else if (this.selectedIndex != nv) {
-        this.foundation.setSelectedIndex(nv);
-      }
-    },
-
-    wrapFocus(nv) {
-      this.foundation.setWrapFocus(nv);
-    },
-
-    ariaOrientation(nv) {
-      this.foundation.setVerticalOrientation(nv === VERTICAL);
-    }
-
-  },
-  computed: {
-    selIndex: {
-      get() {
-        return this.selectedIndex;
-      },
-
-      set(nv) {
-        this.$emit('change', nv);
-      }
-
-    },
-
-    classes() {
-      return {
+  setup: function setup(props, _ref) {
+    var emit = _ref.emit,
+        slots = _ref.slots;
+    var uiState = reactive({
+      classes: {
         'mdc-list': 1,
-        'mdc-list--dense': this.dense,
-        'mdc-list--avatar-list': this.avatarList,
-        'mdc-list--two-line': this.twoLine,
-        'mdc-list--non-interactive': this.nonInteractive
-      };
-    },
+        'mdc-list--dense': props.dense,
+        'mdc-list--avatar-list': props.avatarList,
+        'mdc-list--two-line': props.twoLine,
+        'mdc-list--non-interactive': props.nonInteractive,
+        'mdc-list--textual-list': props.textualList,
+        'mdc-list--icon-list': props.iconList,
+        'mdc-list--thumbnail-list': props.thumbnailList,
+        'mdc-list--video-list': props.videoList
+      },
+      rootAttrs: {
+        'aria-orientation': props.ariaOrientation
+      },
+      listn: 0,
+      listRoot: null
+    });
+    var selectedIndex = ref(props.selectedIndex);
+    var foundation;
+    var slotObserver;
 
-    listElements() {
-      // eslint-disable-next-line no-unused-vars
-      const xx = this.listn; // for dependency
-
-      return [].slice.call(this.$el.querySelectorAll(`.${cssClasses$1.LIST_ITEM_CLASS}`));
+    if (props.singleSelection) {
+      uiState.rootAttrs.role = 'listbox';
     }
 
-  },
-  methods: {
-    handleFocusInEvent(evt, index) {
-      this.foundation.handleFocusIn(evt, index);
-    },
-
-    handleFocusOutEvent(evt, index) {
-      this.foundation.handleFocusOut(evt, index);
-    },
-
-    handleKeydownEvent(evt) {
-      const index = this.getListItemIndex(evt);
-      const target = evt.target;
-      this.foundation.handleKeydown(evt, target.classList.contains(cssClasses$1.LIST_ITEM_CLASS), index);
-    },
-
-    handleClickEvent(evt) {
-      const index = this.getListItemIndex(evt);
-      const target = evt.target; // Toggle the checkbox only if it's not the target of the event, or the checkbox will have 2 change events.
-
-      const toggleCheckbox = !matches(target, strings.CHECKBOX_RADIO_SELECTOR);
-      this.foundation.handleClick(index, toggleCheckbox);
-    },
-
-    layout() {
-      this.foundation.setVerticalOrientation(this.ariaOrientation == VERTICAL); // List items need to have at least tabindex=-1 to be focusable.
-
-      [].slice.call(this.$el.querySelectorAll('.mdc-list-item:not([tabindex])')).forEach(ele => {
-        ele.setAttribute('tabindex', -1);
-      }); // Child button/a elements are not tabbable until the list item is focused.
-
-      [].slice.call(this.$el.querySelectorAll(strings.FOCUSABLE_CHILD_ELEMENTS)).forEach(ele => ele.setAttribute('tabindex', -1));
-      this.foundation.layout();
-    },
-
-    initializeListType() {
-      const checkboxListItems = this.$el.querySelectorAll(strings.ARIA_ROLE_CHECKBOX_SELECTOR);
-      const singleSelectedListItem = this.$el.querySelector(`
-        .${cssClasses$1.LIST_ITEM_ACTIVATED_CLASS},
-        .${cssClasses$1.LIST_ITEM_SELECTED_CLASS}
-      `);
-      let radioSelectedListItem = this.$el.querySelector(strings.ARIA_CHECKED_RADIO_SELECTOR);
-
-      if (!radioSelectedListItem) {
-        const radioSelectedInput = this.$el.querySelector(RADIO_CHECKED_RADIO_SELECTOR);
-
-        if (radioSelectedInput) {
-          radioSelectedListItem = closest(radioSelectedInput, `[role="radio"].${cssClasses$1.LIST_ITEM_CLASS}`);
-        }
+    var selIndex = computed({
+      get: function get() {
+        return selectedIndex.value;
+      },
+      set: function set(nv) {
+        selectedIndex.value = nv;
+        emit('change', nv);
       }
+    });
+    var listElements = computed(function () {
+      var _slots$default;
 
-      if (checkboxListItems.length) {
-        const preselectedItems = this.$el.querySelectorAll(strings.ARIA_CHECKED_CHECKBOX_SELECTOR);
-        this.selIndex = [].map.call(preselectedItems, listItem => this.listElements.indexOf(listItem));
-      } else if (singleSelectedListItem) {
-        if (singleSelectedListItem.classList.contains(cssClasses$1.LIST_ITEM_ACTIVATED_CLASS)) {
-          this.foundation.setUseActivatedClass(true);
+      // eslint-disable-next-line no-unused-vars
+      var xx = uiState.listn; // for dependency
+
+      var processItem = function processItem(item) {
+        var _item$componentInstan;
+
+        var items = [];
+
+        if ((_item$componentInstan = item.componentInstance) === null || _item$componentInstan === void 0 ? void 0 : _item$componentInstan.setAttribute) {
+          items.push(item.componentInstance);
         }
 
-        this.singleSelection = true;
-        this.selIndex = this.listElements.indexOf(singleSelectedListItem);
-      } else if (radioSelectedListItem) {
-        const selIndex = this.listElements.indexOf(radioSelectedListItem);
-        this.foundation.setSelectedIndex(selIndex);
-        this.selIndex = selIndex;
-        radioSelectedListItem.setAttribute('tabindex', '0');
+        if (item.children) {
+          return item.children.reduce(function (p, v) {
+            return p.concat(processItem(v));
+          }, items);
+        }
+
+        return items;
+      }; // search depth first down the tree for vue components that match the signature of a mcw-list-item
+
+
+      var topList = (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots).reduce(function (p, v) {
+        return p.concat(processItem(v));
+      }, []);
+      return topList;
+    });
+
+    var getListItemIndex = function getListItemIndex(evt) {
+      if (evt.__itemId) {
+        return listElements.value.findIndex(function (_ref2) {
+          var itemId = _ref2.itemId;
+          return itemId === evt.__itemId;
+        });
       }
-    },
 
-    getListItemIndex(evt) {
-      const eventTarget = evt.target;
-      const nearestParent = closest(eventTarget, `.${cssClasses$1.LIST_ITEM_CLASS}, .${cssClasses$1.ROOT}`); // Get the index of the element if it is a list item.
+      var eventTarget = evt.target;
+      var nearestParent = closest(eventTarget, ".".concat(cssClasses$1.LIST_ITEM_CLASS, ", .").concat(cssClasses$1.ROOT)); // Get the index of the element if it is a list item.
 
-      if (nearestParent && matches(nearestParent, `.${cssClasses$1.LIST_ITEM_CLASS}`)) {
-        return this.listElements.indexOf(nearestParent);
+      if (nearestParent && matches(nearestParent, ".".concat(cssClasses$1.LIST_ITEM_CLASS))) {
+        return listElements.value.indexOf(nearestParent.__vue__);
       }
 
       return -1;
-    }
+    };
 
-  },
+    var layout = function layout() {
+      foundation.setVerticalOrientation(props.ariaOrientation == 'vertical'); // List items need to have at least tabindex=-1 to be focusable.
 
-  mounted() {
-    const {
-      wrapFocus
-    } = this;
-    const adapter = {
-      addClassForElementIndex: (index, className) => {
-        const element = this.listElements[index];
+      [].slice.call(uiState.listRoot.querySelectorAll('.mdc-list-item:not([tabindex])')).forEach(function (ele) {
+        ele.setAttribute('tabindex', -1);
+      }); // Child button/a elements are not tabbable until the list item is focused.
 
-        if (element) {
-          element.classList.add(className);
-        }
+      [].slice.call(uiState.listRoot.querySelectorAll(strings$5.FOCUSABLE_CHILD_ELEMENTS)).forEach(function (ele) {
+        return ele.setAttribute('tabindex', -1);
+      });
+      foundation.layout();
+    };
+
+    var initializeListType = function initializeListType() {
+      var checkboxListItems = uiState.listRoot.querySelectorAll(strings$5.ARIA_ROLE_CHECKBOX_SELECTOR);
+      var radioSelectedListItem = uiState.listRoot.querySelector(strings$5.ARIA_CHECKED_RADIO_SELECTOR);
+
+      if (checkboxListItems.length) {
+        var preselectedItems = uiState.listRoot.querySelectorAll(strings$5.ARIA_CHECKED_CHECKBOX_SELECTOR);
+        selIndex.value = [].map.call(preselectedItems, function (listItem) {
+          return listElements.value.indexOf(listItem.__vue__);
+        });
+      } else if (radioSelectedListItem) {
+        selIndex.value = listElements.value.indexOf(radioSelectedListItem.__vue__);
+      }
+    };
+
+    var getPrimaryText = function getPrimaryText(item) {
+      var primaryText = item.querySelector(".".concat(cssClasses$1.LIST_ITEM_PRIMARY_TEXT_CLASS));
+
+      if (primaryText) {
+        return primaryText.textContent || '';
+      }
+
+      var singleLineText = item.querySelector(".".concat(cssClasses$1.LIST_ITEM_TEXT_CLASS));
+      return singleLineText && singleLineText.textContent || '';
+    };
+
+    var setEnabled = function setEnabled(itemIndex, isEnabled) {
+      foundation.setEnabled(itemIndex, isEnabled);
+    };
+
+    var typeaheadMatchItem = function typeaheadMatchItem(nextChar, startingIndex) {
+      return foundation.typeaheadMatchItem(nextChar, startingIndex,
+      /** skipFocus */
+      true);
+    };
+
+    var handleFocusInEvent = function handleFocusInEvent(evt) {
+      var index = getListItemIndex(evt);
+      foundation.handleFocusIn(evt, index);
+    };
+
+    var handleFocusOutEvent = function handleFocusOutEvent(evt) {
+      var index = getListItemIndex(evt);
+      foundation.handleFocusOut(evt, index);
+    };
+
+    var handleKeydownEvent = function handleKeydownEvent(evt) {
+      var index = getListItemIndex(evt);
+      var target = evt.target;
+      foundation.handleKeydown(evt, target.classList.contains(cssClasses$1.LIST_ITEM_CLASS), index);
+    };
+
+    var handleClickEvent = function handleClickEvent(evt) {
+      var index = getListItemIndex(evt);
+      var target = evt.target; // Toggle the checkbox only if it's not the target of the event, or the checkbox will have 2 change events.
+
+      var toggleCheckbox = !matches(target, strings$5.CHECKBOX_RADIO_SELECTOR);
+      foundation.handleClick(index, toggleCheckbox);
+    };
+
+    var rootListeners = {
+      click: function click(event) {
+        return handleClickEvent(event);
       },
-      focusItemAtIndex: index => {
-        const element = this.listElements[index];
+      focusin: function focusin(event) {
+        handleFocusInEvent(event);
+      },
+      focusout: function focusout(event) {
+        handleFocusOutEvent(event);
+      },
+      keydown: function keydown(event) {
+        return handleKeydownEvent(event);
+      }
+    };
+
+    var typeaheadInProgress = function typeaheadInProgress() {
+      return foundation.isTypeaheadInProgress();
+    };
+
+    var adapter = {
+      addClassForElementIndex: function addClassForElementIndex(index, className) {
+        var element = listElements.value[index];
+        element.classList.add(className);
+      },
+      focusItemAtIndex: function focusItemAtIndex(index) {
+        var element = listElements.value[index];
 
         if (element) {
           element.focus();
         }
       },
-      getAttributeForElementIndex: (index, attr) => this.listElements[index].getAttribute(attr),
-      getFocusedElementIndex: () => this.listElements.indexOf(document.activeElement),
-      getListItemCount: () => this.listElements.length,
-      hasCheckboxAtIndex: index => {
-        const listItem = this.listElements[index];
-        return !!listItem.querySelector(strings.CHECKBOX_SELECTOR);
+      getAttributeForElementIndex: function getAttributeForElementIndex(index, attr) {
+        var listItem = listElements.value[index];
+        return listItem.getAttribute(attr);
       },
-      hasRadioAtIndex: index => {
-        const listItem = this.listElements[index];
-        return !!listItem.querySelector(strings.RADIO_SELECTOR);
+      getFocusedElementIndex: function getFocusedElementIndex() {
+        return listElements.value.indexOf(document.activeElement);
       },
-      isCheckboxCheckedAtIndex: index => {
-        const listItem = this.listElements[index];
-        const toggleEl = listItem.querySelector(strings.CHECKBOX_SELECTOR);
+      getListItemCount: function getListItemCount() {
+        return listElements.value.length;
+      },
+      getPrimaryTextAtIndex: function getPrimaryTextAtIndex(index) {
+        return getPrimaryText(listElements.value[index]);
+      },
+      hasCheckboxAtIndex: function hasCheckboxAtIndex(index) {
+        var _listItem$$el;
+
+        var listItem = listElements.value[index];
+        return !!((_listItem$$el = listItem.$el) !== null && _listItem$$el !== void 0 ? _listItem$$el : listItem).querySelector(strings$5.CHECKBOX_SELECTOR);
+      },
+      hasRadioAtIndex: function hasRadioAtIndex(index) {
+        var _listItem$$el2;
+
+        var listItem = listElements.value[index];
+        return !!((_listItem$$el2 = listItem.$el) !== null && _listItem$$el2 !== void 0 ? _listItem$$el2 : listItem).querySelector(strings$5.RADIO_SELECTOR);
+      },
+      isCheckboxCheckedAtIndex: function isCheckboxCheckedAtIndex(index) {
+        var _listItem$$el3;
+
+        var listItem = listElements.value[index];
+        var toggleEl = ((_listItem$$el3 = listItem.$el) !== null && _listItem$$el3 !== void 0 ? _listItem$$el3 : listItem).querySelector(strings$5.CHECKBOX_SELECTOR);
         return toggleEl.checked;
       },
-      isFocusInsideList: () => {
-        return this.$el.contains(document.activeElement);
+      isFocusInsideList: function isFocusInsideList() {
+        return uiState.listRoot.contains(document.activeElement);
       },
-      isRootFocused: () => document.activeElement === this.$el,
-      listItemAtIndexHasClass: (index, className) => {
-        this.listElements[index].classList.contains(className);
+      isRootFocused: function isRootFocused() {
+        return document.activeElement === uiState.listRoot;
       },
-      notifyAction: index => {
-        emitCustomEvent(this.$el, strings.ACTION_EVENT, {
-          index
+      listItemAtIndexHasClass: function listItemAtIndexHasClass(index, className) {
+        var listItem = listElements.value[index];
+        listItem.classList.contains(className);
+      },
+      notifyAction: function notifyAction(index) {
+        emitCustomEvent(uiState.listRoot, strings$5.ACTION_EVENT, {
+          index: index
         },
         /** shouldBubble */
         true);
 
-        if (Array.isArray(this.selectedIndex)) {
-          this.$emit('change', this.foundation.getSelectedIndex());
+        if (Array.isArray(props.selectedIndex)) {
+          emit('change', foundation.getSelectedIndex());
         } else {
-          this.$emit('change', index);
+          emit('change', index);
         }
       },
-      removeClassForElementIndex: (index, className) => {
-        const element = this.listElements[index];
-
-        if (element) {
-          element.classList.remove(className);
-        }
+      removeClassForElementIndex: function removeClassForElementIndex(index, className) {
+        var listItem = listElements.value[index];
+        listItem.classList.remove(className);
       },
-      setAttributeForElementIndex: (index, attr, value) => {
-        const element = this.listElements[index];
-
-        if (element) {
-          element.setAttribute(attr, value);
-        }
+      setAttributeForElementIndex: function setAttributeForElementIndex(index, attr, value) {
+        var listItem = listElements.value[index];
+        listItem.setAttribute(attr, value);
       },
-      setCheckedCheckboxOrRadioAtIndex: (index, isChecked) => {
-        const listItem = this.listElements[index];
-        const toggleEl = listItem.querySelector(strings.CHECKBOX_RADIO_SELECTOR);
+      setCheckedCheckboxOrRadioAtIndex: function setCheckedCheckboxOrRadioAtIndex(index, isChecked) {
+        var listItem = listElements.value[index];
+        var toggleEl = listItem.$el.querySelector(strings$5.CHECKBOX_RADIO_SELECTOR);
         toggleEl && (toggleEl.checked = isChecked);
-        const event = document.createEvent('Event');
+        var event = document.createEvent('Event');
         event.initEvent('change', true, true);
-        toggleEl && toggleEl.dispatchEvent(event);
+        toggleEl === null || toggleEl === void 0 ? void 0 : toggleEl.dispatchEvent(event);
       },
-      setTabIndexForListItemChildren: (listItemIndex, tabIndexValue) => {
-        const element = this.listElements[listItemIndex];
-        const listItemChildren = [].slice.call(element.querySelectorAll(strings.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX));
-        listItemChildren.forEach(el => el.setAttribute('tabindex', tabIndexValue));
+      setTabIndexForListItemChildren: function setTabIndexForListItemChildren(listItemIndex, tabIndexValue) {
+        var element = listElements.value[listItemIndex].$el;
+        var listItemChildren = [].slice.call(element.querySelectorAll(strings$5.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX));
+        listItemChildren.forEach(function (el) {
+          return el.setAttribute('tabindex', tabIndexValue);
+        });
       }
     };
-    this.foundation = new MDCListFoundation(adapter);
-    this.foundation.init();
-    this.foundation.layout();
-    this.initializeListType();
-    this.foundation.setSingleSelection(this.singleSelection);
-
-    if (this.singleSelection && typeof this.selectedIndex === 'number' && !isNaN(this.selectedIndex)) {
-      this.foundation.setSelectedIndex(this.selectedIndex);
-    }
-
-    this.foundation.setWrapFocus(wrapFocus);
-    this.foundation.setVerticalOrientation(this[ARIA_ORIENTATION] === VERTICAL);
-    this.layout(); // the list content could change outside of this component
-    // so use a mutation observer to trigger an update by
-    // incrementing the dependency variable "listn" referenced
-    // in the computed that selects the list elements
-
-    this.slotObserver = new MutationObserver((mutationList, observer) => {
-      this.listn++;
+    watch(function () {
+      return props.singleSelection;
+    }, function (nv) {
+      return foundation.setSingleSelection(nv);
     });
-    this.slotObserver.observe(this.$refs.listRoot, {
-      childList: true // subtree: true,
-
-    });
-  },
-
-  beforeDestroy() {
-    this.slotObserver.disconnect();
-  },
-
-  render(createElement) {
-    const {
-      tag,
-      ariaOrientation,
-      singleSelection,
-      $scopedSlots: slots
-    } = this;
-    const attrs = {
-      'aria-orientation': ariaOrientation
-    };
-
-    if (singleSelection) {
-      attrs.role = 'listbox';
-    }
-
-    return createElement(tag, {
-      class: this.classes,
-      attrs,
-      on: {
-        click: event => this.handleClickEvent(event),
-        focusin: event => this.handleFocusInEvent(event),
-        focusout: event => this.handleFocusOutEvent(event),
-        keydown: event => this.handleKeydownEvent(event)
-      },
-      ref: 'listRoot'
-    }, slots.default && slots.default());
-  }
-
-};
-
-var mcwListDivider = {
-  name: 'mcw-list-divider',
-  props: {
-    inset: Boolean,
-    padded: Boolean,
-    role: {
-      type: String,
-
-      default() {
-        return 'separator';
-      }
-
-    },
-    tag: {
-      type: String,
-
-      default() {
-        return 'li';
-      }
-
-    }
-  },
-  functional: true,
-
-  render(createElement, {
-    props: {
-      tag,
-      inset,
-      padded,
-      role,
-      staticClass,
-      attrs
-    }
-  }) {
-    return createElement(tag, {
-      class: ['mdc-list-divider', staticClass, {
-        'mdc-list-divider--inset': inset,
-        'mdc-list-divider--padded': padded
-      }],
-      attrs: { ...attrs,
-        role
+    watch(function () {
+      return props.selectedIndex;
+    }, function (nv) {
+      if (Array.isArray(nv)) {
+        foundation.setSelectedIndex(nv);
+      } else if (props.selectedIndex != nv) {
+        selectedIndex.value = nv;
+        foundation.setSelectedIndex(nv);
       }
     });
-  }
+    watch(function () {
+      return props.wrapFocus;
+    }, function (nv) {
+      return foundation.setWrapFocus(nv);
+    });
+    watch(function () {
+      return props.ariaOrientation;
+    }, function (nv) {
+      return foundation.setVerticalOrientation(nv === 'vertical');
+    });
+    watch(function () {
+      return props.typeAhead;
+    }, function (nv) {
+      return foundation.setHasTypeahead(nv);
+    });
+    onMounted(function () {
+      foundation = new MDCListFoundation(adapter);
+      foundation.init(); // if a single selection list need to ensure the selected item has the selected or activated class
 
-};
+      if (props.singleSelection && typeof props.selectedIndex === 'number' && !isNaN(props.selectedIndex)) {
+        var i = props.selectedIndex;
+        var hasSelectedClass = adapter.listItemAtIndexHasClass(i, cssClasses$1.LIST_ITEM_SELECTED_CLASS);
+        var hasActivatedClass = adapter.listItemAtIndexHasClass(i, cssClasses$1.LIST_ITEM_ACTIVATED_CLASS);
 
-var mcwListGroupSubHeader = {
-  name: 'mcw-list-group-sub-header',
-  functional: true,
-  props: {
-    tag: {
-      type: String,
+        if (!(hasSelectedClass || hasActivatedClass)) {
+          adapter.addClassForElementIndex(props.selectedIndex, 'mdc-list-item--selected');
+        }
 
-      default() {
-        return 'h3';
+        adapter.setAttributeForElementIndex(i, 'tabindex', 0);
+        foundation.setSingleSelection(true);
+        foundation.setSelectedIndex(i);
       }
 
-    }
-  },
+      layout();
+      initializeListType();
+      foundation.setWrapFocus(props.wrapFocus);
+      foundation.setVerticalOrientation(props.ariaOrientation === 'vertical');
 
-  render(createElement, {
-    scopedSlots,
-    props: {
-      tag
-    },
-    staticClass,
-    attrs
-  }) {
-    return createElement(tag, {
-      class: ['mdc-list-group__subheader', staticClass],
-      attrs
-    }, scopedSlots.default && scopedSlots.default());
+      if (props.typeAhead) {
+        foundation.setHasTypeahead(props.typeAhead);
+      } // the list content could change outside of this component
+      // so use a mutation observer to trigger an update by
+      // incrementing the dependency variable "listn" referenced
+      // in the computed that selects the list elements
+
+
+      slotObserver = new MutationObserver(function (mutationList, observer) {
+        uiState.listn++;
+      });
+      slotObserver.observe(uiState.listRoot, {
+        childList: true // subtree: true,
+
+      });
+    });
+    onBeforeUnmount(function () {
+      slotObserver.disconnect();
+      foundation.destroy();
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      listElements: listElements,
+      rootListeners: rootListeners,
+      layout: layout,
+      setEnabled: setEnabled,
+      typeaheadMatchItem: typeaheadMatchItem,
+      typeaheadInProgress: typeaheadInProgress,
+      selIndex: selIndex,
+      getPrimaryText: getPrimaryText
+    });
   }
-
 };
 
-var mcwListGroup = {
-  name: 'mcw-list-group',
-  functional: true,
-  props: {
-    tag: {
-      type: String,
+/* script */
+const __vue_script__$k = script$k;
 
-      default() {
-        return 'div';
-      }
-
-    }
-  },
-
-  render(createElement, {
-    props: {
-      tag
-    },
-    scopedSlots,
-    staticClass,
-    attrs
-  }) {
-    return createElement(tag, {
-      class: ['mdc-list-group', staticClass],
-      attrs
-    }, scopedSlots.default && scopedSlots.default());
-  }
-
+/* template */
+var __vue_render__$k = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    _vm.tag,
+    _vm._g(
+      _vm._b(
+        { ref: "listRoot", tag: "component", class: _vm.classes },
+        "component",
+        _vm.rootAttrs,
+        false
+      ),
+      _vm.rootListeners
+    ),
+    [_vm._t("default")],
+    2
+  )
 };
+var __vue_staticRenderFns__$k = [];
+__vue_render__$k._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$k = undefined;
+  /* scoped */
+  const __vue_scope_id__$k = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$k = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$k = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$k = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$k, staticRenderFns: __vue_staticRenderFns__$k },
+    __vue_inject_styles__$k,
+    __vue_script__$k,
+    __vue_scope_id__$k,
+    __vue_is_functional_template__$k,
+    __vue_module_identifier__$k,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var list = BasePlugin({
-  mcwList,
-  mcwListDivider,
-  mcwListGroup,
-  mcwListGroupSubHeader
+  mcwList: __vue_component__$k,
+  mcwListItem: __vue_component__$j
 });
 
 var mcwMaterialIcon = {
   name: 'mcw-material-icon',
   props: {
-    hasRipple: Boolean,
     icon: String,
     tag: {
       type: String,
       default: 'i'
     }
   },
-
-  data() {
-    return {
-      classes: {
-        'material-icons': true,
-        'material-icons--ripple-surface': this.hasRipple
-      },
-      styles: {} // for ripple support
-
+  setup: function setup(props, _ref) {
+    var listeners = _ref.listeners;
+    return function () {
+      return h(props.tag, {
+        class: 'material-icons',
+        on: listeners
+      }, props.icon);
     };
-  },
-
-  mounted() {
-    if (this.hasRipple) {
-      this.ripple = new RippleBase(this, {
-        isUnbounded: () => true
-      });
-      this.ripple.init();
-    }
-  },
-
-  beforeDestroy() {
-    if (this.ripple) {
-      this.ripple.destroy();
-    }
-  },
-
-  render(createElement) {
-    const {
-      tag
-    } = this;
-    return createElement(tag, {
-      class: this.classes,
-      on: this.$listeners,
-      style: this.styles
-    }, this.icon);
   }
-
 };
 
 var materialIcon = BasePlugin({
-  mcwMaterialIcon
+  mcwMaterialIcon: mcwMaterialIcon
 });
-
-/* eslint-disable quote-props */
-var mcwMenu = {
-  name: 'mcw-menu',
-  model: {
-    prop: 'open',
-    event: 'change'
-  },
-  props: {
-    open: [Boolean, Object],
-    'quick-open': Boolean,
-    'anchor-corner': [String, Number],
-    'anchor-margin': Object
-  },
-
-  data() {
-    return {
-      classes: {},
-      styles: {},
-      menuOpen: false,
-      myWrapFocus: true
-    };
-  },
-
-  watch: {
-    open(nv) {
-      this.menuOpen = nv;
-    }
-
-  },
-
-  mounted() {
-    this._previousFocus = undefined;
-    const {
-      cssClasses,
-      strings
-    } = MDCMenuFoundation;
-    const adapter = {
-      addClassToElementAtIndex: (index, className) => {
-        const list = this.items;
-        list[index].classList.add(className);
-      },
-      removeClassFromElementAtIndex: (index, className) => {
-        const list = this.items;
-        list[index].classList.remove(className);
-      },
-      addAttributeToElementAtIndex: (index, attr, value) => {
-        const list = this.items;
-        list[index].setAttribute(attr, value);
-      },
-      removeAttributeFromElementAtIndex: (index, attr) => {
-        const list = this.items;
-        list[index].removeAttribute(attr);
-      },
-      elementContainsClass: (element, className) => element.classList.contains(className),
-      closeSurface: skipRestoreFocus => {
-        this.$refs.menuSurface_.close(skipRestoreFocus);
-        this.$emit('change', false);
-      },
-      getElementIndex: element => {
-        return this.items.indexOf(element);
-      },
-      isSelectableItemAtIndex: index => !!closest(this.items[index], `.${cssClasses.MENU_SELECTION_GROUP}`),
-      getSelectedSiblingOfItemAtIndex: index => {
-        const selectionGroupEl = closest(this.items[index], `.${cssClasses.MENU_SELECTION_GROUP}`);
-        const selectedItemEl = selectionGroupEl.querySelector(`.${cssClasses.MENU_SELECTED_LIST_ITEM}`);
-        return selectedItemEl ? this.items.indexOf(selectedItemEl) : -1;
-      },
-      notifySelected: evtData => {
-        emitCustomEvent(this.$el, strings.SELECTED_EVENT, {
-          index: evtData.index,
-          item: this.items[evtData.index]
-        });
-        this.$emit('select', {
-          index: evtData.index,
-          item: this.items[evtData.index]
-        });
-      },
-      getMenuItemCount: () => this.items.length,
-      focusItemAtIndex: index => this.items[index].focus(),
-      focusListRoot: () => this.$el.querySelector(strings.LIST_SELECTOR).focus()
-    };
-    this.menuOpen = this.open;
-    this.foundation = new MDCMenuFoundation(adapter);
-    this.foundation.init();
-  },
-
-  beforeDestroy() {
-    this._previousFocus = null;
-    this.foundation.destroy();
-  },
-
-  computed: {
-    items() {
-      return this.$refs.list ? this.$refs.list.listElements : [];
-    },
-
-    surfaceOpen: {
-      get() {
-        return this.menuOpen;
-      },
-
-      set(value) {
-        this.menuOpen = value;
-      }
-
-    },
-    wrapFocus: {
-      get() {
-        return this.myWrapFocus;
-      },
-
-      set(nv) {
-        this.myWrapFocus = nv;
-      }
-
-    }
-  },
-  methods: {
-    listen(evtType, handler, options) {
-      this.$el.addEventListener(evtType, handler, options);
-    },
-
-    unlisten(evtType, handler, options) {
-      this.$el.removeEventListener(evtType, handler, options);
-    },
-
-    handleAction({
-      detail: {
-        index
-      }
-    }) {
-      this.foundation.handleItemAction(this.items[index]);
-    },
-
-    handleKeydown(evt) {
-      this.foundation.handleKeydown(evt);
-    },
-
-    onChange(item) {
-      this.menuOpen = item;
-      this.$emit('change', item);
-    },
-
-    handleMenuSurfaceOpened() {
-      this.foundation.handleMenuSurfaceOpened();
-    },
-
-    setDefaultFocusState(focusState) {
-      this.foundation.setDefaultFocusState(focusState);
-    },
-
-    setAnchorCorner(corner) {
-      this.$refs.menuSurface_.foundation.setAnchorCorner(corner);
-    },
-
-    setAnchorElement(element) {
-      this.$refs.menuSurface_.setMenuSurfaceAnchorElement(element);
-    },
-
-    setSelectedIndex(index) {
-      this.foundation.setSelectedIndex(index);
-    },
-
-    setAnchorMargin(margin) {
-      this.$refs.menuSurface_.foundation.setAnchorMargin(margin);
-    },
-
-    getOptionByIndex(index) {
-      const items = this.items;
-
-      if (index < items.length) {
-        return items[index];
-      }
-
-      return null;
-    },
-
-    setFixedPosition(isFixed) {
-      this.$refs.menuSurface_.foundation.setFixedPosition(isFixed);
-    },
-
-    hoistMenuToBody() {
-      this.$refs.menuSurface_.foundation.hoistMenuToBody();
-    },
-
-    setIsHoisted(isHoisted) {
-      this.$refs.menuSurface_.foundation.setIsHoisted(isHoisted);
-    },
-
-    setAbsolutePosition(x, y) {
-      this.$refs.menuSurface_.foundation.setAbsolutePosition(x, y);
-    }
-
-  },
-
-  render(createElement) {
-    var _scopedSlots$default;
-
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
-    return createElement('mcw-menu-surface', {
-      class: {
-        'mdc-menu': 1
-      },
-      ref: 'menuSurface_',
-      attrs: {
-        'quick-open': this.quickOpen,
-        open: this.menuOpen
-      },
-      on: {
-        change: evt => this.onChange(evt),
-        keydown: evt => this.handleKeydown(evt),
-        'MDCMenuSurface:opened': evt => this.handleMenuSurfaceOpened(evt)
-      }
-    }, [createElement('mcw-list', {
-      ref: 'list',
-      props: {
-        wrapFocus: this.myWrapFocus
-      },
-      on: {
-        change: index => this.handleAction({
-          detail: {
-            index
-          }
-        })
-      }
-    }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots))]);
-  }
-
-};
 
 var mcwMenuAnchor = {
   name: 'mcw-menu-anchor',
-  functional: true,
+  setup: function setup(props, _ref) {
+    var slots = _ref.slots;
+    return function () {
+      var _slots$default;
 
-  render(createElement, {
-    scopedSlots
-  }) {
-    var _scopedSlots$default;
-
-    return createElement('div', {
-      class: {
-        'mdc-menu-anchor': 1,
-        'mdc-menu-surface--anchor': 1
-      }
-    }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots));
+      return h('div', {
+        class: {
+          'mdc-menu-surface--anchor': 1
+        }
+      }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
+    };
   }
-
 };
 
-/* eslint-disable quote-props */
 var mcwMenuItem = {
   name: 'mcw-menu-item',
   props: {
     disabled: Boolean
   },
-  functional: true,
+  setup: function setup(props, _ref) {
+    var slots = _ref.slots;
+    return function () {
+      var _slots$default;
 
-  render(createElement, {
-    props: {
-      disabled
-    },
-    scopedSlots
-  }) {
-    var _scopedSlots$default;
-
-    return createElement('li', {
-      class: {
-        'mdc-menu-divider': 1,
-        'mdc-list-divider': 1
-      },
-      attrs: {
-        tabindex: disabled ? '-1' : '0',
-        'aria-disabled': disabled,
-        role: 'menuitem'
-      }
-    }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots));
+      return h('li', {
+        class: {
+          'mdc-menu-divider': 1,
+          'mdc-list-divider': 1
+        },
+        attrs: {
+          tabindex: props.disabled ? '-1' : '0',
+          'aria-disabled': props.disabled,
+          role: 'menuitem'
+        }
+      }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
+    };
   }
-
 };
 
-/* eslint-disable quote-props */
-const {
-  strings: strings$1,
-  cssClasses: cssClasses$2
-} = MDCMenuSurfaceFoundation;
-var mcwMenuSurface = {
+var strings$6 = MDCMenuSurfaceFoundation.strings,
+    cssClasses$2 = MDCMenuSurfaceFoundation.cssClasses;
+var script$l = {
   name: 'mcw-menu-surface',
   model: {
     prop: 'open',
@@ -4550,286 +5678,755 @@ var mcwMenuSurface = {
     'anchor-corner': [String, Number],
     'anchor-margin': Object
   },
-
-  data() {
-    return {
+  setup: function setup(props, _ref) {
+    var emit = _ref.emit;
+    var uiState = reactive({
       classes: {
-        'mdc-menu': 1,
         'mdc-menu-surface': 1
-      }
+      },
+      root: null
+    });
+    var foundation;
+    var anchorElement;
+    var previousFocus_;
+
+    var handleBodyClick = function handleBodyClick(evt) {
+      foundation.handleBodyClick(evt);
     };
-  },
 
-  watch: {
-    open: 'onOpen_',
+    var registerBodyClickListener = function registerBodyClickListener() {
+      document.body.addEventListener('click', handleBodyClick);
+    };
 
-    quickOpen(nv) {
-      this.foundation.setQuickOpen(nv);
-    }
+    var deregisterBodyClickListener = function deregisterBodyClickListener() {
+      document.body.removeEventListener('click', handleBodyClick);
+    };
 
-  },
+    var handleKeydown = function handleKeydown(evt) {
+      foundation.handleKeydown(evt);
+    };
 
-  mounted() {
-    this._previousFocus = undefined;
-    this.foundation = new MDCMenuSurfaceFoundation(Object.assign({
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      hasClass: className => this.$el.classList.contains(className),
-      hasAnchor: () => !!this.anchorElement,
-      notifyClose: () => {
-        emitCustomEvent(this.$el, strings$1.CLOSED_EVENT, {});
-        this.$emit('change', false);
-      },
-      notifyOpen: () => {
-        emitCustomEvent(this.$el, strings$1.OPENED_EVENT, {});
-        this.$emit('change', true);
-      },
-      isElementInContainer: el => this.$el.contains(el),
-      isRtl: () => getComputedStyle(this.$el).getPropertyValue('direction') === 'rtl',
-      setTransformOrigin: origin => {
-        this.$el.style.setProperty(`${getTransformPropertyName(window)}-origin`, origin);
-      }
-    }, this.getFocusAdapterMethods(), this.getDimensionAdapterMethods()));
-
-    if (this.$el.parentElement && this.$el.parentElement.classList.contains(cssClasses$2.ANCHOR)) {
-      this.anchorElement = this.$el.parentElement;
-    }
-
-    this.foundation.init();
-  },
-
-  beforeDestroy() {
-    this._previousFocus = null;
-    this.foundation.destroy();
-  },
-
-  methods: {
-    handleBodyClick(evt) {
-      this.foundation.handleBodyClick(evt);
-    },
-
-    registerBodyClickListener() {
-      document.body.addEventListener('click', this.handleBodyClick);
-    },
-
-    deregisterBodyClickListener() {
-      document.body.removeEventListener('click', this.handleBodyClick);
-    },
-
-    handleKeydown(evt) {
-      this.foundation.handleKeydown(evt);
-    },
-
-    getFocusAdapterMethods() {
+    var getFocusAdapterMethods = function getFocusAdapterMethods() {
       return {
-        isFocused: () => document.activeElement === this.$el,
-        saveFocus: () => {
-          this.previousFocus_ = document.activeElement;
+        isFocused: function isFocused() {
+          return document.activeElement === uiState.root;
         },
-        restoreFocus: () => {
-          if (this.$el.contains(document.activeElement)) {
-            if (this.previousFocus_ && this.previousFocus_.focus) {
-              this.previousFocus_.focus();
+        saveFocus: function saveFocus() {
+          previousFocus_ = document.activeElement;
+        },
+        restoreFocus: function restoreFocus() {
+          if (uiState.root.contains(document.activeElement)) {
+            if (previousFocus_ && previousFocus_.focus) {
+              previousFocus_.focus();
             }
           }
         }
       };
-    },
+    };
 
-    getDimensionAdapterMethods() {
+    var getDimensionAdapterMethods = function getDimensionAdapterMethods() {
       return {
-        getInnerDimensions: () => {
+        getInnerDimensions: function getInnerDimensions() {
           return {
-            width: this.$el.offsetWidth,
-            height: this.$el.offsetHeight
+            width: uiState.root.offsetWidth,
+            height: uiState.root.offsetHeight
           };
         },
-        getAnchorDimensions: () => this.anchorElement ? this.anchorElement.getBoundingClientRect() : null,
-        getWindowDimensions: () => {
+        getAnchorDimensions: function getAnchorDimensions() {
+          return anchorElement ? anchorElement.getBoundingClientRect() : null;
+        },
+        getWindowDimensions: function getWindowDimensions() {
           return {
             width: window.innerWidth,
             height: window.innerHeight
           };
         },
-        getBodyDimensions: () => {
+        getBodyDimensions: function getBodyDimensions() {
           return {
             width: document.body.clientWidth,
             height: document.body.clientHeight
           };
         },
-        getWindowScroll: () => {
+        getWindowScroll: function getWindowScroll() {
           return {
             x: window.pageXOffset,
             y: window.pageYOffset
           };
         },
-        setPosition: position => {
-          this.$el.style.left = 'left' in position ? `${position.left}px` : null;
-          this.$el.style.right = 'right' in position ? `${position.right}px` : null;
-          this.$el.style.top = 'top' in position ? `${position.top}px` : null;
-          this.$el.style.bottom = 'bottom' in position ? `${position.bottom}px` : null;
+        setPosition: function setPosition(position) {
+          uiState.root.style.left = 'left' in position ? "".concat(position.left, "px") : null;
+          uiState.root.style.right = 'right' in position ? "".concat(position.right, "px") : null;
+          uiState.root.style.top = 'top' in position ? "".concat(position.top, "px") : null;
+          uiState.root.style.bottom = 'bottom' in position ? "".concat(position.bottom, "px") : null;
         },
-        setMaxHeight: height => {
-          this.$el.style.maxHeight = height;
+        setMaxHeight: function setMaxHeight(height) {
+          uiState.root.style.maxHeight = height;
         }
       };
-    },
+    };
 
-    onOpen_(value) {
-      const method = value ? 'open' : 'close';
-      this.foundation[method]();
-    },
+    var rootListeners = {
+      keydown: function keydown(evt) {
+        return handleKeydown(evt);
+      },
+      'MDCMenuSurface:opened': function MDCMenuSurfaceOpened(evt) {
+        return registerBodyClickListener();
+      },
+      'MDCMenuSurface:closed': function MDCMenuSurfaceClosed(evt) {
+        return deregisterBodyClickListener();
+      }
+    };
 
-    hoistMenuToBody() {
-      document.body.appendChild(this.$el.parentElement.removeChild(this.$el));
-      this.setIsHoisted(true);
-    },
+    var onOpen_ = function onOpen_(value) {
+      var method = value ? 'open' : 'close';
+      foundation[method]();
+    };
 
-    setIsHoisted(isHoisted) {
-      this.foundation.setIsHoisted(isHoisted);
-    },
+    var setIsHoisted = function setIsHoisted(isHoisted) {
+      foundation.setIsHoisted(isHoisted);
+    };
 
-    setFixedPosition(isFixed) {
+    var hoistMenuToBody = function hoistMenuToBody() {
+      document.body.appendChild(uiState.root.parentElement.removeChild(uiState.root));
+      setIsHoisted(true);
+    };
+
+    var setFixedPosition = function setFixedPosition(isFixed) {
       if (isFixed) {
-        this.$set(this.classes, cssClasses$2.FIXED, true);
+        uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, cssClasses$2.FIXED, true));
       } else {
-        this.$delete(this.classes, cssClasses$2.FIXED);
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$classes = uiState.classes,
+            _cssClasses$FIXED = cssClasses$2.FIXED,
+            removed = _uiState$classes[_cssClasses$FIXED],
+            rest = _objectWithoutProperties(_uiState$classes, [_cssClasses$FIXED].map(_toPropertyKey));
+
+        uiState.classes = rest;
       }
 
-      this.foundation.setFixedPosition(isFixed);
-    },
+      foundation.setFixedPosition(isFixed);
+    };
 
-    setAbsolutePosition(x, y) {
-      this.foundation.setAbsolutePosition(x, y);
-      this.setIsHoisted(true);
-    },
+    var setAbsolutePosition = function setAbsolutePosition(x, y) {
+      foundation.setAbsolutePosition(x, y);
+      setIsHoisted(true);
+    };
 
-    setAnchorCorner(corner) {
-      this.foundation.setAnchorCorner(corner);
-    },
+    var setAnchorCorner = function setAnchorCorner(corner) {
+      foundation.setAnchorCorner(corner);
+    };
 
-    setAnchorMargin(margin) {
-      this.foundation.setAnchorMargin(margin);
-    },
+    var setAnchorMargin = function setAnchorMargin(margin) {
+      foundation.setAnchorMargin(margin);
+    };
 
-    setMenuSurfaceAnchorElement(element) {
-      this.anchorElement = element;
-    },
+    var setMenuSurfaceAnchorElement = function setMenuSurfaceAnchorElement(element) {
+      anchorElement = element;
+    };
 
-    show(options) {
-      this.foundation.open(options);
-    },
+    var show = function show(options) {
+      foundation.open(options);
+    };
 
-    hide() {
-      this.close();
-    },
+    var close = function close() {
+      var skipRestoreFocus = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+      foundation.close(skipRestoreFocus);
+    };
 
-    close(skipRestoreFocus = false) {
-      this.foundation.close(skipRestoreFocus);
-    },
+    var hide = function hide() {
+      close();
+    };
 
-    isOpen() {
-      return this.foundation ? this.foundation.isOpen() : false;
-    }
+    var isOpen = function isOpen() {
+      return foundation ? foundation.isOpen() : false;
+    };
 
-  },
+    var adapter = {
+      addClass: function addClass(className) {
+        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+      },
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$classes2 = uiState.classes,
+            removed = _uiState$classes2[className],
+            rest = _objectWithoutProperties(_uiState$classes2, [className].map(_toPropertyKey));
 
-  render(createElement) {
-    var _scopedSlots$default;
-
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
-    return createElement('div', {
-      class: this.classes,
-      on: {
-        keydown: evt => this.handleKeydown(evt),
-        'MDCMenuSurface:opened': evt => this.registerBodyClickListener(evt),
-        'MDCMenuSurface:closed': evt => this.deregisterBodyClickListener(evt)
+        uiState.classes = rest;
+      },
+      hasClass: function hasClass(className) {
+        return uiState.root.classList.contains(className);
+      },
+      hasAnchor: function hasAnchor() {
+        return !!anchorElement;
+      },
+      notifyClose: function notifyClose() {
+        emitCustomEvent(uiState.root, strings$6.CLOSED_EVENT, {});
+        emit('change', false);
+      },
+      notifyOpen: function notifyOpen() {
+        emitCustomEvent(uiState.root, strings$6.OPENED_EVENT, {});
+        emit('change', true);
+      },
+      isElementInContainer: function isElementInContainer(el) {
+        return uiState.root.contains(el);
+      },
+      isRtl: function isRtl() {
+        return getComputedStyle(uiState.root).getPropertyValue('direction') === 'rtl';
+      },
+      setTransformOrigin: function setTransformOrigin(origin) {
+        uiState.root.style.setProperty("".concat(getTransformPropertyName(window), "-origin"), origin);
       }
-    }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots));
-  }
-
-};
-
-var menu = BasePlugin({
-  mcwMenu,
-  mcwMenuSurface,
-  mcwMenuItem,
-  mcwMenuAnchor
-});
-
-var script$b = {
-  name: 'mcw-notched-outline',
-  components: {
-    mcwFloatingLabel: __vue_component__$6
-  },
-
-  data() {
-    return {
-      outlinedClasses: {
-        'mdc-notched-outline': true
-      },
-      notchStyles: {}
     };
-  },
+    watch(function () {
+      return props.open;
+    }, function (nv) {
+      return onOpen_(nv);
+    });
+    watch(function () {
+      return props.quickOpen;
+    }, function (nv) {
+      return foundation.setQuickOpen(nv);
+    });
+    onMounted(function () {
+      foundation = new MDCMenuSurfaceFoundation(_objectSpread2(_objectSpread2(_objectSpread2({}, adapter), getFocusAdapterMethods()), getDimensionAdapterMethods()));
+      foundation.init();
 
-  mounted() {
-    const {
-      OUTLINE_UPGRADED,
-      NO_LABEL
-    } = MDCNotchedOutlineFoundation.cssClasses;
-    const adapter = {
-      addClass: className => {
-        this.$set(this.outlinedClasses, className, true);
-      },
-      removeClass: className => {
-        this.$delete(this.outlinedClasses, className);
-      },
-      setNotchWidthProperty: width => this.$set(this.notchStyles, 'width', `${width}px`),
-      removeNotchWidthProperty: () => this.$delete(this.notchStyles, 'width')
-    };
-    this.foundation = new MDCNotchedOutlineFoundation(adapter);
-    this.foundation.init();
-    const key = this.$slots.default ? OUTLINE_UPGRADED : NO_LABEL;
-    this.$set(this.outlinedClasses, key, true);
-  },
-
-  beforeDestroy() {
-    this.foundation.destroy();
-  },
-
-  methods: {
-    notch(notchWidth) {
-      this.foundation.notch(notchWidth);
-    },
-
-    closeNotch() {
-      this.foundation.closeNotch();
-    },
-
-    float(shouldFloat) {
-      this.$refs.labelEl && this.$refs.labelEl.float(shouldFloat);
-    },
-
-    shake(shouldShake) {
-      this.$refs.labelEl && this.$refs.labelEl.shake(shouldShake);
-    },
-
-    getWidth() {
-      var _this$$refs$labelEl;
-
-      return (_this$$refs$labelEl = this.$refs.labelEl) === null || _this$$refs$labelEl === void 0 ? void 0 : _this$$refs$labelEl.getWidth();
-    }
-
+      if (uiState.root.parentElement && uiState.root.parentElement.classList.contains(cssClasses$2.ANCHOR)) {
+        anchorElement = uiState.root.parentElement;
+      }
+    });
+    onBeforeUnmount(function () {
+      previousFocus_ = null;
+      foundation.destroy();
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      rootListeners: rootListeners,
+      hoistMenuToBody: hoistMenuToBody,
+      setFixedPosition: setFixedPosition,
+      setAbsolutePosition: setAbsolutePosition,
+      setAnchorCorner: setAnchorCorner,
+      setAnchorMargin: setAnchorMargin,
+      setMenuSurfaceAnchorElement: setMenuSurfaceAnchorElement,
+      show: show,
+      hide: hide,
+      isOpen: isOpen,
+      close: close
+    });
   }
 };
 
 /* script */
-const __vue_script__$b = script$b;
+const __vue_script__$l = script$l;
 
 /* template */
-var __vue_render__$b = function() {
+var __vue_render__$l = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    _vm._g({ ref: "root", class: _vm.classes }, _vm.rootListeners),
+    [_vm._t("default")],
+    2
+  )
+};
+var __vue_staticRenderFns__$l = [];
+__vue_render__$l._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$l = undefined;
+  /* scoped */
+  const __vue_scope_id__$l = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$l = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$l = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$l = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$l, staticRenderFns: __vue_staticRenderFns__$l },
+    __vue_inject_styles__$l,
+    __vue_script__$l,
+    __vue_scope_id__$l,
+    __vue_is_functional_template__$l,
+    __vue_module_identifier__$l,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var cssClasses$3 = MDCMenuFoundation.cssClasses,
+    strings$7 = MDCMenuFoundation.strings;
+var DefaultFocusState_ = {
+  NONE: 0,
+  LIST_ROOT: 1,
+  FIRST_ITEM: 2,
+  LAST_ITEM: 3
+};
+var script$m = {
+  name: 'mcw-menu',
+  model: {
+    prop: 'open',
+    event: 'change'
+  },
+  props: {
+    open: [Boolean, Object],
+    quickOpen: Boolean,
+    anchorCorner: [String, Number],
+    anchorMargin: Object,
+    fixed: Boolean,
+    absolutePosition: Array,
+    typeAhead: Boolean,
+    singleSelection: Boolean,
+    defaultFocusState: {
+      type: String,
+      default: function _default() {
+        return 'LIST_ROOT';
+      }
+    }
+  },
+  setup: function setup(props, _ref) {
+    var emit = _ref.emit;
+    var uiState = reactive({
+      classes: {},
+      styles: {},
+      menuOpen: false,
+      myWrapFocus: true,
+      menuSurface: null,
+      list: null
+    });
+    var foundation;
+    var rootEl;
+    var items = computed(function () {
+      var _uiState$list$listEle;
+
+      return (_uiState$list$listEle = uiState.list.listElements) !== null && _uiState$list$listEle !== void 0 ? _uiState$list$listEle : [];
+    });
+    var surfaceOpen = computed({
+      get: function get() {
+        return uiState.menuOpen;
+      },
+      set: function set(value) {
+        uiState.menuOpen = value;
+      }
+    });
+    var wrapFocus = computed({
+      get: function get() {
+        return uiState.myWrapFocus;
+      },
+      set: function set(nv) {
+        uiState.myWrapFocus = nv;
+      }
+    });
+    var selectedIndex = computed(function () {
+      var _uiState$list;
+
+      return (_uiState$list = uiState.list) === null || _uiState$list === void 0 ? void 0 : _uiState$list.selIndex.value;
+    });
+
+    var layout = function layout() {
+      var _uiState$list2;
+
+      return (_uiState$list2 = uiState.list) === null || _uiState$list2 === void 0 ? void 0 : _uiState$list2.layout();
+    };
+
+    var handleAction = function handleAction(index) {
+      foundation.handleItemAction(items.value[index].$el);
+    };
+
+    var handleKeydown = function handleKeydown(evt) {
+      return foundation.handleKeydown(evt);
+    };
+
+    var handleMenuSurfaceOpened = function handleMenuSurfaceOpened() {
+      return foundation.handleMenuSurfaceOpened();
+    };
+
+    var onChange = function onChange(item) {
+      uiState.menuOpen = item;
+      emit('change', item);
+    };
+
+    var listen = function listen(evtType, handler, options) {
+      uiState.menuSurface.addEventListener(evtType, handler, options);
+    };
+
+    var unlisten = function unlisten(evtType, handler, options) {
+      uiState.menuSurface.removeEventListener(evtType, handler, options);
+    };
+
+    var setDefaultFocusState = function setDefaultFocusState(focusState) {
+      if (typeof focusState == 'string') {
+        focusState = DefaultFocusState_[focusState];
+      }
+
+      foundation.setDefaultFocusState(focusState);
+    };
+
+    var setAnchorCorner = function setAnchorCorner(corner) {
+      uiState.menuSurface.setAnchorCorner(corner);
+    };
+
+    var setAnchorElement = function setAnchorElement(element) {
+      uiState.menuSurface.setMenuSurfaceAnchorElement(element);
+    };
+
+    var setSelectedIndex = function setSelectedIndex(index) {
+      return uiState.list && (uiState.list.selIndex.value = index);
+    };
+
+    var setAnchorMargin = function setAnchorMargin(margin) {
+      uiState.menuSurface.setAnchorMargin(margin);
+    };
+
+    var getOptionByIndex = function getOptionByIndex(index) {
+      var itms = items.value;
+
+      if (index < itms.length) {
+        return itms[index];
+      }
+
+      return null;
+    };
+
+    var getPrimaryTextAtIndex = function getPrimaryTextAtIndex(index) {
+      var item = getOptionByIndex(index);
+
+      if (item && uiState.list) {
+        return uiState.list.getPrimaryText(item) || '';
+      }
+
+      return '';
+    };
+
+    var setFixedPosition = function setFixedPosition(isFixed) {
+      uiState.menuSurface.setFixedPosition(isFixed);
+    };
+
+    var hoistMenuToBody = function hoistMenuToBody() {
+      uiState.menuSurface.hoistMenuToBody();
+    };
+
+    var setIsHoisted = function setIsHoisted(isHoisted) {
+      uiState.menuSurface.setIsHoisted(isHoisted);
+    };
+
+    var setAbsolutePosition = function setAbsolutePosition(x, y) {
+      uiState.menuSurface.setAbsolutePosition(x, y);
+    };
+
+    var typeaheadInProgress = function typeaheadInProgress() {
+      var _uiState$list$typeAhe;
+
+      return (_uiState$list$typeAhe = uiState.list.typeAheadInProgress) !== null && _uiState$list$typeAhe !== void 0 ? _uiState$list$typeAhe : false;
+    };
+
+    var typeaheadMatchItem = function typeaheadMatchItem(nextChar, startingIndex) {
+      if (uiState.list) {
+        return uiState.list.typeaheadMatchItem(nextChar, startingIndex);
+      }
+
+      return -1;
+    };
+
+    var adapter = {
+      addClassToElementAtIndex: function addClassToElementAtIndex(index, className) {
+        var item = items.value[index];
+        item.classList.add(className);
+      },
+      removeClassFromElementAtIndex: function removeClassFromElementAtIndex(index, className) {
+        var item = items.value[index];
+        item.classList.remove(className);
+      },
+      addAttributeToElementAtIndex: function addAttributeToElementAtIndex(index, attr, value) {
+        var item = items.value[index];
+        item.setAttribute(attr, value);
+      },
+      removeAttributeFromElementAtIndex: function removeAttributeFromElementAtIndex(index, attr) {
+        var item = items.value[index];
+        item.removeAttribute(attr);
+      },
+      elementContainsClass: function elementContainsClass(element, className) {
+        return element.classList.contains(className);
+      },
+      closeSurface: function closeSurface(skipRestoreFocus) {
+        uiState.menuSurface.close(skipRestoreFocus);
+        emit('change', false);
+      },
+      getElementIndex: function getElementIndex(element) {
+        return items.value.findIndex(function (_ref2) {
+          var $el = _ref2.$el;
+          return $el == element;
+        });
+      },
+      notifySelected: function notifySelected(evtData) {
+        emitCustomEvent(rootEl, strings$7.SELECTED_EVENT, {
+          index: evtData.index,
+          item: items.value[evtData.index]
+        });
+        emit('select', {
+          index: evtData.index,
+          item: items.value[evtData.index]
+        });
+      },
+      getMenuItemCount: function getMenuItemCount() {
+        return items.value.length;
+      },
+      focusItemAtIndex: function focusItemAtIndex(index) {
+        return items.value[index].$el.focus();
+      },
+      focusListRoot: function focusListRoot() {
+        return uiState.menuSurface.querySelector(strings$7.LIST_SELECTOR).focus();
+      },
+      isSelectableItemAtIndex: function isSelectableItemAtIndex(index) {
+        return !!closest(items.value[index].$el, ".".concat(cssClasses$3.MENU_SELECTION_GROUP));
+      },
+      getSelectedSiblingOfItemAtIndex: function getSelectedSiblingOfItemAtIndex(index) {
+        var selectionGroupEl = closest(items.value[index].$el, ".".concat(cssClasses$3.MENU_SELECTION_GROUP));
+        var selectedItemEl = selectionGroupEl.querySelector(".".concat(cssClasses$3.MENU_SELECTED_LIST_ITEM));
+        return selectedItemEl ? items.value.findIndex(function (_ref3) {
+          var $el = _ref3.$el;
+          return $el == selectedItemEl;
+        }) : -1;
+      }
+    };
+    watch(function () {
+      return props.open;
+    }, function (nv) {
+      uiState.menuOpen = nv;
+    });
+    onMounted(function () {
+      rootEl = uiState.menuSurface.$el;
+      uiState.menuOpen = props.open;
+      foundation = new MDCMenuFoundation(adapter);
+      foundation.init();
+
+      if (props.fixed) {
+        uiState.menuSurface.setFixedPosition(props.fixed);
+      }
+
+      if (props.absolutePosition) {
+        var _props$absolutePositi = _slicedToArray(props.absolutePosition, 2),
+            x = _props$absolutePositi[0],
+            y = _props$absolutePositi[1];
+
+        uiState.menuSurface.setAbsolutePosition(x, y);
+      }
+    });
+    onBeforeUnmount(function () {
+      foundation.destroy();
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      handleAction: handleAction,
+      handleKeydown: handleKeydown,
+      onChange: onChange,
+      handleMenuSurfaceOpened: handleMenuSurfaceOpened,
+      setAbsolutePosition: setAbsolutePosition,
+      setIsHoisted: setIsHoisted,
+      hoistMenuToBody: hoistMenuToBody,
+      setFixedPosition: setFixedPosition,
+      getOptionByIndex: getOptionByIndex,
+      setAnchorMargin: setAnchorMargin,
+      setAnchorElement: setAnchorElement,
+      setAnchorCorner: setAnchorCorner,
+      setSelectedIndex: setSelectedIndex,
+      listen: listen,
+      unlisten: unlisten,
+      setDefaultFocusState: setDefaultFocusState,
+      wrapFocus: wrapFocus,
+      surfaceOpen: surfaceOpen,
+      layout: layout,
+      selectedIndex: selectedIndex,
+      getPrimaryTextAtIndex: getPrimaryTextAtIndex,
+      items: items,
+      typeaheadInProgress: typeaheadInProgress,
+      typeaheadMatchItem: typeaheadMatchItem
+    });
+  }
+};
+
+/* script */
+const __vue_script__$m = script$m;
+
+/* template */
+var __vue_render__$m = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "mcw-menu-surface",
+    {
+      ref: "menuSurface",
+      staticClass: "mdc-menu",
+      attrs: { "quick-open": _vm.quickOpen, open: _vm.menuOpen },
+      on: {
+        keydown: _vm.handleKeydown,
+        change: _vm.onChange,
+        "MDCMenuSurface:opened": _vm.handleMenuSurfaceOpened
+      }
+    },
+    [
+      _c(
+        "mcw-list",
+        {
+          ref: "list",
+          attrs: {
+            role: "menu",
+            "aria-hidden": "true",
+            "wrap-focus": _vm.myWrapFocus,
+            tabindex: "-1",
+            "type-ahead": _vm.typeAhead,
+            "single-selection": _vm.singleSelection
+          },
+          on: { change: _vm.handleAction }
+        },
+        [_vm._t("default")],
+        2
+      )
+    ],
+    1
+  )
+};
+var __vue_staticRenderFns__$m = [];
+__vue_render__$m._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$m = undefined;
+  /* scoped */
+  const __vue_scope_id__$m = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$m = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$m = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$m = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$m, staticRenderFns: __vue_staticRenderFns__$m },
+    __vue_inject_styles__$m,
+    __vue_script__$m,
+    __vue_scope_id__$m,
+    __vue_is_functional_template__$m,
+    __vue_module_identifier__$m,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var menu = BasePlugin({
+  mcwMenu: __vue_component__$m,
+  mcwMenuSurface: __vue_component__$l,
+  mcwMenuItem: mcwMenuItem,
+  mcwMenuAnchor: mcwMenuAnchor,
+  mcwList: __vue_component__$k
+});
+
+var cssClasses$4 = MDCNotchedOutlineFoundation.cssClasses;
+var script$n = {
+  name: 'mcw-notched-outline',
+  components: {
+    mcwFloatingLabel: __vue_component__$c
+  },
+  setup: function setup(props, _ref) {
+    var slots = _ref.slots;
+    var uiState = reactive({
+      outlinedClasses: {
+        'mdc-notched-outline': true
+      },
+      notchStyles: {},
+      labelEl: null
+    });
+    var foundation;
+    var adapter = {
+      addClass: function addClass(className) {
+        return uiState.outlinedClasses = _objectSpread2(_objectSpread2({}, uiState.outlinedClasses), {}, _defineProperty({}, className, true));
+      },
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$outlinedClas = uiState.outlinedClasses,
+            removed = _uiState$outlinedClas[className],
+            rest = _objectWithoutProperties(_uiState$outlinedClas, [className].map(_toPropertyKey));
+
+        uiState.outlinedClasses = rest;
+      },
+      setNotchWidthProperty: function setNotchWidthProperty(width) {
+        return uiState.notchStyles = _objectSpread2(_objectSpread2({}, uiState.notchStyles), {}, {
+          width: "".concat(width, "px")
+        });
+      },
+      removeNotchWidthProperty: function removeNotchWidthProperty() {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$notchStyles = uiState.notchStyles,
+            removed = _uiState$notchStyles.width,
+            rest = _objectWithoutProperties(_uiState$notchStyles, ["width"]);
+
+        uiState.notchStyles = rest;
+      }
+    };
+
+    var notch = function notch(notchWidth) {
+      foundation.notch(notchWidth);
+    };
+
+    var closeNotch = function closeNotch() {
+      foundation.closeNotch();
+    };
+
+    var float = function float(shouldFloat) {
+      var _uiState$labelEl;
+
+      (_uiState$labelEl = uiState.labelEl) === null || _uiState$labelEl === void 0 ? void 0 : _uiState$labelEl.float(shouldFloat);
+    };
+
+    var shake = function shake(shouldShake) {
+      var _uiState$labelEl2;
+
+      (_uiState$labelEl2 = uiState.labelEl) === null || _uiState$labelEl2 === void 0 ? void 0 : _uiState$labelEl2.shake(shouldShake);
+    };
+
+    var getWidth = function getWidth() {
+      var _uiState$labelEl3;
+
+      return (_uiState$labelEl3 = uiState.labelEl) === null || _uiState$labelEl3 === void 0 ? void 0 : _uiState$labelEl3.getWidth();
+    };
+
+    onMounted(function () {
+      foundation = new MDCNotchedOutlineFoundation(adapter);
+      foundation.init();
+      var key = slots.default ? cssClasses$4.OUTLINE_UPGRADED : cssClasses$4.NO_LABEL;
+      uiState.outlinedClasses = _objectSpread2(_objectSpread2({}, uiState.outlinedClasses), {}, _defineProperty({}, key, true));
+    });
+    onBeforeUnmount(function () {
+      foundation.destroy();
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      getWidth: getWidth,
+      shake: shake,
+      float: float,
+      closeNotch: closeNotch,
+      notch: notch
+    });
+  }
+};
+
+/* script */
+const __vue_script__$n = script$n;
+
+/* template */
+var __vue_render__$n = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -4838,11 +6435,7 @@ var __vue_render__$b = function() {
     _vm._v(" "),
     _c(
       "span",
-      {
-        ref: "notchEl",
-        staticClass: "mdc-notched-outline__notch",
-        style: _vm.notchStyles
-      },
+      { staticClass: "mdc-notched-outline__notch", style: _vm.notchStyles },
       [
         _vm.$slots.default
           ? _c("mcw-floating-label", { ref: "labelEl" }, [_vm._t("default")], 2)
@@ -4854,17 +6447,17 @@ var __vue_render__$b = function() {
     _c("span", { staticClass: "mdc-notched-outline__trailing" })
   ])
 };
-var __vue_staticRenderFns__$b = [];
-__vue_render__$b._withStripped = true;
+var __vue_staticRenderFns__$n = [];
+__vue_render__$n._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$b = undefined;
+  const __vue_inject_styles__$n = undefined;
   /* scoped */
-  const __vue_scope_id__$b = undefined;
+  const __vue_scope_id__$n = undefined;
   /* module identifier */
-  const __vue_module_identifier__$b = undefined;
+  const __vue_module_identifier__$n = undefined;
   /* functional template */
-  const __vue_is_functional_template__$b = false;
+  const __vue_is_functional_template__$n = false;
   /* style inject */
   
   /* style inject SSR */
@@ -4873,13 +6466,13 @@ __vue_render__$b._withStripped = true;
   
 
   
-  const __vue_component__$b = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$b, staticRenderFns: __vue_staticRenderFns__$b },
-    __vue_inject_styles__$b,
-    __vue_script__$b,
-    __vue_scope_id__$b,
-    __vue_is_functional_template__$b,
-    __vue_module_identifier__$b,
+  const __vue_component__$n = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$n, staticRenderFns: __vue_staticRenderFns__$n },
+    __vue_inject_styles__$n,
+    __vue_script__$n,
+    __vue_scope_id__$n,
+    __vue_is_functional_template__$n,
+    __vue_module_identifier__$n,
     false,
     undefined,
     undefined,
@@ -4887,13 +6480,12 @@ __vue_render__$b._withStripped = true;
   );
 
 var notchedOutline = BasePlugin({
-  mcwNotchedOutline: __vue_component__$b
+  mcwNotchedOutline: __vue_component__$n
 });
 
-/* eslint-disable quote-props */
-var script$c = {
+var radioId_ = 0;
+var script$o = {
   name: 'mcw-radio',
-  mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
   model: {
     prop: 'picked',
     event: 'change'
@@ -4907,202 +6499,211 @@ var script$c = {
       required: true
     },
     id: {
-      type: String,
-      required: true
+      type: String
     },
     value: String,
     picked: String,
     disabled: Boolean,
     checked: Boolean
   },
+  setup: function setup(props, _ref) {
+    var _props$id;
 
-  data() {
-    return {
+    var emit = _ref.emit,
+        attrs = _ref.attrs;
+    var uiState = reactive({
       classes: {
         'mdc-radio': 1
       },
-      styles: {}
-    };
-  },
+      controlEl: null,
+      labelEl: null,
+      root: null
+    });
 
-  watch: {
-    checked: 'setChecked',
-    picked: 'onPicked',
-
-    disabled(value) {
-      this.foundation.setDisabled(value);
-    }
-
-  },
-  computed: {
-    rootClasses() {
-      return { ...this.classes,
-        ...this.radioClasses
-      };
-    },
-
-    formFieldClasses() {
-      return {
-        'mdc-form-field': 1,
-        'mdc-form-field--align-end': this.alignEnd
-      };
-    }
-
-  },
-
-  mounted() {
-    const adapter = {
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      setNativeControlDisabled: disabled => this.$refs.controlEl && this.$refs.controlEl.disabled == disabled
-    }; // add foundation
-
-    this.foundation = new MDCRadioFoundation(adapter); // add ripple
-
-    this.ripple = new RippleBase(this, {
-      isUnbounded: () => true,
+    var _useRipplePlugin = useRipplePlugin$1(toRef(uiState, 'root'), {
+      isUnbounded: function isUnbounded() {
+        return true;
+      },
       // Radio buttons technically go "active" whenever there is *any* keyboard interaction. This is not the
       // UI we desire.
-      isSurfaceActive: () => false,
-      registerInteractionHandler: (evt, handler) => {
-        this.$refs.controlEl.addEventListener(evt, handler, applyPassive());
+      isSurfaceActive: function isSurfaceActive() {
+        return false;
       },
-      deregisterInteractionHandler: (evt, handler) => {
-        this.$refs.controlEl.removeEventListener(evt, handler, applyPassive());
+      registerInteractionHandler: function registerInteractionHandler(evt, handler) {
+        uiState.controlEl.addEventListener(evt, handler, applyPassive());
       },
-      computeBoundingRect: () => {
-        return this.$refs.root.getBoundingClientRect();
+      deregisterInteractionHandler: function deregisterInteractionHandler(evt, handler) {
+        uiState.controlEl.removeEventListener(evt, handler, applyPassive());
+      },
+      computeBoundingRect: function computeBoundingRect() {
+        return uiState.root.getBoundingClientRect();
       }
+    }),
+        rippleClasses = _useRipplePlugin.classes,
+        styles = _useRipplePlugin.styles,
+        activate = _useRipplePlugin.activate,
+        deactivate = _useRipplePlugin.deactivate;
+
+    var foundation;
+    var formField;
+    var radioId = (_props$id = props.id) !== null && _props$id !== void 0 ? _props$id : "__mcw-radio-".concat(radioId_++);
+    var rootClasses = computed(function () {
+      return _objectSpread2(_objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes), props.radioClasses);
     });
-    this.formField = new MDCFormFieldFoundation({
-      registerInteractionHandler: (type, handler) => {
-        this.$refs.labelEl && this.$refs.labelEl.addEventListener(type, handler);
-      },
-      deregisterInteractionHandler: (type, handler) => {
-        this.$refs.labelEl && this.$refs.labelEl.removeEventListener(type, handler);
-      },
-      activateInputRipple: () => {
-        this.ripple && this.ripple.activate();
-      },
-      deactivateInputRipple: () => {
-        this.ripple && this.ripple.deactivate();
-      }
-    });
-    this.foundation.init();
-    this.ripple.init();
-    this.formField.init();
-    const {
-      checked,
-      disabled,
-      picked,
-      value
-    } = this;
-    this.foundation.setDisabled(disabled);
-    this.setChecked(checked || picked == value); // if checked, need to sync any change of value
-
-    checked && this.onChange();
-  },
-
-  methods: {
-    onChange() {
-      const nativeValue = this.$refs.controlEl.value;
-      nativeValue != this.picked && this.$emit('change', this.$refs.controlEl.value);
-    },
-
-    onPicked(nv) {
-      this.setChecked(nv == this.$refs.controlEl.value);
-    },
-
-    setChecked(checked) {
-      this.$refs.controlEl.checked = checked;
-    }
-
-  },
-
-  beforeDestroy() {
-    this.formField.destroy();
-    this.ripple.destroy();
-    this.foundation.destroy();
-  },
-
-  renderX(createElement) {
-    const {
-      alignEnd,
-      value,
-      disabled,
-      picked,
-      $attrs: attrs,
-      $listeners: listeners,
-      id,
-      label,
-      name
-    } = this;
-    const backgroundEl = createElement('div', {
-      class: {
-        'mdc-radio__background': 1
-      }
-    }, [createElement('div', {
-      class: 'mdc-radio__outer-circle'
-    }), createElement('div', {
-      class: 'mdc-radio__inner-circle'
-    })]);
-    const inputEl = createElement('input', {
-      class: ['mdc-radio__native-control'],
-      attrs: { ...attrs,
-        name,
-        id,
-        type: 'radio',
-        value,
-        checked: picked == value,
-        disabled
-      },
-      ref: 'controlEl',
-      on: { ...listeners,
-        change: evt => this.onChange(evt)
-      }
-    });
-    const radioEl = createElement('div', {
-      class: [this.classes, this.radioClasses],
-      style: this.styles,
-      ref: 'root'
-    }, [inputEl, backgroundEl, createElement('div', {
-      class: {
-        'mdc-radio__ripple': 1
-      }
-    })]);
-
-    if (!label) {
-      return radioEl;
-    }
-
-    return createElement('div', {
-      class: {
+    var formFieldClasses = computed(function () {
+      return {
         'mdc-form-field': 1,
-        'mdc-form-field--align-end': alignEnd
-      }
-    }, [radioEl, createElement('label', {
-      ref: 'labelEl',
-      attrs: {
-        for: id
-      }
-    }, label)]);
-  }
+        'mdc-form-field--align-end': props.alignEnd
+      };
+    });
 
+    var onChange = function onChange() {
+      var nativeValue = uiState.controlEl.value;
+      nativeValue != props.picked && emit('change', uiState.controlEl.value);
+    };
+
+    var setChecked = function setChecked(checked) {
+      uiState.controlEl.checked = checked;
+    };
+
+    var onPicked = function onPicked(nv) {
+      setChecked(nv == uiState.controlEl.value);
+    };
+
+    var adapter = {
+      addClass: function addClass(className) {
+        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+      },
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$classes = uiState.classes,
+            removed = _uiState$classes[className],
+            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+
+        uiState.classes = rest;
+      },
+      setNativeControlDisabled: function setNativeControlDisabled(disabled) {
+        return uiState.controlEl && uiState.controlEl.disabled == disabled;
+      }
+    };
+    watch(function () {
+      return props.checked;
+    }, function (nv) {
+      setChecked(nv);
+    });
+    watch(function () {
+      return props.disabled;
+    }, function (nv) {
+      foundation.setDisabled(nv);
+    });
+    watch(function () {
+      return props.picked;
+    }, function (nv) {
+      onPicked(nv);
+    });
+    onMounted(function () {
+      foundation = new MDCRadioFoundation(adapter);
+      formField = new MDCFormFieldFoundation({
+        registerInteractionHandler: function registerInteractionHandler(type, handler) {
+          var _uiState$labelEl;
+
+          return (_uiState$labelEl = uiState.labelEl) === null || _uiState$labelEl === void 0 ? void 0 : _uiState$labelEl.addEventListener(type, handler);
+        },
+        deregisterInteractionHandler: function deregisterInteractionHandler(type, handler) {
+          var _uiState$labelEl2;
+
+          return (_uiState$labelEl2 = uiState.labelEl) === null || _uiState$labelEl2 === void 0 ? void 0 : _uiState$labelEl2.removeEventListener(type, handler);
+        },
+        activateInputRipple: function activateInputRipple() {
+          activate();
+        },
+        deactivateInputRipple: function deactivateInputRipple() {
+          deactivate();
+        }
+      });
+      foundation.init();
+      formField.init();
+      var checked = props.checked,
+          disabled = props.disabled,
+          picked = props.picked,
+          value = props.value;
+      foundation.setDisabled(disabled);
+      setChecked(checked || picked == value); // if checked, need to sync any change of value
+
+      checked && onChange();
+    });
+    onBeforeUnmount(function () {
+      foundation.destroy();
+      formField.destroy();
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      rootClasses: rootClasses,
+      formFieldClasses: formFieldClasses,
+      styles: styles,
+      onChange: onChange,
+      onPicked: onPicked,
+      setChecked: setChecked,
+      radioId: radioId
+    });
+  }
 };
 
 /* script */
-const __vue_script__$c = script$c;
+const __vue_script__$o = script$o;
 
 /* template */
-var __vue_render__$c = function() {
+var __vue_render__$o = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    { staticClass: "mdc-radio-wrapper", class: _vm.formFieldClasses },
-    [
-      _c("div", { ref: "root", class: _vm.rootClasses, style: _vm.styles }, [
+  return _vm.label
+    ? _c(
+        "div",
+        { staticClass: "mdc-radio-wrapper", class: _vm.formFieldClasses },
+        [
+          _c(
+            "div",
+            { ref: "root", class: _vm.rootClasses, style: _vm.styles },
+            [
+              _c(
+                "input",
+                _vm._b(
+                  {
+                    ref: "controlEl",
+                    staticClass: "mdc-radio__native-control",
+                    attrs: {
+                      id: _vm.radioId,
+                      name: _vm.name,
+                      type: "radio",
+                      disabled: _vm.disabled
+                    },
+                    domProps: {
+                      value: _vm.value,
+                      checked: _vm.picked == _vm.value
+                    },
+                    on: { change: _vm.onChange }
+                  },
+                  "input",
+                  _vm.$attrs,
+                  false
+                )
+              ),
+              _vm._v(" "),
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "mdc-radio__ripple" })
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "label",
+            { ref: "labelEl", attrs: { for: _vm.radioId } },
+            [_vm._t("default", [_vm._v(_vm._s(_vm.label))])],
+            2
+          )
+        ]
+      )
+    : _c("div", { ref: "root", class: _vm.rootClasses, style: _vm.styles }, [
         _c(
           "input",
           _vm._b(
@@ -5110,7 +6711,7 @@ var __vue_render__$c = function() {
               ref: "controlEl",
               staticClass: "mdc-radio__native-control",
               attrs: {
-                id: _vm.vma_uid_,
+                id: _vm.radioId,
                 name: _vm.name,
                 type: "radio",
                 disabled: _vm.disabled
@@ -5124,21 +6725,22 @@ var __vue_render__$c = function() {
           )
         ),
         _vm._v(" "),
-        _vm._m(0),
+        _vm._m(1),
         _vm._v(" "),
         _c("div", { staticClass: "mdc-radio__ripple" })
-      ]),
-      _vm._v(" "),
-      _c(
-        "label",
-        { ref: "labelEl", attrs: { for: _vm.vma_uid_ } },
-        [_vm._t("default", [_vm._v(_vm._s(_vm.label))])],
-        2
-      )
-    ]
-  )
+      ])
 };
-var __vue_staticRenderFns__$c = [
+var __vue_staticRenderFns__$o = [
+  function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", { staticClass: "mdc-radio__background" }, [
+      _c("div", { staticClass: "mdc-radio__outer-circle" }),
+      _vm._v(" "),
+      _c("div", { staticClass: "mdc-radio__inner-circle" })
+    ])
+  },
   function() {
     var _vm = this;
     var _h = _vm.$createElement;
@@ -5150,16 +6752,16 @@ var __vue_staticRenderFns__$c = [
     ])
   }
 ];
-__vue_render__$c._withStripped = true;
+__vue_render__$o._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$c = undefined;
+  const __vue_inject_styles__$o = undefined;
   /* scoped */
-  const __vue_scope_id__$c = undefined;
+  const __vue_scope_id__$o = undefined;
   /* module identifier */
-  const __vue_module_identifier__$c = undefined;
+  const __vue_module_identifier__$o = undefined;
   /* functional template */
-  const __vue_is_functional_template__$c = false;
+  const __vue_is_functional_template__$o = false;
   /* style inject */
   
   /* style inject SSR */
@@ -5168,13 +6770,13 @@ __vue_render__$c._withStripped = true;
   
 
   
-  const __vue_component__$c = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$c, staticRenderFns: __vue_staticRenderFns__$c },
-    __vue_inject_styles__$c,
-    __vue_script__$c,
-    __vue_scope_id__$c,
-    __vue_is_functional_template__$c,
-    __vue_module_identifier__$c,
+  const __vue_component__$o = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$o, staticRenderFns: __vue_staticRenderFns__$o },
+    __vue_inject_styles__$o,
+    __vue_script__$o,
+    __vue_scope_id__$o,
+    __vue_is_functional_template__$o,
+    __vue_module_identifier__$o,
     false,
     undefined,
     undefined,
@@ -5182,131 +6784,220 @@ __vue_render__$c._withStripped = true;
   );
 
 var radio = BasePlugin({
-  mcwRadio: __vue_component__$c
+  mcwRadio: __vue_component__$o
 });
 
 var SelectHelperText = {
   name: 'select-helper-text',
   props: {
     helptextPersistent: Boolean,
-    helptextValidation: Boolean
+    helptextValidation: Boolean,
+    helptext: String
   },
-
-  data() {
-    return {
+  setup: function setup(props, _ref) {
+    var slots = _ref.slots;
+    var uiState = reactive({
       classes: {
         'mdc-select-helper-text': true,
-        'mdc-select-helper-text--persistent': this.helptextPersistent,
-        'mdc-select-helper-text--validation-msg': this.helptextValidation
+        'mdc-select-helper-text--persistent': props.helptextPersistent,
+        'mdc-select-helper-text--validation-msg': props.helptextValidation
       },
       attrs: {
         'aria-hidden': 'true'
+      },
+      myHelptext: props.helptext
+    });
+    var foundation;
+    var adapter = {
+      addClass: function addClass(className) {
+        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+      },
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$classes = uiState.classes,
+            removed = _uiState$classes[className],
+            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+
+        uiState.classes = rest;
+      },
+      hasClass: function hasClass(className) {
+        return Boolean(uiState.classes[className]);
+      },
+      setAttr: function setAttr(attr, value) {
+        return uiState.attrs = _objectSpread2(_objectSpread2({}, uiState.attrs), {}, _defineProperty({}, attr, value));
+      },
+      removeAttr: function removeAttr(attr) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$attrs = uiState.attrs,
+            removed = _uiState$attrs[attr],
+            rest = _objectWithoutProperties(_uiState$attrs, [attr].map(_toPropertyKey));
+
+        uiState.attrs = rest;
+      },
+      setContent: function setContent(content) {
+        uiState.myHelptext = content;
       }
     };
-  },
-
-  watch: {
-    helptextPersistent() {
-      this.foundation.setPersistent(this.helptextPersistent);
-    },
-
-    helptextValidation() {
-      this.foundation.setValidation(this.helptextValidation);
-    }
-
-  },
-
-  mounted() {
-    this.foundation = new MDCSelectHelperTextFoundation({
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      hasClass: className => Boolean(this.classes[className]),
-      setAttr: (attr, value) => {
-        this.$set(this.attrs, attr, value); // this.$el.setAttribute(attr, value);
-      },
-      removeAttr: attr => {
-        this.$delete(this.attrs, attr); // this.$el.removeAttribute(attr);
-      },
-      setContent: () =>
-      /* content */
-      {// help text get's updated from {{helptext}}
-        // cf. this.$el.textContent = content
-      }
+    watch(function () {
+      return props.helptextPersistent;
+    }, function (nv) {
+      return foundation.setPersistent(nv);
     });
-    this.foundation.init();
-  },
-
-  beforeDestroy() {
-    this.foundation.destroy();
-  },
-
-  render(createElement) {
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
-    return createElement('p', {
-      class: this.classes,
-      attrs: this.attrs
-    }, scopedSlots.default && scopedSlots.default());
+    watch(function () {
+      return props.helptextValidation;
+    }, function (nv) {
+      return foundation.setValidation(nv);
+    });
+    watch(function () {
+      return props.helptext;
+    }, function (nv) {
+      return uiState.myHelptext = nv;
+    });
+    onMounted(function () {
+      foundation = new MDCSelectHelperTextFoundation(adapter);
+      foundation.init();
+    });
+    onBeforeUnmount(function () {
+      foundation.destroy();
+    });
+    return function () {
+      return h('p', {
+        class: uiState.classes,
+        attrs: uiState.attrs
+      }, [uiState.myHelptext]);
+    };
   }
-
 };
 
-var SelectIcon = {
+var script$p = {
   name: 'select-icon',
   props: {
     icon: String
   },
-
-  data() {
-    return {
+  setup: function setup(props, _ref) {
+    var emit = _ref.emit,
+        $listeners = _ref.listeners;
+    var uiState = reactive({
       classes: {
         'material-icons': true,
         'mdc-select__icon': true
       },
-      styles: {}
-    };
-  },
-
-  mounted() {
-    this.foundation = new MDCSelectIconFoundation(Object.assign({
-      getAttr: attr => this.$el.getAttribute(attr),
-      setAttr: (attr, value) => this.$el.setAttribute(attr, value),
-      removeAttr: attr => this.$el.removeAttribute(attr),
-      setContent: content => {
-        this.$el.textContent = content;
+      styles: {},
+      root: null,
+      rootAttrs: {},
+      rootListeners: {}
+    });
+    var foundation;
+    var listeners = computed(function () {
+      return _objectSpread2(_objectSpread2({}, $listeners), uiState.rootListeners);
+    });
+    var adapter = {
+      getAttr: function getAttr(attr) {
+        return uiState.rootAttrs[attr];
       },
-      registerInteractionHandler: (evtType, handler) => this.$el.addEventListener(evtType, handler),
-      deregisterInteractionHandler: (evtType, handler) => this.$el.removeEventListener(evtType, handler),
-      notifyIconAction: () => {
-        this.$emit('click');
-        emitCustomEvent(this.$el, MDCSelectIconFoundation.strings.ICON_EVENT, {}, true
+      setAttr: function setAttr(attr, value) {
+        return uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, _defineProperty({}, attr, value));
+      },
+      removeAttr: function removeAttr(attr) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$rootAttrs = uiState.rootAttrs,
+            removed = _uiState$rootAttrs[attr],
+            rest = _objectWithoutProperties(_uiState$rootAttrs, [attr].map(_toPropertyKey));
+
+        uiState.rootAttrs = rest;
+      },
+      setContent: function setContent(content) {
+        uiState.root.textContent = content;
+      },
+      registerInteractionHandler: function registerInteractionHandler(evtType, handler) {
+        return uiState.rootListeners = _objectSpread2(_objectSpread2({}, uiState.rootListeners), {}, _defineProperty({}, evtType, handler));
+      },
+      deregisterInteractionHandler: function deregisterInteractionHandler(evtType, handler) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$rootListener = uiState.rootListeners,
+            removed = _uiState$rootListener[evtType],
+            rest = _objectWithoutProperties(_uiState$rootListener, [evtType].map(_toPropertyKey));
+
+        uiState.rootListeners = rest;
+      },
+      notifyIconAction: function notifyIconAction() {
+        emit('click');
+        emitCustomEvent(uiState.root, MDCSelectIconFoundation.strings.ICON_EVENT, {}, true
         /* shouldBubble  */
         );
       }
-    }));
-    this.foundation.init();
-  },
-
-  beforeDestroy() {
-    this.foundation.destroy();
-  },
-
-  render(createElement) {
-    return createElement('i', {
-      class: this.classes,
-      style: this.styles,
-      attrs: this.$attrs,
-      on: this.$listeners
-    }, this.icon);
+    };
+    onMounted(function () {
+      foundation = new MDCSelectIconFoundation(adapter);
+      foundation.init();
+    });
+    onBeforeUnmount(function () {
+      foundation.destroy();
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      listeners: listeners
+    });
   }
-
 };
 
-const {
-  strings: strings$2
-} = MDCSelectFoundation;
-var mcwSelect = {
+/* script */
+const __vue_script__$p = script$p;
+
+/* template */
+var __vue_render__$p = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "i",
+    _vm._g(
+      _vm._b(
+        { ref: "root", class: _vm.classes, style: _vm.styles },
+        "i",
+        _vm.rootAttrs,
+        false
+      ),
+      _vm.rootListeners
+    ),
+    [_vm._v(_vm._s(_vm.icon))]
+  )
+};
+var __vue_staticRenderFns__$p = [];
+__vue_render__$p._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$p = undefined;
+  /* scoped */
+  const __vue_scope_id__$p = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$p = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$p = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$p = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$p, staticRenderFns: __vue_staticRenderFns__$p },
+    __vue_inject_styles__$p,
+    __vue_script__$p,
+    __vue_scope_id__$p,
+    __vue_is_functional_template__$p,
+    __vue_module_identifier__$p,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var strings$8 = MDCSelectFoundation.strings,
+    cssClasses$5 = MDCSelectFoundation.cssClasses;
+var uid_ = 0;
+var script$q = {
   name: 'mcw-select',
   inheritAttrs: false,
   model: {
@@ -5322,377 +7013,572 @@ var mcwSelect = {
     disabled: Boolean,
     label: String,
     outlined: Boolean,
-    id: {
-      type: String
+    required: Boolean,
+    menuFullwidth: {
+      type: Boolean,
+      default: function _default() {
+        return true;
+      }
     }
   },
-  mixins: [VMAUniqueIdMixin],
-
-  data() {
-    return {
+  setup: function setup(props, _ref) {
+    var emit = _ref.emit;
+    var uiState = reactive({
       styles: {},
       classes: {},
       selectedTextContent: '',
       selTextAttrs: {},
-      selectAnchorAttrs: {}
-    };
-  },
+      selectAnchorAttrs: {},
+      helpId: "help-mcw-select-".concat(uid_++),
+      menuClasses: {
+        'mdc-menu-surface--fullwidth': props.menuFullwidth
+      },
+      root: null,
+      helperTextEl: null,
+      leadingIconEl: null,
+      lineRippleEl: null,
+      outlineEl: null,
+      labelEl: null,
+      menu: null,
+      anchorEl: null
+    });
+    var rippleClasses;
+    var rippleStyles;
 
-  components: {
-    SelectHelperText,
-    SelectIcon
-  },
-  computed: {
-    rootClasses() {
-      return {
+    if (props.outlined) {
+      var _useRipplePlugin = useRipplePlugin$1(toRef(uiState, 'anchorEl'), {
+        registerInteractionHandler: function registerInteractionHandler(evtType, handler) {
+          uiState.anchorEl.addEventListener(evtType, handler);
+        },
+        deregisterInteractionHandler: function deregisterInteractionHandler(evtType, handler) {
+          uiState.anchorEl.removeEventListener(evtType, handler);
+        }
+      }),
+          classes = _useRipplePlugin.classes,
+          styles = _useRipplePlugin.styles;
+
+      rippleClasses = classes;
+      rippleStyles = styles;
+    }
+
+    var rootClasses = computed(function () {
+      return _objectSpread2({
         'mdc-select': 1,
-        'mdc-select--outlined': this.outlined,
-        'mdc-select--with-leading-icon': this.leadingIcon,
-        'mdc-select--disabled': this.disabled,
-        'mdc-select--no-label': !this.label,
-        ...this.classes
-      };
-    },
+        'mdc-select--required': props.required,
+        'mdc-select--filled': !props.outlined,
+        'mdc-select--outlined': props.outlined,
+        'mdc-select--with-leading-icon': props.leadingIcon,
+        'mdc-select--disabled': props.disabled,
+        'mdc-select--no-label': !props.label
+      }, uiState.classes);
+    });
+    var menuItems = computed(function () {
+      var _uiState$menu;
 
-    selectedTextAttrs() {
-      const helpId = `help-${this.vma_uid_}`;
-      const attrs = { ...this.selTextAttrs
-      };
+      return (_uiState$menu = uiState.menu) === null || _uiState$menu === void 0 ? void 0 : _uiState$menu.items;
+    });
+    var foundation;
 
-      if (this.helptext) {
-        attrs['aria-controls'] = helpId;
-        attrs['aria-describedBy'] = helpId;
+    var handleFocus = function handleFocus() {
+      return foundation.handleFocus();
+    };
+
+    var handleBlur = function handleBlur() {
+      return foundation.handleBlur();
+    };
+
+    var handleClick = function handleClick(evt) {
+      uiState.anchorEl.focus();
+      handleFocus();
+      foundation.handleClick(getNormalizedXCoordinate(evt));
+    };
+
+    var handleKeydown = function handleKeydown(evt) {
+      return foundation.handleKeydown(evt);
+    };
+
+    var handleChange = function handleChange(isOpen) {
+      return foundation["handleMenu".concat(isOpen ? 'Opened' : 'Closed')]();
+    };
+
+    var layout = function layout() {
+      return foundation.layout();
+    };
+
+    var selectedIndex = function selectedIndex() {
+      return foundation.getSelectedIndex();
+    };
+
+    var handleMenuOpened = function handleMenuOpened() {
+      return foundation.handleMenuOpened();
+    };
+
+    var handleMenuClosed = function handleMenuClosed() {
+      return foundation.handleMenuClosed();
+    };
+
+    var handleMenuItemAction = function handleMenuItemAction(_ref2) {
+      var index = _ref2.index;
+      return foundation.handleMenuItemAction(index);
+    };
+
+    var layoutOptions = function layoutOptions() {
+      foundation.layoutOptions();
+      uiState.menu.layout();
+    };
+
+    var selectedTextAttrs = computed(function () {
+      var attrs = _objectSpread2({}, uiState.selTextAttrs);
+
+      if (props.helptext) {
+        attrs['aria-controls'] = uiState.helpId;
+        attrs['aria-describedBy'] = uiState.helpId;
       }
 
       return attrs;
-    },
+    });
+    var adapter = {
+      // select methods
+      getSelectedMenuItem: function getSelectedMenuItem() {
+        var x = menuItems.value.find(function (item) {
+          return item.classList.contains(cssClasses$5.SELECTED_ITEM_CLASS);
+        });
+        return x === null || x === void 0 ? void 0 : x.$el;
+      },
+      getMenuItemAttr: function getMenuItemAttr(menuItem, attr) {
+        return menuItem.getAttribute(attr);
+      },
+      setSelectedText: function setSelectedText(text) {
+        uiState.selectedTextContent = text;
+      },
+      isSelectAnchorFocused: function isSelectAnchorFocused() {
+        return document.activeElement === uiState.anchorEl;
+      },
+      getSelectAnchorAttr: function getSelectAnchorAttr(attr) {
+        return uiState.selectAnchorAttrs[attr];
+      },
+      setSelectAnchorAttr: function setSelectAnchorAttr(attr, value) {
+        return uiState.selectAnchorAttrs = _objectSpread2(_objectSpread2({}, uiState.selectAnchorAttrs), {}, _defineProperty({}, attr, value));
+      },
+      removeSelectAnchorAttr: function removeSelectAnchorAttr(attr) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$selectAnchor = uiState.selectAnchorAttrs,
+            removed = _uiState$selectAnchor[attr],
+            rest = _objectWithoutProperties(_uiState$selectAnchor, [attr].map(_toPropertyKey));
 
-    selectAriaControls() {
-      return this.helptext ? 'help-' + this.vma_uid_ : undefined;
-    }
+        uiState.selectAnchorAttrs = rest;
+      },
+      addMenuClass: function addMenuClass(className) {
+        return uiState.menuClasses = _objectSpread2(_objectSpread2({}, uiState.menuClasses), {}, _defineProperty({}, className, true));
+      },
+      removeMenuClass: function removeMenuClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$menuClasses = uiState.menuClasses,
+            removed = _uiState$menuClasses[className],
+            rest = _objectWithoutProperties(_uiState$menuClasses, [className].map(_toPropertyKey));
 
-  },
-  watch: {
-    disabled(value) {
-      const {
-        foundation
-      } = this;
-      foundation && foundation.updateDisabledStyle(value);
-    },
+        uiState.menuClasses = rest;
+      },
+      openMenu: function openMenu() {
+        return uiState.menu.surfaceOpen = true;
+      },
+      closeMenu: function closeMenu() {
+        return uiState.menu.surfaceOpen = false;
+      },
+      getAnchorElement: function getAnchorElement() {
+        return uiState.anchorEl;
+      },
+      setMenuAnchorElement: function setMenuAnchorElement(anchorEl) {
+        return uiState.menu.setAnchorElement(anchorEl);
+      },
+      setMenuAnchorCorner: function setMenuAnchorCorner(anchorCorner) {
+        return uiState.menu.setAnchorCorner(anchorCorner);
+      },
+      setMenuWrapFocus: function setMenuWrapFocus(wrapFocus) {
+        return uiState.menu.wrapFocus = wrapFocus;
+      },
+      getSelectedIndex: function getSelectedIndex() {
+        var index = uiState.menu.selectedIndex;
+        return index instanceof Array ? index[0] : index;
+      },
+      setSelectedIndex: function setSelectedIndex(index) {
+        uiState.menu.selectedIndex = index;
+      },
+      setAttributeAtIndex: function setAttributeAtIndex(index, attributeName, attributeValue) {
+        return menuItems.value[index].setAttribute(attributeName, attributeValue);
+      },
+      removeAttributeAtIndex: function removeAttributeAtIndex(index, attributeName) {
+        return menuItems.value[index].removeAttribute(attributeName);
+      },
+      focusMenuItemAtIndex: function focusMenuItemAtIndex(index) {
+        return menuItems.value[index].$el.focus();
+      },
+      getMenuItemCount: function getMenuItemCount() {
+        return menuItems.value.length;
+      },
+      getMenuItemValues: function getMenuItemValues() {
+        return menuItems.value.map(function (el) {
+          return el.getAttribute(strings$8.VALUE_ATTR) || '';
+        });
+      },
+      getMenuItemTextAtIndex: function getMenuItemTextAtIndex(index) {
+        return menuItems.value[index].$el.textContent;
+      },
+      addClassAtIndex: function addClassAtIndex(index, className) {
+        menuItems.value[index].classList.add(className);
+      },
+      removeClassAtIndex: function removeClassAtIndex(index, className) {
+        return menuItems.value[index].classList.remove(className);
+      },
+      isTypeaheadInProgress: function isTypeaheadInProgress() {
+        return uiState.menu.typeaheadInProgress();
+      },
+      typeaheadMatchItem: function typeaheadMatchItem(nextChar, startingIndex) {
+        var _uiState$menu2;
 
-    value: 'refreshIndex'
-  },
-
-  mounted() {
-    this.menuSetup_();
-    const {
-      $refs: {
-        helperTextEl,
-        leadingIconEl
-      }
-    } = this;
-    this.foundation = new MDCSelectFoundation(Object.assign({
+        return (_uiState$menu2 = uiState.menu) === null || _uiState$menu2 === void 0 ? void 0 : _uiState$menu2.typeaheadMatchItem(nextChar, startingIndex);
+      },
       // common methods
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      hasClass: className => Boolean(this.rootClasses[className]),
-      setRippleCenter: normalizedX => {
-        const {
-          $refs: {
-            lineRippleEl
-          }
-        } = this;
-        lineRippleEl && lineRippleEl.setRippleCenter(normalizedX);
+      addClass: function addClass(className) {
+        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
       },
-      activateBottomLine: () => {
-        const {
-          $refs: {
-            lineRippleEl
-          }
-        } = this;
-        lineRippleEl && lineRippleEl.foundation_.activate();
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$classes = uiState.classes,
+            removed = _uiState$classes[className],
+            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+
+        uiState.classes = rest;
       },
-      deactivateBottomLine: () => {
-        const {
-          $refs: {
-            lineRippleEl
-          }
-        } = this;
-        lineRippleEl && lineRippleEl.foundation_.deactivate();
+      hasClass: function hasClass(className) {
+        return Boolean(rootClasses.value[className]);
       },
-      notifyChange: value => {
-        const index = this.selectedIndex;
-        emitCustomEvent(this.$el, strings$2.CHANGE_EVENT, {
-          value,
-          index
+      setRippleCenter: function setRippleCenter(normalizedX) {
+        var _uiState$lineRippleEl;
+
+        return (_uiState$lineRippleEl = uiState.lineRippleEl) === null || _uiState$lineRippleEl === void 0 ? void 0 : _uiState$lineRippleEl.setRippleCenter(normalizedX);
+      },
+      activateBottomLine: function activateBottomLine() {
+        var _uiState$lineRippleEl2;
+
+        return (_uiState$lineRippleEl2 = uiState.lineRippleEl) === null || _uiState$lineRippleEl2 === void 0 ? void 0 : _uiState$lineRippleEl2.activate();
+      },
+      deactivateBottomLine: function deactivateBottomLine() {
+        var _uiState$lineRippleEl3;
+
+        return (_uiState$lineRippleEl3 = uiState.lineRippleEl) === null || _uiState$lineRippleEl3 === void 0 ? void 0 : _uiState$lineRippleEl3.deactivate();
+      },
+      notifyChange: function notifyChange(value) {
+        var index = selectedIndex();
+        emitCustomEvent(uiState.root, strings$8.CHANGE_EVENT, {
+          value: value,
+          index: index
         }, true
         /* shouldBubble  */
         );
-        value != this.value && this.$emit('change', value);
-      },
-      // select methods
-      getSelectedMenuItem: () => {
-        return this.menuElement_.querySelector(strings$2.SELECTED_ITEM_SELECTOR);
-      },
-      getMenuItemAttr: (menuItem, attr) => menuItem.getAttribute(attr),
-      setSelectedText: text => {
-        this.selectedTextContent = text;
-      },
-      isSelectAnchorFocused: () => {
-        return document.activeElement === this.$refs.anchorEl;
-      },
-      getSelectAnchorAttr: attr => {
-        return this.selectAnchorAttrs[attr];
-      },
-      setSelectAnchorAttr: (attr, value) => {
-        this.$set(this.selectAnchorAttrs, attr, value);
-      },
-      openMenu: () => {
-        this.menu_.surfaceOpen = true;
-      },
-      closeMenu: () => {
-        this.menu_.surfaceOpen = false;
-      },
-      getAnchorElement: () => this.$refs.anchorEl,
-      setMenuAnchorElement: anchorEl => this.menu_.setAnchorElement(anchorEl),
-      setMenuAnchorCorner: anchorCorner => this.menu_.setAnchorCorner(anchorCorner),
-      setMenuWrapFocus: wrapFocus => this.menu_.wrapFocus = wrapFocus,
-      setAttributeAtIndex: (index, attributeName, attributeValue) => this.menu_.items[index].setAttribute(attributeName, attributeValue),
-      removeAttributeAtIndex: (index, attributeName) => this.menu_.items[index].removeAttribute(attributeName),
-      focusMenuItemAtIndex: index => {
-        this.menu_.items[index].focus();
-      },
-      getMenuItemCount: () => this.menu_.items.length,
-      getMenuItemValues: () => this.menu_.items.map(el => el.getAttribute(strings$2.VALUE_ATTR) || ''),
-      getMenuItemTextAtIndex: index => this.menu_.items[index].textContent,
-      addClassAtIndex: (index, className) => {
-        this.menu_.items[index].classList.add(className);
-      },
-      removeClassAtIndex: (index, className) => {
-        this.menu_.items[index].classList.remove(className);
+        value != props.value && emit('change', value);
       },
       // outline methods
-      hasOutline: () => {
-        return this.outlined;
+      hasOutline: function hasOutline() {
+        return props.outlined;
       },
-      notchOutline: labelWidth => {
-        const {
-          $refs: {
-            outlineEl
-          }
-        } = this;
-        outlineEl && outlineEl.notch(labelWidth);
+      notchOutline: function notchOutline(labelWidth) {
+        var _uiState$outlineEl;
+
+        return (_uiState$outlineEl = uiState.outlineEl) === null || _uiState$outlineEl === void 0 ? void 0 : _uiState$outlineEl.notch(labelWidth);
       },
-      closeOutline: () => {
-        const {
-          $refs: {
-            outlineEl
-          }
-        } = this;
-        outlineEl && outlineEl.closeNotch();
+      closeOutline: function closeOutline() {
+        var _uiState$outlineEl2;
+
+        return (_uiState$outlineEl2 = uiState.outlineEl) === null || _uiState$outlineEl2 === void 0 ? void 0 : _uiState$outlineEl2.closeNotch();
       },
       // label methods
-      hasLabel: () => {
-        return !!this.label;
+      hasLabel: function hasLabel() {
+        return !!props.label;
       },
-      floatLabel: value => {
-        const {
-          $refs: {
-            labelEl,
-            outlineEl
-          }
-        } = this;
-        (labelEl || outlineEl).float(value);
+      floatLabel: function floatLabel(shouldFloat) {
+        return (uiState.labelEl || uiState.outlineEl).float(shouldFloat);
       },
-      getLabelWidth: () => {
-        const {
-          $refs: {
-            labelEl
-          }
-        } = this;
-        return labelEl && labelEl.getWidth();
+      getLabelWidth: function getLabelWidth() {
+        var _uiState$labelEl;
+
+        return (_uiState$labelEl = uiState.labelEl) === null || _uiState$labelEl === void 0 ? void 0 : _uiState$labelEl.getWidth();
+      },
+      setLabelRequired: function setLabelRequired(isRequired) {
+        var _uiState$labelEl2;
+
+        return (_uiState$labelEl2 = uiState.labelEl) === null || _uiState$labelEl2 === void 0 ? void 0 : _uiState$labelEl2.setRequired(isRequired);
       }
-    }), {
-      helperText: helperTextEl && helperTextEl.foundation,
-      leadingIcon: leadingIconEl && leadingIconEl.foundation
-    });
+    };
 
-    if (this.menu_) {
-      this.menu_.listen(MDCMenuSurfaceFoundation.strings.CLOSED_EVENT, this.handleMenuClosed);
-      this.menu_.listen(MDCMenuSurfaceFoundation.strings.OPENED_EVENT, this.handleMenuOpened);
-      this.menu_.listen(MDCMenuFoundation.strings.SELECTED_EVENT, this.handleMenuItemAction);
-    }
+    var setFixedPosition = function setFixedPosition(isFixed) {
+      return uiState.menu.setFixedPosition(isFixed);
+    };
 
-    this.foundation.init(); // this.foundation.handleChange(false);
-    // initial sync with DOM
-
-    this.refreshIndex(); // this.slotObserver = new MutationObserver(() => this.refreshIndex());
-    // this.slotObserver.observe(this.$refs.native_control, {
-    //   childList: true,
-    //   subtree: true,
-    // });
-
-    if (!this.outlined) {
-      this.ripple = new RippleBase(this);
-      this.ripple.init();
-    }
-  },
-
-  beforeDestroy() {
-    // this.slotObserver.disconnect();
-    if (this.menu_) {
-      this.menu_.unlisten(MDCMenuSurfaceFoundation.strings.SELECTED_EVENT, this.handleMenuItemAction);
-      this.menu_.unlisten(MDCMenuSurfaceFoundation.strings.OPENED_EVENT, this.handleMenuOpened);
-      this.menu_.unlisten(MDCMenuSurfaceFoundation.strings.CLOSED_EVENT, this.handleMenuClosed);
-    }
-
-    const foundation = this.foundation;
-    this.foundation = null;
-    foundation.destroy();
-    this.ripple && this.ripple.destroy();
-  },
-
-  methods: {
-    handleMenuOpened() {
-      this.foundation.handleMenuOpened();
-    },
-
-    handleMenuClosed() {
-      this.foundation.handleMenuClosed();
-    },
-
-    handleMenuItemAction(evt) {
-      this.foundation.handleMenuItemAction(evt.detail.index);
-    },
-
-    handleChange() {
-      this.foundation.handleChange(true);
-    },
-
-    handleFocus() {
-      this.foundation.handleFocus();
-    },
-
-    handleBlur() {
-      this.foundation.handleBlur();
-    },
-
-    handleClick(evt) {
-      this.$refs.anchorEl.focus();
-      this.handleFocus();
-      this.foundation.handleClick(this.getNormalizedXCoordinate(evt));
-    },
-
-    getNormalizedXCoordinate(evt) {
-      const targetClientRect = evt.target.getBoundingClientRect();
-      const xCoordinate = evt.clientX;
-      return xCoordinate - targetClientRect.left;
-    },
-
-    menuSetup_() {
-      this.menuElement_ = this.$el.querySelector(MDCSelectFoundation.strings.MENU_SELECTOR);
-
-      if (this.menuElement_) {
-        this.menu_ = this.menuElement_.__vue__;
-      }
-    },
-
-    refreshIndex() {
-      const items = this.menu_.items.map(el => el.getAttribute(strings$2.VALUE_ATTR) || '');
-      const idx = items.findIndex(value => {
-        return this.value === value;
+    var refreshIndex = function refreshIndex() {
+      var items = menuItems.value.map(function (el) {
+        return el.getAttribute(strings$8.VALUE_ATTR) || '';
       });
-      this.foundation.setSelectedIndex(idx);
-    }
+      var idx = items.findIndex(function (value) {
+        return props.value === value;
+      });
+      foundation.setSelectedIndex(idx);
+    };
 
+    watch(function () {
+      return props.disabled;
+    }, function (nv) {
+      var _foundation;
+
+      return (_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.updateDisabledStyle(nv);
+    });
+    watch(function () {
+      return props.value;
+    }, function () {
+      refreshIndex();
+    });
+    onMounted(function () {
+      var _uiState$helperTextEl, _uiState$leadingIconE;
+
+      foundation = new MDCSelectFoundation(adapter, {
+        helperText: (_uiState$helperTextEl = uiState.helperTextEl) === null || _uiState$helperTextEl === void 0 ? void 0 : _uiState$helperTextEl.foundation,
+        leadingIcon: (_uiState$leadingIconE = uiState.leadingIconEl) === null || _uiState$leadingIconE === void 0 ? void 0 : _uiState$leadingIconE.foundation
+      });
+      foundation = new MDCSelectFoundation(adapter);
+      foundation.init(); // initial sync with DOM
+
+      refreshIndex(); // do we need a slotObserver here?
+      // this.slotObserver = new MutationObserver(() => this.refreshIndex());
+      // this.slotObserver.observe(this.$refs.native_control, {
+      //   childList: true,
+      //   subtree: true,
+      // });
+    });
+    onBeforeUnmount(function () {
+      foundation.destroy();
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      rootClasses: rootClasses,
+      handleBlur: handleBlur,
+      handleFocus: handleFocus,
+      handleClick: handleClick,
+      handleChange: handleChange,
+      handleKeydown: handleKeydown,
+      layout: layout,
+      layoutOptions: layoutOptions,
+      rippleClasses: rippleClasses,
+      rippleStyles: rippleStyles,
+      selectedTextAttrs: selectedTextAttrs,
+      handleMenuItemAction: handleMenuItemAction,
+      refreshIndex: refreshIndex,
+      setFixedPosition: setFixedPosition,
+      handleMenuOpened: handleMenuOpened,
+      handleMenuClosed: handleMenuClosed
+    });
   },
-
-  render(createElement) {
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
-    const helpId = `help-${this.vma_uid_}`;
-    const anchorNodes = [createElement('span', {
-      class: ['mdc-select__ripple']
-    }), createElement('input', {
-      class: {
-        'mdc-select__selected-text': 1
-      },
-      attrs: {
-        disabled: true,
-        readonly: true,
-        value: this.selectedTextContent,
-        ...this.selectedTextAttrs
-      },
-      ref: 'selectedTextEl'
-    }), createElement('i', {
-      class: {
-        'mdc-select__dropdown-icon': 1
-      }
-    })];
-
-    if (this.outlined) {
-      anchorNodes.push(createElement(__vue_component__$b, {
-        ref: 'outlineEl'
-      }, this.label));
-    } else {
-      anchorNodes.push(createElement(__vue_component__$6, {
-        ref: 'labelEl'
-      }, this.label), createElement(mcwLineRipple, {
-        ref: 'lineRippleEl'
-      }, this.label));
-    }
-
-    if (this.leadingIcon) {
-      anchorNodes.unshift(createElement('select-icon', {
-        attrs: {
-          icon: this.leadingIcon,
-          'tab-index': '0',
-          role: 'button'
-        },
-        ref: 'leadingIconEl'
-      }));
-    }
-
-    const anchorEl = createElement('div', {
-      class: {
-        'mdc-select__anchor': 1
-      },
-      attrs: this.selectAnchorAttrs,
-      ref: 'anchorEl',
-      on: {
-        click: evt => this.handleClick(evt),
-        focus: () => this.handleFocus(),
-        blur: () => this.handleBlur()
-      }
-    }, anchorNodes);
-    const nodes = [anchorEl, scopedSlots.default && scopedSlots.default()];
-
-    if (this.helptext) {
-      nodes.push(createElement('select-helper-text', {
-        attrs: {
-          helptextPersistent: this.helptextPersistent,
-          helptextValidation: this.helptextValidation,
-          id: helpId
-        },
-        ref: 'helperTextEl'
-      }, [this.helptext]));
-    }
-
-    return createElement('div', {
-      class: this.rootClasses
-    }, nodes);
+  components: {
+    SelectHelperText: SelectHelperText,
+    SelectIcon: __vue_component__$p
   }
+}; // ===
+// Private functions
+// ===
 
+function getNormalizedXCoordinate(evt) {
+  var targetClientRect = evt.target.getBoundingClientRect();
+  var xCoordinate = evt.clientX;
+  return xCoordinate - targetClientRect.left;
+}
+
+/* script */
+const __vue_script__$q = script$q;
+
+/* template */
+var __vue_render__$q = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    { staticClass: "select-wrapper" },
+    [
+      _c(
+        "div",
+        { ref: "root", class: _vm.rootClasses },
+        [
+          _c(
+            "div",
+            _vm._b(
+              {
+                ref: "anchorEl",
+                staticClass: "mdc-select__anchor",
+                class: _vm.rippleClasses,
+                style: _vm.rippleStyles,
+                attrs: {
+                  role: "button",
+                  "aria-haspopup": "listbox",
+                  "aria-required": _vm.required
+                },
+                on: {
+                  click: _vm.handleClick,
+                  keydown: _vm.handleKeydown,
+                  focus: _vm.handleFocus,
+                  blur: _vm.handleBlur
+                }
+              },
+              "div",
+              _vm.selectAnchorAttrs,
+              false
+            ),
+            [
+              _vm.leadingIcon
+                ? _c("select-icon", {
+                    ref: "leadingIconEl",
+                    attrs: {
+                      icon: _vm.leadingIcon,
+                      tabindex: "0",
+                      role: "button"
+                    }
+                  })
+                : _vm._e(),
+              _vm._v(" "),
+              !_vm.outlined
+                ? _c("span", { staticClass: "mdc-select__ripple" })
+                : _vm._e(),
+              _vm._v(" "),
+              _c("span", { staticClass: "mdc-select__selected-text" }, [
+                _vm._v(_vm._s(_vm.selectedTextContent))
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "mdc-select__dropdown-icon" }, [
+                _c(
+                  "svg",
+                  {
+                    staticClass: "mdc-select__dropdown-icon-graphic",
+                    attrs: { viewBox: "7 10 10 5" }
+                  },
+                  [
+                    _c("polygon", {
+                      staticClass: "mdc-select__dropdown-icon-inactive",
+                      attrs: {
+                        stroke: "none",
+                        "fill-rule": "evenodd",
+                        points: "7 10 12 15 17 10"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("polygon", {
+                      staticClass: "mdc-select__dropdown-icon-active",
+                      attrs: {
+                        stroke: "none",
+                        "fill-rule": "evenodd",
+                        points: "7 15 12 10 17 15"
+                      }
+                    })
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _vm.outlined
+                ? [
+                    _c("mcw-notched-outline", { ref: "outlineEl" }, [
+                      _vm._v(_vm._s(_vm.label))
+                    ])
+                  ]
+                : [
+                    _c("mcw-floating-label", { ref: "labelEl" }, [
+                      _vm._v(_vm._s(_vm.label))
+                    ]),
+                    _vm._v(" "),
+                    _c("mdc-line-ripple", { ref: "lineRippleEl" })
+                  ]
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _c(
+            "mcw-menu",
+            {
+              ref: "menu",
+              staticClass: "mdc-select__menu",
+              class: _vm.menuClasses,
+              attrs: { role: "listbox" },
+              on: {
+                change: _vm.handleChange,
+                select: _vm.handleMenuItemAction
+              },
+              nativeOn: {
+                "MDCMenuSurface:opened": function($event) {
+                  return _vm.handleMenuOpened($event)
+                },
+                "MDCMenuSurface:closed": function($event) {
+                  return _vm.handleMenuClosed($event)
+                }
+              }
+            },
+            [_vm._t("default")],
+            2
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _vm.helptext
+        ? _c("select-helper-text", {
+            ref: "helperTextEl",
+            attrs: {
+              id: _vm.helpId,
+              helptextPersistent: _vm.helptextPersistent,
+              helptextValidation: _vm.helptextValidation,
+              helptext: _vm.helptext
+            }
+          })
+        : _vm._e()
+    ],
+    1
+  )
 };
+var __vue_staticRenderFns__$q = [];
+__vue_render__$q._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$q = undefined;
+  /* scoped */
+  const __vue_scope_id__$q = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$q = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$q = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$q = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$q, staticRenderFns: __vue_staticRenderFns__$q },
+    __vue_inject_styles__$q,
+    __vue_script__$q,
+    __vue_scope_id__$q,
+    __vue_is_functional_template__$q,
+    __vue_module_identifier__$q,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var select = BasePlugin({
-  mcwSelect
+  mcwSelect: __vue_component__$q,
+  mcwNotchedOutline: __vue_component__$n,
+  mcwLineRipple: __vue_component__$h,
+  mcwFloatingLabel: __vue_component__$c
 });
 
-var script$d = {
+var script$r = {
   name: 'mcw-slider',
-  mixins: [DispatchFocusMixin],
   model: {
     prop: 'value',
     event: 'change'
@@ -5720,19 +7606,20 @@ var script$d = {
       required: false
     }
   },
+  setup: function setup(props, _ref) {
+    var emit = _ref.emit,
+        $root = _ref.root;
+    var stepSize = props.step;
 
-  data() {
-    let stepSize = this.step;
-
-    if (this.discrete && !stepSize) {
+    if (props.discrete && !stepSize) {
       stepSize = 1;
     }
 
-    return {
+    var uiState = reactive({
       classes: {
         'mdc-slider': 1,
-        'mdc-slider--discrete': this.discrete,
-        'mdc-slider--display-markers': this.discrete && this.displayMarkers
+        'mdc-slider--discrete': props.discrete,
+        'mdc-slider--display-markers': props.discrete && props.displayMarkers
       },
       sliderAttrs: {},
       trackStyles: {},
@@ -5741,169 +7628,190 @@ var script$d = {
       thumbStyles: {},
       markerValue: '',
       numMarkers: 0,
-      stepSize
-    };
-  },
-
-  computed: {
-    hasMarkers() {
-      return this.discrete && this.displayMarkers;
-    }
-
-  },
-  watch: {
-    value(nv) {
-      if (this.foundation.getValue() !== Number(nv)) {
-        this.foundation.setValue(nv);
-      }
-    },
-
-    min(nv) {
-      this.foundation.setMin(Number(nv));
-    },
-
-    max(nv) {
-      this.foundation.setMax(Number(nv));
-    },
-
-    step(nv) {
-      this.foundation.setStep(Number(nv));
-    },
-
-    disabled(nv) {
-      this.foundation.setDisabled(nv);
-    }
-
-  },
-
-  mounted() {
-    const adapter = {
-      hasClass: className => this.$el.classList.contains(className),
-      addClass: className => {
-        this.$set(this.classes, className, true);
+      stepSize: stepSize,
+      root: null,
+      thumbContainer: null
+    });
+    var foundation;
+    var layoutOnEventSource;
+    var hasMarkers = computed(function () {
+      return props.discrete && props.displayMarkers;
+    });
+    var adapter = {
+      hasClass: function hasClass(className) {
+        return uiState.root.classList.contains(className);
       },
-      removeClass: className => {
-        this.$delete(this.classes, className, true);
+      addClass: function addClass(className) {
+        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
       },
-      getAttribute: name => this.$el.getAttribute(name),
-      setAttribute: (name, value) => this.$set(this.sliderAttrs, name, value),
-      removeAttribute: name => this.$delete(this.sliderAttrs, name),
-      computeBoundingRect: () => this.$el.getBoundingClientRect(),
-      getTabIndex: () => this.$el.tabIndex,
-      registerInteractionHandler: (type, handler) => {
-        this.$el.addEventListener(type, handler, applyPassive());
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$classes = uiState.classes,
+            removed = _uiState$classes[className],
+            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+
+        uiState.classes = rest;
       },
-      deregisterInteractionHandler: (type, handler) => {
-        this.$el.removeEventListener(type, handler, applyPassive());
+      getAttribute: function getAttribute(name) {
+        return uiState.root.getAttribute(name);
       },
-      registerThumbContainerInteractionHandler: (type, handler) => {
-        this.$refs.thumbContainer.addEventListener(type, handler, applyPassive());
+      setAttribute: function setAttribute(name, value) {
+        return uiState.sliderAttrs = _objectSpread2(_objectSpread2({}, uiState.sliderAttrs), {}, _defineProperty({}, name, value));
       },
-      deregisterThumbContainerInteractionHandler: (type, handler) => {
-        this.$refs.thumbContainer.removeEventListener(type, handler, applyPassive());
+      removeAttribute: function removeAttribute(name) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$sliderAttrs = uiState.sliderAttrs,
+            removed = _uiState$sliderAttrs[name],
+            rest = _objectWithoutProperties(_uiState$sliderAttrs, [name].map(_toPropertyKey));
+
+        uiState.sliderAttrs = rest;
       },
-      registerBodyInteractionHandler: (type, handler) => {
+      computeBoundingRect: function computeBoundingRect() {
+        return uiState.root.getBoundingClientRect();
+      },
+      getTabIndex: function getTabIndex() {
+        return uiState.root.tabIndex;
+      },
+      registerInteractionHandler: function registerInteractionHandler(type, handler) {
+        uiState.root.addEventListener(type, handler, applyPassive());
+      },
+      deregisterInteractionHandler: function deregisterInteractionHandler(type, handler) {
+        uiState.root.removeEventListener(type, handler, applyPassive());
+      },
+      registerThumbContainerInteractionHandler: function registerThumbContainerInteractionHandler(type, handler) {
+        uiState.thumbContainer.addEventListener(type, handler, applyPassive());
+      },
+      deregisterThumbContainerInteractionHandler: function deregisterThumbContainerInteractionHandler(type, handler) {
+        uiState.thumbContainer.removeEventListener(type, handler, applyPassive());
+      },
+      registerBodyInteractionHandler: function registerBodyInteractionHandler(type, handler) {
         document.body.addEventListener(type, handler);
       },
-      deregisterBodyInteractionHandler: (type, handler) => {
+      deregisterBodyInteractionHandler: function deregisterBodyInteractionHandler(type, handler) {
         document.body.removeEventListener(type, handler);
       },
-      registerResizeHandler: handler => {
+      registerResizeHandler: function registerResizeHandler(handler) {
         window.addEventListener('resize', handler);
       },
-      deregisterResizeHandler: handler => {
+      deregisterResizeHandler: function deregisterResizeHandler(handler) {
         window.removeEventListener('resize', handler);
       },
-      notifyInput: () => {
-        this.$emit('input', this.foundation.getValue());
+      notifyInput: function notifyInput() {
+        emit('input', foundation.getValue());
       },
-      notifyChange: () => {
-        this.$emit('change', this.foundation.getValue());
+      notifyChange: function notifyChange() {
+        emit('change', foundation.getValue());
       },
-      setThumbContainerStyleProperty: (propertyName, value) => {
-        this.$set(this.thumbStyles, propertyName, value);
+      setThumbContainerStyleProperty: function setThumbContainerStyleProperty(propertyName, value) {
+        return uiState.thumbStyles = _objectSpread2(_objectSpread2({}, uiState.thumbStyles), {}, _defineProperty({}, propertyName, value));
       },
-      setTrackStyleProperty: (propertyName, value) => {
-        this.$set(this.trackStyles, propertyName, value);
+      setTrackStyleProperty: function setTrackStyleProperty(propertyName, value) {
+        return uiState.trackStyles = _objectSpread2(_objectSpread2({}, uiState.trackStyles), {}, _defineProperty({}, propertyName, value));
       },
-      setMarkerValue: value => {
-        this.markerValue = value;
+      setMarkerValue: function setMarkerValue(value) {
+        uiState.markerValue = value;
       },
-      // appendTrackMarkers: numMarkers => {
-      //   this.numMarkers = numMarkers;
-      // },
-      // removeTrackMarkers: () => {
-      //   this.numMarkers = 0;
-      // },
-      // setLastTrackMarkersStyleProperty: (propertyName, value) => {
-      //   this.$set(this.lastTrackMarkersStyles, propertyName, value);
-      // },
-      setTrackMarkers: (step, max, min) => {
-        const stepStr = step.toLocaleString();
-        const maxStr = max.toLocaleString();
-        const minStr = min.toLocaleString(); // keep calculation in css for better rounding/subpixel behavior
+      setTrackMarkers: function setTrackMarkers(step, max, min) {
+        var stepStr = step.toLocaleString();
+        var maxStr = max.toLocaleString();
+        var minStr = min.toLocaleString(); // keep calculation in css for better rounding/subpixel behavior
 
-        const markerAmount = `((${maxStr} - ${minStr}) / ${stepStr})`;
-        const markerWidth = `2px`;
-        const markerBkgdImage = `linear-gradient(to right, currentColor ${markerWidth}, transparent 0)`;
-        const markerBkgdLayout = `0 center / calc((100% - ${markerWidth}) / ${markerAmount}) 100% repeat-x`;
-        const markerBkgdShorthand = `${markerBkgdImage} ${markerBkgdLayout}`;
-        this.$set(this.markerBkgdShorthand, 'background', markerBkgdShorthand);
+        var markerAmount = "((".concat(maxStr, " - ").concat(minStr, ") / ").concat(stepStr, ")");
+        var markerWidth = "2px";
+        var markerBkgdImage = "linear-gradient(to right, currentColor ".concat(markerWidth, ", transparent 0)");
+        var markerBkgdLayout = "0 center / calc((100% - ".concat(markerWidth, ") / ").concat(markerAmount, ") 100% repeat-x");
+        var markerBkgdShorthand = "".concat(markerBkgdImage, " ").concat(markerBkgdLayout);
+        uiState.markerBkgdShorthand = _objectSpread2(_objectSpread2({}, uiState.markerBkgdShorthand), {}, _defineProperty({}, 'background', markerBkgdShorthand));
       },
-      isRTL: () => getComputedStyle(this.$el).direction === 'rtl'
+      isRTL: function isRTL() {
+        return getComputedStyle(uiState.root).direction === 'rtl';
+      }
     };
-    this.foundation = new MDCSliderFoundation(adapter);
-    this.foundation.init();
-    this.foundation.setDisabled(this.disabled);
 
-    if (Number(this.min) <= this.foundation.getMax()) {
-      this.foundation.setMin(Number(this.min));
-      this.foundation.setMax(Number(this.max));
-    } else {
-      this.foundation.setMax(Number(this.max));
-      this.foundation.setMin(Number(this.min));
-    }
+    var layout = function layout() {
+      $root.$nextTick(function () {
+        var _foundation;
 
-    this.foundation.setStep(Number(this.stepSize));
-    this.foundation.setValue(Number(this.value));
-
-    if (this.hasMarkers) {
-      this.foundation.setupTrackMarker();
-    }
-
-    this.$root.$on('vma:layout', this.layout);
-
-    if (this.layoutOn) {
-      this.layoutOnEventSource = this.layoutOnSource || this.$root;
-      this.layoutOnEventSource.$on(this.layoutOn, this.layout);
-    }
-  },
-
-  beforeDestroy() {
-    this.$root.$off('vma:layout', this.layout);
-
-    if (this.layoutOnEventSource) {
-      this.layoutOnEventSource.$off(this.layoutOn, this.layout);
-    }
-
-    this.foundation.destroy();
-  },
-
-  methods: {
-    layout() {
-      this.$nextTick(() => {
-        this.foundation && this.foundation.layout();
+        (_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.layout();
       });
-    }
+    };
 
+    watch(function () {
+      return props.value;
+    }, function (nv) {
+      if (foundation.getValue() !== Number(nv)) {
+        foundation.setValue(nv);
+      }
+    });
+    watch(function () {
+      return props.min;
+    }, function (nv) {
+      foundation.setMin(Number(nv));
+    });
+    watch(function () {
+      return props.max;
+    }, function (nv) {
+      foundation.setMax(Number(nv));
+    });
+    watch(function () {
+      return props.step;
+    }, function (nv) {
+      foundation.setStep(Number(nv));
+    });
+    watch(function () {
+      return props.disabled;
+    }, function (nv) {
+      foundation.setDisabled(nv);
+    });
+    onMounted(function () {
+      foundation = new MDCSliderFoundation(adapter);
+      foundation.init();
+      foundation.setDisabled(props.disabled);
+
+      if (Number(props.min) <= foundation.getMax()) {
+        foundation.setMin(Number(props.min));
+        foundation.setMax(Number(props.max));
+      } else {
+        foundation.setMax(Number(props.max));
+        foundation.setMin(Number(props.min));
+      }
+
+      foundation.setStep(Number(uiState.stepSize));
+      foundation.setValue(Number(props.value));
+
+      if (hasMarkers.value) {
+        foundation.setupTrackMarker();
+      }
+
+      $root.$on('vma:layout', layout);
+
+      if (props.layoutOn) {
+        var _props$layoutOnSource;
+
+        layoutOnEventSource = (_props$layoutOnSource = props.layoutOnSource) !== null && _props$layoutOnSource !== void 0 ? _props$layoutOnSource : $root;
+        layoutOnEventSource.$on(props.layoutOn, layout);
+      }
+    });
+    onBeforeUnmount(function () {
+      $root.$off('vma:layout', layout);
+
+      if (layoutOnEventSource) {
+        layoutOnEventSource.$off(props.layoutOn, layout);
+      }
+
+      foundation.destroy();
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      hasMarkers: hasMarkers
+    });
   }
 };
 
 /* script */
-const __vue_script__$d = script$d;
+const __vue_script__$r = script$r;
 
 /* template */
-var __vue_render__$d = function() {
+var __vue_render__$r = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -5911,6 +7819,7 @@ var __vue_render__$d = function() {
     "div",
     _vm._b(
       {
+        ref: "root",
         class: _vm.classes,
         attrs: { tabindex: "0", role: "slider", "aria-label": "Select value" }
       },
@@ -5962,17 +7871,17 @@ var __vue_render__$d = function() {
     ]
   )
 };
-var __vue_staticRenderFns__$d = [];
-__vue_render__$d._withStripped = true;
+var __vue_staticRenderFns__$r = [];
+__vue_render__$r._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$d = undefined;
+  const __vue_inject_styles__$r = undefined;
   /* scoped */
-  const __vue_scope_id__$d = undefined;
+  const __vue_scope_id__$r = undefined;
   /* module identifier */
-  const __vue_module_identifier__$d = undefined;
+  const __vue_module_identifier__$r = undefined;
   /* functional template */
-  const __vue_is_functional_template__$d = false;
+  const __vue_is_functional_template__$r = false;
   /* style inject */
   
   /* style inject SSR */
@@ -5981,13 +7890,13 @@ __vue_render__$d._withStripped = true;
   
 
   
-  const __vue_component__$d = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$d, staticRenderFns: __vue_staticRenderFns__$d },
-    __vue_inject_styles__$d,
-    __vue_script__$d,
-    __vue_scope_id__$d,
-    __vue_is_functional_template__$d,
-    __vue_module_identifier__$d,
+  const __vue_component__$r = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$r, staticRenderFns: __vue_staticRenderFns__$r },
+    __vue_inject_styles__$r,
+    __vue_script__$r,
+    __vue_scope_id__$r,
+    __vue_is_functional_template__$r,
+    __vue_module_identifier__$r,
     false,
     undefined,
     undefined,
@@ -5995,16 +7904,18 @@ __vue_render__$d._withStripped = true;
   );
 
 var slider = BasePlugin({
-  mcwSlider: __vue_component__$d
+  mcwSlider: __vue_component__$r
 });
 
-const noop = () => {};
+var noop = function noop() {};
 
-var mcwSnackbarQueue = {
+var script$s = {
   name: 'mcw-snackbar-queue',
-
-  data() {
-    return {
+  setup: function setup(props, _ref) {
+    var emit = _ref.emit,
+        $listeners = _ref.$listeners,
+        $root = _ref.root;
+    var uiState = reactive({
       open: false,
       queue: [],
       snack: {
@@ -6016,89 +7927,130 @@ var mcwSnackbarQueue = {
         leading: false,
         stacked: false
       }
-    };
-  },
-
-  render(createElement) {
-    return createElement('mcw-snackbar', {
-      props: {
-        open: this.open,
-        ...this.snack
-      },
-      on: this.listeners
     });
-  },
+    var actionHandler_;
 
-  methods: {
-    handleSnack({
-      timeoutMs = 5000,
-      closeOnEscape,
-      message = '',
-      actionText = '',
-      dismissAction = true,
-      stacked,
-      leading,
-      actionHandler = noop
-    }) {
-      this.queue.push(() => {
-        this.snack = {
-          timeoutMs,
-          closeOnEscape,
-          message,
-          actionText,
-          actionHandler,
-          dismissAction,
-          stacked,
-          leading
+    var handleSnack = function handleSnack(_ref2) {
+      var _ref2$timeoutMs = _ref2.timeoutMs,
+          timeoutMs = _ref2$timeoutMs === void 0 ? 5000 : _ref2$timeoutMs,
+          closeOnEscape = _ref2.closeOnEscape,
+          _ref2$message = _ref2.message,
+          message = _ref2$message === void 0 ? '' : _ref2$message,
+          _ref2$actionText = _ref2.actionText,
+          actionText = _ref2$actionText === void 0 ? '' : _ref2$actionText,
+          _ref2$dismissAction = _ref2.dismissAction,
+          dismissAction = _ref2$dismissAction === void 0 ? true : _ref2$dismissAction,
+          stacked = _ref2.stacked,
+          leading = _ref2.leading,
+          _ref2$actionHandler = _ref2.actionHandler,
+          actionHandler = _ref2$actionHandler === void 0 ? noop : _ref2$actionHandler;
+      uiState.queue.push(function () {
+        uiState.snack = {
+          timeoutMs: timeoutMs,
+          closeOnEscape: closeOnEscape,
+          message: message,
+          actionText: actionText,
+          actionHandler: actionHandler,
+          dismissAction: dismissAction,
+          stacked: stacked,
+          leading: leading
         };
-        this.actionHandler = actionHandler;
-        this.open = true;
+        actionHandler_ = actionHandler;
+        uiState.open = true;
       });
 
-      if (this.queue.length === 1) {
-        this.queue[0]();
+      if (uiState.queue.length === 1) {
+        uiState.queue[0]();
       }
-    },
+    };
 
-    handleClosed() {
-      this.open = false;
-      this.queue.shift();
+    var handleClosed = function handleClosed() {
+      uiState.open = false;
+      uiState.queue.shift();
 
-      if (this.queue.length > 0) {
-        this.$nextTick(() => this.queue[0]());
+      if (uiState.queue.length > 0) {
+        $root.$nextTick(function () {
+          return uiState.queue[0]();
+        });
       }
-    }
+    };
 
-  },
-  computed: {
-    listeners() {
-      return { ...this.$listeners,
-        'MDCSnackbar:closed': ({
-          reason
-        }) => {
-          if (this.actionHandler && reason === 'action') {
-            this.actionHandler({
-              reason
+    var listeners = computed(function () {
+      return _objectSpread2(_objectSpread2({}, $listeners), {}, {
+        'MDCSnackbar:closed': function MDCSnackbarClosed(_ref3) {
+          var reason = _ref3.reason;
+
+          if (actionHandler_ && reason === 'action') {
+            actionHandler_({
+              reason: reason
             });
           }
 
-          this.handleClosed();
-          this.$emit('closed', {
-            reason
+          handleClosed();
+          emit('closed', {
+            reason: reason
           });
         }
-      };
-    }
-
+      });
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      handleSnack: handleSnack,
+      listeners: listeners
+    });
   }
 };
 
-/* eslint-disable quote-props */
-const {
-  strings: strings$3,
-  numbers
-} = MDCSnackbarFoundation;
-var mcwSnackbar = {
+/* script */
+const __vue_script__$s = script$s;
+
+/* template */
+var __vue_render__$s = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "mcw-snackbar",
+    _vm._g(
+      _vm._b({ attrs: { open: _vm.open } }, "mcw-snackbar", _vm.snack, false),
+      _vm.listeners
+    )
+  )
+};
+var __vue_staticRenderFns__$s = [];
+__vue_render__$s._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$s = undefined;
+  /* scoped */
+  const __vue_scope_id__$s = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$s = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$s = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$s = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$s, staticRenderFns: __vue_staticRenderFns__$s },
+    __vue_inject_styles__$s,
+    __vue_script__$s,
+    __vue_scope_id__$s,
+    __vue_is_functional_template__$s,
+    __vue_module_identifier__$s,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var strings$9 = MDCSnackbarFoundation.strings,
+    numbers = MDCSnackbarFoundation.numbers;
+var script$t = {
   name: 'mcw-snackbar',
   model: {
     prop: 'open',
@@ -6121,127 +8073,35 @@ var mcwSnackbar = {
     },
     reason: String
   },
-
-  data() {
-    return {
+  setup: function setup(props, _ref) {
+    var emit = _ref.emit;
+    var uiState = reactive({
       classes: {},
       hidden: false,
       actionHidden: false,
-      showMessage: true
-    };
-  },
-
-  watch: {
-    open: 'onOpen_',
-    timeoutMs: 'onTimeoutMs_',
-    closeOnEscape: 'onCloseOnEscape_'
-  },
-
-  mounted() {
-    window.addEventListener('keydown', this.handleKeydownEvent);
-    const adapter = {
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      announce: () => this.announce(this.$refs.labelEl),
-      notifyOpening: () => this.$emit(strings$3.OPENING_EVENT, {}),
-      notifyOpened: () => {
-        this.$emit(strings$3.OPENED_EVENT, {});
-        this.$emit('change', true);
-        this.$emit('show', {});
-      },
-      notifyClosing: reason => {
-        this.$emit(strings$3.CLOSING_EVENT, reason ? {
-          reason
-        } : {});
-        this.$emit('update:reason', reason);
-      },
-      notifyClosed: reason => {
-        this.$emit(strings$3.CLOSED_EVENT, reason ? {
-          reason
-        } : {});
-        this.$emit('change', false);
-        this.$emit('hide');
-      }
-    };
-    const {
-      closeOnEscape,
-      timeoutMs
-    } = this;
-    this.foundation = new MDCSnackbarFoundation(adapter);
-    this.foundation.init();
-
-    if (timeoutMs !== void 0) {
-      this.foundation.setTimeoutMs(timeoutMs);
-    }
-
-    this.foundation.setCloseOnEscape(closeOnEscape);
-  },
-
-  computed: {
-    rootClasses() {
-      return {
+      showMessage: true,
+      labelEl: null
+    });
+    var foundation;
+    var rootClasses = computed(function () {
+      return _objectSpread2({
         'mdc-snackbar': 1,
-        'mdc-snackbar--leading': this.leading,
-        'mdc-snackbar--stacked': this.stacked
-      };
-    },
+        'mdc-snackbar--leading': props.leading,
+        'mdc-snackbar--stacked': props.stacked
+      }, uiState.classes);
+    });
+    var showDismissAction = computed(function () {
+      return typeof props.dismissAction === 'string' ? props.dismissAction != 'false' : props.dismissAction;
+    });
 
-    showDismissAction() {
-      return typeof this.dismissAction === 'string' ? this.dismissAction != 'false' : this.dismissAction;
-    }
+    var handleKeydownEvent = function handleKeydownEvent(evt) {
+      return foundation.handleKeyDown(evt);
+    };
 
-  },
-
-  beforeDestroy() {
-    window.removeEventListener('keydown', this.handleKeydownEvent);
-    this.foundation.destroy();
-  },
-
-  methods: {
-    onTimeoutMs_(value) {
-      if (value !== void 0) {
-        this.foundation.setTimeoutMs(value);
-      }
-    },
-
-    onCloseOnEscape_(nv) {
-      this.foundation.setCloseOnEscape(nv);
-    },
-
-    onOpen_(value) {
-      if (value) {
-        this.foundation.open();
-      } else {
-        const {
-          reason
-        } = this;
-        this.foundation.close(reason ? reason : '');
-      }
-    },
-
-    surfaceClickHandler(evt) {
-      if (this.isActionButton_(evt.target)) {
-        this.foundation.handleActionButtonClick(evt);
-      } else if (this.isActionIcon_(evt.target)) {
-        this.foundation.handleActionIconClick(evt);
-      }
-    },
-
-    handleKeydownEvent(evt) {
-      this.foundation.handleKeyDown(evt);
-    },
-
-    isActionButton_(target) {
-      return Boolean(closest(target, strings$3.ACTION_SELECTOR));
-    },
-
-    isActionIcon_(target) {
-      return Boolean(closest(target, strings$3.DISMISS_SELECTOR));
-    },
-
-    announce(ariaEl, labelEl = ariaEl) {
-      const priority = ariaEl.getAttribute('aria-live');
-      const text = this.message;
+    var _announce = function announce(ariaEl) {
+      var labelEl = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ariaEl;
+      var priority = ariaEl.getAttribute('aria-live');
+      var text = props.message;
 
       if (!text) {
         return;
@@ -6277,107 +8137,241 @@ var mcwSnackbar = {
       //       - IE 11
       //   * ChromeVox 53
 
-      this.showMessage = false; // Prevent visual jank by temporarily displaying the label text in the ::before pseudo-element.
+      uiState.showMessage = false; // Prevent visual jank by temporarily displaying the label text in the ::before pseudo-element.
       // CSS generated content is normally announced by screen readers
       // (except in IE 11; see https://tink.uk/accessibility-support-for-css-generated-content/);
       // however, `aria-live` is turned off, so this DOM update will be ignored by screen readers.
 
-      labelEl.setAttribute(strings$3.ARIA_LIVE_LABEL_TEXT_ATTR, this.message);
-      setTimeout(() => {
+      labelEl.setAttribute(strings$9.ARIA_LIVE_LABEL_TEXT_ATTR, props.message);
+      setTimeout(function () {
         // Allow screen readers to announce changes to the DOM again.
         ariaEl.setAttribute('aria-live', priority); // Remove the message from the ::before pseudo-element.
 
-        labelEl.removeAttribute(strings$3.ARIA_LIVE_LABEL_TEXT_ATTR); // Restore the original label text, which will be announced by screen readers.
+        labelEl.removeAttribute(strings$9.ARIA_LIVE_LABEL_TEXT_ATTR); // Restore the original label text, which will be announced by screen readers.
 
-        this.showMessage = true;
+        uiState.showMessage = true;
       }, numbers.ARIA_LIVE_DELAY_MS);
-    }
+    };
 
-  },
+    var adapter = {
+      addClass: function addClass(className) {
+        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+      },
+      announce: function announce() {
+        return _announce(uiState.labelEl);
+      },
+      notifyClosed: function notifyClosed(reason) {
+        emit(strings$9.CLOSED_EVENT, reason ? {
+          reason: reason
+        } : {});
+        emit('change', false);
+        emit('hide');
+      },
+      notifyClosing: function notifyClosing(reason) {
+        emit(strings$9.CLOSING_EVENT, reason ? {
+          reason: reason
+        } : {});
+        emit('update:reason', reason);
+      },
+      notifyOpened: function notifyOpened() {
+        emit(strings$9.OPENED_EVENT, {});
+        emit('change', true);
+        emit('show', {});
+      },
+      notifyOpening: function notifyOpening() {
+        return emit(strings$9.OPENING_EVENT, {});
+      },
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$classes = uiState.classes,
+            removed = _uiState$classes[className],
+            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
-  render(createElement) {
-    const surfaceNodes = [createElement('div', {
-      class: {
-        'mdc-snackbar__label': 1
-      },
-      attrs: {
-        role: 'status',
-        'aria-live': 'polite'
-      },
-      ref: 'labelEl'
-    }, [this.showMessage ? this.message : createElement('span', {
-      style: {
-        display: 'inline-block',
-        width: 0,
-        height: '1px'
-      },
-      domProps: {
-        innerHTML: '&nbsp;'
+        uiState.classes = rest;
       }
-    })])];
+    };
 
-    if (this.showDismissAction || this.actionText) {
-      const buttonNodes = [];
+    var surfaceClickHandler = function surfaceClickHandler(evt) {
+      if (isActionButton_(evt.target)) {
+        foundation.handleActionButtonClick(evt);
+      } else if (isActionIcon_(evt.target)) {
+        foundation.handleActionIconClick(evt);
+      }
+    };
 
-      if (this.actionText) {
-        buttonNodes.push(createElement('button', {
-          class: {
-            'mdc-button': 1,
-            'mdc-snackbar__action': 1
-          },
-          attrs: {
-            type: 'button'
-          },
-          ref: 'actionEl',
-          on: this.$listeners
-        }, this.actionText));
+    watch(function () {
+      return props.open;
+    }, function (nv) {
+      if (nv) {
+        foundation.open();
+      } else {
+        foundation.close(props.reason ? props.reason : '');
+      }
+    });
+    watch(function () {
+      return props.timeoutMs;
+    }, function (nv) {
+      if (nv !== void 0) {
+        foundation.setTimeoutMs(nv);
+      }
+    });
+    watch(function () {
+      return props.closeOnEscape;
+    }, function (nv) {
+      return foundation.setCloseOnEscape(nv);
+    });
+    onMounted(function () {
+      window.addEventListener('keydown', handleKeydownEvent);
+      foundation = new MDCSnackbarFoundation(adapter);
+      foundation.init();
+
+      if (props.timeoutMs !== void 0) {
+        foundation.setTimeoutMs(props.timeoutMs);
       }
 
-      if (this.showDismissAction) {
-        buttonNodes.push(createElement('button', {
-          class: {
-            'mdc-icon-button': 1,
-            'mdc-snackbar__dismiss': 1,
-            'material-icons': 1
-          },
-          attrs: {
-            title: 'Dismiss'
-          }
-        }, ['close']));
-      }
-
-      surfaceNodes.push(createElement('div', {
-        class: {
-          'mdc-snackbar__actions': 1
-        }
-      }, buttonNodes));
-    }
-
-    return createElement('div', {
-      class: { ...this.rootClasses,
-        ...this.classes
-      },
-      ref: 'root'
-    }, [createElement('div', {
-      class: {
-        'mdc-snackbar__surface': 1
-      },
-      on: {
-        click: evt => this.surfaceClickHandler(evt)
-      }
-    }, surfaceNodes)]);
+      foundation.setCloseOnEscape(props.closeOnEscape);
+    });
+    onBeforeUnmount(function () {
+      window.removeEventListener('keydown', handleKeydownEvent);
+      foundation.destroy();
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      rootClasses: rootClasses,
+      showDismissAction: showDismissAction,
+      surfaceClickHandler: surfaceClickHandler
+    });
   }
+}; // ===
+// Private functions
+// ===
 
+function isActionButton_(target) {
+  return Boolean(closest(target, strings$9.ACTION_SELECTOR));
+}
+
+function isActionIcon_(target) {
+  return Boolean(closest(target, strings$9.DISMISS_SELECTOR));
+}
+
+/* script */
+const __vue_script__$t = script$t;
+
+/* template */
+var __vue_render__$t = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { class: _vm.rootClasses }, [
+    _c(
+      "div",
+      {
+        staticClass: "mdc-snackbar__surface",
+        on: { click: _vm.surfaceClickHandler }
+      },
+      [
+        _c(
+          "div",
+          {
+            ref: "labelEl",
+            staticClass: "mdc-snackbar__label",
+            attrs: { role: "status", "aria-live": "polite" }
+          },
+          [
+            _vm.showMessage
+              ? [_vm._v(_vm._s(_vm.message))]
+              : _c(
+                  "span",
+                  {
+                    staticStyle: {
+                      display: "inline-block",
+                      width: "0",
+                      height: "'1px'"
+                    }
+                  },
+                  [_vm._v(" ")]
+                )
+          ],
+          2
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "mdc-snackbar__actions" }, [
+          _vm.actionText
+            ? _c(
+                "button",
+                _vm._g(
+                  {
+                    ref: "actionEl",
+                    staticClass: "mdc-button mdc-snackbar__action",
+                    attrs: { type: "button" }
+                  },
+                  _vm.$listeners
+                ),
+                [
+                  _c("div", { staticClass: "mdc-button__ripple" }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "mdc-button__label" }, [
+                    _vm._v(_vm._s(_vm.actionText))
+                  ])
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.showDismissAction
+            ? _c(
+                "button",
+                {
+                  staticClass:
+                    "mdc-icon-button mdc-snackbar__dismiss material-icons",
+                  attrs: { type: "button", title: "Dismiss" }
+                },
+                [_vm._v("\n        close\n      ")]
+              )
+            : _vm._e()
+        ])
+      ]
+    )
+  ])
 };
+var __vue_staticRenderFns__$t = [];
+__vue_render__$t._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$t = undefined;
+  /* scoped */
+  const __vue_scope_id__$t = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$t = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$t = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$t = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$t, staticRenderFns: __vue_staticRenderFns__$t },
+    __vue_inject_styles__$t,
+    __vue_script__$t,
+    __vue_scope_id__$t,
+    __vue_is_functional_template__$t,
+    __vue_module_identifier__$t,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var snackbar = BasePlugin({
-  mcwSnackbar,
-  mcwSnackbarQueue
+  mcwSnackbar: __vue_component__$t,
+  mcwSnackbarQueue: __vue_component__$s
 });
 
-var script$e = {
+var switchId_ = 0;
+var script$u = {
   name: 'mcw-switch',
-  mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
   model: {
     prop: 'checked',
     event: 'change'
@@ -6388,74 +8382,104 @@ var script$e = {
     value: String,
     label: String,
     alignEnd: Boolean,
-    name: String
+    name: String,
+    id: String
   },
+  setup: function setup(props, _ref) {
+    var _props$id;
 
-  data() {
-    return {
+    var slots = _ref.slots,
+        emit = _ref.emit;
+    var uiState = reactive({
       classes: {
         'mdc-switch': 1
       },
-      styles: {},
-      nativeControlChecked: this.checked,
-      nativeControlDisabled: this.disabled,
-      nativeAttrs: {}
-    };
-  },
-
-  computed: {
-    hasLabel() {
-      return this.label || this.$slots.default;
-    }
-
-  },
-  watch: {
-    checked(value) {
-      this.foundation && this.foundation.setChecked(value);
-    },
-
-    disabled(value) {
-      this.foundation && this.foundation.setDisabled(value);
-    }
-
-  },
-
-  mounted() {
-    this.foundation = new MDCSwitchFoundation({
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      setNativeControlChecked: checked => this.nativeControlChecked = checked,
-      setNativeControlDisabled: disabled => this.nativeControlDisabled = disabled,
-      setNativeControlAttr: (attr, value) => {
-        this.nativeAttrs[attr] = value;
-      }
+      nativeControlChecked: props.checked,
+      nativeControlDisabled: props.disabled,
+      nativeAttrs: {},
+      root: null
     });
-    this.foundation.init();
-    this.foundation.setChecked(this.checked);
-    this.foundation.setDisabled(this.disabled);
-    this.ripple = new RippleBase(this);
-    this.ripple.init();
-  },
 
-  beforeDestroy() {
-    this.foundation && this.foundation.destroy();
-    this.ripple && this.ripple.destroy();
-  },
+    var _useRipplePlugin = useRipplePlugin$1(toRef(uiState, 'root')),
+        rippleClasses = _useRipplePlugin.classes,
+        styles = _useRipplePlugin.styles;
 
-  methods: {
-    onChanged(event) {
-      this.foundation && this.foundation.handleChange(event);
-      this.$emit('change', event.target.checked);
-    }
+    var foundation;
+    var switchId = (_props$id = props.id) !== null && _props$id !== void 0 ? _props$id : "__mcw-switch-".concat(switchId_++);
+    var classes = computed(function () {
+      return _objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes);
+    });
+    var hasLabel = computed(function () {
+      return props.label || slots.default;
+    });
 
+    var onChanged = function onChanged(event) {
+      var _foundation;
+
+      (_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.handleChange(event);
+      emit('change', event.target.checked);
+    };
+
+    var adapter = {
+      addClass: function addClass(className) {
+        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+      },
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$classes = uiState.classes,
+            removed = _uiState$classes[className],
+            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+
+        uiState.classes = rest;
+      },
+      setNativeControlChecked: function setNativeControlChecked(checked) {
+        return uiState.nativeControlChecked = checked;
+      },
+      setNativeControlDisabled: function setNativeControlDisabled(disabled) {
+        return uiState.nativeControlDisabled = disabled;
+      },
+      setNativeControlAttr: function setNativeControlAttr(attr, value) {
+        uiState.nativeAttrs[attr] = value;
+      }
+    };
+    watch(function () {
+      return props.checked;
+    }, function (nv, ov) {
+      var _foundation2;
+
+      nv != ov && ((_foundation2 = foundation) === null || _foundation2 === void 0 ? void 0 : _foundation2.setChecked(nv));
+    });
+    watch(function () {
+      return props.disabled;
+    }, function (nv, ov) {
+      var _foundation3;
+
+      nv != ov && ((_foundation3 = foundation) === null || _foundation3 === void 0 ? void 0 : _foundation3.setDisabled(nv));
+    });
+    onMounted(function () {
+      foundation = new MDCSwitchFoundation(adapter);
+      foundation.init();
+      foundation.setChecked(props.checked);
+      foundation.setDisabled(props.disabled);
+    });
+    onBeforeUnmount(function () {
+      foundation.destroy();
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      classes: classes,
+      hasLabel: hasLabel,
+      onChanged: onChanged,
+      styles: styles,
+      switchId: switchId
+    });
   }
 };
 
 /* script */
-const __vue_script__$e = script$e;
+const __vue_script__$u = script$u;
 
 /* template */
-var __vue_render__$e = function() {
+var __vue_render__$u = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
@@ -6471,7 +8495,12 @@ var __vue_render__$e = function() {
     [
       _c(
         "div",
-        { staticClass: "mdc-switch", class: _vm.classes, style: _vm.styles },
+        {
+          ref: "root",
+          staticClass: "mdc-switch",
+          class: _vm.classes,
+          style: _vm.styles
+        },
         [
           _c("div", { staticClass: "mdc-switch__track" }),
           _vm._v(" "),
@@ -6482,11 +8511,10 @@ var __vue_render__$e = function() {
               "input",
               _vm._b(
                 {
-                  ref: "control",
                   staticClass: "mdc-switch__native-control",
                   attrs: {
                     name: _vm.name,
-                    id: _vm.vma_uid_,
+                    id: _vm.switchId,
                     type: "checkbox",
                     role: "switch",
                     disabled: _vm.nativeControlDisabled
@@ -6509,7 +8537,7 @@ var __vue_render__$e = function() {
       _vm.hasLabel
         ? _c(
             "label",
-            { staticClass: "mdc-switch-label", attrs: { for: _vm.vma_uid_ } },
+            { staticClass: "mdc-switch-label", attrs: { for: _vm.switchId } },
             [_vm._t("default", [_vm._v(_vm._s(_vm.label))])],
             2
           )
@@ -6517,17 +8545,17 @@ var __vue_render__$e = function() {
     ]
   )
 };
-var __vue_staticRenderFns__$e = [];
-__vue_render__$e._withStripped = true;
+var __vue_staticRenderFns__$u = [];
+__vue_render__$u._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$e = undefined;
+  const __vue_inject_styles__$u = undefined;
   /* scoped */
-  const __vue_scope_id__$e = undefined;
+  const __vue_scope_id__$u = undefined;
   /* module identifier */
-  const __vue_module_identifier__$e = undefined;
+  const __vue_module_identifier__$u = undefined;
   /* functional template */
-  const __vue_is_functional_template__$e = false;
+  const __vue_is_functional_template__$u = false;
   /* style inject */
   
   /* style inject SSR */
@@ -6536,13 +8564,13 @@ __vue_render__$e._withStripped = true;
   
 
   
-  const __vue_component__$e = /*#__PURE__*/normalizeComponent(
-    { render: __vue_render__$e, staticRenderFns: __vue_staticRenderFns__$e },
-    __vue_inject_styles__$e,
-    __vue_script__$e,
-    __vue_scope_id__$e,
-    __vue_is_functional_template__$e,
-    __vue_module_identifier__$e,
+  const __vue_component__$u = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$u, staticRenderFns: __vue_staticRenderFns__$u },
+    __vue_inject_styles__$u,
+    __vue_script__$u,
+    __vue_scope_id__$u,
+    __vue_is_functional_template__$u,
+    __vue_module_identifier__$u,
     false,
     undefined,
     undefined,
@@ -6550,249 +8578,363 @@ __vue_render__$e._withStripped = true;
   );
 
 var switchControl = BasePlugin({
-  mcwSwitch: __vue_component__$e
+  mcwSwitch: __vue_component__$u
 });
 
-var mcwTabBar = {
+var strings$a = MDCTabBarFoundation.strings;
+var script$v = {
   name: 'mcw-tab-bar',
-
-  data() {
-    return {
-      classes: {
-        'mdc-tab-bar': 1
-      },
-      indicatorStyles: {},
-      tabList: []
-    };
+  model: {
+    prop: 'value',
+    event: 'change'
   },
-
   props: {
-    activeTabIndex: [Number, String]
+    fade: Boolean,
+    stacked: Boolean,
+    spanContent: Boolean,
+    value: Number
   },
+  setup: function setup(props, _ref) {
+    var emit = _ref.emit,
+        $listeners = _ref.listeners;
+    var scroller = ref(null);
+    var root = ref(null);
+    var tabList = ref([]);
+    provide('mcwTabList', {
+      fade: props.fade,
+      stacked: props.stacked,
+      spanContent: props.spanContent,
+      tabList: tabList
+    });
+    var listeners = computed(function () {
+      var _objectSpread2$1;
 
-  provide() {
-    return {
-      mcwTabBar: this
+      return _objectSpread2(_objectSpread2({}, $listeners), {}, (_objectSpread2$1 = {}, _defineProperty(_objectSpread2$1, MDCTabFoundation.strings.INTERACTED_EVENT, function (evt) {
+        return foundation.handleTabInteraction(evt);
+      }), _defineProperty(_objectSpread2$1, "keydown", function keydown(evt) {
+        return foundation.handleKeyDown(evt);
+      }), _objectSpread2$1));
+    });
+    var foundation;
+
+    var getTabElements_ = function getTabElements_() {
+      return [].slice.call(root.value.querySelectorAll(strings$a.TAB_SELECTOR));
     };
-  },
 
-  mounted() {
-    this.foundation = new MDCTabBarFoundation({
-      scrollTo: scrollX => this.$refs.scroller.scrollTo(scrollX),
-      incrementScroll: scrollXIncrement => this.$refs.scroller.incrementScroll(scrollXIncrement),
-      getScrollPosition: () => this.$refs.scroller.getScrollPosition(),
-      getScrollContentWidth: () => this.$refs.scroller.getScrollContentWidth(),
-      getOffsetWidth: () => this.$el.offsetWidth,
-      isRTL: () => window.getComputedStyle(this.$el).getPropertyValue('direction') === 'rtl',
-      setActiveTab: index => {
-        this.foundation.activateTab(index);
+    var activateTab = function activateTab(index) {
+      return foundation.activateTab(index);
+    };
+
+    var adapter = {
+      scrollTo: function scrollTo(scrollX) {
+        return scroller.value.scrollTo(scrollX);
       },
-      activateTabAtIndex: (index, clientRect) => {
-        this.tabList[index].activate(clientRect);
+      incrementScroll: function incrementScroll(scrollXIncrement) {
+        return scroller.value.incrementScroll(scrollXIncrement);
       },
-      deactivateTabAtIndex: index => {
-        this.tabList[index] && this.tabList[index].deactivate();
+      getScrollPosition: function getScrollPosition() {
+        return scroller.value.getScrollPosition();
       },
-      focusTabAtIndex: index => this.tabList[index].focus(),
-      getTabIndicatorClientRectAtIndex: index => {
-        return this.tabList[index] && this.tabList[index].computeIndicatorClientRect();
+      getScrollContentWidth: function getScrollContentWidth() {
+        return scroller.value.getScrollContentWidth();
       },
-      getTabDimensionsAtIndex: index => {
-        return this.tabList[index].computeDimensions();
+      getOffsetWidth: function getOffsetWidth() {
+        return root.value.offsetWidth;
       },
-      getPreviousActiveTabIndex: () => {
-        for (let i = 0; i < this.tabList.length; i++) {
-          if (this.tabList[i].isActive()) {
+      isRTL: function isRTL() {
+        return window.getComputedStyle(root.value).getPropertyValue('direction') === 'rtl';
+      },
+      setActiveTab: function setActiveTab(index) {
+        foundation.activateTab(index);
+      },
+      activateTabAtIndex: function activateTabAtIndex(index, clientRect) {
+        tabList.value[index].activate(clientRect);
+      },
+      deactivateTabAtIndex: function deactivateTabAtIndex(index) {
+        var _tabList$value$index;
+
+        return (_tabList$value$index = tabList.value[index]) === null || _tabList$value$index === void 0 ? void 0 : _tabList$value$index.deactivate();
+      },
+      focusTabAtIndex: function focusTabAtIndex(index) {
+        return tabList.value[index].focus();
+      },
+      getTabIndicatorClientRectAtIndex: function getTabIndicatorClientRectAtIndex(index) {
+        var _tabList$value$index2;
+
+        return (_tabList$value$index2 = tabList.value[index]) === null || _tabList$value$index2 === void 0 ? void 0 : _tabList$value$index2.computeIndicatorClientRect();
+      },
+      getTabDimensionsAtIndex: function getTabDimensionsAtIndex(index) {
+        return tabList.value[index].computeDimensions();
+      },
+      getPreviousActiveTabIndex: function getPreviousActiveTabIndex() {
+        for (var i = 0; i < tabList.value.length; i++) {
+          if (tabList.value[i].isActive()) {
             return i;
           }
         }
 
         return -1;
       },
-      getFocusedTabIndex: () => {
-        const tabElements = this.getTabElements_();
-        const activeElement = document.activeElement;
+      getFocusedTabIndex: function getFocusedTabIndex() {
+        var tabElements = getTabElements_();
+        var activeElement = document.activeElement;
         return tabElements.indexOf(activeElement);
       },
-      getIndexOfTabById: id => {
-        for (let i = 0; i < this.tabList.length; i++) {
-          if (this.tabList[i].id === id) {
+      getIndexOfTabById: function getIndexOfTabById(id) {
+        for (var i = 0; i < tabList.value.length; i++) {
+          if (tabList.value[i].id === id) {
             return i;
           }
         }
 
         return -1;
       },
-      getTabListLength: () => this.tabList.length,
-      notifyTabActivated: index => {
-        emitCustomEvent(this.$el, MDCTabBarFoundation.strings.TAB_ACTIVATED_EVENT, {
-          index
+      getTabListLength: function getTabListLength() {
+        return tabList.value.length;
+      },
+      notifyTabActivated: function notifyTabActivated(index) {
+        emitCustomEvent(root.value, strings$a.TAB_ACTIVATED_EVENT, {
+          index: index
         }, true);
-        this.$emit('change', index);
+        emit('change', Number(index));
       }
+    };
+    onMounted(function () {
+      foundation = foundation = new MDCTabBarFoundation(adapter);
+      foundation.init(); // ensure active tab
+
+      props.value !== void 0;
+      foundation.activateTab(Number(props.value) || 0);
+
+      for (var i = 0; i < tabList.value.length; i++) {
+        if (tabList.value[i].active) {
+          foundation.scrollIntoView(i);
+          break;
+        }
+      }
+
+      watchEffect(function () {
+        foundation.activateTab(Number(props.value));
+      });
     });
-    this.foundation.init(); // ensure active tab
-
-    this.foundation.activateTab(this.activeTabIndex || 0);
-  },
-
-  beforeDestroy() {
-    this.foundation.destroy();
-  },
-
-  computed: {
-    listeners() {
-      return { ...this.$listeners,
-        'MDCTab:interacted': event => this.handleInteraction(event),
-        // eslint-disable-next-line quote-props
-        keydown: event => this.handleKeyDown(event)
-      };
-    }
-
-  },
-  methods: {
-    handleInteraction(evt) {
-      this.foundation.handleTabInteraction(evt);
-    },
-
-    handleKeyDown(evt) {
-      this.foundation.handleKeyDown(evt);
-    }
-
-  },
-
-  render(createElement) {
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
-    return createElement('div', {
-      class: this.classes,
-      on: this.listeners,
-      attrs: {
-        role: 'tablist'
-      }
-    }, [createElement('mdc-tab-scroller', {
-      ref: 'scroller'
-    }, scopedSlots.default && scopedSlots.default())]);
+    onBeforeUnmount(function () {
+      foundation.destroy();
+    });
+    return {
+      root: root,
+      scroller: scroller,
+      listeners: listeners,
+      activateTab: activateTab
+    };
   }
-
 };
 
-const {
-  cssClasses: cssClasses$3
-} = MDCTabIndicatorFoundation;
-var mcwTabIndicator = {
+/* script */
+const __vue_script__$v = script$v;
+
+/* template */
+var __vue_render__$v = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    _vm._g(
+      { ref: "root", staticClass: "mdc-tab-bar", attrs: { role: "tablist" } },
+      _vm.listeners
+    ),
+    [_c("mcw-tab-scroller", { ref: "scroller" }, [_vm._t("default")], 2)],
+    1
+  )
+};
+var __vue_staticRenderFns__$v = [];
+__vue_render__$v._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$v = undefined;
+  /* scoped */
+  const __vue_scope_id__$v = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$v = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$v = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$v = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$v, staticRenderFns: __vue_staticRenderFns__$v },
+    __vue_inject_styles__$v,
+    __vue_script__$v,
+    __vue_scope_id__$v,
+    __vue_is_functional_template__$v,
+    __vue_module_identifier__$v,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var cssClasses$6 = MDCTabIndicatorFoundation.cssClasses;
+var script$w = {
   name: 'mcw-tab-indicator',
-
-  data() {
-    return {
-      classes: {
-        'mdc-tab-indicator': 1
-      },
-      styles: {}
-    };
+  props: {
+    fade: {
+      type: Boolean
+    },
+    icon: {
+      type: String
+    }
   },
+  setup: function setup(props) {
+    var uiState = reactive({
+      classes: {
+        'mdc-tab-indicator--fade': props.fade
+      },
+      contentClasses: {
+        'mdc-tab-indicator__content--underline': !props.icon,
+        'mdc-tab-indicator__content--icon': !!props.icon,
+        'material-icons': !!props.icon
+      },
+      contentAttrs: {
+        'aria-hidden': !!props.icon
+      },
+      styles: {},
+      contentEl: null
+    });
+    var foundation;
+    var adapter = {
+      addClass: function addClass(className) {
+        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+      },
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$classes = uiState.classes,
+            removed = _uiState$classes[className],
+            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
-  mounted() {
-    this.adapter_ = {
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      computeContentClientRect: () => this.$refs.content.getBoundingClientRect(),
-      setContentStyleProperty: (prop, value) => {
-        this.$set(this.styles, prop, value);
+        uiState.classes = rest;
+      },
+      computeContentClientRect: function computeContentClientRect() {
+        return uiState.contentEl.getBoundingClientRect();
+      },
+      setContentStyleProperty: function setContentStyleProperty(prop, value) {
+        return uiState.styles = _objectSpread2(_objectSpread2({}, uiState.styles), {}, _defineProperty({}, prop, value));
       }
     };
-    this.foundation = new MDCTabIndicatorFoundation(this.adapter_);
-    this.foundation.init();
-  },
 
-  beforeDestroy() {
-    this.foundation.destroy();
-  },
+    var deactivate = function deactivate() {
+      return foundation.deactivate();
+    };
 
-  methods: {
-    deactivate() {
-      this.adapter_.removeClass(cssClasses$3.ACTIVE);
-    },
+    var computeContentClientRect = function computeContentClientRect() {
+      return foundation.computeContentClientRect();
+    };
 
-    computeContentClientRect() {
-      return this.foundation.computeContentClientRect();
-    },
-
-    activate(previousIndicatorClientRect) {
+    var activate = function activate(previousIndicatorClientRect) {
       // Early exit if no indicator is present to handle cases where an indicator
       // may be activated without a prior indicator state
       if (!previousIndicatorClientRect) {
-        this.adapter_.addClass(cssClasses$3.ACTIVE);
+        adapter.addClass(cssClasses$6.ACTIVE);
         return;
       }
 
-      const currentClientRect = this.computeContentClientRect();
-      const widthDelta = previousIndicatorClientRect.width / currentClientRect.width;
-      const xPosition = previousIndicatorClientRect.left - currentClientRect.left;
-      this.foundation.adapter_.addClass(cssClasses$3.NO_TRANSITION);
-      this.adapter_.setContentStyleProperty('transform', `translateX(${xPosition}px) scaleX(${widthDelta})`); // THE FIX
+      var currentClientRect = computeContentClientRect();
+      var widthDelta = previousIndicatorClientRect.width / currentClientRect.width;
+      var xPosition = previousIndicatorClientRect.left - currentClientRect.left; // THE FIX - use request animation frame to ensure framework has rendered DOM
 
-      requestAnimationFrame(() => {
-        this.adapter_.removeClass(cssClasses$3.NO_TRANSITION);
-        this.adapter_.addClass(cssClasses$3.ACTIVE);
-        this.adapter_.setContentStyleProperty('transform', '');
+      requestAnimationFrame(function () {
+        adapter.addClass(cssClasses$6.NO_TRANSITION);
+        adapter.setContentStyleProperty('transform', "translateX(".concat(xPosition, "px) scaleX(").concat(widthDelta, ")"));
+        requestAnimationFrame(function () {
+          adapter.removeClass(cssClasses$6.NO_TRANSITION);
+          adapter.addClass(cssClasses$6.ACTIVE);
+          adapter.setContentStyleProperty('transform', '');
+        });
       });
-    }
-
-  },
-
-  render(createElement) {
-    return createElement('span', {
-      class: this.classes
-    }, [createElement('span', {
-      class: {
-        'mdc-tab-indicator__content': 1,
-        'mdc-tab-indicator__content--underline': 1
-      },
-      style: this.styles,
-      ref: 'content'
-    })]);
-  }
-
-};
-
-var mcwTabRipple = {
-  name: 'mcw-tab-ripple',
-
-  data() {
-    return {
-      classes: {
-        'mdc-tab__ripple': 1,
-        'mdc-tab-ripple': 1
-      },
-      styles: {}
     };
-  },
 
-  mounted() {
-    this.ripple = new RippleBase(this);
-    this.ripple.init();
-  },
-
-  beforeDestroy() {
-    this.ripple.destroy();
-  },
-
-  render(createElement) {
-    return createElement('span', {
-      class: this.classes,
-      style: this.styles
+    onMounted(function () {
+      foundation = props.fade ? new MDCFadingTabIndicatorFoundation(adapter) : new MDCSlidingTabIndicatorFoundation(adapter);
+      foundation.init();
+    });
+    onBeforeUnmount(function () {
+      foundation.destroy();
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      activate: activate,
+      deactivate: deactivate,
+      computeContentClientRect: computeContentClientRect
     });
   }
-
 };
 
-var mcwTabScroller = {
-  name: 'mcw-tab-scroller',
+/* script */
+const __vue_script__$w = script$w;
 
-  data() {
-    return {
+/* template */
+var __vue_render__$w = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("span", { staticClass: "mdc-tab-indicator", class: _vm.classes }, [
+    _c(
+      "span",
+      _vm._b(
+        {
+          ref: "contentEl",
+          staticClass: "mdc-tab-indicator__content",
+          class: _vm.contentClasses,
+          style: _vm.styles
+        },
+        "span",
+        _vm.contentAttrs,
+        false
+      ),
+      [_vm._v(_vm._s(_vm.icon))]
+    )
+  ])
+};
+var __vue_staticRenderFns__$w = [];
+__vue_render__$w._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$w = undefined;
+  /* scoped */
+  const __vue_scope_id__$w = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$w = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$w = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$w = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$w, staticRenderFns: __vue_staticRenderFns__$w },
+    __vue_inject_styles__$w,
+    __vue_script__$w,
+    __vue_scope_id__$w,
+    __vue_is_functional_template__$w,
+    __vue_module_identifier__$w,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var script$x = {
+  name: 'mcw-tab-scroller',
+  setup: function setup() {
+    var uiState = reactive({
       classes: {
         'mdc-tab-scroller': 1
       },
@@ -6800,253 +8942,354 @@ var mcwTabScroller = {
         'mdc-tab-scroller__scroll-area': 1
       },
       areaStyles: {},
-      contentStyles: {}
-    };
-  },
+      contentStyles: {},
+      content: null,
+      area: null
+    });
+    var foundation;
 
-  mounted() {
-    this.foundation = new MDCTabScrollerFoundation({
-      eventTargetMatchesSelector: (evtTarget, selector) => {
+    var getScrollPosition = function getScrollPosition() {
+      return foundation.getScrollPosition();
+    };
+
+    var getScrollContentWidth = function getScrollContentWidth() {
+      return uiState.content.offsetWidth;
+    };
+
+    var incrementScroll = function incrementScroll(scrollXIncrement) {
+      return foundation.incrementScroll(scrollXIncrement);
+    };
+
+    var scrollTo = function scrollTo(scrollX) {
+      return foundation.scrollTo(scrollX);
+    };
+
+    var onTransitionEnd = function onTransitionEnd(evt) {
+      return foundation.handleTransitionEnd(evt);
+    };
+
+    var areaListeners = {
+      mousedown: function mousedown(evt) {
+        return foundation.handleInteraction(evt);
+      },
+      wheel: function wheel(evt) {
+        return foundation.handleInteraction(evt);
+      },
+      pointerdown: function pointerdown(evt) {
+        return foundation.handleInteraction(evt);
+      },
+      touchstart: function touchstart(evt) {
+        return foundation.handleInteraction(evt);
+      },
+      keydown: function keydown(evt) {
+        return foundation.handleInteraction(evt);
+      }
+    };
+    var adapter = {
+      eventTargetMatchesSelector: function eventTargetMatchesSelector(evtTarget, selector) {
         return matches(evtTarget, selector);
       },
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      addScrollAreaClass: className => this.$set(this.areaClasses, className, true),
-      setScrollAreaStyleProperty: (prop, value) => this.$set(this.areaStyles, prop, value),
-      setScrollContentStyleProperty: (prop, value) => this.$set(this.contentStyles, prop, value),
-      getScrollContentStyleValue: propName => window.getComputedStyle(this.$refs.content).getPropertyValue(propName),
-      setScrollAreaScrollLeft: scrollX => this.$refs.area.scrollLeft = scrollX,
-      getScrollAreaScrollLeft: () => this.$refs.area.scrollLeft,
-      getScrollContentOffsetWidth: () => this.$refs.content.offsetWidth,
-      getScrollAreaOffsetWidth: () => this.$refs.area.offsetWidth,
-      computeScrollAreaClientRect: () => this.$refs.area.getBoundingClientRect(),
-      computeScrollContentClientRect: () => this.$refs.content.getBoundingClientRect(),
-      computeHorizontalScrollbarHeight: () => computeHorizontalScrollbarHeight(document)
-    });
-    this.foundation.init();
-  },
-
-  beforeDestroy() {
-    this.foundation.destroy();
-  },
-
-  methods: {
-    getScrollPosition() {
-      return this.foundation.getScrollPosition();
-    },
-
-    getScrollContentWidth() {
-      return this.$refs.content.offsetWidth;
-    },
-
-    incrementScroll(scrollXIncrement) {
-      this.foundation.incrementScroll(scrollXIncrement);
-    },
-
-    scrollTo(scrollX) {
-      this.foundation.scrollTo(scrollX);
-    }
-
-  },
-
-  render(createElement) {
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
-    const areaEl = createElement('div', {
-      class: this.areaClasses,
-      style: this.areaStyles,
-      ref: 'area',
-      on: {
-        mousedown: evt => this.foundation.handleInteraction(evt),
-        wheel: evt => this.foundation.handleInteraction(evt),
-        pointerdown: evt => this.foundation.handleInteraction(evt),
-        touchstart: evt => this.foundation.handleInteraction(evt),
-        keydown: evt => this.foundation.handleInteraction(evt)
-      }
-    }, [createElement('div', {
-      class: {
-        'mdc-tab-scroller__scroll-content': 1
+      addClass: function addClass(className) {
+        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
       },
-      style: this.contentStyles,
-      ref: 'content',
-      on: {
-        transitionend: evt => this.foundation.handleTransitionEnd(evt)
-      }
-    }, scopedSlots.default && scopedSlots.default())]);
-    return createElement('div', {
-      class: this.classes
-    }, [areaEl]);
-  }
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$classes = uiState.classes,
+            removed = _uiState$classes[className],
+            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
+        uiState.classes = rest;
+      },
+      addScrollAreaClass: function addScrollAreaClass(className) {
+        return uiState.areaClasses = _objectSpread2(_objectSpread2({}, uiState.areaClasses), {}, _defineProperty({}, className, true));
+      },
+      setScrollAreaStyleProperty: function setScrollAreaStyleProperty(prop, value) {
+        return uiState.areaStyles = _objectSpread2(_objectSpread2({}, uiState.areaStyles), {}, _defineProperty({}, prop, value));
+      },
+      setScrollContentStyleProperty: function setScrollContentStyleProperty(prop, value) {
+        return uiState.contentStyles = _objectSpread2(_objectSpread2({}, uiState.contentStyles), {}, _defineProperty({}, prop, value));
+      },
+      getScrollContentStyleValue: function getScrollContentStyleValue(propName) {
+        return window.getComputedStyle(uiState.content).getPropertyValue(propName);
+      },
+      setScrollAreaScrollLeft: function setScrollAreaScrollLeft(scrollX) {
+        return uiState.area.scrollLeft = scrollX;
+      },
+      getScrollAreaScrollLeft: function getScrollAreaScrollLeft() {
+        return uiState.area.scrollLeft;
+      },
+      getScrollContentOffsetWidth: function getScrollContentOffsetWidth() {
+        return uiState.content.offsetWidth;
+      },
+      getScrollAreaOffsetWidth: function getScrollAreaOffsetWidth() {
+        return uiState.area.offsetWidth;
+      },
+      computeScrollAreaClientRect: function computeScrollAreaClientRect() {
+        return uiState.area.getBoundingClientRect();
+      },
+      computeScrollContentClientRect: function computeScrollContentClientRect() {
+        return uiState.content.getBoundingClientRect();
+      },
+      computeHorizontalScrollbarHeight: function computeHorizontalScrollbarHeight$1() {
+        return computeHorizontalScrollbarHeight(document);
+      }
+    };
+    onMounted(function () {
+      foundation = new MDCTabScrollerFoundation(adapter);
+      foundation.init();
+    });
+    onBeforeUnmount(function () {
+      foundation.destroy();
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      scrollTo: scrollTo,
+      incrementScroll: incrementScroll,
+      getScrollPosition: getScrollPosition,
+      getScrollContentWidth: getScrollContentWidth,
+      areaListeners: areaListeners,
+      onTransitionEnd: onTransitionEnd
+    });
+  }
 };
 
-/* eslint-disable quote-props */
-var mcwTab = {
+/* script */
+const __vue_script__$x = script$x;
+
+/* template */
+var __vue_render__$x = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { class: _vm.classes }, [
+    _c(
+      "div",
+      _vm._g(
+        { ref: "area", class: _vm.areaClasses, style: _vm.areaStyles },
+        _vm.areaListeners
+      ),
+      [
+        _c(
+          "div",
+          {
+            ref: "content",
+            staticClass: "mdc-tab-scroller__scroll-content",
+            style: _vm.contentStyles,
+            on: { transitionend: _vm.onTransitionEnd }
+          },
+          [_vm._t("default")],
+          2
+        )
+      ]
+    )
+  ])
+};
+var __vue_staticRenderFns__$x = [];
+__vue_render__$x._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$x = undefined;
+  /* scoped */
+  const __vue_scope_id__$x = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$x = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$x = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$x = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$x, staticRenderFns: __vue_staticRenderFns__$x },
+    __vue_inject_styles__$x,
+    __vue_script__$x,
+    __vue_scope_id__$x,
+    __vue_is_functional_template__$x,
+    __vue_module_identifier__$x,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var tabId_ = 0;
+var script$y = {
   name: 'mcw-tab',
-  mixins: [CustomLinkMixin, DispatchEventMixin, VMAUniqueIdMixin],
+  inheritAttrs: false,
   props: {
     active: Boolean,
     icon: [String, Array, Object],
-    stacked: Boolean,
     minWidth: Boolean
   },
-
-  data() {
-    return {
+  components: {
+    CustomLink: CustomLink
+  },
+  setup: function setup(props, _ref) {
+    var slots = _ref.slots,
+        attrs = _ref.attrs;
+    var uiState = reactive({
       classes: {
         'mdc-tab': 1,
-        'mdc-tab--stacked': this.stacked,
-        'mdc-tab--min-width': this.minWidth
+        'mdc-tab--min-width': props.minWidth
       },
-      styles: {}
-    };
-  },
+      rootAttrs: {
+        role: 'tab',
+        'aria-selected': 'false',
+        tabindex: '-1',
+        tag: 'button'
+      },
+      styles: {},
+      content: null,
+      iconEl: null,
+      tabIndicator: null,
+      root: null,
+      rippleSurface: null
+    });
 
-  inject: ['mcwTabBar'],
-  computed: {
-    hasIcon() {
-      const {
-        $scopedSlots: scopedSlots
-      } = this;
+    var _useRipplePlugin = useRipplePlugin$1(toRef(uiState, 'root')),
+        rippleClasses = _useRipplePlugin.classes,
+        styles = _useRipplePlugin.styles;
 
-      if (this.icon || scopedSlots.icon && scopedSlots.icon()) {
-        return this.icon ? extractIconProp(this.icon) : {};
+    var _inject = inject('mcwTabList'),
+        fade = _inject.fade,
+        stacked = _inject.stacked,
+        spanContent = _inject.spanContent,
+        tabList = _inject.tabList;
+
+    uiState.classes['mdc-tab--stacked'] = stacked;
+    var hasIcon = computed(function () {
+      if (props.icon || slots.icon) {
+        return props.icon ? extractIconProp(props.icon) : {};
       }
 
       return false;
-    },
-
-    hasText() {
-      const {
-        $scopedSlots: scopedSlots
-      } = this;
-      return !!(scopedSlots.default && scopedSlots.default());
-    }
-
-  },
-  watch: {
-    active(value) {}
-
-  },
-
-  mounted() {
-    this.id = this.vma_uid_;
-    this.foundation = new MDCTabFoundation({
-      setAttr: (attr, value) => this.$el.setAttribute(attr, value),
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      hasClass: className => this.$el.classList.contains(className),
-      activateIndicator: previousIndicatorClientRect => {
-        this.$refs.tabIndicator.activate(previousIndicatorClientRect);
-      },
-      deactivateIndicator: () => {
-        this.$refs.tabIndicator.deactivate();
-      },
-      notifyInteracted: () => emitCustomEvent(this.$el, MDCTabFoundation.strings.INTERACTED_EVENT, {
-        tabId: this.id
-      }, true
-      /* bubble */
-      ),
-      getOffsetLeft: () => this.$el.offsetLeft,
-      getOffsetWidth: () => this.$el.offsetWidth,
-      getContentOffsetLeft: () => this.$refs.content.offsetLeft,
-      getContentOffsetWidth: () => this.$refs.content.offsetWidth,
-      focus: () => this.$el.focus()
     });
-    this.foundation.init(); // console.log('tab mounted')
+    var hasText = computed(function () {
+      return !!slots.default;
+    });
+    var linkAttrs = computed(function () {
+      return _objectSpread2(_objectSpread2({}, attrs), uiState.rootAttrs);
+    });
+    var foundation;
+    var tabId = "__mcw-tab-".concat(tabId_++);
+    var rootEl;
 
-    this.mcwTabBar.tabList.push(this); // this.setActive(this.active)
-  },
+    var activate = function activate(computeIndicatorClientRect) {
+      return foundation.activate(computeIndicatorClientRect);
+    };
 
-  beforeDestroy() {
-    this.foundation.destroy();
-  },
+    var deactivate = function deactivate() {
+      return foundation.deactivate();
+    };
 
-  methods: {
-    activate(computeIndicatorClientRect) {
-      this.foundation.activate(computeIndicatorClientRect);
-    },
+    var isActive = function isActive() {
+      return foundation.isActive();
+    };
 
-    deactivate() {
-      this.foundation.deactivate();
-    },
-
-    isActive() {
-      return this.foundation.isActive();
-    },
-
-    setActive(isActive) {
+    var setActive = function setActive(isActive) {
       if (isActive) {
-        this.$set(this.classes, 'mdc-tab--active', true), this.$refs.tabIndicator.activate();
+        uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+          'mdc-tab--active': true
+        }), uiState.tabIndicator.activate();
       }
-    },
+    };
 
-    computeIndicatorClientRect() {
-      return this.$refs.tabIndicator.computeContentClientRect();
-    },
+    var computeIndicatorClientRect = function computeIndicatorClientRect() {
+      return uiState.tabIndicator.computeContentClientRect();
+    };
 
-    computeDimensions() {
-      return this.foundation.computeDimensions();
-    },
+    var computeDimensions = function computeDimensions() {
+      return foundation.computeDimensions();
+    };
 
-    focus() {
-      this.$el.focus();
-    }
+    var focus = function focus() {
+      return rootEl.focus();
+    };
 
-  },
+    var onClick = function onClick(evt) {
+      return foundation.handleClick(evt);
+    };
 
-  render(createElement) {
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
-    const contentNodes = [];
-
-    if (this.hasIcon) {
-      contentNodes.push(createElement('i', {
-        class: { ...this.hasIcon.classes,
-          'mdc-tab__icon': 1
-        },
-        attrs: {
-          tabindex: '0',
-          'aria-hidden': 'true'
-        },
-        ref: 'icon'
-      }, scopedSlots.icon && scopedSlots.icon() || this.hasIcon.content));
-    }
-
-    if (this.hasText) {
-      contentNodes.push(createElement('span', {
-        class: {
-          'mdc-tab__text-label': 1
-        }
-      }, scopedSlots.default && scopedSlots.default()));
-    }
-
-    const spanEl = createElement('span', {
-      class: {
-        'mdc-tab__content': 1
+    var adapter = {
+      setAttr: function setAttr(attr, value) {
+        return uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, _defineProperty({}, attr, value));
       },
-      ref: 'content'
-    }, contentNodes);
-    const nodes = [spanEl, createElement('mdc-tab-indicator', {
-      ref: 'tabIndicator'
-    }), createElement('mdc-tab-ripple')];
-    return createElement('custom-link', {
-      class: this.classes,
-      style: this.styles,
-      attrs: {
-        link: this.link,
-        role: 'tab',
-        'aria-selected': 'false',
-        tabindex: '-1'
+      addClass: function addClass(className) {
+        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
       },
-      on: {
-        click: evt => this.foundation.handleClick(evt)
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$classes = uiState.classes,
+            removed = _uiState$classes[className],
+            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+
+        uiState.classes = rest;
+      },
+      hasClass: function hasClass(className) {
+        return !!uiState.classes[className];
+      },
+      activateIndicator: function activateIndicator(previousIndicatorClientRect) {
+        return uiState.tabIndicator.activate(previousIndicatorClientRect);
+      },
+      deactivateIndicator: function deactivateIndicator() {
+        return uiState.tabIndicator.deactivate();
+      },
+      notifyInteracted: function notifyInteracted() {
+        return emitCustomEvent(rootEl, MDCTabFoundation$1.strings.INTERACTED_EVENT, {
+          tabId: tabId
+        }, true
+        /* bubble */
+        );
+      },
+      getOffsetLeft: function getOffsetLeft() {
+        return rootEl.offsetLeft;
+      },
+      getOffsetWidth: function getOffsetWidth() {
+        return rootEl.offsetWidth;
+      },
+      getContentOffsetLeft: function getContentOffsetLeft() {
+        return uiState.content.offsetLeft;
+      },
+      getContentOffsetWidth: function getContentOffsetWidth() {
+        return uiState.content.offsetWidth;
+      },
+      focus: function focus() {
+        return rootEl.focus();
       }
-    }, nodes);
+    };
+    onMounted(function () {
+      rootEl = uiState.root.$el;
+      foundation = new MDCTabFoundation$1(adapter);
+      foundation.init();
+      tabList.value.push({
+        id: tabId,
+        activate: activate,
+        deactivate: deactivate,
+        focus: focus,
+        computeIndicatorClientRect: computeIndicatorClientRect,
+        computeDimensions: computeDimensions,
+        isActive: isActive
+      });
+    });
+    onBeforeUnmount(function () {
+      foundation.destroy();
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      hasIcon: hasIcon,
+      hasText: hasText,
+      onClick: onClick,
+      setActive: setActive,
+      tabId: tabId,
+      fade: fade,
+      spanContent: spanContent,
+      rippleClasses: rippleClasses,
+      styles: styles,
+      linkAttrs: linkAttrs
+    });
   }
-
 }; // ===
 // Private functions
 // ===
@@ -7061,192 +9304,436 @@ function extractIconProp(iconProp) {
     };
   } else if (iconProp instanceof Array) {
     return {
-      classes: iconProp.reduce((result, value) => Object.assign(result, {
-        [value]: true
-      }), {})
+      classes: iconProp.reduce(function (result, value) {
+        return Object.assign(result, _defineProperty({}, value, true));
+      }, {})
     };
-  } else if (typeof iconProp === 'object') {
+  } else if (_typeof(iconProp) === 'object') {
     return {
-      classes: iconProp.className.split(' ').reduce((result, value) => Object.assign(result, {
-        [value]: true
-      }), {}),
+      classes: iconProp.className.split(' ').reduce(function (result, value) {
+        return Object.assign(result, _defineProperty({}, value, true));
+      }, {}),
       content: iconProp.textContent
     };
   }
 }
 
+/* script */
+const __vue_script__$y = script$y;
+
+/* template */
+var __vue_render__$y = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "custom-link",
+    {
+      ref: "root",
+      class: _vm.classes,
+      style: _vm.styles,
+      attrs: { id: _vm.tabId, link: _vm.linkAttrs },
+      on: { click: _vm.onClick }
+    },
+    [
+      _c(
+        "span",
+        { ref: "content", staticClass: "mdc-tab__content" },
+        [
+          _vm.hasIcon
+            ? _c(
+                "i",
+                {
+                  ref: "iconEl",
+                  staticClass: "mdc-tab__icon",
+                  class: _vm.hasIcon.classes,
+                  attrs: { slot: "icon", tabindex: "0", "aria-hidden": "true" },
+                  slot: "icon"
+                },
+                [_vm._v(_vm._s(_vm.hasIcon.content))]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.hasText
+            ? _c(
+                "span",
+                { staticClass: "mdc-tab__text-label" },
+                [_vm._t("default")],
+                2
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.spanContent
+            ? _c("mcw-tab-indicator", {
+                ref: "tabIndicator",
+                attrs: { fade: _vm.fade }
+              })
+            : _vm._e(),
+          _vm._v(" "),
+          _c("span", {
+            ref: "rippleSurface",
+            staticClass: "mdc-tab__ripple",
+            class: _vm.rippleClasses,
+            style: _vm.styles
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      !_vm.spanContent
+        ? _c("mcw-tab-indicator", {
+            ref: "tabIndicator",
+            attrs: { fade: _vm.fade }
+          })
+        : _vm._e()
+    ],
+    1
+  )
+};
+var __vue_staticRenderFns__$y = [];
+__vue_render__$y._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$y = undefined;
+  /* scoped */
+  const __vue_scope_id__$y = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$y = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$y = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$y = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$y, staticRenderFns: __vue_staticRenderFns__$y },
+    __vue_inject_styles__$y,
+    __vue_script__$y,
+    __vue_scope_id__$y,
+    __vue_is_functional_template__$y,
+    __vue_module_identifier__$y,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
 var tabs = BasePlugin({
-  mcwTab,
-  mcwTabBar,
-  mcwTabScroller,
-  mcwTabIndicator,
-  mcwTabRipple
+  mcwTab: __vue_component__$y,
+  mcwTabBar: __vue_component__$v,
+  mcwTabScroller: __vue_component__$x,
+  mcwTabIndicator: __vue_component__$w
 });
 
-var TextfieldHelperText = {
-  name: 'textfield-helper-text',
+var script$z = {
+  name: 'mcw-character-counter',
+  setup: function setup() {
+    var uiState = reactive({
+      textContent: '',
+      foundation: {}
+    });
+    var adapter = {
+      setContent: function setContent(content) {
+        uiState.textContent = content;
+      }
+    };
+    onMounted(function () {
+      uiState.foundation = new MDCTextFieldCharacterCounterFoundation(adapter);
+      uiState.foundation.init();
+    });
+    onBeforeUnmount(function () {
+      uiState.foundation.destroy();
+    });
+    return _objectSpread2({}, toRefs(uiState));
+  }
+};
+
+/* script */
+const __vue_script__$z = script$z;
+
+/* template */
+var __vue_render__$z = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { staticClass: "mdc-text-field-character-counter" }, [
+    _vm._v(_vm._s(_vm.textContent))
+  ])
+};
+var __vue_staticRenderFns__$z = [];
+__vue_render__$z._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$z = undefined;
+  /* scoped */
+  const __vue_scope_id__$z = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$z = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$z = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$z = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$z, staticRenderFns: __vue_staticRenderFns__$z },
+    __vue_inject_styles__$z,
+    __vue_script__$z,
+    __vue_scope_id__$z,
+    __vue_is_functional_template__$z,
+    __vue_module_identifier__$z,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var script$A = {
+  name: 'mcw-textfield-helper-text',
   props: {
     persistent: Boolean,
     validation: Boolean,
     helptext: String
   },
-
-  data() {
-    return {
+  setup: function setup(props) {
+    var uiState = reactive({
       classes: {
         'mdc-text-field-helper-text': true,
-        'mdc-text-field-helper-text--persistent': this.persistent,
-        'mdc-text-field-helper-text--validation-msg': this.validation
+        'mdc-text-field-helper-text--persistent': props.persistent,
+        'mdc-text-field-helper-text--validation-msg': props.validation
+      },
+      rootAttrs: {
+        'aria-hidden': true
+      },
+      helpertext: props.helptext,
+      foundation: {}
+    });
+    var adapter = {
+      addClass: function addClass(className) {
+        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+      },
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$classes = uiState.classes,
+            removed = _uiState$classes[className],
+            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+
+        uiState.classes = rest;
+      },
+      hasClass: function hasClass(className) {
+        return Boolean(uiState.classes[className]);
+      },
+      setAttr: function setAttr(attr, value) {
+        return uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, _defineProperty({}, attr, value));
+      },
+      removeAttr: function removeAttr(attr) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$rootAttrs = uiState.rootAttrs,
+            removed = _uiState$rootAttrs[attr],
+            rest = _objectWithoutProperties(_uiState$rootAttrs, [attr].map(_toPropertyKey));
+
+        uiState.rootAttrs = rest;
+      },
+      setContent: function setContent(content) {
+        return uiState.helpertext = content;
       }
     };
-  },
-
-  watch: {
-    persistent() {
-      this.foundation.setPersistent(this.persistent);
-    },
-
-    validation() {
-      this.foundation.setValidation(this.validation);
-    }
-
-  },
-
-  mounted() {
-    this.foundation = new MDCTextFieldHelperTextFoundation({
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      hasClass: className => Boolean(this.classes[className]),
-      setAttr: (attr, value) => {
-        this.$el.setAttribute(attr, value);
-      },
-      removeAttr: attr => {
-        this.$el.removeAttribute(attr);
-      },
-      setContent: () =>
-      /* content */
-      {// help text get's updated from {{helptext}}
-        // cf. this.$el.textContent = content
-      }
+    watch(function () {
+      return props.persistent;
+    }, function (nv) {
+      return uiState.foundation.setPersistent(nv);
     });
-    this.foundation.init();
-  },
-
-  beforeDestroy() {
-    this.foundation.destroy();
-  },
-
-  render(createElement) {
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
-    const defaultSlot = scopedSlots.default && scopedSlots.default();
-    const classes = classNames(this.classes);
-
-    if (defaultSlot) {
-      return defaultSlot[0];
-    }
-
-    return createElement('div', {
-      class: 'mdc-text-field-helper-line'
-    }, [createElement('div', {
-      class: classes,
-      attrs: this.$attrs
-    }, this.helptext)]);
+    watch(function () {
+      return props.validation;
+    }, function (nv) {
+      return uiState.foundation.setValidation(nv);
+    });
+    onMounted(function () {
+      uiState.foundation = new MDCTextFieldHelperTextFoundation(adapter);
+      uiState.foundation.init();
+    });
+    onBeforeUnmount(function () {
+      uiState.foundation.destroy();
+    });
+    return _objectSpread2({}, toRefs(uiState));
   }
-
-}; // ===
-// Private functions
-// ===
-
-const hasOwn = {}.hasOwnProperty;
-
-function classNames() {
-  const classes = [];
-
-  for (let i = 0; i < arguments.length; i++) {
-    // eslint-disable-next-line prefer-rest-params
-    const arg = arguments[i];
-    if (!arg) continue;
-    const argType = typeof arg;
-
-    if (argType === 'string' || argType === 'number') {
-      classes.push(arg);
-    } else if (Array.isArray(arg) && arg.length) {
-      // eslint-disable-next-line prefer-spread
-      const inner = classNames.apply(null, arg);
-
-      if (inner) {
-        classes.push(inner);
-      }
-    } else if (argType === 'object') {
-      for (const key in arg) {
-        if (hasOwn.call(arg, key) && arg[key]) {
-          classes.push(key);
-        }
-      }
-    }
-  }
-
-  return classes.join(' ');
-}
-
-var TextfieldIcon = {
-  name: 'textfield-icon',
-  functional: true,
-  props: {
-    disabled: Boolean,
-    leading: {
-      type: Boolean,
-
-      default() {
-        return true;
-      }
-
-    }
-  },
-
-  mounted() {
-    this.foundation = new MDCTextFieldIconFoundation(Object.assign({
-      getAttr: attr => this.$el.getAttribute(attr),
-      setAttr: (attr, value) => this.$el.setAttribute(attr, value),
-      removeAttr: attr => this.$el.removeAttribute(attr),
-      setContent: content => {
-        this.$el.textContent = content;
-      },
-      registerInteractionHandler: (evtType, handler) => this.$el.addEventListener(evtType, handler),
-      deregisterInteractionHandler: (evtType, handler) => this.$el.removeEventListener(evtType, handler),
-      notifyIconAction: () => {
-        this.$emit('click');
-        emitCustomEvent(this.$el, MDCTextFieldIconFoundation.strings.ICON_EVENT, {}, true
-        /* shouldBubble  */
-        );
-      }
-    }));
-    this.foundation.init();
-  },
-
-  beforeDestroy() {
-    this.foundation.destroy();
-  },
-
-  render(createElement, context) {
-    const node = context.children[0];
-    const {
-      props: {
-        leading
-      }
-    } = context;
-    node.data.class = `mdc-text-field__icon mdc-text-field__icon--${leading ? 'leading' : 'trailing'}`;
-    return node;
-  }
-
 };
 
-/* eslint-disable quote-props */
-var mcwTextfield = {
+/* script */
+const __vue_script__$A = script$A;
+
+/* template */
+var __vue_render__$A = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    _vm._b({ class: _vm.classes }, "div", _vm.rootAttrs, false),
+    [_vm._v(_vm._s(_vm.helpertext))]
+  )
+};
+var __vue_staticRenderFns__$A = [];
+__vue_render__$A._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$A = undefined;
+  /* scoped */
+  const __vue_scope_id__$A = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$A = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$A = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$A = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$A, staticRenderFns: __vue_staticRenderFns__$A },
+    __vue_inject_styles__$A,
+    __vue_script__$A,
+    __vue_scope_id__$A,
+    __vue_is_functional_template__$A,
+    __vue_module_identifier__$A,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var script$B = {
+  name: 'textfield-icon',
+  props: {
+    disabled: Boolean,
+    trailing: Boolean,
+    trailingIcon: Boolean
+  },
+  setup: function setup(props, _ref) {
+    var emit = _ref.emit;
+    var uiState = reactive({
+      classes: _defineProperty({
+        'mdc-text-field__icon': 1
+      }, "mdc-text-field__icon--".concat(props.trailing || props.trailingIcon ? 'trailing' : 'leading'), 1),
+      rootAttrs: {
+        tabindex: props.disabled ? '-1' : '0',
+        role: props.disabled ? void 0 : 'button'
+      },
+      root: null,
+      foundation: {}
+    });
+    var adapter = {
+      getAttr: function getAttr(attr) {
+        return uiState.rootAttrs[attr];
+      },
+      setAttr: function setAttr(attr, value) {
+        return uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, _defineProperty({}, attr, value));
+      },
+      removeAttr: function removeAttr(attr) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$rootAttrs = uiState.rootAttrs,
+            removed = _uiState$rootAttrs[attr],
+            rest = _objectWithoutProperties(_uiState$rootAttrs, [attr].map(_toPropertyKey));
+
+        uiState.rootAttrs = rest;
+      },
+      setContent: function setContent()
+      /* content */
+      {// set content is done through vue in templates
+        // so we dont expose a method to set content
+        // thus this is a no-op
+      },
+      registerInteractionHandler: function registerInteractionHandler(evtType, handler) {
+        return uiState.root.addEventListener(evtType, handler);
+      },
+      deregisterInteractionHandler: function deregisterInteractionHandler(evtType, handler) {
+        return uiState.root.removeEventListener(evtType, handler);
+      },
+      notifyIconAction: function notifyIconAction() {
+        emitCustomEvent(uiState.root, MDCTextFieldIconFoundation.strings.ICON_EVENT, {}, true
+        /* shouldBubble  */
+        );
+        emit('click');
+      }
+    };
+    onMounted(function () {
+      uiState.foundation = new MDCTextFieldIconFoundation(adapter);
+      uiState.foundation.init();
+    });
+    onBeforeUnmount(function () {
+      uiState.foundation.destroy();
+    });
+    return _objectSpread2({}, toRefs(uiState));
+  }
+};
+
+/* script */
+const __vue_script__$B = script$B;
+
+/* template */
+var __vue_render__$B = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "i",
+    _vm._b(
+      { ref: "root", staticClass: "material-icons", class: _vm.classes },
+      "i",
+      _vm.rootAttrs,
+      false
+    ),
+    [_vm._t("default")],
+    2
+  )
+};
+var __vue_staticRenderFns__$B = [];
+__vue_render__$B._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$B = undefined;
+  /* scoped */
+  const __vue_scope_id__$B = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$B = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$B = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$B = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$B, staticRenderFns: __vue_staticRenderFns__$B },
+    __vue_inject_styles__$B,
+    __vue_script__$B,
+    __vue_scope_id__$B,
+    __vue_is_functional_template__$B,
+    __vue_module_identifier__$B,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
+var strings$b = MDCTextFieldFoundation.strings;
+var uid_$1 = 0;
+var script$C = {
   name: 'mcw-textfield',
-  mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
   inheritAttrs: false,
   model: {
     prop: 'value',
@@ -7257,7 +9744,7 @@ var mcwTextfield = {
     type: {
       type: String,
       default: 'text',
-      validator: function (value) {
+      validator: function validator(value) {
         return ['text', 'email', 'search', 'password', 'tel', 'url', 'number'].indexOf(value) !== -1;
       }
     },
@@ -7269,7 +9756,6 @@ var mcwTextfield = {
       type: Boolean,
       default: undefined
     },
-    fullwidth: Boolean,
     multiline: Boolean,
     size: {
       type: [Number, String],
@@ -7296,25 +9782,37 @@ var mcwTextfield = {
     },
     helptext: String,
     helptextPersistent: Boolean,
-    helptextValidation: Boolean
+    helptextValidation: Boolean,
+    resizer: {
+      type: Boolean,
+      default: function _default() {
+        return true;
+      }
+    },
+    prefix: String,
+    suffix: String,
+    characterCounter: Boolean,
+    characterCounterInternal: Boolean
   },
-  data: function () {
-    return {
-      text: this.value,
+  setup: function setup(props, _ref) {
+    var emit = _ref.emit,
+        $root = _ref.root.$root,
+        slots = _ref.slots,
+        listeners = _ref.listeners;
+    var uiState = reactive({
+      text: props.value,
       classes: {
         'mdc-textfield': true,
         'mdc-text-field': true,
         'mdc-text-field--upgraded': true,
-        'mdc-text-field--disabled': this.disabled,
-        'mdc-text-field--fullwidth': this.fullwidth,
-        'mdc-text-field--textarea': this.multiline,
-        'mdc-text-field--outlined': !this.fullwidth && this.outline,
-        'mdc-text-field--with-leading-icon': Boolean(this.$slots.leadingIcon),
-        'mdc-text-field--with-trailing-icon': Boolean(this.$slots.trailingIcon),
-        'mdc-text-field--filled': Boolean(!this.outline),
-        'mdc-text-field--no-label': !this.label
+        'mdc-text-field--disabled': props.disabled,
+        'mdc-text-field--textarea': props.multiline,
+        'mdc-text-field--outlined': !props.fullwidth && props.outline,
+        'mdc-text-field--with-leading-icon': Boolean(slots.leadingIcon || slots.leading),
+        'mdc-text-field--with-trailing-icon': Boolean(slots.trailingIcon || slots.trailing),
+        'mdc-text-field--filled': Boolean(!props.outline),
+        'mdc-text-field--no-label': !props.label
       },
-      styles: {},
       inputClasses: {
         'mdc-text-field__input': true
       },
@@ -7326,806 +9824,699 @@ var mcwTextfield = {
       },
       lineRippleStyles: {},
       outlineClasses: {},
-      notchStyles: {}
+      notchStyles: {},
+      helpTextId: "mcw-help-".concat(uid_$1++),
+      labelId: "mcw-label-".concat(uid_$1),
+      root: null,
+      wrapper: null,
+      helpertext: null,
+      input: null,
+      labelEl: null,
+      lineRippleEl: null,
+      characterCounterEl: null,
+      helpertextEl: null
+    });
+    var foundation;
+    var rippleClasses;
+    var rippleStyles;
+
+    if (!props.multiline && !props.outline) {
+      var _useRipplePlugin = useRipplePlugin$1(toRef(uiState, 'root')),
+          classes = _useRipplePlugin.classes,
+          styles = _useRipplePlugin.styles;
+
+      rippleClasses = classes;
+      rippleStyles = styles;
+    }
+
+    var inputAriaControls = computed(function () {
+      return props.helptext ? uiState.helpTextId : undefined;
+    });
+    var hasLabel = computed(function () {
+      return !props.outline && props.label;
+    });
+    var hasOutlineLabel = computed(function () {
+      return props.outline && props.label;
+    });
+    var hasLineRipple = computed(function () {
+      return !(props.outline || props.multiline);
+    });
+    var hasHelptext = computed(function () {
+      return slots.helpText || props.helptext;
+    });
+    var internalCharacterCounter = computed(function () {
+      return props.characterCounter && props.characterCounterInternal;
+    });
+    var helperCharacterCounter = computed(function () {
+      return props.characterCounter && !(props.multiline && props.characterCounterInternal);
+    });
+    var hasHelpline = computed(function () {
+      return props.helptext || helperCharacterCounter.value;
+    });
+    var rootClasses = computed(function () {
+      return _objectSpread2(_objectSpread2({}, rippleClasses), uiState.classes);
+    });
+
+    var inputListeners = _objectSpread2(_objectSpread2({}, listeners), {}, {
+      input: function input(_ref2) {
+        var value = _ref2.target.value;
+        return emit('model', value);
+      }
+    });
+
+    var focus = function focus() {
+      var _uiState$input;
+
+      return (_uiState$input = uiState.input) === null || _uiState$input === void 0 ? void 0 : _uiState$input.focus();
     };
-  },
-  components: {
-    TextfieldHelperText,
-    TextfieldIcon
-  },
-  computed: {
-    inputPlaceHolder() {
-      return this.fullwidth ? this.label : undefined;
-    },
 
-    inputAriaControls() {
-      return this.help ? 'help-' + this.vma_uid_ : undefined;
-    },
+    var isValid = function isValid() {
+      return foundation.isValid();
+    };
 
-    hasLabel() {
-      return !this.fullwidth && !this.outline && this.label;
-    },
-
-    hasOutlineLabel() {
-      return this.hasOutline && this.label;
-    },
-
-    hasOutline() {
-      return !this.fullwidth && this.outline;
-    },
-
-    hasLineRipple() {
-      return !this.hasOutline && !this.multiline;
-    },
-
-    hasHelptext() {
-      const {
-        $scopedSlots: scopedSlots
-      } = this;
-      return scopedSlots.helpText && scopedSlots.helpText() || this.helptext;
-    }
-
-  },
-  watch: {
-    disabled() {
-      this.foundation && this.foundation.setDisabled(this.disabled);
-    },
-
-    required() {
-      this.$refs.input && (this.$refs.input.required = this.required);
-    },
-
-    valid() {
-      if (typeof this.valid !== 'undefined') {
-        this.foundation && this.foundation.setValid(this.valid);
-      }
-    },
-
-    value(value) {
-      if (this.foundation) {
-        if (value !== this.foundation.getValue()) {
-          this.foundation.setValue(value);
-        }
-      }
-    }
-
-  },
-
-  mounted() {
-    this.foundation = new MDCTextFieldFoundation(Object.assign({
-      addClass: className => {
-        this.$set(this.classes, className, true);
+    var adapter = {
+      addClass: function addClass(className) {
+        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
       },
-      removeClass: className => {
-        this.$delete(this.classes, className);
-      },
-      hasClass: className => {
-        this.$refs.root.classList.contains(className);
-      },
-      registerTextFieldInteractionHandler: (evtType, handler) => {
-        this.$refs.root.addEventListener(evtType, handler);
-      },
-      deregisterTextFieldInteractionHandler: (evtType, handler) => {
-        this.$refs.root.removeEventListener(evtType, handler);
-      },
-      isFocused: () => {
-        return document.activeElement === this.$refs.input;
-      },
-      registerValidationAttributeChangeHandler: handler => {
-        const getAttributesList = mutationsList => mutationsList.map(mutation => mutation.attributeName);
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$classes = uiState.classes,
+            removed = _uiState$classes[className],
+            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
-        const observer = new MutationObserver(mutationsList => handler(getAttributesList(mutationsList)));
-        const targetNode = this.$refs.input;
-        const config = {
+        uiState.classes = rest;
+      },
+      hasClass: function hasClass(className) {
+        return Boolean(uiState.classes[className]);
+      },
+      registerTextFieldInteractionHandler: function registerTextFieldInteractionHandler(evtType, handler) {
+        uiState.root.addEventListener(evtType, handler);
+      },
+      deregisterTextFieldInteractionHandler: function deregisterTextFieldInteractionHandler(evtType, handler) {
+        uiState.root.removeEventListener(evtType, handler);
+      },
+      isFocused: function isFocused() {
+        return document.activeElement === uiState.input;
+      },
+      registerValidationAttributeChangeHandler: function registerValidationAttributeChangeHandler(handler) {
+        var getAttributesList = function getAttributesList(mutationsList) {
+          return mutationsList.map(function (mutation) {
+            return mutation.attributeName;
+          });
+        };
+
+        var observer = new MutationObserver(function (mutationsList) {
+          return handler(getAttributesList(mutationsList));
+        });
+        var targetNode = uiState.input;
+        var config = {
           attributes: true
         };
         observer.observe(targetNode, config);
         return observer;
       },
-      deregisterValidationAttributeChangeHandler: observer => {
+      deregisterValidationAttributeChangeHandler: function deregisterValidationAttributeChangeHandler(observer) {
         observer.disconnect();
-      }
-    }, this.getInputAdapterMethods(), this.getLabelAdapterMethods(), this.getLineRippleAdapterMethods(), this.getOutlineAdapterMethods()), {
-      helperText: this.$refs.helpertextEl ? this.$refs.helpertextEl.foundation : void 0,
-      leadingIcon: this.$refs.leadingIconEl ? this.$refs.leadingIconEl.foundation : void 0,
-      trailingIcon: this.$refs.trailingIconEl ? this.$refs.trailingIconEl.foundation : void 0
-    });
-    this.foundation.init();
-    this.foundation.setValue(this.value);
-    this.foundation.setDisabled(this.disabled);
-    this.$refs.input && (this.$refs.input.required = this.required);
-
-    if (typeof this.valid !== 'undefined') {
-      this.foundation.setValid(this.valid);
-    }
-
-    const isTextArea = this.$refs.root.classList.contains('mdc-text-field--textarea');
-    const isOutlined = this.$refs.root.classList.contains('mdc-text-field--outlined');
-
-    if (!isTextArea && !isOutlined) {
-      this.ripple = new RippleBase(this, {
-        isSurfaceActive: () => matches(this.$refs.input, ':active'),
-        registerInteractionHandler: (evtType, handler) => {
-          this.$refs.input.addEventListener(evtType, handler, applyPassive());
-        },
-        deregisterInteractionHandler: (evtType, handler) => this.$refs.input.removeEventListener(evtType, handler, applyPassive())
-      });
-      this.ripple.init();
-    }
-  },
-
-  beforeDestroy() {
-    this.foundation && this.foundation.destroy();
-    this.ripple && this.ripple.destroy();
-  },
-
-  methods: {
-    getInputAdapterMethods() {
-      return {
-        registerInputInteractionHandler: (evtType, handler) => {
-          this.$refs.input.addEventListener(evtType, handler, applyPassive());
-        },
-        deregisterInputInteractionHandler: (evtType, handler) => {
-          this.$refs.input.removeEventListener(evtType, handler, applyPassive());
-        },
-        getNativeInput: () => {
-          return this.$refs.input;
-        }
-      };
-    },
-
-    getLabelAdapterMethods() {
-      return {
-        shakeLabel: shouldShake => {
-          this.$refs.labelEl && this.$refs.labelEl.shake(shouldShake);
-        },
-        floatLabel: shouldFloat => {
-          this.$refs.labelEl && this.$refs.labelEl.float(shouldFloat);
-        },
-        hasLabel: () => {
-          return !!this.$refs.labelEl || !!this.$refs.notchedEl;
-        },
-        getLabelWidth: () => {
-          return this.$refs.labelEl.getWidth();
-        }
-      };
-    },
-
-    getLineRippleAdapterMethods() {
-      return {
-        deactivateLineRipple: () => {
-          if (this.$refs.lineRippleEl) {
-            this.$refs.lineRippleEl.deactivate();
-          }
-        },
-        activateLineRipple: () => {
-          if (this.$refs.lineRippleEl) {
-            this.$refs.lineRippleEl.activate();
-          }
-        },
-        setLineRippleTransformOrigin: normalizedX => {
-          if (this.$refs.lineRippleEl) {
-            this.$refs.lineRippleEl.setRippleCenter(normalizedX);
-          }
-        }
-      };
-    },
-
-    getOutlineAdapterMethods() {
-      return {
-        hasOutline: () => !!this.hasOutline,
-        notchOutline: (notchWidth, isRtl) => this.$refs.labelEl.notch(notchWidth, isRtl),
-        closeOutline: () => this.$refs.labelEl.closeNotch()
-      };
-    },
-
-    updateValue(value) {
-      this.$emit('model', value);
-    },
-
-    focus() {
-      this.$refs.input && this.$refs.input.focus();
-    },
-
-    blur() {
-      this.$refs.input && this.$refs.input.blur();
-    }
-
-  },
-
-  render(createElement) {
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
-    const rootNodes = [];
-    const leadingIconSlot = scopedSlots.leadingIcon && scopedSlots.leadingIcon();
-
-    if (leadingIconSlot) {
-      rootNodes.push(createElement('textfield-icon', {
-        ref: 'leadingIconEl',
-        props: {
-          leading: true
-        }
-      }, leadingIconSlot));
-    }
-
-    if (this.multiline) {
-      rootNodes.push(createElement('textarea', {
-        class: this.inputClasses,
-        attrs: { ...this.$attrs,
-          id: this.vma_uid_,
-          minlength: this.minlength,
-          maxlength: this.maxlength,
-          placeholder: this.inputPlaceHolder,
-          'aria-label': this.inputPlaceHolder,
-          'aria-controls': this.inputAriaControls,
-          rows: this.rows,
-          cols: this.cols
-        },
-        ref: 'input',
-        on: { ...this.$listeners,
-          input: evt => this.updateValue(evt.target.value)
-        }
-      }));
-    } else {
-      rootNodes.push(createElement('span', {
-        class: 'mdc-text-field__ripple',
-        ref: 'ripple'
-      }));
-      rootNodes.push(createElement('input', {
-        class: this.inputClasses,
-        attrs: { ...this.$attrs,
-          id: this.vma_uid_,
-          type: this.type,
-          minlength: this.minlength,
-          maxlength: this.maxlength,
-          placeholder: this.inputPlaceHolder,
-          'aria-label': this.inputPlaceHolder,
-          'aria-controls': this.inputAriaControls,
-          'aria-labelledby': `label-${this.vma_uid_}`
-        },
-        ref: 'input',
-        on: { ...this.$listeners,
-          input: evt => this.updateValue(evt.target.value)
-        }
-      }));
-    }
-
-    if (this.hasLabel) {
-      rootNodes.push(createElement(__vue_component__$6, {
-        attrs: {
-          id: `label-${this.vma_uid_}`
-        },
-        ref: 'labelEl'
-      }, this.label));
-    }
-
-    const trailingIconSlot = scopedSlots.trailingIcon && scopedSlots.trailingIcon();
-
-    if (trailingIconSlot) {
-      rootNodes.push(createElement('textfield-icon', {
-        ref: 'trailingIconEl',
-        props: {
-          leading: false
-        }
-      }, trailingIconSlot));
-    }
-
-    if (this.hasOutline) {
-      rootNodes.push(createElement(__vue_component__$b, {
-        ref: 'labelEl'
-      }, this.label));
-    }
-
-    if (this.hasLineRipple) {
-      rootNodes.push(createElement(mcwLineRipple, {
-        ref: 'lineRippleEl'
-      }));
-    }
-
-    const rootEl = createElement('label', {
-      class: this.classes,
-      style: this.styles,
-      ref: 'root'
-    }, rootNodes);
-    const nodes = [rootEl];
-    const helpTextSlot = scopedSlots.helpText && scopedSlots.helpText();
-
-    if (this.hasHelptext) {
-      nodes.push(createElement('textfield-helper-text', {
-        attrs: {
-          id: `help${this.vma_uid_}`,
-          helptext: this.helptext,
-          persistent: this.helptextPersistent,
-          validation: this.helptextValidation
-        },
-        ref: 'helpertextEl'
-      }, helpTextSlot));
-    }
-
-    return createElement('div', {
-      style: {
-        width: this.fullwidth ? '100%' : void 0
       },
-      attrs: {
-        id: this.id
-      }
-    }, nodes);
-  }
+      // input adapter methods
+      registerInputInteractionHandler: function registerInputInteractionHandler(evtType, handler) {
+        uiState.input.addEventListener(evtType, handler, applyPassive());
+      },
+      deregisterInputInteractionHandler: function deregisterInputInteractionHandler(evtType, handler) {
+        uiState.input.removeEventListener(evtType, handler, applyPassive());
+      },
+      getNativeInput: function getNativeInput() {
+        return uiState.input;
+      },
+      // label adapter methods
+      shakeLabel: function shakeLabel(shouldShake) {
+        var _uiState$labelEl;
 
+        (_uiState$labelEl = uiState.labelEl) === null || _uiState$labelEl === void 0 ? void 0 : _uiState$labelEl.shake(shouldShake);
+      },
+      floatLabel: function floatLabel(shouldFloat) {
+        var _uiState$labelEl2;
+
+        (_uiState$labelEl2 = uiState.labelEl) === null || _uiState$labelEl2 === void 0 ? void 0 : _uiState$labelEl2.float(shouldFloat);
+      },
+      hasLabel: function hasLabel() {
+        return !!uiState.labelEl || !!uiState.notchedEl;
+      },
+      getLabelWidth: function getLabelWidth() {
+        return uiState.labelEl.getWidth();
+      },
+      // line ripple adapter methods
+      deactivateLineRipple: function deactivateLineRipple() {
+        var _uiState$lineRippleEl;
+
+        return (_uiState$lineRippleEl = uiState.lineRippleEl) === null || _uiState$lineRippleEl === void 0 ? void 0 : _uiState$lineRippleEl.deactivate();
+      },
+      activateLineRipple: function activateLineRipple() {
+        var _uiState$lineRippleEl2;
+
+        return (_uiState$lineRippleEl2 = uiState.lineRippleEl) === null || _uiState$lineRippleEl2 === void 0 ? void 0 : _uiState$lineRippleEl2.activate();
+      },
+      setLineRippleTransformOrigin: function setLineRippleTransformOrigin(normalizedX) {
+        var _uiState$lineRippleEl3;
+
+        return (_uiState$lineRippleEl3 = uiState.lineRippleEl) === null || _uiState$lineRippleEl3 === void 0 ? void 0 : _uiState$lineRippleEl3.setRippleCenter(normalizedX);
+      },
+      // outline adapter methods
+      hasOutline: function hasOutline() {
+        return !!props.outline;
+      },
+      notchOutline: function notchOutline(notchWidth, isRtl) {
+        return uiState.labelEl.notch(notchWidth, isRtl);
+      },
+      closeOutline: function closeOutline() {
+        return uiState.labelEl.closeNotch();
+      }
+    };
+    watch(function () {
+      return props.disabled;
+    }, function (nv) {
+      var _foundation;
+
+      return (_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.setDisabled(nv);
+    });
+    watch(function () {
+      return props.required;
+    }, function (nv) {
+      uiState.input && (uiState.input.required = nv);
+    });
+    watch(function () {
+      return props.valid;
+    }, function (nv) {
+      if (typeof nv !== 'undefined') {
+        var _foundation2;
+
+        (_foundation2 = foundation) === null || _foundation2 === void 0 ? void 0 : _foundation2.setValid(nv);
+      }
+    });
+    watch(function () {
+      return props.value;
+    }, function (nv) {
+      if (foundation) {
+        if (nv !== foundation.getValue()) {
+          foundation.setValue(nv);
+        }
+      }
+    });
+    onMounted(function () {
+      var _uiState$characterCou, _uiState$helpertext;
+
+      var leadingIconEl = uiState.wrapper.querySelector(strings$b.LEADING_ICON_SELECTOR);
+      var trailingIconEl = uiState.wrapper.querySelector(strings$b.TRAILING_ICON_SELECTOR);
+      foundation = new MDCTextFieldFoundation(_objectSpread2({}, adapter), {
+        characterCounter: (_uiState$characterCou = uiState.characterCounterEl) === null || _uiState$characterCou === void 0 ? void 0 : _uiState$characterCou.foundation,
+        helperText: (_uiState$helpertext = uiState.helpertext) === null || _uiState$helpertext === void 0 ? void 0 : _uiState$helpertext.foundation,
+        leadingIcon: leadingIconEl === null || leadingIconEl === void 0 ? void 0 : leadingIconEl.__vue__.foundation,
+        trailingIcon: trailingIconEl === null || trailingIconEl === void 0 ? void 0 : trailingIconEl.__vue__.foundation
+      });
+      foundation.init();
+      foundation.setValue(props.value);
+      props.disabled && foundation.setDisabled(props.disabled);
+      uiState.input && (uiState.input.required = props.required);
+
+      if (typeof props.valid !== 'undefined') {
+        foundation.setValid(props.valid);
+      }
+    });
+    onBeforeUnmount(function () {
+      foundation.destroy();
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      inputAriaControls: inputAriaControls,
+      hasLabel: hasLabel,
+      hasOutlineLabel: hasOutlineLabel,
+      inputListeners: inputListeners,
+      hasLineRipple: hasLineRipple,
+      hasHelptext: hasHelptext,
+      hasHelpline: hasHelpline,
+      focus: focus,
+      helperCharacterCounter: helperCharacterCounter,
+      internalCharacterCounter: internalCharacterCounter,
+      rootClasses: rootClasses,
+      rippleStyles: rippleStyles,
+      isValid: isValid
+    });
+  },
+  components: {
+    mcwLineRipple: __vue_component__$h,
+    mcwNotchedOutline: __vue_component__$n
+  }
 };
 
+/* script */
+const __vue_script__$C = script$C;
+
+/* template */
+var __vue_render__$C = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { ref: "wrapper", staticClass: "textfield-container" }, [
+    !_vm.multiline
+      ? _c(
+          "label",
+          { ref: "root", class: _vm.rootClasses, style: _vm.rippleStyles },
+          [
+            !_vm.outline
+              ? _c("span", { staticClass: "mdc-text-field__ripple" })
+              : _vm._e(),
+            _vm._v(" "),
+            _vm._t("leading"),
+            _vm._v(" "),
+            _vm._t("leadingIcon"),
+            _vm._v(" "),
+            _vm.prefix
+              ? _c(
+                  "span",
+                  {
+                    staticClass:
+                      "mdc-text-field__affix mdc-text-field__affix--prefix"
+                  },
+                  [_vm._v(_vm._s(_vm.prefix))]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c(
+              "input",
+              _vm._g(
+                _vm._b(
+                  {
+                    ref: "input",
+                    class: _vm.inputClasses,
+                    attrs: {
+                      type: _vm.type,
+                      minlength: _vm.minlength,
+                      maxlength: _vm.maxlength,
+                      "aria-label": _vm.label,
+                      "aria-controls": _vm.inputAriaControls,
+                      "aria-labelledby": _vm.labelId,
+                      "aria-describedby": _vm.inputAriaControls
+                    }
+                  },
+                  "input",
+                  _vm.$attrs,
+                  false
+                ),
+                _vm.inputListeners
+              )
+            ),
+            _vm._v(" "),
+            _vm.suffix
+              ? _c(
+                  "span",
+                  {
+                    staticClass:
+                      "mdc-text-field__affix mdc-text-field__affix--suffix"
+                  },
+                  [_vm._v(_vm._s(_vm.suffix))]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.hasLabel
+              ? _c(
+                  "mcw-floating-label",
+                  {
+                    ref: "labelEl",
+                    attrs: { id: _vm.labelId, required: _vm.required }
+                  },
+                  [_vm._v(_vm._s(_vm.label))]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm._t("trailingIcon"),
+            _vm._v(" "),
+            _vm._t("trailing"),
+            _vm._v(" "),
+            _vm.outline
+              ? _c("mcw-notched-outline", { ref: "labelEl" }, [
+                  _vm._v(_vm._s(_vm.label))
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.hasLineRipple
+              ? _c("mcw-line-ripple", { ref: "lineRippleEl" })
+              : _vm._e()
+          ],
+          2
+        )
+      : _c(
+          "label",
+          { ref: "root", class: _vm.classes },
+          [
+            _vm.resizer
+              ? _c("span", { staticClass: "mdc-text-field__resizer" }, [
+                  _c(
+                    "textarea",
+                    _vm._g(
+                      _vm._b(
+                        {
+                          ref: "input",
+                          class: _vm.inputClasses,
+                          attrs: {
+                            minlength: _vm.minlength,
+                            maxlength: _vm.maxlength,
+                            "aria-label": _vm.label,
+                            "aria-controls": _vm.inputAriaControls,
+                            cols: _vm.cols,
+                            rows: _vm.rows
+                          }
+                        },
+                        "textarea",
+                        _vm.$attrs,
+                        false
+                      ),
+                      _vm.inputListeners
+                    )
+                  )
+                ])
+              : _c(
+                  "textarea",
+                  _vm._g(
+                    _vm._b(
+                      {
+                        ref: "input",
+                        class: _vm.inputClasses,
+                        attrs: {
+                          minlength: _vm.minlength,
+                          maxlength: _vm.maxlength,
+                          "aria-label": _vm.label,
+                          "aria-controls": _vm.inputAriaControls,
+                          cols: _vm.cols,
+                          rows: _vm.rows
+                        }
+                      },
+                      "textarea",
+                      _vm.$attrs,
+                      false
+                    ),
+                    _vm.inputListeners
+                  )
+                ),
+            _vm._v(" "),
+            _vm.internalCharacterCounter
+              ? _c("mcw-character-counter", { ref: "characterCounterEl" })
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.outline
+              ? _c("mcw-notched-outline", { ref: "labelEl" }, [
+                  _vm._v(_vm._s(_vm.label))
+                ])
+              : _vm._e()
+          ],
+          1
+        ),
+    _vm._v(" "),
+    _vm.hasHelpline
+      ? _c(
+          "div",
+          { staticClass: "mdc-text-field-helper-line" },
+          [
+            _vm.helptext
+              ? _c("mcw-textfield-helper-text", {
+                  ref: "helpertext",
+                  attrs: {
+                    id: _vm.helpTextId,
+                    helptext: _vm.helptext,
+                    persistent: _vm.helptextPersistent,
+                    validation: _vm.helptextValidation
+                  }
+                })
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.helperCharacterCounter
+              ? _c("mcw-character-counter", { ref: "characterCounterEl" })
+              : _vm._e()
+          ],
+          1
+        )
+      : _vm._e()
+  ])
+};
+var __vue_staticRenderFns__$C = [];
+__vue_render__$C._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$C = undefined;
+  /* scoped */
+  const __vue_scope_id__$C = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$C = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$C = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$C = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$C, staticRenderFns: __vue_staticRenderFns__$C },
+    __vue_inject_styles__$C,
+    __vue_script__$C,
+    __vue_scope_id__$C,
+    __vue_is_functional_template__$C,
+    __vue_module_identifier__$C,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
+
 var textfield = BasePlugin({
-  mcwTextfield
+  mcwTextfield: __vue_component__$C,
+  mcwTextfieldIcon: __vue_component__$B,
+  mcwCharacterCounter: __vue_component__$z,
+  mcwTextfieldHelperText: __vue_component__$A,
+  mcwLineRipple: __vue_component__$h,
+  mcwNotchedOutline: __vue_component__$n,
+  mcwFloatingLabel: __vue_component__$c
 });
 
-const {
-  cssClasses: cssClasses$4,
-  strings: strings$4
-} = MDCTopAppBarFoundation;
-var mcwTopAppBar = {
+var cssClasses$7 = MDCTopAppBarFoundation.cssClasses,
+    strings$c = MDCTopAppBarFoundation.strings;
+var script$D = {
   name: 'mcw-top-app-bar',
   props: {
-    short: Boolean,
-    shortCollapsed: Boolean,
-    prominent: Boolean,
-    fixed: Boolean,
-    dense: Boolean,
     tag: {
       type: String,
       default: 'header'
     },
     scrollTarget: HTMLElement
   },
-
-  data() {
-    return {
-      rootStyles: {
-        top: '0'
-      },
+  setup: function setup(props, _ref) {
+    var emit = _ref.emit,
+        listeners = _ref.listeners;
+    var uiState = reactive({
+      rootStyles: {},
       rootClasses: {
-        'mdc-top-app-bar': true,
-        'mdc-top-app-bar--dense': this.dense,
-        'mdc-top-app-bar--short': this.short,
-        'mdc-top-app-bar--short-collapsed': this.shortCollapsed,
-        'mdc-top-app-bar--prominent': this.prominent,
-        'mdc-top-app-bar--fixed': this.fixed
+        'mdc-top-app-bar': true
       },
-      myScrollTarget: null
+      myScrollTarget: props.scrollTarget || window,
+      root: null
+    });
+    var foundation;
+    var navIcon;
+    var iconRipples = [];
+
+    var handleNavigationClick = function handleNavigationClick(event) {
+      return foundation.handleNavigationClick(event);
     };
-  },
 
-  watch: {
-    scrollTarget(nv, ov) {
-      if (nv !== ov) {
-        this.myScrollTarget.removeEventListener('scroll', this.foundation_.handleTargetScroll);
-        this.myScrollTarget = nv;
-        this.myScrollTarget.addEventListener('scroll', this.foundation_.handleTargetScroll);
-      }
-    }
+    var handleTargetScroll = function handleTargetScroll(evt) {
+      return foundation.handleTargetScroll(evt);
+    };
 
-  },
-  methods: {
-    handleNavigationClick_(event) {
-      this.foundation_.handleNavigationClick(event);
-    }
+    var handleWindowResize = function handleWindowResize(evt) {
+      return foundation.handleWindowResize(evt);
+    };
 
-  },
+    var adapter = {
+      addClass: function addClass(className) {
+        return uiState.rootClasses = _objectSpread2(_objectSpread2({}, uiState.rootClasses), {}, _defineProperty({}, className, true));
+      },
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$rootClasses = uiState.rootClasses,
+            removed = _uiState$rootClasses[className],
+            rest = _objectWithoutProperties(_uiState$rootClasses, [className].map(_toPropertyKey));
 
-  mounted() {
-    const adapter = {
-      addClass: className => this.$set(this.rootClasses, className, true),
-      removeClass: className => this.$delete(this.rootClasses, className),
-      hasClass: className => Boolean(this.rootClasses[className]),
-      setStyle: (property, value) => this.$set(this.rootStyles, property, value),
-      getTopAppBarHeight: () => this.$el.clientHeight,
-      notifyNavigationIconClicked: () => {
-        this.$emit('nav', {});
-        emitCustomEvent(this.$el, strings$4.NAVIGATION_EVENT, {},
+        uiState.rootClasses = rest;
+      },
+      hasClass: function hasClass(className) {
+        return Boolean(uiState.rootClasses[className]);
+      },
+      setStyle: function setStyle(property, value) {
+        return uiState.rootStyles = _objectSpread2(_objectSpread2({}, uiState.rootStyles), {}, _defineProperty({}, property, value));
+      },
+      getTopAppBarHeight: function getTopAppBarHeight() {
+        return uiState.root.clientHeight;
+      },
+      notifyNavigationIconClicked: function notifyNavigationIconClicked() {
+        emit('nav', {});
+        emitCustomEvent(uiState.root, strings$c.NAVIGATION_EVENT, {},
         /** shouldBubble */
         true);
       },
-      //  registerScrollHandler: handler => {
-      //         if (this.myScrollTarget) {
-      //           this.myScrollTarget.addEventListener('scroll', handler);
-      //         } else {
-      //           window.addEventListener('scroll', handler);
-      //         }
-      //       },
-      //       deregisterScrollHandler: handler => {
-      //         if (this.myScrollTarget) {
-      //           this.myScrollTarget.removeEventListener('scroll', handler);
-      //         } else {
-      //           window.removeEventListener('scroll', handler);
-      //         }
-      //       },
-      getViewportScrollY: () => window.pageYOffset,
-      getTotalActionItems: () => this.$refs.root.querySelectorAll(`.${cssClasses$4.ACTION_ITEM}`).length
-    };
-    const {
-      short,
-      shortCollapsed,
-      fixed
-    } = this;
-
-    if (short || shortCollapsed) {
-      this.foundation_ = new MDCShortTopAppBarFoundation(adapter);
-    } else if (fixed) {
-      this.foundation_ = new MDCFixedTopAppBarFoundation(adapter);
-    } else {
-      this.foundation_ = new MDCTopAppBarFoundation(adapter);
-    } // todo: hunt down icons for ripples
-
-
-    this.navIcon_ = this.$el.querySelector(strings$4.NAVIGATION_ICON_SELECTOR);
-
-    if (this.navIcon_) {
-      this.navIcon_.addEventListener('click', this.handleNavigationClick_);
-    }
-
-    this.myScrollTarget = this.scrollTarget || window;
-    this.foundation_.init(); // Get all icons in the toolbar and instantiate the ripples
-
-    const icons = [].slice.call(this.$el.querySelectorAll(strings$4.ACTION_ITEM_SELECTOR));
-
-    if (this.navIcon_) {
-      icons.push(this.navIcon_);
-    }
-
-    this.iconRipples_ = icons.map(icon => {
-      const ripple = new RippleElement(icon);
-      ripple.init();
-      ripple.unbounded = true;
-      return ripple;
-    });
-  },
-
-  beforeDestroy() {
-    if (this.navIcon_) {
-      this.navIcon_.removeEventListener('click', this.handleNavigationClick_);
-    }
-
-    this.iconRipples_.forEach(iconRipple => iconRipple.destroy());
-    this.myScrollTarget && this.myScrollTarget.removeEventListener('scroll', this.foundation_.handleTargetScroll);
-    this.foundation_.destroy();
-  },
-
-  render(createElement) {
-    const {
-      $scopedSlots: scopedSlots
-    } = this;
-    return createElement(this.tag, {
-      class: this.rootClasses,
-      style: this.rootStyles,
-      ref: 'root',
-      on: this.$listeners
-    }, scopedSlots.default && scopedSlots.default());
-  }
-
-};
-
-var mcwFixedAdjust = {
-  name: 'mcw-fixed-adjust',
-  functional: true,
-  props: {
-    tag: {
-      type: String,
-      default: 'main'
-    },
-    dense: Boolean,
-    short: Boolean,
-    prominent: Boolean
-  },
-
-  render(createElement, {
-    props: {
-      short,
-      dense,
-      prominent,
-      tag
-    },
-    scopedSlots,
-    data: {
-      attrs,
-      staticStyle,
-      staticClass
-    }
-  }) {
-    var _scopedSlots$default;
-
-    const base = 'mdc-top-app-bar';
-    const suffix = '-fixed-adjust';
-    return createElement(tag, {
-      class: [{
-        [base + '--short' + suffix]: short,
-        [base + '--dense' + suffix]: dense && !prominent,
-        [base + '--dense-prominent' + suffix]: dense && prominent,
-        [base + '--prominent' + suffix]: !dense && prominent,
-        [base + '-' + suffix]: !short && !dense && !prominent
-      }, staticClass],
-      style: staticStyle,
-      attrs
-    }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots));
-  }
-
-};
-
-var mcwTopAppBarIcon = {
-  name: 'mcw-top-app-bar-icon',
-  props: {
-    actionItem: Boolean
-  },
-
-  render(createElement) {
-    var _scopedSlots$default;
-
-    const {
-      $attrs: attrs,
-      $scopedSlots: scopedSlots,
-      actionItem,
-      $listeners: listeners
-    } = this;
-    return createElement('button', {
-      class: {
-        'mdc-icon-button': 1,
-        'material-icons': 1,
-        'mdc-top-app-bar__action-item': actionItem,
-        'mdc-top-app-bar__navigation-icon': !actionItem
+      getViewportScrollY: function getViewportScrollY() {
+        var st = uiState.myScrollTarget;
+        return st.pageYOffset !== void 0 ? st.pageYOffset : st.scrollTop;
       },
-      attrs,
-      on: { ...listeners
+      getTotalActionItems: function getTotalActionItems() {
+        return uiState.root.querySelectorAll(strings$c.ACTION_ITEM_SELECTOR).length;
       }
-    }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots));
-  }
+    };
+    watch(function () {
+      return props.scrollTarget;
+    }, function (nv, ov) {
+      if (nv !== ov) {
+        uiState.myScrollTarget.removeEventListener('scroll', handleTargetScroll);
+        uiState.myScrollTarget = nv;
+        uiState.myScrollTarget.addEventListener('scroll', handleTargetScroll);
+      }
+    });
 
+    var setScrollTarget = function setScrollTarget(nv) {
+      uiState.myScrollTarget.removeEventListener('scroll', handleTargetScroll);
+      uiState.myScrollTarget = nv;
+      uiState.myScrollTarget.addEventListener('scroll', handleTargetScroll);
+    };
+
+    onMounted(function () {
+      var isFixed = uiState.root.classList.contains(cssClasses$7.FIXED_CLASS);
+      var isShort = uiState.root.classList.contains(cssClasses$7.SHORT_CLASS);
+
+      if (isShort) {
+        foundation = new MDCShortTopAppBarFoundation(adapter);
+      } else if (isFixed) {
+        foundation = new MDCFixedTopAppBarFoundation(adapter);
+      } else {
+        foundation = new MDCTopAppBarFoundation(adapter);
+      } // todo: hunt down icons for ripples
+
+
+      navIcon = uiState.root.querySelector(strings$c.NAVIGATION_ICON_SELECTOR); // Get all icons in the toolbar and instantiate the ripples
+
+      var icons = [].slice.call(uiState.root.querySelectorAll(strings$c.ACTION_ITEM_SELECTOR));
+
+      if (navIcon) {
+        navIcon.addEventListener('click', handleNavigationClick);
+        icons.push(navIcon);
+      }
+
+      iconRipples = icons.map(function (icon) {
+        var ripple = new RippleElement(icon);
+        ripple.init();
+        ripple.unbounded = true;
+        return ripple;
+      });
+      uiState.myScrollTarget.addEventListener('scroll', handleTargetScroll);
+
+      if (!isShort && !isFixed) {
+        window.addEventListener('resize', handleWindowResize);
+      }
+
+      foundation.init();
+    });
+    onBeforeUnmount(function () {
+      var _uiState$myScrollTarg;
+
+      if (navIcon) {
+        navIcon.removeEventListener('click', handleNavigationClick);
+      }
+
+      iconRipples.forEach(function (iconRipple) {
+        return iconRipple.destroy();
+      });
+      uiState.myScrollTarget.removeEventListener('scroll', handleTargetScroll);
+      (_uiState$myScrollTarg = uiState.myScrollTarget) === null || _uiState$myScrollTarg === void 0 ? void 0 : _uiState$myScrollTarg.removeEventListener('scroll', foundation.handleTargetScroll);
+      var isFixed = uiState.root.classList.contains(cssClasses$7.FIXED_CLASS);
+      var isShort = uiState.root.classList.contains(cssClasses$7.SHORT_CLASS);
+
+      if (!isShort && !isFixed) {
+        window.removeEventListener('resize', handleWindowResize);
+      }
+
+      foundation.destroy();
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      listeners: listeners,
+      setScrollTarget: setScrollTarget
+    });
+  }
 };
 
-var mcwTopAppBarRow = {
-  name: 'mcw-top-app-bar-row',
-  props: {
-    tag: {
-      type: String,
+/* script */
+const __vue_script__$D = script$D;
 
-      default() {
-        return 'div';
-      }
-
-    }
-  },
-  functional: true,
-
-  render(createElement, {
-    props: {
-      tag
-    },
-    scopedSlots,
-    data: {
-      attrs,
-      staticClass
-    }
-  }) {
-    var _scopedSlots$default;
-
-    return createElement(tag, {
-      class: ['mdc-top-app-bar__row', staticClass],
-      attrs
-    }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots));
-  }
-
+/* template */
+var __vue_render__$D = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    _vm.tag,
+    _vm._g(
+      {
+        ref: "root",
+        tag: "component",
+        class: _vm.rootClasses,
+        style: _vm.rootStyles
+      },
+      _vm.listeners
+    ),
+    [_vm._t("default")],
+    2
+  )
 };
+var __vue_staticRenderFns__$D = [];
+__vue_render__$D._withStripped = true;
 
-var mcwTopAppBarSection = {
-  name: 'mcw-top-app-bar-section',
-  props: {
-    align: {
-      type: String,
+  /* style */
+  const __vue_inject_styles__$D = undefined;
+  /* scoped */
+  const __vue_scope_id__$D = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$D = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$D = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
 
-      default() {
-        return 'start';
-      }
-
-    },
-    tag: {
-      type: String,
-
-      default() {
-        return 'div';
-      }
-
-    }
-  },
-  functional: true,
-
-  render(createElement, {
-    props: {
-      tag,
-      align
-    },
-    scopedSlots,
-    data: {
-      attrs,
-      staticClass
-    }
-  }) {
-    var _scopedSlots$default;
-
-    const classes = ['mdc-top-app-bar__section', staticClass];
-    align == 'start' && classes.push('mdc-top-app-bar__section--align-start');
-    align == 'end' && classes.push('mdc-top-app-bar__section--align-end');
-    return createElement(tag, {
-      class: classes,
-      attrs
-    }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots));
-  }
-
-};
-
-var mcwTopAppBarTitle = {
-  name: 'mcw-top-app-bar-title',
-  props: {
-    tag: {
-      type: String,
-
-      default() {
-        return 'span';
-      }
-
-    }
-  },
-  functional: true,
-
-  render(createElement, {
-    props: {
-      tag
-    },
-    scopedSlots,
-    data: {
-      attrs,
-      staticClass
-    }
-  }) {
-    var _scopedSlots$default;
-
-    return createElement(tag, {
-      class: ['mdc-top-app-bar__title', staticClass],
-      attrs
-    }, (_scopedSlots$default = scopedSlots.default) === null || _scopedSlots$default === void 0 ? void 0 : _scopedSlots$default.call(scopedSlots));
-  }
-
-};
+  
+  const __vue_component__$D = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$D, staticRenderFns: __vue_staticRenderFns__$D },
+    __vue_inject_styles__$D,
+    __vue_script__$D,
+    __vue_scope_id__$D,
+    __vue_is_functional_template__$D,
+    __vue_module_identifier__$D,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var topAppBar = BasePlugin({
-  mcwTopAppBar,
-  mcwFixedAdjust,
-  mcwTopAppBarIcon,
-  mcwTopAppBarRow,
-  mcwTopAppBarSection,
-  mcwTopAppBarTitle
-});
+  mcwTopAppBar: __vue_component__$D // mcwFixedAdjust,
+  // mcwTopAppBarIcon,
+  // mcwTopAppBarRow,
+  // mcwTopAppBarSection,
+  // mcwTopAppBarTitle,
 
-function mcwTypoMixin(defaultTag, defaultClassModifier, name = `mdc-${defaultTag}`) {
-  return {
-    functional: true,
-    props: {
-      tag: {
-        type: String,
-        default: defaultTag
-      },
-      classModifier: {
-        type: String,
-        default: defaultClassModifier
-      }
-    },
-
-    render(createElement, {
-      props: {
-        tag,
-        classModifier
-      },
-      scopedSlots,
-      listeners,
-      data: {
-        attrs
-      }
-    }) {
-      return createElement(tag, {
-        class: {
-          [name]: true,
-          'mdc-typography': true,
-          [`mdc-typography--${classModifier}`]: true
-        },
-        attrs,
-        on: listeners
-      }, scopedSlots.default && scopedSlots.default());
-    }
-
-  };
-}
-
-const mcwHeadline1 = {
-  name: 'mcw-headline1',
-  functional: true,
-  mixins: [mcwTypoMixin('h1', 'headline1')]
-};
-const mcwHeadline2 = {
-  name: 'mcw-headline2',
-  functional: true,
-  mixins: [mcwTypoMixin('h2', 'headline2')]
-};
-const mcwHeadline3 = {
-  name: 'mcw-headline3',
-  functional: true,
-  mixins: [mcwTypoMixin('h3', 'headline3')]
-};
-const mcwHeadline4 = {
-  name: 'mcw-headline4',
-  functional: true,
-  mixins: [mcwTypoMixin('h4', 'headline4')]
-};
-const mcwHeadline5 = {
-  name: 'mcw-headline5',
-  functional: true,
-  mixins: [mcwTypoMixin('h5', 'headline5')]
-};
-const mcwHeadline6 = {
-  name: 'mcw-headline6',
-  functional: true,
-  mixins: [mcwTypoMixin('h6', 'headline6')]
-};
-const mcwSubtitle1 = {
-  name: 'mcw-subtitle1',
-  functional: true,
-  mixins: [mcwTypoMixin('h6', 'subtitle1')]
-};
-const mcwSubtitle2 = {
-  name: 'mcw-subtitle2',
-  functional: true,
-  mixins: [mcwTypoMixin('h6', 'subtitle2')]
-};
-const mcwBody1 = {
-  name: 'mcw-body1',
-  functional: true,
-  mixins: [mcwTypoMixin('p', 'body1')]
-};
-const mcwBody2 = {
-  name: 'mcw-body2',
-  functional: true,
-  mixins: [mcwTypoMixin('p', 'body2')]
-};
-const mcwButton1 = {
-  name: 'mcw-button1',
-  functional: true,
-  mixins: [mcwTypoMixin('span', 'button', 'mdc-button1')]
-};
-const mcwCaption = {
-  name: 'mcw-caption',
-  functional: true,
-  mixins: [mcwTypoMixin('span', 'caption')]
-};
-const mcwOverline = {
-  name: 'mcw-overline',
-  functional: true,
-  mixins: [mcwTypoMixin('span', 'overline')]
-};
-
-var typography = BasePlugin({
-  mcwHeadline1,
-  mcwHeadline2,
-  mcwHeadline3,
-  mcwHeadline4,
-  mcwHeadline5,
-  mcwHeadline6,
-  mcwOverline,
-  mcwSubtitle1,
-  mcwSubtitle2,
-  mcwBody1,
-  mcwBody2,
-  mcwButton1,
-  mcwCaption
 });
 
 var index$1 = {
-  install(vm) {
+  install: function install(vm) {
     vm.use(button);
     vm.use(card);
     vm.use(circularProgress);
@@ -8152,10 +10543,8 @@ var index$1 = {
     vm.use(tabs);
     vm.use(textfield);
     vm.use(topAppBar);
-    vm.use(typography);
   }
-
 };
 
 export default index$1;
-export { index as base, button, card, checkbox, chips, circularProgress, dataTable, dialog, drawer, fab, floatingLabel, iconButton, layoutGrid, lineRipple, linearProgress, list, materialIcon, menu, notchedOutline, radio, select, slider, snackbar, switchControl, tabs, textfield, topAppBar, typography };
+export { index as base, button, card, checkbox, chips, circularProgress, dataTable, dialog, drawer, fab, floatingLabel, iconButton, layoutGrid, lineRipple, linearProgress, list, materialIcon, menu, notchedOutline, radio, select, slider, snackbar, switchControl, tabs, textfield, topAppBar };

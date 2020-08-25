@@ -2,16 +2,16 @@
   <div class="mcw-demo mcw-demo--container">
     <div>
       <p>
-        <mcw-switch v-model="checked" label="Property"/>
+        <mcw-switch id="property-switch" v-model="checked" label="Property" />
       </p>
       <p>
-        <mcw-switch disabled label="Disabled"/>
+        <mcw-switch disabled label="Disabled" />
       </p>
 
-      <mcw-caption>
+      <div class="mdc-typography--caption">
         Property:
         <span class>{{ checked ? 'on' : 'off' }}</span>
-      </mcw-caption>
+      </div>
     </div>
   </div>
 </template>

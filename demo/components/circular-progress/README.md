@@ -22,8 +22,9 @@ var vm = new Vue({
 | --------------- | ------- | --------- | ---------------------------------------------------------- |
 | `open`          | Boolean | true      | When changed to `false`, closes the component              |
 | `indeterminate` | Boolean | false     | When set to `true`, renders the indeterminate variant      |
+| `medium`        | Boolean | false     | When set to `true`, renders the medium variant             |
 | `progress`      | Number  | undefined | Decimal value between 0 and 1, sets the progress bar width |
-| `medium`        | Boolean | false     | When set to `true`, renders the medium size variant        |
+| `tag`           | String  | div       | The html root element type                                 |
 
 - Determinate
 
@@ -45,4 +46,4 @@ var vm = new Vue({
 
 ### Reference
 
-- <https://material.io/components/web/catalog/circular-progress>
+- <https://github.com/material-components/material-components-web/tree/master/packages/mdc-circular-progress>

@@ -1,73 +1,98 @@
+import { MDCFadingTabIndicatorFoundation } from '@material/tab-indicator/fading-foundation';
 import { MDCTabIndicatorFoundation } from '@material/tab-indicator/foundation';
+import { MDCSlidingTabIndicatorFoundation } from '@material/tab-indicator/sliding-foundation';
+import {
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  toRefs,
+} from '@vue/composition-api';
 
 const { cssClasses } = MDCTabIndicatorFoundation;
 
 export default {
   name: 'mcw-tab-indicator',
-  data() {
-    return { classes: { 'mdc-tab-indicator': 1 }, styles: {} };
-  },
-
-  mounted() {
-    this.adapter_ = {
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      computeContentClientRect: () =>
-        this.$refs.content.getBoundingClientRect(),
-      setContentStyleProperty: (prop, value) => {
-        this.$set(this.styles, prop, value);
+  props: { fade: { type: Boolean }, icon: { type: String } },
+  setup(props) {
+    const uiState = reactive({
+      classes: { 'mdc-tab-indicator--fade': props.fade },
+      contentClasses: {
+        'mdc-tab-indicator__content--underline': !props.icon,
+        'mdc-tab-indicator__content--icon': !!props.icon,
+        'material-icons': !!props.icon,
       },
+      contentAttrs: { 'aria-hidden': !!props.icon },
+      styles: {},
+      contentEl: null,
+    });
+
+    let foundation;
+
+    const adapter = {
+      addClass: className =>
+        (uiState.classes = { ...uiState.classes, [className]: true }),
+      removeClass: className => {
+        // eslint-disable-next-line no-unused-vars
+        const { [className]: removed, ...rest } = uiState.classes;
+        uiState.classes = rest;
+      },
+      computeContentClientRect: () => uiState.contentEl.getBoundingClientRect(),
+      setContentStyleProperty: (prop, value) =>
+        (uiState.styles = { ...uiState.styles, [prop]: value }),
     };
 
-    this.foundation = new MDCTabIndicatorFoundation(this.adapter_);
-    this.foundation.init();
-  },
-  beforeDestroy() {
-    this.foundation.destroy();
-  },
-  methods: {
-    deactivate() {
-      this.adapter_.removeClass(cssClasses.ACTIVE);
-    },
-    computeContentClientRect() {
-      return this.foundation.computeContentClientRect();
-    },
-    activate(previousIndicatorClientRect) {
+    const deactivate = () => foundation.deactivate();
+
+    const computeContentClientRect = () =>
+      foundation.computeContentClientRect();
+
+    const activate = previousIndicatorClientRect => {
       // Early exit if no indicator is present to handle cases where an indicator
       // may be activated without a prior indicator state
       if (!previousIndicatorClientRect) {
-        this.adapter_.addClass(cssClasses.ACTIVE);
+        adapter.addClass(cssClasses.ACTIVE);
         return;
       }
 
-      const currentClientRect = this.computeContentClientRect();
+      const currentClientRect = computeContentClientRect();
       const widthDelta =
         previousIndicatorClientRect.width / currentClientRect.width;
       const xPosition =
         previousIndicatorClientRect.left - currentClientRect.left;
-      this.foundation.adapter_.addClass(cssClasses.NO_TRANSITION);
-      this.adapter_.setContentStyleProperty(
-        'transform',
-        `translateX(${xPosition}px) scaleX(${widthDelta})`,
-      );
-      // THE FIX
+
+      // THE FIX - use request animation frame to ensure framework has rendered DOM
       requestAnimationFrame(() => {
-        this.adapter_.removeClass(cssClasses.NO_TRANSITION);
-        this.adapter_.addClass(cssClasses.ACTIVE);
-        this.adapter_.setContentStyleProperty('transform', '');
+        adapter.addClass(cssClasses.NO_TRANSITION);
+        adapter.setContentStyleProperty(
+          'transform',
+          `translateX(${xPosition}px) scaleX(${widthDelta})`,
+        );
+
+        requestAnimationFrame(() => {
+          adapter.removeClass(cssClasses.NO_TRANSITION);
+          adapter.addClass(cssClasses.ACTIVE);
+          adapter.setContentStyleProperty('transform', '');
+        });
       });
-    },
-  },
-  render(createElement) {
-    return createElement('span', { class: this.classes }, [
-      createElement('span', {
-        class: {
-          'mdc-tab-indicator__content': 1,
-          'mdc-tab-indicator__content--underline': 1,
-        },
-        style: this.styles,
-        ref: 'content',
-      }),
-    ]);
+    };
+
+    onMounted(() => {
+      foundation = props.fade
+        ? new MDCFadingTabIndicatorFoundation(adapter)
+        : new MDCSlidingTabIndicatorFoundation(adapter);
+
+      foundation.init();
+    });
+
+    onBeforeUnmount(() => {
+      foundation.destroy();
+    });
+
+    return {
+      ...toRefs(uiState),
+      activate,
+      deactivate,
+      computeContentClientRect,
+    };
   },
 };

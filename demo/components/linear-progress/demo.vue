@@ -6,25 +6,26 @@
         aria-label="Example Progress Bar"
         aria-valuemin="0"
         aria-valuemax="1"
-      />
-      <p>
-        <mcw-caption>Determinate</mcw-caption>
-      </p>
+      ></mcw-linear-progress>
+      <div class="mdc-typography--caption linear-progress-demo--example">
+        Determinate
+      </div>
+
       <br />
-      <mcw-linear-progress indeterminate />
-      <p>
-        <mcw-caption>Indeterminate</mcw-caption>
-      </p>
+      <mcw-linear-progress indeterminate></mcw-linear-progress>
+      <div class="mdc-typography--caption" linear-progress-demo--example>
+        Indeterminate
+      </div>
       <br />
-      <mcw-linear-progress progress="0.5" buffer="0.75" />
-      <p>
-        <mcw-caption>Buffer</mcw-caption>
-      </p>
+      <mcw-linear-progress progress="0.5" buffer="0.75"></mcw-linear-progress>
+      <div class="mdc-typography--caption linear-progress-demo--example">
+        Buffer
+      </div>
       <br />
-      <mcw-linear-progress reversed progress="0.5" />
-      <p>
-        <mcw-caption>Reversed</mcw-caption>
-      </p>
+      <mcw-linear-progress reversed progress="0.5"></mcw-linear-progress>
+      <div class="mdc-typography--caption linear-progress-demo--example">
+        Reversed
+      </div>
     </div>
   </div>
 </template>
@@ -34,5 +35,8 @@
   flex: 1;
   min-width: 150px;
   max-width: 450px;
+}
+.linear-progress-demo--example {
+  margin: 20px 0;
 }
 </style>

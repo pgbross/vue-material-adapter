@@ -1,15 +1,21 @@
-import { MDCMenuSurfaceFoundation } from '@material/menu-surface/foundation';
-import { MDCMenuFoundation } from '@material/menu/foundation';
 import { MDCSelectFoundation } from '@material/select/foundation';
-import { emitCustomEvent, VMAUniqueIdMixin } from '~/base/index.js';
-import { mcwFloatingLabel } from '~/floating-label/index.js';
-import { mcwLineRipple } from '~/line-ripple/index.js';
-import { mcwNotchedOutline } from '~/notched-outline/index.js';
-import { RippleBase } from '~/ripple/index.js';
+import {
+  computed,
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  toRefs,
+  watch,
+  toRef,
+} from '@vue/composition-api';
+import { emitCustomEvent } from '~/base/index.js';
+import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 import SelectHelperText from './select-helper-text.js';
-import SelectIcon from './select-icon.js';
+import SelectIcon from './select-icon.vue';
 
-const { strings } = MDCSelectFoundation;
+const { strings, cssClasses } = MDCSelectFoundation;
+
+let uid_ = 0;
 
 export default {
   name: 'mcw-select',
@@ -27,383 +33,284 @@ export default {
     disabled: Boolean,
     label: String,
     outlined: Boolean,
-    id: { type: String },
+    required: Boolean,
+    menuFullwidth: { type: Boolean, default: () => true },
   },
-  mixins: [VMAUniqueIdMixin],
-  data() {
-    return {
+
+  setup(props, { emit }) {
+    const uiState = reactive({
       styles: {},
       classes: {},
       selectedTextContent: '',
       selTextAttrs: {},
       selectAnchorAttrs: {},
-    };
-  },
+      helpId: `help-mcw-select-${uid_++}`,
+      menuClasses: { 'mdc-menu-surface--fullwidth': props.menuFullwidth },
+      root: null,
+      helperTextEl: null,
+      leadingIconEl: null,
+      lineRippleEl: null,
+      outlineEl: null,
+      labelEl: null,
+      menu: null,
+      anchorEl: null,
+    });
 
-  components: { SelectHelperText, SelectIcon },
-  computed: {
-    rootClasses() {
+    let rippleClasses;
+    let rippleStyles;
+
+    if (props.outlined) {
+      const { classes, styles } = useRipplePlugin(toRef(uiState, 'anchorEl'), {
+        registerInteractionHandler: (evtType, handler) => {
+          uiState.anchorEl.addEventListener(evtType, handler);
+        },
+        deregisterInteractionHandler: (evtType, handler) => {
+          uiState.anchorEl.removeEventListener(evtType, handler);
+        },
+      });
+      rippleClasses = classes;
+      rippleStyles = styles;
+    }
+
+    const rootClasses = computed(() => {
       return {
         'mdc-select': 1,
-        'mdc-select--outlined': this.outlined,
-        'mdc-select--with-leading-icon': this.leadingIcon,
-        'mdc-select--disabled': this.disabled,
-        'mdc-select--no-label': !this.label,
-        ...this.classes,
+        'mdc-select--required': props.required,
+        'mdc-select--filled': !props.outlined,
+        'mdc-select--outlined': props.outlined,
+        'mdc-select--with-leading-icon': props.leadingIcon,
+        'mdc-select--disabled': props.disabled,
+        'mdc-select--no-label': !props.label,
+
+        ...uiState.classes,
       };
-    },
+    });
 
-    selectedTextAttrs() {
-      const helpId = `help-${this.vma_uid_}`;
+    const menuItems = computed(() => uiState.menu?.items);
 
-      const attrs = { ...this.selTextAttrs };
-      if (this.helptext) {
-        attrs['aria-controls'] = helpId;
-        attrs['aria-describedBy'] = helpId;
+    let foundation;
+
+    const handleFocus = () => foundation.handleFocus();
+    const handleBlur = () => foundation.handleBlur();
+    const handleClick = evt => {
+      uiState.anchorEl.focus();
+      handleFocus();
+      foundation.handleClick(getNormalizedXCoordinate(evt));
+    };
+    const handleKeydown = evt => foundation.handleKeydown(evt);
+
+    const handleChange = isOpen =>
+      foundation[`handleMenu${isOpen ? 'Opened' : 'Closed'}`]();
+
+    const layout = () => foundation.layout();
+    const selectedIndex = () => foundation.getSelectedIndex();
+
+    const handleMenuOpened = () => foundation.handleMenuOpened();
+    const handleMenuClosed = () => foundation.handleMenuClosed();
+
+    const handleMenuItemAction = ({ index }) =>
+      foundation.handleMenuItemAction(index);
+
+    const layoutOptions = () => {
+      foundation.layoutOptions();
+      uiState.menu.layout();
+    };
+
+    const selectedTextAttrs = computed(() => {
+      const attrs = { ...uiState.selTextAttrs };
+      if (props.helptext) {
+        attrs['aria-controls'] = uiState.helpId;
+        attrs['aria-describedBy'] = uiState.helpId;
       }
       return attrs;
-    },
+    });
 
-    selectAriaControls() {
-      return this.helptext ? 'help-' + this.vma_uid_ : undefined;
-    },
-  },
-  watch: {
-    disabled(value) {
-      const { foundation } = this;
-      foundation && foundation.updateDisabledStyle(value);
-    },
-    value: 'refreshIndex',
-  },
-
-  mounted() {
-    this.menuSetup_();
-    const {
-      $refs: { helperTextEl, leadingIconEl },
-    } = this;
-
-    this.foundation = new MDCSelectFoundation(
-      Object.assign({
-        // common methods
-        addClass: className => this.$set(this.classes, className, true),
-        removeClass: className => this.$delete(this.classes, className),
-        hasClass: className => Boolean(this.rootClasses[className]),
-        setRippleCenter: normalizedX => {
-          const {
-            $refs: { lineRippleEl },
-          } = this;
-
-          lineRippleEl && lineRippleEl.setRippleCenter(normalizedX);
-        },
-        activateBottomLine: () => {
-          const {
-            $refs: { lineRippleEl },
-          } = this;
-          lineRippleEl && lineRippleEl.foundation_.activate();
-        },
-        deactivateBottomLine: () => {
-          const {
-            $refs: { lineRippleEl },
-          } = this;
-          lineRippleEl && lineRippleEl.foundation_.deactivate();
-        },
-
-        notifyChange: value => {
-          const index = this.selectedIndex;
-          emitCustomEvent(
-            this.$el,
-            strings.CHANGE_EVENT,
-            { value, index },
-            true /* shouldBubble  */,
-          );
-          value != this.value && this.$emit('change', value);
-        },
-
-        // select methods
-        getSelectedMenuItem: () => {
-          return this.menuElement_.querySelector(
-            strings.SELECTED_ITEM_SELECTOR,
-          );
-        },
-        getMenuItemAttr: (menuItem, attr) => menuItem.getAttribute(attr),
-
-        setSelectedText: text => {
-          this.selectedTextContent = text;
-        },
-        isSelectAnchorFocused: () => {
-          return document.activeElement === this.$refs.anchorEl;
-        },
-
-        getSelectAnchorAttr: attr => {
-          return this.selectAnchorAttrs[attr];
-        },
-
-        setSelectAnchorAttr: (attr, value) => {
-          this.$set(this.selectAnchorAttrs, attr, value);
-        },
-        openMenu: () => {
-          this.menu_.surfaceOpen = true;
-        },
-        closeMenu: () => {
-          this.menu_.surfaceOpen = false;
-        },
-
-        getAnchorElement: () => this.$refs.anchorEl,
-        setMenuAnchorElement: anchorEl => this.menu_.setAnchorElement(anchorEl),
-        setMenuAnchorCorner: anchorCorner =>
-          this.menu_.setAnchorCorner(anchorCorner),
-
-        setMenuWrapFocus: wrapFocus => (this.menu_.wrapFocus = wrapFocus),
-        setAttributeAtIndex: (index, attributeName, attributeValue) =>
-          this.menu_.items[index].setAttribute(attributeName, attributeValue),
-        removeAttributeAtIndex: (index, attributeName) =>
-          this.menu_.items[index].removeAttribute(attributeName),
-        focusMenuItemAtIndex: index => {
-          this.menu_.items[index].focus();
-        },
-        getMenuItemCount: () => this.menu_.items.length,
-        getMenuItemValues: () =>
-          this.menu_.items.map(el => el.getAttribute(strings.VALUE_ATTR) || ''),
-        getMenuItemTextAtIndex: index => this.menu_.items[index].textContent,
-        addClassAtIndex: (index, className) => {
-          this.menu_.items[index].classList.add(className);
-        },
-        removeClassAtIndex: (index, className) => {
-          this.menu_.items[index].classList.remove(className);
-        },
-
-        // outline methods
-        hasOutline: () => {
-          return this.outlined;
-        },
-        notchOutline: labelWidth => {
-          const {
-            $refs: { outlineEl },
-          } = this;
-          outlineEl && outlineEl.notch(labelWidth);
-        },
-        closeOutline: () => {
-          const {
-            $refs: { outlineEl },
-          } = this;
-          outlineEl && outlineEl.closeNotch();
-        },
-        // label methods
-        hasLabel: () => {
-          return !!this.label;
-        },
-        floatLabel: value => {
-          const {
-            $refs: { labelEl, outlineEl },
-          } = this;
-          (labelEl || outlineEl).float(value);
-        },
-        getLabelWidth: () => {
-          const {
-            $refs: { labelEl },
-          } = this;
-          return labelEl && labelEl.getWidth();
-        },
-      }),
-      {
-        helperText: helperTextEl && helperTextEl.foundation,
-
-        leadingIcon: leadingIconEl && leadingIconEl.foundation,
+    const adapter = {
+      // select methods
+      getSelectedMenuItem: () => {
+        const x = menuItems.value.find(item =>
+          item.classList.contains(cssClasses.SELECTED_ITEM_CLASS),
+        );
+        return x?.$el;
       },
-    );
 
-    if (this.menu_) {
-      this.menu_.listen(
-        MDCMenuSurfaceFoundation.strings.CLOSED_EVENT,
-        this.handleMenuClosed,
-      );
-      this.menu_.listen(
-        MDCMenuSurfaceFoundation.strings.OPENED_EVENT,
-        this.handleMenuOpened,
-      );
-      this.menu_.listen(
-        MDCMenuFoundation.strings.SELECTED_EVENT,
-        this.handleMenuItemAction,
-      );
-    }
+      getMenuItemAttr: (menuItem, attr) => menuItem.getAttribute(attr),
 
-    this.foundation.init();
-    // this.foundation.handleChange(false);
+      setSelectedText: text => {
+        uiState.selectedTextContent = text;
+      },
+      isSelectAnchorFocused: () => document.activeElement === uiState.anchorEl,
+      getSelectAnchorAttr: attr => uiState.selectAnchorAttrs[attr],
+      setSelectAnchorAttr: (attr, value) =>
+        (uiState.selectAnchorAttrs = {
+          ...uiState.selectAnchorAttrs,
+          [attr]: value,
+        }),
+      removeSelectAnchorAttr: attr => {
+        // eslint-disable-next-line no-unused-vars
+        const { [attr]: removed, ...rest } = uiState.selectAnchorAttrs;
+        uiState.selectAnchorAttrs = rest;
+      },
+      addMenuClass: className =>
+        (uiState.menuClasses = { ...uiState.menuClasses, [className]: true }),
 
-    // initial sync with DOM
-    this.refreshIndex();
-    // this.slotObserver = new MutationObserver(() => this.refreshIndex());
-    // this.slotObserver.observe(this.$refs.native_control, {
-    //   childList: true,
-    //   subtree: true,
-    // });
+      removeMenuClass: className => {
+        // eslint-disable-next-line no-unused-vars
+        const { [className]: removed, ...rest } = uiState.menuClasses;
+        uiState.menuClasses = rest;
+      },
+      openMenu: () => (uiState.menu.surfaceOpen = true),
+      closeMenu: () => (uiState.menu.surfaceOpen = false),
+      getAnchorElement: () => uiState.anchorEl,
+      setMenuAnchorElement: anchorEl => uiState.menu.setAnchorElement(anchorEl),
+      setMenuAnchorCorner: anchorCorner =>
+        uiState.menu.setAnchorCorner(anchorCorner),
+      setMenuWrapFocus: wrapFocus => (uiState.menu.wrapFocus = wrapFocus),
+      getSelectedIndex: () => {
+        const index = uiState.menu.selectedIndex;
+        return index instanceof Array ? index[0] : index;
+      },
+      setSelectedIndex: index => {
+        uiState.menu.selectedIndex = index;
+      },
+      setAttributeAtIndex: (index, attributeName, attributeValue) =>
+        menuItems.value[index].setAttribute(attributeName, attributeValue),
+      removeAttributeAtIndex: (index, attributeName) =>
+        menuItems.value[index].removeAttribute(attributeName),
+      focusMenuItemAtIndex: index => menuItems.value[index].$el.focus(),
+      getMenuItemCount: () => menuItems.value.length,
+      getMenuItemValues: () =>
+        menuItems.value.map(el => el.getAttribute(strings.VALUE_ATTR) || ''),
+      getMenuItemTextAtIndex: index => {
+        return menuItems.value[index].$el.textContent;
+      },
+      addClassAtIndex: (index, className) => {
+        menuItems.value[index].classList.add(className);
+      },
+      removeClassAtIndex: (index, className) =>
+        menuItems.value[index].classList.remove(className),
 
-    if (!this.outlined) {
-      this.ripple = new RippleBase(this);
-      this.ripple.init();
-    }
-  },
+      isTypeaheadInProgress: () => uiState.menu.typeaheadInProgress(),
+      typeaheadMatchItem: (nextChar, startingIndex) =>
+        uiState.menu?.typeaheadMatchItem(nextChar, startingIndex),
 
-  beforeDestroy() {
-    // this.slotObserver.disconnect();
-    if (this.menu_) {
-      this.menu_.unlisten(
-        MDCMenuSurfaceFoundation.strings.SELECTED_EVENT,
-        this.handleMenuItemAction,
-      );
+      // common methods
+      addClass: className =>
+        (uiState.classes = { ...uiState.classes, [className]: true }),
+      removeClass: className => {
+        // eslint-disable-next-line no-unused-vars
+        const { [className]: removed, ...rest } = uiState.classes;
+        uiState.classes = rest;
+      },
+      hasClass: className => Boolean(rootClasses.value[className]),
+      setRippleCenter: normalizedX =>
+        uiState.lineRippleEl?.setRippleCenter(normalizedX),
+      activateBottomLine: () => uiState.lineRippleEl?.activate(),
+      deactivateBottomLine: () => uiState.lineRippleEl?.deactivate(),
 
-      this.menu_.unlisten(
-        MDCMenuSurfaceFoundation.strings.OPENED_EVENT,
-        this.handleMenuOpened,
-      );
+      notifyChange: value => {
+        const index = selectedIndex();
+        emitCustomEvent(
+          uiState.root,
+          strings.CHANGE_EVENT,
+          { value, index },
+          true /* shouldBubble  */,
+        );
+        value != props.value && emit('change', value);
+      },
 
-      this.menu_.unlisten(
-        MDCMenuSurfaceFoundation.strings.CLOSED_EVENT,
-        this.handleMenuClosed,
-      );
-    }
+      // outline methods
+      hasOutline: () => props.outlined,
+      notchOutline: labelWidth => uiState.outlineEl?.notch(labelWidth),
+      closeOutline: () => uiState.outlineEl?.closeNotch(),
 
-    const foundation = this.foundation;
-    this.foundation = null;
-    foundation.destroy();
+      // label methods
+      hasLabel: () => !!props.label,
+      floatLabel: shouldFloat =>
+        (uiState.labelEl || uiState.outlineEl).float(shouldFloat),
+      getLabelWidth: () => uiState.labelEl?.getWidth(),
+      setLabelRequired: isRequired => uiState.labelEl?.setRequired(isRequired),
+    };
 
-    this.ripple && this.ripple.destroy();
-  },
+    const setFixedPosition = isFixed => uiState.menu.setFixedPosition(isFixed);
 
-  methods: {
-    handleMenuOpened() {
-      this.foundation.handleMenuOpened();
-    },
-    handleMenuClosed() {
-      this.foundation.handleMenuClosed();
-    },
-    handleMenuItemAction(evt) {
-      this.foundation.handleMenuItemAction(evt.detail.index);
-    },
-    handleChange() {
-      this.foundation.handleChange(true);
-    },
-
-    handleFocus() {
-      this.foundation.handleFocus();
-    },
-
-    handleBlur() {
-      this.foundation.handleBlur();
-    },
-
-    handleClick(evt) {
-      this.$refs.anchorEl.focus();
-      this.handleFocus();
-      this.foundation.handleClick(this.getNormalizedXCoordinate(evt));
-    },
-
-    getNormalizedXCoordinate(evt) {
-      const targetClientRect = evt.target.getBoundingClientRect();
-      const xCoordinate = evt.clientX;
-      return xCoordinate - targetClientRect.left;
-    },
-
-    menuSetup_() {
-      this.menuElement_ = this.$el.querySelector(
-        MDCSelectFoundation.strings.MENU_SELECTOR,
-      );
-      if (this.menuElement_) {
-        this.menu_ = this.menuElement_.__vue__;
-      }
-    },
-    refreshIndex() {
-      const items = this.menu_.items.map(
+    const refreshIndex = () => {
+      const items = menuItems.value.map(
         el => el.getAttribute(strings.VALUE_ATTR) || '',
       );
 
       const idx = items.findIndex(value => {
-        return this.value === value;
+        return props.value === value;
       });
-      this.foundation.setSelectedIndex(idx);
-    },
-  },
+      foundation.setSelectedIndex(idx);
+    };
 
-  render(createElement) {
-    const { $scopedSlots: scopedSlots } = this;
-
-    const helpId = `help-${this.vma_uid_}`;
-
-    const anchorNodes = [
-      createElement('span', { class: ['mdc-select__ripple'] }),
-      createElement('input', {
-        class: {
-          'mdc-select__selected-text': 1,
-        },
-        attrs: {
-          disabled: true,
-          readonly: true,
-          value: this.selectedTextContent,
-          ...this.selectedTextAttrs,
-        },
-        ref: 'selectedTextEl',
-      }),
-      createElement('i', { class: { 'mdc-select__dropdown-icon': 1 } }),
-    ];
-
-    if (this.outlined) {
-      anchorNodes.push(
-        createElement(mcwNotchedOutline, { ref: 'outlineEl' }, this.label),
-      );
-    } else {
-      anchorNodes.push(
-        createElement(mcwFloatingLabel, { ref: 'labelEl' }, this.label),
-        createElement(mcwLineRipple, { ref: 'lineRippleEl' }, this.label),
-      );
-    }
-    if (this.leadingIcon) {
-      anchorNodes.unshift(
-        createElement('select-icon', {
-          attrs: { icon: this.leadingIcon, 'tab-index': '0', role: 'button' },
-          ref: 'leadingIconEl',
-        }),
-      );
-    }
-
-    const anchorEl = createElement(
-      'div',
-      {
-        class: { 'mdc-select__anchor': 1 },
-        attrs: this.selectAnchorAttrs,
-        ref: 'anchorEl',
-        on: {
-          click: evt => this.handleClick(evt),
-          focus: () => this.handleFocus(),
-          blur: () => this.handleBlur(),
-        },
-      },
-      anchorNodes,
+    watch(
+      () => props.disabled,
+      nv => foundation?.updateDisabledStyle(nv),
     );
 
-    const nodes = [anchorEl, scopedSlots.default && scopedSlots.default()];
-
-    if (this.helptext) {
-      nodes.push(
-        createElement(
-          'select-helper-text',
-          {
-            attrs: {
-              helptextPersistent: this.helptextPersistent,
-              helptextValidation: this.helptextValidation,
-              id: helpId,
-            },
-            ref: 'helperTextEl',
-          },
-          [this.helptext],
-        ),
-      );
-    }
-    return createElement(
-      'div',
-      {
-        class: this.rootClasses,
+    watch(
+      () => props.value,
+      () => {
+        refreshIndex();
       },
-      nodes,
     );
+
+    onMounted(() => {
+      foundation = new MDCSelectFoundation(adapter, {
+        helperText: uiState.helperTextEl?.foundation,
+        leadingIcon: uiState.leadingIconEl?.foundation,
+      });
+
+      foundation = new MDCSelectFoundation(adapter);
+      foundation.init();
+
+      // initial sync with DOM
+      refreshIndex();
+
+      // do we need a slotObserver here?
+      // this.slotObserver = new MutationObserver(() => this.refreshIndex());
+      // this.slotObserver.observe(this.$refs.native_control, {
+      //   childList: true,
+      //   subtree: true,
+      // });
+    });
+
+    onBeforeUnmount(() => {
+      foundation.destroy();
+    });
+
+    return {
+      ...toRefs(uiState),
+      rootClasses,
+      handleBlur,
+      handleFocus,
+      handleClick,
+      handleChange,
+      handleKeydown,
+      layout,
+      layoutOptions,
+      rippleClasses,
+      rippleStyles,
+      selectedTextAttrs,
+      handleMenuItemAction,
+      refreshIndex,
+      setFixedPosition,
+      handleMenuOpened,
+      handleMenuClosed,
+    };
   },
+
+  components: { SelectHelperText, SelectIcon },
 };
+
+// ===
+// Private functions
+// ===
+
+function getNormalizedXCoordinate(evt) {
+  const targetClientRect = evt.target.getBoundingClientRect();
+  const xCoordinate = evt.clientX;
+  return xCoordinate - targetClientRect.left;
+}

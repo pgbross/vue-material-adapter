@@ -1,6 +1,5 @@
-@use '~@material/button' with (
+@use '@material/button' with (
   $height: 48px
 );
 
 @include button.core-styles;
-@include button.theme-baseline;

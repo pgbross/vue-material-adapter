@@ -1,6 +1,0 @@
-@use '@material/ripple/mixins' as ripple-mixins;
-
-.material-icons--ripple-surface {
-    @include ripple-mixins.surface;
-    @include ripple-mixins.radius-bounded();
-}

@@ -1,8 +1,7 @@
 import { BasePlugin } from '~/base/index.js';
-import mcwButtonBase from './button-base.js';
-import mcwButton from './button.js';
+import mcwButton from './button.vue';
 
-export { mcwButtonBase, mcwButton };
+export { mcwButton };
 
 export default BasePlugin({
   mcwButton,

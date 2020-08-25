@@ -21,12 +21,12 @@ var vm = new Vue({
 | prop            | Type    | Default   | Description                                                  |
 | --------------- | ------- | --------- | ------------------------------------------------------------ |
 | `open`          | Boolean | true      | When changed to `false`, closes the component                |
-| `indeterminate` | Boolean | false     | When set to `true`, renders the indeterminate variant        |
-| `reversed`      | Boolean | false     | When set to `true`, renders the reversed variant             |
+| `indeterminate` | Boolean | false     | If `true`, renders the indeterminate variant                 |
+| `reversed`      | Boolean | false     | If `true`, renders the reversed variant                      |
 | `progress`      | Number  | undefined | Decimal value between 0 and 1, sets the progress bar width   |
 | `buffer`        | Number  | undefined | Decimal value between 0 and 1, sets the buffer bar width     |
 | `bufferingDots` | Boolean | true      | Whether to show the buffer dots in the un-progressed section |
-| `tag`           | String  | 'div'     | The tag type to render                                       |
+| `tag`           | String  | 'div'     | The root element                                             |
 
 - Determinate
 
@@ -54,4 +54,4 @@ var vm = new Vue({
 
 ### Reference
 
-- <https://material.io/components/web/catalog/linear-progress>
+- <https://github.com/material-components/material-components-web/tree/master/packages/mdc-linear-progress>

@@ -1,4 +1,11 @@
 import { MDCCircularProgressFoundation } from '@material/circular-progress/foundation';
+import {
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  toRefs,
+  watch,
+} from '@vue/composition-api';
 
 const ProgressPropType = {
   type: [Number, String],
@@ -6,6 +13,113 @@ const ProgressPropType = {
     return Number(value) >= 0 && Number(value) <= 1;
   },
 };
+
+export default {
+  name: 'mcw-circular-progress',
+  props: {
+    open: { type: Boolean, default: true },
+    indeterminate: Boolean,
+    medium: Boolean,
+    progress: ProgressPropType,
+    tag: { type: String, default: 'div' },
+  },
+
+  setup(props) {
+    const uiState = reactive({
+      classes: {
+        'mdc-circular-progress': 1,
+        'mdc-circular-progress--medium': props.medium,
+        'mdc-circular-progress--large': !props.medium,
+      },
+      rootAttrs: {},
+      circleAttrs: getCircleAttrs(props.medium, false),
+      indeterminateAttrs: getCircleAttrs(props.medium, true),
+      root: null,
+    });
+
+    let foundation;
+
+    const adapter = {
+      addClass: className => {
+        uiState.classes = { ...uiState.classes, [className]: true };
+      },
+
+      getDeterminateCircleAttribute: attributeName => {
+        return uiState.circleAttrs[attributeName];
+      },
+
+      hasClass: className => uiState.root.classList.contains(className),
+      removeClass: className => {
+        // eslint-disable-next-line no-unused-vars
+        const { [className]: removed, ...rest } = uiState.classes;
+        uiState.classes = rest;
+      },
+
+      removeAttribute: attributeName => {
+        // eslint-disable-next-line no-unused-vars
+        const { [attributeName]: removed, ...rest } = uiState.rootAttrs;
+        uiState.rootAttrs = rest;
+      },
+
+      setAttribute: (attributeName, value) => {
+        uiState.rootAttrs = { ...uiState.rootAttrs, [attributeName]: value };
+      },
+
+      setDeterminateCircleAttribute: (attributeName, value) =>
+        (uiState.circleAttrs = {
+          ...uiState.circleAttrs,
+          [attributeName]: value,
+        }),
+    };
+
+    watch(
+      () => props.open,
+      nv => {
+        if (nv) {
+          foundation.open();
+        } else {
+          foundation.close();
+        }
+      },
+    );
+
+    watch(
+      () => props.progress,
+      nv => {
+        foundation.setProgress(Number(nv));
+      },
+    );
+
+    watch(
+      () => props.indeterminate,
+      nv => {
+        foundation.setDeterminate(!nv);
+      },
+    );
+
+    onMounted(() => {
+      foundation = new MDCCircularProgressFoundation(adapter);
+      foundation.init();
+
+      foundation.setProgress(Number(props.progress));
+      foundation.setDeterminate(!props.indeterminate);
+
+      if (props.open) {
+        foundation.open();
+      } else {
+        foundation.close();
+      }
+    });
+
+    onBeforeUnmount(() => foundation.destroy());
+
+    return { ...toRefs(uiState) };
+  },
+};
+
+// ===
+// Private functions
+// ===
 
 function getCircleAttrs(medium = false, indeterminate = true) {
   return medium
@@ -24,83 +138,3 @@ function getCircleAttrs(medium = false, indeterminate = true) {
         'stroke-dashoffset': indeterminate ? '56.549' : '113.097',
       };
 }
-
-export default {
-  name: 'mcw-circular-progress',
-  props: {
-    open: { type: Boolean, default: true },
-    indeterminate: Boolean,
-    medium: Boolean,
-    progress: ProgressPropType,
-    tag: { type: String, default: 'div' },
-  },
-  data() {
-    return {
-      classes: {
-        'mdc-circular-progress': 1,
-        'mdc-circular-progress--medium': this.medium,
-        'mdc-circular-progress--large': !this.medium,
-      },
-      rootAttrs: {},
-      circleAttrs: getCircleAttrs(this.medium, false),
-      indeterminateAttrs: getCircleAttrs(this.medium, true),
-    };
-  },
-  watch: {
-    open(nv) {
-      if (nv) {
-        this.foundation.open();
-      } else {
-        this.foundation.close();
-      }
-    },
-    progress(nv) {
-      this.foundation.setProgress(Number(nv));
-    },
-
-    indeterminate(nv) {
-      this.foundation.setDeterminate(!nv);
-    },
-  },
-
-  mounted() {
-    const adapter = {
-      addClass: className => {
-        this.$set(this.classes, className, true);
-      },
-
-      getDeterminateCircleAttribute: attributeName => {
-        return this.circleAttrs[attributeName];
-      },
-
-      hasClass: className => this.$el.classList.contains(className),
-      removeClass: className => this.$delete(this.classes, className),
-
-      removeAttribute: attributeName => {
-        this.$delete(this.rootAttrs, attributeName);
-      },
-
-      setAttribute: (attributeName, value) => {
-        this.$set(this.rootAttrs, attributeName, value);
-      },
-
-      setDeterminateCircleAttribute: (attributeName, value) =>
-        this.$set(this.circleAttrs, attributeName, value),
-    };
-
-    this.foundation = new MDCCircularProgressFoundation(adapter);
-    this.foundation.init();
-
-    this.foundation.setProgress(Number(this.progress));
-    this.foundation.setDeterminate(!this.indeterminate);
-
-    if (this.open) {
-      this.foundation.open();
-    } else {
-      this.foundation.close();
-    }
-  },
-  beforeDestroy() {
-    this.foundation.destroy();
-  },
-};

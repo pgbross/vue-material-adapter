@@ -1,8 +1,6 @@
 @use "@material/theme" with (
-  $primary: #212121,
-  $secondary: #41b883,
-  $accent: #41b883,
-  $background: #fff
+  $primary: rgb(190, 108, 53)
+
 );
 
 @use "@material/button/mdc-button";

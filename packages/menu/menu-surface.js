@@ -1,7 +1,13 @@
-/* eslint-disable quote-props */
 import { MDCMenuSurfaceFoundation } from '@material/menu-surface/foundation';
-import { emitCustomEvent } from '~/base/index.js';
 import * as util from '@material/menu-surface/util';
+import {
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  toRefs,
+  watch,
+} from '@vue/composition-api';
+import { emitCustomEvent } from '~/base/index.js';
 
 const { strings, cssClasses } = MDCMenuSurfaceFoundation;
 
@@ -17,113 +23,56 @@ export default {
     'anchor-corner': [String, Number],
     'anchor-margin': Object,
   },
-  data() {
-    return {
+  setup(props, { emit }) {
+    const uiState = reactive({
       classes: {
-        'mdc-menu': 1,
         'mdc-menu-surface': 1,
       },
+      root: null,
+    });
+
+    let foundation;
+    let anchorElement;
+    let previousFocus_;
+
+    const handleBodyClick = evt => {
+      foundation.handleBodyClick(evt);
     };
-  },
 
-  watch: {
-    open: 'onOpen_',
-    quickOpen(nv) {
-      this.foundation.setQuickOpen(nv);
-    },
-  },
-
-  mounted() {
-    this._previousFocus = undefined;
-
-    this.foundation = new MDCMenuSurfaceFoundation(
-      Object.assign(
-        {
-          addClass: className => this.$set(this.classes, className, true),
-          removeClass: className => this.$delete(this.classes, className),
-          hasClass: className => this.$el.classList.contains(className),
-          hasAnchor: () => !!this.anchorElement,
-          notifyClose: () => {
-            emitCustomEvent(this.$el, strings.CLOSED_EVENT, {});
-
-            this.$emit('change', false);
-          },
-          notifyOpen: () => {
-            emitCustomEvent(this.$el, strings.OPENED_EVENT, {});
-
-            this.$emit('change', true);
-          },
-          isElementInContainer: el => this.$el.contains(el),
-          isRtl: () =>
-            getComputedStyle(this.$el).getPropertyValue('direction') === 'rtl',
-          setTransformOrigin: origin => {
-            this.$el.style.setProperty(
-              `${util.getTransformPropertyName(window)}-origin`,
-              origin,
-            );
-          },
-        },
-        this.getFocusAdapterMethods(),
-        this.getDimensionAdapterMethods(),
-      ),
-    );
-
-    if (
-      this.$el.parentElement &&
-      this.$el.parentElement.classList.contains(cssClasses.ANCHOR)
-    ) {
-      this.anchorElement = this.$el.parentElement;
-    }
-
-    this.foundation.init();
-  },
-  beforeDestroy() {
-    this._previousFocus = null;
-
-    this.foundation.destroy();
-  },
-
-  methods: {
-    handleBodyClick(evt) {
-      this.foundation.handleBodyClick(evt);
-    },
-
-    registerBodyClickListener() {
-      document.body.addEventListener('click', this.handleBodyClick);
-    },
-    deregisterBodyClickListener() {
-      document.body.removeEventListener('click', this.handleBodyClick);
-    },
-    handleKeydown(evt) {
-      this.foundation.handleKeydown(evt);
-    },
-    getFocusAdapterMethods() {
+    const registerBodyClickListener = () => {
+      document.body.addEventListener('click', handleBodyClick);
+    };
+    const deregisterBodyClickListener = () => {
+      document.body.removeEventListener('click', handleBodyClick);
+    };
+    const handleKeydown = evt => {
+      foundation.handleKeydown(evt);
+    };
+    const getFocusAdapterMethods = () => {
       return {
-        isFocused: () => document.activeElement === this.$el,
+        isFocused: () => document.activeElement === uiState.root,
         saveFocus: () => {
-          this.previousFocus_ = document.activeElement;
+          previousFocus_ = document.activeElement;
         },
         restoreFocus: () => {
-          if (this.$el.contains(document.activeElement)) {
-            if (this.previousFocus_ && this.previousFocus_.focus) {
-              this.previousFocus_.focus();
+          if (uiState.root.contains(document.activeElement)) {
+            if (previousFocus_ && previousFocus_.focus) {
+              previousFocus_.focus();
             }
           }
         },
       };
-    },
-    getDimensionAdapterMethods() {
+    };
+    const getDimensionAdapterMethods = () => {
       return {
         getInnerDimensions: () => {
           return {
-            width: this.$el.offsetWidth,
-            height: this.$el.offsetHeight,
+            width: uiState.root.offsetWidth,
+            height: uiState.root.offsetHeight,
           };
         },
         getAnchorDimensions: () =>
-          this.anchorElement
-            ? this.anchorElement.getBoundingClientRect()
-            : null,
+          anchorElement ? anchorElement.getBoundingClientRect() : null,
         getWindowDimensions: () => {
           return { width: window.innerWidth, height: window.innerHeight };
         },
@@ -137,81 +86,158 @@ export default {
           return { x: window.pageXOffset, y: window.pageYOffset };
         },
         setPosition: position => {
-          this.$el.style.left =
+          uiState.root.style.left =
             'left' in position ? `${position.left}px` : null;
-          this.$el.style.right =
+          uiState.root.style.right =
             'right' in position ? `${position.right}px` : null;
-          this.$el.style.top = 'top' in position ? `${position.top}px` : null;
-          this.$el.style.bottom =
+          uiState.root.style.top =
+            'top' in position ? `${position.top}px` : null;
+          uiState.root.style.bottom =
             'bottom' in position ? `${position.bottom}px` : null;
         },
         setMaxHeight: height => {
-          this.$el.style.maxHeight = height;
+          uiState.root.style.maxHeight = height;
         },
       };
-    },
+    };
 
-    onOpen_(value) {
+    const rootListeners = {
+      keydown: evt => handleKeydown(evt),
+      'MDCMenuSurface:opened': evt => registerBodyClickListener(evt),
+      'MDCMenuSurface:closed': evt => deregisterBodyClickListener(evt),
+    };
+
+    const onOpen_ = value => {
       const method = value ? 'open' : 'close';
-      this.foundation[method]();
-    },
-    hoistMenuToBody() {
-      document.body.appendChild(this.$el.parentElement.removeChild(this.$el));
-      this.setIsHoisted(true);
-    },
-    setIsHoisted(isHoisted) {
-      this.foundation.setIsHoisted(isHoisted);
-    },
+      foundation[method]();
+    };
 
-    setFixedPosition(isFixed) {
+    const setIsHoisted = isHoisted => {
+      foundation.setIsHoisted(isHoisted);
+    };
+
+    const hoistMenuToBody = () => {
+      document.body.appendChild(
+        uiState.root.parentElement.removeChild(uiState.root),
+      );
+      setIsHoisted(true);
+    };
+
+    const setFixedPosition = isFixed => {
       if (isFixed) {
-        this.$set(this.classes, cssClasses.FIXED, true);
+        uiState.classes = { ...uiState.classes, [cssClasses.FIXED]: true };
       } else {
-        this.$delete(this.classes, cssClasses.FIXED);
+        // eslint-disable-next-line no-unused-vars
+        const { [cssClasses.FIXED]: removed, ...rest } = uiState.classes;
+        uiState.classes = rest;
       }
 
-      this.foundation.setFixedPosition(isFixed);
-    },
-    setAbsolutePosition(x, y) {
-      this.foundation.setAbsolutePosition(x, y);
-      this.setIsHoisted(true);
-    },
-    setAnchorCorner(corner) {
-      this.foundation.setAnchorCorner(corner);
-    },
-    setAnchorMargin(margin) {
-      this.foundation.setAnchorMargin(margin);
-    },
-    setMenuSurfaceAnchorElement(element) {
-      this.anchorElement = element;
-    },
-    show(options) {
-      this.foundation.open(options);
-    },
-    hide() {
-      this.close();
-    },
-    close(skipRestoreFocus = false) {
-      this.foundation.close(skipRestoreFocus);
-    },
-    isOpen() {
-      return this.foundation ? this.foundation.isOpen() : false;
-    },
-  },
+      foundation.setFixedPosition(isFixed);
+    };
+    const setAbsolutePosition = (x, y) => {
+      foundation.setAbsolutePosition(x, y);
+      setIsHoisted(true);
+    };
+    const setAnchorCorner = corner => {
+      foundation.setAnchorCorner(corner);
+    };
+    const setAnchorMargin = margin => {
+      foundation.setAnchorMargin(margin);
+    };
+    const setMenuSurfaceAnchorElement = element => {
+      anchorElement = element;
+    };
+    const show = options => {
+      foundation.open(options);
+    };
 
-  render(createElement) {
-    const { $scopedSlots: scopedSlots } = this;
-    return createElement(
-      'div',
-      {
-        class: this.classes,
-        on: {
-          keydown: evt => this.handleKeydown(evt),
-          'MDCMenuSurface:opened': evt => this.registerBodyClickListener(evt),
-          'MDCMenuSurface:closed': evt => this.deregisterBodyClickListener(evt),
-        },
+    const close = (skipRestoreFocus = false) => {
+      foundation.close(skipRestoreFocus);
+    };
+
+    const hide = () => {
+      close();
+    };
+
+    const isOpen = () => {
+      return foundation ? foundation.isOpen() : false;
+    };
+
+    const adapter = {
+      addClass: className =>
+        (uiState.classes = { ...uiState.classes, [className]: true }),
+      removeClass: className => {
+        // eslint-disable-next-line no-unused-vars
+        const { [className]: removed, ...rest } = uiState.classes;
+        uiState.classes = rest;
       },
-      scopedSlots.default?.(),
+      hasClass: className => uiState.root.classList.contains(className),
+      hasAnchor: () => !!anchorElement,
+      notifyClose: () => {
+        emitCustomEvent(uiState.root, strings.CLOSED_EVENT, {});
+
+        emit('change', false);
+      },
+      notifyOpen: () => {
+        emitCustomEvent(uiState.root, strings.OPENED_EVENT, {});
+
+        emit('change', true);
+      },
+      isElementInContainer: el => uiState.root.contains(el),
+      isRtl: () =>
+        getComputedStyle(uiState.root).getPropertyValue('direction') === 'rtl',
+      setTransformOrigin: origin => {
+        uiState.root.style.setProperty(
+          `${util.getTransformPropertyName(window)}-origin`,
+          origin,
+        );
+      },
+    };
+
+    watch(
+      () => props.open,
+      nv => onOpen_(nv),
     );
+
+    watch(
+      () => props.quickOpen,
+      nv => foundation.setQuickOpen(nv),
+    );
+
+    onMounted(() => {
+      foundation = new MDCMenuSurfaceFoundation({
+        ...adapter,
+        ...getFocusAdapterMethods(),
+        ...getDimensionAdapterMethods(),
+      });
+
+      foundation.init();
+
+      if (
+        uiState.root.parentElement &&
+        uiState.root.parentElement.classList.contains(cssClasses.ANCHOR)
+      ) {
+        anchorElement = uiState.root.parentElement;
+      }
+    });
+
+    onBeforeUnmount(() => {
+      previousFocus_ = null;
+      foundation.destroy();
+    });
+    return {
+      ...toRefs(uiState),
+      rootListeners,
+      hoistMenuToBody,
+      setFixedPosition,
+      setAbsolutePosition,
+      setAnchorCorner,
+      setAnchorMargin,
+      setMenuSurfaceAnchorElement,
+      show,
+      hide,
+      isOpen,
+      close,
+    };
   },
 };

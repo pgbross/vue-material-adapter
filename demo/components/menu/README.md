@@ -4,19 +4,11 @@
 <mcw-menu-anchor class="myAnchor">
   <mcw-button raised @click="open = true">Open Menu</mcw-button>
   <mcw-menu v-model="open" @select="onSelect">
-    <li class="mdc-list-item" role="menuitem">
-      <span class="mdc-list-item__text">A Menu Item</span>
-    </li>
-    <li class="mdc-list-item" role="menuitem">
-      <span class="mdc-list-item__text">Another Menu Item</span>
-    </li>
-    <mcw-list-divider></mcw-list-divider>
-    <li class="mdc-list-item" role="menuitem">
-      <span class="mdc-list-item__text">A Menu Item</span>
-    </li>
-    <li class="mdc-list-item" role="menuitem">
-      <span class="mdc-list-item__text">Parted Menu Item</span>
-    </li>
+    <mcw-list-item>A Menu Item</mcw-list-item>
+    <mcw-list-item>Another Menu Item</mcw-list-item>
+    <li role="separator" class="mdc-list-divider"></li>
+    <mcw-list-item>A Menu Item</mcw-list-item>
+    <mcw-list-item>Parted Menu Item</mcw-list-item>
   </mcw-menu>
 </mcw-menu-anchor>
 ```
@@ -37,16 +29,21 @@ var vm = new Vue({
 });
 ```
 
-### Props
+### `mcw-menu`
 
-#### mcw-menu
+#### Props
 
-| props           | Type              | Default   | Description                                                   |
-| --------------- | ----------------- | --------- | ------------------------------------------------------------- |
-| `open`          | Boolean or Object | false     | optional v-model when true opens menu                         |
-| `quick-open`    | Boolean           | false     | sets whether the menu should open and close without animation |
-| `anchor-corner` | Number            | undefined | set anchor corner alignment of menu corner                    |
-| `anchor-margin` | Object            | undefined | set anchor margin of menu (top, right, bottom, left)          |
+| props                 | Type              | Default     | Description                                              |
+| --------------------- | ----------------- | ----------- | -------------------------------------------------------- |
+| `open`                | Boolean or Object | false       | optional v-model when true opens menu                    |
+| `quick-open`          | Boolean           | false       | Whether the menu should open and close without animation |
+| `anchor-corner`       | Number            |             | set anchor corner alignment of menu corner               |
+| `anchor-margin`       | Object            |             | set anchor margin of menu (top, right, bottom, left)     |
+| `fixed`               | Boolean           | false       | use fixed positioning                                    |
+| `absolute-position`   | Array             |             | use absolutely positioning , [x,y]                       |
+| `type-ahead`          | Boolean           | false       | use type ahead functionality                             |
+| `single-selection`    | Boolean           | false       | Turn on underlying list single selection mode            |
+| `default-focus-state` | String            | 'LIST_ROOT' | where the menu should focus when opened                  |
 
 > if open is an object it should set {focusIndex: number} as per [MDC menu docs](https://github.com/material-components/material-components-web/tree/master/packages/mcw-menu)
 
@@ -62,37 +59,22 @@ Menus can contain a group of list items that can represent the selection state o
   <mcw-menu v-model="openGroup" @select="onSelect">
     <li>
       <ul class="mdc-menu__selection-group">
-        <li class="mdc-list-item" role="menuitem">
-          <span class="mdc-list-item__graphic mdc-menu__selection-group-icon">
-            <i class="material-icons">check</i>
-          </span>
-          <span class="mdc-list-item__text">Single</span>
-        </li>
-        <li class="mdc-list-item" role="menuitem">
-          <span class="mdc-list-item__graphic mdc-menu__selection-group-icon">
-            <i class="material-icons">check</i>
-          </span>
-          <span class="mdc-list-item__text">1.15</span>
-        </li>
+        <mcw-list-item group-icon="check">Single</mcw-list-item>
+        <mcw-list-item group-icon="check">1.15</mcw-list-item>
       </ul>
     </li>
     <li class="mdc-list-divider" role="separator"></li>
-    <li class="mdc-list-item" role="menuitem">
-      <span class="mdc-list-item__text">Add space before paragraph</span>
-    </li>
+    <mcw-list-item>Add space before paragraph</mcw-list-item>
   </mcw-menu>
 </mcw-menu-anchor>
 ```
 
 ### Events
 
-| props     | arg                                    | Description                                                |
-| --------- | -------------------------------------- | ---------------------------------------------------------- |
-| `@change` | Boolean                                | notify v-model/listeners that menu open state has changed. |
-| `@select` | `{ index: Number, item: HTMLElement }` | emitted when a menu item is selected                       |
-| `@cancel` |                                        | emitted when menu is cancelled                             |
-
-> `select` event data specifies index and item :
+| props     | arg               | Description                                                |
+| --------- | ----------------- | ---------------------------------------------------------- |
+| `@change` | Boolean           | notify v-model/listeners that menu open state has changed. |
+| `@select` | `{ index, item }` | emitted when a menu item is selected                       |
 
 ### Methods
 
@@ -106,4 +88,4 @@ Menus can contain a group of list items that can represent the selection state o
 
 ### Reference
 
-- <https://material.io/components/web/catalog/menus>
+- <https://github.com/material-components/material-components-web/tree/master/packages/mdc-menu>

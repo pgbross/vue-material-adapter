@@ -18,7 +18,6 @@ import icTabs from './assets/ic_tabs_24px.svg';
 import icTextField from './assets/ic_text_field_24px.svg';
 import icToast from './assets/ic_toast_24px.svg';
 import icTopAppBar from './assets/ic_toolbar_24px.svg';
-import icTypography from './assets/ic_typography_24px.svg';
 import { capitalize } from './utils';
 
 function link(id, icon, name, title) {
@@ -57,5 +56,4 @@ export default [
   link('tabs', icTabs),
   link('textfield', icTextField),
   link('top-app-bar', icTopAppBar),
-  link('typography', icTypography),
 ];

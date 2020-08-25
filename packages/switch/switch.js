@@ -1,10 +1,19 @@
 import { MDCSwitchFoundation } from '@material/switch/foundation';
-import { DispatchFocusMixin, VMAUniqueIdMixin } from '~/base/index.js';
-import { RippleBase } from '~/ripple/index.js';
+import {
+  computed,
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  toRefs,
+  watch,
+  toRef,
+} from '@vue/composition-api';
+import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
+
+let switchId_ = 0;
 
 export default {
   name: 'mcw-switch',
-  mixins: [DispatchFocusMixin, VMAUniqueIdMixin],
   model: {
     prop: 'checked',
     event: 'change',
@@ -16,57 +25,89 @@ export default {
     label: String,
     alignEnd: Boolean,
     name: String,
-  },
-  data() {
-    return {
-      classes: { 'mdc-switch': 1 },
-      styles: {},
-      nativeControlChecked: this.checked,
-      nativeControlDisabled: this.disabled,
-      nativeAttrs: {},
-    };
-  },
-  computed: {
-    hasLabel() {
-      return this.label || this.$slots.default;
-    },
-  },
-  watch: {
-    checked(value) {
-      this.foundation && this.foundation.setChecked(value);
-    },
-    disabled(value) {
-      this.foundation && this.foundation.setDisabled(value);
-    },
+    id: String,
   },
 
-  mounted() {
-    this.foundation = new MDCSwitchFoundation({
-      addClass: className => this.$set(this.classes, className, true),
-      removeClass: className => this.$delete(this.classes, className),
-      setNativeControlChecked: checked => (this.nativeControlChecked = checked),
+  setup(props, { slots, emit }) {
+    const uiState = reactive({
+      classes: { 'mdc-switch': 1 },
+      nativeControlChecked: props.checked,
+      nativeControlDisabled: props.disabled,
+      nativeAttrs: {},
+      root: null,
+    });
+
+    const { classes: rippleClasses, styles } = useRipplePlugin(
+      toRef(uiState, 'root'),
+    );
+
+    let foundation;
+    const switchId = props.id ?? `__mcw-switch-${switchId_++}`;
+
+    const classes = computed(() => {
+      return { ...rippleClasses.value, ...uiState.classes };
+    });
+
+    const hasLabel = computed(() => {
+      return props.label || slots.default;
+    });
+
+    const onChanged = event => {
+      foundation?.handleChange(event);
+      emit('change', event.target.checked);
+    };
+
+    const adapter = {
+      addClass: className =>
+        (uiState.classes = { ...uiState.classes, [className]: true }),
+      removeClass: className => {
+        // eslint-disable-next-line no-unused-vars
+        const { [className]: removed, ...rest } = uiState.classes;
+        uiState.classes = rest;
+      },
+      setNativeControlChecked: checked =>
+        (uiState.nativeControlChecked = checked),
       setNativeControlDisabled: disabled =>
-        (this.nativeControlDisabled = disabled),
+        (uiState.nativeControlDisabled = disabled),
 
       setNativeControlAttr: (attr, value) => {
-        this.nativeAttrs[attr] = value;
+        uiState.nativeAttrs[attr] = value;
       },
-    });
-    this.foundation.init();
-    this.foundation.setChecked(this.checked);
-    this.foundation.setDisabled(this.disabled);
+    };
 
-    this.ripple = new RippleBase(this);
-    this.ripple.init();
-  },
-  beforeDestroy() {
-    this.foundation && this.foundation.destroy();
-    this.ripple && this.ripple.destroy();
-  },
-  methods: {
-    onChanged(event) {
-      this.foundation && this.foundation.handleChange(event);
-      this.$emit('change', event.target.checked);
-    },
+    watch(
+      () => props.checked,
+      (nv, ov) => {
+        nv != ov && foundation?.setChecked(nv);
+      },
+    );
+
+    watch(
+      () => props.disabled,
+      (nv, ov) => {
+        nv != ov && foundation?.setDisabled(nv);
+      },
+    );
+
+    onMounted(() => {
+      foundation = new MDCSwitchFoundation(adapter);
+
+      foundation.init();
+      foundation.setChecked(props.checked);
+      foundation.setDisabled(props.disabled);
+    });
+
+    onBeforeUnmount(() => {
+      foundation.destroy();
+    });
+
+    return {
+      ...toRefs(uiState),
+      classes,
+      hasLabel,
+      onChanged,
+      styles,
+      switchId,
+    };
   },
 };

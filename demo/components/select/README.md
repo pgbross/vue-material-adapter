@@ -5,19 +5,28 @@
   :value="selectedType"
   label="Food"
   helptext="Pick a food group"
+  leading-icon="restaurant_menu"
   @change="onTypeChanged"
 >
-  <mcw-menu class="mdc-select__menu">
-    <li
-      v-for="type in types"
-      :key="type"
-      class="mdc-list-item"
-      role="menuitem"
-      :data-value="type"
-    >
-      <span class="mdc-list-item__text">{{ type }}</span>
-    </li>
-  </mcw-menu>
+  <mcw-list-item
+    v-for="type in types"
+    :key="type"
+    :data-value="type"
+    role="option"
+    icon
+    >{{ type }}</mcw-list-item
+  >
+</mcw-select>
+
+<br />
+<mcw-select v-if="selectedType" v-model="selectedValue" outlined label="Kind">
+  <mcw-list-item
+    v-for="option of options"
+    :key="option"
+    :data-value="option.toLowerCase()"
+    role="option"
+    >{{ option }}</mcw-list-item
+  >
 </mcw-select>
 <span>Selected: {{ selected }}</span>
 ```
@@ -26,32 +35,59 @@
 var vm = new Vue({
   data() {
     return {
-      selected: '',
+      selectedType: 'Meat',
+      selectedValue: undefined,
+      food: {
+        Vegetables: ['Spinach', 'Carrots', 'Onions', 'Broccoli'],
+        Meat: ['Eggs', 'Chicken', 'Fish', 'Turkey', 'Pork', 'Beef'],
+        Fruits: ['Apples', 'Oranges', 'Bananas', 'Berries', 'Lemons'],
+      },
     };
   },
-});
+  computed: {
+    types() {
+      return Object.keys(this.food);
+    },
+    options() {
+      return this.selectedType ? this.food[this.selectedType] : [];
+    },
+  },
+  methods: {
+    onTypeChanged(nv) {
+      console.log(nv);
+      this.selectedType = nv;
+      this.selectedValue = null;
+    },
+    onKindChanged(nv) {
+      this.selectedValue = nv;
+    },
+  },
+};
 ```
 
-### mcw-select
+### `mcw-select`
 
-| props                | Type    | Default | Description                                  |
-| -------------------- | ------- | ------- | -------------------------------------------- |
-| `label`              | String  |         | the selection label (placeholder)            |
-| `value`              | String  |         | bind with v-model (update on `change` event) |
-| `disabled`           | Boolean | false   | whether this select is disabled              |
-| `outlined`           | Boolean | false   | outlined style                               |
-| `helptext`           | String  |         | Helptext                                     |
-| `helptextPersistent` | Boolean |         | Always show helptext                         |
-| `leadingIcon`        | String  |         | Optional leading icon                        |
-| `disabled`           | Boolean | false   | Disables control                             |
-| `label`              | String  |         | Optional field label                         |
-| `outlined`           | Boolean | false   | Use outline variant                          |
+#### Props
 
-| event               | Description                                         |
-| ------------------- | --------------------------------------------------- |
-| `@change`           | emitted on change (supressed if value is unchanged) |
-| `@MDCSelect:change` | Native event emitted on change                      |
+| prop                 | Type    | Default | Description                     |
+| -------------------- | ------- | ------- | ------------------------------- |
+| `label`              | String  |         | the selection label             |
+| `value`              | String  |         | the v-model                     |
+| `disabled`           | Boolean | false   | whether this select is disabled |
+| `outlined`           | Boolean | false   | outlined style                  |
+| `helptext`           | String  |         | Helptext                        |
+| `helptextPersistent` | Boolean |         | Always show helptext            |
+| `leadingIcon`        | String  |         | Optional leading icon           |
+| `disabled`           | Boolean | false   | Disables control                |
+| `label`              | String  |         | Optional field label            |
+| `outlined`           | Boolean | false   | Use outline variant             |
+| `menu-fullwidth`     | Boolean | true    | Menu is full width              |
+
+| event              | Description                                         |
+| ------------------ | --------------------------------------------------- |
+| `@change`          | emitted on change (supressed if value is unchanged) |
+| `MDCSelect:change` | Native event emitted on change                      |
 
 ### Reference
 
-- <https://material.io/components/web/catalog/input-controls/select-menus>
+- <https://github.com/material-components/material-components-web/tree/master/packages/mdc-select>

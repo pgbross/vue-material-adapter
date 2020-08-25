@@ -26,10 +26,10 @@
       <div class="button-style-select">
         <mcw-checkbox v-model="disabled" label="disabled" />
       </div>
-      <mcw-caption>
+      <div class="mdc-typography--caption">
         isOn:
         <span class>{{ isOn }}</span>
-      </mcw-caption>
+      </div>
     </section>
   </div>
 </template>

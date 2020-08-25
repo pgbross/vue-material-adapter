@@ -1,0 +1,21 @@
+<mcw-menu-surface
+  ref="menuSurface"
+  class="mdc-menu"
+  :quick-open="quickOpen"
+  :open="menuOpen"
+  @keydown="handleKeydown"
+  @change="onChange"
+  @MDCMenuSurface:opened="handleMenuSurfaceOpened"
+>
+  <mcw-list
+    ref="list"
+    role="menu"
+    aria-hidden="true"
+    :wrap-focus="myWrapFocus"
+    @change="handleAction"
+    tabindex="-1"
+    :type-ahead="typeAhead"
+    :single-selection="singleSelection"
+    ><slot></slot
+  ></mcw-list>
+</mcw-menu-surface>

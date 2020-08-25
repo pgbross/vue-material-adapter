@@ -1,223 +1,185 @@
 <template>
-  <div>
-    <mcw-layout-grid class="mcw-demo mcw-demo--container mcw-list-demo">
-      <mcw-layout-cell>
-        <mcw-list v-model="selected">
-          <li class="mdc-list-item" tabindex="0">
-            <span class="mdc-list-item__text">Single-line item</span>
-          </li>
-          <li class="mdc-list-item">
-            <span class="mdc-list-item__text">Single-line item</span>
-          </li>
-          <li class="mdc-list-item">
-            <span class="mdc-list-item__text">Single-line item</span>
-          </li>
+  <div class="demo-list-wrapper">
+    <div class="demo-list-example">
+      <h3 class="mdc-typography--subtitle1">Single-Line</h3>
+      <mcw-list v-model="selected" class="demo-list">
+        <mcw-list-item tabindex="0">One Single-line item 1 </mcw-list-item>
+        <mcw-list-item>Two Single-line item 2 </mcw-list-item>
+        <mcw-list-item>Three Single-line item 3 </mcw-list-item>
+      </mcw-list>
+    </div>
+
+    <div class="demo-list-example">
+      <h3 class="mdc-typography--subtitle1">Two Line</h3>
+
+      <mcw-list v-model="selected" two-line class="demo-list">
+        <mcw-list-item
+          >Two-line item
+          <span slot="secondary-text">Secondary text</span>
+        </mcw-list-item>
+
+        <mcw-list-item two-line="Other secondary text"
+          >Two-line item
+        </mcw-list-item>
+
+        <mcw-list-item
+          >Two-line item
+          <span slot="secondary-text">More secondary text</span>
+        </mcw-list-item>
+      </mcw-list>
+    </div>
+
+    <div class="demo-list-example">
+      <h3 class="mdc-typography--subtitle1">List group</h3>
+      <div class="mdc-list-group">
+        <h3 class="mdc-list-group__subheader">List 1</h3>
+        <mcw-list v-model="selected" class="demo-list">
+          <mcw-list-item tabindex="0">line item</mcw-list-item>
+          <mcw-list-item>line item</mcw-list-item>
+          <mcw-list-item>line item</mcw-list-item>
         </mcw-list>
-      </mcw-layout-cell>
-
-      <mcw-layout-cell>
-        <mcw-list v-model="selected" two-line>
-          <li class="mdc-list-item" tabindex="0">
-            <span class="mdc-list-item__text">
-              <span class="mdc-list-item__primary-text">Two-line item</span>
-              <span class="mdc-list-item__secondary-text">Secondary text</span>
-            </span>
-          </li>
-          <li class="mdc-list-item">
-            <span class="mdc-list-item__text">
-              <span class="mdc-list-item__primary-text">Two-line item</span>
-              <span class="mdc-list-item__secondary-text">Secondary text</span>
-            </span>
-          </li>
-          <li class="mdc-list-item">
-            <span class="mdc-list-item__text">
-              <span class="mdc-list-item__primary-text">Two-line item</span>
-              <span class="mdc-list-item__secondary-text">Secondary text</span>
-            </span>
-          </li>
+        <h3 class="mdc-list-group__subheader">List 2</h3>
+        <mcw-list v-model="selected" class="demo-list">
+          <mcw-list-item tabindex="0">line item</mcw-list-item>
+          <mcw-list-item>line item</mcw-list-item>
+          <mcw-list-item>line item</mcw-list-item>
         </mcw-list>
-      </mcw-layout-cell>
+      </div>
+    </div>
 
-      <mcw-layout-cell>
-        <div class="mdc-list-group">
-          <h3 class="mdc-list-group__subheader">List 1</h3>
-          <mcw-list v-model="selected">
-            <li class="mdc-list-item" tabindex="0">
-              <span class="mdc-list-item__text">line item</span>
-            </li>
-            <li class="mdc-list-item">
-              <span class="mdc-list-item__text">line item</span>
-            </li>
-            <li class="mdc-list-item">
-              <span class="mdc-list-item__text">line item</span>
-            </li>
-          </mcw-list>
-          <h3 class="mdc-list-group__subheader">List 2</h3>
-          <mcw-list v-model="selected">
-            <li class="mdc-list-item">
-              <span class="mdc-list-item__text">line item</span>
-            </li>
-            <li class="mdc-list-item">
-              <span class="mdc-list-item__text">line item</span>
-            </li>
-            <li class="mdc-list-item">
-              <span class="mdc-list-item__text">line item</span>
-            </li>
-          </mcw-list>
-        </div>
-      </mcw-layout-cell>
+    <div class="demo-list-example">
+      <h3 class="mdc-typography--subtitle1">List dividers</h3>
+      <mcw-list v-model="selected" class="demo-list">
+        <mcw-list-item tabindex="0">Item 1 - Division 1</mcw-list-item>
+        <mcw-list-item>Item 2 - Division 1</mcw-list-item>
 
-      <mcw-layout-cell>
-        <mcw-list v-model="selected">
-          <li class="mdc-list-item" tabindex="0">
-            <span class="mdc-list-item__text">Item 1 - Division 1</span>
-          </li>
-          <li class="mdc-list-item">
-            <span class="mdc-list-item__text">Item 2 - Division 1</span>
-          </li>
-          <li role="separator" class="mdc-list-divider"></li>
-          <li class="mdc-list-item">
-            <span class="mdc-list-item__text">Item 1 - Division 2</span>
-          </li>
-          <li class="mdc-list-item">
-            <span class="mdc-list-item__text">Item 2 - Division 2</span>
-          </li>
-        </mcw-list>
-      </mcw-layout-cell>
+        <li role="separator" class="mdc-list-divider"></li>
 
-      <mcw-layout-cell>
-        <mcw-list v-model="selected">
-          <li class="mdc-list-item" tabindex="0">
-            <span class="mdc-list-item__text">Item 1 - List 1</span>
-          </li>
-          <li class="mdc-list-item">
-            <span class="mdc-list-item__text">Item 2 - List 1</span>
-          </li>
-        </mcw-list>
-        <hr class="mdc-list-divider" />
+        <mcw-list-item tabindex="0">Item 1 - Division 2</mcw-list-item>
+        <mcw-list-item>Item 2 - Division 2</mcw-list-item>
+      </mcw-list>
+    </div>
 
-        <mcw-list v-model="selected">
-          <li class="mdc-list-item">
-            <span class="mdc-list-item__text">Item 1 - List 2</span>
-          </li>
-          <li class="mdc-list-item">
-            <span class="mdc-list-item__text">Item 2 - List 2</span>
-          </li>
-        </mcw-list>
-      </mcw-layout-cell>
+    <div class="demo-list-example">
+      <h3 class="mdc-typography--subtitle1">Single selection list</h3>
+      <mcw-list
+        v-model="selected"
+        single-selection
+        wrap-focus
+        class="demo-list"
+      >
+        <mcw-list-item tabindex="0">Single-line item</mcw-list-item>
+        <mcw-list-item>Single-line item</mcw-list-item>
+        <mcw-list-item>Single-line item</mcw-list-item>
+      </mcw-list>
+    </div>
 
-      <mcw-layout-cell>
-        <mcw-list v-model="selected" single-selection wrap-focus>
-          <li class="mdc-list-item" role="option" tabindex="0">
-            <span class="mdc-list-item__text">Single-line item</span>
-          </li>
-          <li class="mdc-list-item" role="option">
-            <span class="mdc-list-item__text">Single-line item</span>
-          </li>
-          <li class="mdc-list-item" role="option">
-            <span class="mdc-list-item__text">Single-line item</span>
-          </li>
-        </mcw-list>
-      </mcw-layout-cell>
-
-      <mcw-layout-cell>
-        <mcw-list v-model="radioSelected" role="radiogroup">
-          <li class="mdc-list-item" role="radio" aria-checked="false">
-            <span class="mdc-list-item__graphic">
-              <mcw-radio
-                id="demo-list-radio-item-1"
-                v-model="picked"
-                value="1"
-                name="demo-list-radio"
-              ></mcw-radio>
-            </span>
-            <label class="mdc-list-item__text" for="demo-list-radio-item-1"
-              >Option 1</label
-            >
-          </li>
-          <li class="mdc-list-item" role="radio" aria-checked="false">
-            <span class="mdc-list-item__graphic">
-              <mcw-radio
-                id="demo-list-radio-item-2"
-                v-model="picked"
-                value="2"
-                name="demo-list-radio"
-              ></mcw-radio>
-            </span>
-            <label class="mdc-list-item__text" for="demo-list-radio-item-2"
-              >Option 2</label
-            >
-          </li>
-          <li class="mdc-list-item" role="radio" aria-checked="false">
-            <span class="mdc-list-item__graphic">
-              <mcw-radio
-                id="demo-list-radio-item-3"
-                v-model="picked"
-                value="3"
-                name="demo-list-radio"
-              ></mcw-radio>
-            </span>
-            <label class="mdc-list-item__text" for="demo-list-radio-item-3"
-              >Option 3</label
-            >
-          </li>
-        </mcw-list>
-      </mcw-layout-cell>
-
-      <mcw-layout-cell>
-        <mcw-list
-          v-model="listSelected"
-          role="group"
-          aria-label="List with checkbox items"
-        >
-          <li class="mdc-list-item" role="checkbox" aria-checked="false">
-            <span class="mdc-list-item__graphic">
-              <mcw-checkbox id="demo-list-checkbox-item-1"></mcw-checkbox>
-            </span>
-            <label class="mdc-list-item__text" for="demo-list-checkbox-item-1"
-              >Option 1</label
-            >
-          </li>
-          <li
-            class="mdc-list-item"
-            role="checkbox"
-            aria-checked="true"
-            tabindex="0"
+    <div class="demo-list-example">
+      <h3 class="mdc-typography--subtitle1">List with checkbox items</h3>
+      <mcw-list
+        v-model="listSelected"
+        role="group"
+        aria-label="List with checkbox items"
+        class="demo-list"
+      >
+        <mcw-list-item role="checkbox" aria-checked="true">
+          <label class="mdc-list-item__text" for="demo-list-checkbox-item-1"
+            >Option 1</label
           >
-            <span class="mdc-list-item__graphic">
-              <mcw-checkbox
-                id="demo-list-checkbox-item-2"
-                checked
-              ></mcw-checkbox>
-            </span>
-            <label class="mdc-list-item__text" for="demo-list-checkbox-item-2"
-              >Option 2</label
-            >
-          </li>
-          <li class="mdc-list-item" role="checkbox" aria-checked="false">
-            <span class="mdc-list-item__graphic">
-              <mcw-checkbox id="demo-list-checkbox-item-3"></mcw-checkbox>
-            </span>
-            <label class="mdc-list-item__text" for="demo-list-checkbox-item-2"
-              >Option 3</label
-            >
-          </li>
-        </mcw-list>
-      </mcw-layout-cell>
-    </mcw-layout-grid>
+        </mcw-list-item>
+        <mcw-list-item role="checkbox" tabindex="0">
+          <label class="mdc-list-item__text" for="demo-list-checkbox-item-2"
+            >Option 2</label
+          >
+        </mcw-list-item>
+        <mcw-list-item role="checkbox">
+          <label class="mdc-list-item__text" for="demo-list-checkbox-item-3"
+            >Option 3</label
+          >
+        </mcw-list-item>
+      </mcw-list>
+    </div>
 
-    <mcw-caption>
+    <div class="demo-list-example">
+      <h3 class="mdc-typography--subtitle1">List with trailing checkbox</h3>
+      <mcw-list
+        v-model="listSelected"
+        role="group"
+        aria-label="List with checkbox items"
+        class="demo-list"
+      >
+        <mcw-list-item role="checkbox" aria-checked="true" trailing>
+          <label class="mdc-list-item__text" for="demo-list-checkbox-item-1"
+            >Option 1</label
+          >
+        </mcw-list-item>
+        <mcw-list-item role="checkbox" tabindex="0" trailing>
+          <label class="mdc-list-item__text" for="demo-list-checkbox-item-2"
+            >Option 2</label
+          >
+        </mcw-list-item>
+        <mcw-list-item role="checkbox" trailing>
+          <label class="mdc-list-item__text" for="demo-list-checkbox-item-3"
+            >Option 3</label
+          >
+        </mcw-list-item>
+      </mcw-list>
+    </div>
+
+    <div class="demo-list-example">
+      <h3 class="mdc-typography--subtitle1">List with radio group</h3>
+      <mcw-list v-model="radioSelected" role="radiogroup" class="demo-list">
+        <mcw-list-item role="radio" name="demo-group">
+          <label class="mdc-list-item__text" for="demo-list-radio-item-1"
+            >Option 1</label
+          ></mcw-list-item
+        >
+
+        <mcw-list-item role="radio" aria-checked="true" name="demo-group">
+          <label class="mdc-list-item__text" for="demo-list-radio-item-2"
+            >Option 2</label
+          >
+        </mcw-list-item>
+        <mcw-list-item role="radio" name="demo-group">
+          <label class="mdc-list-item__text" for="demo-list-radio-item-3"
+            >Option 3</label
+          >
+        </mcw-list-item>
+      </mcw-list>
+    </div>
+
+    <div class="demo-list-example">
+      <h3 class="mdc-typography--subtitle1">Single-Line trailing radio</h3>
+      <mcw-list v-model="radioSelected" class="demo-list">
+        <mcw-list-item
+          tabindex="0"
+          role="radio"
+          aria-checked="true"
+          trailing
+          name="mydemo"
+          >One Single-line item 1
+        </mcw-list-item>
+        <mcw-list-item role="radio" trailing name="mydemo"
+          >Two Single-line item 2
+        </mcw-list-item>
+        <mcw-list-item role="radio" trailing name="mydemo"
+          >Three Single-line item 3
+        </mcw-list-item>
+      </mcw-list>
+    </div>
+
+    <div class="mdc-typography--caption">
       selected:
       <span class>{{ selected }}</span>
       listSelected:
       <span class>{{ listSelected }}</span>
       radioSelected:
       <span class>{{ radioSelected }}</span>
-    </mcw-caption>
-    <mcw-caption>
+    </div>
+    <div class="mdc-typography--caption">
       picked:
       <span class>{{ picked }}</span>
-    </mcw-caption>
+    </div>
   </div>
 </template>
 
@@ -225,11 +187,22 @@
 export default {
   data() {
     return {
-      selected: null,
+      selected: 1,
       listSelected: [],
       radioSelected: null,
       picked: '1',
+      test_: true,
     };
+  },
+  computed: {
+    test: {
+      set(nv) {
+        this.test_ = nv;
+      },
+      get() {
+        return this.test_;
+      },
+    },
   },
   methods: {
     onAction(index) {
@@ -240,7 +213,15 @@ export default {
 </script>
 
 <style>
-.demo-article .mcw-layout-grid {
+.demo-article {
   width: 100%;
+}
+.demo-list-wrapper,
+.demo-list-example {
+  width: 100%;
+}
+.demo-list {
+  max-width: 600px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 </style>

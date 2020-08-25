@@ -1,6 +1,7 @@
+import { h } from '@vue/composition-api';
+
 export default {
   name: 'mcw-card-media',
-  functional: true,
   props: {
     src: String,
     square: {
@@ -17,41 +18,36 @@ export default {
     },
     contentClass: String,
   },
-  render(
-    createElement,
-    {
-      props: { src, square, wide, contentClass },
-      data: { staticStyle },
-      scopedSlots,
-    },
-  ) {
-    const nodes = [];
 
-    const content = scopedSlots.default && scopedSlots.default();
-    if (content) {
-      nodes.push(
-        createElement(
-          'div',
-          { class: ['mdc-card__media-content', contentClass] },
-          content,
-        ),
+  setup(props, { slots }) {
+    return () => {
+      const nodes = [];
+
+      const content = slots.default?.();
+      if (content) {
+        nodes.push(
+          h(
+            'div',
+            { class: ['mdc-card__media-content', props.contentClass] },
+            content,
+          ),
+        );
+      }
+
+      return h(
+        'section',
+        {
+          class: {
+            'mdc-card__media': 1,
+            'mdc-card__media--square': props.square,
+            'mdc-card__media--16-9': props.wide && !props.square,
+          },
+          style: {
+            backgroundImage: `url(${props.src})`,
+          },
+        },
+        nodes,
       );
-    }
-
-    return createElement(
-      'section',
-      {
-        class: {
-          'mdc-card__media': 1,
-          'mdc-card__media--square': square,
-          'mdc-card__media--16-9': wide && !square,
-        },
-        style: {
-          backgroundImage: `url(${src})`,
-          ...staticStyle,
-        },
-      },
-      nodes,
-    );
+    };
   },
 };

@@ -1,21 +1,21 @@
 import { MDCChipFoundation } from '@material/chips/chip/foundation';
-import { CustomLinkMixin, emitCustomEvent } from '~/base/index.js';
-import { RippleBase } from '~/ripple/index.js';
-import mcwChipCheckmark from './chip-checkmark.js';
+import {
+  computed,
+  inject,
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  toRef,
+  toRefs,
+  watch,
+} from '@vue/composition-api';
+import { emitCustomEvent } from '~/base/index.js';
+import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 
-const {
-  INTERACTION_EVENT,
-  SELECTION_EVENT,
-  REMOVAL_EVENT,
-  TRAILING_ICON_INTERACTION_EVENT,
-  PRIMARY_ACTION_SELECTOR,
-  TRAILING_ACTION_SELECTOR,
-  NAVIGATION_EVENT,
-} = MDCChipFoundation.strings;
+const { strings } = MDCChipFoundation;
 
 export default {
   name: 'mcw-chip',
-  mixins: [CustomLinkMixin],
   props: {
     leadingIcon: [String],
     trailingIcon: [String],
@@ -26,9 +26,8 @@ export default {
       },
     },
   },
-  inject: ['mcwChipSet'],
-  data() {
-    return {
+  setup(props, { slots }) {
+    const uiState = reactive({
       classes: {
         'mdc-chip': true,
       },
@@ -40,202 +39,111 @@ export default {
       styles: {},
       primaryAttrs: {},
       trailingAttrs: {},
-    };
-  },
-  watch: {
-    shouldRemoveOnTrailingIconClick(shouldRemove) {
-      this.foundation.setShouldRemoveOnTrailingIconClick(shouldRemove);
-    },
-  },
-  computed: {
-    id() {
-      return this.$el.id;
-    },
-    selected: {
+      myListeners: null,
+      root: null,
+      checkmarkEl: null,
+      trailingAction: null,
+    });
+
+    const mcwChipSet = inject('mcwChipSet');
+
+    const { classes: rippleClasses, styles: rippleStyles } = useRipplePlugin(
+      toRef(uiState, 'root'),
+    );
+
+    let foundation;
+
+    const classes = computed(() => {
+      return { ...rippleClasses.value, ...uiState.classes };
+    });
+
+    const styles = computed(() => {
+      return { ...rippleStyles.value, ...uiState.styles };
+    });
+
+    let trailingAction_;
+    let leadingIcon_;
+
+    const id = computed(() => {
+      return uiState.root.id;
+    });
+
+    const selected = computed({
       get() {
-        return this.foundation.isSelected();
+        return foundation.isSelected();
       },
       set(nv) {
-        this.foundation.setSelected(nv);
+        foundation.setSelected(nv);
       },
-    },
-    isFilter() {
-      return this.mcwChipSet && this.mcwChipSet.filter;
-    },
-    isInput() {
-      return this.mcwChipSet && this.mcwChipSet.input;
-    },
-    haveleadingIcon() {
-      const slot = this.$slots['leading-icon'];
-      return (slot && slot[0]) || !!this.leadingIcon;
-    },
-    havetrailingIcon() {
-      const slot = this.$slots['trailing-icon'];
+    });
 
-      return this.isInput && ((slot && slot[0]) || !!this.trailingIcon);
-    },
-  },
-  methods: {
-    setSelectedFromChipSet(selected, shouldNotifyClients) {
-      this.foundation.setSelectedFromChipSet(selected, shouldNotifyClients);
-    },
+    const isFilter = computed(() => mcwChipSet?.filter);
 
-    focusPrimaryAction() {
-      this.foundation.focusPrimaryAction();
-    },
+    const isInput = computed(() => mcwChipSet?.input);
 
-    focusTrailingAction() {
-      this.foundation.focusTrailingAction();
-    },
-    removeFocus() {
-      this.foundation.removeFocus();
-    },
-    toggleSelected() {
-      this.foundation.toggleSelected();
-    },
-    isSelected() {
-      return this.foundation.isSelected();
-    },
+    const haveleadingIcon = computed(() => {
+      const slot = slots['leading-icon'];
+      return (slot && slot[0]) || !!props.leadingIcon;
+    });
 
-    remove() {
-      const parent = this.$el.parentNode;
-      if (parent != null) {
-        parent.removeChild(this.$el);
-      }
-    },
+    const havetrailingIcon = computed(() => {
+      const slot = slots['trailing-icon'];
 
-    renderLeadingIcon(createElement) {
-      const {
-        $slots: { ['leading-icon']: slot },
-      } = this;
-      const v0 = slot && slot[0];
+      return isInput.value && ((slot && slot[0]) || !!props.trailingIcon);
+    });
 
-      if (v0) {
-        const { staticClass = '' } = v0.data;
-        const haveClasses =
-          staticClass && staticClass.indexOf('mdc-chip__icon') > -1;
-        if (!haveClasses) {
-          v0.data.staticClass = `mdc-chip__icon mdc-chip__icon--leading ${staticClass}`;
-        }
-        return slot;
-      }
+    const adapter = {
+      addClass: className =>
+        (uiState.classes = { ...uiState.classes, [className]: true }),
 
-      return createElement(
-        'i',
-        {
-          class: this.leadingClasses,
-          ref: 'leading-icon',
-        },
-        this.leadingIcon,
-      );
-    },
-
-    renderTrailingIcon(createElement) {
-      const {
-        $slots: { ['trailing-icon']: slot },
-      } = this;
-
-      const v0 = slot && slot[0];
-      if (v0) {
-        const { staticClass = '' } = v0.data;
-        const haveClasses =
-          staticClass && staticClass.indexOf('mdc-chip__icon') > -1;
-        if (!haveClasses) {
-          v0.data.staticClass = `mdc-chip__icon mdc-chip__icon--trailing mdc-chip__trailing-action${staticClass}`;
-          v0.data.on = {
-            ...v0.data.on,
-            click: evt => {
-              this.foundation.handleTrailingIconInteraction(evt);
-            },
-            keydown: evt => this.foundation.handleTrailingIconInteraction(evt),
-          };
-        }
-        return slot;
-      }
-
-      return createElement('span', { attrs: { role: 'gridcell' } }, [
-        createElement(
-          'i',
-          {
-            class: {
-              'mdc-chip__icon': 1,
-              'mdc-chip__icon--trailing': 1,
-              'material-icons': 1,
-              // 'mdc-chip__trailing-action': 1,
-            },
-            attrs: { ...this.trailingAttrs },
-            ref: 'trailing-icon',
-            on: {
-              click: evt => this.foundation.handleTrailingIconInteraction(evt),
-              keydown: evt =>
-                this.foundation.handleTrailingIconInteraction(evt),
-            },
-          },
-          this.trailingIcon,
-        ),
-      ]);
-    },
-  },
-  mounted() {
-    this.trailingAction_ = this.$el.querySelector(TRAILING_ACTION_SELECTOR);
-
-    this.foundation = new MDCChipFoundation({
-      addClass: className => this.$set(this.classes, className, true),
       addClassToLeadingIcon: className => {
-        this.$set(this.leadingClasses, className, true);
-
-        // if no ref, then using slot, so just add class directly
-        if (!this.$refs['leading-icon'] && this.haveleadingIcon) {
-          const item = this.$slots['leading-icon'][0];
-          (item.elm || item).classList.add(className);
+        if (leadingIcon_) {
+          leadingIcon_.classList.add(className);
         }
       },
       eventTargetHasClass: (target, className) =>
         target.classList.contains(className),
       focusPrimaryAction: () => {
-        const {
-          $refs: {
-            primaryAction = this.$el.querySelector(PRIMARY_ACTION_SELECTOR),
-          },
-        } = this;
-
-        primaryAction && primaryAction.focus();
+        uiState.root.querySelector(strings.PRIMARY_ACTION_SELECTOR)?.focus();
       },
       focusTrailingAction: () => {
-        this.trailingAction_ && this.trailingAction_.focus();
+        trailingAction_?.focus();
       },
-      getAttribute: attr => this.$el.getAttribute(attr),
+      getAttribute: attr => uiState.root.getAttribute(attr),
       getCheckmarkBoundingClientRect: () => {
-        return this.$refs.checkmarkEl
-          ? this.$refs.checkmarkEl.$el.getBoundingClientRect()
-          : null;
+        return uiState.checkmarkEl?.getBoundingClientRect();
       },
       getComputedStyleValue: propertyName =>
-        window.getComputedStyle(this.$el).getPropertyValue(propertyName),
-      getRootBoundingClientRect: () => this.$el.getBoundingClientRect(),
-      hasClass: className => this.$el.classList.contains(className),
-      hasLeadingIcon: () => !!this.haveleadingIcon,
-      hasTrailingAction: () => !!this.trailingAction_,
+        window.getComputedStyle(uiState.root).getPropertyValue(propertyName),
+      getRootBoundingClientRect: () => uiState.root.getBoundingClientRect(),
+      hasClass: className => uiState.root.classList.contains(className),
+      hasLeadingIcon: () => !!haveleadingIcon.value,
       isRTL: () =>
-        window.getComputedStyle(this.$el).getPropertyValue('direction') ===
+        window.getComputedStyle(uiState.root).getPropertyValue('direction') ===
         'rtl',
+      isTrailingActionNavigable: () => {
+        if (trailingAction_) {
+          return uiState.trailingAction?.isNavigable();
+        }
+        return false;
+      },
 
       notifyInteraction: () => {
         emitCustomEvent(
-          this.$el,
-          INTERACTION_EVENT,
+          uiState.root,
+          strings.INTERACTION_EVENT,
           {
-            chipId: this.id,
+            chipId: id.value,
           },
           true,
         );
       },
       notifyNavigation: (key, source) =>
         emitCustomEvent(
-          this.$el,
-          NAVIGATION_EVENT,
+          uiState.root,
+          strings.NAVIGATION_EVENT,
           {
-            chipId: this.id,
+            chipId: id.value,
             key,
             source,
           },
@@ -243,133 +151,137 @@ export default {
         ),
       notifyRemoval: removedAnnouncement => {
         emitCustomEvent(
-          this.$el,
-          REMOVAL_EVENT,
-          { chipId: this.id, root: this.$el, removedAnnouncement },
+          uiState.root,
+          strings.REMOVAL_EVENT,
+          { chipId: id.value, removedAnnouncement },
           true,
         );
       },
-      notifySelection: selected =>
+      notifySelection: (selected, shouldIgnore) =>
         emitCustomEvent(
-          this.$el,
-          SELECTION_EVENT,
-          { chipId: this.id, selected: selected },
+          uiState.root,
+          strings.SELECTION_EVENT,
+          { chipId: id.value, selected: selected, shouldIgnore },
           true /* shouldBubble */,
         ),
       notifyTrailingIconInteraction: () => {
         emitCustomEvent(
-          this.$el,
-          TRAILING_ICON_INTERACTION_EVENT,
+          uiState.root,
+          strings.TRAILING_ICON_INTERACTION_EVENT,
           {
-            chipId: this.id,
+            chipId: id.value,
           },
           true,
         );
       },
-      removeClass: className => this.$delete(this.classes, className),
+      removeClass: className => {
+        // eslint-disable-next-line no-unused-vars
+        const { [className]: removed, ...rest } = uiState.classes;
+        uiState.classes = rest;
+      },
       removeClassFromLeadingIcon: className => {
-        this.$delete(this.leadingClasses, className);
-
-        // if no ref, then using slot, so just remove class directly
-        if (!this.$refs['leading-icon'] && this.haveleadingIcon) {
-          const item = this.$slots['leading-icon'][0];
-          (item.elm || item).classList.remove(className);
+        if (leadingIcon_) {
+          leadingIcon_.classList.remove(className);
         }
       },
-
-      setPrimaryActionAttr: (attr, value) => {
-        this.$set(this.primaryAttrs, attr, value);
+      removeTrailingActionFocus: () => {
+        uiState.trailingAction?.removeFocus();
       },
+      setPrimaryActionAttr: (attr, value) =>
+        (uiState.primaryAttrs = { ...uiState.primaryAttrs, [attr]: value }),
+
       setStyleProperty: (property, value) =>
-        this.$set(this.styles, property, value),
-      setTrailingActionAttr: (attr, value) => {
-        if (this.trailingAction_) {
-          this.trailingAction_.setAttribute(attr, value);
-        }
+        (uiState.styles = { ...uiState.styles, [property]: value }),
+    };
+
+    const setSelectedFromChipSet = (selected, shouldNotifyClients) => {
+      foundation.setSelectedFromChipSet(selected, shouldNotifyClients);
+    };
+
+    const focusPrimaryAction = () => foundation.focusPrimaryAction();
+
+    const focusTrailingAction = () => foundation.focusTrailingAction();
+
+    const removeFocus = () => foundation.removeFocus();
+
+    const toggleSelected = () => foundation.toggleSelected();
+
+    const isSelected = () => foundation.isSelected();
+
+    const remove = () => {
+      const parent = uiState.root.parentNode;
+      if (parent != null) {
+        parent.removeChild(uiState.root);
+      }
+    };
+
+    watch(
+      () => props.shouldRemoveOnTrailingIconClick,
+      nv => {
+        foundation.setShouldRemoveOnTrailingIconClick(nv);
       },
-    });
+    );
 
-    this.foundation.init();
+    onMounted(() => {
+      leadingIcon_ = uiState.root.querySelector(strings.LEADING_ICON_SELECTOR);
 
-    this.primaryAttrs.tabindex = this.isFilter ? 0 : -1;
-
-    if (
-      this.shouldRemoveOnTrailingIconClick !==
-      this.foundation.getShouldRemoveOnTrailingIconClick()
-    ) {
-      this.foundation.setShouldRemoveOnTrailingIconClick(
-        this.shouldRemoveOnTrailingIconClick,
+      trailingAction_ = uiState.root.querySelector(
+        strings.TRAILING_ACTION_SELECTOR,
       );
-    }
 
-    this.ripple = new RippleBase(this, {
-      computeBoundingRect: () => this.foundation.getDimensions(),
+      foundation = new MDCChipFoundation(adapter);
+
+      uiState.myListeners = {
+        click: evt => foundation.handleClick(evt),
+        keydown: evt => foundation.handleKeydown(evt),
+        transitionend: evt => foundation.handleTransitionEnd(evt),
+        focusin: evt => foundation.handleFocusIn(evt),
+        focusout: evt => foundation.handleFocusOut(evt),
+      };
+
+      if (trailingAction_) {
+        uiState.myListeners[strings.INTERACTION_EVENT] = evt =>
+          foundation.handleTrailingActionInteraction(evt);
+
+        uiState.myListeners[strings.NAVIGATION_EVENT] = evt =>
+          foundation.handleTrailingActionNavigation(evt);
+      }
+
+      foundation.init();
+
+      uiState.primaryAttrs.tabindex = isFilter.value ? 0 : -1;
+
+      if (
+        props.shouldRemoveOnTrailingIconClick !==
+        foundation.getShouldRemoveOnTrailingIconClick()
+      ) {
+        foundation.setShouldRemoveOnTrailingIconClick(
+          props.shouldRemoveOnTrailingIconClick,
+        );
+      }
     });
-    this.ripple.init();
-  },
-  beforeDestroy() {
-    this.ripple.destroy();
 
-    this.foundation.destroy();
-  },
+    onBeforeUnmount(() => {
+      foundation.destroy();
+    });
 
-  render(createElement) {
-    const {
-      $scopedSlots: scopedSlots,
+    return {
+      ...toRefs(uiState),
+      classes,
+      styles,
+      id,
+      isInput,
+      isFilter,
+      selected,
       haveleadingIcon,
       havetrailingIcon,
-      isFilter,
-      primaryAttrs,
-    } = this;
-
-    const role = isFilter ? 'checkbox' : 'button';
-
-    const on = {
-      click: evt => this.foundation.handleInteraction(evt),
-      keydown: evt => this.foundation.handleInteraction(evt),
-      transitionend: evt => this.foundation.handleTransitionEnd(evt),
-      focusin: evt => this.foundation.handleFocusIn(evt),
-      focusout: evt => this.foundation.handleFocusOut(evt),
+      remove,
+      isSelected,
+      toggleSelected,
+      removeFocus,
+      focusPrimaryAction,
+      focusTrailingAction,
+      setSelectedFromChipSet,
     };
-    if (this.trailingAction_) {
-      on[INTERACTION_EVENT] = evt =>
-        this.foundation.handleTrailingIconInteraction(evt);
-    }
-
-    return createElement(
-      'div',
-      {
-        class: this.classes,
-        style: this.styles,
-        attrs: { role: 'row' },
-        on,
-      },
-      [
-        createElement('div', { class: { 'mdc-chip__ripple': 1 } }),
-        haveleadingIcon && this.renderLeadingIcon(createElement),
-        isFilter && createElement(mcwChipCheckmark, { ref: 'checkmarkEl' }),
-
-        createElement('span', { attrs: { role: 'gridcell' } }, [
-          createElement(
-            'span',
-            {
-              attrs: { role, tabindex: 0, ...primaryAttrs },
-              class: { 'mdc-chip__primary-action': 1 },
-              ref: 'primaryAction',
-            },
-            [
-              createElement(
-                'span',
-                {
-                  class: ['mdc-chip__text'],
-                },
-                scopedSlots.default?.(),
-              ),
-            ],
-          ),
-        ]),
-        havetrailingIcon && this.renderTrailingIcon(createElement),
-      ],
-    );
   },
 };

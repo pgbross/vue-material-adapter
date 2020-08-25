@@ -3,22 +3,21 @@
     <div class="mcw-demo mcw-demo--container">
       <div>
         <mcw-select
+          id="food-group"
           :value="selectedType"
           label="Food"
           helptext="Pick a food group"
+          leading-icon="restaurant_menu"
           @change="onTypeChanged"
         >
-          <mcw-menu class="mdc-select__menu">
-            <li
-              v-for="type in types"
-              :key="type"
-              class="mdc-list-item"
-              role="menuitem"
-              :data-value="type"
-            >
-              <span class="mdc-list-item__text">{{ type }}</span>
-            </li>
-          </mcw-menu>
+          <mcw-list-item
+            v-for="type in types"
+            :key="type"
+            :data-value="type"
+            role="option"
+            icon
+            >{{ type }}</mcw-list-item
+          >
         </mcw-select>
 
         <br />
@@ -28,26 +27,22 @@
           outlined
           label="Kind"
         >
-          <mcw-menu class="mdc-select__menu">
-            <li
-              v-for="option of options"
-              :key="option"
-              :data-value="option.toLowerCase()"
-              class="mdc-list-item"
-              role="menuitem"
-            >
-              <span class="mdc-list-item__text">{{ option }}</span>
-            </li>
-          </mcw-menu>
+          <mcw-list-item
+            v-for="option of options"
+            :key="option"
+            :data-value="option.toLowerCase()"
+            role="option"
+            >{{ option }}</mcw-list-item
+          >
         </mcw-select>
       </div>
     </div>
-    <mcw-caption v-if="selectedType" tag="p"
-      >Selected Type: {{ selectedType }}</mcw-caption
-    >
-    <mcw-caption v-if="selectedValue" tag="p"
-      >Selected Value: {{ selectedValue }}</mcw-caption
-    >
+    <div v-if="selectedType" class="mdc-typography--caption">
+      Selected Type: {{ selectedType }}
+    </div>
+    <div v-if="selectedValue" class="mdc-typography--caption">
+      Selected Value: {{ selectedValue }}
+    </div>
   </div>
 </template>
 
