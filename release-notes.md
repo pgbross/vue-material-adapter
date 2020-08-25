@@ -1,14 +1,33 @@
-`v0.17.0` - This release targets `material-components-web v7.0.0`.
+### `v0.17.0` - This release targets `material-components-web v7.0.0`.
 
 BREAKING CHANGE:
 
 `@vue/composition-api` 1.0 or greater is required as peer dependency.
 
+Add import and use composition api. Applications do not have to use the composition api if they do not wish to.
+
+```js
+import VueCompositionAPI from '@vue/composition-api';
+
+Vue.use(VueCompositionAPI);
+```
+
+Packages based on list items now use `mcw-list-item`. Affected pacakges include:
+
+```
+mcw-list
+mcw-menu
+mcw-select
+mcw-drawer
+```
+
 FEATURES:
 
 Support Textfield character counter.
 
-`v0.16.0` - This release targets `material-components-web v6.0.0`.
+See `demo` for documentation and examples on updated html structure. Also the examples `basic-webpack` and `basic-vue-cli` show using the declarative UI and how to initialise the @vue/composition-api functionality.
+
+### `v0.16.0` - This release targets `material-components-web v6.0.0`.
 
 BREAKING CHANGE: The build process now uses rollup to produce 'ESM', 'CJS', and 'AMD' bundles. Clients should now`import { button } from 'vue-material-adapter`, instead of`import button from '@mcwv/button'`.
 
