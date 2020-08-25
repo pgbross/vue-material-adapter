@@ -3,7 +3,6 @@ import { applyPassive } from '@material/dom/events';
 import { matches, closest } from '@material/dom/ponyfill';
 import { MDCRippleFoundation } from '@material/ripple';
 import { supportsCssVariables } from '@material/ripple/util';
-import { resolveComponent, openBlock, createBlock, mergeProps, toHandlers, withCtx, renderSlot, createVNode, toDisplayString, createCommentVNode, createTextVNode, Fragment, resolveDynamicComponent } from 'vue';
 import { getCorrectEventName } from '@material/animation';
 import { MDCCheckboxFoundation } from '@material/checkbox/foundation';
 import { MDCFormFieldFoundation } from '@material/form-field/foundation';
@@ -673,52 +672,176 @@ var script = {
   }
 };
 
-const _hoisted_1 = /*#__PURE__*/createVNode("div", { class: "mdc-button__ripple" }, null, -1 /* HOISTED */);
-const _hoisted_2 = {
-  class: "material-icons mdc-button__icon",
-  "aria-hidden": "true"
-};
-const _hoisted_3 = { class: "mdc-button__label" };
-const _hoisted_4 = {
-  class: "material-icons mdc-button__icon",
-  "aria-hidden": "true"
-};
+function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier
+/* server only */
+, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
+  if (typeof shadowMode !== 'boolean') {
+    createInjectorSSR = createInjector;
+    createInjector = shadowMode;
+    shadowMode = false;
+  } // Vue.extend constructor export interop.
 
-function render(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_custom_link = resolveComponent("custom-link");
 
-  return (openBlock(), createBlock(_component_custom_link, mergeProps({
-    ref: "root",
-    class: _ctx.classes,
-    link: _ctx.$attrs,
-    style: _ctx.styles,
-    tag: "button"
-  }, toHandlers(_ctx.listeners)), {
-    default: withCtx(() => [
-      _hoisted_1,
-      (_ctx.haveIcon)
-        ? renderSlot(_ctx.$slots, "icon", { key: 0 }, () => [
-            createVNode("i", _hoisted_2, toDisplayString(_ctx.icon), 1 /* TEXT */)
-          ])
-        : createCommentVNode("v-if", true),
-      createVNode("span", _hoisted_3, [
-        renderSlot(_ctx.$slots, "default")
-      ]),
-      (_ctx.haveTrailingIcon)
-        ? renderSlot(_ctx.$slots, "trailingIcon", { key: 1 }, () => [
-            createVNode("i", _hoisted_4, toDisplayString(_ctx.trailingIcon), 1 /* TEXT */)
-          ])
-        : createCommentVNode("v-if", true)
-    ]),
-    _: 3
-  }, 16 /* FULL_PROPS */, ["class", "link", "style"]))
+  var options = typeof script === 'function' ? script.options : script; // render functions
+
+  if (template && template.render) {
+    options.render = template.render;
+    options.staticRenderFns = template.staticRenderFns;
+    options._compiled = true; // functional template
+
+    if (isFunctionalTemplate) {
+      options.functional = true;
+    }
+  } // scopedId
+
+
+  if (scopeId) {
+    options._scopeId = scopeId;
+  }
+
+  var hook;
+
+  if (moduleIdentifier) {
+    // server build
+    hook = function hook(context) {
+      // 2.3 injection
+      context = context || // cached call
+      this.$vnode && this.$vnode.ssrContext || // stateful
+      this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext; // functional
+      // 2.2 with runInNewContext: true
+
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__;
+      } // inject component styles
+
+
+      if (style) {
+        style.call(this, createInjectorSSR(context));
+      } // register component module identifier for async chunk inference
+
+
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier);
+      }
+    }; // used by ssr in case component is cached and beforeCreate
+    // never gets called
+
+
+    options._ssrRegister = hook;
+  } else if (style) {
+    hook = shadowMode ? function (context) {
+      style.call(this, createInjectorShadow(context, this.$root.$options.shadowRoot));
+    } : function (context) {
+      style.call(this, createInjector(context));
+    };
+  }
+
+  if (hook) {
+    if (options.functional) {
+      // register for functional component in vue file
+      var originalRender = options.render;
+
+      options.render = function renderWithStyleInjection(h, context) {
+        hook.call(context);
+        return originalRender(h, context);
+      };
+    } else {
+      // inject component registration as beforeCreate hook
+      var existing = options.beforeCreate;
+      options.beforeCreate = existing ? [].concat(existing, hook) : [hook];
+    }
+  }
+
+  return script;
 }
 
-script.render = render;
-script.__file = "packages/button/button.vue";
+/* script */
+const __vue_script__ = script;
+
+/* template */
+var __vue_render__ = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "custom-link",
+    _vm._g(
+      {
+        ref: "root",
+        class: _vm.classes,
+        style: _vm.styles,
+        attrs: { link: _vm.$attrs, tag: "button" }
+      },
+      _vm.listeners
+    ),
+    [
+      _c("div", { staticClass: "mdc-button__ripple" }),
+      _vm._v(" "),
+      _vm.haveIcon
+        ? _vm._t("icon", [
+            _c(
+              "i",
+              {
+                staticClass: "material-icons mdc-button__icon",
+                attrs: { "aria-hidden": "true" }
+              },
+              [_vm._v(_vm._s(_vm.icon))]
+            )
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _c("span", { staticClass: "mdc-button__label" }, [_vm._t("default")], 2),
+      _vm._v(" "),
+      _vm.haveTrailingIcon
+        ? _vm._t("trailingIcon", [
+            _c(
+              "i",
+              {
+                staticClass: "material-icons mdc-button__icon",
+                attrs: { "aria-hidden": "true" }
+              },
+              [_vm._v(_vm._s(_vm.trailingIcon))]
+            )
+          ])
+        : _vm._e()
+    ],
+    2
+  )
+};
+var __vue_staticRenderFns__ = [];
+__vue_render__._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__ = undefined;
+  /* scoped */
+  const __vue_scope_id__ = undefined;
+  /* module identifier */
+  const __vue_module_identifier__ = undefined;
+  /* functional template */
+  const __vue_is_functional_template__ = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__ = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ },
+    __vue_inject_styles__,
+    __vue_script__,
+    __vue_scope_id__,
+    __vue_is_functional_template__,
+    __vue_module_identifier__,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var button = BasePlugin({
-  mcwButton: script
+  mcwButton: __vue_component__
 });
 
 var mcwCardActionButtons = {
@@ -843,25 +966,60 @@ var script$1 = {
   }
 };
 
-function render$1(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_custom_link = resolveComponent("custom-link");
+/* script */
+const __vue_script__$1 = script$1;
 
-  return (openBlock(), createBlock(_component_custom_link, mergeProps({
-    ref: "root",
-    class: _ctx.classes,
-    style: _ctx.styles,
-    tabIndex: "0",
-    link: _ctx.$attrs
-  }, toHandlers(_ctx.listeners)), {
-    default: withCtx(() => [
-      renderSlot(_ctx.$slots, "default")
-    ]),
-    _: 3
-  }, 16 /* FULL_PROPS */, ["class", "style", "link"]))
-}
+/* template */
+var __vue_render__$1 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "custom-link",
+    _vm._g(
+      {
+        ref: "root",
+        class: _vm.classes,
+        style: _vm.styles,
+        attrs: { tabIndex: "0", link: _vm.$attrs }
+      },
+      _vm.listeners
+    ),
+    [_vm._t("default")],
+    2
+  )
+};
+var __vue_staticRenderFns__$1 = [];
+__vue_render__$1._withStripped = true;
 
-script$1.render = render$1;
-script$1.__file = "packages/card/card-primary-action.vue";
+  /* style */
+  const __vue_inject_styles__$1 = undefined;
+  /* scoped */
+  const __vue_scope_id__$1 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$1 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$1 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$1 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$1, staticRenderFns: __vue_staticRenderFns__$1 },
+    __vue_inject_styles__$1,
+    __vue_script__$1,
+    __vue_scope_id__$1,
+    __vue_is_functional_template__$1,
+    __vue_module_identifier__$1,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var mcwCard = {
   name: 'mcw-card',
@@ -888,7 +1046,7 @@ var mcwCard = {
 
 var card = BasePlugin({
   mcwCard: mcwCard,
-  mcwCardPrimaryAction: script$1,
+  mcwCardPrimaryAction: __vue_component__$1,
   mcwCardMedia: mcwCardMedia,
   mcwCardActions: mcwCardActions,
   mcwCardActionButtons: mcwCardActionButtons,
@@ -1157,92 +1315,128 @@ function validDescriptor(inputPropDesc) {
   return !!inputPropDesc && typeof inputPropDesc.set === 'function';
 }
 
-const _hoisted_1$1 = /*#__PURE__*/createVNode("div", { class: "mdc-checkbox__background" }, [
-  /*#__PURE__*/createVNode("svg", {
-    class: "mdc-checkbox__checkmark",
-    viewBox: "0 0 24 24"
-  }, [
-    /*#__PURE__*/createVNode("path", {
-      class: "mdc-checkbox__checkmark-path",
-      fill: "none",
-      d: "M1.73,12.91 8.1,19.28 22.79,4.59"
-    })
-  ]),
-  /*#__PURE__*/createVNode("div", { class: "mdc-checkbox__mixedmark" })
-], -1 /* HOISTED */);
-const _hoisted_2$1 = /*#__PURE__*/createVNode("div", { class: "mdc-checkbox__ripple" }, null, -1 /* HOISTED */);
-const _hoisted_3$1 = /*#__PURE__*/createVNode("div", { class: "mdc-checkbox__background" }, [
-  /*#__PURE__*/createVNode("svg", {
-    class: "mdc-checkbox__checkmark",
-    viewBox: "0 0 24 24"
-  }, [
-    /*#__PURE__*/createVNode("path", {
-      class: "mdc-checkbox__checkmark-path",
-      fill: "none",
-      d: "M1.73,12.91 8.1,19.28 22.79,4.59"
-    })
-  ]),
-  /*#__PURE__*/createVNode("div", { class: "mdc-checkbox__mixedmark" })
-], -1 /* HOISTED */);
-const _hoisted_4$1 = /*#__PURE__*/createVNode("div", { class: "mdc-checkbox__ripple" }, null, -1 /* HOISTED */);
+/* script */
+const __vue_script__$2 = script$2;
 
-function render$2(_ctx, _cache, $props, $setup, $data, $options) {
-  return (_ctx.hasLabel)
-    ? (openBlock(), createBlock("div", {
-        key: 0,
-        class: [_ctx.formFieldClasses, "mdc-checkbox-wrapper"]
-      }, [
-        createVNode("div", {
-          ref: "root",
-          class: _ctx.rootClasses,
-          style: _ctx.styles
-        }, [
-          createVNode("input", {
-            id: _ctx.checkboxId,
-            ref: "control",
-            name: _ctx.name,
-            value: _ctx.value,
-            type: "checkbox",
-            class: "mdc-checkbox__native-control",
-            onChange: _cache[1] || (_cache[1] = (...args) => (_ctx.onChange(...args)))
-          }, null, 40 /* PROPS, HYDRATE_EVENTS */, ["id", "name", "value"]),
-          _hoisted_1$1,
-          _hoisted_2$1
-        ], 6 /* CLASS, STYLE */),
-        createVNode("label", {
-          ref: "labelEl",
-          for: _ctx.checkboxId
-        }, [
-          renderSlot(_ctx.$slots, "default", {}, () => [
-            createTextVNode(toDisplayString(_ctx.label), 1 /* TEXT */)
-          ])
-        ], 8 /* PROPS */, ["for"])
-      ], 2 /* CLASS */))
-    : (openBlock(), createBlock("div", {
-        key: 1,
-        ref: "root",
-        class: _ctx.rootClasses,
-        style: _ctx.styles
-      }, [
-        createVNode("input", {
-          id: _ctx.checkboxId,
+/* template */
+var __vue_render__$2 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _vm.hasLabel
+    ? _c(
+        "div",
+        { staticClass: "mdc-checkbox-wrapper", class: _vm.formFieldClasses },
+        [
+          _c(
+            "div",
+            { ref: "root", class: _vm.rootClasses, style: _vm.styles },
+            [
+              _c("input", {
+                ref: "control",
+                staticClass: "mdc-checkbox__native-control",
+                attrs: { id: _vm.checkboxId, name: _vm.name, type: "checkbox" },
+                domProps: { value: _vm.value },
+                on: { change: _vm.onChange }
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "mdc-checkbox__background" }, [
+                _c(
+                  "svg",
+                  {
+                    staticClass: "mdc-checkbox__checkmark",
+                    attrs: { viewBox: "0 0 24 24" }
+                  },
+                  [
+                    _c("path", {
+                      staticClass: "mdc-checkbox__checkmark-path",
+                      attrs: {
+                        fill: "none",
+                        d: "M1.73,12.91 8.1,19.28 22.79,4.59"
+                      }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "mdc-checkbox__mixedmark" })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "mdc-checkbox__ripple" })
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "label",
+            { ref: "labelEl", attrs: { for: _vm.checkboxId } },
+            [_vm._t("default", [_vm._v(_vm._s(_vm.label))])],
+            2
+          )
+        ]
+      )
+    : _c("div", { ref: "root", class: _vm.rootClasses, style: _vm.styles }, [
+        _c("input", {
           ref: "control",
-          name: _ctx.name,
-          value: _ctx.value,
-          type: "checkbox",
-          class: "mdc-checkbox__native-control",
-          onChange: _cache[2] || (_cache[2] = (...args) => (_ctx.onChange(...args)))
-        }, null, 40 /* PROPS, HYDRATE_EVENTS */, ["id", "name", "value"]),
-        _hoisted_3$1,
-        _hoisted_4$1
-      ], 6 /* CLASS, STYLE */))
-}
+          staticClass: "mdc-checkbox__native-control",
+          attrs: { id: _vm.checkboxId, name: _vm.name, type: "checkbox" },
+          domProps: { value: _vm.value },
+          on: { change: _vm.onChange }
+        }),
+        _vm._v(" "),
+        _c("div", { staticClass: "mdc-checkbox__background" }, [
+          _c(
+            "svg",
+            {
+              staticClass: "mdc-checkbox__checkmark",
+              attrs: { viewBox: "0 0 24 24" }
+            },
+            [
+              _c("path", {
+                staticClass: "mdc-checkbox__checkmark-path",
+                attrs: { fill: "none", d: "M1.73,12.91 8.1,19.28 22.79,4.59" }
+              })
+            ]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "mdc-checkbox__mixedmark" })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "mdc-checkbox__ripple" })
+      ])
+};
+var __vue_staticRenderFns__$2 = [];
+__vue_render__$2._withStripped = true;
 
-script$2.render = render$2;
-script$2.__file = "packages/checkbox/checkbox.vue";
+  /* style */
+  const __vue_inject_styles__$2 = undefined;
+  /* scoped */
+  const __vue_scope_id__$2 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$2 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$2 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$2 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$2, staticRenderFns: __vue_staticRenderFns__$2 },
+    __vue_inject_styles__$2,
+    __vue_script__$2,
+    __vue_scope_id__$2,
+    __vue_is_functional_template__$2,
+    __vue_module_identifier__$2,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var checkbox = BasePlugin({
-  mcwCheckbox: script$2
+  mcwCheckbox: __vue_component__$2
 });
 
 var script$3 = {
@@ -1260,30 +1454,65 @@ var script$3 = {
   }
 };
 
-const _hoisted_1$2 = {
-  ref: "root",
-  class: "mdc-chip__checkmark"
+/* script */
+const __vue_script__$3 = script$3;
+
+/* template */
+var __vue_render__$3 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("span", { ref: "root", staticClass: "mdc-chip__checkmark" }, [
+    _c(
+      "svg",
+      {
+        staticClass: "mdc-chip__checkmark-svg",
+        attrs: { viewBox: "-2 -3 30 30" }
+      },
+      [
+        _c("path", {
+          staticClass: "mdc-chip__checkmark-path",
+          attrs: {
+            fill: "none",
+            stroke: "black",
+            d: "M1.73,12.91 8.1,19.28 22.79,4.59"
+          }
+        })
+      ]
+    )
+  ])
 };
-const _hoisted_2$2 = /*#__PURE__*/createVNode("svg", {
-  class: "mdc-chip__checkmark-svg",
-  viewBox: "-2 -3 30 30"
-}, [
-  /*#__PURE__*/createVNode("path", {
-    class: "mdc-chip__checkmark-path",
-    fill: "none",
-    stroke: "black",
-    d: "M1.73,12.91 8.1,19.28 22.79,4.59"
-  })
-], -1 /* HOISTED */);
+var __vue_staticRenderFns__$3 = [];
+__vue_render__$3._withStripped = true;
 
-function render$3(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("span", _hoisted_1$2, [
-    _hoisted_2$2
-  ], 512 /* NEED_PATCH */))
-}
+  /* style */
+  const __vue_inject_styles__$3 = undefined;
+  /* scoped */
+  const __vue_scope_id__$3 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$3 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$3 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
 
-script$3.render = render$3;
-script$3.__file = "packages/chips/chip-checkmark.vue";
+  
+  const __vue_component__$3 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$3, staticRenderFns: __vue_staticRenderFns__$3 },
+    __vue_inject_styles__$3,
+    __vue_script__$3,
+    __vue_scope_id__$3,
+    __vue_is_functional_template__$3,
+    __vue_module_identifier__$3,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var strings = MDCChipFoundation.strings;
 var CHIP_SELECTOR = MDCChipSetFoundation.strings.CHIP_SELECTOR;
@@ -1407,18 +1636,55 @@ var script$4 = {
   }
 };
 
-function render$4(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", mergeProps({
-    ref: "root",
-    class: _ctx.classes,
-    role: "grid"
-  }, toHandlers(_ctx.myListeners)), [
-    renderSlot(_ctx.$slots, "default")
-  ], 16 /* FULL_PROPS */))
-}
+/* script */
+const __vue_script__$4 = script$4;
 
-script$4.render = render$4;
-script$4.__file = "packages/chips/chip-set.vue";
+/* template */
+var __vue_render__$4 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    _vm._g(
+      { ref: "root", class: _vm.classes, attrs: { role: "grid" } },
+      _vm.myListeners
+    ),
+    [_vm._t("default")],
+    2
+  )
+};
+var __vue_staticRenderFns__$4 = [];
+__vue_render__$4._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$4 = undefined;
+  /* scoped */
+  const __vue_scope_id__$4 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$4 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$4 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$4 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$4, staticRenderFns: __vue_staticRenderFns__$4 },
+    __vue_inject_styles__$4,
+    __vue_script__$4,
+    __vue_scope_id__$4,
+    __vue_is_functional_template__$4,
+    __vue_module_identifier__$4,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var RippleElement$1 = /*#__PURE__*/function (_MDCRippleFoundation) {
   _inherits(RippleElement, _MDCRippleFoundation);
@@ -1841,68 +2107,114 @@ var script$5 = {
   }
 };
 
-const _hoisted_1$3 = /*#__PURE__*/createVNode("div", { class: "mdc-chip__ripple" }, null, -1 /* HOISTED */);
-const _hoisted_2$3 = { role: "gridcell" };
-const _hoisted_3$2 = { class: "mdc-chip__text" };
-const _hoisted_4$2 = {
-  key: 0,
-  role: "gridcell"
+/* script */
+const __vue_script__$5 = script$5;
+
+/* template */
+var __vue_render__$5 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    _vm._g(
+      {
+        ref: "root",
+        staticClass: "mdc-chip",
+        class: _vm.classes,
+        style: _vm.styles,
+        attrs: { role: "row" }
+      },
+      _vm.myListeners
+    ),
+    [
+      _c("div", { staticClass: "mdc-chip__ripple" }),
+      _vm._v(" "),
+      _vm._t("leading-icon", [
+        _vm.haveleadingIcon
+          ? _c(
+              "i",
+              {
+                ref: "leading-icon",
+                staticClass:
+                  "material-icons mdc-chip__icon mdc-chip__icon--leading"
+              },
+              [_vm._v(_vm._s(_vm.leadingIcon))]
+            )
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _vm.isFilter
+        ? _c("mcw-chip-checkmark", { ref: "checkmarkEl" })
+        : _vm._e(),
+      _vm._v(" "),
+      _c("span", { attrs: { role: "gridcell" } }, [
+        _c(
+          "span",
+          {
+            staticClass: "mdc-chip__primary-action",
+            attrs: { role: _vm.isFilter ? "checkbox" : "button", tabindex: "0" }
+          },
+          [
+            _c(
+              "span",
+              { staticClass: "mdc-chip__text" },
+              [_vm._t("default")],
+              2
+            )
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _vm._t("trailing-icon", [
+        _vm.havetrailingIcon
+          ? _c(
+              "span",
+              { attrs: { role: "gridcell" } },
+              [
+                _c("mcw-chip-trailing-action", { ref: "trailingAction" }, [
+                  _vm._v(_vm._s(_vm.trailingIcon))
+                ])
+              ],
+              1
+            )
+          : _vm._e()
+      ])
+    ],
+    2
+  )
 };
+var __vue_staticRenderFns__$5 = [];
+__vue_render__$5._withStripped = true;
 
-function render$5(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_mcw_chip_checkmark = resolveComponent("mcw-chip-checkmark");
-  const _component_mcw_chip_trailing_action = resolveComponent("mcw-chip-trailing-action");
+  /* style */
+  const __vue_inject_styles__$5 = undefined;
+  /* scoped */
+  const __vue_scope_id__$5 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$5 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$5 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
 
-  return (openBlock(), createBlock("div", mergeProps({
-    ref: "root",
-    class: ["mdc-chip", _ctx.classes],
-    role: "row",
-    style: _ctx.styles
-  }, toHandlers(_ctx.myListeners)), [
-    _hoisted_1$3,
-    renderSlot(_ctx.$slots, "leading-icon", {}, () => [
-      (_ctx.haveleadingIcon)
-        ? (openBlock(), createBlock("i", {
-            key: 0,
-            ref: "leading-icon",
-            class: "material-icons mdc-chip__icon mdc-chip__icon--leading"
-          }, toDisplayString(_ctx.leadingIcon), 513 /* TEXT, NEED_PATCH */))
-        : createCommentVNode("v-if", true)
-    ]),
-    (_ctx.isFilter)
-      ? createVNode(_component_mcw_chip_checkmark, {
-          key: 0,
-          ref: "checkmarkEl"
-        }, null, 512 /* NEED_PATCH */)
-      : createCommentVNode("v-if", true),
-    createVNode("span", _hoisted_2$3, [
-      createVNode("span", {
-        role: _ctx.isFilter ? 'checkbox' : 'button',
-        tabindex: "0",
-        class: "mdc-chip__primary-action"
-      }, [
-        createVNode("span", _hoisted_3$2, [
-          renderSlot(_ctx.$slots, "default")
-        ])
-      ], 8 /* PROPS */, ["role"])
-    ]),
-    renderSlot(_ctx.$slots, "trailing-icon", {}, () => [
-      (_ctx.havetrailingIcon)
-        ? (openBlock(), createBlock("span", _hoisted_4$2, [
-            createVNode(_component_mcw_chip_trailing_action, { ref: "trailingAction" }, {
-              default: withCtx(() => [
-                createTextVNode(toDisplayString(_ctx.trailingIcon), 1 /* TEXT */)
-              ]),
-              _: 1
-            }, 512 /* NEED_PATCH */)
-          ]))
-        : createCommentVNode("v-if", true)
-    ])
-  ], 16 /* FULL_PROPS */))
-}
-
-script$5.render = render$5;
-script$5.__file = "packages/chips/chip.vue";
+  
+  const __vue_component__$5 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$5, staticRenderFns: __vue_staticRenderFns__$5 },
+    __vue_inject_styles__$5,
+    __vue_script__$5,
+    __vue_scope_id__$5,
+    __vue_is_functional_template__$5,
+    __vue_module_identifier__$5,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var strings$2 = MDCChipTrailingActionFoundation.strings;
 var script$6 = {
@@ -1977,34 +2289,73 @@ var script$6 = {
   }
 };
 
-const _hoisted_1$4 = /*#__PURE__*/createVNode("span", { class: "mdc-chip-trailing-action__ripple" }, null, -1 /* HOISTED */);
-const _hoisted_2$4 = { class: "mdc-chip-trailing-action__icon material-icons" };
+/* script */
+const __vue_script__$6 = script$6;
 
-function render$6(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("button", {
-    ref: "root",
-    class: [_ctx.classes, "mdc-chip-trailing-action"],
-    style: _ctx.styles,
-    "aria-label": "Remove chip",
-    tabindex: "-1",
-    onClick: _cache[1] || (_cache[1] = (...args) => (_ctx.onClick(...args))),
-    onKeydown: _cache[2] || (_cache[2] = (...args) => (_ctx.onKeydown(...args)))
-  }, [
-    _hoisted_1$4,
-    createVNode("span", _hoisted_2$4, [
-      renderSlot(_ctx.$slots, "default")
-    ])
-  ], 38 /* CLASS, STYLE, HYDRATE_EVENTS */))
-}
+/* template */
+var __vue_render__$6 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "button",
+    {
+      ref: "root",
+      staticClass: "mdc-chip-trailing-action",
+      class: _vm.classes,
+      style: _vm.styles,
+      attrs: { "aria-label": "Remove chip", tabindex: "-1" },
+      on: { click: _vm.onClick, keydown: _vm.onKeydown }
+    },
+    [
+      _c("span", { staticClass: "mdc-chip-trailing-action__ripple" }),
+      _vm._v(" "),
+      _c(
+        "span",
+        { staticClass: "mdc-chip-trailing-action__icon material-icons" },
+        [_vm._t("default")],
+        2
+      )
+    ]
+  )
+};
+var __vue_staticRenderFns__$6 = [];
+__vue_render__$6._withStripped = true;
 
-script$6.render = render$6;
-script$6.__file = "packages/chips/trailing-action.vue";
+  /* style */
+  const __vue_inject_styles__$6 = undefined;
+  /* scoped */
+  const __vue_scope_id__$6 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$6 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$6 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$6 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$6, staticRenderFns: __vue_staticRenderFns__$6 },
+    __vue_inject_styles__$6,
+    __vue_script__$6,
+    __vue_scope_id__$6,
+    __vue_is_functional_template__$6,
+    __vue_module_identifier__$6,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var chips = BasePlugin({
-  mcwChip: script$5,
-  mcwChipSet: script$4,
-  mcwChipCheckmark: script$3,
-  mcwChipTrailingAction: script$6
+  mcwChip: __vue_component__$5,
+  mcwChipSet: __vue_component__$4,
+  mcwChipCheckmark: __vue_component__$3,
+  mcwChipTrailingAction: __vue_component__$6
 });
 
 var ProgressPropType = {
@@ -2132,76 +2483,167 @@ function getCircleAttrs() {
   };
 }
 
-const _hoisted_1$5 = { class: "mdc-circular-progress__determinate-container" };
-const _hoisted_2$5 = {
-  class: "mdc-circular-progress__determinate-circle-graphic",
-  viewBox: "0 0 48 48",
-  xmlns: "http://www.w3.org/2000/svg"
-};
-const _hoisted_3$3 = { class: "mdc-circular-progress__indeterminate-container" };
-const _hoisted_4$3 = { class: "mdc-circular-progress__spinner-layer" };
-const _hoisted_5 = { class: "mdc-circular-progress__circle-clipper mdc-circular-progress__circle-left" };
-const _hoisted_6 = {
-  class: "mdc-circular-progress__indeterminate-circle-graphic",
-  viewBox: "0 0 48 48",
-  xmlns: "http://www.w3.org/2000/svg"
-};
-const _hoisted_7 = { class: "mdc-circular-progress__gap-patch" };
-const _hoisted_8 = {
-  class: "mdc-circular-progress__indeterminate-circle-graphic",
-  viewBox: "0 0 48 48",
-  xmlns: "http://www.w3.org/2000/svg"
-};
-const _hoisted_9 = { class: "mdc-circular-progress__circle-clipper mdc-circular-progress__circle-right" };
-const _hoisted_10 = {
-  class: "mdc-circular-progress__indeterminate-circle-graphic",
-  viewBox: "0 0 48 48",
-  xmlns: "http://www.w3.org/2000/svg"
-};
+/* script */
+const __vue_script__$7 = script$7;
 
-function render$7(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock(Fragment, null, [
-    createCommentVNode("must be no space between divs"),
-    createCommentVNode(" prettier-ignore "),
-    createVNode("div", mergeProps({
-      ref: "root",
-      class: _ctx.classes,
-      role: "progressbar"
-    }, _ctx.rootAttrs), [
-      createVNode("div", _hoisted_1$5, [
-        (openBlock(), createBlock("svg", _hoisted_2$5, [
-          createVNode("circle", mergeProps({ class: "mdc-circular-progress__determinate-circle" }, _ctx.circleAttrs), null, 16 /* FULL_PROPS */)
-        ]))
-      ]),
-      createVNode("div", _hoisted_3$3, [
-        createVNode("div", _hoisted_4$3, [
-          createVNode("div", _hoisted_5, [
-            (openBlock(), createBlock("svg", _hoisted_6, [
-              createVNode("circle", _ctx.indeterminateAttrs, null, 16 /* FULL_PROPS */)
-            ])),
-            createCommentVNode("must be no space between divs")
-          ]),
-          createVNode("div", _hoisted_7, [
-            (openBlock(), createBlock("svg", _hoisted_8, [
-              createVNode("circle", _ctx.indeterminateAttrs, null, 16 /* FULL_PROPS */)
-            ]))
-          ]),
-          createVNode("div", _hoisted_9, [
-            (openBlock(), createBlock("svg", _hoisted_10, [
-              createVNode("circle", _ctx.indeterminateAttrs, null, 16 /* FULL_PROPS */)
-            ]))
+/* template */
+var __vue_render__$7 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    _vm._b(
+      { ref: "root", class: _vm.classes, attrs: { role: "progressbar" } },
+      "div",
+      _vm.rootAttrs,
+      false
+    ),
+    [
+      _c(
+        "div",
+        { staticClass: "mdc-circular-progress__determinate-container" },
+        [
+          _c(
+            "svg",
+            {
+              staticClass: "mdc-circular-progress__determinate-circle-graphic",
+              attrs: {
+                viewBox: "0 0 48 48",
+                xmlns: "http://www.w3.org/2000/svg"
+              }
+            },
+            [
+              _c(
+                "circle",
+                _vm._b(
+                  { staticClass: "mdc-circular-progress__determinate-circle" },
+                  "circle",
+                  _vm.circleAttrs,
+                  false
+                )
+              )
+            ]
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "mdc-circular-progress__indeterminate-container" },
+        [
+          _c("div", { staticClass: "mdc-circular-progress__spinner-layer" }, [
+            _c(
+              "div",
+              {
+                staticClass:
+                  "mdc-circular-progress__circle-clipper mdc-circular-progress__circle-left"
+              },
+              [
+                _c(
+                  "svg",
+                  {
+                    staticClass:
+                      "mdc-circular-progress__indeterminate-circle-graphic",
+                    attrs: {
+                      viewBox: "0 0 48 48",
+                      xmlns: "http://www.w3.org/2000/svg"
+                    }
+                  },
+                  [
+                    _c(
+                      "circle",
+                      _vm._b({}, "circle", _vm.indeterminateAttrs, false)
+                    )
+                  ]
+                )
+              ]
+            ),
+            _c("div", { staticClass: "mdc-circular-progress__gap-patch" }, [
+              _c(
+                "svg",
+                {
+                  staticClass:
+                    "mdc-circular-progress__indeterminate-circle-graphic",
+                  attrs: {
+                    viewBox: "0 0 48 48",
+                    xmlns: "http://www.w3.org/2000/svg"
+                  }
+                },
+                [
+                  _c(
+                    "circle",
+                    _vm._b({}, "circle", _vm.indeterminateAttrs, false)
+                  )
+                ]
+              )
+            ]),
+            _c(
+              "div",
+              {
+                staticClass:
+                  "mdc-circular-progress__circle-clipper mdc-circular-progress__circle-right"
+              },
+              [
+                _c(
+                  "svg",
+                  {
+                    staticClass:
+                      "mdc-circular-progress__indeterminate-circle-graphic",
+                    attrs: {
+                      viewBox: "0 0 48 48",
+                      xmlns: "http://www.w3.org/2000/svg"
+                    }
+                  },
+                  [
+                    _c(
+                      "circle",
+                      _vm._b({}, "circle", _vm.indeterminateAttrs, false)
+                    )
+                  ]
+                )
+              ]
+            )
           ])
-        ])
-      ])
-    ], 16 /* FULL_PROPS */)
-  ], 64 /* STABLE_FRAGMENT */))
-}
+        ]
+      )
+    ]
+  )
+};
+var __vue_staticRenderFns__$7 = [];
+__vue_render__$7._withStripped = true;
 
-script$7.render = render$7;
-script$7.__file = "packages/circular-progress/circular-progress.vue";
+  /* style */
+  const __vue_inject_styles__$7 = undefined;
+  /* scoped */
+  const __vue_scope_id__$7 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$7 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$7 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$7 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$7, staticRenderFns: __vue_staticRenderFns__$7 },
+    __vue_inject_styles__$7,
+    __vue_script__$7,
+    __vue_scope_id__$7,
+    __vue_is_functional_template__$7,
+    __vue_module_identifier__$7,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var circularProgress = BasePlugin({
-  mcwCircularProgress: script$7
+  mcwCircularProgress: __vue_component__$7
 });
 
 var CheckboxAdapter = /*#__PURE__*/function () {
@@ -2540,24 +2982,61 @@ var script$8 = {
   }
 };
 
-const _hoisted_1$6 = { class: "mdc-data-table__table-container" };
+/* script */
+const __vue_script__$8 = script$8;
 
-function render$8(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", {
-    ref: "root",
-    class: [_ctx.classes, "mdc-data-table"]
-  }, [
-    createVNode("div", _hoisted_1$6, [
-      renderSlot(_ctx.$slots, "default")
-    ])
-  ], 2 /* CLASS */))
-}
+/* template */
+var __vue_render__$8 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    { ref: "root", staticClass: "mdc-data-table", class: _vm.classes },
+    [
+      _c(
+        "div",
+        { staticClass: "mdc-data-table__table-container" },
+        [_vm._t("default")],
+        2
+      )
+    ]
+  )
+};
+var __vue_staticRenderFns__$8 = [];
+__vue_render__$8._withStripped = true;
 
-script$8.render = render$8;
-script$8.__file = "packages/data-table/data-table.vue";
+  /* style */
+  const __vue_inject_styles__$8 = undefined;
+  /* scoped */
+  const __vue_scope_id__$8 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$8 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$8 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$8 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$8, staticRenderFns: __vue_staticRenderFns__$8 },
+    __vue_inject_styles__$8,
+    __vue_script__$8,
+    __vue_scope_id__$8,
+    __vue_is_functional_template__$8,
+    __vue_module_identifier__$8,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var dataTable = BasePlugin({
-  mcwDataTable: script$8
+  mcwDataTable: __vue_component__$8
 });
 
 var mcwDialogButton = {
@@ -2663,7 +3142,7 @@ var LAYOUT_EVENTS = ['resize', 'orientationchange'];
 var script$9 = {
   name: 'mcw-dialog',
   components: {
-    mcwButton: script
+    mcwButton: __vue_component__
   },
   model: {
     prop: 'open',
@@ -2875,41 +3354,79 @@ var script$9 = {
   }
 };
 
-const _hoisted_1$7 = {
-  ref: "container",
-  class: "mdc-dialog__container"
+/* script */
+const __vue_script__$9 = script$9;
+
+/* template */
+var __vue_render__$9 = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    {
+      ref: "root",
+      class: _vm.classes,
+      style: _vm.styles,
+      on: { click: _vm.onClick, keydown: _vm.onKeydown }
+    },
+    [
+      _c("div", { ref: "container", staticClass: "mdc-dialog__container" }, [
+        _c(
+          "div",
+          {
+            ref: "surface",
+            staticClass: "mdc-dialog__surface",
+            attrs: {
+              role: "alertdialog",
+              "aria-modal": "true",
+              "aria-labelledby": _vm.ariaLabelledby,
+              "aria-describedby": _vm.ariaDescribedby
+            }
+          },
+          [_vm._t("default")],
+          2
+        )
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "mdc-dialog__scrim" })
+    ]
+  )
 };
-const _hoisted_2$6 = /*#__PURE__*/createVNode("div", { class: "mdc-dialog__scrim" }, null, -1 /* HOISTED */);
+var __vue_staticRenderFns__$9 = [];
+__vue_render__$9._withStripped = true;
 
-function render$9(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", {
-    ref: "root",
-    class: _ctx.classes,
-    style: _ctx.styles,
-    onClick: _cache[1] || (_cache[1] = (...args) => (_ctx.onClick(...args))),
-    onKeydown: _cache[2] || (_cache[2] = (...args) => (_ctx.onKeydown(...args)))
-  }, [
-    createVNode("div", _hoisted_1$7, [
-      createVNode("div", {
-        ref: "surface",
-        class: "mdc-dialog__surface",
-        role: "alertdialog",
-        "aria-modal": "true",
-        "aria-labelledby": _ctx.ariaLabelledby,
-        "aria-describedby": _ctx.ariaDescribedby
-      }, [
-        renderSlot(_ctx.$slots, "default")
-      ], 8 /* PROPS */, ["aria-labelledby", "aria-describedby"])
-    ], 512 /* NEED_PATCH */),
-    _hoisted_2$6
-  ], 38 /* CLASS, STYLE, HYDRATE_EVENTS */))
-}
+  /* style */
+  const __vue_inject_styles__$9 = undefined;
+  /* scoped */
+  const __vue_scope_id__$9 = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$9 = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$9 = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
 
-script$9.render = render$9;
-script$9.__file = "packages/dialog/dialog.vue";
+  
+  const __vue_component__$9 = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$9, staticRenderFns: __vue_staticRenderFns__$9 },
+    __vue_inject_styles__$9,
+    __vue_script__$9,
+    __vue_scope_id__$9,
+    __vue_is_functional_template__$9,
+    __vue_module_identifier__$9,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var dialog = BasePlugin({
-  mcwDialog: script$9,
+  mcwDialog: __vue_component__$9,
   mcwDialogTitle: mcwDialogTitle,
   mcwDialogFooter: mcwDialogFooter,
   mcwDialogButton: mcwDialogButton,
@@ -3137,81 +3654,133 @@ var script$a = {
   }
 };
 
-const _hoisted_1$8 = { class: "mdc-drawer__content" };
-const _hoisted_2$7 = {
-  key: 1,
-  class: "drawer-wrapper"
-};
-const _hoisted_3$4 = { class: "mdc-drawer__content" };
+/* script */
+const __vue_script__$a = script$a;
 
-function render$a(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_mcw_list = resolveComponent("mcw-list");
-
-  return (openBlock(), createBlock(Fragment, null, [
-    createCommentVNode(" <div ref=\"root\"> "),
-    (!_ctx.modal)
-      ? (openBlock(), createBlock("aside", {
-          key: 0,
+/* template */
+var __vue_render__$a = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return !_vm.modal
+    ? _c(
+        "aside",
+        {
           ref: "drawer",
-          class: _ctx.classes,
-          "onMDCList:action": _cache[1] || (_cache[1] = (...args) => (_ctx.onListAction(...args))),
-          onKeydown: _cache[2] || (_cache[2] = (...args) => (_ctx.handleKeydown(...args))),
-          onTransitionend: _cache[3] || (_cache[3] = (...args) => (_ctx.handleTransitionEnd(...args)))
-        }, [
-          renderSlot(_ctx.$slots, "header"),
-          createVNode("div", _hoisted_1$8, [
-            createVNode(_component_mcw_list, {
-              "wrap-focus": true,
-              tag: "nav",
-              "single-selection": "",
-              "selected-index": 0
-            }, {
-              default: withCtx(() => [
-                renderSlot(_ctx.$slots, "default")
-              ]),
-              _: 3
-            })
-          ])
-        ], 34 /* CLASS, HYDRATE_EVENTS */))
-      : (openBlock(), createBlock("div", _hoisted_2$7, [
-          createVNode("aside", {
+          class: _vm.classes,
+          on: {
+            "MDCList:action": _vm.onListAction,
+            keydown: _vm.handleKeydown,
+            transitionend: _vm.handleTransitionEnd
+          }
+        },
+        [
+          _vm._t("header"),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "mdc-drawer__content" },
+            [
+              _c(
+                "mcw-list",
+                {
+                  attrs: {
+                    "wrap-focus": true,
+                    tag: "nav",
+                    "single-selection": "",
+                    "selected-index": 0
+                  }
+                },
+                [_vm._t("default")],
+                2
+              )
+            ],
+            1
+          )
+        ],
+        2
+      )
+    : _c("div", { staticClass: "drawer-wrapper" }, [
+        _c(
+          "aside",
+          {
             ref: "drawer",
-            class: _ctx.classes,
-            "onMDCList:action": _cache[4] || (_cache[4] = (...args) => (_ctx.onListAction(...args))),
-            onKeydown: _cache[5] || (_cache[5] = (...args) => (_ctx.handleKeydown(...args))),
-            onTransitionend: _cache[6] || (_cache[6] = (...args) => (_ctx.handleTransitionEnd(...args)))
-          }, [
-            renderSlot(_ctx.$slots, "header"),
-            createVNode("div", _hoisted_3$4, [
-              createVNode(_component_mcw_list, {
-                "wrap-focus": true,
-                tag: "nav",
-                "single-selection": "",
-                "selected-index": 0
-              }, {
-                default: withCtx(() => [
-                  renderSlot(_ctx.$slots, "default")
-                ]),
-                _: 3
-              })
-            ])
-          ], 34 /* CLASS, HYDRATE_EVENTS */),
-          (_ctx.modal)
-            ? (openBlock(), createBlock("div", {
-                key: 0,
-                class: "mdc-drawer-scrim",
-                onClick: _cache[7] || (_cache[7] = (...args) => (_ctx.handleScrimClick(...args)))
-              }))
-            : createCommentVNode("v-if", true)
-        ]))
-  ], 64 /* STABLE_FRAGMENT */))
-}
+            class: _vm.classes,
+            on: {
+              "MDCList:action": _vm.onListAction,
+              keydown: _vm.handleKeydown,
+              transitionend: _vm.handleTransitionEnd
+            }
+          },
+          [
+            _vm._t("header"),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "mdc-drawer__content" },
+              [
+                _c(
+                  "mcw-list",
+                  {
+                    attrs: {
+                      "wrap-focus": true,
+                      tag: "nav",
+                      "single-selection": "",
+                      "selected-index": 0
+                    }
+                  },
+                  [_vm._t("default")],
+                  2
+                )
+              ],
+              1
+            )
+          ],
+          2
+        ),
+        _vm._v(" "),
+        _vm.modal
+          ? _c("div", {
+              staticClass: "mdc-drawer-scrim",
+              on: { click: _vm.handleScrimClick }
+            })
+          : _vm._e()
+      ])
+};
+var __vue_staticRenderFns__$a = [];
+__vue_render__$a._withStripped = true;
 
-script$a.render = render$a;
-script$a.__file = "packages/drawer/drawer.vue";
+  /* style */
+  const __vue_inject_styles__$a = undefined;
+  /* scoped */
+  const __vue_scope_id__$a = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$a = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$a = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$a = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$a, staticRenderFns: __vue_staticRenderFns__$a },
+    __vue_inject_styles__$a,
+    __vue_script__$a,
+    __vue_scope_id__$a,
+    __vue_is_functional_template__$a,
+    __vue_module_identifier__$a,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var drawer = BasePlugin({
-  mcwDrawer: script$a
+  mcwDrawer: __vue_component__$a
 });
 
 var script$b = {
@@ -3276,41 +3845,78 @@ var script$b = {
   }
 };
 
-const _hoisted_1$9 = /*#__PURE__*/createVNode("div", { class: "mdc-fab__ripple" }, null, -1 /* HOISTED */);
-const _hoisted_2$8 = { class: "mdc-fab__icon material-icons" };
-const _hoisted_3$5 = { class: "mdc-fab__label" };
+/* script */
+const __vue_script__$b = script$b;
 
-function render$b(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_custom_link = resolveComponent("custom-link");
-
-  return (openBlock(), createBlock(_component_custom_link, mergeProps({
-    ref: "root",
-    role: "button",
-    class: _ctx.classes,
-    style: _ctx.styles,
-    link: _ctx.$attrs,
-    tag: "button"
-  }, toHandlers(_ctx.listeners)), {
-    default: withCtx(() => [
-      _hoisted_1$9,
-      renderSlot(_ctx.$slots, "icon", {}, () => [
-        createVNode("span", _hoisted_2$8, toDisplayString(_ctx.icon), 1 /* TEXT */)
-      ]),
-      createVNode("span", _hoisted_3$5, [
-        renderSlot(_ctx.$slots, "default", {}, () => [
-          createTextVNode(toDisplayString(_ctx.label), 1 /* TEXT */)
+/* template */
+var __vue_render__$b = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "custom-link",
+    _vm._g(
+      {
+        ref: "root",
+        class: _vm.classes,
+        style: _vm.styles,
+        attrs: { role: "button", link: _vm.$attrs, tag: "button" }
+      },
+      _vm.listeners
+    ),
+    [
+      _c("div", { staticClass: "mdc-fab__ripple" }),
+      _vm._v(" "),
+      _vm._t("icon", [
+        _c("span", { staticClass: "mdc-fab__icon material-icons" }, [
+          _vm._v(_vm._s(_vm.icon))
         ])
-      ])
-    ]),
-    _: 3
-  }, 16 /* FULL_PROPS */, ["class", "style", "link"]))
-}
+      ]),
+      _vm._v(" "),
+      _c(
+        "span",
+        { staticClass: "mdc-fab__label" },
+        [_vm._t("default", [_vm._v(_vm._s(_vm.label))])],
+        2
+      )
+    ],
+    2
+  )
+};
+var __vue_staticRenderFns__$b = [];
+__vue_render__$b._withStripped = true;
 
-script$b.render = render$b;
-script$b.__file = "packages/fab/fab.vue";
+  /* style */
+  const __vue_inject_styles__$b = undefined;
+  /* scoped */
+  const __vue_scope_id__$b = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$b = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$b = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$b = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$b, staticRenderFns: __vue_staticRenderFns__$b },
+    __vue_inject_styles__$b,
+    __vue_script__$b,
+    __vue_scope_id__$b,
+    __vue_is_functional_template__$b,
+    __vue_module_identifier__$b,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var fab = BasePlugin({
-  mcwFAB: script$b
+  mcwFAB: __vue_component__$b
 });
 
 var script$c = {
@@ -3384,20 +3990,55 @@ var script$c = {
   }
 };
 
-function render$c(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("span", {
-    ref: "root",
-    class: _ctx.labelClasses
-  }, [
-    renderSlot(_ctx.$slots, "default")
-  ], 2 /* CLASS */))
-}
+/* script */
+const __vue_script__$c = script$c;
 
-script$c.render = render$c;
-script$c.__file = "packages/floating-label/floating-label.vue";
+/* template */
+var __vue_render__$c = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "span",
+    { ref: "root", class: _vm.labelClasses },
+    [_vm._t("default")],
+    2
+  )
+};
+var __vue_staticRenderFns__$c = [];
+__vue_render__$c._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$c = undefined;
+  /* scoped */
+  const __vue_scope_id__$c = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$c = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$c = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$c = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$c, staticRenderFns: __vue_staticRenderFns__$c },
+    __vue_inject_styles__$c,
+    __vue_script__$c,
+    __vue_scope_id__$c,
+    __vue_is_functional_template__$c,
+    __vue_module_identifier__$c,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var floatingLabel = BasePlugin({
-  mcwFloatingLabel: script$c
+  mcwFloatingLabel: __vue_component__$c
 });
 
 var script$d = {
@@ -3494,24 +4135,59 @@ var script$d = {
   }
 };
 
-function render$d(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock(resolveDynamicComponent(_ctx.tag), {
-    class: _ctx.classes,
-    style: _ctx.styles,
-    ref: "root",
-    onClick: _ctx.onClick,
-    "aria-pressed": "false",
-    disabled: _ctx.disabled
-  }, {
-    default: withCtx(() => [
-      renderSlot(_ctx.$slots, "default")
-    ]),
-    _: 3
-  }, 8 /* PROPS */, ["class", "style", "onClick", "disabled"]))
-}
+/* script */
+const __vue_script__$d = script$d;
 
-script$d.render = render$d;
-script$d.__file = "packages/icon-button/icon-button.vue";
+/* template */
+var __vue_render__$d = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    _vm.tag,
+    {
+      ref: "root",
+      tag: "component",
+      class: _vm.classes,
+      style: _vm.styles,
+      attrs: { "aria-pressed": "false", disabled: _vm.disabled },
+      on: { click: _vm.onClick }
+    },
+    [_vm._t("default")],
+    2
+  )
+};
+var __vue_staticRenderFns__$d = [];
+__vue_render__$d._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$d = undefined;
+  /* scoped */
+  const __vue_scope_id__$d = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$d = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$d = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$d = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$d, staticRenderFns: __vue_staticRenderFns__$d },
+    __vue_inject_styles__$d,
+    __vue_script__$d,
+    __vue_scope_id__$d,
+    __vue_is_functional_template__$d,
+    __vue_module_identifier__$d,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var mcwIconToggle = {
   name: 'mcw-icon-toggle',
@@ -3535,7 +4211,7 @@ var mcwIconToggle = {
 };
 
 var iconButton = BasePlugin({
-  mcwIconButton: script$d,
+  mcwIconButton: __vue_component__$d,
   mcwIconToggle: mcwIconToggle
 });
 
@@ -3598,16 +4274,55 @@ var script$e = {
   }
 };
 
-function render$e(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", {
-    class: [_ctx.classes, "mdc-layout-cell mdc-layout-grid__cell"]
-  }, [
-    renderSlot(_ctx.$slots, "default")
-  ], 2 /* CLASS */))
-}
+/* script */
+const __vue_script__$e = script$e;
 
-script$e.render = render$e;
-script$e.__file = "packages/layout-grid/layout-cell.vue";
+/* template */
+var __vue_render__$e = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    {
+      staticClass: "mdc-layout-cell mdc-layout-grid__cell",
+      class: _vm.classes
+    },
+    [_vm._t("default")],
+    2
+  )
+};
+var __vue_staticRenderFns__$e = [];
+__vue_render__$e._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$e = undefined;
+  /* scoped */
+  const __vue_scope_id__$e = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$e = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$e = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$e = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$e, staticRenderFns: __vue_staticRenderFns__$e },
+    __vue_inject_styles__$e,
+    __vue_script__$e,
+    __vue_scope_id__$e,
+    __vue_is_functional_template__$e,
+    __vue_module_identifier__$e,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var script$f = {
   name: 'mcw-layout-grid',
@@ -3631,38 +4346,105 @@ var script$f = {
   }
 };
 
-const _hoisted_1$a = { class: "mdc-layout-grid__inner" };
+/* script */
+const __vue_script__$f = script$f;
 
-function render$f(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", { class: _ctx.classes }, [
-    createVNode("div", _hoisted_1$a, [
-      renderSlot(_ctx.$slots, "default")
-    ])
-  ], 2 /* CLASS */))
-}
+/* template */
+var __vue_render__$f = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { class: _vm.classes }, [
+    _c("div", { staticClass: "mdc-layout-grid__inner" }, [_vm._t("default")], 2)
+  ])
+};
+var __vue_staticRenderFns__$f = [];
+__vue_render__$f._withStripped = true;
 
-script$f.render = render$f;
-script$f.__file = "packages/layout-grid/layout-grid.vue";
+  /* style */
+  const __vue_inject_styles__$f = undefined;
+  /* scoped */
+  const __vue_scope_id__$f = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$f = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$f = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$f = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$f, staticRenderFns: __vue_staticRenderFns__$f },
+    __vue_inject_styles__$f,
+    __vue_script__$f,
+    __vue_scope_id__$f,
+    __vue_is_functional_template__$f,
+    __vue_module_identifier__$f,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var script$g = {
   name: 'mcw-layout-inner-grid'
 };
 
-const _hoisted_1$b = { class: "mdc-layout-inner-grid mdc-layout-grid__inner" };
+/* script */
+const __vue_script__$g = script$g;
 
-function render$g(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", _hoisted_1$b, [
-    renderSlot(_ctx.$slots, "default")
-  ]))
-}
+/* template */
+var __vue_render__$g = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    { staticClass: "mdc-layout-inner-grid mdc-layout-grid__inner" },
+    [_vm._t("default")],
+    2
+  )
+};
+var __vue_staticRenderFns__$g = [];
+__vue_render__$g._withStripped = true;
 
-script$g.render = render$g;
-script$g.__file = "packages/layout-grid/layout-inner-grid.vue";
+  /* style */
+  const __vue_inject_styles__$g = undefined;
+  /* scoped */
+  const __vue_scope_id__$g = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$g = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$g = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$g = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$g, staticRenderFns: __vue_staticRenderFns__$g },
+    __vue_inject_styles__$g,
+    __vue_script__$g,
+    __vue_scope_id__$g,
+    __vue_is_functional_template__$g,
+    __vue_module_identifier__$g,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var layoutGrid = BasePlugin({
-  mcwLayoutGrid: script$f,
-  mcwLayoutCell: script$e,
-  mcwLayoutInnerGrid: script$g
+  mcwLayoutGrid: __vue_component__$f,
+  mcwLayoutCell: __vue_component__$e,
+  mcwLayoutInnerGrid: __vue_component__$g
 });
 
 var script$h = {
@@ -3729,19 +4511,54 @@ var script$h = {
   }
 };
 
-function render$h(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("span", {
-    class: _ctx.lineClasses,
-    style: _ctx.lineStyles,
-    onTransitionend: _cache[1] || (_cache[1] = (...args) => (_ctx.onTransitionEnd(...args)))
-  }, null, 38 /* CLASS, STYLE, HYDRATE_EVENTS */))
-}
+/* script */
+const __vue_script__$h = script$h;
 
-script$h.render = render$h;
-script$h.__file = "packages/line-ripple/line-ripple.vue";
+/* template */
+var __vue_render__$h = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("span", {
+    class: _vm.lineClasses,
+    style: _vm.lineStyles,
+    on: { transitionend: _vm.onTransitionEnd }
+  })
+};
+var __vue_staticRenderFns__$h = [];
+__vue_render__$h._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$h = undefined;
+  /* scoped */
+  const __vue_scope_id__$h = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$h = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$h = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$h = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$h, staticRenderFns: __vue_staticRenderFns__$h },
+    __vue_inject_styles__$h,
+    __vue_script__$h,
+    __vue_scope_id__$h,
+    __vue_is_functional_template__$h,
+    __vue_module_identifier__$h,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var lineRipple = BasePlugin({
-  mcwLineRipple: script$h
+  mcwLineRipple: __vue_component__$h
 });
 
 var progressPropType_ = {
@@ -3867,49 +4684,89 @@ var script$i = {
   }
 };
 
-const _hoisted_1$c = {
-  ref: "buffer",
-  class: "mdc-linear-progress__buffer"
-};
-const _hoisted_2$9 = /*#__PURE__*/createVNode("div", { class: "mdc-linear-progress__buffer-dots" }, null, -1 /* HOISTED */);
-const _hoisted_3$6 = /*#__PURE__*/createVNode("span", { class: "mdc-linear-progress__bar-inner" }, null, -1 /* HOISTED */);
-const _hoisted_4$4 = {
-  ref: "secondary",
-  class: "mdc-linear-progress__bar mdc-linear-progress__secondary-bar"
-};
-const _hoisted_5$1 = /*#__PURE__*/createVNode("span", { class: "mdc-linear-progress__bar-inner" }, null, -1 /* HOISTED */);
+/* script */
+const __vue_script__$i = script$i;
 
-function render$i(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", mergeProps({
-    ref: "root",
-    class: _ctx.classes,
-    role: "progressbar"
-  }, _ctx.rootAttrs), [
-    createVNode("div", _hoisted_1$c, [
-      createVNode("div", {
-        class: "mdc-linear-progress__buffer-bar",
-        style: _ctx.bufferbarStyles
-      }, null, 4 /* STYLE */),
-      _hoisted_2$9
-    ], 512 /* NEED_PATCH */),
-    createVNode("div", {
-      ref: "primary",
-      class: "mdc-linear-progress__bar mdc-linear-progress__primary-bar",
-      style: _ctx.primaryStyles
-    }, [
-      _hoisted_3$6
-    ], 4 /* STYLE */),
-    createVNode("div", _hoisted_4$4, [
-      _hoisted_5$1
-    ], 512 /* NEED_PATCH */)
-  ], 16 /* FULL_PROPS */))
-}
+/* template */
+var __vue_render__$i = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    _vm._b(
+      { ref: "root", class: _vm.classes, attrs: { role: "progressbar" } },
+      "div",
+      _vm.rootAttrs,
+      false
+    ),
+    [
+      _c("div", { ref: "buffer", staticClass: "mdc-linear-progress__buffer" }, [
+        _c("div", {
+          staticClass: "mdc-linear-progress__buffer-bar",
+          style: _vm.bufferbarStyles
+        }),
+        _vm._v(" "),
+        _c("div", { staticClass: "mdc-linear-progress__buffer-dots" })
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          ref: "primary",
+          staticClass:
+            "mdc-linear-progress__bar mdc-linear-progress__primary-bar",
+          style: _vm.primaryStyles
+        },
+        [_c("span", { staticClass: "mdc-linear-progress__bar-inner" })]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          ref: "secondary",
+          staticClass:
+            "mdc-linear-progress__bar mdc-linear-progress__secondary-bar"
+        },
+        [_c("span", { staticClass: "mdc-linear-progress__bar-inner" })]
+      )
+    ]
+  )
+};
+var __vue_staticRenderFns__$i = [];
+__vue_render__$i._withStripped = true;
 
-script$i.render = render$i;
-script$i.__file = "packages/linear-progress/linear-progress.vue";
+  /* style */
+  const __vue_inject_styles__$i = undefined;
+  /* scoped */
+  const __vue_scope_id__$i = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$i = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$i = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$i = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$i, staticRenderFns: __vue_staticRenderFns__$i },
+    __vue_inject_styles__$i,
+    __vue_script__$i,
+    __vue_scope_id__$i,
+    __vue_is_functional_template__$i,
+    __vue_module_identifier__$i,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var linearProgress = BasePlugin({
-  mcwLinearProgress: script$i
+  mcwLinearProgress: __vue_component__$i
 });
 
 var listItemId_ = 0;
@@ -4067,181 +4924,230 @@ var script$j = {
   }
 };
 
-const _hoisted_1$d = /*#__PURE__*/createVNode("span", { class: "mdc-list-item__ripple" }, null, -1 /* HOISTED */);
-const _hoisted_2$a = {
-  key: 0,
-  class: "material-icons"
-};
-const _hoisted_3$7 = {
-  key: 1,
-  class: "mdc-list-item__graphic"
-};
-const _hoisted_4$5 = /*#__PURE__*/createVNode("div", { class: "mdc-checkbox" }, [
-  /*#__PURE__*/createVNode("input", {
-    type: "checkbox",
-    class: "mdc-checkbox__native-control"
-  }),
-  /*#__PURE__*/createVNode("div", { class: "mdc-checkbox__background" }, [
-    /*#__PURE__*/createVNode("svg", {
-      class: "mdc-checkbox__checkmark",
-      viewBox: "0 0 24 24"
-    }, [
-      /*#__PURE__*/createVNode("path", {
-        class: "mdc-checkbox__checkmark-path",
-        fill: "none",
-        d: "M1.73,12.91 8.1,19.28 22.79,4.59"
-      })
-    ]),
-    /*#__PURE__*/createVNode("div", { class: "mdc-checkbox__mixedmark" })
-  ])
-], -1 /* HOISTED */);
-const _hoisted_5$2 = {
-  key: 2,
-  class: "mdc-list-item__graphic"
-};
-const _hoisted_6$1 = { class: "mdc-radio" };
-const _hoisted_7$1 = /*#__PURE__*/createVNode("div", { class: "mdc-radio__background" }, [
-  /*#__PURE__*/createVNode("div", { class: "mdc-radio__outer-circle" }),
-  /*#__PURE__*/createVNode("div", { class: "mdc-radio__inner-circle" })
-], -1 /* HOISTED */);
-const _hoisted_8$1 = {
-  key: 3,
-  class: "mdc-list-item__text"
-};
-const _hoisted_9$1 = { class: "mdc-list-item__primary-text" };
-const _hoisted_10$1 = { class: "mdc-list-item__secondary-text" };
-const _hoisted_11 = {
-  key: 4,
-  class: "mdc-list-item__text"
-};
-const _hoisted_12 = {
-  key: 5,
-  class: "mdc-list-item__meta"
-};
-const _hoisted_13 = { class: "mdc-radio" };
-const _hoisted_14 = /*#__PURE__*/createVNode("div", { class: "mdc-radio__background" }, [
-  /*#__PURE__*/createVNode("div", { class: "mdc-radio__outer-circle" }),
-  /*#__PURE__*/createVNode("div", { class: "mdc-radio__inner-circle" })
-], -1 /* HOISTED */);
-const _hoisted_15 = {
-  key: 6,
-  class: "mdc-list-item__meta"
-};
-const _hoisted_16 = /*#__PURE__*/createVNode("div", { class: "mdc-checkbox" }, [
-  /*#__PURE__*/createVNode("input", {
-    type: "checkbox",
-    class: "mdc-checkbox__native-control"
-  }),
-  /*#__PURE__*/createVNode("div", { class: "mdc-checkbox__background" }, [
-    /*#__PURE__*/createVNode("svg", {
-      class: "mdc-checkbox__checkmark",
-      viewBox: "0 0 24 24"
-    }, [
-      /*#__PURE__*/createVNode("path", {
-        class: "mdc-checkbox__checkmark-path",
-        fill: "none",
-        d: "M1.73,12.91 8.1,19.28 22.79,4.59"
-      })
-    ]),
-    /*#__PURE__*/createVNode("div", { class: "mdc-checkbox__mixedmark" })
-  ])
-], -1 /* HOISTED */);
-const _hoisted_17 = {
-  key: 7,
-  class: "mdc-list-item__meta"
-};
+/* script */
+const __vue_script__$j = script$j;
 
-function render$j(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_custom_link = resolveComponent("custom-link");
-
-  return (openBlock(), createBlock(_component_custom_link, mergeProps({
-    ref: "root",
-    link: _ctx.myAttrs,
-    class: _ctx.classes,
-    style: _ctx.styles
-  }, toHandlers(_ctx.myListeners), { tag: "a" }), {
-    default: withCtx(() => [
-      _hoisted_1$d,
-      (_ctx.needGraphic)
-        ? (openBlock(), createBlock("span", {
-            key: 0,
-            class: ["mdc-list-item__graphic", _ctx.groupClasses]
-          }, [
-            renderSlot(_ctx.$slots, "graphic", {}, () => [
-              (_ctx.listIcon)
-                ? (openBlock(), createBlock("i", _hoisted_2$a, toDisplayString(_ctx.listIcon), 1 /* TEXT */))
-                : createCommentVNode("v-if", true)
-            ])
-          ], 2 /* CLASS */))
-        : (_ctx.checkbox)
-          ? (openBlock(), createBlock("span", _hoisted_3$7, [
-              renderSlot(_ctx.$slots, "graphic", {}, () => [
-                _hoisted_4$5
+/* template */
+var __vue_render__$j = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "custom-link",
+    _vm._g(
+      {
+        ref: "root",
+        class: _vm.classes,
+        style: _vm.styles,
+        attrs: { link: _vm.myAttrs, tag: "a" }
+      },
+      _vm.myListeners
+    ),
+    [
+      _c("span", { staticClass: "mdc-list-item__ripple" }),
+      _vm._v(" "),
+      _vm.needGraphic
+        ? _c(
+            "span",
+            { staticClass: "mdc-list-item__graphic", class: _vm.groupClasses },
+            [
+              _vm._t("graphic", [
+                _vm.listIcon
+                  ? _c("i", { staticClass: "material-icons" }, [
+                      _vm._v(_vm._s(_vm.listIcon))
+                    ])
+                  : _vm._e()
               ])
-            ]))
-          : (_ctx.radio)
-            ? (openBlock(), createBlock("span", _hoisted_5$2, [
-                renderSlot(_ctx.$slots, "graphic", {}, () => [
-                  createVNode("div", _hoisted_6$1, [
-                    createVNode("input", {
-                      class: "mdc-radio__native-control",
-                      type: "radio",
-                      value: "1",
-                      name: _ctx.name,
-                      checked: _ctx.radioChecked
-                    }, null, 8 /* PROPS */, ["name", "checked"]),
-                    _hoisted_7$1
+            ],
+            2
+          )
+        : _vm.checkbox
+        ? _c(
+            "span",
+            { staticClass: "mdc-list-item__graphic" },
+            [
+              _vm._t("graphic", [
+                _c("div", { staticClass: "mdc-checkbox" }, [
+                  _c("input", {
+                    staticClass: "mdc-checkbox__native-control",
+                    attrs: { type: "checkbox" }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mdc-checkbox__background" }, [
+                    _c(
+                      "svg",
+                      {
+                        staticClass: "mdc-checkbox__checkmark",
+                        attrs: { viewBox: "0 0 24 24" }
+                      },
+                      [
+                        _c("path", {
+                          staticClass: "mdc-checkbox__checkmark-path",
+                          attrs: {
+                            fill: "none",
+                            d: "M1.73,12.91 8.1,19.28 22.79,4.59"
+                          }
+                        })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "mdc-checkbox__mixedmark" })
                   ])
                 ])
-              ]))
-            : createCommentVNode("v-if", true),
-      (_ctx.isTwoLine)
-        ? (openBlock(), createBlock("span", _hoisted_8$1, [
-            createVNode("span", _hoisted_9$1, [
-              renderSlot(_ctx.$slots, "default")
-            ]),
-            createVNode("span", _hoisted_10$1, [
-              renderSlot(_ctx.$slots, "secondary-text", {}, () => [
-                createTextVNode(toDisplayString(_ctx.twoLine), 1 /* TEXT */)
               ])
-            ])
-          ]))
-        : (openBlock(), createBlock("span", _hoisted_11, [
-            renderSlot(_ctx.$slots, "default")
-          ])),
-      (_ctx.trailingRadio)
-        ? (openBlock(), createBlock("span", _hoisted_12, [
-            renderSlot(_ctx.$slots, "meta", {}, () => [
-              createVNode("div", _hoisted_13, [
-                createVNode("input", {
-                  class: "mdc-radio__native-control",
-                  type: "radio",
-                  value: "1",
-                  name: _ctx.name,
-                  checked: _ctx.radioChecked
-                }, null, 8 /* PROPS */, ["name", "checked"]),
-                _hoisted_14
+            ],
+            2
+          )
+        : _vm.radio
+        ? _c(
+            "span",
+            { staticClass: "mdc-list-item__graphic" },
+            [
+              _vm._t("graphic", [
+                _c("div", { staticClass: "mdc-radio" }, [
+                  _c("input", {
+                    staticClass: "mdc-radio__native-control",
+                    attrs: { type: "radio", value: "1", name: _vm.name },
+                    domProps: { checked: _vm.radioChecked }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mdc-radio__background" }, [
+                    _c("div", { staticClass: "mdc-radio__outer-circle" }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "mdc-radio__inner-circle" })
+                  ])
+                ])
               ])
-            ])
-          ]))
-        : (_ctx.trailingCheckbox)
-          ? (openBlock(), createBlock("span", _hoisted_15, [
-              renderSlot(_ctx.$slots, "meta", {}, () => [
-                _hoisted_16
+            ],
+            2
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.isTwoLine
+        ? _c("span", { staticClass: "mdc-list-item__text" }, [
+            _c(
+              "span",
+              { staticClass: "mdc-list-item__primary-text" },
+              [_vm._t("default")],
+              2
+            ),
+            _vm._v(" "),
+            _c(
+              "span",
+              { staticClass: "mdc-list-item__secondary-text" },
+              [_vm._t("secondary-text", [_vm._v(_vm._s(_vm.twoLine))])],
+              2
+            )
+          ])
+        : _c(
+            "span",
+            { staticClass: "mdc-list-item__text" },
+            [_vm._t("default")],
+            2
+          ),
+      _vm._v(" "),
+      _vm.trailingRadio
+        ? _c(
+            "span",
+            { staticClass: "mdc-list-item__meta" },
+            [
+              _vm._t("meta", [
+                _c("div", { staticClass: "mdc-radio" }, [
+                  _c("input", {
+                    staticClass: "mdc-radio__native-control",
+                    attrs: { type: "radio", value: "1", name: _vm.name },
+                    domProps: { checked: _vm.radioChecked }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mdc-radio__background" }, [
+                    _c("div", { staticClass: "mdc-radio__outer-circle" }),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "mdc-radio__inner-circle" })
+                  ])
+                ])
               ])
-            ]))
-          : (_ctx.$slots.meta)
-            ? (openBlock(), createBlock("span", _hoisted_17, [
-                renderSlot(_ctx.$slots, "meta")
-              ]))
-            : createCommentVNode("v-if", true)
-    ]),
-    _: 1
-  }, 16 /* FULL_PROPS */, ["link", "class", "style"]))
-}
+            ],
+            2
+          )
+        : _vm.trailingCheckbox
+        ? _c(
+            "span",
+            { staticClass: "mdc-list-item__meta" },
+            [
+              _vm._t("meta", [
+                _c("div", { staticClass: "mdc-checkbox" }, [
+                  _c("input", {
+                    staticClass: "mdc-checkbox__native-control",
+                    attrs: { type: "checkbox" }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "mdc-checkbox__background" }, [
+                    _c(
+                      "svg",
+                      {
+                        staticClass: "mdc-checkbox__checkmark",
+                        attrs: { viewBox: "0 0 24 24" }
+                      },
+                      [
+                        _c("path", {
+                          staticClass: "mdc-checkbox__checkmark-path",
+                          attrs: {
+                            fill: "none",
+                            d: "M1.73,12.91 8.1,19.28 22.79,4.59"
+                          }
+                        })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "mdc-checkbox__mixedmark" })
+                  ])
+                ])
+              ])
+            ],
+            2
+          )
+        : _vm.$slots.meta
+        ? _c(
+            "span",
+            { staticClass: "mdc-list-item__meta" },
+            [_vm._t("meta")],
+            2
+          )
+        : _vm._e()
+    ]
+  )
+};
+var __vue_staticRenderFns__$j = [];
+__vue_render__$j._withStripped = true;
 
-script$j.render = render$j;
-script$j.__file = "packages/list/list-item.vue";
+  /* style */
+  const __vue_inject_styles__$j = undefined;
+  /* scoped */
+  const __vue_scope_id__$j = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$j = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$j = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$j = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$j, staticRenderFns: __vue_staticRenderFns__$j },
+    __vue_inject_styles__$j,
+    __vue_script__$j,
+    __vue_scope_id__$j,
+    __vue_is_functional_template__$j,
+    __vue_module_identifier__$j,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var strings$5 = MDCListFoundation.strings,
     cssClasses$1 = MDCListFoundation.cssClasses;
@@ -4633,24 +5539,64 @@ var script$k = {
   }
 };
 
-function render$k(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock(resolveDynamicComponent(_ctx.tag), mergeProps({
-    ref: "listRoot",
-    class: _ctx.classes
-  }, toHandlers(_ctx.rootListeners), _ctx.rootAttrs), {
-    default: withCtx(() => [
-      renderSlot(_ctx.$slots, "default")
-    ]),
-    _: 3
-  }, 16 /* FULL_PROPS */, ["class"]))
-}
+/* script */
+const __vue_script__$k = script$k;
 
-script$k.render = render$k;
-script$k.__file = "packages/list/list.vue";
+/* template */
+var __vue_render__$k = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    _vm.tag,
+    _vm._g(
+      _vm._b(
+        { ref: "listRoot", tag: "component", class: _vm.classes },
+        "component",
+        _vm.rootAttrs,
+        false
+      ),
+      _vm.rootListeners
+    ),
+    [_vm._t("default")],
+    2
+  )
+};
+var __vue_staticRenderFns__$k = [];
+__vue_render__$k._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$k = undefined;
+  /* scoped */
+  const __vue_scope_id__$k = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$k = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$k = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$k = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$k, staticRenderFns: __vue_staticRenderFns__$k },
+    __vue_inject_styles__$k,
+    __vue_script__$k,
+    __vue_scope_id__$k,
+    __vue_is_functional_template__$k,
+    __vue_module_identifier__$k,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var list = BasePlugin({
-  mcwList: script$k,
-  mcwListItem: script$j
+  mcwList: __vue_component__$k,
+  mcwListItem: __vue_component__$j
 });
 
 var mcwMaterialIcon = {
@@ -4969,17 +5915,52 @@ var script$l = {
   }
 };
 
-function render$l(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", mergeProps({
-    ref: "root",
-    class: _ctx.classes
-  }, toHandlers(_ctx.rootListeners)), [
-    renderSlot(_ctx.$slots, "default")
-  ], 16 /* FULL_PROPS */))
-}
+/* script */
+const __vue_script__$l = script$l;
 
-script$l.render = render$l;
-script$l.__file = "packages/menu/menu-surface.vue";
+/* template */
+var __vue_render__$l = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    _vm._g({ ref: "root", class: _vm.classes }, _vm.rootListeners),
+    [_vm._t("default")],
+    2
+  )
+};
+var __vue_staticRenderFns__$l = [];
+__vue_render__$l._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$l = undefined;
+  /* scoped */
+  const __vue_scope_id__$l = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$l = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$l = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$l = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$l, staticRenderFns: __vue_staticRenderFns__$l },
+    __vue_inject_styles__$l,
+    __vue_script__$l,
+    __vue_scope_id__$l,
+    __vue_is_functional_template__$l,
+    __vue_module_identifier__$l,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var cssClasses$3 = MDCMenuFoundation.cssClasses,
     strings$7 = MDCMenuFoundation.strings;
@@ -5271,56 +6252,93 @@ var script$m = {
   }
 };
 
-function render$m(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_mcw_list = resolveComponent("mcw-list");
-  const _component_mcw_menu_surface = resolveComponent("mcw-menu-surface");
+/* script */
+const __vue_script__$m = script$m;
 
-  return (openBlock(), createBlock(_component_mcw_menu_surface, {
-    ref: "menuSurface",
-    class: "mdc-menu",
-    "quick-open": _ctx.quickOpen,
-    open: _ctx.menuOpen,
-    onKeydown: _ctx.handleKeydown,
-    onChange: _ctx.onChange,
-    "onMDCMenuSurface:opened": _ctx.handleMenuSurfaceOpened
-  }, {
-    default: withCtx(() => [
-      createVNode(_component_mcw_list, {
-        ref: "list",
-        role: "menu",
-        "aria-hidden": "true",
-        "wrap-focus": _ctx.myWrapFocus,
-        onChange: _ctx.handleAction,
-        tabindex: "-1",
-        "type-ahead": _ctx.typeAhead,
-        "single-selection": _ctx.singleSelection
-      }, {
-        default: withCtx(() => [
-          renderSlot(_ctx.$slots, "default")
-        ]),
-        _: 3
-      }, 8 /* PROPS */, ["wrap-focus", "onChange", "type-ahead", "single-selection"])
-    ]),
-    _: 1
-  }, 8 /* PROPS */, ["quick-open", "open", "onKeydown", "onChange", "onMDCMenuSurface:opened"]))
-}
+/* template */
+var __vue_render__$m = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "mcw-menu-surface",
+    {
+      ref: "menuSurface",
+      staticClass: "mdc-menu",
+      attrs: { "quick-open": _vm.quickOpen, open: _vm.menuOpen },
+      on: {
+        keydown: _vm.handleKeydown,
+        change: _vm.onChange,
+        "MDCMenuSurface:opened": _vm.handleMenuSurfaceOpened
+      }
+    },
+    [
+      _c(
+        "mcw-list",
+        {
+          ref: "list",
+          attrs: {
+            role: "menu",
+            "aria-hidden": "true",
+            "wrap-focus": _vm.myWrapFocus,
+            tabindex: "-1",
+            "type-ahead": _vm.typeAhead,
+            "single-selection": _vm.singleSelection
+          },
+          on: { change: _vm.handleAction }
+        },
+        [_vm._t("default")],
+        2
+      )
+    ],
+    1
+  )
+};
+var __vue_staticRenderFns__$m = [];
+__vue_render__$m._withStripped = true;
 
-script$m.render = render$m;
-script$m.__file = "packages/menu/menu.vue";
+  /* style */
+  const __vue_inject_styles__$m = undefined;
+  /* scoped */
+  const __vue_scope_id__$m = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$m = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$m = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$m = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$m, staticRenderFns: __vue_staticRenderFns__$m },
+    __vue_inject_styles__$m,
+    __vue_script__$m,
+    __vue_scope_id__$m,
+    __vue_is_functional_template__$m,
+    __vue_module_identifier__$m,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var menu = BasePlugin({
-  mcwMenu: script$m,
-  mcwMenuSurface: script$l,
+  mcwMenu: __vue_component__$m,
+  mcwMenuSurface: __vue_component__$l,
   mcwMenuItem: mcwMenuItem,
   mcwMenuAnchor: mcwMenuAnchor,
-  mcwList: script$k
+  mcwList: __vue_component__$k
 });
 
 var cssClasses$4 = MDCNotchedOutlineFoundation.cssClasses;
 var script$n = {
   name: 'mcw-notched-outline',
   components: {
-    mcwFloatingLabel: script$c
+    mcwFloatingLabel: __vue_component__$c
   },
   setup: function setup(props, _ref) {
     var slots = _ref.slots;
@@ -5404,42 +6422,65 @@ var script$n = {
   }
 };
 
-const _hoisted_1$e = /*#__PURE__*/createVNode("span", { class: "mdc-notched-outline__leading" }, null, -1 /* HOISTED */);
-const _hoisted_2$b = /*#__PURE__*/createVNode("span", { class: "mdc-notched-outline__trailing" }, null, -1 /* HOISTED */);
+/* script */
+const __vue_script__$n = script$n;
 
-function render$n(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_mcw_floating_label = resolveComponent("mcw-floating-label");
+/* template */
+var __vue_render__$n = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("span", { ref: "outlined", class: _vm.outlinedClasses }, [
+    _c("span", { staticClass: "mdc-notched-outline__leading" }),
+    _vm._v(" "),
+    _c(
+      "span",
+      { staticClass: "mdc-notched-outline__notch", style: _vm.notchStyles },
+      [
+        _vm.$slots.default
+          ? _c("mcw-floating-label", { ref: "labelEl" }, [_vm._t("default")], 2)
+          : _vm._e()
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c("span", { staticClass: "mdc-notched-outline__trailing" })
+  ])
+};
+var __vue_staticRenderFns__$n = [];
+__vue_render__$n._withStripped = true;
 
-  return (openBlock(), createBlock("span", {
-    ref: "outlined",
-    class: _ctx.outlinedClasses
-  }, [
-    _hoisted_1$e,
-    createVNode("span", {
-      class: "mdc-notched-outline__notch",
-      style: _ctx.notchStyles
-    }, [
-      (_ctx.$slots.default)
-        ? createVNode(_component_mcw_floating_label, {
-            key: 0,
-            ref: "labelEl"
-          }, {
-            default: withCtx(() => [
-              renderSlot(_ctx.$slots, "default")
-            ]),
-            _: 3
-          }, 512 /* NEED_PATCH */)
-        : createCommentVNode("v-if", true)
-    ], 4 /* STYLE */),
-    _hoisted_2$b
-  ], 2 /* CLASS */))
-}
+  /* style */
+  const __vue_inject_styles__$n = undefined;
+  /* scoped */
+  const __vue_scope_id__$n = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$n = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$n = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
 
-script$n.render = render$n;
-script$n.__file = "packages/notched-outline/notched-outline.vue";
+  
+  const __vue_component__$n = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$n, staticRenderFns: __vue_staticRenderFns__$n },
+    __vue_inject_styles__$n,
+    __vue_script__$n,
+    __vue_scope_id__$n,
+    __vue_is_functional_template__$n,
+    __vue_module_identifier__$n,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var notchedOutline = BasePlugin({
-  mcwNotchedOutline: script$n
+  mcwNotchedOutline: __vue_component__$n
 });
 
 var radioId_ = 0;
@@ -5607,80 +6648,143 @@ var script$o = {
   }
 };
 
-const _hoisted_1$f = /*#__PURE__*/createVNode("div", { class: "mdc-radio__background" }, [
-  /*#__PURE__*/createVNode("div", { class: "mdc-radio__outer-circle" }),
-  /*#__PURE__*/createVNode("div", { class: "mdc-radio__inner-circle" })
-], -1 /* HOISTED */);
-const _hoisted_2$c = /*#__PURE__*/createVNode("div", { class: "mdc-radio__ripple" }, null, -1 /* HOISTED */);
-const _hoisted_3$8 = /*#__PURE__*/createVNode("div", { class: "mdc-radio__background" }, [
-  /*#__PURE__*/createVNode("div", { class: "mdc-radio__outer-circle" }),
-  /*#__PURE__*/createVNode("div", { class: "mdc-radio__inner-circle" })
-], -1 /* HOISTED */);
-const _hoisted_4$6 = /*#__PURE__*/createVNode("div", { class: "mdc-radio__ripple" }, null, -1 /* HOISTED */);
+/* script */
+const __vue_script__$o = script$o;
 
-function render$o(_ctx, _cache, $props, $setup, $data, $options) {
-  return (_ctx.label)
-    ? (openBlock(), createBlock("div", {
-        key: 0,
-        class: [_ctx.formFieldClasses, "mdc-radio-wrapper"]
-      }, [
-        createVNode("div", {
-          ref: "root",
-          class: _ctx.rootClasses,
-          style: _ctx.styles
-        }, [
-          createVNode("input", mergeProps({
-            ref: "controlEl",
-            id: _ctx.radioId,
-            name: _ctx.name,
-            type: "radio",
-            class: "mdc-radio__native-control",
-            onChange: _cache[1] || (_cache[1] = (...args) => (_ctx.onChange(...args)))
-          }, _ctx.$attrs, {
-            value: _ctx.value,
-            checked: _ctx.picked==_ctx.value,
-            disabled: _ctx.disabled
-          }), null, 16 /* FULL_PROPS */, ["id", "name", "value", "checked", "disabled"]),
-          _hoisted_1$f,
-          _hoisted_2$c
-        ], 6 /* CLASS, STYLE */),
-        createVNode("label", {
-          ref: "labelEl",
-          for: _ctx.radioId
-        }, [
-          renderSlot(_ctx.$slots, "default", {}, () => [
-            createTextVNode(toDisplayString(_ctx.label), 1 /* TEXT */)
-          ])
-        ], 8 /* PROPS */, ["for"])
-      ], 2 /* CLASS */))
-    : (openBlock(), createBlock("div", {
-        key: 1,
-        ref: "root",
-        class: _ctx.rootClasses,
-        style: _ctx.styles
-      }, [
-        createVNode("input", mergeProps({
-          ref: "controlEl",
-          id: _ctx.radioId,
-          name: _ctx.name,
-          type: "radio",
-          class: "mdc-radio__native-control",
-          onChange: _cache[2] || (_cache[2] = (...args) => (_ctx.onChange(...args)))
-        }, _ctx.$attrs, {
-          value: _ctx.value,
-          checked: _ctx.picked==_ctx.value,
-          disabled: _ctx.disabled
-        }), null, 16 /* FULL_PROPS */, ["id", "name", "value", "checked", "disabled"]),
-        _hoisted_3$8,
-        _hoisted_4$6
-      ], 6 /* CLASS, STYLE */))
-}
+/* template */
+var __vue_render__$o = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _vm.label
+    ? _c(
+        "div",
+        { staticClass: "mdc-radio-wrapper", class: _vm.formFieldClasses },
+        [
+          _c(
+            "div",
+            { ref: "root", class: _vm.rootClasses, style: _vm.styles },
+            [
+              _c(
+                "input",
+                _vm._b(
+                  {
+                    ref: "controlEl",
+                    staticClass: "mdc-radio__native-control",
+                    attrs: {
+                      id: _vm.radioId,
+                      name: _vm.name,
+                      type: "radio",
+                      disabled: _vm.disabled
+                    },
+                    domProps: {
+                      value: _vm.value,
+                      checked: _vm.picked == _vm.value
+                    },
+                    on: { change: _vm.onChange }
+                  },
+                  "input",
+                  _vm.$attrs,
+                  false
+                )
+              ),
+              _vm._v(" "),
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "mdc-radio__ripple" })
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "label",
+            { ref: "labelEl", attrs: { for: _vm.radioId } },
+            [_vm._t("default", [_vm._v(_vm._s(_vm.label))])],
+            2
+          )
+        ]
+      )
+    : _c("div", { ref: "root", class: _vm.rootClasses, style: _vm.styles }, [
+        _c(
+          "input",
+          _vm._b(
+            {
+              ref: "controlEl",
+              staticClass: "mdc-radio__native-control",
+              attrs: {
+                id: _vm.radioId,
+                name: _vm.name,
+                type: "radio",
+                disabled: _vm.disabled
+              },
+              domProps: { value: _vm.value, checked: _vm.picked == _vm.value },
+              on: { change: _vm.onChange }
+            },
+            "input",
+            _vm.$attrs,
+            false
+          )
+        ),
+        _vm._v(" "),
+        _vm._m(1),
+        _vm._v(" "),
+        _c("div", { staticClass: "mdc-radio__ripple" })
+      ])
+};
+var __vue_staticRenderFns__$o = [
+  function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", { staticClass: "mdc-radio__background" }, [
+      _c("div", { staticClass: "mdc-radio__outer-circle" }),
+      _vm._v(" "),
+      _c("div", { staticClass: "mdc-radio__inner-circle" })
+    ])
+  },
+  function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c("div", { staticClass: "mdc-radio__background" }, [
+      _c("div", { staticClass: "mdc-radio__outer-circle" }),
+      _vm._v(" "),
+      _c("div", { staticClass: "mdc-radio__inner-circle" })
+    ])
+  }
+];
+__vue_render__$o._withStripped = true;
 
-script$o.render = render$o;
-script$o.__file = "packages/radio/radio.vue";
+  /* style */
+  const __vue_inject_styles__$o = undefined;
+  /* scoped */
+  const __vue_scope_id__$o = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$o = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$o = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$o = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$o, staticRenderFns: __vue_staticRenderFns__$o },
+    __vue_inject_styles__$o,
+    __vue_script__$o,
+    __vue_scope_id__$o,
+    __vue_is_functional_template__$o,
+    __vue_module_identifier__$o,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var radio = BasePlugin({
-  mcwRadio: script$o
+  mcwRadio: __vue_component__$o
 });
 
 var SelectHelperText = {
@@ -5836,16 +6940,59 @@ var script$p = {
   }
 };
 
-function render$p(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("i", mergeProps({
-    ref: "root",
-    class: _ctx.classes,
-    style: _ctx.styles
-  }, toHandlers(_ctx.rootListeners), _ctx.rootAttrs), toDisplayString(_ctx.icon), 17 /* TEXT, FULL_PROPS */))
-}
+/* script */
+const __vue_script__$p = script$p;
 
-script$p.render = render$p;
-script$p.__file = "packages/select/select-icon.vue";
+/* template */
+var __vue_render__$p = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "i",
+    _vm._g(
+      _vm._b(
+        { ref: "root", class: _vm.classes, style: _vm.styles },
+        "i",
+        _vm.rootAttrs,
+        false
+      ),
+      _vm.rootListeners
+    ),
+    [_vm._v(_vm._s(_vm.icon))]
+  )
+};
+var __vue_staticRenderFns__$p = [];
+__vue_render__$p._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$p = undefined;
+  /* scoped */
+  const __vue_scope_id__$p = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$p = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$p = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$p = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$p, staticRenderFns: __vue_staticRenderFns__$p },
+    __vue_inject_styles__$p,
+    __vue_script__$p,
+    __vue_scope_id__$p,
+    __vue_is_functional_template__$p,
+    __vue_module_identifier__$p,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var strings$8 = MDCSelectFoundation.strings,
     cssClasses$5 = MDCSelectFoundation.cssClasses;
@@ -6231,7 +7378,7 @@ var script$q = {
   },
   components: {
     SelectHelperText: SelectHelperText,
-    SelectIcon: script$p
+    SelectIcon: __vue_component__$p
   }
 }; // ===
 // Private functions
@@ -6243,128 +7390,191 @@ function getNormalizedXCoordinate(evt) {
   return xCoordinate - targetClientRect.left;
 }
 
-const _hoisted_1$g = { class: "select-wrapper" };
-const _hoisted_2$d = {
-  key: 1,
-  class: "mdc-select__ripple"
-};
-const _hoisted_3$9 = { class: "mdc-select__selected-text" };
-const _hoisted_4$7 = /*#__PURE__*/createVNode("span", { class: "mdc-select__dropdown-icon" }, [
-  /*#__PURE__*/createVNode("svg", {
-    class: "mdc-select__dropdown-icon-graphic",
-    viewBox: "7 10 10 5"
-  }, [
-    /*#__PURE__*/createVNode("polygon", {
-      class: "mdc-select__dropdown-icon-inactive",
-      stroke: "none",
-      "fill-rule": "evenodd",
-      points: "7 10 12 15 17 10"
-    }),
-    /*#__PURE__*/createVNode("polygon", {
-      class: "mdc-select__dropdown-icon-active",
-      stroke: "none",
-      "fill-rule": "evenodd",
-      points: "7 15 12 10 17 15"
-    })
-  ])
-], -1 /* HOISTED */);
+/* script */
+const __vue_script__$q = script$q;
 
-function render$q(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_select_icon = resolveComponent("select-icon");
-  const _component_mcw_notched_outline = resolveComponent("mcw-notched-outline");
-  const _component_mcw_floating_label = resolveComponent("mcw-floating-label");
-  const _component_mcw_line_ripple = resolveComponent("mcw-line-ripple");
-  const _component_mcw_menu = resolveComponent("mcw-menu");
-  const _component_select_helper_text = resolveComponent("select-helper-text");
-
-  return (openBlock(), createBlock("div", _hoisted_1$g, [
-    createVNode("div", {
-      ref: "root",
-      class: _ctx.rootClasses
-    }, [
-      createVNode("div", mergeProps({
-        ref: "anchorEl",
-        class: ["mdc-select__anchor", _ctx.rippleClasses],
-        style: _ctx.rippleStyles,
-        onClick: _cache[1] || (_cache[1] = (...args) => (_ctx.handleClick(...args))),
-        onKeydown: _cache[2] || (_cache[2] = (...args) => (_ctx.handleKeydown(...args))),
-        onFocus: _cache[3] || (_cache[3] = (...args) => (_ctx.handleFocus(...args))),
-        onBlur: _cache[4] || (_cache[4] = (...args) => (_ctx.handleBlur(...args)))
-      }, _ctx.selectAnchorAttrs, {
-        role: "button",
-        "aria-haspopup": "listbox",
-        "aria-required": _ctx.required
-      }), [
-        (_ctx.leadingIcon)
-          ? createVNode(_component_select_icon, {
-              key: 0,
-              ref: "leadingIconEl",
-              icon: _ctx.leadingIcon,
-              tabindex: "0",
-              role: "button"
-            }, null, 8 /* PROPS */, ["icon"])
-          : createCommentVNode("v-if", true),
-        (!_ctx.outlined)
-          ? (openBlock(), createBlock("span", _hoisted_2$d))
-          : createCommentVNode("v-if", true),
-        createVNode("span", _hoisted_3$9, toDisplayString(_ctx.selectedTextContent), 1 /* TEXT */),
-        _hoisted_4$7,
-        (_ctx.outlined)
-          ? createVNode(_component_mcw_notched_outline, {
-              key: 2,
-              ref: "outlineEl"
-            }, {
-              default: withCtx(() => [
-                createTextVNode(toDisplayString(_ctx.label), 1 /* TEXT */)
+/* template */
+var __vue_render__$q = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    { staticClass: "select-wrapper" },
+    [
+      _c(
+        "div",
+        { ref: "root", class: _vm.rootClasses },
+        [
+          _c(
+            "div",
+            _vm._b(
+              {
+                ref: "anchorEl",
+                staticClass: "mdc-select__anchor",
+                class: _vm.rippleClasses,
+                style: _vm.rippleStyles,
+                attrs: {
+                  role: "button",
+                  "aria-haspopup": "listbox",
+                  "aria-required": _vm.required
+                },
+                on: {
+                  click: _vm.handleClick,
+                  keydown: _vm.handleKeydown,
+                  focus: _vm.handleFocus,
+                  blur: _vm.handleBlur
+                }
+              },
+              "div",
+              _vm.selectAnchorAttrs,
+              false
+            ),
+            [
+              _vm.leadingIcon
+                ? _c("select-icon", {
+                    ref: "leadingIconEl",
+                    attrs: {
+                      icon: _vm.leadingIcon,
+                      tabindex: "0",
+                      role: "button"
+                    }
+                  })
+                : _vm._e(),
+              _vm._v(" "),
+              !_vm.outlined
+                ? _c("span", { staticClass: "mdc-select__ripple" })
+                : _vm._e(),
+              _vm._v(" "),
+              _c("span", { staticClass: "mdc-select__selected-text" }, [
+                _vm._v(_vm._s(_vm.selectedTextContent))
               ]),
-              _: 1
-            }, 512 /* NEED_PATCH */)
-          : (openBlock(), createBlock(Fragment, { key: 3 }, [
-              createVNode(_component_mcw_floating_label, { ref: "labelEl" }, {
-                default: withCtx(() => [
-                  createTextVNode(toDisplayString(_ctx.label), 1 /* TEXT */)
-                ]),
-                _: 1
-              }, 512 /* NEED_PATCH */),
-              createVNode(_component_mcw_line_ripple, { ref: "lineRippleEl" }, null, 512 /* NEED_PATCH */)
-            ], 64 /* STABLE_FRAGMENT */))
-      ], 16 /* FULL_PROPS */, ["aria-required"]),
-      createVNode(_component_mcw_menu, {
-        ref: "menu",
-        class: ["mdc-select__menu", _ctx.menuClasses],
-        onChange: _ctx.handleChange,
-        onSelect: _ctx.handleMenuItemAction,
-        "onMDCMenuSurface:opened": _ctx.handleMenuOpened,
-        "onMDCMenuSurface:closed": _ctx.handleMenuClosed,
-        role: "listbox"
-      }, {
-        default: withCtx(() => [
-          renderSlot(_ctx.$slots, "default")
-        ]),
-        _: 3
-      }, 8 /* PROPS */, ["class", "onChange", "onSelect", "onMDCMenuSurface:opened", "onMDCMenuSurface:closed"])
-    ], 2 /* CLASS */),
-    (_ctx.helptext)
-      ? createVNode(_component_select_helper_text, {
-          key: 0,
-          ref: "helperTextEl",
-          id: _ctx.helpId,
-          helptextPersistent: _ctx.helptextPersistent,
-          helptextValidation: _ctx.helptextValidation,
-          helptext: _ctx.helptext
-        }, null, 8 /* PROPS */, ["id", "helptextPersistent", "helptextValidation", "helptext"])
-      : createCommentVNode("v-if", true)
-  ]))
-}
+              _vm._v(" "),
+              _c("span", { staticClass: "mdc-select__dropdown-icon" }, [
+                _c(
+                  "svg",
+                  {
+                    staticClass: "mdc-select__dropdown-icon-graphic",
+                    attrs: { viewBox: "7 10 10 5" }
+                  },
+                  [
+                    _c("polygon", {
+                      staticClass: "mdc-select__dropdown-icon-inactive",
+                      attrs: {
+                        stroke: "none",
+                        "fill-rule": "evenodd",
+                        points: "7 10 12 15 17 10"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("polygon", {
+                      staticClass: "mdc-select__dropdown-icon-active",
+                      attrs: {
+                        stroke: "none",
+                        "fill-rule": "evenodd",
+                        points: "7 15 12 10 17 15"
+                      }
+                    })
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _vm.outlined
+                ? [
+                    _c("mcw-notched-outline", { ref: "outlineEl" }, [
+                      _vm._v(_vm._s(_vm.label))
+                    ])
+                  ]
+                : [
+                    _c("mcw-floating-label", { ref: "labelEl" }, [
+                      _vm._v(_vm._s(_vm.label))
+                    ]),
+                    _vm._v(" "),
+                    _c("mcw-line-ripple", { ref: "lineRippleEl" })
+                  ]
+            ],
+            2
+          ),
+          _vm._v(" "),
+          _c(
+            "mcw-menu",
+            {
+              ref: "menu",
+              staticClass: "mdc-select__menu",
+              class: _vm.menuClasses,
+              attrs: { role: "listbox" },
+              on: {
+                change: _vm.handleChange,
+                select: _vm.handleMenuItemAction
+              },
+              nativeOn: {
+                "MDCMenuSurface:opened": function($event) {
+                  return _vm.handleMenuOpened($event)
+                },
+                "MDCMenuSurface:closed": function($event) {
+                  return _vm.handleMenuClosed($event)
+                }
+              }
+            },
+            [_vm._t("default")],
+            2
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _vm.helptext
+        ? _c("select-helper-text", {
+            ref: "helperTextEl",
+            attrs: {
+              id: _vm.helpId,
+              helptextPersistent: _vm.helptextPersistent,
+              helptextValidation: _vm.helptextValidation,
+              helptext: _vm.helptext
+            }
+          })
+        : _vm._e()
+    ],
+    1
+  )
+};
+var __vue_staticRenderFns__$q = [];
+__vue_render__$q._withStripped = true;
 
-script$q.render = render$q;
-script$q.__file = "packages/select/select.vue";
+  /* style */
+  const __vue_inject_styles__$q = undefined;
+  /* scoped */
+  const __vue_scope_id__$q = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$q = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$q = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$q = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$q, staticRenderFns: __vue_staticRenderFns__$q },
+    __vue_inject_styles__$q,
+    __vue_script__$q,
+    __vue_scope_id__$q,
+    __vue_is_functional_template__$q,
+    __vue_module_identifier__$q,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var select = BasePlugin({
-  mcwSelect: script$q,
-  mcwNotchedOutline: script$n,
-  mcwLineRipple: script$h,
-  mcwFloatingLabel: script$c
+  mcwSelect: __vue_component__$q,
+  mcwNotchedOutline: __vue_component__$n,
+  mcwLineRipple: __vue_component__$h,
+  mcwFloatingLabel: __vue_component__$c
 });
 
 var script$r = {
@@ -6597,69 +7807,104 @@ var script$r = {
   }
 };
 
-const _hoisted_1$h = { class: "mdc-slider__track-container" };
-const _hoisted_2$e = {
-  key: 0,
-  class: "mdc-slider__pin"
+/* script */
+const __vue_script__$r = script$r;
+
+/* template */
+var __vue_render__$r = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    _vm._b(
+      {
+        ref: "root",
+        class: _vm.classes,
+        attrs: { tabindex: "0", role: "slider", "aria-label": "Select value" }
+      },
+      "div",
+      _vm.sliderAttrs,
+      false
+    ),
+    [
+      _c("div", { staticClass: "mdc-slider__track-container" }, [
+        _c("div", { staticClass: "mdc-slider__track", style: _vm.trackStyles }),
+        _vm._v(" "),
+        _vm.hasMarkers
+          ? _c("div", {
+              ref: "trackMarkerContainer",
+              staticClass: "mdc-slider__track-marker-container",
+              style: _vm.markerBkgdShorthand
+            })
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          ref: "thumbContainer",
+          staticClass: "mdc-slider__thumb-container",
+          style: _vm.thumbStyles
+        },
+        [
+          _vm.discrete
+            ? _c("div", { staticClass: "mdc-slider__pin" }, [
+                _c("span", { staticClass: "mdc-slider__pin-value-marker" }, [
+                  _vm._v(_vm._s(_vm.markerValue))
+                ])
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _c(
+            "svg",
+            {
+              staticClass: "mdc-slider__thumb",
+              attrs: { width: "21", height: "21" }
+            },
+            [_c("circle", { attrs: { cx: "10.5", cy: "10.5", r: "7.875" } })]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "mdc-slider__focus-ring" })
+        ]
+      )
+    ]
+  )
 };
-const _hoisted_3$a = { class: "mdc-slider__pin-value-marker" };
-const _hoisted_4$8 = /*#__PURE__*/createVNode("svg", {
-  class: "mdc-slider__thumb",
-  width: "21",
-  height: "21"
-}, [
-  /*#__PURE__*/createVNode("circle", {
-    cx: "10.5",
-    cy: "10.5",
-    r: "7.875"
-  })
-], -1 /* HOISTED */);
-const _hoisted_5$3 = /*#__PURE__*/createVNode("div", { class: "mdc-slider__focus-ring" }, null, -1 /* HOISTED */);
+var __vue_staticRenderFns__$r = [];
+__vue_render__$r._withStripped = true;
 
-function render$r(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", mergeProps({
-    ref: "root",
-    class: _ctx.classes
-  }, _ctx.sliderAttrs, {
-    tabindex: "0",
-    role: "slider",
-    "aria-label": "Select value"
-  }), [
-    createVNode("div", _hoisted_1$h, [
-      createVNode("div", {
-        style: _ctx.trackStyles,
-        class: "mdc-slider__track"
-      }, null, 4 /* STYLE */),
-      (_ctx.hasMarkers)
-        ? (openBlock(), createBlock("div", {
-            key: 0,
-            class: "mdc-slider__track-marker-container",
-            style: _ctx.markerBkgdShorthand,
-            ref: "trackMarkerContainer"
-          }, null, 4 /* STYLE */))
-        : createCommentVNode("v-if", true)
-    ]),
-    createVNode("div", {
-      ref: "thumbContainer",
-      style: _ctx.thumbStyles,
-      class: "mdc-slider__thumb-container"
-    }, [
-      (_ctx.discrete)
-        ? (openBlock(), createBlock("div", _hoisted_2$e, [
-            createVNode("span", _hoisted_3$a, toDisplayString(_ctx.markerValue), 1 /* TEXT */)
-          ]))
-        : createCommentVNode("v-if", true),
-      _hoisted_4$8,
-      _hoisted_5$3
-    ], 4 /* STYLE */)
-  ], 16 /* FULL_PROPS */))
-}
+  /* style */
+  const __vue_inject_styles__$r = undefined;
+  /* scoped */
+  const __vue_scope_id__$r = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$r = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$r = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
 
-script$r.render = render$r;
-script$r.__file = "packages/slider/slider.vue";
+  
+  const __vue_component__$r = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$r, staticRenderFns: __vue_staticRenderFns__$r },
+    __vue_inject_styles__$r,
+    __vue_script__$r,
+    __vue_scope_id__$r,
+    __vue_is_functional_template__$r,
+    __vue_module_identifier__$r,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var slider = BasePlugin({
-  mcwSlider: script$r
+  mcwSlider: __vue_component__$r
 });
 
 var noop = function noop() {};
@@ -6755,14 +8000,53 @@ var script$s = {
   }
 };
 
-function render$s(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_mcw_snackbar = resolveComponent("mcw-snackbar");
+/* script */
+const __vue_script__$s = script$s;
 
-  return (openBlock(), createBlock(_component_mcw_snackbar, mergeProps({ open: _ctx.open }, _ctx.snack, toHandlers(_ctx.listeners)), null, 16 /* FULL_PROPS */, ["open"]))
-}
+/* template */
+var __vue_render__$s = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "mcw-snackbar",
+    _vm._g(
+      _vm._b({ attrs: { open: _vm.open } }, "mcw-snackbar", _vm.snack, false),
+      _vm.listeners
+    )
+  )
+};
+var __vue_staticRenderFns__$s = [];
+__vue_render__$s._withStripped = true;
 
-script$s.render = render$s;
-script$s.__file = "packages/snackbar/snackbar-queue.vue";
+  /* style */
+  const __vue_inject_styles__$s = undefined;
+  /* scoped */
+  const __vue_scope_id__$s = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$s = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$s = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$s = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$s, staticRenderFns: __vue_staticRenderFns__$s },
+    __vue_inject_styles__$s,
+    __vue_script__$s,
+    __vue_scope_id__$s,
+    __vue_is_functional_template__$s,
+    __vue_module_identifier__$s,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var strings$9 = MDCSnackbarFoundation.strings,
     numbers = MDCSnackbarFoundation.numbers;
@@ -6969,64 +8253,120 @@ function isActionIcon_(target) {
   return Boolean(closest(target, strings$9.DISMISS_SELECTOR));
 }
 
-const _hoisted_1$i = {
-  ref: "labelEl",
-  class: "mdc-snackbar__label",
-  role: "status",
-  "aria-live": "polite"
-};
-const _hoisted_2$f = {
-  key: 1,
-  style: {"display":"inline-block","width":"0","height":"'1px'"}
-};
-const _hoisted_3$b = { class: "mdc-snackbar__actions" };
-const _hoisted_4$9 = /*#__PURE__*/createVNode("div", { class: "mdc-button__ripple" }, null, -1 /* HOISTED */);
-const _hoisted_5$4 = { class: "mdc-button__label" };
-const _hoisted_6$2 = {
-  key: 1,
-  type: "button",
-  class: "mdc-icon-button mdc-snackbar__dismiss material-icons",
-  title: "Dismiss"
-};
+/* script */
+const __vue_script__$t = script$t;
 
-function render$t(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", { class: _ctx.rootClasses }, [
-    createVNode("div", {
-      class: "mdc-snackbar__surface",
-      onClick: _cache[1] || (_cache[1] = (...args) => (_ctx.surfaceClickHandler(...args)))
-    }, [
-      createVNode("div", _hoisted_1$i, [
-        (_ctx.showMessage)
-          ? (openBlock(), createBlock(Fragment, { key: 0 }, [
-              createTextVNode(toDisplayString(_ctx.message), 1 /* TEXT */)
-            ], 64 /* STABLE_FRAGMENT */))
-          : (openBlock(), createBlock("span", _hoisted_2$f, " "))
-      ], 512 /* NEED_PATCH */),
-      createVNode("div", _hoisted_3$b, [
-        (_ctx.actionText)
-          ? (openBlock(), createBlock("button", mergeProps({
-              key: 0,
-              ref: "actionEl",
-              type: "button"
-            }, toHandlers(_ctx.$listeners), { class: "mdc-button mdc-snackbar__action" }), [
-              _hoisted_4$9,
-              createVNode("span", _hoisted_5$4, toDisplayString(_ctx.actionText), 1 /* TEXT */)
-            ], 16 /* FULL_PROPS */))
-          : createCommentVNode("v-if", true),
-        (_ctx.showDismissAction)
-          ? (openBlock(), createBlock("button", _hoisted_6$2, " close "))
-          : createCommentVNode("v-if", true)
-      ])
-    ])
-  ], 2 /* CLASS */))
-}
+/* template */
+var __vue_render__$t = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { class: _vm.rootClasses }, [
+    _c(
+      "div",
+      {
+        staticClass: "mdc-snackbar__surface",
+        on: { click: _vm.surfaceClickHandler }
+      },
+      [
+        _c(
+          "div",
+          {
+            ref: "labelEl",
+            staticClass: "mdc-snackbar__label",
+            attrs: { role: "status", "aria-live": "polite" }
+          },
+          [
+            _vm.showMessage
+              ? [_vm._v(_vm._s(_vm.message))]
+              : _c(
+                  "span",
+                  {
+                    staticStyle: {
+                      display: "inline-block",
+                      width: "0",
+                      height: "'1px'"
+                    }
+                  },
+                  [_vm._v(" ")]
+                )
+          ],
+          2
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "mdc-snackbar__actions" }, [
+          _vm.actionText
+            ? _c(
+                "button",
+                _vm._g(
+                  {
+                    ref: "actionEl",
+                    staticClass: "mdc-button mdc-snackbar__action",
+                    attrs: { type: "button" }
+                  },
+                  _vm.$listeners
+                ),
+                [
+                  _c("div", { staticClass: "mdc-button__ripple" }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "mdc-button__label" }, [
+                    _vm._v(_vm._s(_vm.actionText))
+                  ])
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.showDismissAction
+            ? _c(
+                "button",
+                {
+                  staticClass:
+                    "mdc-icon-button mdc-snackbar__dismiss material-icons",
+                  attrs: { type: "button", title: "Dismiss" }
+                },
+                [_vm._v("\n        close\n      ")]
+              )
+            : _vm._e()
+        ])
+      ]
+    )
+  ])
+};
+var __vue_staticRenderFns__$t = [];
+__vue_render__$t._withStripped = true;
 
-script$t.render = render$t;
-script$t.__file = "packages/snackbar/snackbar.vue";
+  /* style */
+  const __vue_inject_styles__$t = undefined;
+  /* scoped */
+  const __vue_scope_id__$t = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$t = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$t = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$t = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$t, staticRenderFns: __vue_staticRenderFns__$t },
+    __vue_inject_styles__$t,
+    __vue_script__$t,
+    __vue_scope_id__$t,
+    __vue_is_functional_template__$t,
+    __vue_module_identifier__$t,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var snackbar = BasePlugin({
-  mcwSnackbar: script$t,
-  mcwSnackbarQueue: script$s
+  mcwSnackbar: __vue_component__$t,
+  mcwSnackbarQueue: __vue_component__$s
 });
 
 var switchId_ = 0;
@@ -7135,58 +8475,110 @@ var script$u = {
   }
 };
 
-const _hoisted_1$j = /*#__PURE__*/createVNode("div", { class: "mdc-switch__track" }, null, -1 /* HOISTED */);
-const _hoisted_2$g = { class: "mdc-switch__thumb-underlay" };
-const _hoisted_3$c = /*#__PURE__*/createVNode("div", { class: "mdc-switch__thumb" }, null, -1 /* HOISTED */);
+/* script */
+const __vue_script__$u = script$u;
 
-function render$u(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", {
-    class: [{
-  'mdc-form-field': _ctx.hasLabel,
-  'mdc-form-field--align-end': _ctx.hasLabel && _ctx.alignEnd,
-}, "mdc-switch-wrapper"]
-  }, [
-    createVNode("div", {
-      ref: "root",
-      class: [_ctx.classes, "mdc-switch"],
-      style: _ctx.styles
-    }, [
-      _hoisted_1$j,
-      createVNode("div", _hoisted_2$g, [
-        _hoisted_3$c,
-        createVNode("input", mergeProps({
-          name: _ctx.name,
-          id: _ctx.switchId,
-          value: _ctx.value,
-          type: "checkbox",
-          role: "switch",
-          class: "mdc-switch__native-control",
-          checked: _ctx.nativeControlChecked,
-          disabled: _ctx.nativeControlDisabled
-        }, _ctx.nativeAttrs, {
-          onChange: _cache[1] || (_cache[1] = (...args) => (_ctx.onChanged(...args)))
-        }), null, 16 /* FULL_PROPS */, ["name", "id", "value", "checked", "disabled"])
-      ])
-    ], 6 /* CLASS, STYLE */),
-    (_ctx.hasLabel)
-      ? (openBlock(), createBlock("label", {
-          key: 0,
-          for: _ctx.switchId,
-          class: "mdc-switch-label"
-        }, [
-          renderSlot(_ctx.$slots, "default", {}, () => [
-            createTextVNode(toDisplayString(_ctx.label), 1 /* TEXT */)
+/* template */
+var __vue_render__$u = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    {
+      staticClass: "mdc-switch-wrapper",
+      class: {
+        "mdc-form-field": _vm.hasLabel,
+        "mdc-form-field--align-end": _vm.hasLabel && _vm.alignEnd
+      }
+    },
+    [
+      _c(
+        "div",
+        {
+          ref: "root",
+          staticClass: "mdc-switch",
+          class: _vm.classes,
+          style: _vm.styles
+        },
+        [
+          _c("div", { staticClass: "mdc-switch__track" }),
+          _vm._v(" "),
+          _c("div", { staticClass: "mdc-switch__thumb-underlay" }, [
+            _c("div", { staticClass: "mdc-switch__thumb" }),
+            _vm._v(" "),
+            _c(
+              "input",
+              _vm._b(
+                {
+                  staticClass: "mdc-switch__native-control",
+                  attrs: {
+                    name: _vm.name,
+                    id: _vm.switchId,
+                    type: "checkbox",
+                    role: "switch",
+                    disabled: _vm.nativeControlDisabled
+                  },
+                  domProps: {
+                    value: _vm.value,
+                    checked: _vm.nativeControlChecked
+                  },
+                  on: { change: _vm.onChanged }
+                },
+                "input",
+                _vm.nativeAttrs,
+                false
+              )
+            )
           ])
-        ], 8 /* PROPS */, ["for"]))
-      : createCommentVNode("v-if", true)
-  ], 2 /* CLASS */))
-}
+        ]
+      ),
+      _vm._v(" "),
+      _vm.hasLabel
+        ? _c(
+            "label",
+            { staticClass: "mdc-switch-label", attrs: { for: _vm.switchId } },
+            [_vm._t("default", [_vm._v(_vm._s(_vm.label))])],
+            2
+          )
+        : _vm._e()
+    ]
+  )
+};
+var __vue_staticRenderFns__$u = [];
+__vue_render__$u._withStripped = true;
 
-script$u.render = render$u;
-script$u.__file = "packages/switch/switch.vue";
+  /* style */
+  const __vue_inject_styles__$u = undefined;
+  /* scoped */
+  const __vue_scope_id__$u = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$u = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$u = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$u = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$u, staticRenderFns: __vue_staticRenderFns__$u },
+    __vue_inject_styles__$u,
+    __vue_script__$u,
+    __vue_scope_id__$u,
+    __vue_is_functional_template__$u,
+    __vue_module_identifier__$u,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var switchControl = BasePlugin({
-  mcwSwitch: script$u
+  mcwSwitch: __vue_component__$u
 });
 
 var strings$a = MDCTabBarFoundation.strings;
@@ -7337,24 +8729,55 @@ var script$v = {
   }
 };
 
-function render$v(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_mcw_tab_scroller = resolveComponent("mcw-tab-scroller");
+/* script */
+const __vue_script__$v = script$v;
 
-  return (openBlock(), createBlock("div", mergeProps({
-    ref: "root",
-    role: "tablist"
-  }, toHandlers(_ctx.listeners), { class: "mdc-tab-bar" }), [
-    createVNode(_component_mcw_tab_scroller, { ref: "scroller" }, {
-      default: withCtx(() => [
-        renderSlot(_ctx.$slots, "default")
-      ]),
-      _: 3
-    }, 512 /* NEED_PATCH */)
-  ], 16 /* FULL_PROPS */))
-}
+/* template */
+var __vue_render__$v = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    _vm._g(
+      { ref: "root", staticClass: "mdc-tab-bar", attrs: { role: "tablist" } },
+      _vm.listeners
+    ),
+    [_c("mcw-tab-scroller", { ref: "scroller" }, [_vm._t("default")], 2)],
+    1
+  )
+};
+var __vue_staticRenderFns__$v = [];
+__vue_render__$v._withStripped = true;
 
-script$v.render = render$v;
-script$v.__file = "packages/tabs/tab-bar.vue";
+  /* style */
+  const __vue_inject_styles__$v = undefined;
+  /* scoped */
+  const __vue_scope_id__$v = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$v = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$v = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$v = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$v, staticRenderFns: __vue_staticRenderFns__$v },
+    __vue_inject_styles__$v,
+    __vue_script__$v,
+    __vue_scope_id__$v,
+    __vue_is_functional_template__$v,
+    __vue_module_identifier__$v,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var cssClasses$6 = MDCTabIndicatorFoundation.cssClasses;
 var script$w = {
@@ -7450,20 +8873,63 @@ var script$w = {
   }
 };
 
-function render$w(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("span", {
-    class: ["mdc-tab-indicator", _ctx.classes]
-  }, [
-    createVNode("span", mergeProps({
-      ref: "contentEl",
-      class: ["mdc-tab-indicator__content", _ctx.contentClasses],
-      style: _ctx.styles
-    }, _ctx.contentAttrs), toDisplayString(_ctx.icon), 17 /* TEXT, FULL_PROPS */)
-  ], 2 /* CLASS */))
-}
+/* script */
+const __vue_script__$w = script$w;
 
-script$w.render = render$w;
-script$w.__file = "packages/tabs/tab-indicator.vue";
+/* template */
+var __vue_render__$w = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("span", { staticClass: "mdc-tab-indicator", class: _vm.classes }, [
+    _c(
+      "span",
+      _vm._b(
+        {
+          ref: "contentEl",
+          staticClass: "mdc-tab-indicator__content",
+          class: _vm.contentClasses,
+          style: _vm.styles
+        },
+        "span",
+        _vm.contentAttrs,
+        false
+      ),
+      [_vm._v(_vm._s(_vm.icon))]
+    )
+  ])
+};
+var __vue_staticRenderFns__$w = [];
+__vue_render__$w._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$w = undefined;
+  /* scoped */
+  const __vue_scope_id__$w = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$w = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$w = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$w = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$w, staticRenderFns: __vue_staticRenderFns__$w },
+    __vue_inject_styles__$w,
+    __vue_script__$w,
+    __vue_scope_id__$w,
+    __vue_is_functional_template__$w,
+    __vue_module_identifier__$w,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var script$x = {
   name: 'mcw-tab-scroller',
@@ -7586,27 +9052,68 @@ var script$x = {
   }
 };
 
-function render$x(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", { class: _ctx.classes }, [
-    createVNode("div", mergeProps({
-      ref: "area",
-      class: _ctx.areaClasses,
-      style: _ctx.areaStyles
-    }, toHandlers(_ctx.areaListeners)), [
-      createVNode("div", {
-        ref: "content",
-        class: "mdc-tab-scroller__scroll-content",
-        style: _ctx.contentStyles,
-        onTransitionend: _cache[1] || (_cache[1] = (...args) => (_ctx.onTransitionEnd(...args)))
-      }, [
-        renderSlot(_ctx.$slots, "default")
-      ], 36 /* STYLE, HYDRATE_EVENTS */)
-    ], 16 /* FULL_PROPS */)
-  ], 2 /* CLASS */))
-}
+/* script */
+const __vue_script__$x = script$x;
 
-script$x.render = render$x;
-script$x.__file = "packages/tabs/tab-scroller.vue";
+/* template */
+var __vue_render__$x = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { class: _vm.classes }, [
+    _c(
+      "div",
+      _vm._g(
+        { ref: "area", class: _vm.areaClasses, style: _vm.areaStyles },
+        _vm.areaListeners
+      ),
+      [
+        _c(
+          "div",
+          {
+            ref: "content",
+            staticClass: "mdc-tab-scroller__scroll-content",
+            style: _vm.contentStyles,
+            on: { transitionend: _vm.onTransitionEnd }
+          },
+          [_vm._t("default")],
+          2
+        )
+      ]
+    )
+  ])
+};
+var __vue_staticRenderFns__$x = [];
+__vue_render__$x._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$x = undefined;
+  /* scoped */
+  const __vue_scope_id__$x = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$x = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$x = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$x = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$x, staticRenderFns: __vue_staticRenderFns__$x },
+    __vue_inject_styles__$x,
+    __vue_script__$x,
+    __vue_scope_id__$x,
+    __vue_is_functional_template__$x,
+    __vue_module_identifier__$x,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var tabId_ = 0;
 var script$y = {
@@ -7811,77 +9318,115 @@ function extractIconProp(iconProp) {
   }
 }
 
-const _hoisted_1$k = {
-  ref: "content",
-  class: "mdc-tab__content"
-};
-const _hoisted_2$h = {
-  key: 1,
-  class: "mdc-tab__text-label"
-};
+/* script */
+const __vue_script__$y = script$y;
 
-function render$y(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_mcw_tab_indicator = resolveComponent("mcw-tab-indicator");
-  const _component_custom_link = resolveComponent("custom-link");
-
-  return (openBlock(), createBlock(_component_custom_link, {
-    id: _ctx.tabId,
-    ref: "root",
-    link: _ctx.linkAttrs,
-    class: _ctx.classes,
-    style: _ctx.styles,
-    onClick: _ctx.onClick
-  }, {
-    default: withCtx(() => [
-      createVNode("span", _hoisted_1$k, [
-        (_ctx.hasIcon)
-          ? (openBlock(), createBlock("i", {
-              key: 0,
-              ref: "iconEl",
-              class: ["mdc-tab__icon", _ctx.hasIcon.classes],
-              tabindex: "0",
-              "aria-hidden": "true",
-              slot: "icon"
-            }, toDisplayString(_ctx.hasIcon.content), 3 /* TEXT, CLASS */))
-          : createCommentVNode("v-if", true),
-        (_ctx.hasText)
-          ? (openBlock(), createBlock("span", _hoisted_2$h, [
-              renderSlot(_ctx.$slots, "default")
-            ]))
-          : createCommentVNode("v-if", true),
-        (_ctx.spanContent)
-          ? createVNode(_component_mcw_tab_indicator, {
-              key: 2,
-              ref: "tabIndicator",
-              fade: _ctx.fade
-            }, null, 8 /* PROPS */, ["fade"])
-          : createCommentVNode("v-if", true),
-        createVNode("span", {
-          ref: "rippleSurface",
-          class: ["mdc-tab__ripple", _ctx.rippleClasses],
-          style: _ctx.styles
-        }, null, 6 /* CLASS, STYLE */)
-      ], 512 /* NEED_PATCH */),
-      (!_ctx.spanContent)
-        ? createVNode(_component_mcw_tab_indicator, {
-            key: 0,
+/* template */
+var __vue_render__$y = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "custom-link",
+    {
+      ref: "root",
+      class: _vm.classes,
+      style: _vm.styles,
+      attrs: { id: _vm.tabId, link: _vm.linkAttrs },
+      on: { click: _vm.onClick }
+    },
+    [
+      _c(
+        "span",
+        { ref: "content", staticClass: "mdc-tab__content" },
+        [
+          _vm.hasIcon
+            ? _c(
+                "i",
+                {
+                  ref: "iconEl",
+                  staticClass: "mdc-tab__icon",
+                  class: _vm.hasIcon.classes,
+                  attrs: { slot: "icon", tabindex: "0", "aria-hidden": "true" },
+                  slot: "icon"
+                },
+                [_vm._v(_vm._s(_vm.hasIcon.content))]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.hasText
+            ? _c(
+                "span",
+                { staticClass: "mdc-tab__text-label" },
+                [_vm._t("default")],
+                2
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.spanContent
+            ? _c("mcw-tab-indicator", {
+                ref: "tabIndicator",
+                attrs: { fade: _vm.fade }
+              })
+            : _vm._e(),
+          _vm._v(" "),
+          _c("span", {
+            ref: "rippleSurface",
+            staticClass: "mdc-tab__ripple",
+            class: _vm.rippleClasses,
+            style: _vm.styles
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      !_vm.spanContent
+        ? _c("mcw-tab-indicator", {
             ref: "tabIndicator",
-            fade: _ctx.fade
-          }, null, 8 /* PROPS */, ["fade"])
-        : createCommentVNode("v-if", true)
-    ]),
-    _: 1
-  }, 8 /* PROPS */, ["id", "link", "class", "style", "onClick"]))
-}
+            attrs: { fade: _vm.fade }
+          })
+        : _vm._e()
+    ],
+    1
+  )
+};
+var __vue_staticRenderFns__$y = [];
+__vue_render__$y._withStripped = true;
 
-script$y.render = render$y;
-script$y.__file = "packages/tabs/tab.vue";
+  /* style */
+  const __vue_inject_styles__$y = undefined;
+  /* scoped */
+  const __vue_scope_id__$y = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$y = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$y = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$y = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$y, staticRenderFns: __vue_staticRenderFns__$y },
+    __vue_inject_styles__$y,
+    __vue_script__$y,
+    __vue_scope_id__$y,
+    __vue_is_functional_template__$y,
+    __vue_module_identifier__$y,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var tabs = BasePlugin({
-  mcwTab: script$y,
-  mcwTabBar: script$v,
-  mcwTabScroller: script$x,
-  mcwTabIndicator: script$w
+  mcwTab: __vue_component__$y,
+  mcwTabBar: __vue_component__$v,
+  mcwTabScroller: __vue_component__$x,
+  mcwTabIndicator: __vue_component__$w
 });
 
 var script$z = {
@@ -7907,14 +9452,49 @@ var script$z = {
   }
 };
 
-const _hoisted_1$l = { class: "mdc-text-field-character-counter" };
+/* script */
+const __vue_script__$z = script$z;
 
-function render$z(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", _hoisted_1$l, toDisplayString(_ctx.textContent), 1 /* TEXT */))
-}
+/* template */
+var __vue_render__$z = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { staticClass: "mdc-text-field-character-counter" }, [
+    _vm._v(_vm._s(_vm.textContent))
+  ])
+};
+var __vue_staticRenderFns__$z = [];
+__vue_render__$z._withStripped = true;
 
-script$z.render = render$z;
-script$z.__file = "packages/textfield/character-counter.vue";
+  /* style */
+  const __vue_inject_styles__$z = undefined;
+  /* scoped */
+  const __vue_scope_id__$z = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$z = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$z = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$z = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$z, staticRenderFns: __vue_staticRenderFns__$z },
+    __vue_inject_styles__$z,
+    __vue_script__$z,
+    __vue_scope_id__$z,
+    __vue_is_functional_template__$z,
+    __vue_module_identifier__$z,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var script$A = {
   name: 'mcw-textfield-helper-text',
@@ -7987,12 +9567,51 @@ var script$A = {
   }
 };
 
-function render$A(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("div", mergeProps({ class: _ctx.classes }, _ctx.rootAttrs), toDisplayString(_ctx.helpertext), 17 /* TEXT, FULL_PROPS */))
-}
+/* script */
+const __vue_script__$A = script$A;
 
-script$A.render = render$A;
-script$A.__file = "packages/textfield/textfield-helper-text.vue";
+/* template */
+var __vue_render__$A = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "div",
+    _vm._b({ class: _vm.classes }, "div", _vm.rootAttrs, false),
+    [_vm._v(_vm._s(_vm.helpertext))]
+  )
+};
+var __vue_staticRenderFns__$A = [];
+__vue_render__$A._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$A = undefined;
+  /* scoped */
+  const __vue_scope_id__$A = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$A = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$A = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$A = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$A, staticRenderFns: __vue_staticRenderFns__$A },
+    __vue_inject_styles__$A,
+    __vue_script__$A,
+    __vue_scope_id__$A,
+    __vue_is_functional_template__$A,
+    __vue_module_identifier__$A,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var script$B = {
   name: 'textfield-icon',
@@ -8059,17 +9678,57 @@ var script$B = {
   }
 };
 
-function render$B(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock("i", mergeProps({
-    ref: "root",
-    class: ["material-icons", _ctx.classes]
-  }, _ctx.rootAttrs), [
-    renderSlot(_ctx.$slots, "default")
-  ], 16 /* FULL_PROPS */))
-}
+/* script */
+const __vue_script__$B = script$B;
 
-script$B.render = render$B;
-script$B.__file = "packages/textfield/textfield-icon.vue";
+/* template */
+var __vue_render__$B = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    "i",
+    _vm._b(
+      { ref: "root", staticClass: "material-icons", class: _vm.classes },
+      "i",
+      _vm.rootAttrs,
+      false
+    ),
+    [_vm._t("default")],
+    2
+  )
+};
+var __vue_staticRenderFns__$B = [];
+__vue_render__$B._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$B = undefined;
+  /* scoped */
+  const __vue_scope_id__$B = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$B = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$B = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$B = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$B, staticRenderFns: __vue_staticRenderFns__$B },
+    __vue_inject_styles__$B,
+    __vue_script__$B,
+    __vue_scope_id__$B,
+    __vue_is_functional_template__$B,
+    __vue_module_identifier__$B,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var strings$b = MDCTextFieldFoundation.strings;
 var uid_$1 = 0;
@@ -8403,190 +10062,240 @@ var script$C = {
     });
   },
   components: {
-    mcwLineRipple: script$h,
-    mcwNotchedOutline: script$n
+    mcwLineRipple: __vue_component__$h,
+    mcwNotchedOutline: __vue_component__$n
   }
 };
 
-const _hoisted_1$m = {
-  ref: "wrapper",
-  class: "textfield-container"
-};
-const _hoisted_2$i = {
-  key: 0,
-  class: "mdc-text-field__ripple"
-};
-const _hoisted_3$d = {
-  key: 1,
-  class: "mdc-text-field__affix mdc-text-field__affix--prefix"
-};
-const _hoisted_4$a = {
-  key: 2,
-  class: "mdc-text-field__affix mdc-text-field__affix--suffix"
-};
-const _hoisted_5$5 = {
-  key: 0,
-  class: "mdc-text-field__resizer"
-};
-const _hoisted_6$3 = {
-  key: 2,
-  class: "mdc-text-field-helper-line"
-};
+/* script */
+const __vue_script__$C = script$C;
 
-function render$C(_ctx, _cache, $props, $setup, $data, $options) {
-  const _component_mcw_floating_label = resolveComponent("mcw-floating-label");
-  const _component_mcw_notched_outline = resolveComponent("mcw-notched-outline");
-  const _component_mcw_line_ripple = resolveComponent("mcw-line-ripple");
-  const _component_mcw_character_counter = resolveComponent("mcw-character-counter");
-  const _component_mcw_textfield_helper_text = resolveComponent("mcw-textfield-helper-text");
+/* template */
+var __vue_render__$C = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c("div", { ref: "wrapper", staticClass: "textfield-container" }, [
+    !_vm.multiline
+      ? _c(
+          "label",
+          { ref: "root", class: _vm.rootClasses, style: _vm.rippleStyles },
+          [
+            !_vm.outline
+              ? _c("span", { staticClass: "mdc-text-field__ripple" })
+              : _vm._e(),
+            _vm._v(" "),
+            _vm._t("leading"),
+            _vm._v(" "),
+            _vm._t("leadingIcon"),
+            _vm._v(" "),
+            _vm.prefix
+              ? _c(
+                  "span",
+                  {
+                    staticClass:
+                      "mdc-text-field__affix mdc-text-field__affix--prefix"
+                  },
+                  [_vm._v(_vm._s(_vm.prefix))]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c(
+              "input",
+              _vm._g(
+                _vm._b(
+                  {
+                    ref: "input",
+                    class: _vm.inputClasses,
+                    attrs: {
+                      type: _vm.type,
+                      minlength: _vm.minlength,
+                      maxlength: _vm.maxlength,
+                      "aria-label": _vm.label,
+                      "aria-controls": _vm.inputAriaControls,
+                      "aria-labelledby": _vm.labelId,
+                      "aria-describedby": _vm.inputAriaControls
+                    }
+                  },
+                  "input",
+                  _vm.$attrs,
+                  false
+                ),
+                _vm.inputListeners
+              )
+            ),
+            _vm._v(" "),
+            _vm.suffix
+              ? _c(
+                  "span",
+                  {
+                    staticClass:
+                      "mdc-text-field__affix mdc-text-field__affix--suffix"
+                  },
+                  [_vm._v(_vm._s(_vm.suffix))]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.hasLabel
+              ? _c(
+                  "mcw-floating-label",
+                  {
+                    ref: "labelEl",
+                    attrs: { id: _vm.labelId, required: _vm.required }
+                  },
+                  [_vm._v(_vm._s(_vm.label))]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm._t("trailingIcon"),
+            _vm._v(" "),
+            _vm._t("trailing"),
+            _vm._v(" "),
+            _vm.outline
+              ? _c("mcw-notched-outline", { ref: "labelEl" }, [
+                  _vm._v(_vm._s(_vm.label))
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.hasLineRipple
+              ? _c("mcw-line-ripple", { ref: "lineRippleEl" })
+              : _vm._e()
+          ],
+          2
+        )
+      : _c(
+          "label",
+          { ref: "root", class: _vm.classes },
+          [
+            _vm.resizer
+              ? _c("span", { staticClass: "mdc-text-field__resizer" }, [
+                  _c(
+                    "textarea",
+                    _vm._g(
+                      _vm._b(
+                        {
+                          ref: "input",
+                          class: _vm.inputClasses,
+                          attrs: {
+                            minlength: _vm.minlength,
+                            maxlength: _vm.maxlength,
+                            "aria-label": _vm.label,
+                            "aria-controls": _vm.inputAriaControls,
+                            cols: _vm.cols,
+                            rows: _vm.rows
+                          }
+                        },
+                        "textarea",
+                        _vm.$attrs,
+                        false
+                      ),
+                      _vm.inputListeners
+                    )
+                  )
+                ])
+              : _c(
+                  "textarea",
+                  _vm._g(
+                    _vm._b(
+                      {
+                        ref: "input",
+                        class: _vm.inputClasses,
+                        attrs: {
+                          minlength: _vm.minlength,
+                          maxlength: _vm.maxlength,
+                          "aria-label": _vm.label,
+                          "aria-controls": _vm.inputAriaControls,
+                          cols: _vm.cols,
+                          rows: _vm.rows
+                        }
+                      },
+                      "textarea",
+                      _vm.$attrs,
+                      false
+                    ),
+                    _vm.inputListeners
+                  )
+                ),
+            _vm._v(" "),
+            _vm.internalCharacterCounter
+              ? _c("mcw-character-counter", { ref: "characterCounterEl" })
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.outline
+              ? _c("mcw-notched-outline", { ref: "labelEl" }, [
+                  _vm._v(_vm._s(_vm.label))
+                ])
+              : _vm._e()
+          ],
+          1
+        ),
+    _vm._v(" "),
+    _vm.hasHelpline
+      ? _c(
+          "div",
+          { staticClass: "mdc-text-field-helper-line" },
+          [
+            _vm.helptext
+              ? _c("mcw-textfield-helper-text", {
+                  ref: "helpertext",
+                  attrs: {
+                    id: _vm.helpTextId,
+                    helptext: _vm.helptext,
+                    persistent: _vm.helptextPersistent,
+                    validation: _vm.helptextValidation
+                  }
+                })
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.helperCharacterCounter
+              ? _c("mcw-character-counter", { ref: "characterCounterEl" })
+              : _vm._e()
+          ],
+          1
+        )
+      : _vm._e()
+  ])
+};
+var __vue_staticRenderFns__$C = [];
+__vue_render__$C._withStripped = true;
 
-  return (openBlock(), createBlock("div", _hoisted_1$m, [
-    (!_ctx.multiline)
-      ? (openBlock(), createBlock("label", {
-          key: 0,
-          ref: "root",
-          class: _ctx.rootClasses,
-          style: _ctx.rippleStyles
-        }, [
-          (!_ctx.outline)
-            ? (openBlock(), createBlock("span", _hoisted_2$i))
-            : createCommentVNode("v-if", true),
-          renderSlot(_ctx.$slots, "leading"),
-          renderSlot(_ctx.$slots, "leadingIcon"),
-          (_ctx.prefix)
-            ? (openBlock(), createBlock("span", _hoisted_3$d, toDisplayString(_ctx.prefix), 1 /* TEXT */))
-            : createCommentVNode("v-if", true),
-          createVNode("input", mergeProps({
-            ref: "input",
-            class: _ctx.inputClasses
-          }, _ctx.$attrs, {
-            type: _ctx.type,
-            minlength: _ctx.minlength,
-            maxlength: _ctx.maxlength,
-            "aria-label": _ctx.label,
-            "aria-controls": _ctx.inputAriaControls,
-            "aria-labelledby": _ctx.labelId,
-            "aria-describedby": _ctx.inputAriaControls
-          }, toHandlers(_ctx.inputListeners)), null, 16 /* FULL_PROPS */, ["type", "minlength", "maxlength", "aria-label", "aria-controls", "aria-labelledby", "aria-describedby"]),
-          (_ctx.suffix)
-            ? (openBlock(), createBlock("span", _hoisted_4$a, toDisplayString(_ctx.suffix), 1 /* TEXT */))
-            : createCommentVNode("v-if", true),
-          (_ctx.hasLabel)
-            ? createVNode(_component_mcw_floating_label, {
-                key: 3,
-                ref: "labelEl",
-                id: _ctx.labelId,
-                required: _ctx.required
-              }, {
-                default: withCtx(() => [
-                  createTextVNode(toDisplayString(_ctx.label), 1 /* TEXT */)
-                ]),
-                _: 1
-              }, 8 /* PROPS */, ["id", "required"])
-            : createCommentVNode("v-if", true),
-          renderSlot(_ctx.$slots, "trailingIcon"),
-          renderSlot(_ctx.$slots, "trailing"),
-          (_ctx.outline)
-            ? createVNode(_component_mcw_notched_outline, {
-                key: 4,
-                ref: "labelEl"
-              }, {
-                default: withCtx(() => [
-                  createTextVNode(toDisplayString(_ctx.label), 1 /* TEXT */)
-                ]),
-                _: 1
-              }, 512 /* NEED_PATCH */)
-            : createCommentVNode("v-if", true),
-          (_ctx.hasLineRipple)
-            ? createVNode(_component_mcw_line_ripple, {
-                key: 5,
-                ref: "lineRippleEl"
-              }, null, 512 /* NEED_PATCH */)
-            : createCommentVNode("v-if", true)
-        ], 6 /* CLASS, STYLE */))
-      : (openBlock(), createBlock("label", {
-          key: 1,
-          ref: "root",
-          class: _ctx.classes
-        }, [
-          (_ctx.resizer)
-            ? (openBlock(), createBlock("span", _hoisted_5$5, [
-                createVNode("textarea", mergeProps({
-                  ref: "input",
-                  class: _ctx.inputClasses
-                }, _ctx.$attrs, {
-                  minlength: _ctx.minlength,
-                  maxlength: _ctx.maxlength,
-                  "aria-label": _ctx.label,
-                  "aria-controls": _ctx.inputAriaControls,
-                  cols: _ctx.cols,
-                  rows: _ctx.rows
-                }, toHandlers(_ctx.inputListeners)), null, 16 /* FULL_PROPS */, ["minlength", "maxlength", "aria-label", "aria-controls", "cols", "rows"])
-              ]))
-            : (openBlock(), createBlock("textarea", mergeProps({
-                key: 1,
-                ref: "input",
-                class: _ctx.inputClasses
-              }, _ctx.$attrs, {
-                minlength: _ctx.minlength,
-                maxlength: _ctx.maxlength,
-                "aria-label": _ctx.label,
-                "aria-controls": _ctx.inputAriaControls,
-                cols: _ctx.cols,
-                rows: _ctx.rows
-              }, toHandlers(_ctx.inputListeners)), null, 16 /* FULL_PROPS */, ["minlength", "maxlength", "aria-label", "aria-controls", "cols", "rows"])),
-          (_ctx.internalCharacterCounter)
-            ? createVNode(_component_mcw_character_counter, {
-                key: 2,
-                ref: "characterCounterEl"
-              }, null, 512 /* NEED_PATCH */)
-            : createCommentVNode("v-if", true),
-          (_ctx.outline)
-            ? createVNode(_component_mcw_notched_outline, {
-                key: 3,
-                ref: "labelEl"
-              }, {
-                default: withCtx(() => [
-                  createTextVNode(toDisplayString(_ctx.label), 1 /* TEXT */)
-                ]),
-                _: 1
-              }, 512 /* NEED_PATCH */)
-            : createCommentVNode("v-if", true)
-        ], 2 /* CLASS */)),
-    (_ctx.hasHelpline)
-      ? (openBlock(), createBlock("div", _hoisted_6$3, [
-          (_ctx.helptext)
-            ? createVNode(_component_mcw_textfield_helper_text, {
-                key: 0,
-                ref: "helpertext",
-                id: _ctx.helpTextId,
-                helptext: _ctx.helptext,
-                persistent: _ctx.helptextPersistent,
-                validation: _ctx.helptextValidation
-              }, null, 8 /* PROPS */, ["id", "helptext", "persistent", "validation"])
-            : createCommentVNode("v-if", true),
-          (_ctx.helperCharacterCounter)
-            ? createVNode(_component_mcw_character_counter, {
-                key: 1,
-                ref: "characterCounterEl"
-              }, null, 512 /* NEED_PATCH */)
-            : createCommentVNode("v-if", true)
-        ]))
-      : createCommentVNode("v-if", true)
-  ], 512 /* NEED_PATCH */))
-}
+  /* style */
+  const __vue_inject_styles__$C = undefined;
+  /* scoped */
+  const __vue_scope_id__$C = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$C = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$C = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
 
-script$C.render = render$C;
-script$C.__file = "packages/textfield/textfield.vue";
+  
+  const __vue_component__$C = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$C, staticRenderFns: __vue_staticRenderFns__$C },
+    __vue_inject_styles__$C,
+    __vue_script__$C,
+    __vue_scope_id__$C,
+    __vue_is_functional_template__$C,
+    __vue_module_identifier__$C,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var textfield = BasePlugin({
-  mcwTextfield: script$C,
-  mcwTextfieldIcon: script$B,
-  mcwCharacterCounter: script$z,
-  mcwTextfieldHelperText: script$A,
-  mcwLineRipple: script$h,
-  mcwNotchedOutline: script$n,
-  mcwFloatingLabel: script$c
+  mcwTextfield: __vue_component__$C,
+  mcwTextfieldIcon: __vue_component__$B,
+  mcwCharacterCounter: __vue_component__$z,
+  mcwTextfieldHelperText: __vue_component__$A,
+  mcwLineRipple: __vue_component__$h,
+  mcwNotchedOutline: __vue_component__$n,
+  mcwFloatingLabel: __vue_component__$c
 });
 
 var cssClasses$7 = MDCTopAppBarFoundation.cssClasses,
@@ -8742,24 +10451,63 @@ var script$D = {
   }
 };
 
-function render$D(_ctx, _cache, $props, $setup, $data, $options) {
-  return (openBlock(), createBlock(resolveDynamicComponent(_ctx.tag), mergeProps({
-    ref: "root",
-    class: _ctx.rootClasses,
-    style: _ctx.rootStyles
-  }, toHandlers(_ctx.listeners)), {
-    default: withCtx(() => [
-      renderSlot(_ctx.$slots, "default")
-    ]),
-    _: 3
-  }, 16 /* FULL_PROPS */, ["class", "style"]))
-}
+/* script */
+const __vue_script__$D = script$D;
 
-script$D.render = render$D;
-script$D.__file = "packages/top-app-bar/top-app-bar.vue";
+/* template */
+var __vue_render__$D = function() {
+  var _vm = this;
+  var _h = _vm.$createElement;
+  var _c = _vm._self._c || _h;
+  return _c(
+    _vm.tag,
+    _vm._g(
+      {
+        ref: "root",
+        tag: "component",
+        class: _vm.rootClasses,
+        style: _vm.rootStyles
+      },
+      _vm.listeners
+    ),
+    [_vm._t("default")],
+    2
+  )
+};
+var __vue_staticRenderFns__$D = [];
+__vue_render__$D._withStripped = true;
+
+  /* style */
+  const __vue_inject_styles__$D = undefined;
+  /* scoped */
+  const __vue_scope_id__$D = undefined;
+  /* module identifier */
+  const __vue_module_identifier__$D = undefined;
+  /* functional template */
+  const __vue_is_functional_template__$D = false;
+  /* style inject */
+  
+  /* style inject SSR */
+  
+  /* style inject shadow dom */
+  
+
+  
+  const __vue_component__$D = /*#__PURE__*/normalizeComponent(
+    { render: __vue_render__$D, staticRenderFns: __vue_staticRenderFns__$D },
+    __vue_inject_styles__$D,
+    __vue_script__$D,
+    __vue_scope_id__$D,
+    __vue_is_functional_template__$D,
+    __vue_module_identifier__$D,
+    false,
+    undefined,
+    undefined,
+    undefined
+  );
 
 var topAppBar = BasePlugin({
-  mcwTopAppBar: script$D // mcwFixedAdjust,
+  mcwTopAppBar: __vue_component__$D // mcwFixedAdjust,
   // mcwTopAppBarIcon,
   // mcwTopAppBarRow,
   // mcwTopAppBarSection,
