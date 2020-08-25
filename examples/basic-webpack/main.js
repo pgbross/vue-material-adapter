@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import VueCompositionAPI from '@vue/composition-api';
 
 // uncomment the next line to import all vue-material-adapter as a single chunk
 // import VueMaterialAdapter from 'vue-material-adapter';
@@ -7,6 +8,7 @@ import Vue from 'vue';
 import VueMaterialAdapter from './vma.js';
 
 export default async function main() {
+  Vue.use(VueCompositionAPI);
   Vue.use(VueMaterialAdapter);
   return new Vue({
     data: {
@@ -28,7 +30,7 @@ export default async function main() {
       ],
     },
     methods: {
-      humanizeURL: function(url) {
+      humanizeURL: function (url) {
         return url.replace(/^https?:\/\//, '').replace(/\/$/, '');
       },
       onShowSnack() {
