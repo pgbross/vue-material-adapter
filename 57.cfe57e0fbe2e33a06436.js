@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[57],{226:function(t,i,a){"use strict";a.r(i);var s=a(2),c=Object(s.a)({},(function(){var t=this.$createElement,i=this._self._c||t;return i("div",{staticClass:"mcw-demo mcw-demo--container"},[i("mcw-material-icon",{attrs:{icon:"favorite"}}),this._v(" "),i("mcw-material-icon",{attrs:{icon:"aspect_ratio"}}),this._v(" "),i("i",{staticClass:"material-icons"},[this._v("android")])],1)}),[],!1,null,null,null);i.default=c.exports}}]);
+//# sourceMappingURL=57.cfe57e0fbe2e33a06436.js.map

@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack:///./demo/components/list/demo.vue?f5f6"],"names":[],"mappings":"AAAA,oDAAoD,WAAW,WAAW,gBAAgB,gC","file":"20.bbc035c730b22dc04ce7.css","sourcesContent":[".demo-article,.demo-list-example,.demo-list-wrapper{width:100%}.demo-list{max-width:600px;border:1px solid rgba(0,0,0,.1)}"],"sourceRoot":""}
