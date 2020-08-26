@@ -1,4 +1,16 @@
-@use '@material/theme'  with (
+$dark-mode-primary: #67360b;
+$dark-mode-on-primary: white;
+
+@use '~@material/theme'  with (
   $primary: #be6c35,
   $on-primary: white,
 );
+
+:root {
+    @media screen and (prefers-color-scheme: dark) {
+        --mdc-theme-primary: #{$dark-mode-primary};
+        --mdc-theme-on-primary: #{$dark-mode-on-primary};
+
+        background: #291202;
+    }
+}
