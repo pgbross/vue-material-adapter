@@ -13,14 +13,14 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
   </head>
 
-  <body class="mdc-typography">
+  <body class="mdc-typography mdc-theme--on-primary">
     <div id="app">
-      <div class="mdc-typography--headline2">{{title}}</div>
+      <div class="mdc-typography--headline4">{{title}}</div>
       <mcw-button @click="onShowSnack" raised>Show snack</mcw-button>
 
       <div
         class="mdc-typography--body1"
-        style="margin-top: 16px;"
+        style="margin-top: 16px"
         v-for="item in links"
         :key="item.id"
       >

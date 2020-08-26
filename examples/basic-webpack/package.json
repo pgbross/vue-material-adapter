@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "vue-material-adapter": "^0.17.0-beta.10"
+    "vue-material-adapter": "^0.17.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.5",
