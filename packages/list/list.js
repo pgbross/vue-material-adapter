@@ -101,7 +101,7 @@ export default {
     });
 
     const getListItemIndex = evt => {
-      if (evt.__itemId) {
+      if (evt.__itemId !== void 0) {
         return listElements.value.findIndex(
           ({ itemId }) => itemId === evt.__itemId,
         );
