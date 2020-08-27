@@ -5254,7 +5254,7 @@ var script$k = {
     });
 
     var getListItemIndex = function getListItemIndex(evt) {
-      if (evt.__itemId) {
+      if (evt.__itemId !== void 0) {
         return listElements.value.findIndex(function (_ref2) {
           var itemId = _ref2.itemId;
           return itemId === evt.__itemId;
