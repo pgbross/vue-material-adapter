@@ -1,3 +1,13 @@
+## [0.17.3](https://github.com/pgbross/vue-material-adapter/compare/v0.17.2...v0.17.3) (2020-08-27)
+
+### Bug Fixes
+
+- first select cannot pick first item ([77a625e](https://github.com/pgbross/vue-material-adapter/commit/77a625eb006b3eb270a9a83950c83ee4d993b924))
+
+### Features
+
+- basic-webpack add support for prefers-color-scheme ([5cdeab8](https://github.com/pgbross/vue-material-adapter/commit/5cdeab8cfaf8f183019e1cdf7fce6ae723c227d7))
+
 ### `v0.17.0` - This release targets `material-components-web v7.0.0`.
 
 BREAKING CHANGE:
