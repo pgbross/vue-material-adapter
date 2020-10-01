@@ -1,4 +1,4 @@
-import { applyPassive } from '@material/dom/events';
+// import { applyPassive } from '@material/dom/events';
 import { MDCSliderFoundation } from '@material/slider/foundation';
 import {
   computed,
@@ -21,7 +21,7 @@ export default {
     max: { type: [Number, String], default: 100 },
     step: { type: [Number, String], default: 0 },
     discrete: Boolean,
-    displayMarkers: Boolean,
+    tickMarks: Boolean,
     disabled: Boolean,
     layoutOn: String,
     layoutOnSource: { type: Object, required: false },
@@ -36,7 +36,7 @@ export default {
       classes: {
         'mdc-slider': 1,
         'mdc-slider--discrete': props.discrete,
-        'mdc-slider--display-markers': props.discrete && props.displayMarkers,
+        'mdc-slider--tick-marks': props.discrete && props.tickMarks,
       },
       sliderAttrs: {},
       trackStyles: {},
@@ -66,7 +66,117 @@ export default {
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
+      addThumbClass: (className, thumb) => {
+        // this.getThumbEl(thumb).classList.add(className);
+      },
+      removeThumbClass: (className, thumb) => {
+        // this.getThumbEl(thumb).classList.remove(className);
+      },
+
       getAttribute: name => uiState.root.getAttribute(name),
+
+      getThumbAttribute: (attribute, thumb) => null, // this.getThumbEl(thumb).getAttribute(attribute),
+      setThumbAttribute: (attribute, value, thumb) => {
+        // this.getThumbEl(thumb).setAttribute(attribute, value);
+      },
+      isThumbFocused: thumb => '', // this.getThumbEl(thumb) === document.activeElement,
+      focusThumb: thumb => {
+        // this.getThumbEl(thumb).focus();
+      },
+      getThumbKnobWidth: thumb => {
+        // return this.getThumbEl(thumb)
+        //   .querySelector(`.${cssClasses.THUMB_KNOB}`)
+        //   ?.getBoundingClientRect().width;
+      },
+      getThumbBoundingClientRect: thumb => '', // this.getThumbEl(thumb).getBoundingClientRect(),
+
+      getBoundingClientRect: () => this.root.getBoundingClientRect(),
+
+      isRTL: () => getComputedStyle(uiState.root).direction === 'rtl',
+
+      setThumbStyleProperty: (propertyName, value, thumb) => {
+        // this.getThumbEl(thumb).style.setProperty(propertyName, value);
+      },
+      removeThumbStyleProperty: (propertyName, thumb) => {
+        // this.getThumbEl(thumb).style.removeProperty(propertyName);
+      },
+      setTrackActiveStyleProperty: (propertyName, value) => {
+        // this.trackActive.style.setProperty(propertyName, value);
+      },
+      removeTrackActiveStyleProperty: propertyName => {
+        // this.trackActive.style.removeProperty(propertyName);
+      },
+
+      setValueIndicatorText: (value, thumb) => {
+        // const valueIndicatorEl =
+        //     this.getThumbEl(thumb).querySelector(
+        //         `.${cssClasses.VALUE_INDICATOR_TEXT}`);
+        // valueIndicatorEl?.textContent = String(value);
+      },
+      getValueToAriaValueTextFn: () => '', //  this.valueToAriaValueTextFn,
+
+      updateTickMarks: tickMarks => {
+        // let tickMarksContainer = this.root.querySelector(
+        //     `.${cssClasses.TICK_MARKS_CONTAINER}`);
+        // if (!tickMarksContainer) {
+        //   tickMarksContainer = document.createElement('div');
+        //   tickMarksContainer.classList.add(cssClasses.TICK_MARKS_CONTAINER);
+        //   const track =
+        //       this.root.querySelector(`.${cssClasses.TRACK}`);
+        //   track?.appendChild(tickMarksContainer);
+        // }
+        // if (tickMarks.length !== tickMarksContainer.children.length) {
+        //   tickMarksContainer.innerHTML = '';
+        //   this.addTickMarks(tickMarksContainer, tickMarks);
+        // } else {
+        //   this.updateTickMarks(tickMarksContainer, tickMarks);
+        // }
+      },
+      setPointerCapture: pointerId => {
+        // this.root.setPointerCapture(pointerId);
+      },
+
+      emitChangeEvent: (value, thumb) => {
+        // this.emit<MDCSliderChangeEventDetail>(events.CHANGE, {value, thumb});
+      },
+      emitInputEvent: (value, thumb) => {
+        // this.emit<MDCSliderChangeEventDetail>(events.INPUT, {value, thumb});
+      },
+      emitDragStartEvent: () => {
+        // Not yet implemented. See issue:
+        // https://github.com/material-components/material-components-web/issues/6448
+      },
+      emitDragEndEvent: () => {
+        // Not yet implemented. See issue:
+        // https://github.com/material-components/material-components-web/issues/6448
+      },
+
+      registerEventHandler: (evtType, handler) => {
+        // this.listen(evtType, handler);
+      },
+      deregisterEventHandler: (evtType, handler) => {
+        // this.unlisten(evtType, handler);
+      },
+      registerThumbEventHandler: (thumb, evtType, handler) => {
+        // this.getThumbEl(thumb).addEventListener(evtType, handler);
+      },
+      deregisterThumbEventHandler: (thumb, evtType, handler) => {
+        // this.getThumbEl(thumb).removeEventListener(evtType, handler);
+      },
+      registerBodyEventHandler: (evtType, handler) => {
+        // document.body.addEventListener(evtType, handler);
+      },
+      deregisterBodyEventHandler: (evtType, handler) => {
+        // document.body.removeEventListener(evtType, handler);
+      },
+      registerWindowEventHandler: (evtType, handler) => {
+        // window.addEventListener(evtType, handler);
+      },
+      deregisterWindowEventHandler: (evtType, handler) => {
+        // window.removeEventListener(evtType, handler);
+      },
+
+      /**  old slider code
       setAttribute: (name, value) =>
         (uiState.sliderAttrs = { ...uiState.sliderAttrs, [name]: value }),
 
@@ -143,7 +253,7 @@ export default {
         };
       },
 
-      isRTL: () => getComputedStyle(uiState.root).direction === 'rtl',
+      */
     };
 
     const layout = () => {

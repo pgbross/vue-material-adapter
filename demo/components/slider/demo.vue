@@ -13,7 +13,7 @@
         discrete
         step="2"
         max="10"
-        display-markers
+        tick-marks
       />
     </div>
   </div>

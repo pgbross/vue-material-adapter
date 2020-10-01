@@ -3,7 +3,7 @@
 
 );
 
-@use '@material/button' ;
+@use '@material/button';
 @use "@material/card";
 @use "@material/circular-progress/mdc-circular-progress";
 @use "@material/checkbox";
@@ -26,7 +26,7 @@
 @use "@material/notched-outline";
 @use "@material/radio/_radio" as radio;
 @use "@material/ripple";
-@use "@material/select/_select" as select; 
+@use "@material/select/_select" as select;
 @use "@material/slider/_slider" as slider;
 @use "@material/snackbar";
 @use "@material/switch";
@@ -38,8 +38,6 @@
 
 @use "@material/top-app-bar/mdc-top-app-bar";
 @use "@material/typography";
-
-
 
 @include button.core-styles;
 @include card.core-styles;
@@ -73,8 +71,3 @@
 @include textfield.core-styles;
 // @include top-app-bar.core-styles;
 @include typography.core-styles;
-
-
-
-
-

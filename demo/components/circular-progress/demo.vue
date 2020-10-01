@@ -4,10 +4,10 @@
       <mcw-circular-progress progress="0.3" />
       <div class="mdc-typography--caption">Determinate</div>
       <br />
-      <mcw-circular-progress indeterminate />
+      <mcw-circular-progress class="four-color" indeterminate />
       <div class="mdc-typography--caption">Indeterminate</div>
       <br />
-      <mcw-circular-progress medium :progress="progressValue" />
+      <mcw-circular-progress size="medium" :progress="progressValue" />
       <div class="mdc-typography--caption">Medium</div>
     </div>
   </div>

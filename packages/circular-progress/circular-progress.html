@@ -1,13 +1,14 @@
 <!--must be no space between divs-->
 <!-- prettier-ignore -->
-<div ref="root" :class="classes" role="progressbar" v-bind="rootAttrs">
+<div ref="root" :style="rootStyle" :class="classes" role="progressbar" v-bind="rootAttrs">
   <div class="mdc-circular-progress__determinate-container">
     <svg
       class="mdc-circular-progress__determinate-circle-graphic"
       viewBox="0 0 48 48"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <circle class="mdc-circular-progress__determinate-circle" v-bind="circleAttrs" />
+     <circle class="mdc-circular-progress__determinate-track" v-bind="trackAttrs" />
+     <circle class="mdc-circular-progress__determinate-circle" v-bind="circleAttrs" />
     </svg>
   </div>
   <div class="mdc-circular-progress__indeterminate-container">
@@ -28,7 +29,7 @@
           viewBox="0 0 48 48"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <circle v-bind="indeterminateAttrs" />
+          <circle v-bind="indeterminateGapAttrs" />
         </svg>
       </div><div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-right">
         <svg

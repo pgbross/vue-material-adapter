@@ -242,7 +242,7 @@ export default {
       addClassForElementIndex: (index, className) => {
         const element = listElements.value[index];
 
-        element.classList.add(className);
+        element?.classList.add(className);
       },
       focusItemAtIndex: index => {
         const element = listElements.value[index];
@@ -314,12 +314,12 @@ export default {
       removeClassForElementIndex: (index, className) => {
         const listItem = listElements.value[index];
 
-        listItem.classList.remove(className);
+        listItem?.classList.remove(className);
       },
 
       setAttributeForElementIndex: (index, attr, value) => {
         const listItem = listElements.value[index];
-        listItem.setAttribute(attr, value);
+        listItem?.setAttribute(attr, value);
       },
 
       setCheckedCheckboxOrRadioAtIndex: (index, isChecked) => {

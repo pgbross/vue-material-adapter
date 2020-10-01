@@ -14,12 +14,22 @@ const ProgressPropType = {
   },
 };
 
+const SizePropType = {
+  type: [String],
+  default: 'large',
+  validator(value) {
+    return value == 'small' || value == 'medium' || value == 'large';
+  },
+};
+
+const styleSizes_ = { large: '48px', medium: '36px', small: '24px' };
+
 export default {
   name: 'mcw-circular-progress',
   props: {
     open: { type: Boolean, default: true },
     indeterminate: Boolean,
-    medium: Boolean,
+    size: SizePropType,
     progress: ProgressPropType,
     tag: { type: String, default: 'div' },
   },
@@ -28,12 +38,16 @@ export default {
     const uiState = reactive({
       classes: {
         'mdc-circular-progress': 1,
-        'mdc-circular-progress--medium': props.medium,
-        'mdc-circular-progress--large': !props.medium,
       },
       rootAttrs: {},
-      circleAttrs: getCircleAttrs(props.medium, false),
-      indeterminateAttrs: getCircleAttrs(props.medium, true),
+      rootStyle: {
+        width: styleSizes_[props.size],
+        height: styleSizes_[props.size],
+      },
+      circleAttrs: getCircleAttrs(props.size, false),
+      trackAttrs: getTrackAttrs(props.size, false),
+      indeterminateAttrs: getCircleAttrs(props.size, true),
+      indeterminateGapAttrs: getCircleAttrs(props.size, true, true),
       root: null,
     });
 
@@ -121,20 +135,57 @@ export default {
 // Private functions
 // ===
 
-function getCircleAttrs(medium = false, indeterminate = true) {
-  return medium
-    ? {
-        cx: '16',
-        cy: '16',
-        r: '12.5',
-        'stroke-dasharray': '78.54',
-        'stroke-dashoffset': indeterminate ? '39.27' : '78.54',
-      }
-    : {
-        cx: '24',
-        cy: '24',
-        r: '18',
-        'stroke-dasharray': '113.097',
-        'stroke-dashoffset': indeterminate ? '56.549' : '113.097',
-      };
+const sizes_ = {
+  large: {
+    c: '24',
+    r: '18',
+    sda: '113.097',
+    sw: '4',
+  },
+  medium: {
+    c: '16',
+    r: '12.5',
+    sda: '78.54',
+    sw: '3',
+  },
+  small: {
+    c: '12',
+    r: '8.75',
+    sda: '54.978',
+    sw: '2.5',
+  },
+};
+
+function getCircleAttrs(size = 'large', indeterminate = false, gap = false) {
+  const sz = sizes_[size];
+  if (indeterminate) {
+    return {
+      cx: sz.c,
+      cy: sz.c,
+      r: sz.r,
+      'stroke-dasharray': sz.sda,
+      'stroke-dashoffset': String(sz.sda / 2),
+      'stroke-width': gap ? String(sz.sw * 0.8) : sz.sw,
+    };
+  }
+
+  return {
+    cx: sz.c,
+    cy: sz.c,
+    r: sz.r,
+    'stroke-dasharray': sz.sda,
+    'stroke-dashoffset': sz.sda,
+    'stroke-width': sz.sw,
+  };
+}
+
+function getTrackAttrs(size, indeterminate, gap) {
+  const {
+    // eslint-disable-next-line no-unused-vars
+    'stroke-dasharray': sda,
+    // eslint-disable-next-line no-unused-vars
+    'stroke-dashoffset': sdo,
+    ...ta
+  } = getCircleAttrs(size, indeterminate, gap);
+  return ta;
 }
