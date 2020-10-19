@@ -1,10 +1,5 @@
 import { MDCFloatingLabelFoundation } from '@material/floating-label/foundation';
-import {
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  toRefs,
-} from '@vue/composition-api';
+import { onBeforeUnmount, onMounted, reactive, toRefs } from 'vue';
 
 export default {
   name: 'mcw-floating-label',

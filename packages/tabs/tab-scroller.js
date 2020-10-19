@@ -1,12 +1,7 @@
 import { matches } from '@material/dom/ponyfill';
 import { MDCTabScrollerFoundation } from '@material/tab-scroller/foundation';
 import * as util from '@material/tab-scroller/util';
-import {
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  toRefs,
-} from '@vue/composition-api';
+import { onBeforeUnmount, onMounted, reactive, toRefs } from 'vue';
 
 export default {
   name: 'mcw-tab-scroller',

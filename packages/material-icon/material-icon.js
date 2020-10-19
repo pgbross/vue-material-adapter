@@ -1,4 +1,4 @@
-import { h } from '@vue/composition-api';
+import { h } from 'vue';
 
 export default {
   name: 'mcw-material-icon',

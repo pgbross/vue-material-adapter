@@ -1,10 +1,5 @@
 import { MDCNotchedOutlineFoundation } from '@material/notched-outline/foundation';
-import {
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  toRefs,
-} from '@vue/composition-api';
+import { onBeforeUnmount, onMounted, reactive, toRefs } from 'vue';
 import { mcwFloatingLabel } from '../floating-label/index.js';
 
 const { cssClasses } = MDCNotchedOutlineFoundation;

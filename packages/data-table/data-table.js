@@ -2,12 +2,7 @@ import { MDCCheckbox } from '@material/checkbox';
 import * as test from '@material/data-table';
 import { MDCDataTableFoundation } from '@material/data-table/foundation';
 import { closest } from '@material/dom/ponyfill';
-import {
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  toRefs,
-} from '@vue/composition-api';
+import { onBeforeUnmount, onMounted, reactive, toRefs } from 'vue';
 import { CheckboxAdapter } from './checkbox-adapter';
 
 export default {

@@ -8,7 +8,7 @@ import {
   reactive,
   toRefs,
   toRef,
-} from '@vue/composition-api';
+} from 'vue';
 import { CustomLink, emitCustomEvent } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 

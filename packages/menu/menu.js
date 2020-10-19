@@ -7,7 +7,7 @@ import {
   reactive,
   toRefs,
   watch,
-} from '@vue/composition-api';
+} from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
 
 const { cssClasses, strings } = MDCMenuFoundation;

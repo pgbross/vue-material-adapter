@@ -8,7 +8,7 @@ import {
   provide,
   reactive,
   toRefs,
-} from '@vue/composition-api';
+} from 'vue';
 
 const { strings } = MDCChipFoundation;
 const { CHIP_SELECTOR } = MDCChipSetFoundation.strings;

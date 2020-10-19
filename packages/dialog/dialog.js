@@ -2,13 +2,7 @@ import { MDCDialogFoundation } from '@material/dialog/foundation';
 import * as util from '@material/dialog/util';
 import { FocusTrap } from '@material/dom/focus-trap.js';
 import { closest, matches } from '@material/dom/ponyfill.js';
-import {
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  toRefs,
-  watch,
-} from '@vue/composition-api';
+import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
 import { mcwButton } from '~/button/index.js';
 
 const { cssClasses, strings } = MDCDialogFoundation;

@@ -1,10 +1,5 @@
 import { MDCTextFieldIconFoundation } from '@material/textfield/icon/foundation.js';
-import {
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  toRefs,
-} from '@vue/composition-api';
+import { onBeforeUnmount, onMounted, reactive, toRefs } from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
 
 export default {

@@ -3,13 +3,7 @@ import { MDCDismissibleDrawerFoundation } from '@material/drawer/dismissible/fou
 import { MDCModalDrawerFoundation } from '@material/drawer/modal/foundation';
 import * as util from '@material/drawer/util';
 import { MDCListFoundation } from '@material/list/foundation';
-import {
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  toRefs,
-  watch,
-} from '@vue/composition-api';
+import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
 
 const { strings } = MDCDismissibleDrawerFoundation;

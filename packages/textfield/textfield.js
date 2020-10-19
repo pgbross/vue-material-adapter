@@ -8,7 +8,7 @@ import {
   toRef,
   toRefs,
   watch,
-} from '@vue/composition-api';
+} from 'vue';
 import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 import { mcwLineRipple } from '~/line-ripple/index.js';
 import { mcwNotchedOutline } from '~/notched-outline/index.js';

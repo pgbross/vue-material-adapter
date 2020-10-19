@@ -1,4 +1,5 @@
-import { h } from '@vue/composition-api';
+import { h } from 'vue';
+import { useRouter } from 'vue-router';
 
 export const CustomLink = {
   name: 'custom-link',
@@ -6,7 +7,8 @@ export const CustomLink = {
     link: Object,
     tag: String,
   },
-  setup(props, { listeners, root: { $router }, slots }) {
+  setup(props, { attrs: $attrs, slots }) {
+    const $router = useRouter();
     return () => {
       let element;
 
@@ -24,7 +26,7 @@ export const CustomLink = {
         ...rest
       } = link;
 
-      const data = { attrs: rest, on: listeners };
+      const data = { attrs: rest, on: $attrs };
 
       if (link.to && $router) {
         element = 'router-link';
@@ -40,8 +42,8 @@ export const CustomLink = {
         };
 
         // we add the native click so it can bubble and be detected in a menu/drawer
-        if (listeners.click) {
-          data.nativeOn = { click: listeners.click };
+        if ($attrs.click) {
+          data.nativeOn = { click: $attrs.click };
         }
       } else if (link.href) {
         element = 'a';

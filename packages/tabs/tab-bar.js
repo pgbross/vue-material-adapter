@@ -7,7 +7,7 @@ import {
   provide,
   ref,
   watchEffect,
-} from '@vue/composition-api';
+} from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
 
 const { strings } = MDCTabBarFoundation;

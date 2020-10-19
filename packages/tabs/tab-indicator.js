@@ -1,12 +1,7 @@
 import { MDCFadingTabIndicatorFoundation } from '@material/tab-indicator/fading-foundation';
 import { MDCTabIndicatorFoundation } from '@material/tab-indicator/foundation';
 import { MDCSlidingTabIndicatorFoundation } from '@material/tab-indicator/sliding-foundation';
-import {
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  toRefs,
-} from '@vue/composition-api';
+import { onBeforeUnmount, onMounted, reactive, toRefs } from 'vue';
 
 const { cssClasses } = MDCTabIndicatorFoundation;
 

@@ -9,7 +9,7 @@ import {
   toRefs,
   watch,
   toRef,
-} from '@vue/composition-api';
+} from 'vue';
 import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 
 let radioId_ = 0;

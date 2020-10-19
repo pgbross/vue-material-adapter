@@ -8,7 +8,7 @@ import {
   ref,
   toRefs,
   watch,
-} from '@vue/composition-api';
+} from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
 
 const { strings, cssClasses } = MDCListFoundation;
@@ -73,32 +73,42 @@ export default {
       },
     });
 
-    const listElements = computed(() => {
-      // eslint-disable-next-line no-unused-vars
-      const xx = uiState.listn; // for dependency
+    // const listElements = computed(() => {
+    //   // eslint-disable-next-line no-unused-vars
+    //   const xx = uiState.listn; // for dependency
 
-      const processItem = item => {
-        const items = [];
-        if (item.componentInstance?.setAttribute) {
-          items.push(item.componentInstance);
-        }
+    //   const processItem = item => {
+    //     const items = [];
+    //     if (item.componentInstance?.setAttribute) {
+    //       items.push(item.componentInstance);
+    //     }
 
-        if (item.children) {
-          return item.children.reduce((p, v) => {
-            return p.concat(processItem(v));
-          }, items);
-        }
+    //     if (item.children) {
+    //       return item.children.reduce((p, v) => {
+    //         return p.concat(processItem(v));
+    //       }, items);
+    //     }
 
-        return items;
-      };
+    //     return items;
+    //   };
 
-      // search depth first down the tree for vue components that match the signature of a mcw-list-item
-      const topList = slots.default?.().reduce((p, v) => {
-        return p.concat(processItem(v));
-      }, []);
+    //   // // search depth first down the tree for vue components that match the signature of a mcw-list-item
+    //   // const topList = slots.default?.().reduce((p, v) => {
+    //   //   return p.concat(processItem(v));
+    //   // }, []);
 
-      return topList;
-    });
+    //   return []; // topList;
+    // });
+
+    const listElements = { value: [] };
+
+    const updateListElements = () => {
+      const elements = [].slice.call(
+        uiState.listRoot.querySelectorAll(`.${cssClasses.LIST_ITEM_CLASS}`),
+      );
+
+      listElements.value = elements;
+    };
 
     const getListItemIndex = evt => {
       if (evt.__itemId !== void 0) {
@@ -378,6 +388,7 @@ export default {
     );
 
     onMounted(() => {
+      updateListElements();
       foundation = new MDCListFoundation(adapter);
       foundation.init();
 

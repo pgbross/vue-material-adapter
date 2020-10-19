@@ -1,26 +1,33 @@
-import Vue from 'vue';
-import VueCompositionApi from '@vue/composition-api';
+import { createApp, h } from 'vue';
 import VueMaterialAdapter from 'vue-material-adapter';
-import VueRouter from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import index from './index.vue';
 import './polyfill.js';
 import routes from './routes.js';
 import './styles';
 
-Vue.use(VueCompositionApi);
-
-Vue.config.productionTip = true;
-Vue.use(VueRouter);
-Vue.use(VueMaterialAdapter);
-const router = new VueRouter({
+// Vue.config.productionTip = true;
+// Vue.use(VueRouter);
+// Vue.use(VueMaterialAdapter);
+const router = createRouter({
+  history: createWebHistory(),
   routes,
-  scrollBehavior() {
-    return { x: 0, y: 0 };
-  },
 });
+
+// new VueRouter({
+//   routes,
+//   scrollBehavior() {
+//     return { x: 0, y: 0 };
+//   },
+// });
 
 // mount app
-const App = Vue.extend({
-  render: h => h(index),
+const app = createApp({
+  render: () => h(index),
 });
-new App({ router }).$mount('#app');
+
+app.use(router);
+app.use(VueMaterialAdapter);
+
+app.mount('#app');
+// new App({ router }).$mount('#app');

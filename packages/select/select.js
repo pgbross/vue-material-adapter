@@ -7,7 +7,7 @@ import {
   toRefs,
   watch,
   toRef,
-} from '@vue/composition-api';
+} from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 import SelectHelperText from './select-helper-text.js';

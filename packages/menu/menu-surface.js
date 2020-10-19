@@ -1,12 +1,6 @@
 import { MDCMenuSurfaceFoundation } from '@material/menu-surface/foundation';
 import * as util from '@material/menu-surface/util';
-import {
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  toRefs,
-  watch,
-} from '@vue/composition-api';
+import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
 
 const { strings, cssClasses } = MDCMenuSurfaceFoundation;

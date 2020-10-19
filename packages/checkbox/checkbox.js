@@ -11,7 +11,7 @@ import {
   toRef,
   toRefs,
   watch,
-} from '@vue/composition-api';
+} from 'vue';
 import { emitCustomEvent } from '../base/custom-event';
 import { useRipplePlugin } from '../ripple/ripple-plugin.js';
 

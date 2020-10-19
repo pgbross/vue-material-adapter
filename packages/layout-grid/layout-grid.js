@@ -1,4 +1,4 @@
-import { computed } from '@vue/composition-api';
+import { computed } from 'vue';
 
 export default {
   name: 'mcw-layout-grid',

@@ -7,7 +7,7 @@ import {
   reactive,
   toRefs,
   watch,
-} from '@vue/composition-api';
+} from 'vue';
 
 const { strings, numbers } = MDCSnackbarFoundation;
 

@@ -1,11 +1,5 @@
 import { MDCCircularProgressFoundation } from '@material/circular-progress/foundation';
-import {
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  toRefs,
-  watch,
-} from '@vue/composition-api';
+import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
 
 const ProgressPropType = {
   type: [Number, String],

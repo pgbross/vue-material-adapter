@@ -7,7 +7,7 @@ import {
   ref,
   toRefs,
   watch,
-} from '@vue/composition-api';
+} from 'vue';
 import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 
 export default {

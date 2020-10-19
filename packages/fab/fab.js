@@ -1,4 +1,4 @@
-import { computed, reactive, ref, toRefs, watch } from '@vue/composition-api';
+import { computed, reactive, ref, toRefs, watch } from 'vue';
 import { CustomLink } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 
