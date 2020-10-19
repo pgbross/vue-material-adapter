@@ -11,13 +11,11 @@ export function BasePlugin(components) {
         const mdcName = ['mdc', ...rest].join('-');
         const mcwName = ['mcw', ...rest].join('-');
 
-        // const haveComponent = vm.options.components[mcwName];
-        // if (!haveComponent) {
-        //   const definition = vm.extend(component);
-
-        vm.component(mcwName, component);
-        vm.component(mdcName, component);
-        // }
+        const haveComponent = vm._context.components[mcwName];
+        if (!haveComponent) {
+          vm.component(mcwName, component);
+          vm.component(mdcName, component);
+        }
       });
     },
     components,

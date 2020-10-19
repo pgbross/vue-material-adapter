@@ -10,14 +10,15 @@ const { strings } = MDCDismissibleDrawerFoundation;
 
 export default {
   name: 'mcw-drawer',
-  model: {
-    prop: 'open',
-    event: 'change',
-  },
+  // model: {
+  //   prop: 'open',
+  //   event: 'change',
+  // },
   props: {
+    modelValue: Boolean,
     modal: Boolean,
     dismissible: Boolean,
-    open: Boolean,
+    // open: Boolean,
     toolbarSpacer: Boolean,
     toggleOn: String,
     toggleOnSource: {
@@ -64,8 +65,8 @@ export default {
     const handleTransitionEnd = evt => foundation.handleTransitionEnd(evt);
 
     const onChange = event => {
-      emit('change', event);
-      $root.$emit('vma:layout');
+      emit('update:modelValue', event);
+      $root.$emit('vma-layout');
     };
 
     const onListAction = () => props.modal && close();
@@ -123,7 +124,7 @@ export default {
     };
 
     watch(
-      () => props.open,
+      () => props.modelValue,
       nv => {
         if (nv) {
           foundation?.open();

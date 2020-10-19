@@ -100,15 +100,19 @@ export default {
     //   return []; // topList;
     // });
 
-    const listElements = { value: [] };
-
-    const updateListElements = () => {
-      const elements = [].slice.call(
+    const listElements = computed(() => {
+      return [].slice.call(
         uiState.listRoot.querySelectorAll(`.${cssClasses.LIST_ITEM_CLASS}`),
       );
+    });
 
-      listElements.value = elements;
-    };
+    // const updateListElements = () => {
+    //   const elements = [].slice.call(
+    //     uiState.listRoot.querySelectorAll(`.${cssClasses.LIST_ITEM_CLASS}`),
+    //   );
+
+    //   listElements.value = elements;
+    // };
 
     const getListItemIndex = evt => {
       if (evt.__itemId !== void 0) {
@@ -388,7 +392,7 @@ export default {
     );
 
     onMounted(() => {
-      updateListElements();
+      // updateListElements();
       foundation = new MDCListFoundation(adapter);
       foundation.init();
 

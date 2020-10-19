@@ -4,7 +4,7 @@
       {{ title }}
     </div>
     <article class="doc-article markdown">
-      <component :is="$route.params.id" />
+      <!-- <component :is="$route.params.id" /> -->
     </article>
   </section>
 </template>

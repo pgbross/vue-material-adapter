@@ -19,7 +19,7 @@ export default {
     trailing: Boolean,
   },
   components: { CustomLink },
-  setup(props, { slots, listeners, attrs }) {
+  setup(props, { slots, attrs, emit }) {
     const root = ref(null);
 
     const uiState = reactive({
@@ -97,7 +97,9 @@ export default {
       return myAttrs.value[attr];
     };
 
-    const addItemId = evt => (evt.__itemId = itemId);
+    const addItemId = evt => {
+      evt.__itemId = itemId;
+    };
 
     const classList = {
       add: addClass,
@@ -110,8 +112,8 @@ export default {
     };
 
     const myListeners = {
-      ...listeners,
-      click: addItemId,
+      // ...listeners,
+      // click: addItemId,
       focusin: addItemId,
     };
 

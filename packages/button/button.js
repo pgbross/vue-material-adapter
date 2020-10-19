@@ -13,7 +13,7 @@ export default {
     trailingIcon: String,
   },
   components: { CustomLink },
-  setup(props, { listeners, slots }) {
+  setup(props, { slots }) {
     const root = ref(null);
 
     const { classes: rippleClasses, styles } = useRipplePlugin(root);
@@ -39,7 +39,6 @@ export default {
     return {
       styles,
       classes,
-      listeners,
       root,
       haveIcon,
       haveTrailingIcon,

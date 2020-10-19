@@ -12,6 +12,7 @@
         </template>
 
         <mcw-list-item to="/" tabindex="0">Home</mcw-list-item>
+        <div @click="onStart">Getting Started</div>
         <mcw-list-item to="/docs/getting-started"
           >Getting Started</mcw-list-item
         >
@@ -22,7 +23,10 @@
         }}</mcw-list-item>
       </mcw-drawer>
       <div ref="app-content" class="mdc-drawer-app-content">
-        <top-app-bar :scroll-target="scrollTarget" @nav="onNav"></top-app-bar>
+        <top-app-bar
+          :scroll-target="scrollTarget"
+          @toggle="onNav"
+        ></top-app-bar>
         <div class="drawer-main-content">
           <div class="mdc-top-app-bar--fixed-adjust"></div>
           <router-view />
@@ -48,6 +52,10 @@ export default {
   methods: {
     onNav() {
       this.open = !this.open;
+    },
+    onStart() {
+      console.dir('onState');
+      this.$router.push('/docs/getting-started');
     },
   },
 };

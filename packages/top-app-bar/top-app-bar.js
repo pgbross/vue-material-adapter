@@ -13,7 +13,10 @@ export default {
     tag: { type: String, default: 'header' },
     scrollTarget: HTMLElement,
   },
-  setup(props, { emit, listeners }) {
+
+  emits: ['nav'],
+
+  setup(props, { emit, attrs }) {
     const uiState = reactive({
       rootStyles: {},
       rootClasses: {
@@ -148,6 +151,6 @@ export default {
       foundation.destroy();
     });
 
-    return { ...toRefs(uiState), listeners, setScrollTarget };
+    return { ...toRefs(uiState), setScrollTarget };
   },
 };
