@@ -1,14 +1,15 @@
 <template>
   <div class="demo-home">
     <div ref="title" class="mdc-typography--headline4">{{ title }}</div>
-    <!-- <about class="markdown" /> -->
+    <about class="markdown" />
   </div>
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue';
 export default {
   components: {
-    // about: () => import('../docs/about.md'),
+    about: defineAsyncComponent(() => import('../docs/about.md')),
   },
   data() {
     return {

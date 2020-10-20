@@ -21,7 +21,6 @@
 <script>
 import { defineAsyncComponent } from 'vue';
 import links from './links.js';
-// import buttonDemo from './components/button/demo.vue';
 
 const titles = links.reduce((result, link) => {
   return { ...result, ...{ [link.id]: link.title } };
@@ -32,7 +31,6 @@ const icons = links.reduce((result, link) => {
 }, {});
 
 export default {
-  // components: { buttonDemo },
   components: {
     'button-readme': defineAsyncComponent(() =>
       import('./components/button/README.md'),
