@@ -1,6 +1,6 @@
 This Guide assumes you are familiar with [Vue.js](https://vuejs.org/v2/guide/index.html)
 components and plugin system.  
-`Vue.js` 2.6 or greater and `@vue/composition-api` 1.0 or greater are required as peer dependencies.
+`Vue.js` 3 or greater is required as peer dependencies.
 
 > Note: Applications must install `Vue.use(VueCompositionApi)` but have no requirement to use the composition style of programming.
 > Material Components Web are not bundled and need to be installed.  

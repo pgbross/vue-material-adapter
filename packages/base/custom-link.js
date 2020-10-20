@@ -59,7 +59,7 @@ export const CustomLink = {
 
       const children = slots.default?.();
 
-      return h(element, data, children);
+      return h(element, data, { default: () => children });
     };
   },
 };

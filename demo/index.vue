@@ -17,6 +17,7 @@
         >
         <hr class="mdc-list-divider" />
         <h6 class="mdc-list-group__subheader">Components</h6>
+
         <mcw-list-item v-for="link in links" :key="link.id" :to="link.to">{{
           link.name
         }}</mcw-list-item>
