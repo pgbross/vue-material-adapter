@@ -27,7 +27,7 @@ process.on('unhandledRejection', err => {
   throw err;
 });
 
-const externals = getDependencies().concat(['@material', '@vue']);
+const externals = getDependencies().concat(['@material', '@vue', 'vue-router']);
 
 async function createBundle(bundleType, { minimize } = {}) {
   const filename = 'vue-material-adapter';
