@@ -58,7 +58,8 @@ export const CustomLink = {
       }
 
       const children = slots.default?.();
-
+      // todo: fixme so that link context can be handled properly
+      // see https://next.router.vuejs.org/guide/migration/#removal-of-append-prop-in-router-link
       return h(element, data, { default: () => children });
     };
   },
