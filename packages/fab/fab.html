@@ -5,7 +5,7 @@
   :style="styles"
   :link="$attrs"
   tag="button"
-  v-on="listeners"
+  v-on="{click: $attrs.onClick}"
 >
   <div class="mdc-fab__ripple"></div>
   <slot name="icon"><span class="mdc-fab__icon material-icons">{{icon}}</span></slot>

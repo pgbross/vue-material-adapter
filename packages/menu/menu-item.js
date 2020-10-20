@@ -14,11 +14,9 @@ export default {
             'mdc-menu-divider': 1,
             'mdc-list-divider': 1,
           },
-          attrs: {
-            tabindex: props.disabled ? '-1' : '0',
-            'aria-disabled': props.disabled,
-            role: 'menuitem',
-          },
+          tabindex: props.disabled ? '-1' : '0',
+          'aria-disabled': props.disabled,
+          role: 'menuitem',
         },
         slots.default?.(),
       );

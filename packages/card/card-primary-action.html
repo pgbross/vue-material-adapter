@@ -3,8 +3,8 @@
   :class="classes"
   :style="styles"
   tabIndex="0"
-  :link="$attrs"
-  v-on="listeners"
+  :link="filteredAttrs"
+  @click="onClick"
 >
   <slot></slot>
 </custom-link>

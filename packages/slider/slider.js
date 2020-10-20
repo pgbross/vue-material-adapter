@@ -11,12 +11,12 @@ import {
 
 export default {
   name: 'mcw-slider',
-  model: {
-    prop: 'value',
-    event: 'change',
-  },
+  // model: {
+  //   prop: 'value',
+  //   event: 'change',
+  // },
   props: {
-    value: [Number, String],
+    modelValue: [Number, String],
     min: { type: [Number, String], default: 0 },
     max: { type: [Number, String], default: 100 },
     step: { type: [Number, String], default: 0 },
@@ -51,7 +51,7 @@ export default {
     });
 
     let foundation;
-    let layoutOnEventSource;
+    // let layoutOnEventSource;
 
     const hasMarkers = computed(() => {
       return props.discrete && props.displayMarkers;
@@ -110,7 +110,7 @@ export default {
         emit('input', foundation.getValue());
       },
       notifyChange: () => {
-        emit('change', foundation.getValue());
+        emit('update:modelValue', foundation.getValue());
       },
       setThumbContainerStyleProperty: (propertyName, value) =>
         (uiState.thumbStyles = {
@@ -146,14 +146,14 @@ export default {
       isRTL: () => getComputedStyle(uiState.root).direction === 'rtl',
     };
 
-    const layout = () => {
-      $root.$nextTick(() => {
-        foundation?.layout();
-      });
-    };
+    // const layout = () => {
+    //   $root.$nextTick(() => {
+    //     foundation?.layout();
+    //   });
+    // };
 
     watch(
-      () => props.value,
+      () => props.modelValue,
       nv => {
         if (foundation.getValue() !== Number(nv)) {
           foundation.setValue(nv);
@@ -203,25 +203,25 @@ export default {
         foundation.setMin(Number(props.min));
       }
       foundation.setStep(Number(uiState.stepSize));
-      foundation.setValue(Number(props.value));
+      foundation.setValue(Number(props.modelValue));
 
       if (hasMarkers.value) {
         foundation.setupTrackMarker();
       }
 
-      $root.$on('vma:layout', layout);
+      // $root.$on('vma:layout', layout);
 
-      if (props.layoutOn) {
-        layoutOnEventSource = props.layoutOnSource ?? $root;
-        layoutOnEventSource.$on(props.layoutOn, layout);
-      }
+      // if (props.layoutOn) {
+      //   layoutOnEventSource = props.layoutOnSource ?? $root;
+      //   layoutOnEventSource.$on(props.layoutOn, layout);
+      // }
     });
 
     onBeforeUnmount(() => {
-      $root.$off('vma:layout', layout);
-      if (layoutOnEventSource) {
-        layoutOnEventSource.$off(props.layoutOn, layout);
-      }
+      // $root.$off('vma:layout', layout);
+      // if (layoutOnEventSource) {
+      //   layoutOnEventSource.$off(props.layoutOn, layout);
+      // }
       foundation.destroy();
     });
 

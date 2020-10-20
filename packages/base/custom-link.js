@@ -19,7 +19,7 @@ export const CustomLink = {
       const { link = {} } = props;
       const {
         to,
-
+        onClick,
         append,
         replace,
         activeClass,
@@ -47,15 +47,19 @@ export const CustomLink = {
         // }
       } else if (link.href) {
         element = 'a';
-        data.attrs.role = 'button';
+        data.role = 'button';
+        data.onClick = onClick;
       } else {
         element = props.tag ?? 'a';
+        data.onClick = onClick;
         if (element !== 'button') {
           data.role = 'button';
         }
       }
 
-      return h(element, data, [slots.default?.()]);
+      const children = slots.default?.();
+
+      return h(element, data, children);
     };
   },
 };

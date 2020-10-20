@@ -18,7 +18,7 @@ export default {
               'mdc-card--outlined': outlined,
             },
           ],
-          attrs,
+          ...attrs,
         },
         slots.default?.(),
       );

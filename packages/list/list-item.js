@@ -113,7 +113,7 @@ export default {
 
     const myListeners = {
       // ...listeners,
-      // click: addItemId,
+      click: addItemId,
       focusin: addItemId,
     };
 

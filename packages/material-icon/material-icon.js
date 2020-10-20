@@ -6,13 +6,13 @@ export default {
     icon: String,
     tag: { type: String, default: 'i' },
   },
-  setup(props, { listeners }) {
+  setup(props, { attrs }) {
     return () => {
       return h(
         props.tag,
         {
           class: 'material-icons',
-          on: listeners,
+          ...attrs,
         },
         props.icon,
       );

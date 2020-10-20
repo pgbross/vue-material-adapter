@@ -13,15 +13,15 @@ export default {
   components: {
     mcwButton: mcwButton,
   },
-  model: {
-    prop: 'open',
-    event: 'change',
-  },
+  // model: {
+  //   prop: 'open',
+  //   event: 'change',
+  // },
   props: {
     autoStackButtons: Boolean,
     escapeKeyAction: String,
     scrollable: Boolean,
-    open: Boolean,
+    modelValue: Boolean,
     role: String,
     scrimClickAction: { type: String, default: 'close' },
     tag: { type: String, default: 'div' },
@@ -29,7 +29,7 @@ export default {
     ariaDescribedby: String,
   },
 
-  setup(props, { emit, attrs }) {
+  setup(props, { emit }) {
     const uiState = reactive({
       classes: { 'mdc-dialog': 1 },
       styles: {},
@@ -125,7 +125,7 @@ export default {
       },
       notifyOpened: () => emit(strings.OPENED_EVENT, {}),
       notifyClosing: action => {
-        emit('change', false);
+        emit('update:modelValue', false);
         emit(strings.CLOSING_EVENT, action ? { action } : {});
 
         LAYOUT_EVENTS.forEach(evt =>
@@ -139,7 +139,7 @@ export default {
     };
 
     watch(
-      () => props.open,
+      () => props.modelValue,
       nv => {
         onOpen(nv);
       },
@@ -147,7 +147,7 @@ export default {
 
     onMounted(() => {
       const {
-        open,
+        modelValue,
         autoStackButtons,
         escapeKeyAction,
         scrimClickAction,
@@ -186,7 +186,7 @@ export default {
         // set even if empty string
         foundation.setScrimClickAction(scrimClickAction);
       }
-      onOpen(open);
+      onOpen(modelValue);
     });
 
     onBeforeUnmount(() => {

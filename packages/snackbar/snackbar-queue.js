@@ -1,10 +1,10 @@
-import { computed, reactive, toRefs } from 'vue';
+import { computed, reactive, toRefs, nextTick } from 'vue';
 
 const noop = () => {};
 
 export default {
   name: 'mcw-snackbar-queue',
-  setup(props, { emit, $listeners, root: $root }) {
+  setup(props, { emit, attrs }) {
     const uiState = reactive({
       open: false,
       queue: [],
@@ -54,13 +54,13 @@ export default {
       uiState.open = false;
       uiState.queue.shift();
       if (uiState.queue.length > 0) {
-        $root.$nextTick(() => uiState.queue[0]());
+        nextTick(() => uiState.queue[0]());
       }
     };
 
     const listeners = computed(() => {
       return {
-        ...$listeners,
+        'update:reason': attrs['update:reason'],
         'MDCSnackbar:closed': ({ reason }) => {
           if (actionHandler_ && reason === 'action') {
             actionHandler_({ reason });

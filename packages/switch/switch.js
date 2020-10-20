@@ -14,12 +14,12 @@ let switchId_ = 0;
 
 export default {
   name: 'mcw-switch',
-  model: {
-    prop: 'checked',
-    event: 'change',
-  },
+  // model: {
+  //   prop: 'checked',
+  //   event: 'change',
+  // },
   props: {
-    checked: Boolean,
+    modelValue: Boolean,
     disabled: Boolean,
     value: String,
     label: String,
@@ -31,7 +31,7 @@ export default {
   setup(props, { slots, emit }) {
     const uiState = reactive({
       classes: { 'mdc-switch': 1 },
-      nativeControlChecked: props.checked,
+      nativeControlChecked: props.modelValue,
       nativeControlDisabled: props.disabled,
       nativeAttrs: {},
       root: null,
@@ -54,7 +54,7 @@ export default {
 
     const onChanged = event => {
       foundation?.handleChange(event);
-      emit('change', event.target.checked);
+      emit('update:modelValue', event.target.checked);
     };
 
     const adapter = {
@@ -76,7 +76,7 @@ export default {
     };
 
     watch(
-      () => props.checked,
+      () => props.modelValue,
       (nv, ov) => {
         nv != ov && foundation?.setChecked(nv);
       },
@@ -93,7 +93,7 @@ export default {
       foundation = new MDCSwitchFoundation(adapter);
 
       foundation.init();
-      foundation.setChecked(props.checked);
+      foundation.setChecked(props.modelValue);
       foundation.setDisabled(props.disabled);
     });
 

@@ -4,12 +4,12 @@
       <mcw-checkbox
         v-model="checked"
         :disabled="disabled"
-        :indeterminate.sync="indeterminate"
+        v-model:indeterminate="indeterminate"
         :label="checked ? 'Checked' : 'Unchecked'"
       />
 
       <div>
-        <mcw-button outlined @click="indeterminate = true"
+        <mcw-button outlined @click="onIndeterminate"
           >make indeterminate</mcw-button
         >
         <mcw-button outlined @click="disabled = !disabled"
@@ -25,13 +25,26 @@ export default {
   data() {
     return {
       checked: false,
-      indeterminate: false,
+      indeterminate_: false,
       disabled: false,
     };
+  },
+  computed: {
+    indeterminate: {
+      get() {
+        return this.indeterminate_;
+      },
+      set(nv) {
+        this.indeterminate_ = nv;
+      },
+    },
   },
   methods: {
     onChange(evt) {
       console.dir(evt);
+    },
+    onIndeterminate() {
+      this.indeterminate = true;
     },
   },
 };

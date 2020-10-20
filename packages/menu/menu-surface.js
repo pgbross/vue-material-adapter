@@ -7,12 +7,12 @@ const { strings, cssClasses } = MDCMenuSurfaceFoundation;
 
 export default {
   name: 'mcw-menu-surface',
-  model: {
-    prop: 'open',
-    event: 'change',
-  },
+  // model: {
+  //   prop: 'open',
+  //   event: 'change',
+  // },
   props: {
-    open: [Boolean, Object],
+    modelValue: [Boolean, Object],
     'quick-open': Boolean,
     'anchor-corner': [String, Number],
     'anchor-margin': Object,
@@ -170,12 +170,12 @@ export default {
       notifyClose: () => {
         emitCustomEvent(uiState.root, strings.CLOSED_EVENT, {});
 
-        emit('change', false);
+        emit('update:modelValue', false);
       },
       notifyOpen: () => {
         emitCustomEvent(uiState.root, strings.OPENED_EVENT, {});
 
-        emit('change', true);
+        emit('update:modelValue', true);
       },
       isElementInContainer: el => uiState.root.contains(el),
       isRtl: () =>
@@ -189,7 +189,7 @@ export default {
     };
 
     watch(
-      () => props.open,
+      () => props.modelValue,
       nv => onOpen_(nv),
     );
 

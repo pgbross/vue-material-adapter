@@ -12,7 +12,7 @@ export default {
     label: String,
   },
   components: { CustomLink },
-  setup(props, { slots, listeners }) {
+  setup(props, { slots }) {
     const root = ref(null);
     const uiState = reactive({
       classes: {
@@ -49,6 +49,6 @@ export default {
       },
     );
 
-    return { ...toRefs(uiState), classes, root, styles, listeners };
+    return { ...toRefs(uiState), classes, root, styles };
   },
 };

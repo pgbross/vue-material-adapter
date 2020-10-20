@@ -7,7 +7,7 @@ export default {
   props: {
     icon: String,
   },
-  setup(props, { emit, listeners: $listeners }) {
+  setup(props, { emit, attrs }) {
     const uiState = reactive({
       classes: {
         'material-icons': true,
@@ -21,7 +21,7 @@ export default {
 
     let foundation;
     const listeners = computed(() => {
-      return { ...$listeners, ...uiState.rootListeners };
+      return { ...attrs, ...uiState.rootListeners };
     });
 
     const adapter = {

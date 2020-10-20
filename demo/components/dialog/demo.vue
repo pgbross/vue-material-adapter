@@ -1,7 +1,7 @@
 <template>
   <div class="mcw-demo">
     <div class="mcw-demo mcw-demo--container">
-      <mcw-button @click="openBasic = !openBasic">Basic Dialog</mcw-button>
+      <mcw-button @click="onOpen('Basic')">Basic Dialog</mcw-button>
       <mcw-button @click="openSimple = !openSimple">Simple Dialog</mcw-button>
       <mcw-button @click="openAlert = !openAlert">Alert Dialog</mcw-button>
       <mcw-button @click="openConfirmation = !openConfirmation"
@@ -68,9 +68,7 @@
           <mcw-list-item data-mdc-dialog-action="test" tabindex="0">
             test
           </mcw-list-item>
-          <mcw-list-item data-mdc-dialog-action="help">
-            help
-          </mcw-list-item>
+          <mcw-list-item data-mdc-dialog-action="help"> help </mcw-list-item>
         </mcw-list>
       </mcw-dialog-content>
     </mcw-dialog>
@@ -260,6 +258,9 @@ export default {
   },
 
   methods: {
+    onOpen(action) {
+      this[`open${action}`] = !this[`open${action}`];
+    },
     onClosed({ action }) {
       this.hasBeenOpened = true;
       this.action =

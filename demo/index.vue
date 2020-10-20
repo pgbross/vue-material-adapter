@@ -12,7 +12,6 @@
         </template>
 
         <mcw-list-item to="/" tabindex="0">Home</mcw-list-item>
-        <div @click="onStart">Getting Started</div>
         <mcw-list-item to="/docs/getting-started"
           >Getting Started</mcw-list-item
         >

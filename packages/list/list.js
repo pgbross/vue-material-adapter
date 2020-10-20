@@ -15,10 +15,10 @@ const { strings, cssClasses } = MDCListFoundation;
 
 export default {
   name: 'mcw-list',
-  model: {
-    prop: 'selectedIndex',
-    event: 'change',
-  },
+  // model: {
+  //   prop: 'selectedIndex',
+  //   event: 'change',
+  // },
   props: {
     nonInteractive: { type: Boolean, default: false },
     dense: Boolean,
@@ -27,7 +27,7 @@ export default {
     singleSelection: Boolean,
     wrapFocus: Boolean,
     textualList: Boolean,
-    selectedIndex: { type: [String, Number, Array] },
+    modelValue: { type: [String, Number, Array] },
     tag: { type: String, default: 'ul' },
     ariaOrientation: { type: String, default: 'vertical' },
     thumbnailList: Boolean,
@@ -54,7 +54,7 @@ export default {
       listRoot: null,
     });
 
-    const selectedIndex = ref(props.selectedIndex);
+    const selectedIndex = ref(props.modelValue);
 
     let foundation;
     let slotObserver;
@@ -318,10 +318,10 @@ export default {
           /** shouldBubble */ true,
         );
 
-        if (Array.isArray(props.selectedIndex)) {
-          emit('change', foundation.getSelectedIndex());
+        if (Array.isArray(props.modelValue)) {
+          emit('update:modelValue', foundation.getSelectedIndex());
         } else {
-          emit('change', index);
+          emit('update:modelValue', index);
         }
       },
 
@@ -344,7 +344,7 @@ export default {
         toggleEl && (toggleEl.checked = isChecked);
 
         const event = document.createEvent('Event');
-        event.initEvent('change', true, true);
+        event.initEvent('update:modelValue', true, true);
         toggleEl?.dispatchEvent(event);
       },
 
@@ -365,11 +365,11 @@ export default {
     );
 
     watch(
-      () => props.selectedIndex,
+      () => props.modelValue,
       nv => {
         if (Array.isArray(nv)) {
           foundation.setSelectedIndex(nv);
-        } else if (props.selectedIndex != nv) {
+        } else if (props.modelValue != nv) {
           selectedIndex.value = nv;
           foundation.setSelectedIndex(nv);
         }
@@ -399,10 +399,10 @@ export default {
       // if a single selection list need to ensure the selected item has the selected or activated class
       if (
         props.singleSelection &&
-        typeof props.selectedIndex === 'number' &&
-        !isNaN(props.selectedIndex)
+        typeof props.modelValue === 'number' &&
+        !isNaN(props.modelValue)
       ) {
-        const i = props.selectedIndex;
+        const i = props.modelValue;
         const hasSelectedClass = adapter.listItemAtIndexHasClass(
           i,
           cssClasses.LIST_ITEM_SELECTED_CLASS,
@@ -413,7 +413,7 @@ export default {
         );
         if (!(hasSelectedClass || hasActivatedClass)) {
           adapter.addClassForElementIndex(
-            props.selectedIndex,
+            props.modelValue,
             'mdc-list-item--selected',
           );
         }

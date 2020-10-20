@@ -2,9 +2,9 @@
   ref="menuSurface"
   class="mdc-menu"
   :quick-open="quickOpen"
-  :open="menuOpen"
+  :modelValue="menuOpen"
   @keydown="handleKeydown"
-  @change="onChange"
+  @update:modelValue="onChange"
   @MDCMenuSurface:opened="handleMenuSurfaceOpened"
 >
   <mcw-list
@@ -12,7 +12,7 @@
     role="menu"
     aria-hidden="true"
     :wrap-focus="myWrapFocus"
-    @change="handleAction"
+    @update:modelValue="handleAction"
     tabindex="-1"
     :type-ahead="typeAhead"
     :single-selection="singleSelection"

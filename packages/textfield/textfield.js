@@ -19,13 +19,13 @@ let uid_ = 0;
 export default {
   name: 'mcw-textfield',
   inheritAttrs: false,
-  model: {
-    prop: 'value',
-    event: 'model',
-  },
+  // model: {
+  //   prop: 'value',
+  //   event: 'model',
+  // },
 
   props: {
-    value: [String, Number],
+    modelValue: [String, Number],
     type: {
       type: String,
       default: 'text',
@@ -64,9 +64,9 @@ export default {
     characterCounter: Boolean,
     characterCounterInternal: Boolean,
   },
-  setup(props, { emit, root: { $root }, slots, listeners }) {
+  setup(props, { emit, slots }) {
     const uiState = reactive({
-      text: props.value,
+      text: props.modelValue,
       classes: {
         'mdc-textfield': true,
         'mdc-text-field': true,
@@ -157,8 +157,8 @@ export default {
     }));
 
     const inputListeners = {
-      ...listeners,
-      input: ({ target: { value } }) => emit('model', value),
+      // ...listeners,
+      input: ({ target: { value } }) => emit('update:modelValue', value),
     };
 
     const focus = () => uiState.input?.focus();
@@ -260,7 +260,7 @@ export default {
     );
 
     watch(
-      () => props.value,
+      () => props.modelValue,
       nv => {
         if (foundation) {
           if (nv !== foundation.getValue()) {
@@ -283,14 +283,14 @@ export default {
         {
           characterCounter: uiState.characterCounterEl?.foundation,
           helperText: uiState.helpertext?.foundation,
-          leadingIcon: leadingIconEl?.__vue__.foundation,
-          trailingIcon: trailingIconEl?.__vue__.foundation,
+          // leadingIcon: leadingIconEl?.__vue__.foundation,
+          // trailingIcon: trailingIconEl?.__vue__.foundation,
         },
       );
 
       foundation.init();
 
-      foundation.setValue(props.value);
+      foundation.setValue(props.modelValue);
       props.disabled && foundation.setDisabled(props.disabled);
       uiState.input && (uiState.input.required = props.required);
       if (typeof props.valid !== 'undefined') {

@@ -12,16 +12,16 @@ import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 
 export default {
   name: 'mcw-icon-button',
-  model: {
-    prop: 'isOn',
-    event: 'change',
-  },
+  // model: {
+  //   prop: 'isOn',
+  //   event: 'change',
+  // },
   props: {
-    isOn: Boolean,
+    modelValue: Boolean,
     disabled: Boolean,
   },
 
-  setup(props, { emit, attrs, refs, slots }) {
+  setup(props, { emit, attrs }) {
     const uiState = reactive({
       classes: {
         'mdc-icon-button': 1,
@@ -48,11 +48,11 @@ export default {
       },
       hasClass: className => Boolean(uiState.classes[className]),
       setAttr: (attrName, attrValue) =>
-        refs.root.setAttribute(attrName, attrValue),
-      getAttr: attrName => refs.root.getAttribute(attrName),
+        root.value.setAttribute(attrName, attrValue),
+      getAttr: attrName => root.value.getAttribute(attrName),
       notifyChange: evtData => {
         emit(CHANGE_EVENT, evtData);
-        emit('change', evtData.isOn);
+        emit('update:modelValue', evtData.isOn);
       },
     };
 
@@ -64,7 +64,7 @@ export default {
     });
 
     watch(
-      () => props.isOn,
+      () => props.modelValue,
       nv => {
         foundation.toggle(nv);
       },
@@ -81,7 +81,7 @@ export default {
       foundation = new MDCIconButtonToggleFoundation(adapter);
       foundation.init();
 
-      foundation.toggle(props.isOn);
+      foundation.toggle(props.modelValue);
     });
 
     onBeforeUnmount(() => {

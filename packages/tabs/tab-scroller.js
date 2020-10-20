@@ -32,6 +32,9 @@ export default {
       pointerdown: evt => foundation.handleInteraction(evt),
       touchstart: evt => foundation.handleInteraction(evt),
       keydown: evt => foundation.handleInteraction(evt),
+      ['MDCTab:interacted']: evt => {
+        console.dir('wiffle');
+      },
     };
 
     const adapter = {

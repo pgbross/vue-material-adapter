@@ -20,12 +20,12 @@ let uid_ = 0;
 export default {
   name: 'mcw-select',
   inheritAttrs: false,
-  model: {
-    prop: 'value',
-    event: 'change',
-  },
+  // model: {
+  //   prop: 'value',
+  //   event: 'change',
+  // },
   props: {
-    value: String,
+    modelValue: String,
     helptext: String,
     leadingIcon: String,
     helptextPersistent: Boolean,
@@ -216,7 +216,7 @@ export default {
           { value, index },
           true /* shouldBubble  */,
         );
-        value != props.value && emit('change', value);
+        value != props.modelValue && emit('update:modelValue', value);
       },
 
       // outline methods
@@ -240,7 +240,7 @@ export default {
       );
 
       const idx = items.findIndex(value => {
-        return props.value === value;
+        return props.modelValue === value;
       });
       foundation.setSelectedIndex(idx);
     };
@@ -251,7 +251,7 @@ export default {
     );
 
     watch(
-      () => props.value,
+      () => props.modelValue,
       () => {
         refreshIndex();
       },

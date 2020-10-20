@@ -20,12 +20,12 @@ const DefaultFocusState_ = {
 
 export default {
   name: 'mcw-menu',
-  model: {
-    prop: 'open',
-    event: 'change',
-  },
+  // model: {
+  //   prop: 'open',
+  //   event: 'change',
+  // },
   props: {
-    open: [Boolean, Object],
+    modelValue: [Boolean, Object],
     quickOpen: Boolean,
     anchorCorner: [String, Number],
     anchorMargin: Object,
@@ -83,7 +83,7 @@ export default {
 
     const onChange = item => {
       uiState.menuOpen = item;
-      emit('change', item);
+      emit('update:modelValue', item);
     };
 
     const listen = (evtType, handler, options) => {
@@ -221,7 +221,7 @@ export default {
     };
 
     watch(
-      () => props.open,
+      () => props.modelValue,
       nv => {
         uiState.menuOpen = nv;
       },
@@ -229,7 +229,7 @@ export default {
 
     onMounted(() => {
       rootEl = uiState.menuSurface.$el;
-      uiState.menuOpen = props.open;
+      uiState.menuOpen = props.modelValue;
       foundation = new MDCMenuFoundation(adapter);
       foundation.init();
 

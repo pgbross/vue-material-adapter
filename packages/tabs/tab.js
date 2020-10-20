@@ -90,7 +90,9 @@ export default {
 
     const focus = () => rootEl.focus();
 
-    const onClick = evt => foundation.handleClick(evt);
+    const onClick = evt => {
+      foundation.handleClick(evt);
+    };
 
     const adapter = {
       setAttr: (attr, value) =>
@@ -106,13 +108,10 @@ export default {
       activateIndicator: previousIndicatorClientRect =>
         uiState.tabIndicator.activate(previousIndicatorClientRect),
       deactivateIndicator: () => uiState.tabIndicator.deactivate(),
-      notifyInteracted: () =>
-        emitCustomEvent(
-          rootEl,
-          MDCTabFoundation.strings.INTERACTED_EVENT,
-          { tabId },
-          true /* bubble */,
-        ),
+      notifyInteracted: () => {
+        const interactedEvent = MDCTabFoundation.strings.INTERACTED_EVENT;
+        emitCustomEvent(rootEl, interactedEvent, { tabId }, true /* bubble */);
+      },
       getOffsetLeft: () => rootEl.offsetLeft,
       getOffsetWidth: () => rootEl.offsetWidth,
       getContentOffsetLeft: () => uiState.content.offsetLeft,

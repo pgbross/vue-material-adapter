@@ -14,18 +14,18 @@ const { strings } = MDCTabBarFoundation;
 
 export default {
   name: 'mcw-tab-bar',
-  model: {
-    prop: 'value',
-    event: 'change',
-  },
+  // model: {
+  //   prop: 'value',
+  //   event: 'change',
+  // },
   props: {
     fade: Boolean,
     stacked: Boolean,
     spanContent: Boolean,
-    value: Number,
+    modelValue: Number,
   },
 
-  setup(props, { emit, listeners: $listeners }) {
+  setup(props, { emit, attrs }) {
     const scroller = ref(null);
     const root = ref(null);
 
@@ -40,9 +40,10 @@ export default {
 
     const listeners = computed(() => {
       return {
-        ...$listeners,
-        [MDCTabFoundation.strings.INTERACTED_EVENT]: evt =>
-          foundation.handleTabInteraction(evt),
+        change: attrs.onChange,
+        [MDCTabFoundation.strings.INTERACTED_EVENT]: evt => {
+          foundation.handleTabInteraction(evt);
+        },
         keydown: evt => foundation.handleKeyDown(evt),
       };
     });
@@ -108,7 +109,7 @@ export default {
           true,
         );
 
-        emit('change', Number(index));
+        emit('update:modelValue', Number(index));
       },
     };
 
@@ -117,8 +118,8 @@ export default {
       foundation.init();
 
       // ensure active tab
-      props.value !== void 0;
-      foundation.activateTab(Number(props.value) || 0);
+      props.modelValue !== void 0;
+      foundation.activateTab(Number(props.modelValue) || 0);
 
       for (let i = 0; i < tabList.value.length; i++) {
         if (tabList.value[i].active) {
@@ -128,7 +129,7 @@ export default {
       }
 
       watchEffect(() => {
-        foundation.activateTab(Number(props.value));
+        foundation.activateTab(Number(props.modelValue));
       });
     });
 
