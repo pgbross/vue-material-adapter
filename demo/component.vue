@@ -1,20 +1,20 @@
 <template>
   <section>
-    <!-- <div :style="'background-image: url(' + icon + ')'" class="demo-icon" />
+    <div :style="'background-image: url(' + icon + ')'" class="demo-icon" />
 
     <div v-if="title" ref="title" class="mdc-typography--headline4">
       {{ title }}
-    </div> -->
+    </div>
     <article v-if="demo" class="demo-article">
       <component :is="demo" />
     </article>
-    <!-- <article v-if="readme" class="doc-article markdown">
+    <article v-if="readme" class="doc-article markdown">
       <div class="mdc-typography--subtitle2">
         Note: elements can use names prefixed with either
         <em>mcw-</em> (preferred) or for backwards compatibility <em>mdc-</em>.
       </div>
       <component :is="readme" />
-    </article> -->
+    </article>
   </section>
 </template>
 

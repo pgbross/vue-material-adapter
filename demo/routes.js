@@ -6,5 +6,5 @@ export default [
   { path: '/component/:id', component: Component, name: 'component' },
   { path: '/docs/:id', component: Documentation, name: 'docs' },
   { path: '/', component: Home, name: 'home' },
-  { path: '/:pathMatch(.*)', redirect: '/' },
+  { path: '/:pathMatch(.*)*', redirect: '/' },
 ];

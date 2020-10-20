@@ -20,12 +20,12 @@ let checkboxId_ = 0;
 
 export default {
   name: 'mcw-checkbox',
-  model: {
-    prop: 'checked',
-    event: 'change',
-  },
+  // model: {
+  //   prop: 'checked',
+  //   event: 'change',
+  // },
   props: {
-    checked: [Boolean, Array],
+    modelValue: [Boolean, Array],
     indeterminate: Boolean,
     disabled: Boolean,
     label: String,
@@ -89,22 +89,25 @@ export default {
       // note indeterminate will not currently work with the array model
       emit('update:indeterminate', indeterminate);
 
-      if (Array.isArray(props.checked)) {
-        const idx = props.checked.indexOf(props.value);
+      if (Array.isArray(props.modelValue)) {
+        const idx = props.modelValue.indexOf(props.value);
         if (checked) {
-          idx < 0 && emit('change', props.checked.concat(props.value));
+          idx < 0 &&
+            emit('update:modelValue', props.modelValue.concat(props.value));
         } else {
           idx > -1 &&
             emit(
-              'change',
-              props.checked.slice(0, idx).concat(props.checked.slice(idx + 1)),
+              'update:modelValue',
+              props.modelValue
+                .slice(0, idx)
+                .concat(props.modelValue.slice(idx + 1)),
             );
         }
       } else {
         // emit a native event so that it bubbles to parent elements
         // e.g. data table row
         emitCustomEvent(uiState.root, 'change', true);
-        emit('change', checked);
+        emit('update:modelValue', checked);
       }
     };
 
@@ -192,7 +195,7 @@ export default {
     );
 
     watch(
-      () => props.checked,
+      () => props.modelValue,
       (nv, ov) => {
         nv != ov && setChecked(nv);
       },
@@ -234,7 +237,7 @@ export default {
 
       foundation.init();
 
-      setChecked(props.checked);
+      setChecked(props.modelValue);
       foundation.setDisabled(props.disabled);
       setIndeterminate(props.indeterminate);
     });

@@ -1,6 +1,6 @@
 import { createApp, h } from 'vue';
 import VueMaterialAdapter from 'vue-material-adapter';
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 import index from './index.vue';
 import './polyfill.js';
 import routes from './routes.js';
@@ -10,7 +10,7 @@ import './styles';
 // Vue.use(VueRouter);
 // Vue.use(VueMaterialAdapter);
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes,
 });
 
