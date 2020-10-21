@@ -115,9 +115,6 @@ export default {
     },
   },
 
-  created() {
-    console.dir('created');
-  },
   mounted() {
     setTimeout(() => {
       this.icon = 'flight_takeoff';
