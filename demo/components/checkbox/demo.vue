@@ -1,6 +1,6 @@
 <template>
   <div class="mcw-demo mcw-demo--container">
-    <div @change="onChange">
+    <div>
       <mcw-checkbox
         v-model="checked"
         :disabled="disabled"
@@ -40,9 +40,6 @@ export default {
     },
   },
   methods: {
-    onChange(evt) {
-      console.dir(evt);
-    },
     onIndeterminate() {
       this.indeterminate = true;
     },
