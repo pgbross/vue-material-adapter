@@ -131,7 +131,7 @@ export default {
         const x = menuItems.value.find(item =>
           item.classList.contains(cssClasses.SELECTED_ITEM_CLASS),
         );
-        return x?.$el;
+        return x;
       },
 
       getMenuItemAttr: (menuItem, attr) => menuItem.getAttribute(attr),
@@ -177,12 +177,12 @@ export default {
         menuItems.value[index].setAttribute(attributeName, attributeValue),
       removeAttributeAtIndex: (index, attributeName) =>
         menuItems.value[index].removeAttribute(attributeName),
-      focusMenuItemAtIndex: index => menuItems.value[index].$el.focus(),
+      focusMenuItemAtIndex: index => menuItems.value[index].focus(),
       getMenuItemCount: () => menuItems.value.length,
       getMenuItemValues: () =>
         menuItems.value.map(el => el.getAttribute(strings.VALUE_ATTR) || ''),
       getMenuItemTextAtIndex: index => {
-        return menuItems.value[index].$el.textContent;
+        return menuItems.value[index].textContent;
       },
       addClassAtIndex: (index, className) => {
         menuItems.value[index].classList.add(className);

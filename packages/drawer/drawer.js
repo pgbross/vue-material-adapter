@@ -20,24 +20,9 @@ export default {
     dismissible: Boolean,
     // open: Boolean,
     toolbarSpacer: Boolean,
-    toggleOn: String,
-    toggleOnSource: {
-      type: Object,
-      required: false,
-    },
-    openOn: String,
-    openOnSource: {
-      type: Object,
-      required: false,
-    },
-    closeOn: String,
-    closeOnSource: {
-      type: Object,
-      required: false,
-    },
   },
 
-  setup(props, { emit, root: $root }) {
+  setup(props, { emit }) {
     const uiState = reactive({
       classes: {
         'mdc-drawer': 1,
@@ -66,7 +51,6 @@ export default {
 
     const onChange = event => {
       emit('update:modelValue', event);
-      $root.$emit('vma-layout');
     };
 
     const onListAction = () => props.modal && close();
@@ -153,19 +137,6 @@ export default {
           focusTrapFactory_,
         );
       }
-
-      if (props.toggleOn) {
-        props.toggleOnEventSource = props.toggleOnSource || $root;
-        props.toggleOnEventSource.$on(props.toggleOn, props.toggle);
-      }
-      if (props.openOn) {
-        props.openOnEventSource = props.openOnSource || $root;
-        props.openOnEventSource.$on(props.openOn, props.show);
-      }
-      if (props.closeOn) {
-        props.closeOnEventSource = props.closeOnSource || $root;
-        props.closeOnEventSource.$on(props.closeOn, props.close);
-      }
     });
 
     onBeforeUnmount(() => {
@@ -173,16 +144,6 @@ export default {
       foundation.destroy();
 
       foundation = null;
-
-      if (props.toggleOnEventSource) {
-        props.toggleOnEventSource.$off(props.toggleOn, props.toggle);
-      }
-      if (props.openOnEventSource) {
-        props.openOnEventSource.$off(props.openOn, props.show);
-      }
-      if (props.closeOnEventSource) {
-        props.closeOnEventSource.$off(props.closeOn, props.close);
-      }
     });
 
     return {

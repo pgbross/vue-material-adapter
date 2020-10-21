@@ -1,4 +1,4 @@
-import { h, resolveComponent } from 'vue';
+import { h, resolveComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 export const CustomLink = {
@@ -8,8 +8,9 @@ export const CustomLink = {
     tag: String,
   },
   inheritAttrs: true,
-  setup(props, { attrs, slots }) {
+  setup(props, { emit, slots }) {
     const $router = useRouter();
+    const elementRef = ref();
 
     return () => {
       let element;
@@ -19,11 +20,13 @@ export const CustomLink = {
       const { link = {} } = props;
       const {
         to,
+        tag,
         onClick,
-        append,
         replace,
         activeClass,
         exactActiveClass,
+        itemId,
+        tabindex,
       } = link;
 
       const data = { to };
@@ -31,20 +34,41 @@ export const CustomLink = {
       if (link.to && $router) {
         element = resolveComponent('router-link');
 
-        // data.props = {
-        //   to,
-        //   tag: tag ?? props.tag,
-        //   replace,
-        //   append,
-        //   activeClass,
-        //   exactActiveClass,
-        //   exact,
-        // };
-
         // // we add the native click so it can bubble and be detected in a menu/drawer
         // if ($attrs.click) {
         //   data.nativeOn = { click: $attrs.click };
         // }
+
+        const rtag = tag ?? props.tag;
+
+        return h(
+          resolveComponent('router-link'),
+          {
+            custom: true,
+            to,
+            tabindex,
+            activeClass,
+            exactActiveClass,
+            replace,
+          },
+          {
+            default: props =>
+              h(
+                rtag,
+                {
+                  ref: elementRef,
+                  onClick: evt => {
+                    // console.log('emit linkclick');
+                    evt.__itemId = itemId;
+                    // emitCustomEvent(elementRef.value, 'linkclick', evt, true);
+                    // emit('linkClick', evt);
+                    props.navigate(evt);
+                  },
+                },
+                slots.default?.(),
+              ),
+          },
+        );
       } else if (link.href) {
         element = 'a';
         data.role = 'button';
@@ -58,8 +82,6 @@ export const CustomLink = {
       }
 
       const children = slots.default?.();
-      // todo: fixme so that link context can be handled properly
-      // see https://next.router.vuejs.org/guide/migration/#removal-of-append-prop-in-router-link
       return h(element, data, { default: () => children });
     };
   },

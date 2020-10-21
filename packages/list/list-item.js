@@ -1,4 +1,4 @@
-import { computed, reactive, ref, toRefs } from 'vue';
+import { computed, inject, reactive, ref, toRefs } from 'vue';
 import { CustomLink } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/index.js';
 
@@ -31,8 +31,12 @@ export default {
       styles: {},
     });
 
+    const addListElement = inject('addListElement');
+
+    const itemId = listItemId_++;
+
     const myAttrs = computed(() => {
-      return { ...attrs, ...uiState.attrs, to: props.to };
+      return { ...uiState.attrs, to: props.to, itemId };
     });
 
     const radioChecked = computed(() => {
@@ -51,8 +55,6 @@ export default {
     const trailingCheckbox = computed(
       () => props.trailing && attrs?.role == 'checkbox',
     );
-
-    const itemId = listItemId_++;
 
     const { classes: rippleClasses, styles } = useRipplePlugin(root);
 
@@ -107,14 +109,22 @@ export default {
       contains: className => !!uiState.classes[className],
     };
 
+    addListElement({
+      itemId,
+      setAttribute,
+      getAttribute,
+      classList,
+    });
+
     const focus = () => {
       (root.value.$el ?? root.value).focus();
     };
 
     const myListeners = {
       // ...listeners,
+      zzlinkclick: addItemId,
       click: addItemId,
-      focusin: addItemId,
+      // focusin: addItemId,
     };
 
     return {

@@ -74,7 +74,7 @@ export default {
     const layout = () => uiState.list?.layout();
 
     const handleAction = index => {
-      foundation.handleItemAction(items.value[index].$el);
+      foundation.handleItemAction(items.value[index]);
     };
 
     const handleKeydown = evt => foundation.handleKeydown(evt);
@@ -179,7 +179,7 @@ export default {
       },
 
       getElementIndex: element => {
-        return items.value.findIndex(({ $el }) => $el == element);
+        return items.value.findIndex($el => $el == element);
       },
 
       notifySelected: evtData => {
@@ -196,26 +196,23 @@ export default {
 
       getMenuItemCount: () => items.value.length,
 
-      focusItemAtIndex: index => items.value[index].$el.focus(),
+      focusItemAtIndex: index => items.value[index].focus(),
       focusListRoot: () =>
         uiState.menuSurface.querySelector(strings.LIST_SELECTOR).focus(),
 
       isSelectableItemAtIndex: index =>
-        !!closest(
-          items.value[index].$el,
-          `.${cssClasses.MENU_SELECTION_GROUP}`,
-        ),
+        !!closest(items.value[index], `.${cssClasses.MENU_SELECTION_GROUP}`),
 
       getSelectedSiblingOfItemAtIndex: index => {
         const selectionGroupEl = closest(
-          items.value[index].$el,
+          items.value[index],
           `.${cssClasses.MENU_SELECTION_GROUP}`,
         );
         const selectedItemEl = selectionGroupEl.querySelector(
           `.${cssClasses.MENU_SELECTED_LIST_ITEM}`,
         );
         return selectedItemEl
-          ? items.value.findIndex(({ $el }) => $el == selectedItemEl)
+          ? items.value.findIndex($el => $el == selectedItemEl)
           : -1;
       },
     };

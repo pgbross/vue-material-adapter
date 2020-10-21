@@ -4,6 +4,7 @@ import {
   computed,
   onBeforeUnmount,
   onMounted,
+  provide,
   reactive,
   ref,
   toRefs,
@@ -53,6 +54,14 @@ export default {
       listn: 0,
       listRoot: null,
     });
+
+    const le = ref([]);
+
+    const addListElement = item => {
+      le.value.push(item);
+    };
+
+    provide('addListElement', addListElement);
 
     const selectedIndex = ref(props.modelValue);
 
@@ -116,9 +125,15 @@ export default {
 
     const getListItemIndex = evt => {
       if (evt.__itemId !== void 0) {
-        return listElements.value.findIndex(
-          ({ itemId }) => itemId === evt.__itemId,
+        const listIndex = le.value.findIndex(
+          ({ itemId }) => itemId == evt.__itemId,
         );
+
+        return listIndex;
+
+        // return listElements.value.findIndex(
+        //   ({ itemId }) => itemId === evt.__itemId,
+        // );
       }
 
       const eventTarget = evt.target;
@@ -254,9 +269,12 @@ export default {
 
     const adapter = {
       addClassForElementIndex: (index, className) => {
-        const element = listElements.value[index];
+        const item = le.value[index];
+        item.classList.add(className);
 
-        element.classList.add(className);
+        // const element = listElements.value[index];
+
+        // element.classList.add(className);
       },
       focusItemAtIndex: index => {
         const element = listElements.value[index];
@@ -265,14 +283,17 @@ export default {
         }
       },
       getAttributeForElementIndex: (index, attr) => {
-        const listItem = listElements.value[index];
-        return listItem.getAttribute(attr);
+        const item = le.value[index];
+        return item.getAttribute(attr);
+
+        // const listItem = listElements.value[index];
+        // return listItem.getAttribute(attr);
       },
 
       getFocusedElementIndex: () =>
         listElements.value.indexOf(document.activeElement),
 
-      getListItemCount: () => listElements.value.length,
+      getListItemCount: () => le.value.length,
 
       getPrimaryTextAtIndex: index => getPrimaryText(listElements.value[index]),
 
@@ -305,7 +326,9 @@ export default {
       isRootFocused: () => document.activeElement === uiState.listRoot,
 
       listItemAtIndexHasClass: (index, className) => {
-        const listItem = listElements.value[index];
+        // const listItem = listElements.value[index];
+
+        const listItem = le.value[index];
 
         listItem.classList.contains(className);
       },
@@ -326,19 +349,24 @@ export default {
       },
 
       removeClassForElementIndex: (index, className) => {
-        const listItem = listElements.value[index];
+        // const listItem = listElements.value[index];
+
+        const listItem = le.value[index];
 
         listItem.classList.remove(className);
       },
 
       setAttributeForElementIndex: (index, attr, value) => {
-        const listItem = listElements.value[index];
-        listItem.setAttribute(attr, value);
+        const item = le.value[index];
+        item.setAttribute(attr, value);
+
+        // const listItem = listElements.value[index];
+        // listItem.setAttribute(attr, value);
       },
 
       setCheckedCheckboxOrRadioAtIndex: (index, isChecked) => {
         const listItem = listElements.value[index];
-        const toggleEl = listItem.$el.querySelector(
+        const toggleEl = listItem.querySelector(
           strings.CHECKBOX_RADIO_SELECTOR,
         );
         toggleEl && (toggleEl.checked = isChecked);

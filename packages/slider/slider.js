@@ -26,7 +26,7 @@ export default {
     layoutOn: String,
     layoutOnSource: { type: Object, required: false },
   },
-  setup(props, { emit, root: $root }) {
+  setup(props, { emit }) {
     let stepSize = props.step;
     if (props.discrete && !stepSize) {
       stepSize = 1;
