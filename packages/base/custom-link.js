@@ -1,4 +1,4 @@
-import { h, resolveComponent, ref } from 'vue';
+import { h, resolveComponent } from 'vue';
 import { useRouter } from 'vue-router';
 
 export const CustomLink = {
@@ -8,9 +8,8 @@ export const CustomLink = {
     tag: String,
   },
   inheritAttrs: true,
-  setup(props, { emit, slots }) {
+  setup(props, { slots }) {
     const $router = useRouter();
-    const elementRef = ref();
 
     return () => {
       let element;
@@ -27,17 +26,13 @@ export const CustomLink = {
         exactActiveClass,
         itemId,
         tabindex,
+        ...rest
       } = link;
 
-      const data = { to };
+      const data = { to, ...rest };
 
       if (link.to && $router) {
         element = resolveComponent('router-link');
-
-        // // we add the native click so it can bubble and be detected in a menu/drawer
-        // if ($attrs.click) {
-        //   data.nativeOn = { click: $attrs.click };
-        // }
 
         const rtag = tag ?? props.tag;
 
@@ -45,6 +40,7 @@ export const CustomLink = {
           resolveComponent('router-link'),
           {
             custom: true,
+            ...rest,
             to,
             tabindex,
             activeClass,
@@ -56,12 +52,8 @@ export const CustomLink = {
               h(
                 rtag,
                 {
-                  ref: elementRef,
                   onClick: evt => {
-                    // console.log('emit linkclick');
                     evt.__itemId = itemId;
-                    // emitCustomEvent(elementRef.value, 'linkclick', evt, true);
-                    // emit('linkClick', evt);
                     props.navigate(evt);
                   },
                 },
