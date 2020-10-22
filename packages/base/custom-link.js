@@ -4,48 +4,31 @@ import { useRouter } from 'vue-router';
 export const CustomLink = {
   name: 'custom-link',
   props: {
-    link: Object,
     tag: String,
+    to: [String, Object],
   },
-  inheritAttrs: true,
-  setup(props, { slots }) {
+  setup(props, { slots, attrs }) {
     const $router = useRouter();
 
     return () => {
       let element;
+      let role;
 
       // destructure the props in the render function so we use the current value
       // if their value has changed since we were created
-      const { link = {} } = props;
-      const {
-        to,
-        tag,
-        onClick,
-        replace,
-        activeClass,
-        exactActiveClass,
-        itemId,
-        tabindex,
-        ...rest
-      } = link;
+      const { to, href } = props;
 
-      const data = { to, ...rest };
-
-      if (link.to && $router) {
+      if (to && $router) {
         element = resolveComponent('router-link');
 
-        const rtag = tag ?? props.tag;
+        const rtag = props.tag;
 
         return h(
           resolveComponent('router-link'),
           {
             custom: true,
-            ...rest,
+            ...attrs,
             to,
-            tabindex,
-            activeClass,
-            exactActiveClass,
-            replace,
           },
           {
             default: props =>
@@ -53,7 +36,7 @@ export const CustomLink = {
                 rtag,
                 {
                   onClick: evt => {
-                    evt.__itemId = itemId;
+                    evt.__itemId = attrs.itemId;
                     props.navigate(evt);
                   },
                 },
@@ -61,20 +44,18 @@ export const CustomLink = {
               ),
           },
         );
-      } else if (link.href) {
+      } else if (href) {
         element = 'a';
-        data.role = 'button';
-        data.onClick = onClick;
+        role = 'button';
       } else {
         element = props.tag ?? 'a';
-        data.onClick = onClick;
         if (element !== 'button') {
-          data.role = 'button';
+          role = 'button';
         }
       }
 
       const children = slots.default?.();
-      return h(element, data, { default: () => children });
+      return h(element, { ...attrs, role }, { default: () => children });
     };
   },
 };

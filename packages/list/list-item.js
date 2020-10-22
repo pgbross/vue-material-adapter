@@ -35,10 +35,6 @@ export default {
 
     const itemId = listItemId_++;
 
-    const myAttrs = computed(() => {
-      return { ...uiState.attrs, to: props.to, itemId };
-    });
-
     const radioChecked = computed(() => {
       return attrs?.['aria-checked'] == 'true';
     });
@@ -126,6 +122,15 @@ export default {
       click: addItemId,
       // focusin: addItemId,
     };
+
+    const myAttrs = computed(() => {
+      return {
+        class: uiState.classes,
+        style: uiState.styles,
+        ...uiState.attrs,
+        itemId,
+      };
+    });
 
     return {
       ...toRefs(uiState),

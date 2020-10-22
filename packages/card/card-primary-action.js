@@ -15,7 +15,7 @@ export default {
     });
 
     // eslint-disable-next-line no-unused-vars
-    const { onClick: fn, ...filteredAttrs } = attrs;
+    const { onClick: fn, to, ...filteredAttrs } = attrs;
 
     const onClick = () => (attrs.onClick ? attrs.onClick() : null);
 
@@ -25,6 +25,7 @@ export default {
       root,
       onClick,
       filteredAttrs,
+      to,
     };
   },
 };

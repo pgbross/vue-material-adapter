@@ -16,7 +16,6 @@ let tabId_ = 0;
 
 export default {
   name: 'mcw-tab',
-  inheritAttrs: false,
   props: {
     active: Boolean,
     icon: [String, Array, Object],
@@ -27,7 +26,6 @@ export default {
     const uiState = reactive({
       classes: {
         'mdc-tab': 1,
-
         'mdc-tab--min-width': props.minWidth,
       },
       rootAttrs: {
@@ -45,7 +43,7 @@ export default {
       rippleSurface: null,
     });
 
-    const { classes: rippleClasses, styles } = useRipplePlugin(
+    const { classes: rippleClasses, styles: rippleStyles } = useRipplePlugin(
       toRef(uiState, 'root'),
     );
     const { fade, stacked, spanContent, tabList } = inject('mcwTabList');
@@ -62,8 +60,6 @@ export default {
     const hasText = computed(() => {
       return !!slots.default;
     });
-
-    const linkAttrs = computed(() => ({ ...attrs, ...uiState.rootAttrs }));
 
     let foundation;
     const tabId = `__mcw-tab-${tabId_++}`;
@@ -149,8 +145,7 @@ export default {
       fade,
       spanContent,
       rippleClasses,
-      styles,
-      linkAttrs,
+      rippleStyles,
     };
   },
 };

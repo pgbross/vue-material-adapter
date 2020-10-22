@@ -4,7 +4,6 @@ import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 
 export default {
   name: 'mcw-fab',
-  inheritAttrs: false,
   props: {
     icon: String,
     mini: Boolean,

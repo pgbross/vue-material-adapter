@@ -1,4 +1,4 @@
-<custom-link ref="root" :class="classes" :link="$attrs" :style="styles" tag="button">
+<custom-link ref="root" :class="classes" :to="to" :style="styles" tag="button">
   <div class="mdc-button__ripple"></div>
   <slot name="icon" v-if="haveIcon">
     <i class="material-icons mdc-button__icon" aria-hidden="true">{{icon}}</i>
