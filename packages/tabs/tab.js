@@ -22,7 +22,7 @@ export default {
     minWidth: Boolean,
   },
   components: { CustomLink },
-  setup(props, { slots, attrs }) {
+  setup(props, { slots }) {
     const uiState = reactive({
       classes: {
         'mdc-tab': 1,
@@ -107,6 +107,12 @@ export default {
       notifyInteracted: () => {
         const interactedEvent = MDCTabFoundation.strings.INTERACTED_EVENT;
         emitCustomEvent(rootEl, interactedEvent, { tabId }, true /* bubble */);
+        emitCustomEvent(
+          rootEl,
+          interactedEvent.toLowerCase(),
+          { tabId },
+          true /* bubble */,
+        );
       },
       getOffsetLeft: () => rootEl.offsetLeft,
       getOffsetWidth: () => rootEl.offsetWidth,

@@ -4,7 +4,6 @@ import { useRipplePlugin } from '~/ripple/index.js';
 
 export default {
   name: 'mcw-button',
-  // inheritAttrs: false,
   props: {
     raised: Boolean,
     unelevated: Boolean,
@@ -13,7 +12,7 @@ export default {
     trailingIcon: String,
   },
   components: { CustomLink },
-  setup(props, { slots, attrs }) {
+  setup(props, { slots }) {
     const root = ref(null);
 
     const { classes: rippleClasses, styles } = useRipplePlugin(root);
@@ -42,7 +41,6 @@ export default {
       root,
       haveIcon,
       haveTrailingIcon,
-      to: attrs.to,
     };
   },
 };
