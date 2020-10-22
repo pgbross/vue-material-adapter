@@ -107,9 +107,12 @@ export default {
       notifyInteracted: () => {
         const interactedEvent = MDCTabFoundation.strings.INTERACTED_EVENT;
         emitCustomEvent(rootEl, interactedEvent, { tabId }, true /* bubble */);
+
+        //  todo: fixme when vue 3 can handle mixed case native event listening
+
         emitCustomEvent(
           rootEl,
-          interactedEvent.toLowerCase(),
+          'mcw-tab:interacted',
           { tabId },
           true /* bubble */,
         );

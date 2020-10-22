@@ -8,14 +8,7 @@ export default {
   },
   setup(props, { attrs }) {
     return () => {
-      return h(
-        props.tag,
-        {
-          class: 'material-icons',
-          ...attrs,
-        },
-        props.icon,
-      );
+      return h(props.tag, { ...attrs, class: 'material-icons' }, props.icon);
     };
   },
 };

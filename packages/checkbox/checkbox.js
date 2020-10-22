@@ -12,8 +12,8 @@ import {
   toRefs,
   watch,
 } from 'vue';
-import { emitCustomEvent } from '../base/custom-event';
-import { useRipplePlugin } from '../ripple/ripple-plugin.js';
+import { emitCustomEvent } from '~/base/custom-event';
+import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 
 const CB_PROTO_PROPS = ['checked', 'indeterminate'];
 let checkboxId_ = 0;

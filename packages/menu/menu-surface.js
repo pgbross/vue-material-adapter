@@ -97,8 +97,8 @@ export default {
 
     const rootListeners = {
       keydown: evt => handleKeydown(evt),
-      'MDCMenuSurface:opened': evt => registerBodyClickListener(evt),
-      'MDCMenuSurface:closed': evt => deregisterBodyClickListener(evt),
+      // 'MDCMenuSurface:opened': evt => registerBodyClickListener(evt),
+      // 'MDCMenuSurface:closed': evt => deregisterBodyClickListener(evt),
     };
 
     const onOpen_ = value => {
@@ -170,11 +170,16 @@ export default {
       notifyClose: () => {
         emitCustomEvent(uiState.root, strings.CLOSED_EVENT, {});
 
+        deregisterBodyClickListener();
+
+        emit('mcw-menu-surface-closed');
         emit('update:modelValue', false);
       },
       notifyOpen: () => {
         emitCustomEvent(uiState.root, strings.OPENED_EVENT, {});
 
+        registerBodyClickListener();
+        emit('mcw-menu-surface-opened');
         emit('update:modelValue', true);
       },
       isElementInContainer: el => uiState.root.contains(el),

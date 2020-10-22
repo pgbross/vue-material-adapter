@@ -44,7 +44,7 @@ export default {
         [MDCTabFoundation.strings.INTERACTED_EVENT]: evt => {
           foundation.handleTabInteraction(evt);
         },
-        [MDCTabFoundation.strings.INTERACTED_EVENT.toLowerCase()]: evt => {
+        'mcw-tab:interacted': evt => {
           foundation.handleTabInteraction(evt);
         },
         keydown: evt => foundation.handleKeyDown(evt),

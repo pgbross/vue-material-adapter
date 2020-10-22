@@ -79,18 +79,18 @@ export default {
 
     const handleKeydown = evt => foundation.handleKeydown(evt);
 
-    const handleMenuSurfaceOpened = () => foundation.handleMenuSurfaceOpened();
+    const handleMenuSurfaceOpened = () => {
+      foundation.handleMenuSurfaceOpened();
+      emit('mcw-menu-surface-opened');
+    };
+
+    const handleMenuSurfaceClosed = () => {
+      emit('mcw-menu-surface-closed');
+    };
 
     const onChange = item => {
       uiState.menuOpen = item;
       emit('update:modelValue', item);
-    };
-
-    const listen = (evtType, handler, options) => {
-      uiState.menuSurface.addEventListener(evtType, handler, options);
-    };
-    const unlisten = (evtType, handler, options) => {
-      uiState.menuSurface.removeEventListener(evtType, handler, options);
     };
 
     const setDefaultFocusState = focusState => {
@@ -198,7 +198,7 @@ export default {
 
       focusItemAtIndex: index => items.value[index].focus(),
       focusListRoot: () =>
-        uiState.menuSurface.querySelector(strings.LIST_SELECTOR).focus(),
+        uiState.menuSurface.$el.querySelector(strings.LIST_SELECTOR).focus(),
 
       isSelectableItemAtIndex: index =>
         !!closest(items.value[index], `.${cssClasses.MENU_SELECTION_GROUP}`),
@@ -250,6 +250,7 @@ export default {
       handleKeydown,
       onChange,
       handleMenuSurfaceOpened,
+      handleMenuSurfaceClosed,
       setAbsolutePosition,
       setIsHoisted,
       hoistMenuToBody,
@@ -259,8 +260,6 @@ export default {
       setAnchorElement,
       setAnchorCorner,
       setSelectedIndex,
-      listen,
-      unlisten,
       setDefaultFocusState,
       wrapFocus,
       surfaceOpen,

@@ -3,8 +3,6 @@ import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 
-const { strings } = MDCChipTrailingActionFoundation;
-
 export default {
   name: 'mcw-chip-trailing-action',
   setup() {
@@ -21,7 +19,7 @@ export default {
       notifyInteraction: trigger =>
         emitCustomEvent(
           root.value,
-          strings.INTERACTION_EVENT,
+          'mcw-chip-trailing-action-interaction',
           {
             trigger,
           },
@@ -30,7 +28,7 @@ export default {
       notifyNavigation: key =>
         emitCustomEvent(
           root.value,
-          strings.INTERACTION_EVENT,
+          'mcw-chip-trailing-action-navigation',
           {
             key,
           },

@@ -37,7 +37,7 @@ export default {
     typeAhead: Boolean,
   },
 
-  setup(props, { emit, slots }) {
+  setup(props, { emit }) {
     const uiState = reactive({
       classes: {
         'mdc-list': 1,
@@ -81,33 +81,6 @@ export default {
         emit('change', nv);
       },
     });
-
-    // const listElements = computed(() => {
-    //   // eslint-disable-next-line no-unused-vars
-    //   const xx = uiState.listn; // for dependency
-
-    //   const processItem = item => {
-    //     const items = [];
-    //     if (item.componentInstance?.setAttribute) {
-    //       items.push(item.componentInstance);
-    //     }
-
-    //     if (item.children) {
-    //       return item.children.reduce((p, v) => {
-    //         return p.concat(processItem(v));
-    //       }, items);
-    //     }
-
-    //     return items;
-    //   };
-
-    //   // // search depth first down the tree for vue components that match the signature of a mcw-list-item
-    //   // const topList = slots.default?.().reduce((p, v) => {
-    //   //   return p.concat(processItem(v));
-    //   // }, []);
-
-    //   return []; // topList;
-    // });
 
     const listElements = computed(() => {
       return [].slice.call(
@@ -341,6 +314,8 @@ export default {
           /** shouldBubble */ true,
         );
 
+        emit('mcw-list-action');
+
         if (Array.isArray(props.modelValue)) {
           emit('update:modelValue', foundation.getSelectedIndex());
         } else {
@@ -377,7 +352,7 @@ export default {
       },
 
       setTabIndexForListItemChildren: (listItemIndex, tabIndexValue) => {
-        const element = listElements.value[listItemIndex].$el;
+        const element = listElements.value[listItemIndex];
         const listItemChildren = [].slice.call(
           element.querySelectorAll(strings.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX),
         );

@@ -1,19 +1,13 @@
 import { MDCChipSetFoundation } from '@material/chips/chip-set/foundation';
-import { MDCChipFoundation } from '@material/chips/chip/foundation';
 import { announce } from '@material/dom/announce';
 import {
-  computed,
   onBeforeUnmount,
   onMounted,
   provide,
   reactive,
+  ref,
   toRefs,
 } from 'vue';
-
-const { strings } = MDCChipFoundation;
-const { CHIP_SELECTOR } = MDCChipSetFoundation.strings;
-
-let idCounter = 0;
 
 export default {
   name: 'mcw-chip-set',
@@ -32,69 +26,58 @@ export default {
         'mdc-chip-set--input': props.input,
       },
       listn: 0,
-      myListeners: null,
+      myListeners: {},
       root: null,
     });
 
     let foundation;
     let slotObserver;
 
-    const chipElements = computed(() => {
-      // eslint-disable-next-line no-unused-vars
-      const xx = uiState.listn; // for dependency
+    const ce = ref([]);
 
-      return [].slice.call(uiState.root.querySelectorAll(CHIP_SELECTOR));
-    });
-
-    const chips_ = computed(() => {
-      return chipElements.value.map(el => {
-        el.id = el.id || `mdc-chip-${++idCounter}`;
-
-        return el.__vue__;
-      });
-    });
+    const addChipElement = item => {
+      ce.value.push(item);
+    };
+    provide('addChipElement', addChipElement);
 
     const adapter = {
       announceMessage: message => {
         announce(message);
       },
       focusChipPrimaryActionAtIndex: index => {
-        const chip = chips_.value[index];
+        const chip = ce.value[index];
 
         chip && chip.focusPrimaryAction();
       },
       focusChipTrailingActionAtIndex: index => {
-        const chip = chips_.value[index];
+        const chip = ce.value[index];
         chip && chip.focusTrailingAction();
       },
       getChipListCount: () => {
-        return chips_.value.length;
+        return ce.value.length;
       },
       getIndexOfChipById: chipId => {
-        return chips_.value.findIndex(({ id }) => id == chipId);
+        return ce.value.findIndex(({ id }) => id == chipId);
       },
       hasClass: className => uiState.root.classList.contains(className),
       isRTL: () =>
         window.getComputedStyle(uiState.root).getPropertyValue('direction') ===
         'rtl',
       removeChipAtIndex: index => {
-        if (index >= 0 && index < chips_.value.length) {
+        if (index >= 0 && index < ce.value.length) {
           // tell chip to remove itself from the DOM
-          chips_.value[index].remove();
-          chips_.value.splice(index, 1);
+          ce.value[index].remove();
+          ce.value.splice(index, 1);
         }
       },
 
       removeFocusFromChipAtIndex: index => {
-        chips_.value[index].removeFocus();
+        ce.value[index].removeFocus();
       },
 
       selectChipAtIndex: (index, selected, shouldNotifyClients) => {
-        if (index >= 0 && index < chips_.value.length) {
-          chips_.value[index].setSelectedFromChipSet(
-            selected,
-            shouldNotifyClients,
-          );
+        if (index >= 0 && index < ce.value.length) {
+          ce.value[index].setSelectedFromChipSet(selected, shouldNotifyClients);
         }
       },
     };
@@ -102,19 +85,17 @@ export default {
     provide('mcwChipSet', { filter: props.filter, input: props.input });
 
     onMounted(() => {
-      // trigger computed
-      chips_.value;
       foundation = new MDCChipSetFoundation(adapter);
       foundation.init();
 
       (uiState.myListeners = {
-        [strings.INTERACTION_EVENT]: ({ detail }) =>
+        'mcw-chip-interaction': ({ detail }) =>
           foundation.handleChipInteraction(detail),
-        [strings.SELECTION_EVENT]: ({ detail }) =>
+        'mcw-chip-selection': ({ detail }) =>
           foundation.handleChipSelection(detail),
-        [strings.REMOVAL_EVENT]: ({ detail }) =>
+        'mcw-chip-removal': ({ detail }) =>
           foundation.handleChipRemoval(detail),
-        [strings.NAVIGATION_EVENT]: ({ detail }) =>
+        'mcw-chip-navigation': ({ detail }) =>
           foundation.handleChipNavigation(detail),
       }),
         // the chips could change outside of this component

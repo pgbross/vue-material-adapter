@@ -21,7 +21,7 @@ export const CustomLink = {
       if (to && $router) {
         element = resolveComponent('router-link');
 
-        const rtag = props.tag;
+        const rtag = props.tag ?? 'a';
 
         return h(
           resolveComponent('router-link'),

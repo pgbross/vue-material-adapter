@@ -19,7 +19,7 @@ export default {
     trailing: Boolean,
   },
   components: { CustomLink },
-  setup(props, { slots, attrs, emit }) {
+  setup(props, { slots, attrs }) {
     const root = ref(null);
 
     const uiState = reactive({
@@ -117,10 +117,8 @@ export default {
     };
 
     const myListeners = {
-      // ...listeners,
-      zzlinkclick: addItemId,
       click: addItemId,
-      // focusin: addItemId,
+      focusin: addItemId,
     };
 
     const myAttrs = computed(() => {

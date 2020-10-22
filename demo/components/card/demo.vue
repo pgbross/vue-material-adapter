@@ -1,7 +1,7 @@
 <template>
   <div class="mcw-demo">
     <mcw-card>
-      <mcw-card-primary-action @click="onPrimaryAction" :to="{ path: '/' }">
+      <mcw-card-primary-action @click="onPrimaryAction">
         <mcw-card-media :src="card" wide>Media</mcw-card-media>
       </mcw-card-primary-action>
       <section>

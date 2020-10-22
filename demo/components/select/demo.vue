@@ -4,11 +4,11 @@
       <div>
         <mcw-select
           id="food-group"
-          :value="selectedType"
+          :model-value="selectedType"
           label="Food"
           helptext="Pick a food group"
           leading-icon="restaurant_menu"
-          @change="onTypeChanged"
+          @update:modelValue="onTypeChanged"
         >
           <mcw-list-item
             v-for="type in types"
@@ -23,6 +23,7 @@
         <br />
         <mcw-select
           v-if="selectedType"
+          :key="selectedType"
           v-model="selectedValue"
           outlined
           label="Kind"
@@ -72,9 +73,6 @@ export default {
       console.log(nv);
       this.selectedType = nv;
       this.selectedValue = null;
-    },
-    onKindChanged(nv) {
-      this.selectedValue = nv;
     },
   },
 };

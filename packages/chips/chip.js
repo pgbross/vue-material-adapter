@@ -14,6 +14,8 @@ import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 
 const { strings } = MDCChipFoundation;
 
+let chipItemId_ = 0;
+
 export default {
   name: 'mcw-chip',
   props: {
@@ -39,17 +41,20 @@ export default {
       styles: {},
       primaryAttrs: {},
       trailingAttrs: {},
-      myListeners: null,
+      myListeners: {},
       root: null,
       checkmarkEl: null,
       trailingAction: null,
     });
 
     const mcwChipSet = inject('mcwChipSet');
+    const addChipElement = inject('addChipElement');
 
     const { classes: rippleClasses, styles: rippleStyles } = useRipplePlugin(
       toRef(uiState, 'root'),
     );
+
+    const id = chipItemId_++;
 
     let foundation;
 
@@ -63,10 +68,6 @@ export default {
 
     let trailingAction_;
     let leadingIcon_;
-
-    const id = computed(() => {
-      return uiState.root.id;
-    });
 
     const selected = computed({
       get() {
@@ -131,9 +132,9 @@ export default {
       notifyInteraction: () => {
         emitCustomEvent(
           uiState.root,
-          strings.INTERACTION_EVENT,
+          'mcw-chip-interaction',
           {
-            chipId: id.value,
+            chipId: id,
           },
           true,
         );
@@ -141,9 +142,9 @@ export default {
       notifyNavigation: (key, source) =>
         emitCustomEvent(
           uiState.root,
-          strings.NAVIGATION_EVENT,
+          'mcw-chip-navigation',
           {
-            chipId: id.value,
+            chipId: id,
             key,
             source,
           },
@@ -152,24 +153,24 @@ export default {
       notifyRemoval: removedAnnouncement => {
         emitCustomEvent(
           uiState.root,
-          strings.REMOVAL_EVENT,
-          { chipId: id.value, removedAnnouncement },
+          'mcw-chip-removal',
+          { chipId: id, removedAnnouncement },
           true,
         );
       },
       notifySelection: (selected, shouldIgnore) =>
         emitCustomEvent(
           uiState.root,
-          strings.SELECTION_EVENT,
-          { chipId: id.value, selected: selected, shouldIgnore },
+          'mcw-chip-selection',
+          { chipId: id, selected: selected, shouldIgnore },
           true /* shouldBubble */,
         ),
       notifyTrailingIconInteraction: () => {
         emitCustomEvent(
           uiState.root,
-          strings.TRAILING_ICON_INTERACTION_EVENT,
+          'mcw-chip-trailing-icon-interaction',
           {
-            chipId: id.value,
+            chipId: id,
           },
           true,
         );
@@ -222,6 +223,15 @@ export default {
       },
     );
 
+    addChipElement({
+      id,
+      removeFocus,
+      focusPrimaryAction,
+      focusTrailingAction,
+      setSelectedFromChipSet,
+      remove,
+    });
+
     onMounted(() => {
       leadingIcon_ = uiState.root.querySelector(strings.LEADING_ICON_SELECTOR);
 
@@ -232,7 +242,9 @@ export default {
       foundation = new MDCChipFoundation(adapter);
 
       uiState.myListeners = {
-        click: evt => foundation.handleClick(evt),
+        click: evt => {
+          foundation.handleClick(evt);
+        },
         keydown: evt => foundation.handleKeydown(evt),
         transitionend: evt => foundation.handleTransitionEnd(evt),
         focusin: evt => foundation.handleFocusIn(evt),
@@ -240,10 +252,10 @@ export default {
       };
 
       if (trailingAction_) {
-        uiState.myListeners[strings.INTERACTION_EVENT] = evt =>
+        uiState.myListeners['mcw-chip-trailing-action-interaction'] = evt =>
           foundation.handleTrailingActionInteraction(evt);
 
-        uiState.myListeners[strings.NAVIGATION_EVENT] = evt =>
+        uiState.myListeners['mcw-chip-trailing-action-navigation'] = evt =>
           foundation.handleTrailingActionNavigation(evt);
       }
 

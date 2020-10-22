@@ -5,7 +5,8 @@
   :modelValue="menuOpen"
   @keydown="handleKeydown"
   @update:modelValue="onChange"
-  @MDCMenuSurface:opened="handleMenuSurfaceOpened"
+  @mcw-menu-surface-opened="handleMenuSurfaceOpened"
+  @mcw-menu-surface-closed="handleMenuSurfaceClosed"
 >
   <mcw-list
     ref="list"
