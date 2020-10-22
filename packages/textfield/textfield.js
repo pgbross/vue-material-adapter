@@ -4,7 +4,9 @@ import {
   computed,
   onBeforeUnmount,
   onMounted,
+  provide,
   reactive,
+  ref,
   toRef,
   toRefs,
   watch,
@@ -12,8 +14,6 @@ import {
 import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 import { mcwLineRipple } from '~/line-ripple/index.js';
 import { mcwNotchedOutline } from '~/notched-outline/index.js';
-
-const { strings } = MDCTextFieldFoundation;
 
 let uid_ = 0;
 export default {
@@ -111,6 +111,14 @@ export default {
 
     let rippleClasses;
     let rippleStyles;
+
+    const icons = ref({});
+
+    const addIconFoundation = ({ foundation, trailing }) => {
+      icons.value[trailing ? 'trailing' : 'leading'] = foundation;
+    };
+
+    provide('addIconFoundation', addIconFoundation);
 
     if (!props.multiline && !props.outline) {
       const { classes, styles } = useRipplePlugin(toRef(uiState, 'root'));
@@ -271,20 +279,13 @@ export default {
     );
 
     onMounted(() => {
-      const leadingIconEl = uiState.wrapper.querySelector(
-        strings.LEADING_ICON_SELECTOR,
-      );
-      const trailingIconEl = uiState.wrapper.querySelector(
-        strings.TRAILING_ICON_SELECTOR,
-      );
-
       foundation = new MDCTextFieldFoundation(
         { ...adapter },
         {
           characterCounter: uiState.characterCounterEl?.foundation,
           helperText: uiState.helpertext?.foundation,
-          // leadingIcon: leadingIconEl?.__vue__.foundation,
-          // trailingIcon: trailingIconEl?.__vue__.foundation,
+          leadingIcon: icons.leading?.foundation,
+          trailingIcon: icons.trailing?.foundation,
         },
       );
 

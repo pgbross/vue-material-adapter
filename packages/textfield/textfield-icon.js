@@ -1,5 +1,5 @@
 import { MDCTextFieldIconFoundation } from '@material/textfield/icon/foundation.js';
-import { onBeforeUnmount, onMounted, reactive, toRefs } from 'vue';
+import { inject, onBeforeUnmount, onMounted, reactive, toRefs } from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
 
 export default {
@@ -24,6 +24,8 @@ export default {
       root: null,
       foundation: {},
     });
+
+    const addIconFoundation = inject('addIconFoundation');
 
     const adapter = {
       getAttr: attr => uiState.rootAttrs[attr],
@@ -57,6 +59,11 @@ export default {
     onMounted(() => {
       uiState.foundation = new MDCTextFieldIconFoundation(adapter);
       uiState.foundation.init();
+
+      addIconFoundation({
+        foundation: uiState.foundation,
+        trailing: props.trailing || props.trailingIcon,
+      });
     });
 
     onBeforeUnmount(() => {
