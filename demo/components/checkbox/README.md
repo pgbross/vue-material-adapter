@@ -4,7 +4,8 @@
 <mcw-checkbox v-model="checked" :label="checked ? 'Checked' : 'Unchecked'" />
 <mcw-checkbox
   v-model="checked"
-  indeterminate
+  :disabled="disabled"
+  v-model:indeterminate="indeterminate"
   :label="checked ? 'Checked' : 'Unchecked'"
 />
 ```
@@ -20,7 +21,11 @@ var vm = new Vue({
 ### Indeterminate checkbox
 
 ```html
-<mcw-checkbox :label="label" v-model="checked" :indeterminate="indeterminate" />
+<mcw-checkbox
+  :label="label"
+  v-model="checked"
+  v-model:indeterminate="indeterminate"
+/>
 ```
 
 ```javascript
@@ -44,15 +49,14 @@ var vm = new Vue({
 
 ### props
 
-| props           | Type    | Default | Description                                   |
-| --------------- | ------- | ------- | --------------------------------------------- |
-| `checked`       | Boolean |         | checkbox's checked state (use `v-model`)      |
-| `indeterminate` | Boolean |         | checkbox's indeterminate state                |
-| `disabled`      | Boolean |         | whether the checkbox is disabled              |
-| `label`         | String  |         | checkbox label (or use default slot)          |
-| `align-end`     | Boolean |         | whether to align the checkbox after the label |
-| `value`         | String  | `'on'`  | checkbox value                                |
-| `name`          | String  |         | input name                                    |
+| props           | Type    | Default | Description                                            |
+| --------------- | ------- | ------- | ------------------------------------------------------ |
+| `indeterminate` | Boolean |         | checkbox's indeterminate state (v-model:indeterminate) |
+| `disabled`      | Boolean |         | whether the checkbox is disabled                       |
+| `label`         | String  |         | checkbox label (or use default slot)                   |
+| `align-end`     | Boolean |         | whether to align the checkbox after the label          |
+| `value`         | String  | `'on'`  | checkbox value                                         |
+| `name`          | String  |         | input name                                             |
 
 ### events
 

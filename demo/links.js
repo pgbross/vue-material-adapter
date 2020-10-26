@@ -35,9 +35,10 @@ function link(id, icon, name, title) {
 export default [
   link('button', icButton),
   link('card', icCard),
-  link('circular-progress', icProgressActivity),
   link('checkbox', icSelectionControl),
   link('chips', icChips),
+  link('circular-progress', icProgressActivity),
+
   link('data-table', icComponent),
   link('dialog', icDialog),
   link('drawer', icSideNavigation),

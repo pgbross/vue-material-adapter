@@ -20,10 +20,6 @@ let checkboxId_ = 0;
 
 export default {
   name: 'mcw-checkbox',
-  // model: {
-  //   prop: 'checked',
-  //   event: 'change',
-  // },
   props: {
     modelValue: [Boolean, Array],
     indeterminate: Boolean,
