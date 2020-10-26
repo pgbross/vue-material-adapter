@@ -47,12 +47,7 @@ The card package provides the building blocks for composing your card components
 
 This component is used as the container for primary tappable content.
 
-| prop      | Type           | Default   | Description          |
-| --------- | -------------- | --------- | -------------------- |
-| `href`    | String         | undefined | link's href          |
-| `to`      | String, Object | undefined | router-link property |
-| `replace` | Boolean        | false     | router-link property |
-| `append`  | Boolean        | false     | router-link property |
+> Supports Vue-Router props
 
 ```html
 <mcw-card>
