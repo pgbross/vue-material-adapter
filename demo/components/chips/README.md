@@ -63,22 +63,27 @@
 </mcw-chip-set>
 ```
 
-or with custom icon
+or with template slot
 
 ```html
 <mcw-chip-set input>
   <mcw-chip>
-    <div slot="leading-icon" class="fa fa-font-awesome"></div>
-    <div slot="trailing-icon">
-      <span role="gridcell" class="fa fa-times"></span>
-    </div>
+    <template #leading-icon>
+      <mcw-material-icon
+        class="mdc-chip__icon mdc-chip__icon--leading"
+        icon="add"
+      ></mcw-material-icon
+    ></template>
+
     Jane Smith
   </mcw-chip>
   <mcw-chip>
-    <div slot="leading-icon" class="fa fa-smile-o"></div>
-    <div slot="trailing-icon">
-      <span role="gridcell" class="fa fa-times"></span>
-    </div>
+    <template #leading-icon>
+      <mcw-material-icon
+        class="mdc-chip__icon mdc-chip__icon--leading"
+        icon="add"
+      ></mcw-material-icon
+    ></template>
     John Doe
   </mcw-chip>
 </mcw-chip-set>
