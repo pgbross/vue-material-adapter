@@ -25,9 +25,7 @@ const cssLoaders = [
   },
   {
     loader: 'postcss-loader',
-    options: {
-      config: { path: __dirname + '/postss.config.js' },
-    },
+    options: { postcssOptions: { config: 'postcss.config.js' } },
   },
   {
     loader: 'sass-loader',
@@ -156,7 +154,7 @@ const config = {
     },
   },
   externals: {},
-  devtool: isProduction ? 'source-map' : 'cheap-eval-source-map',
+  devtool: isProduction ? 'source-map' : 'eval-cheap-source-map',
   module: { rules },
   plugins,
 };

@@ -31,7 +31,7 @@
     "url": "https://github.com/pgbross/vue-material-adapter/issues"
   },
   "scripts": {
-    "dev": "cross-env BROWSERLISTS_ENV=evergreen NODE_ENV=development webpack-dev-server --config=demo/webpack.config.js --progress --inline --hot --host 0.0.0.0",
+    "dev": "cross-env BROWSERLISTS_ENV=evergreen NODE_ENV=development webpack serve --config=demo/webpack.config.js --progress --inline --hot --host 0.0.0.0",
     "test": "NODE_ENV=test; jest --runInBand",
     "Xtestnc": "NODE_ENV=test; jest --runInBand --no-cache",
     "Xbuild": "webpack --progress --colors --mode production",
