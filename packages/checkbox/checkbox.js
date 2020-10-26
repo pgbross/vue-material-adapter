@@ -12,7 +12,7 @@ import {
   toRefs,
   watch,
 } from 'vue';
-import { emitCustomEvent } from '~/base/custom-event';
+import { emitCustomEvent } from '~/base/custom-event.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 
 const CB_PROTO_PROPS = ['checked', 'indeterminate'];
