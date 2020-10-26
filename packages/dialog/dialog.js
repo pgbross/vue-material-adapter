@@ -13,10 +13,7 @@ export default {
   components: {
     mcwButton: mcwButton,
   },
-  // model: {
-  //   prop: 'open',
-  //   event: 'change',
-  // },
+
   props: {
     autoStackButtons: Boolean,
     escapeKeyAction: String,

@@ -3,12 +3,14 @@
 ```html
 <mcw-button raised @click="open=!open">Show dialog</mcw-button>
 <mcw-dialog
-  v-model="open"
   id="demo-dialog"
-  escapeKeyAction="close"
-  scrimClickAction="close"
-  :autoStackButtons="true"
-  @MDCDialog:closing="onClosed"
+  v-model="openBasic"
+  escape-key-action="close"
+  scrim-click-action="close"
+  aria-labelledby="my-basic-title"
+  aria-describedby="my-basic-content"
+  :auto-stack-buttons="true"
+  @mcw-dialog-closing="onClosed"
 >
   <mcw-dialog-title>Lorem ipsum dolor</mcw-dialog-title>
   <mcw-dialog-content>
@@ -45,7 +47,7 @@ var vm = new Vue({
 | `escapeKeyAction`  | String  | `close`       | the action reflected when the Escape key is pressed.   |
 |                    |         |               | Setting to `''` disables closing via the escape key    |
 | `scrollable`       | Boolean | false         | Scrollable content                                     |
-| `open`             | Boolean | `false`       | If true opens the dialog. If false closes the dialog   |
+| v-model            | Boolean | `false`       | If true opens the dialog. If false closes the dialog   |
 | `role`             | String  | `alertdialog` | ARIA attribute _\*_ that specifies the role of dialog. |
 |                    |         |               | Must be `alertdialog` or `dialog`                      |
 | `scrimClickAction` | String  | `close`       | the action reflected when the scrim is clicked.        |
@@ -56,13 +58,13 @@ _\*_[ARIA attribute roles](https://developer.mozilla.org/en-US/docs/Web/Accessib
 
 ### Events
 
-| Event Name           | args    | Description                                             |
-| -------------------- | ------- | ------------------------------------------------------- |
-| `@change`            | Boolean | notify v-model/listeners that drawer state has changed. |
-| `@MDCDialog:opening` | none    | On dialog starts its opening animation                  |
-| `@MDCDialog:opened`  | none    | On dialog finishes its opening animation                |
-| `@MDCDialog:closing` | none    | On starts its closing animation                         |
-| `@MDCDialog:closed`  | none    | On finishes its closing animation                       |
+| Event Name            | args    | Description                                             |
+| --------------------- | ------- | ------------------------------------------------------- |
+| `@change`             | Boolean | notify v-model/listeners that drawer state has changed. |
+| `@mcw-dialog-opening` | none    | On dialog starts its opening animation                  |
+| `@mcw-dialog-opened`  | none    | On dialog finishes its opening animation                |
+| `@mcw-dialog-closing` | none    | On starts its closing animation                         |
+| `@mcw-dialog-closed`  | none    | On finishes its closing animation                       |
 
 ### `mcw-dialog-title`
 
