@@ -15,7 +15,7 @@
       <mcw-list v-model="selected" two-line class="demo-list">
         <mcw-list-item
           >Two-line item
-          <span slot="secondary-text">Secondary text</span>
+          <template #secondary-text> <span>Secondary text</span></template>
         </mcw-list-item>
 
         <mcw-list-item two-line="Other secondary text"
@@ -24,7 +24,7 @@
 
         <mcw-list-item
           >Two-line item
-          <span slot="secondary-text">More secondary text</span>
+          <template #secondary-text> <span>More secondary text</span></template>
         </mcw-list-item>
       </mcw-list>
     </div>
