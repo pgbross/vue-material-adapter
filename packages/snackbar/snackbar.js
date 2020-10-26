@@ -28,7 +28,7 @@ export default {
     dismissAction: { type: [String, Boolean], default: true },
     reason: String,
   },
-  setup(props, { emit }) {
+  setup(props, { emit, attrs }) {
     const uiState = reactive({
       classes: {},
       hidden: false,
