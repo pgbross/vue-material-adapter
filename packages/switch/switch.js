@@ -14,10 +14,7 @@ let switchId_ = 0;
 
 export default {
   name: 'mcw-switch',
-  // model: {
-  //   prop: 'checked',
-  //   event: 'change',
-  // },
+
   props: {
     modelValue: Boolean,
     disabled: Boolean,

@@ -21,7 +21,7 @@ var vm = new Vue({
 
 | props       | Type    | Default | Description                                          |
 | ----------- | ------- | ------- | ---------------------------------------------------- |
-| `checked`   | Boolean |         | whether the checkbox is checked, bind with `v-model` |
+| v-model     | Boolean |         | whether the checkbox is checked, bind with `v-model` |
 | `disabled`  | Boolean | false   | whether the checkbox is disabled                     |
 | `label`     | String  |         | checkbox label                                       |
 | `align-end` | Boolean | false   | align the checkbox after the label                   |
@@ -30,9 +30,9 @@ var vm = new Vue({
 
 ### Events
 
-| event     | args | Description              |
-| --------- | ---- | ------------------------ |
-| `@change` | -    | On checked status change |
+| event                | args | Description              |
+| -------------------- | ---- | ------------------------ |
+| `@update:modelValue` | -    | On checked status change |
 
 ### Reference
 
