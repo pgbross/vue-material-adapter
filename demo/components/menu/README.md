@@ -35,7 +35,7 @@ var vm = new Vue({
 
 | props                 | Type              | Default     | Description                                              |
 | --------------------- | ----------------- | ----------- | -------------------------------------------------------- |
-| `open`                | Boolean or Object | false       | optional v-model when true opens menu                    |
+| v-model               | Boolean or Object | false       | optional v-model when true opens menu                    |
 | `quick-open`          | Boolean           | false       | Whether the menu should open and close without animation |
 | `anchor-corner`       | Number            |             | set anchor corner alignment of menu corner               |
 | `anchor-margin`       | Object            |             | set anchor margin of menu (top, right, bottom, left)     |
@@ -71,10 +71,10 @@ Menus can contain a group of list items that can represent the selection state o
 
 ### Events
 
-| props     | arg               | Description                                                |
-| --------- | ----------------- | ---------------------------------------------------------- |
-| `@change` | Boolean           | notify v-model/listeners that menu open state has changed. |
-| `@select` | `{ index, item }` | emitted when a menu item is selected                       |
+| props                | arg               | Description                              |
+| -------------------- | ----------------- | ---------------------------------------- |
+| `@update:modelValue` | Boolean           | notify that menu open state has changed. |
+| `@select`            | `{ index, item }` | emitted when a menu item is selected     |
 
 ### Methods
 

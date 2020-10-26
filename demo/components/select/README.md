@@ -6,7 +6,7 @@
   label="Food"
   helptext="Pick a food group"
   leading-icon="restaurant_menu"
-  @change="onTypeChanged"
+  @update:modelValue="onTypeChanged"
 >
   <mcw-list-item
     v-for="type in types"
@@ -19,7 +19,13 @@
 </mcw-select>
 
 <br />
-<mcw-select v-if="selectedType" v-model="selectedValue" outlined label="Kind">
+<mcw-select
+  v-if="selectedType"
+  :key="selectedType"
+  v-model="selectedValue"
+  outlined
+  label="Kind"
+>
   <mcw-list-item
     v-for="option of options"
     :key="option"
@@ -83,10 +89,10 @@ var vm = new Vue({
 | `outlined`           | Boolean | false   | Use outline variant             |
 | `menu-fullwidth`     | Boolean | true    | Menu is full width              |
 
-| event              | Description                                         |
-| ------------------ | --------------------------------------------------- |
-| `@change`          | emitted on change (supressed if value is unchanged) |
-| `MDCSelect:change` | Native event emitted on change                      |
+| event                | Description                                         |
+| -------------------- | --------------------------------------------------- |
+| `@update:modelValue` | emitted on change (supressed if value is unchanged) |
+| `MDCSelect:change`   | Native event emitted on change                      |
 
 ### Reference
 

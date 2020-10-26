@@ -20,10 +20,7 @@ const DefaultFocusState_ = {
 
 export default {
   name: 'mcw-menu',
-  // model: {
-  //   prop: 'open',
-  //   event: 'change',
-  // },
+
   props: {
     modelValue: [Boolean, Object],
     quickOpen: Boolean,
@@ -175,7 +172,7 @@ export default {
 
       closeSurface: skipRestoreFocus => {
         uiState.menuSurface.close(skipRestoreFocus);
-        emit('change', false);
+        emit('update:modelValue', false);
       },
 
       getElementIndex: element => {
