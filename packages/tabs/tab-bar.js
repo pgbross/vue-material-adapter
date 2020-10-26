@@ -14,10 +14,7 @@ const { strings } = MDCTabBarFoundation;
 
 export default {
   name: 'mcw-tab-bar',
-  // model: {
-  //   prop: 'value',
-  //   event: 'change',
-  // },
+
   props: {
     fade: Boolean,
     stacked: Boolean,

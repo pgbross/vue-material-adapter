@@ -1,7 +1,7 @@
 ## Usage
 
 ```html
-<mcw-tab-bar active-tab-index="1" @change="onSelected">
+<mcw-tab-bar active-tab-index="1" @update:modelValue="onSelected">
   <mcw-tab v-for="item in filteredItems" :key="item.label">{{ item }}</mcw-tab>
 </mcw-tab-bar>
 ```
@@ -56,7 +56,7 @@ or the `to` property for router-link behavior. `mcw-tab` dispatches `@click` eve
 | props                 | args   | Description                   |
 | --------------------- | ------ | ----------------------------- |
 | `MDCTabBar:activated` | number | Native event on index update. |
-| `@change`             | number | On active index update.       |
+| `@update:modelValue`  | number | On active index update.       |
 
 #### Tabs with icons
 
@@ -87,17 +87,11 @@ or the `to` property for router-link behavior. `mcw-tab` dispatches `@click` eve
 `mcw-tab` behaves as a navigational link. Add an `href` for simple link behavior
 or the `to` property for router-link behavior. `mcw-tab` dispatches `@click` event.
 
-| prop                 | Type           | Default                  | Description                 |
-| -------------------- | -------------- | ------------------------ | --------------------------- |
-| `active`             | Boolean        | false                    | set the tab active          |
-| `to`                 | String, Object | undefined                | router-link property _(\*)_ |
-| `replace`            | Boolean        | false                    | router-link property _(\*)_ |
-| `append`             | Boolean        | false                    | router-link property _(\*)_ |
-| `exact`              | Boolean        | false                    | router-link property _(\*)_ |
-| `active-class`       | String         | router-link-active       | router-link property _(\*)_ |
-| `exact-active-class` | String         | router-link-exact-active | router-link property _(\*)_ |
+| prop     | Type    | Default | Description        |
+| -------- | ------- | ------- | ------------------ |
+| `active` | Boolean | false   | set the tab active |
 
-> _(\*)_ Requires [vue-router](https://router.vuejs.org)
+> Supports Vue-Router props
 
 ### reference
 
