@@ -1,13 +1,19 @@
-import VueCompositionAPI from '@vue/composition-api';
-import Vue from 'vue';
+import { createApp, h } from 'vue';
 import VueMaterialAdapter from 'vue-material-adapter';
 import App from './App.vue';
+import { createRouter, createWebHashHistory } from 'vue-router';
 
-Vue.use(VueCompositionAPI);
+const router = createRouter({
+  history: createWebHashHistory(),
+  routes: [],
+});
 
-Vue.config.productionTip = false;
-Vue.use(VueMaterialAdapter);
+// mount app
+const app = createApp({
+  render: () => h(App),
+});
 
-new Vue({
-  render: h => h(App),
-}).$mount('#app');
+app.use(router);
+app.use(VueMaterialAdapter);
+
+app.mount('#app');
