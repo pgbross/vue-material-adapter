@@ -28,24 +28,17 @@ By default the drawer component is responsive and will switch from temporary to 
 
 ### Drawer
 
-| prop               | Type    | Default   | Description                             |
-| ------------------ | ------- | --------- | --------------------------------------- |
-| `modal`            | Boolean |           | Make drawer modal                       |
-| `open`             | Boolean | false     | optional v-model when true opens drawer |
-| `toolbar-spacer`   | Boolean | undefined | add a toolbar spacer                    |
-| `toggle-on`        | String  | undefined | optional toggle event to listen on      |
-| `toggle-on-source` | Object  | vm.\$root | optional toggle event source            |
-| `open-on`          | String  | undefined | optional open event to listen on        |
-| `open-on-source`   | Object  | vm.\$root | optional open event source              |
-| `close-on`         | String  | undefined | optional close event to listen on       |
-| `close-on-source`  | Object  | vm.\$root | optional close event source             |
+| prop             | Type    | Default   | Description                             |
+| ---------------- | ------- | --------- | --------------------------------------- |
+| `modal`          | Boolean |           | Make drawer modal                       |
+| `open`           | Boolean | false     | optional v-model when true opens drawer |
+| `toolbar-spacer` | Boolean | undefined | add a toolbar spacer                    |
 
-| event         | args    | Description                                             |
-| ------------- | ------- | ------------------------------------------------------- |
-| `@change`     | Boolean | notify v-model/listeners that drawer state has changed. |
-| `@open`       |         | on drawer open                                          |
-| `@close`      |         | on drawer close                                         |
-| `@vma:layout` | Boolean | notify listeners on vm.\$root layout has changed.       |
+| event     | args    | Description                                             |
+| --------- | ------- | ------------------------------------------------------- |
+| `@change` | Boolean | notify v-model/listeners that drawer state has changed. |
+| `@open`   |         | on drawer open                                          |
+| `@close`  |         | on drawer close                                         |
 
 > _(\*)_ Requires [vue-router](https://router.vuejs.org)
 > If the `to` property is defined, the item behaves as a
