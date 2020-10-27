@@ -1,17 +1,17 @@
 {
   "name": "basic-webpack",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Basic webpack",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --watch --mode development",
+    "dev": "webpack serve  --watch --mode development --env development",
     "build": "cross-env NODE_ENV=production webpack --mode production --progress --colors",
     "start": "serve build"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "vue-material-adapter": "^0.17.2"
+    "vue-material-adapter": "^1.0.0-alpha.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.5",
@@ -41,7 +41,6 @@
     "eslint-plugin-promise": "^4.2.1",
     "extract-loader": "^5.1.0",
     "fibers": "^5.0.0",
-    "file-loader": "^6.0.0",
     "html-loader": "^1.2.1",
     "html-webpack-plugin": "^4.3.0",
     "html-webpack-tags-plugin": "^2.0.17",
@@ -50,16 +49,14 @@
     "postcss-cli": "^7.1.1",
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.6.0",
-    "raw-loader": "^4.0.0",
     "regenerator-runtime": "^0.13.7",
     "sass-loader": "^10.0.0",
     "serve": "^11.3.2",
     "style-loader": "^1.0.2",
-    "vue": "^2.6.12",
-    "webpack": "^4.44.1",
+    "vue": "^3",
+    "webpack": "^5",
     "webpack-bundle-analyzer": "^3.6.0",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.10.1"
+    "webpack-cli": "^4"
   },
   "browserslist": [
     "last 2 Chrome versions",

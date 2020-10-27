@@ -2,6 +2,7 @@ const path = require('path');
 const pkg = require('./package.json');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackTagsPlugin = require('html-webpack-tags-plugin');
+const webpack = require('webpack');
 
 // eslint-disable-next-line
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
@@ -12,16 +13,25 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const resolve = relativePath => path.resolve(__dirname, relativePath);
 module.exports = [
   {
-    mode: 'development',
+    target: 'web',
     devtool: 'source-map',
     entry: {
       index: [resolve('main.js'), resolve('mdcweb.scss')],
+    },
+    devServer: {
+      historyApiFallback: true,
+      contentBase: path.resolve(__dirname, './dist'),
+      // open: true,
+      compress: true,
+      // hot: true,
+      port: 8080,
     },
     module: {
       rules: [
         {
           test: /\.html$/,
-          use: 'raw-loader',
+          exclude: [/index\.html/],
+          type: 'asset/source',
         },
 
         {
@@ -48,13 +58,11 @@ module.exports = [
         {
           test: /\.scss$/,
           exclude: /\.module.(s(a|c)ss)$/,
+          type: 'asset/resource',
+          generator: {
+            filename: 'css/[name].min.css',
+          },
           use: [
-            {
-              loader: 'file-loader',
-              options: {
-                name: 'css/[name].min.css',
-              },
-            },
             {
               loader: 'extract-loader',
             },
@@ -81,6 +89,10 @@ module.exports = [
       ],
     },
     plugins: [
+      new webpack.DefinePlugin({
+        __VUE_OPTIONS_API__: true,
+        __VUE_PROD_DEVTOOLS__: false,
+      }),
       new CleanWebpackPlugin({
         verbose: true,
       }),
@@ -97,6 +109,9 @@ module.exports = [
       new MiniCssExtractPlugin({
         filename: '[hash]-[name].css',
       }),
+
+      // Only update what has changed on hot reload
+      new webpack.HotModuleReplacementPlugin(),
 
       // new BundleAnalyzerPlugin({}), // uncomment to analyze the bundles
     ],
@@ -140,9 +155,7 @@ module.exports = [
        * without pre-compiling them
        */
       alias: {
-        vue$: 'vue/dist/vue.esm.js',
-        'vue-material-adapter$':
-          'vue-material-adapter/dist/vue-material-adapter.esm.js',
+        vue$: 'vue/dist/vue.esm-bundler.js',
       },
       extensions: ['*', '.vue', '.js', '.json'],
     },
