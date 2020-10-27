@@ -1,4 +1,4 @@
-import { resolveComponent, h, toRefs, ref, shallowReactive, onMounted, onBeforeUnmount, computed, openBlock, createBlock, withCtx, renderSlot, createVNode, toDisplayString, createCommentVNode, reactive, toRef, watch, createTextVNode, provide, mergeProps, toHandlers, inject, Fragment, resolveDynamicComponent, nextTick, watchEffect } from 'vue';
+import { resolveDynamicComponent, h, toRefs, ref, shallowReactive, onMounted, onBeforeUnmount, computed, resolveComponent, openBlock, createBlock, withCtx, renderSlot, createVNode, toDisplayString, createCommentVNode, reactive, toRef, watch, createTextVNode, provide, mergeProps, toHandlers, inject, Fragment, nextTick, watchEffect } from 'vue';
 import { applyPassive } from '@material/dom/events';
 import { matches, closest } from '@material/dom/ponyfill';
 import { MDCRippleFoundation } from '@material/ripple';
@@ -423,7 +423,7 @@ var CustomLink = {
       // if their value has changed since we were created
       var to = props.to,
           href = props.href;
-      var routerLink = resolveComponent('router-link');
+      var routerLink = resolveDynamicComponent('router-link');
 
       if (to && routerLink) {
         var _props$tag;
