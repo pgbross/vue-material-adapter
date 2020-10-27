@@ -1,9 +1,10 @@
-import { computed, reactive, toRefs, nextTick } from 'vue';
+import { computed, reactive, toRefs, nextTick, watch } from 'vue';
 
 const noop = () => {};
 
 export default {
   name: 'mcw-snackbar-queue',
+  props: { snack: Object },
   setup(props, { emit, attrs }) {
     const uiState = reactive({
       open: false,
@@ -70,6 +71,16 @@ export default {
         },
       };
     });
+
+    watch(
+      () => props.snack,
+      (nv, ov) => {
+        if (nv) {
+          handleSnack(nv);
+          emit('update:snack', null);
+        }
+      },
+    );
 
     return { ...toRefs(uiState), handleSnack, listeners };
   },

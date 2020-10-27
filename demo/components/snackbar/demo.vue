@@ -14,7 +14,11 @@
       Result:
       <span class>{{ reason }}</span>
     </div>
-    <mcw-snackbar-queue ref="bar" @update:reason="onReason" />
+    <mcw-snackbar-queue
+      ref="bar"
+      v-model:snack="snack"
+      @update:reason="onReason"
+    />
     <mcw-snackbar
       v-model="open"
       message="Simple message"
@@ -32,7 +36,13 @@ export default {
       n: 0,
       action: '',
       reason: '',
+      snack: {},
     };
+  },
+  watch: {
+    snack(nv, ov) {
+      console.dir(nv);
+    },
   },
   methods: {
     onReason(reason) {
@@ -46,7 +56,7 @@ export default {
       this.open && this.n++;
     },
     showBaseline() {
-      this.$refs.bar.handleSnack({
+      const nextSnack = {
         message: `Can't send photo. Retry in 5 seconds.`,
         timeoutMs: 5000,
         actionText: 'Retry',
@@ -54,7 +64,10 @@ export default {
           alert(`Action, reason: ${reason}`);
         },
         closeOnEscape: false,
-      });
+      };
+
+      this.snack = nextSnack;
+      // this.$refs.bar.handleSnack(nextSnack);
     },
     showStacked() {
       this.$refs.bar.handleSnack({
@@ -65,12 +78,14 @@ export default {
       });
     },
     showLeading() {
-      this.$refs.bar.handleSnack({
+      const nextSnack = {
         message: `Your photo has been archived.`,
         timeoutMs: 5000,
         actionText: 'Undo',
         leading: true,
-      });
+      };
+
+      this.snack = nextSnack;
     },
   },
 };
