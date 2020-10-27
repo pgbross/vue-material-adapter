@@ -1,5 +1,4 @@
 import { h, resolveComponent } from 'vue';
-import { useRouter } from 'vue-router';
 
 export const CustomLink = {
   name: 'custom-link',
@@ -8,23 +7,17 @@ export const CustomLink = {
     to: [String, Object],
   },
   setup(props, { slots, attrs }) {
-    const $router = useRouter();
-
     return () => {
-      let element;
-      let role;
-
       // destructure the props in the render function so we use the current value
       // if their value has changed since we were created
       const { to, href } = props;
 
-      if (to && $router) {
-        element = resolveComponent('router-link');
-
+      const routerLink = resolveComponent('router-link');
+      if (to && routerLink) {
         const rtag = props.tag ?? 'a';
 
         return h(
-          resolveComponent('router-link'),
+          routerLink,
           {
             custom: true,
             ...attrs,
@@ -44,15 +37,10 @@ export const CustomLink = {
               ),
           },
         );
-      } else if (href) {
-        element = 'a';
-        role = 'button';
-      } else {
-        element = props.tag ?? 'a';
-        if (element !== 'button') {
-          role = 'button';
-        }
       }
+
+      const element = href ? 'a' : props.tag ?? 'a';
+      const role = href ? 'button' : element !== 'button' ? 'button' : null;
 
       const children = slots.default?.();
       return h(element, { ...attrs, role }, { default: () => children });
