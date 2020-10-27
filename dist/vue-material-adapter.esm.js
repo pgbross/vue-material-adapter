@@ -6571,6 +6571,9 @@ var noop = function noop() {};
 
 var script$s = {
   name: 'mcw-snackbar-queue',
+  props: {
+    snack: Object
+  },
   setup: function setup(props, _ref) {
     var emit = _ref.emit,
         attrs = _ref.attrs;
@@ -6652,6 +6655,14 @@ var script$s = {
           });
         }
       };
+    });
+    watch(function () {
+      return props.snack;
+    }, function (nv, ov) {
+      if (nv) {
+        handleSnack(nv);
+        emit('update:snack', null);
+      }
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
       handleSnack: handleSnack,
