@@ -1,5 +1,4 @@
 import { resolveComponent, h, toRefs, ref, shallowReactive, onMounted, onBeforeUnmount, computed, openBlock, createBlock, withCtx, renderSlot, createVNode, toDisplayString, createCommentVNode, reactive, toRef, watch, createTextVNode, provide, mergeProps, toHandlers, inject, Fragment, resolveDynamicComponent, nextTick, watchEffect } from 'vue';
-import { useRouter } from 'vue-router';
 import { applyPassive } from '@material/dom/events';
 import { matches, closest } from '@material/dom/ponyfill';
 import { MDCRippleFoundation } from '@material/ripple';
@@ -417,23 +416,20 @@ var CustomLink = {
   setup: function setup(props, _ref) {
     var slots = _ref.slots,
         attrs = _ref.attrs;
-    var $router = useRouter();
     return function () {
-      var _slots$default2;
+      var _props$tag2, _slots$default2;
 
-      var element;
-      var role; // destructure the props in the render function so we use the current value
+      // destructure the props in the render function so we use the current value
       // if their value has changed since we were created
-
       var to = props.to,
           href = props.href;
+      var routerLink = resolveComponent('router-link');
 
-      if (to && $router) {
+      if (to && routerLink) {
         var _props$tag;
 
-        element = resolveComponent('router-link');
         var rtag = (_props$tag = props.tag) !== null && _props$tag !== void 0 ? _props$tag : 'a';
-        return h(resolveComponent('router-link'), _objectSpread2(_objectSpread2({
+        return h(routerLink, _objectSpread2(_objectSpread2({
           custom: true
         }, attrs), {}, {
           to: to
@@ -449,19 +445,10 @@ var CustomLink = {
             }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
           }
         });
-      } else if (href) {
-        element = 'a';
-        role = 'button';
-      } else {
-        var _props$tag2;
-
-        element = (_props$tag2 = props.tag) !== null && _props$tag2 !== void 0 ? _props$tag2 : 'a';
-
-        if (element !== 'button') {
-          role = 'button';
-        }
       }
 
+      var element = href ? 'a' : (_props$tag2 = props.tag) !== null && _props$tag2 !== void 0 ? _props$tag2 : 'a';
+      var role = href ? 'button' : element !== 'button' ? 'button' : null;
       var children = (_slots$default2 = slots.default) === null || _slots$default2 === void 0 ? void 0 : _slots$default2.call(slots);
       return h(element, _objectSpread2(_objectSpread2({}, attrs), {}, {
         role: role
