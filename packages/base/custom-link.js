@@ -1,4 +1,4 @@
-import { h, resolveComponent } from 'vue';
+import { h, resolveDynamicComponent } from 'vue';
 
 export const CustomLink = {
   name: 'custom-link',
@@ -12,7 +12,7 @@ export const CustomLink = {
       // if their value has changed since we were created
       const { to, href } = props;
 
-      const routerLink = resolveComponent('router-link');
+      const routerLink = resolveDynamicComponent('router-link');
       if (to && routerLink) {
         const rtag = props.tag ?? 'a';
 
