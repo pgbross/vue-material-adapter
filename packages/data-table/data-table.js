@@ -18,14 +18,7 @@ export default {
       return el.__vue__ ? new CheckboxAdapter(el.__vue__) : new MDCCheckbox(el);
     };
 
-    const {
-      cssClasses,
-      events,
-      selectors,
-      dataAttributes,
-      SortValue,
-      messages,
-    } = test;
+    const { cssClasses, selectors, dataAttributes, SortValue, messages } = test;
 
     let foundation;
     let headerRow;
@@ -116,7 +109,7 @@ export default {
 
       notifySortAction: data => {
         emit(
-          events.SORTED,
+          'mdc-data-table-sorted',
           {
             data,
           },
@@ -174,7 +167,7 @@ export default {
         !!uiState.root.querySelector(selectors.ROW_CHECKBOX),
       notifyRowSelectionChanged: data => {
         emit(
-          events.ROW_SELECTION_CHANGED,
+          'mdc-data-table-rowselectionchanged',
           {
             row: getRowByIndex_(data.rowIndex),
             rowId: getRowIdByIndex_(data.rowIndex),
@@ -185,9 +178,9 @@ export default {
         );
       },
       notifySelectedAll: () =>
-        emit(events.SELECTED_ALL, {}, /** shouldBubble */ true),
+        emit('mdc-data-table-selectedall', {}, /** shouldBubble */ true),
       notifyUnselectedAll: () =>
-        emit(events.UNSELECTED_ALL, {}, /** shouldBubble */ true),
+        emit('mdc-data-table-unselectedall', {}, /** shouldBubble */ true),
       registerHeaderRowCheckbox: () => {
         headerRowCheckbox?.destroy();
 

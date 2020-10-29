@@ -75,9 +75,9 @@
     <div class>
       <div class="mdc-typography--headline6">Row Selection</div>
       <mcw-data-table
-        @MDCDataTable:rowSelectionChanged="onRowSelection"
-        @MDCDataTable:selectedAll="onSelectAll"
-        @MDCDataTable:unselectedAll="onUnselectAll"
+        @mdc-data-table-rowselectionchanged="onRowSelection"
+        @mdc-data-table-selectedall="onSelectAll"
+        @mdc-data-table-unselectedall="onUnselectAll"
       >
         <table class="mdc-data-table__table" aria-label="Dessert calories">
           <thead>
@@ -229,7 +229,7 @@
     <p></p>
     <div class>
       <div class="mdc-typography--headline6">Sorting</div>
-      <mcw-data-table @MDCDataTable:sorted="onSorted">
+      <mcw-data-table @mdc-data-table-sorted="onSorted">
         <table class="mdc-data-table__table" aria-label="Dessert calories">
           <thead>
             <tr class="mdc-data-table__header-row">
@@ -241,9 +241,7 @@
                 data-column-id="dessert"
               >
                 <div class="mdc-data-table__header-cell-wrapper">
-                  <div class="mdc-data-table__header-cell-label">
-                    Dessert
-                  </div>
+                  <div class="mdc-data-table__header-cell-label">Dessert</div>
                   <button
                     class="mdc-icon-button material-icons mdc-data-table__sort-icon-button"
                     aria-label="Sort by dessert"
@@ -273,9 +271,7 @@
                   >
                     arrow_upward
                   </button>
-                  <div class="mdc-data-table__header-cell-label">
-                    Carbs (g)
-                  </div>
+                  <div class="mdc-data-table__header-cell-label">Carbs (g)</div>
                   <div
                     id="carbs-status-label"
                     class="mdc-data-table__sort-status-label"

@@ -12,7 +12,7 @@ import { MDCChipFoundation } from '@material/chips/chip/foundation';
 import { MDCChipTrailingActionFoundation } from '@material/chips/trailingaction/foundation';
 import { MDCCircularProgressFoundation } from '@material/circular-progress/foundation';
 import { MDCCheckbox } from '@material/checkbox';
-import { cssClasses as cssClasses$8, events, selectors, dataAttributes, SortValue, messages } from '@material/data-table';
+import { cssClasses as cssClasses$8, selectors, dataAttributes, SortValue, messages } from '@material/data-table';
 import { MDCDataTableFoundation } from '@material/data-table/foundation';
 import { MDCDialogFoundation } from '@material/dialog/foundation';
 import { createFocusTrapInstance, isScrollable, areTopsMisaligned } from '@material/dialog/util';
@@ -2252,7 +2252,6 @@ var script$8 = {
     };
 
     var cssClasses = cssClasses$8,
-        events$1 = events,
         selectors$1 = selectors,
         dataAttributes$1 = dataAttributes,
         SortValue$1 = SortValue,
@@ -2355,7 +2354,7 @@ var script$8 = {
         getHeaderCells()[index].classList.remove(className);
       },
       notifySortAction: function notifySortAction(data) {
-        emit(events$1.SORTED, {
+        emit('mdc-data-table-sorted', {
           data: data
         }, true);
       },
@@ -2414,7 +2413,7 @@ var script$8 = {
         return !!uiState.root.querySelector(selectors$1.ROW_CHECKBOX);
       },
       notifyRowSelectionChanged: function notifyRowSelectionChanged(data) {
-        emit(events$1.ROW_SELECTION_CHANGED, {
+        emit('mdc-data-table-rowselectionchanged', {
           row: getRowByIndex_(data.rowIndex),
           rowId: getRowIdByIndex_(data.rowIndex),
           rowIndex: data.rowIndex,
@@ -2424,12 +2423,12 @@ var script$8 = {
         true);
       },
       notifySelectedAll: function notifySelectedAll() {
-        return emit(events$1.SELECTED_ALL, {},
+        return emit('mdc-data-table-selectedall', {},
         /** shouldBubble */
         true);
       },
       notifyUnselectedAll: function notifyUnselectedAll() {
-        return emit(events$1.UNSELECTED_ALL, {},
+        return emit('mdc-data-table-unselectedall', {},
         /** shouldBubble */
         true);
       },
