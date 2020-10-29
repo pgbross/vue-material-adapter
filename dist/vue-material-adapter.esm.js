@@ -3002,14 +3002,14 @@ var script$a = {
         emitCustomEvent(uiState.drawer, strings$2.CLOSE_EVENT, {}, true
         /* shouldBubble */
         );
-        emit('change', false);
+        emit('update:modelValue', false);
         emit('close');
       },
       notifyOpen: function notifyOpen() {
         emitCustomEvent(uiState.drawer, strings$2.OPEN_EVENT, {}, true
         /* shouldBubble */
         );
-        emit('change', true);
+        emit('update:modelValue', true);
         emit('open');
       },
       trapFocus: function trapFocus() {

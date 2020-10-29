@@ -90,7 +90,7 @@ export default {
           {},
           true /* shouldBubble */,
         );
-        emit('change', false);
+        emit('update:modelValue', false);
         emit('close');
       },
       notifyOpen: () => {
@@ -100,7 +100,7 @@ export default {
           {},
           true /* shouldBubble */,
         );
-        emit('change', true);
+        emit('update:modelValue', true);
         emit('open');
       },
       trapFocus: () => focusTrap_.trapFocus(),
