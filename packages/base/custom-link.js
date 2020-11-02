@@ -28,6 +28,7 @@ export const CustomLink = {
               h(
                 rtag,
                 {
+                  ...attrs,
                   onClick: evt => {
                     evt.__itemId = attrs.itemId;
                     props.navigate(evt);

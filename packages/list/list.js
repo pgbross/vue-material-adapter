@@ -83,6 +83,10 @@ export default {
     });
 
     const listElements = computed(() => {
+      if (!uiState.listRoot) {
+        return [];
+      }
+
       return [].slice.call(
         uiState.listRoot.querySelectorAll(`.${cssClasses.LIST_ITEM_CLASS}`),
       );
@@ -272,15 +276,17 @@ export default {
 
       hasCheckboxAtIndex: index => {
         const listItem = listElements.value[index];
-        return !!(listItem.$el ?? listItem).querySelector(
-          strings.CHECKBOX_SELECTOR,
+        return (
+          listItem &&
+          !!(listItem.$el ?? listItem).querySelector(strings.CHECKBOX_SELECTOR)
         );
       },
 
       hasRadioAtIndex: index => {
         const listItem = listElements.value[index];
-        return !!(listItem.$el ?? listItem).querySelector(
-          strings.RADIO_SELECTOR,
+        return (
+          listItem &&
+          !!(listItem.$el ?? listItem).querySelector(strings.RADIO_SELECTOR)
         );
       },
 

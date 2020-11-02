@@ -437,12 +437,12 @@ var CustomLink = {
           default: function _default(props) {
             var _slots$default;
 
-            return h(rtag, {
+            return h(rtag, _objectSpread2(_objectSpread2({}, attrs), {}, {
               onClick: function onClick(evt) {
                 evt.__itemId = attrs.itemId;
                 props.navigate(evt);
               }
-            }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
+            }), (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
           }
         });
       }
@@ -4090,8 +4090,7 @@ function render$j(_ctx, _cache, $props, $setup, $data, $options) {
 
   return (openBlock(), createBlock(_component_custom_link, mergeProps({
     ref: "root",
-    to: _ctx.to,
-    link: _ctx.myAttrs
+    to: _ctx.to
   }, toHandlers(_ctx.myListeners), _ctx.myAttrs, { tag: "a" }), {
     default: withCtx(() => [
       _hoisted_1$d,
@@ -4170,7 +4169,7 @@ function render$j(_ctx, _cache, $props, $setup, $data, $options) {
             : createCommentVNode("v-if", true)
     ]),
     _: 1
-  }, 16 /* FULL_PROPS */, ["to", "link"]))
+  }, 16 /* FULL_PROPS */, ["to"]))
 }
 
 script$j.render = render$j;
@@ -4256,6 +4255,10 @@ var script$k = {
       }
     });
     var listElements = computed(function () {
+      if (!uiState.listRoot) {
+        return [];
+      }
+
       return [].slice.call(uiState.listRoot.querySelectorAll(".".concat(cssClasses$1.LIST_ITEM_CLASS)));
     }); // const updateListElements = () => {
     //   const elements = [].slice.call(
@@ -4407,13 +4410,13 @@ var script$k = {
         var _listItem$$el;
 
         var listItem = listElements.value[index];
-        return !!((_listItem$$el = listItem.$el) !== null && _listItem$$el !== void 0 ? _listItem$$el : listItem).querySelector(strings$3.CHECKBOX_SELECTOR);
+        return listItem && !!((_listItem$$el = listItem.$el) !== null && _listItem$$el !== void 0 ? _listItem$$el : listItem).querySelector(strings$3.CHECKBOX_SELECTOR);
       },
       hasRadioAtIndex: function hasRadioAtIndex(index) {
         var _listItem$$el2;
 
         var listItem = listElements.value[index];
-        return !!((_listItem$$el2 = listItem.$el) !== null && _listItem$$el2 !== void 0 ? _listItem$$el2 : listItem).querySelector(strings$3.RADIO_SELECTOR);
+        return listItem && !!((_listItem$$el2 = listItem.$el) !== null && _listItem$$el2 !== void 0 ? _listItem$$el2 : listItem).querySelector(strings$3.RADIO_SELECTOR);
       },
       isCheckboxCheckedAtIndex: function isCheckboxCheckedAtIndex(index) {
         var _listItem$$el3;
