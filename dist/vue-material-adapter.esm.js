@@ -1111,7 +1111,7 @@ var script$2 = {
       } else {
         // emit a native event so that it bubbles to parent elements
         // e.g. data table row
-        emitCustomEvent$1(uiState.root, 'change', true);
+        emitCustomEvent$1(uiState.root, 'mdc-checkbox:change', {}, true);
         emit('update:modelValue', checked);
       }
     };
@@ -1488,19 +1488,19 @@ var script$4 = {
       foundation = new MDCChipSetFoundation(adapter);
       foundation.init();
       uiState.myListeners = {
-        'mcw-chip-interaction': function mcwChipInteraction(_ref2) {
+        'mdc-chip:interaction': function mdcChipInteraction(_ref2) {
           var detail = _ref2.detail;
           return foundation.handleChipInteraction(detail);
         },
-        'mcw-chip-selection': function mcwChipSelection(_ref3) {
+        'mdc-chip:selection': function mdcChipSelection(_ref3) {
           var detail = _ref3.detail;
           return foundation.handleChipSelection(detail);
         },
-        'mcw-chip-removal': function mcwChipRemoval(_ref4) {
+        'mdc-chip:removal': function mdcChipRemoval(_ref4) {
           var detail = _ref4.detail;
           return foundation.handleChipRemoval(detail);
         },
-        'mcw-chip-navigation': function mcwChipNavigation(_ref5) {
+        'mdc-chip:navigation': function mdcChipNavigation(_ref5) {
           var detail = _ref5.detail;
           return foundation.handleChipNavigation(detail);
         }
@@ -1664,25 +1664,25 @@ var script$5 = {
         return false;
       },
       notifyInteraction: function notifyInteraction() {
-        emitCustomEvent(uiState.root, 'mcw-chip-interaction', {
+        emitCustomEvent(uiState.root, 'mdc-chip:interaction', {
           chipId: id
         }, true);
       },
       notifyNavigation: function notifyNavigation(key, source) {
-        return emitCustomEvent(uiState.root, 'mcw-chip-navigation', {
+        return emitCustomEvent(uiState.root, 'mdc-chip:navigation', {
           chipId: id,
           key: key,
           source: source
         }, true);
       },
       notifyRemoval: function notifyRemoval(removedAnnouncement) {
-        emitCustomEvent(uiState.root, 'mcw-chip-removal', {
+        emitCustomEvent(uiState.root, 'mdc-chip:removal', {
           chipId: id,
           removedAnnouncement: removedAnnouncement
         }, true);
       },
       notifySelection: function notifySelection(selected, shouldIgnore) {
-        return emitCustomEvent(uiState.root, 'mcw-chip-selection', {
+        return emitCustomEvent(uiState.root, 'mdc-chip:selection', {
           chipId: id,
           selected: selected,
           shouldIgnore: shouldIgnore
@@ -1691,7 +1691,7 @@ var script$5 = {
         );
       },
       notifyTrailingIconInteraction: function notifyTrailingIconInteraction() {
-        emitCustomEvent(uiState.root, 'mcw-chip-trailing-icon-interaction', {
+        emitCustomEvent(uiState.root, 'mdc-chip:trailing-icon-interaction', {
           chipId: id
         }, true);
       },
@@ -1789,11 +1789,11 @@ var script$5 = {
       };
 
       if (trailingAction_) {
-        uiState.myListeners['mcw-chip-trailing-action-interaction'] = function (evt) {
+        uiState.myListeners['mdc-chip:trailing-action-interaction'] = function (evt) {
           return foundation.handleTrailingActionInteraction(evt);
         };
 
-        uiState.myListeners['mcw-chip-trailing-action-navigation'] = function (evt) {
+        uiState.myListeners['mdc-chip:trailing-action-navigation'] = function (evt) {
           return foundation.handleTrailingActionNavigation(evt);
         };
       }
@@ -1909,12 +1909,12 @@ var script$6 = {
         return root.value.getAttribute(attr);
       },
       notifyInteraction: function notifyInteraction(trigger) {
-        return emitCustomEvent(root.value, 'mcw-chip-trailing-action-interaction', {
+        return emitCustomEvent(root.value, 'mdc-chip:trailing-action-interaction', {
           trigger: trigger
         }, true);
       },
       notifyNavigation: function notifyNavigation(key) {
-        return emitCustomEvent(root.value, 'mcw-chip-trailing-action-navigation', {
+        return emitCustomEvent(root.value, 'mdc-chip:trailing-action-navigation', {
           key: key
         }, true);
       },
@@ -2354,7 +2354,7 @@ var script$8 = {
         getHeaderCells()[index].classList.remove(className);
       },
       notifySortAction: function notifySortAction(data) {
-        emit('mdc-data-table-sorted', {
+        emit('mdc-data-table:sorted', {
           data: data
         }, true);
       },
@@ -2413,24 +2413,18 @@ var script$8 = {
         return !!uiState.root.querySelector(selectors$1.ROW_CHECKBOX);
       },
       notifyRowSelectionChanged: function notifyRowSelectionChanged(data) {
-        emit('mdc-data-table-rowselectionchanged', {
+        emit('mdc-data-table:rowselectionchanged', {
           row: getRowByIndex_(data.rowIndex),
           rowId: getRowIdByIndex_(data.rowIndex),
           rowIndex: data.rowIndex,
           selected: data.selected
-        },
-        /** shouldBubble */
-        true);
+        });
       },
       notifySelectedAll: function notifySelectedAll() {
-        return emit('mdc-data-table-selectedall', {},
-        /** shouldBubble */
-        true);
+        return emit('mdc-data-table:selectedall', {});
       },
       notifyUnselectedAll: function notifyUnselectedAll() {
-        return emit('mdc-data-table-unselectedall', {},
-        /** shouldBubble */
-        true);
+        return emit('mdc-data-table:unselectedall', {});
       },
       registerHeaderRowCheckbox: function registerHeaderRowCheckbox() {
         var _headerRowCheckbox;
@@ -2486,7 +2480,7 @@ var script$8 = {
         return foundation.handleHeaderRowCheckboxChange();
       };
 
-      headerRow.addEventListener('change', handleHeaderRowCheckboxChange);
+      headerRow.addEventListener('mdc-checkbox:change', handleHeaderRowCheckboxChange);
 
       headerRowClickListener = function headerRowClickListener(event) {
         handleHeaderRowClick(event);
@@ -2499,7 +2493,7 @@ var script$8 = {
         return foundation.handleRowCheckboxChange(event);
       };
 
-      content.addEventListener('change', handleRowCheckboxChange);
+      content.addEventListener('mdc-checkbox:change', handleRowCheckboxChange);
       foundation = new MDCDataTableFoundation(adapter);
       foundation.init();
       layout();
@@ -2507,9 +2501,9 @@ var script$8 = {
     onBeforeUnmount(function () {
       var _headerRowCheckbox2, _headerRowCheckbox2$d, _rowCheckboxList;
 
-      headerRow.removeEventListener('change', handleHeaderRowCheckboxChange);
+      headerRow.removeEventListener('mdc-checkbox:change', handleHeaderRowCheckboxChange);
       headerRow.removeEventListener('click', headerRowClickListener);
-      content.removeEventListener('change', handleRowCheckboxChange);
+      content.removeEventListener('mdc-checkbox:change', handleRowCheckboxChange);
       (_headerRowCheckbox2 = headerRowCheckbox) === null || _headerRowCheckbox2 === void 0 ? void 0 : (_headerRowCheckbox2$d = _headerRowCheckbox2.destroy) === null || _headerRowCheckbox2$d === void 0 ? void 0 : _headerRowCheckbox2$d.call(_headerRowCheckbox2);
       (_rowCheckboxList = rowCheckboxList) === null || _rowCheckboxList === void 0 ? void 0 : _rowCheckboxList.forEach(function (checkbox) {
         var _checkbox$destroy;
@@ -2776,18 +2770,18 @@ var script$9 = {
         });
       },
       notifyOpening: function notifyOpening() {
-        emit('mcw-dialog-opening', {});
+        emit('mdc-dialog-opening', {});
         LAYOUT_EVENTS.forEach(function (evt) {
           return window.addEventListener(evt, handleLayout);
         });
         document.addEventListener('keydown', handleDocumentKeyDown);
       },
       notifyOpened: function notifyOpened() {
-        return emit('mcw-dialog-opened', {});
+        return emit('mdc-dialog-opened', {});
       },
       notifyClosing: function notifyClosing(action) {
         emit('update:modelValue', false);
-        emit('mcw-dialog-closing', action ? {
+        emit('mdc-dialog-closing', action ? {
           action: action
         } : {});
         LAYOUT_EVENTS.forEach(function (evt) {
@@ -2796,7 +2790,7 @@ var script$9 = {
         document.removeEventListener('keydown', handleDocumentKeyDown);
       },
       notifyClosed: function notifyClosed(action) {
-        emit('mcw-dialog-closed', action ? {
+        emit('mdc-dialog-closed', action ? {
           action: action
         } : {});
       }
@@ -2892,18 +2886,12 @@ var dialog = BasePlugin({
   mcwDialogContent: mcwDialogContent
 });
 
-var strings$2 = MDCDismissibleDrawerFoundation.strings;
 var script$a = {
   name: 'mcw-drawer',
-  // model: {
-  //   prop: 'open',
-  //   event: 'change',
-  // },
   props: {
     modelValue: Boolean,
     modal: Boolean,
     dismissible: Boolean,
-    // open: Boolean,
     toolbarSpacer: Boolean
   },
   setup: function setup(props, _ref) {
@@ -2999,14 +2987,14 @@ var script$a = {
         }
       },
       notifyClose: function notifyClose() {
-        emitCustomEvent(uiState.drawer, strings$2.CLOSE_EVENT, {}, true
+        emitCustomEvent(uiState.drawer, 'mdc-drawer:closed', {}, true
         /* shouldBubble */
         );
         emit('update:modelValue', false);
         emit('close');
       },
       notifyOpen: function notifyOpen() {
-        emitCustomEvent(uiState.drawer, strings$2.OPEN_EVENT, {}, true
+        emitCustomEvent(uiState.drawer, 'mdc-drawer:opened', {}, true
         /* shouldBubble */
         );
         emit('update:modelValue', true);
@@ -3095,7 +3083,7 @@ function render$a(_ctx, _cache, $props, $setup, $data, $options) {
             createVNode(_component_mcw_list, {
               "wrap-focus": true,
               tag: "nav",
-              onMcwListAction: _ctx.onListAction,
+              "onMdcList:action": _ctx.onListAction,
               "single-selection": "",
               "selected-index": 0
             }, {
@@ -3103,7 +3091,7 @@ function render$a(_ctx, _cache, $props, $setup, $data, $options) {
                 renderSlot(_ctx.$slots, "default")
               ]),
               _: 3
-            }, 8 /* PROPS */, ["onMcwListAction"])
+            }, 8 /* PROPS */, ["onMdcList:action"])
           ])
         ], 34 /* CLASS, HYDRATE_EVENTS */))
       : (openBlock(), createBlock("div", _hoisted_2$7, [
@@ -3120,13 +3108,13 @@ function render$a(_ctx, _cache, $props, $setup, $data, $options) {
                 tag: "nav",
                 "single-selection": "",
                 "selected-index": 0,
-                onMcwListAction: _ctx.onListAction
+                "onMdcList:action": _ctx.onListAction
               }, {
                 default: withCtx(() => [
                   renderSlot(_ctx.$slots, "default")
                 ]),
                 _: 3
-              }, 8 /* PROPS */, ["onMcwListAction"])
+              }, 8 /* PROPS */, ["onMdcList:action"])
             ])
           ], 34 /* CLASS, HYDRATE_EVENTS */),
           (_ctx.modal)
@@ -4175,7 +4163,7 @@ function render$j(_ctx, _cache, $props, $setup, $data, $options) {
 script$j.render = render$j;
 script$j.__file = "packages/list/list-item.vue";
 
-var strings$3 = MDCListFoundation.strings,
+var strings$2 = MDCListFoundation.strings,
     cssClasses$1 = MDCListFoundation.cssClasses;
 var script$k = {
   name: 'mcw-list',
@@ -4295,18 +4283,18 @@ var script$k = {
         ele.setAttribute('tabindex', -1);
       }); // Child button/a elements are not tabbable until the list item is focused.
 
-      [].slice.call(uiState.listRoot.querySelectorAll(strings$3.FOCUSABLE_CHILD_ELEMENTS)).forEach(function (ele) {
+      [].slice.call(uiState.listRoot.querySelectorAll(strings$2.FOCUSABLE_CHILD_ELEMENTS)).forEach(function (ele) {
         return ele.setAttribute('tabindex', -1);
       });
       foundation.layout();
     };
 
     var initializeListType = function initializeListType() {
-      var checkboxListItems = uiState.listRoot.querySelectorAll(strings$3.ARIA_ROLE_CHECKBOX_SELECTOR);
-      var radioSelectedListItem = uiState.listRoot.querySelector(strings$3.ARIA_CHECKED_RADIO_SELECTOR);
+      var checkboxListItems = uiState.listRoot.querySelectorAll(strings$2.ARIA_ROLE_CHECKBOX_SELECTOR);
+      var radioSelectedListItem = uiState.listRoot.querySelector(strings$2.ARIA_CHECKED_RADIO_SELECTOR);
 
       if (checkboxListItems.length) {
-        var preselectedItems = uiState.listRoot.querySelectorAll(strings$3.ARIA_CHECKED_CHECKBOX_SELECTOR);
+        var preselectedItems = uiState.listRoot.querySelectorAll(strings$2.ARIA_CHECKED_CHECKBOX_SELECTOR);
         selIndex.value = [].map.call(preselectedItems, function (listItem) {
           return listElements.value.indexOf(listItem.__vue__);
         });
@@ -4356,7 +4344,7 @@ var script$k = {
       var index = getListItemIndex(evt);
       var target = evt.target; // Toggle the checkbox only if it's not the target of the event, or the checkbox will have 2 change events.
 
-      var toggleCheckbox = !matches(target, strings$3.CHECKBOX_RADIO_SELECTOR);
+      var toggleCheckbox = !matches(target, strings$2.CHECKBOX_RADIO_SELECTOR);
       foundation.handleClick(index, toggleCheckbox);
     };
 
@@ -4410,23 +4398,25 @@ var script$k = {
         var _listItem$$el;
 
         var listItem = listElements.value[index];
-        return listItem && !!((_listItem$$el = listItem.$el) !== null && _listItem$$el !== void 0 ? _listItem$$el : listItem).querySelector(strings$3.CHECKBOX_SELECTOR);
+        return listItem && !!((_listItem$$el = listItem.$el) !== null && _listItem$$el !== void 0 ? _listItem$$el : listItem).querySelector(strings$2.CHECKBOX_SELECTOR);
       },
       hasRadioAtIndex: function hasRadioAtIndex(index) {
         var _listItem$$el2;
 
         var listItem = listElements.value[index];
-        return listItem && !!((_listItem$$el2 = listItem.$el) !== null && _listItem$$el2 !== void 0 ? _listItem$$el2 : listItem).querySelector(strings$3.RADIO_SELECTOR);
+        return listItem && !!((_listItem$$el2 = listItem.$el) !== null && _listItem$$el2 !== void 0 ? _listItem$$el2 : listItem).querySelector(strings$2.RADIO_SELECTOR);
       },
       isCheckboxCheckedAtIndex: function isCheckboxCheckedAtIndex(index) {
         var _listItem$$el3;
 
         var listItem = listElements.value[index];
-        var toggleEl = ((_listItem$$el3 = listItem.$el) !== null && _listItem$$el3 !== void 0 ? _listItem$$el3 : listItem).querySelector(strings$3.CHECKBOX_SELECTOR);
+        var toggleEl = ((_listItem$$el3 = listItem.$el) !== null && _listItem$$el3 !== void 0 ? _listItem$$el3 : listItem).querySelector(strings$2.CHECKBOX_SELECTOR);
         return toggleEl.checked;
       },
       isFocusInsideList: function isFocusInsideList() {
-        return uiState.listRoot.contains(document.activeElement);
+        var _uiState$listRoot;
+
+        return (_uiState$listRoot = uiState.listRoot) === null || _uiState$listRoot === void 0 ? void 0 : _uiState$listRoot.contains(document.activeElement);
       },
       isRootFocused: function isRootFocused() {
         return document.activeElement === uiState.listRoot;
@@ -4437,7 +4427,7 @@ var script$k = {
         listItem.classList.contains(className);
       },
       notifyAction: function notifyAction(index) {
-        emitCustomEvent(uiState.listRoot, strings$3.ACTION_EVENT, {
+        emitCustomEvent(uiState.listRoot, 'mdc-list:action', {
           index: index
         },
         /** shouldBubble */
@@ -4462,7 +4452,7 @@ var script$k = {
       },
       setCheckedCheckboxOrRadioAtIndex: function setCheckedCheckboxOrRadioAtIndex(index, isChecked) {
         var listItem = listElements.value[index];
-        var toggleEl = listItem.querySelector(strings$3.CHECKBOX_RADIO_SELECTOR);
+        var toggleEl = listItem.querySelector(strings$2.CHECKBOX_RADIO_SELECTOR);
         toggleEl && (toggleEl.checked = isChecked);
         var event = document.createEvent('Event');
         event.initEvent('update:modelValue', true, true);
@@ -4470,7 +4460,7 @@ var script$k = {
       },
       setTabIndexForListItemChildren: function setTabIndexForListItemChildren(listItemIndex, tabIndexValue) {
         var element = listElements.value[listItemIndex];
-        var listItemChildren = [].slice.call(element.querySelectorAll(strings$3.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX));
+        var listItemChildren = [].slice.call(element.querySelectorAll(strings$2.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX));
         listItemChildren.forEach(function (el) {
           return el.setAttribute('tabindex', tabIndexValue);
         });
@@ -4645,14 +4635,9 @@ var mcwMenuItem = {
   }
 };
 
-var strings$4 = MDCMenuSurfaceFoundation.strings,
-    cssClasses$2 = MDCMenuSurfaceFoundation.cssClasses;
+var cssClasses$2 = MDCMenuSurfaceFoundation.cssClasses;
 var script$l = {
   name: 'mcw-menu-surface',
-  // model: {
-  //   prop: 'open',
-  //   event: 'change',
-  // },
   props: {
     modelValue: [Boolean, Object],
     'quick-open': Boolean,
@@ -4837,15 +4822,15 @@ var script$l = {
         return !!anchorElement;
       },
       notifyClose: function notifyClose() {
-        emitCustomEvent(uiState.root, strings$4.CLOSED_EVENT, {});
+        emitCustomEvent(uiState.root, 'mdc-menu-surface:closed', {});
         deregisterBodyClickListener();
-        emit('mcw-menu-surface-closed');
+        emit('mdc-menu-surface-closed');
         emit('update:modelValue', false);
       },
       notifyOpen: function notifyOpen() {
-        emitCustomEvent(uiState.root, strings$4.OPENED_EVENT, {});
+        emitCustomEvent(uiState.root, 'mdc-menu-surface:opened', {});
         registerBodyClickListener();
-        emit('mcw-menu-surface-opened');
+        emit('mdc-menu-surface-opened');
         emit('update:modelValue', true);
       },
       isElementInContainer: function isElementInContainer(el) {
@@ -4909,7 +4894,7 @@ script$l.render = render$l;
 script$l.__file = "packages/menu/menu-surface.vue";
 
 var cssClasses$3 = MDCMenuFoundation.cssClasses,
-    strings$5 = MDCMenuFoundation.strings;
+    strings$3 = MDCMenuFoundation.strings;
 var DefaultFocusState_ = {
   NONE: 0,
   LIST_ROOT: 1,
@@ -4989,11 +4974,11 @@ var script$m = {
 
     var handleMenuSurfaceOpened = function handleMenuSurfaceOpened() {
       foundation.handleMenuSurfaceOpened();
-      emit('mcw-menu-surface-opened');
+      emit('mdc-menu-surface-opened');
     };
 
     var handleMenuSurfaceClosed = function handleMenuSurfaceClosed() {
-      emit('mcw-menu-surface-closed');
+      emit('mdc-menu-surface-closed');
     };
 
     var onChange = function onChange(item) {
@@ -5105,7 +5090,7 @@ var script$m = {
         });
       },
       notifySelected: function notifySelected(evtData) {
-        emitCustomEvent(rootEl, strings$5.SELECTED_EVENT, {
+        emitCustomEvent(rootEl, 'mdc-menu:selected', {
           index: evtData.index,
           item: items.value[evtData.index]
         });
@@ -5121,7 +5106,7 @@ var script$m = {
         return items.value[index].focus();
       },
       focusListRoot: function focusListRoot() {
-        return uiState.menuSurface.$el.querySelector(strings$5.LIST_SELECTOR).focus();
+        return uiState.menuSurface.$el.querySelector(strings$3.LIST_SELECTOR).focus();
       },
       isSelectableItemAtIndex: function isSelectableItemAtIndex(index) {
         return !!closest(items.value[index], ".".concat(cssClasses$3.MENU_SELECTION_GROUP));
@@ -5199,8 +5184,8 @@ function render$m(_ctx, _cache, $props, $setup, $data, $options) {
     modelValue: _ctx.menuOpen,
     onKeydown: _ctx.handleKeydown,
     "onUpdate:modelValue": _ctx.onChange,
-    onMcwMenuSurfaceOpened: _ctx.handleMenuSurfaceOpened,
-    onMcwMenuSurfaceClosed: _ctx.handleMenuSurfaceClosed
+    "onMdcMenuSurface:opened": _ctx.handleMenuSurfaceOpened,
+    "onMdcMenuSurface:closed": _ctx.handleMenuSurfaceClosed
   }, {
     default: withCtx(() => [
       createVNode(_component_mcw_list, {
@@ -5220,7 +5205,7 @@ function render$m(_ctx, _cache, $props, $setup, $data, $options) {
       }, 8 /* PROPS */, ["wrap-focus", "onUpdate:modelValue", "type-ahead", "single-selection"])
     ]),
     _: 1
-  }, 8 /* PROPS */, ["quick-open", "modelValue", "onKeydown", "onUpdate:modelValue", "onMcwMenuSurfaceOpened", "onMcwMenuSurfaceClosed"]))
+  }, 8 /* PROPS */, ["quick-open", "modelValue", "onKeydown", "onUpdate:modelValue", "onMdcMenuSurface:opened", "onMdcMenuSurface:closed"]))
 }
 
 script$m.render = render$m;
@@ -5601,15 +5586,14 @@ var radio = BasePlugin({
   mcwRadio: script$o
 });
 
-var SelectHelperText = {
+var script$p = {
   name: 'select-helper-text',
   props: {
     helptextPersistent: Boolean,
     helptextValidation: Boolean,
     helptext: String
   },
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots;
+  setup: function setup(props) {
     var uiState = reactive({
       classes: {
         'mdc-select-helper-text': true,
@@ -5619,9 +5603,9 @@ var SelectHelperText = {
       attrs: {
         'aria-hidden': 'true'
       },
-      myHelptext: props.helptext
+      myHelptext: props.helptext,
+      foundation: {}
     });
-    var foundation;
     var adapter = {
       addClass: function addClass(className) {
         return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
@@ -5655,12 +5639,12 @@ var SelectHelperText = {
     watch(function () {
       return props.helptextPersistent;
     }, function (nv) {
-      return foundation.setPersistent(nv);
+      return uiState.foundation.setPersistent(nv);
     });
     watch(function () {
       return props.helptextValidation;
     }, function (nv) {
-      return foundation.setValidation(nv);
+      return uiState.foundation.setValidation(nv);
     });
     watch(function () {
       return props.helptext;
@@ -5668,22 +5652,24 @@ var SelectHelperText = {
       return uiState.myHelptext = nv;
     });
     onMounted(function () {
-      foundation = new MDCSelectHelperTextFoundation(adapter);
-      foundation.init();
+      uiState.foundation = new MDCSelectHelperTextFoundation(adapter);
+      uiState.foundation.init();
     });
     onBeforeUnmount(function () {
-      foundation.destroy();
+      uiState.foundation.destroy();
     });
-    return function () {
-      return h('p', {
-        class: uiState.classes,
-        attrs: uiState.attrs
-      }, [uiState.myHelptext]);
-    };
+    return _objectSpread2({}, toRefs(uiState));
   }
 };
 
-var script$p = {
+function render$p(_ctx, _cache, $props, $setup, $data, $options) {
+  return (openBlock(), createBlock("p", { class: _ctx.classes }, toDisplayString(_ctx.myHelptext), 3 /* TEXT, CLASS */))
+}
+
+script$p.render = render$p;
+script$p.__file = "packages/select/select-helper-text.vue";
+
+var script$q = {
   name: 'select-icon',
   props: {
     icon: String
@@ -5699,9 +5685,9 @@ var script$p = {
       styles: {},
       root: null,
       rootAttrs: {},
-      rootListeners: {}
+      rootListeners: {},
+      foundation: {}
     });
-    var foundation;
     var listeners = computed(function () {
       return _objectSpread2(_objectSpread2({}, attrs), uiState.rootListeners);
     });
@@ -5736,17 +5722,17 @@ var script$p = {
       },
       notifyIconAction: function notifyIconAction() {
         emit('click');
-        emitCustomEvent(uiState.root, MDCSelectIconFoundation.strings.ICON_EVENT, {}, true
+        emitCustomEvent(uiState.root, 'mdc-select:icon', {}, true
         /* shouldBubble  */
         );
       }
     };
     onMounted(function () {
-      foundation = new MDCSelectIconFoundation(adapter);
-      foundation.init();
+      uiState.foundation = new MDCSelectIconFoundation(adapter);
+      uiState.foundation.init();
     });
     onBeforeUnmount(function () {
-      foundation.destroy();
+      uiState.foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
       listeners: listeners
@@ -5754,7 +5740,7 @@ var script$p = {
   }
 };
 
-function render$p(_ctx, _cache, $props, $setup, $data, $options) {
+function render$q(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("i", mergeProps({
     ref: "root",
     class: _ctx.classes,
@@ -5762,19 +5748,15 @@ function render$p(_ctx, _cache, $props, $setup, $data, $options) {
   }, toHandlers(_ctx.rootListeners), _ctx.rootAttrs), toDisplayString(_ctx.icon), 17 /* TEXT, FULL_PROPS */))
 }
 
-script$p.render = render$p;
-script$p.__file = "packages/select/select-icon.vue";
+script$q.render = render$q;
+script$q.__file = "packages/select/select-icon.vue";
 
-var strings$6 = MDCSelectFoundation.strings,
+var strings$4 = MDCSelectFoundation.strings,
     cssClasses$5 = MDCSelectFoundation.cssClasses;
 var uid_ = 0;
-var script$q = {
+var script$r = {
   name: 'mcw-select',
   inheritAttrs: false,
-  // model: {
-  //   prop: 'value',
-  //   event: 'change',
-  // },
   props: {
     modelValue: String,
     helptext: String,
@@ -5989,7 +5971,7 @@ var script$q = {
       },
       getMenuItemValues: function getMenuItemValues() {
         return menuItems.value.map(function (el) {
-          return el.getAttribute(strings$6.VALUE_ATTR) || '';
+          return el.getAttribute(strings$4.VALUE_ATTR) || '';
         });
       },
       getMenuItemTextAtIndex: function getMenuItemTextAtIndex(index) {
@@ -6041,7 +6023,7 @@ var script$q = {
       },
       notifyChange: function notifyChange(value) {
         var index = selectedIndex();
-        emitCustomEvent(uiState.root, strings$6.CHANGE_EVENT, {
+        emitCustomEvent(uiState.root, 'mdc-select:change', {
           value: value,
           index: index
         }, true
@@ -6090,7 +6072,7 @@ var script$q = {
 
     var refreshIndex = function refreshIndex() {
       var items = menuItems.value.map(function (el) {
-        return el.getAttribute(strings$6.VALUE_ATTR) || '';
+        return el.getAttribute(strings$4.VALUE_ATTR) || '';
       });
       var idx = items.findIndex(function (value) {
         return props.modelValue === value;
@@ -6150,8 +6132,8 @@ var script$q = {
     });
   },
   components: {
-    SelectHelperText: SelectHelperText,
-    SelectIcon: script$p
+    SelectHelperText: script$p,
+    SelectIcon: script$q
   }
 }; // ===
 // Private functions
@@ -6189,7 +6171,7 @@ const _hoisted_4$7 = /*#__PURE__*/createVNode("span", { class: "mdc-select__drop
   ])
 ], -1 /* HOISTED */);
 
-function render$q(_ctx, _cache, $props, $setup, $data, $options) {
+function render$r(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_select_icon = resolveComponent("select-icon");
   const _component_mcw_notched_outline = resolveComponent("mcw-notched-outline");
   const _component_mcw_floating_label = resolveComponent("mcw-floating-label");
@@ -6254,15 +6236,15 @@ function render$q(_ctx, _cache, $props, $setup, $data, $options) {
         class: ["mdc-select__menu", _ctx.menuClasses],
         "onUpdate:modelValue": _ctx.handleChange,
         onSelect: _ctx.handleMenuItemAction,
-        onMcwMenuSurfaceOpened: _ctx.handleMenuOpened,
-        onMcwMenuSurfaceClosed: _ctx.handleMenuClosed,
+        "onMdcMenuSurface:opened": _ctx.handleMenuOpened,
+        "onMdcMenuSurface:closed": _ctx.handleMenuClosed,
         role: "listbox"
       }, {
         default: withCtx(() => [
           renderSlot(_ctx.$slots, "default")
         ]),
         _: 3
-      }, 8 /* PROPS */, ["class", "onUpdate:modelValue", "onSelect", "onMcwMenuSurfaceOpened", "onMcwMenuSurfaceClosed"])
+      }, 8 /* PROPS */, ["class", "onUpdate:modelValue", "onSelect", "onMdcMenuSurface:opened", "onMdcMenuSurface:closed"])
     ], 2 /* CLASS */),
     (_ctx.helptext)
       ? (openBlock(), createBlock(_component_select_helper_text, {
@@ -6277,17 +6259,17 @@ function render$q(_ctx, _cache, $props, $setup, $data, $options) {
   ]))
 }
 
-script$q.render = render$q;
-script$q.__file = "packages/select/select.vue";
+script$r.render = render$r;
+script$r.__file = "packages/select/select.vue";
 
 var select = BasePlugin({
-  mcwSelect: script$q,
+  mcwSelect: script$r,
   mcwNotchedOutline: script$n,
   mcwLineRipple: script$h,
   mcwFloatingLabel: script$c
 });
 
-var script$r = {
+var script$s = {
   name: 'mcw-slider',
   // model: {
   //   prop: 'value',
@@ -6525,7 +6507,7 @@ const _hoisted_4$8 = /*#__PURE__*/createVNode("svg", {
 ], -1 /* HOISTED */);
 const _hoisted_5$3 = /*#__PURE__*/createVNode("div", { class: "mdc-slider__focus-ring" }, null, -1 /* HOISTED */);
 
-function render$r(_ctx, _cache, $props, $setup, $data, $options) {
+function render$s(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("div", mergeProps({
     ref: "root",
     class: _ctx.classes
@@ -6564,16 +6546,16 @@ function render$r(_ctx, _cache, $props, $setup, $data, $options) {
   ], 16 /* FULL_PROPS */))
 }
 
-script$r.render = render$r;
-script$r.__file = "packages/slider/slider.vue";
+script$s.render = render$s;
+script$s.__file = "packages/slider/slider.vue";
 
 var slider = BasePlugin({
-  mcwSlider: script$r
+  mcwSlider: script$s
 });
 
 var noop = function noop() {};
 
-var script$s = {
+var script$t = {
   name: 'mcw-snackbar-queue',
   props: {
     snack: Object
@@ -6675,18 +6657,18 @@ var script$s = {
   }
 };
 
-function render$s(_ctx, _cache, $props, $setup, $data, $options) {
+function render$t(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_mcw_snackbar = resolveComponent("mcw-snackbar");
 
   return (openBlock(), createBlock(_component_mcw_snackbar, mergeProps({ modelValue: _ctx.open }, _ctx.snack, toHandlers(_ctx.listeners)), null, 16 /* FULL_PROPS */, ["modelValue"]))
 }
 
-script$s.render = render$s;
-script$s.__file = "packages/snackbar/snackbar-queue.vue";
+script$t.render = render$t;
+script$t.__file = "packages/snackbar/snackbar-queue.vue";
 
-var strings$7 = MDCSnackbarFoundation.strings,
+var strings$5 = MDCSnackbarFoundation.strings,
     numbers = MDCSnackbarFoundation.numbers;
-var script$t = {
+var script$u = {
   name: 'mcw-snackbar',
   // model: {
   //   prop: 'open',
@@ -6779,12 +6761,12 @@ var script$t = {
       // (except in IE 11; see https://tink.uk/accessibility-support-for-css-generated-content/);
       // however, `aria-live` is turned off, so this DOM update will be ignored by screen readers.
 
-      labelEl.setAttribute(strings$7.ARIA_LIVE_LABEL_TEXT_ATTR, props.message);
+      labelEl.setAttribute(strings$5.ARIA_LIVE_LABEL_TEXT_ATTR, props.message);
       setTimeout(function () {
         // Allow screen readers to announce changes to the DOM again.
         ariaEl.setAttribute('aria-live', priority); // Remove the message from the ::before pseudo-element.
 
-        labelEl.removeAttribute(strings$7.ARIA_LIVE_LABEL_TEXT_ATTR); // Restore the original label text, which will be announced by screen readers.
+        labelEl.removeAttribute(strings$5.ARIA_LIVE_LABEL_TEXT_ATTR); // Restore the original label text, which will be announced by screen readers.
 
         uiState.showMessage = true;
       }, numbers.ARIA_LIVE_DELAY_MS);
@@ -6798,25 +6780,25 @@ var script$t = {
         return _announce(uiState.labelEl);
       },
       notifyClosed: function notifyClosed(reason) {
-        emit(strings$7.CLOSED_EVENT, reason ? {
+        emit(strings$5.CLOSED_EVENT, reason ? {
           reason: reason
         } : {});
         emit('update:modelValue', false);
         emit('hide');
       },
       notifyClosing: function notifyClosing(reason) {
-        emit(strings$7.CLOSING_EVENT, reason ? {
+        emit(strings$5.CLOSING_EVENT, reason ? {
           reason: reason
         } : {});
         emit('update:reason', reason);
       },
       notifyOpened: function notifyOpened() {
-        emit(strings$7.OPENED_EVENT, {});
+        emit(strings$5.OPENED_EVENT, {});
         emit('update:modelValue', true);
         emit('show', {});
       },
       notifyOpening: function notifyOpening() {
-        return emit(strings$7.OPENING_EVENT, {});
+        return emit(strings$5.OPENING_EVENT, {});
       },
       removeClass: function removeClass(className) {
         // eslint-disable-next-line no-unused-vars
@@ -6883,11 +6865,11 @@ var script$t = {
 // ===
 
 function isActionButton_(target) {
-  return Boolean(closest(target, strings$7.ACTION_SELECTOR));
+  return Boolean(closest(target, strings$5.ACTION_SELECTOR));
 }
 
 function isActionIcon_(target) {
-  return Boolean(closest(target, strings$7.DISMISS_SELECTOR));
+  return Boolean(closest(target, strings$5.DISMISS_SELECTOR));
 }
 
 const _hoisted_1$i = {
@@ -6916,7 +6898,7 @@ const _hoisted_7$2 = {
   title: "Dismiss"
 };
 
-function render$t(_ctx, _cache, $props, $setup, $data, $options) {
+function render$u(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("div", { class: _ctx.rootClasses }, [
     createVNode("div", {
       class: "mdc-snackbar__surface",
@@ -6944,16 +6926,16 @@ function render$t(_ctx, _cache, $props, $setup, $data, $options) {
   ], 2 /* CLASS */))
 }
 
-script$t.render = render$t;
-script$t.__file = "packages/snackbar/snackbar.vue";
+script$u.render = render$u;
+script$u.__file = "packages/snackbar/snackbar.vue";
 
 var snackbar = BasePlugin({
-  mcwSnackbar: script$t,
-  mcwSnackbarQueue: script$s
+  mcwSnackbar: script$u,
+  mcwSnackbarQueue: script$t
 });
 
 var switchId_ = 0;
-var script$u = {
+var script$v = {
   name: 'mcw-switch',
   props: {
     modelValue: Boolean,
@@ -7058,7 +7040,7 @@ const _hoisted_1$j = /*#__PURE__*/createVNode("div", { class: "mdc-switch__track
 const _hoisted_2$g = { class: "mdc-switch__thumb-underlay" };
 const _hoisted_3$c = /*#__PURE__*/createVNode("div", { class: "mdc-switch__thumb" }, null, -1 /* HOISTED */);
 
-function render$u(_ctx, _cache, $props, $setup, $data, $options) {
+function render$v(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("div", {
     class: [{
   'mdc-form-field': _ctx.hasLabel,
@@ -7101,15 +7083,15 @@ function render$u(_ctx, _cache, $props, $setup, $data, $options) {
   ], 2 /* CLASS */))
 }
 
-script$u.render = render$u;
-script$u.__file = "packages/switch/switch.vue";
+script$v.render = render$v;
+script$v.__file = "packages/switch/switch.vue";
 
 var switchControl = BasePlugin({
-  mcwSwitch: script$u
+  mcwSwitch: script$v
 });
 
-var strings$8 = MDCTabBarFoundation.strings;
-var script$v = {
+var strings$6 = MDCTabBarFoundation.strings;
+var script$w = {
   name: 'mcw-tab-bar',
   props: {
     fade: Boolean,
@@ -7136,7 +7118,7 @@ var script$v = {
         change: attrs.onChange
       }, _defineProperty(_ref2, MDCTabFoundation.strings.INTERACTED_EVENT, function (evt) {
         foundation.handleTabInteraction(evt);
-      }), _defineProperty(_ref2, 'mcw-tab:interacted', function mcwTabInteracted(evt) {
+      }), _defineProperty(_ref2, 'mdc-tab:interacted', function mdcTabInteracted(evt) {
         foundation.handleTabInteraction(evt);
       }), _defineProperty(_ref2, "keydown", function keydown(evt) {
         return foundation.handleKeyDown(evt);
@@ -7145,7 +7127,7 @@ var script$v = {
     var foundation;
 
     var getTabElements_ = function getTabElements_() {
-      return [].slice.call(root.value.querySelectorAll(strings$8.TAB_SELECTOR));
+      return [].slice.call(root.value.querySelectorAll(strings$6.TAB_SELECTOR));
     };
 
     var activateTab = function activateTab(index) {
@@ -7220,7 +7202,7 @@ var script$v = {
         return tabList.value.length;
       },
       notifyTabActivated: function notifyTabActivated(index) {
-        emitCustomEvent(root.value, strings$8.TAB_ACTIVATED_EVENT, {
+        emitCustomEvent(root.value, 'mdc-tab-bar:activated', {
           index: index
         }, true);
         emit('update:modelValue', Number(index));
@@ -7256,7 +7238,7 @@ var script$v = {
   }
 };
 
-function render$v(_ctx, _cache, $props, $setup, $data, $options) {
+function render$w(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_mcw_tab_scroller = resolveComponent("mcw-tab-scroller");
 
   return (openBlock(), createBlock("div", mergeProps({
@@ -7272,11 +7254,11 @@ function render$v(_ctx, _cache, $props, $setup, $data, $options) {
   ], 16 /* FULL_PROPS */))
 }
 
-script$v.render = render$v;
-script$v.__file = "packages/tabs/tab-bar.vue";
+script$w.render = render$w;
+script$w.__file = "packages/tabs/tab-bar.vue";
 
 var cssClasses$6 = MDCTabIndicatorFoundation.cssClasses;
-var script$w = {
+var script$x = {
   name: 'mcw-tab-indicator',
   props: {
     fade: {
@@ -7369,7 +7351,7 @@ var script$w = {
   }
 };
 
-function render$w(_ctx, _cache, $props, $setup, $data, $options) {
+function render$x(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("span", {
     class: ["mdc-tab-indicator", _ctx.classes]
   }, [
@@ -7381,10 +7363,10 @@ function render$w(_ctx, _cache, $props, $setup, $data, $options) {
   ], 2 /* CLASS */))
 }
 
-script$w.render = render$w;
-script$w.__file = "packages/tabs/tab-indicator.vue";
+script$x.render = render$x;
+script$x.__file = "packages/tabs/tab-indicator.vue";
 
-var script$x = {
+var script$y = {
   name: 'mcw-tab-scroller',
   setup: function setup() {
     var uiState = reactive({
@@ -7505,7 +7487,7 @@ var script$x = {
   }
 };
 
-function render$x(_ctx, _cache, $props, $setup, $data, $options) {
+function render$y(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("div", { class: _ctx.classes }, [
     createVNode("div", mergeProps({
       ref: "area",
@@ -7524,11 +7506,11 @@ function render$x(_ctx, _cache, $props, $setup, $data, $options) {
   ], 2 /* CLASS */))
 }
 
-script$x.render = render$x;
-script$x.__file = "packages/tabs/tab-scroller.vue";
+script$y.render = render$y;
+script$y.__file = "packages/tabs/tab-scroller.vue";
 
 var tabId_ = 0;
-var script$y = {
+var script$z = {
   name: 'mcw-tab',
   props: {
     active: Boolean,
@@ -7645,14 +7627,7 @@ var script$y = {
         return uiState.tabIndicator.deactivate();
       },
       notifyInteracted: function notifyInteracted() {
-        var interactedEvent = MDCTabFoundation$1.strings.INTERACTED_EVENT;
-        emitCustomEvent(rootEl, interactedEvent, {
-          tabId: tabId
-        }, true
-        /* bubble */
-        ); //  todo: fixme when vue 3 can handle mixed case native event listening
-
-        emitCustomEvent(rootEl, 'mcw-tab:interacted', {
+        emitCustomEvent(rootEl, 'mdc-tab:interacted', {
           tabId: tabId
         }, true
         /* bubble */
@@ -7740,7 +7715,7 @@ const _hoisted_2$h = {
   class: "mdc-tab__text-label"
 };
 
-function render$y(_ctx, _cache, $props, $setup, $data, $options) {
+function render$z(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_mcw_tab_indicator = resolveComponent("mcw-tab-indicator");
   const _component_custom_link = resolveComponent("custom-link");
 
@@ -7794,17 +7769,17 @@ function render$y(_ctx, _cache, $props, $setup, $data, $options) {
   }, 16 /* FULL_PROPS */, ["id", "class", "style", "onClick"]))
 }
 
-script$y.render = render$y;
-script$y.__file = "packages/tabs/tab.vue";
+script$z.render = render$z;
+script$z.__file = "packages/tabs/tab.vue";
 
 var tabs = BasePlugin({
-  mcwTab: script$y,
-  mcwTabBar: script$v,
-  mcwTabScroller: script$x,
-  mcwTabIndicator: script$w
+  mcwTab: script$z,
+  mcwTabBar: script$w,
+  mcwTabScroller: script$y,
+  mcwTabIndicator: script$x
 });
 
-var script$z = {
+var script$A = {
   name: 'mcw-character-counter',
   setup: function setup() {
     var uiState = reactive({
@@ -7829,14 +7804,14 @@ var script$z = {
 
 const _hoisted_1$l = { class: "mdc-text-field-character-counter" };
 
-function render$z(_ctx, _cache, $props, $setup, $data, $options) {
+function render$A(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("div", _hoisted_1$l, toDisplayString(_ctx.textContent), 1 /* TEXT */))
 }
 
-script$z.render = render$z;
-script$z.__file = "packages/textfield/character-counter.vue";
+script$A.render = render$A;
+script$A.__file = "packages/textfield/character-counter.vue";
 
-var script$A = {
+var script$B = {
   name: 'mcw-textfield-helper-text',
   props: {
     persistent: Boolean,
@@ -7907,14 +7882,14 @@ var script$A = {
   }
 };
 
-function render$A(_ctx, _cache, $props, $setup, $data, $options) {
+function render$B(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("div", mergeProps({ class: _ctx.classes }, _ctx.rootAttrs), toDisplayString(_ctx.helpertext), 17 /* TEXT, FULL_PROPS */))
 }
 
-script$A.render = render$A;
-script$A.__file = "packages/textfield/textfield-helper-text.vue";
+script$B.render = render$B;
+script$B.__file = "packages/textfield/textfield-helper-text.vue";
 
-var script$B = {
+var script$C = {
   name: 'textfield-icon',
   props: {
     disabled: Boolean,
@@ -7963,7 +7938,7 @@ var script$B = {
         return uiState.root.removeEventListener(evtType, handler);
       },
       notifyIconAction: function notifyIconAction() {
-        emitCustomEvent(uiState.root, MDCTextFieldIconFoundation.strings.ICON_EVENT, {}, true
+        emitCustomEvent(uiState.root, 'mdc-textfield:icon', {}, true
         /* shouldBubble  */
         );
         emit('click');
@@ -7984,7 +7959,7 @@ var script$B = {
   }
 };
 
-function render$B(_ctx, _cache, $props, $setup, $data, $options) {
+function render$C(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("i", mergeProps({
     ref: "root",
     class: ["material-icons", _ctx.classes]
@@ -7993,11 +7968,11 @@ function render$B(_ctx, _cache, $props, $setup, $data, $options) {
   ], 16 /* FULL_PROPS */))
 }
 
-script$B.render = render$B;
-script$B.__file = "packages/textfield/textfield-icon.vue";
+script$C.render = render$C;
+script$C.__file = "packages/textfield/textfield-icon.vue";
 
 var uid_$1 = 0;
-var script$C = {
+var script$D = {
   name: 'mcw-textfield',
   inheritAttrs: false,
   // model: {
@@ -8362,7 +8337,7 @@ const _hoisted_6$3 = {
   class: "mdc-text-field-helper-line"
 };
 
-function render$C(_ctx, _cache, $props, $setup, $data, $options) {
+function render$D(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_mcw_floating_label = resolveComponent("mcw-floating-label");
   const _component_mcw_notched_outline = resolveComponent("mcw-notched-outline");
   const _component_mcw_line_ripple = resolveComponent("mcw-line-ripple");
@@ -8505,22 +8480,22 @@ function render$C(_ctx, _cache, $props, $setup, $data, $options) {
   ], 512 /* NEED_PATCH */))
 }
 
-script$C.render = render$C;
-script$C.__file = "packages/textfield/textfield.vue";
+script$D.render = render$D;
+script$D.__file = "packages/textfield/textfield.vue";
 
 var textfield = BasePlugin({
-  mcwTextfield: script$C,
-  mcwTextfieldIcon: script$B,
-  mcwCharacterCounter: script$z,
-  mcwTextfieldHelperText: script$A,
+  mcwTextfield: script$D,
+  mcwTextfieldIcon: script$C,
+  mcwCharacterCounter: script$A,
+  mcwTextfieldHelperText: script$B,
   mcwLineRipple: script$h,
   mcwNotchedOutline: script$n,
   mcwFloatingLabel: script$c
 });
 
 var cssClasses$7 = MDCTopAppBarFoundation.cssClasses,
-    strings$9 = MDCTopAppBarFoundation.strings;
-var script$D = {
+    strings$7 = MDCTopAppBarFoundation.strings;
+var script$E = {
   name: 'mcw-top-app-bar',
   props: {
     tag: {
@@ -8580,7 +8555,7 @@ var script$D = {
       },
       notifyNavigationIconClicked: function notifyNavigationIconClicked() {
         emit('nav', {});
-        emitCustomEvent(uiState.root, strings$9.NAVIGATION_EVENT, {},
+        emitCustomEvent(uiState.root, 'mdc-top-app-bar:nav', {},
         /** shouldBubble */
         true);
       },
@@ -8589,7 +8564,7 @@ var script$D = {
         return st.pageYOffset !== void 0 ? st.pageYOffset : st.scrollTop;
       },
       getTotalActionItems: function getTotalActionItems() {
-        return uiState.root.querySelectorAll(strings$9.ACTION_ITEM_SELECTOR).length;
+        return uiState.root.querySelectorAll(strings$7.ACTION_ITEM_SELECTOR).length;
       }
     };
     watch(function () {
@@ -8621,9 +8596,9 @@ var script$D = {
       } // todo: hunt down icons for ripples
 
 
-      navIcon = uiState.root.querySelector(strings$9.NAVIGATION_ICON_SELECTOR); // Get all icons in the toolbar and instantiate the ripples
+      navIcon = uiState.root.querySelector(strings$7.NAVIGATION_ICON_SELECTOR); // Get all icons in the toolbar and instantiate the ripples
 
-      var icons = [].slice.call(uiState.root.querySelectorAll(strings$9.ACTION_ITEM_SELECTOR));
+      var icons = [].slice.call(uiState.root.querySelectorAll(strings$7.ACTION_ITEM_SELECTOR));
 
       if (navIcon) {
         navIcon.addEventListener('click', handleNavigationClick);
@@ -8671,7 +8646,7 @@ var script$D = {
   }
 };
 
-function render$D(_ctx, _cache, $props, $setup, $data, $options) {
+function render$E(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock(resolveDynamicComponent(_ctx.tag), {
     ref: "root",
     class: _ctx.rootClasses,
@@ -8684,11 +8659,11 @@ function render$D(_ctx, _cache, $props, $setup, $data, $options) {
   }, 8 /* PROPS */, ["class", "style"]))
 }
 
-script$D.render = render$D;
-script$D.__file = "packages/top-app-bar/top-app-bar.vue";
+script$E.render = render$E;
+script$E.__file = "packages/top-app-bar/top-app-bar.vue";
 
 var topAppBar = BasePlugin({
-  mcwTopAppBar: script$D // mcwFixedAdjust,
+  mcwTopAppBar: script$E // mcwFixedAdjust,
   // mcwTopAppBarIcon,
   // mcwTopAppBarRow,
   // mcwTopAppBarSection,
