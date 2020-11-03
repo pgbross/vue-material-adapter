@@ -17,9 +17,9 @@ export default {
       root: null,
       rootAttrs: {},
       rootListeners: {},
+      foundation: {},
     });
 
-    let foundation;
     const listeners = computed(() => {
       return { ...attrs, ...uiState.rootListeners };
     });
@@ -59,12 +59,12 @@ export default {
     };
 
     onMounted(() => {
-      foundation = new MDCSelectIconFoundation(adapter);
-      foundation.init();
+      uiState.foundation = new MDCSelectIconFoundation(adapter);
+      uiState.foundation.init();
     });
 
     onBeforeUnmount(() => {
-      foundation.destroy();
+      uiState.foundation.destroy();
     });
 
     return { ...toRefs(uiState), listeners };

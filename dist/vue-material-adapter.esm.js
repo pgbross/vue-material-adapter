@@ -6068,7 +6068,9 @@ var script$q = {
         return !!props.label;
       },
       floatLabel: function floatLabel(shouldFloat) {
-        return (uiState.labelEl || uiState.outlineEl).float(shouldFloat);
+        var _ref3;
+
+        return (_ref3 = uiState.labelEl || uiState.outlineEl) === null || _ref3 === void 0 ? void 0 : _ref3.float(shouldFloat);
       },
       getLabelWidth: function getLabelWidth() {
         var _uiState$labelEl;

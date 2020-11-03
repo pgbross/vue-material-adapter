@@ -10,7 +10,7 @@ import {
 } from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
-import SelectHelperText from './select-helper-text.js';
+import SelectHelperText from './select-helper-text.vue';
 import SelectIcon from './select-icon.vue';
 
 const { strings, cssClasses } = MDCSelectFoundation;
@@ -227,7 +227,7 @@ export default {
       // label methods
       hasLabel: () => !!props.label,
       floatLabel: shouldFloat =>
-        (uiState.labelEl || uiState.outlineEl).float(shouldFloat),
+        (uiState.labelEl || uiState.outlineEl)?.float(shouldFloat),
       getLabelWidth: () => uiState.labelEl?.getWidth(),
       setLabelRequired: isRequired => uiState.labelEl?.setRequired(isRequired),
     };
