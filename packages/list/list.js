@@ -299,7 +299,7 @@ export default {
       },
 
       isFocusInsideList: () => {
-        return uiState.listRoot.contains(document.activeElement);
+        return uiState.listRoot?.contains(document.activeElement);
       },
 
       isRootFocused: () => document.activeElement === uiState.listRoot,
@@ -315,7 +315,7 @@ export default {
       notifyAction: index => {
         emitCustomEvent(
           uiState.listRoot,
-          strings.ACTION_EVENT,
+          'mdc-list:action',
           { index },
           /** shouldBubble */ true,
         );

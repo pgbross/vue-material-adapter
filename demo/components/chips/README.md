@@ -42,13 +42,13 @@
 |                                   |         |          | the chip from the DOM. Only use with input chips.  |
 | `shouldRemoveOnTrailingIconClick` | Boolean | true     | If true, trailing icon interaction removes chip    |
 
-| event                             | description                  |
-| --------------------------------- | ---------------------------- |
-| `MDCChip:interaction`             | On chip interaction          |
-| `MDCChip:navigation`              | On chip navigation           |
-| `MDCChip:removal`                 | On chip removal              |
-| `MDCChip:selection`               | On chip selection            |
-| `MDCChip:trailingIconInteraction` | On trailing icon interaction |
+| event                              | description                  |
+| ---------------------------------- | ---------------------------- |
+| `mdc-chip:interaction`             | On chip interaction          |
+| `mdc-chip:navigation`              | On chip navigation           |
+| `mdc-chip:removal`                 | On chip removal              |
+| `mdc-chip:selection`               | On chip selection            |
+| `mdc-chip:trailingIconInteraction` | On trailing icon interaction |
 
 > Note: Events emitted by `material-components-web` on `mcw-chip` interaction appear as native events.
 

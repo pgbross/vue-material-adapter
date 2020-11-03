@@ -78,11 +78,11 @@ export default {
 
     const handleMenuSurfaceOpened = () => {
       foundation.handleMenuSurfaceOpened();
-      emit('mcw-menu-surface-opened');
+      emit('mdc-menu-surface-opened');
     };
 
     const handleMenuSurfaceClosed = () => {
-      emit('mcw-menu-surface-closed');
+      emit('mdc-menu-surface-closed');
     };
 
     const onChange = item => {
@@ -180,7 +180,7 @@ export default {
       },
 
       notifySelected: evtData => {
-        emitCustomEvent(rootEl, strings.SELECTED_EVENT, {
+        emitCustomEvent(rootEl, 'mdc-menu:selected', {
           index: evtData.index,
           item: items.value[evtData.index],
         });

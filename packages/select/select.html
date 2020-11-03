@@ -54,8 +54,8 @@
       :class="menuClasses"
       @update:modelValue="handleChange"
       @select="handleMenuItemAction"
-      @mcw-menu-surface-opened="handleMenuOpened"
-      @mcw-menu-surface-closed="handleMenuClosed"
+      @mdc-menu-surface:opened="handleMenuOpened"
+      @mdc-menu-surface:closed="handleMenuClosed"
       role="listbox"
     >
       <slot></slot>

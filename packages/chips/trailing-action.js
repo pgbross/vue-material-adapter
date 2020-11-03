@@ -19,7 +19,7 @@ export default {
       notifyInteraction: trigger =>
         emitCustomEvent(
           root.value,
-          'mcw-chip-trailing-action-interaction',
+          'mdc-chip:trailing-action-interaction',
           {
             trigger,
           },
@@ -28,7 +28,7 @@ export default {
       notifyNavigation: key =>
         emitCustomEvent(
           root.value,
-          'mcw-chip-trailing-action-navigation',
+          'mdc-chip:trailing-action-navigation',
           {
             key,
           },

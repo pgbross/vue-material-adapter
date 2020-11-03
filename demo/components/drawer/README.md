@@ -34,11 +34,13 @@ By default the drawer component is responsive and will switch from temporary to 
 | `open`           | Boolean | false     | optional v-model when true opens drawer |
 | `toolbar-spacer` | Boolean | undefined | add a toolbar spacer                    |
 
-| event     | args    | Description                                             |
-| --------- | ------- | ------------------------------------------------------- |
-| `@change` | Boolean | notify v-model/listeners that drawer state has changed. |
-| `@open`   |         | on drawer open                                          |
-| `@close`  |         | on drawer close                                         |
+| event                | args    | Description                                             |
+| -------------------- | ------- | ------------------------------------------------------- |
+| `@update:modelValue` | Boolean | notify v-model/listeners that drawer state has changed. |
+| `@mdc-drawer:opened` |         | on drawer opened                                        |
+| `@mdc-drawer:closed` |         | on drawer closed                                        |
+| `@open`              |         | on drawer open                                          |
+| `@close`             |         | on drawer close                                         |
 
 > _(\*)_ Requires [vue-router](https://router.vuejs.org)
 > If the `to` property is defined, the item behaves as a

@@ -89,13 +89,13 @@ export default {
       foundation.init();
 
       (uiState.myListeners = {
-        'mcw-chip-interaction': ({ detail }) =>
+        'mdc-chip:interaction': ({ detail }) =>
           foundation.handleChipInteraction(detail),
-        'mcw-chip-selection': ({ detail }) =>
+        'mdc-chip:selection': ({ detail }) =>
           foundation.handleChipSelection(detail),
-        'mcw-chip-removal': ({ detail }) =>
+        'mdc-chip:removal': ({ detail }) =>
           foundation.handleChipRemoval(detail),
-        'mcw-chip-navigation': ({ detail }) =>
+        'mdc-chip:navigation': ({ detail }) =>
           foundation.handleChipNavigation(detail),
       }),
         // the chips could change outside of this component

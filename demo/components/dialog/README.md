@@ -10,7 +10,7 @@
   aria-labelledby="my-basic-title"
   aria-describedby="my-basic-content"
   :auto-stack-buttons="true"
-  @mcw-dialog-closing="onClosed"
+  @mdc-dialog-closing="onClosed"
 >
   <mcw-dialog-title>Lorem ipsum dolor</mcw-dialog-title>
   <mcw-dialog-content>
@@ -58,13 +58,13 @@ _\*_[ARIA attribute roles](https://developer.mozilla.org/en-US/docs/Web/Accessib
 
 ### Events
 
-| Event Name            | args    | Description                                             |
-| --------------------- | ------- | ------------------------------------------------------- |
-| `@change`             | Boolean | notify v-model/listeners that drawer state has changed. |
-| `@mcw-dialog-opening` | none    | On dialog starts its opening animation                  |
-| `@mcw-dialog-opened`  | none    | On dialog finishes its opening animation                |
-| `@mcw-dialog-closing` | none    | On starts its closing animation                         |
-| `@mcw-dialog-closed`  | none    | On finishes its closing animation                       |
+| Event Name           | args    | Description                                             |
+| -------------------- | ------- | ------------------------------------------------------- |
+| `@change`            | Boolean | notify v-model/listeners that drawer state has changed. |
+| `mdc-dialog-opening` | none    | On dialog starts its opening animation                  |
+| `mdc-dialog-opened`  | none    | On dialog finishes its opening animation                |
+| `mdc-dialog-closing` | none    | On starts its closing animation                         |
+| `mdc-dialog-closed`  | none    | On finishes its closing animation                       |
 
 ### `mcw-dialog-title`
 

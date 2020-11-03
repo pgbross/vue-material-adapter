@@ -105,14 +105,9 @@ export default {
         uiState.tabIndicator.activate(previousIndicatorClientRect),
       deactivateIndicator: () => uiState.tabIndicator.deactivate(),
       notifyInteracted: () => {
-        const interactedEvent = MDCTabFoundation.strings.INTERACTED_EVENT;
-        emitCustomEvent(rootEl, interactedEvent, { tabId }, true /* bubble */);
-
-        //  todo: fixme when vue 3 can handle mixed case native event listening
-
         emitCustomEvent(
           rootEl,
-          'mcw-tab:interacted',
+          'mdc-tab:interacted',
           { tabId },
           true /* bubble */,
         );

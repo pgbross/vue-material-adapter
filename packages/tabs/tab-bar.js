@@ -41,7 +41,7 @@ export default {
         [MDCTabFoundation.strings.INTERACTED_EVENT]: evt => {
           foundation.handleTabInteraction(evt);
         },
-        'mcw-tab:interacted': evt => {
+        'mdc-tab:interacted': evt => {
           foundation.handleTabInteraction(evt);
         },
         keydown: evt => foundation.handleKeyDown(evt),
@@ -102,12 +102,7 @@ export default {
       },
       getTabListLength: () => tabList.value.length,
       notifyTabActivated: index => {
-        emitCustomEvent(
-          root.value,
-          strings.TAB_ACTIVATED_EVENT,
-          { index },
-          true,
-        );
+        emitCustomEvent(root.value, 'mdc-tab-bar:activated', { index }, true);
 
         emit('update:modelValue', Number(index));
       },

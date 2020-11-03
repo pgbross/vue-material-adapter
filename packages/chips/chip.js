@@ -132,7 +132,7 @@ export default {
       notifyInteraction: () => {
         emitCustomEvent(
           uiState.root,
-          'mcw-chip-interaction',
+          'mdc-chip:interaction',
           {
             chipId: id,
           },
@@ -142,7 +142,7 @@ export default {
       notifyNavigation: (key, source) =>
         emitCustomEvent(
           uiState.root,
-          'mcw-chip-navigation',
+          'mdc-chip:navigation',
           {
             chipId: id,
             key,
@@ -153,7 +153,7 @@ export default {
       notifyRemoval: removedAnnouncement => {
         emitCustomEvent(
           uiState.root,
-          'mcw-chip-removal',
+          'mdc-chip:removal',
           { chipId: id, removedAnnouncement },
           true,
         );
@@ -161,14 +161,14 @@ export default {
       notifySelection: (selected, shouldIgnore) =>
         emitCustomEvent(
           uiState.root,
-          'mcw-chip-selection',
+          'mdc-chip:selection',
           { chipId: id, selected: selected, shouldIgnore },
           true /* shouldBubble */,
         ),
       notifyTrailingIconInteraction: () => {
         emitCustomEvent(
           uiState.root,
-          'mcw-chip-trailing-icon-interaction',
+          'mdc-chip:trailing-icon-interaction',
           {
             chipId: id,
           },
@@ -252,10 +252,10 @@ export default {
       };
 
       if (trailingAction_) {
-        uiState.myListeners['mcw-chip-trailing-action-interaction'] = evt =>
+        uiState.myListeners['mdc-chip:trailing-action-interaction'] = evt =>
           foundation.handleTrailingActionInteraction(evt);
 
-        uiState.myListeners['mcw-chip-trailing-action-navigation'] = evt =>
+        uiState.myListeners['mdc-chip:trailing-action-navigation'] = evt =>
           foundation.handleTrailingActionNavigation(evt);
       }
 

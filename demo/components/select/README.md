@@ -92,7 +92,7 @@ var vm = new Vue({
 | event                | Description                                         |
 | -------------------- | --------------------------------------------------- |
 | `@update:modelValue` | emitted on change (supressed if value is unchanged) |
-| `MDCSelect:change`   | Native event emitted on change                      |
+| `mdc-select:change`  | Native event emitted on change                      |
 
 ### Reference
 

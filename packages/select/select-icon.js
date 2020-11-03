@@ -51,7 +51,7 @@ export default {
 
         emitCustomEvent(
           uiState.root,
-          MDCSelectIconFoundation.strings.ICON_EVENT,
+          'mdc-select:icon',
           {},
           true /* shouldBubble  */,
         );

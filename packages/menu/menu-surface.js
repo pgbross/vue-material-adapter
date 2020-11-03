@@ -3,14 +3,10 @@ import * as util from '@material/menu-surface/util';
 import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
 
-const { strings, cssClasses } = MDCMenuSurfaceFoundation;
+const { cssClasses } = MDCMenuSurfaceFoundation;
 
 export default {
   name: 'mcw-menu-surface',
-  // model: {
-  //   prop: 'open',
-  //   event: 'change',
-  // },
   props: {
     modelValue: [Boolean, Object],
     'quick-open': Boolean,
@@ -168,18 +164,18 @@ export default {
       hasClass: className => uiState.root.classList.contains(className),
       hasAnchor: () => !!anchorElement,
       notifyClose: () => {
-        emitCustomEvent(uiState.root, strings.CLOSED_EVENT, {});
+        emitCustomEvent(uiState.root, 'mdc-menu-surface:closed', {});
 
         deregisterBodyClickListener();
 
-        emit('mcw-menu-surface-closed');
+        emit('mdc-menu-surface-closed');
         emit('update:modelValue', false);
       },
       notifyOpen: () => {
-        emitCustomEvent(uiState.root, strings.OPENED_EVENT, {});
+        emitCustomEvent(uiState.root, 'mdc-menu-surface:opened', {});
 
         registerBodyClickListener();
-        emit('mcw-menu-surface-opened');
+        emit('mdc-menu-surface-opened');
         emit('update:modelValue', true);
       },
       isElementInContainer: el => uiState.root.contains(el),

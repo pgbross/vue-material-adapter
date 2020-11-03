@@ -53,10 +53,10 @@ or the `to` property for router-link behavior. `mcw-tab` dispatches `@click` eve
 
 #### Events
 
-| props                 | args   | Description                   |
-| --------------------- | ------ | ----------------------------- |
-| `MDCTabBar:activated` | number | Native event on index update. |
-| `@update:modelValue`  | number | On active index update.       |
+| props                   | args   | Description                   |
+| ----------------------- | ------ | ----------------------------- |
+| `mdc-tab-bar:activated` | number | Native event on index update. |
+| `@update:modelValue`    | number | On active index update.       |
 
 #### Tabs with icons
 

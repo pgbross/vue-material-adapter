@@ -53,7 +53,7 @@ export default {
         emit('nav', {});
         emitCustomEvent(
           uiState.root,
-          strings.NAVIGATION_EVENT,
+          'mdc-top-app-bar:nav',
           {},
           /** shouldBubble */ true,
         );

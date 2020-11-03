@@ -109,7 +109,7 @@ export default {
 
       notifySortAction: data => {
         emit(
-          'mdc-data-table-sorted',
+          'mdc-data-table:sorted',
           {
             data,
           },
@@ -166,21 +166,15 @@ export default {
       isRowsSelectable: () =>
         !!uiState.root.querySelector(selectors.ROW_CHECKBOX),
       notifyRowSelectionChanged: data => {
-        emit(
-          'mdc-data-table-rowselectionchanged',
-          {
-            row: getRowByIndex_(data.rowIndex),
-            rowId: getRowIdByIndex_(data.rowIndex),
-            rowIndex: data.rowIndex,
-            selected: data.selected,
-          },
-          /** shouldBubble */ true,
-        );
+        emit('mdc-data-table:rowselectionchanged', {
+          row: getRowByIndex_(data.rowIndex),
+          rowId: getRowIdByIndex_(data.rowIndex),
+          rowIndex: data.rowIndex,
+          selected: data.selected,
+        });
       },
-      notifySelectedAll: () =>
-        emit('mdc-data-table-selectedall', {}, /** shouldBubble */ true),
-      notifyUnselectedAll: () =>
-        emit('mdc-data-table-unselectedall', {}, /** shouldBubble */ true),
+      notifySelectedAll: () => emit('mdc-data-table:selectedall', {}),
+      notifyUnselectedAll: () => emit('mdc-data-table:unselectedall', {}),
       registerHeaderRowCheckbox: () => {
         headerRowCheckbox?.destroy();
 
@@ -236,7 +230,10 @@ export default {
       handleHeaderRowCheckboxChange = () =>
         foundation.handleHeaderRowCheckboxChange();
 
-      headerRow.addEventListener('change', handleHeaderRowCheckboxChange);
+      headerRow.addEventListener(
+        'mdc-checkbox:change',
+        handleHeaderRowCheckboxChange,
+      );
 
       headerRowClickListener = event => {
         handleHeaderRowClick(event);
@@ -249,7 +246,7 @@ export default {
       handleRowCheckboxChange = event =>
         foundation.handleRowCheckboxChange(event);
 
-      content.addEventListener('change', handleRowCheckboxChange);
+      content.addEventListener('mdc-checkbox:change', handleRowCheckboxChange);
 
       foundation = new MDCDataTableFoundation(adapter);
       foundation.init();
@@ -258,10 +255,16 @@ export default {
     });
 
     onBeforeUnmount(() => {
-      headerRow.removeEventListener('change', handleHeaderRowCheckboxChange);
+      headerRow.removeEventListener(
+        'mdc-checkbox:change',
+        handleHeaderRowCheckboxChange,
+      );
       headerRow.removeEventListener('click', headerRowClickListener);
 
-      content.removeEventListener('change', handleRowCheckboxChange);
+      content.removeEventListener(
+        'mdc-checkbox:change',
+        handleRowCheckboxChange,
+      );
 
       headerRowCheckbox?.destroy?.();
       rowCheckboxList?.forEach(checkbox => {

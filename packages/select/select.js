@@ -20,10 +20,7 @@ let uid_ = 0;
 export default {
   name: 'mcw-select',
   inheritAttrs: false,
-  // model: {
-  //   prop: 'value',
-  //   event: 'change',
-  // },
+
   props: {
     modelValue: String,
     helptext: String,
@@ -212,7 +209,7 @@ export default {
         const index = selectedIndex();
         emitCustomEvent(
           uiState.root,
-          strings.CHANGE_EVENT,
+          'mdc-select:change',
           { value, index },
           true /* shouldBubble  */,
         );

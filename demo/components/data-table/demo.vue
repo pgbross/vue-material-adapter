@@ -75,9 +75,9 @@
     <div class>
       <div class="mdc-typography--headline6">Row Selection</div>
       <mcw-data-table
-        @mdc-data-table-rowselectionchanged="onRowSelection"
-        @mdc-data-table-selectedall="onSelectAll"
-        @mdc-data-table-unselectedall="onUnselectAll"
+        @mdc-data-table:rowselectionchanged="onRowSelection"
+        @mdc-data-table:selectedall="onSelectAll"
+        @mdc-data-table:unselectedall="onUnselectAll"
       >
         <table class="mdc-data-table__table" aria-label="Dessert calories">
           <thead>
@@ -229,7 +229,7 @@
     <p></p>
     <div class>
       <div class="mdc-typography--headline6">Sorting</div>
-      <mcw-data-table @mdc-data-table-sorted="onSorted">
+      <mcw-data-table @mdc-data-table:sorted="onSorted">
         <table class="mdc-data-table__table" aria-label="Dessert calories">
           <thead>
             <tr class="mdc-data-table__header-row">

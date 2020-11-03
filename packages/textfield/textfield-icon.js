@@ -48,7 +48,7 @@ export default {
       notifyIconAction: () => {
         emitCustomEvent(
           uiState.root,
-          MDCTextFieldIconFoundation.strings.ICON_EVENT,
+          'mdc-textfield:icon',
           {},
           true /* shouldBubble  */,
         );

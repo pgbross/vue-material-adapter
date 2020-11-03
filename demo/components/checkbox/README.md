@@ -60,12 +60,12 @@ var vm = new Vue({
 
 ### events
 
-| event     | args    | Description             |
-| --------- | ------- | ----------------------- |
-| `change`  | event   | native change event     |
-| `@change` | boolean | checked state           |
-| `@focus`  | -       | emitted on focus gained |
-| `@blur`   | -       | emitted on focus lost   |
+| event                 | args    | Description             |
+| --------------------- | ------- | ----------------------- |
+| `mdc-checkbox:change` | event   | native change event     |
+| `@change`             | boolean | checked state           |
+| `@focus`              | -       | emitted on focus gained |
+| `@blur`               | -       | emitted on focus lost   |
 
 ### Reference
 
