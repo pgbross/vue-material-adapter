@@ -7,8 +7,8 @@ import { getCorrectEventName } from '@material/animation';
 import { MDCCheckboxFoundation } from '@material/checkbox/foundation';
 import { MDCFormFieldFoundation } from '@material/form-field/foundation';
 import { MDCChipSetFoundation } from '@material/chips/chip-set/foundation';
-import { announce } from '@material/dom/announce';
 import { MDCChipFoundation } from '@material/chips/chip/foundation';
+import { announce } from '@material/dom/announce';
 import { MDCChipTrailingActionFoundation } from '@material/chips/trailingaction/foundation';
 import { MDCCircularProgressFoundation } from '@material/circular-progress/foundation';
 import { MDCCheckbox } from '@material/checkbox';
@@ -394,6 +394,7 @@ function BasePlugin(components) {
 
 function emitCustomEvent(el, evtType, evtData) {
   var shouldBubble = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+  evtType = evtType.toLowerCase();
 
   var createCustomEvent = function createCustomEvent() {
     var evt = document.createEvent('CustomEvent');
@@ -872,6 +873,7 @@ var card = BasePlugin({
 
 function emitCustomEvent$1(el, evtType, evtData) {
   var shouldBubble = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+  evtType = evtType.toLowerCase();
 
   var createCustomEvent = function createCustomEvent() {
     var evt = document.createEvent('CustomEvent');
@@ -1111,7 +1113,7 @@ var script$2 = {
       } else {
         // emit a native event so that it bubbles to parent elements
         // e.g. data table row
-        emitCustomEvent$1(uiState.root, 'mdc-checkbox:change', {}, true);
+        emitCustomEvent$1(uiState.root, 'mdccheckbox:change', {}, true);
         emit('update:modelValue', checked);
       }
     };
@@ -1409,6 +1411,7 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
 script$3.render = render$3;
 script$3.__file = "packages/chips/chip-checkmark.vue";
 
+var strings = MDCChipFoundation.strings;
 var script$4 = {
   name: 'mcw-chip-set',
   props: {
@@ -1485,26 +1488,23 @@ var script$4 = {
       input: props.input
     });
     onMounted(function () {
+      var _uiState$myListeners;
+
       foundation = new MDCChipSetFoundation(adapter);
       foundation.init();
-      uiState.myListeners = {
-        'mdc-chip:interaction': function mdcChipInteraction(_ref2) {
-          var detail = _ref2.detail;
-          return foundation.handleChipInteraction(detail);
-        },
-        'mdc-chip:selection': function mdcChipSelection(_ref3) {
-          var detail = _ref3.detail;
-          return foundation.handleChipSelection(detail);
-        },
-        'mdc-chip:removal': function mdcChipRemoval(_ref4) {
-          var detail = _ref4.detail;
-          return foundation.handleChipRemoval(detail);
-        },
-        'mdc-chip:navigation': function mdcChipNavigation(_ref5) {
-          var detail = _ref5.detail;
-          return foundation.handleChipNavigation(detail);
-        }
-      }, // the chips could change outside of this component
+      uiState.myListeners = (_uiState$myListeners = {}, _defineProperty(_uiState$myListeners, strings.INTERACTION_EVENT.toLowerCase(), function (_ref2) {
+        var detail = _ref2.detail;
+        return foundation.handleChipInteraction(detail);
+      }), _defineProperty(_uiState$myListeners, strings.SELECTION_EVENT.toLowerCase(), function (_ref3) {
+        var detail = _ref3.detail;
+        return foundation.handleChipSelection(detail);
+      }), _defineProperty(_uiState$myListeners, strings.REMOVAL_EVENT.toLowerCase(), function (_ref4) {
+        var detail = _ref4.detail;
+        return foundation.handleChipRemoval(detail);
+      }), _defineProperty(_uiState$myListeners, strings.NAVIGATION_EVENT.toLowerCase(), function (_ref5) {
+        var detail = _ref5.detail;
+        return foundation.handleChipNavigation(detail);
+      }), _uiState$myListeners), // the chips could change outside of this component
       // so use a mutation observer to trigger an update by
       // incrementing the dependency variable "listn" referenced
       // in the computed that selects the chip elements
@@ -1537,7 +1537,8 @@ function render$4(_ctx, _cache, $props, $setup, $data, $options) {
 script$4.render = render$4;
 script$4.__file = "packages/chips/chip-set.vue";
 
-var strings = MDCChipFoundation.strings;
+var strings$1 = MDCChipFoundation.strings;
+var trailingActionStrings = MDCChipTrailingActionFoundation.strings;
 var chipItemId_ = 0;
 var script$5 = {
   name: 'mcw-chip',
@@ -1624,7 +1625,7 @@ var script$5 = {
       focusPrimaryAction: function focusPrimaryAction() {
         var _uiState$root$querySe;
 
-        (_uiState$root$querySe = uiState.root.querySelector(strings.PRIMARY_ACTION_SELECTOR)) === null || _uiState$root$querySe === void 0 ? void 0 : _uiState$root$querySe.focus();
+        (_uiState$root$querySe = uiState.root.querySelector(strings$1.PRIMARY_ACTION_SELECTOR)) === null || _uiState$root$querySe === void 0 ? void 0 : _uiState$root$querySe.focus();
       },
       focusTrailingAction: function focusTrailingAction() {
         var _trailingAction_;
@@ -1664,12 +1665,12 @@ var script$5 = {
         return false;
       },
       notifyInteraction: function notifyInteraction() {
-        emitCustomEvent(uiState.root, 'mdc-chip:interaction', {
+        emitCustomEvent(uiState.root, strings$1.INTERACTION_EVENT, {
           chipId: id
         }, true);
       },
       notifyNavigation: function notifyNavigation(key, source) {
-        return emitCustomEvent(uiState.root, 'mdc-chip:navigation', {
+        return emitCustomEvent(uiState.root, strings$1.NAVIGATION_EVENT, {
           chipId: id,
           key: key,
           source: source
@@ -1682,7 +1683,7 @@ var script$5 = {
         }, true);
       },
       notifySelection: function notifySelection(selected, shouldIgnore) {
-        return emitCustomEvent(uiState.root, 'mdc-chip:selection', {
+        return emitCustomEvent(uiState.root, strings$1.SELECTION_EVENT, {
           chipId: id,
           selected: selected,
           shouldIgnore: shouldIgnore
@@ -1691,7 +1692,7 @@ var script$5 = {
         );
       },
       notifyTrailingIconInteraction: function notifyTrailingIconInteraction() {
-        emitCustomEvent(uiState.root, 'mdc-chip:trailing-icon-interaction', {
+        emitCustomEvent(uiState.root, strings$1.TRAILING_ICON_INTERACTION_EVENT, {
           chipId: id
         }, true);
       },
@@ -1767,8 +1768,8 @@ var script$5 = {
       remove: remove
     });
     onMounted(function () {
-      leadingIcon_ = uiState.root.querySelector(strings.LEADING_ICON_SELECTOR);
-      trailingAction_ = uiState.root.querySelector(strings.TRAILING_ACTION_SELECTOR);
+      leadingIcon_ = uiState.root.querySelector(strings$1.LEADING_ICON_SELECTOR);
+      trailingAction_ = uiState.root.querySelector(strings$1.TRAILING_ACTION_SELECTOR);
       foundation = new MDCChipFoundation(adapter);
       uiState.myListeners = {
         click: function click(evt) {
@@ -1789,11 +1790,11 @@ var script$5 = {
       };
 
       if (trailingAction_) {
-        uiState.myListeners['mdc-chip:trailing-action-interaction'] = function (evt) {
+        uiState.myListeners[trailingActionStrings.INTERACTION_EVENT.toLowerCase()] = function (evt) {
           return foundation.handleTrailingActionInteraction(evt);
         };
 
-        uiState.myListeners['mdc-chip:trailing-action-navigation'] = function (evt) {
+        uiState.myListeners[trailingActionStrings.NAVIGATION_EVENT.toLowerCase()] = function (evt) {
           return foundation.handleTrailingActionNavigation(evt);
         };
       }
@@ -1891,6 +1892,7 @@ function render$5(_ctx, _cache, $props, $setup, $data, $options) {
 script$5.render = render$5;
 script$5.__file = "packages/chips/chip.vue";
 
+var strings$2 = MDCChipTrailingActionFoundation.strings;
 var script$6 = {
   name: 'mcw-chip-trailing-action',
   setup: function setup() {
@@ -1909,12 +1911,12 @@ var script$6 = {
         return root.value.getAttribute(attr);
       },
       notifyInteraction: function notifyInteraction(trigger) {
-        return emitCustomEvent(root.value, 'mdc-chip:trailing-action-interaction', {
+        return emitCustomEvent(root.value, strings$2.INTERACTION_EVENT, {
           trigger: trigger
         }, true);
       },
       notifyNavigation: function notifyNavigation(key) {
-        return emitCustomEvent(root.value, 'mdc-chip:trailing-action-navigation', {
+        return emitCustomEvent(root.value, strings$2.NAVIGATION_EVENT, {
           key: key
         }, true);
       },
@@ -2413,7 +2415,7 @@ var script$8 = {
         return !!uiState.root.querySelector(selectors$1.ROW_CHECKBOX);
       },
       notifyRowSelectionChanged: function notifyRowSelectionChanged(data) {
-        emit('mdc-data-table:rowselectionchanged', {
+        emit('mdcdatatable:rowselectionchanged', {
           row: getRowByIndex_(data.rowIndex),
           rowId: getRowIdByIndex_(data.rowIndex),
           rowIndex: data.rowIndex,
@@ -2421,10 +2423,10 @@ var script$8 = {
         });
       },
       notifySelectedAll: function notifySelectedAll() {
-        return emit('mdc-data-table:selectedall', {});
+        return emit('mdcdatatable:selectedall', {});
       },
       notifyUnselectedAll: function notifyUnselectedAll() {
-        return emit('mdc-data-table:unselectedall', {});
+        return emit('mdcdatatable:unselectedall', {});
       },
       registerHeaderRowCheckbox: function registerHeaderRowCheckbox() {
         var _headerRowCheckbox;
@@ -2480,7 +2482,7 @@ var script$8 = {
         return foundation.handleHeaderRowCheckboxChange();
       };
 
-      headerRow.addEventListener('mdc-checkbox:change', handleHeaderRowCheckboxChange);
+      headerRow.addEventListener('mdccheckbox:change', handleHeaderRowCheckboxChange);
 
       headerRowClickListener = function headerRowClickListener(event) {
         handleHeaderRowClick(event);
@@ -2493,7 +2495,7 @@ var script$8 = {
         return foundation.handleRowCheckboxChange(event);
       };
 
-      content.addEventListener('mdc-checkbox:change', handleRowCheckboxChange);
+      content.addEventListener('mdccheckbox:change', handleRowCheckboxChange);
       foundation = new MDCDataTableFoundation(adapter);
       foundation.init();
       layout();
@@ -2501,9 +2503,9 @@ var script$8 = {
     onBeforeUnmount(function () {
       var _headerRowCheckbox2, _headerRowCheckbox2$d, _rowCheckboxList;
 
-      headerRow.removeEventListener('mdc-checkbox:change', handleHeaderRowCheckboxChange);
+      headerRow.removeEventListener('mdccheckbox:change', handleHeaderRowCheckboxChange);
       headerRow.removeEventListener('click', headerRowClickListener);
-      content.removeEventListener('mdc-checkbox:change', handleRowCheckboxChange);
+      content.removeEventListener('mdccheckbox:change', handleRowCheckboxChange);
       (_headerRowCheckbox2 = headerRowCheckbox) === null || _headerRowCheckbox2 === void 0 ? void 0 : (_headerRowCheckbox2$d = _headerRowCheckbox2.destroy) === null || _headerRowCheckbox2$d === void 0 ? void 0 : _headerRowCheckbox2$d.call(_headerRowCheckbox2);
       (_rowCheckboxList = rowCheckboxList) === null || _rowCheckboxList === void 0 ? void 0 : _rowCheckboxList.forEach(function (checkbox) {
         var _checkbox$destroy;
@@ -2633,7 +2635,7 @@ var mcwDialogTitle = {
 };
 
 var cssClasses = MDCDialogFoundation.cssClasses,
-    strings$1 = MDCDialogFoundation.strings;
+    strings$3 = MDCDialogFoundation.strings;
 var LAYOUT_EVENTS = ['resize', 'orientationchange'];
 var script$9 = {
   name: 'mcw-dialog',
@@ -2753,8 +2755,8 @@ var script$9 = {
         return areTopsMisaligned(buttons_);
       },
       getActionFromEvent: function getActionFromEvent(event) {
-        var elem = closest$1(event.target, "[".concat(strings$1.ACTION_ATTRIBUTE, "]"));
-        return elem === null || elem === void 0 ? void 0 : elem.getAttribute(strings$1.ACTION_ATTRIBUTE);
+        var elem = closest$1(event.target, "[".concat(strings$3.ACTION_ATTRIBUTE, "]"));
+        return elem === null || elem === void 0 ? void 0 : elem.getAttribute(strings$3.ACTION_ATTRIBUTE);
       },
       clickDefaultButton: function clickDefaultButton() {
         var _defaultButton;
@@ -2770,18 +2772,18 @@ var script$9 = {
         });
       },
       notifyOpening: function notifyOpening() {
-        emit('mdc-dialog-opening', {});
+        emit('mdcdialog:opening', {});
         LAYOUT_EVENTS.forEach(function (evt) {
           return window.addEventListener(evt, handleLayout);
         });
         document.addEventListener('keydown', handleDocumentKeyDown);
       },
       notifyOpened: function notifyOpened() {
-        return emit('mdc-dialog-opened', {});
+        return emit('mdcdialog:opened', {});
       },
       notifyClosing: function notifyClosing(action) {
         emit('update:modelValue', false);
-        emit('mdc-dialog-closing', action ? {
+        emit('mdcdialog:closing', action ? {
           action: action
         } : {});
         LAYOUT_EVENTS.forEach(function (evt) {
@@ -2790,7 +2792,7 @@ var script$9 = {
         document.removeEventListener('keydown', handleDocumentKeyDown);
       },
       notifyClosed: function notifyClosed(action) {
-        emit('mdc-dialog-closed', action ? {
+        emit('mdcdialog:closed', action ? {
           action: action
         } : {});
       }
@@ -2806,14 +2808,14 @@ var script$9 = {
           escapeKeyAction = props.escapeKeyAction,
           scrimClickAction = props.scrimClickAction;
       buttons_ = [].slice.call(uiState.root.querySelectorAll(cssClasses.BUTTON));
-      defaultButton = uiState.root.querySelector("[".concat(strings$1.BUTTON_DEFAULT_ATTRIBUTE, "]"));
-      var container = uiState.root.querySelector(strings$1.CONTAINER_SELECTOR);
+      defaultButton = uiState.root.querySelector("[".concat(strings$3.BUTTON_DEFAULT_ATTRIBUTE, "]"));
+      var container = uiState.root.querySelector(strings$3.CONTAINER_SELECTOR);
 
       if (!container) {
-        throw new Error("Dialog component requires a ".concat(strings$1.CONTAINER_SELECTOR, " container element"));
+        throw new Error("Dialog component requires a ".concat(strings$3.CONTAINER_SELECTOR, " container element"));
       }
 
-      content_ = uiState.root.querySelector(strings$1.CONTENT_SELECTOR);
+      content_ = uiState.root.querySelector(strings$3.CONTENT_SELECTOR);
       foundation = new MDCDialogFoundation(adapter);
       foundation.init();
 
@@ -2886,6 +2888,7 @@ var dialog = BasePlugin({
   mcwDialogContent: mcwDialogContent
 });
 
+var strings$4 = MDCDismissibleDrawerFoundation.strings;
 var script$a = {
   name: 'mcw-drawer',
   props: {
@@ -2987,14 +2990,14 @@ var script$a = {
         }
       },
       notifyClose: function notifyClose() {
-        emitCustomEvent(uiState.drawer, 'mdc-drawer:closed', {}, true
+        emitCustomEvent(uiState.drawer, strings$4.CLOSE_EVENT, {}, true
         /* shouldBubble */
         );
         emit('update:modelValue', false);
         emit('close');
       },
       notifyOpen: function notifyOpen() {
-        emitCustomEvent(uiState.drawer, 'mdc-drawer:opened', {}, true
+        emitCustomEvent(uiState.drawer, strings$4.OPEN_EVENT, {}, true
         /* shouldBubble */
         );
         emit('update:modelValue', true);
@@ -3826,19 +3829,16 @@ var linearProgress = BasePlugin({
   mcwLinearProgress: script$i
 });
 
-var listItemId_ = 0;
+var itemId = 0;
 var script$j = {
   name: 'mcw-list-item',
+  inheritAttrs: false,
   props: {
     twoLine: String,
     disabled: Boolean,
     icon: [String, Boolean],
     groupIcon: String,
-    selected: Boolean,
-    checked: Boolean,
     name: String,
-    to: [String, Object],
-    noAutoRole: Boolean,
     trailing: Boolean
   },
   components: {
@@ -3848,39 +3848,35 @@ var script$j = {
     var slots = _ref.slots,
         attrs = _ref.attrs;
     var root = ref(null);
+    var myItemId = itemId++;
     var uiState = reactive({
       classes: {
         'mdc-list-item': 1,
         'mdc-list-item--disabled': props.disabled
       },
-      attrs: {},
-      styles: {}
+      attrs: {}
     });
-    var addListElement = inject('addListElement');
-    var itemId = listItemId_++;
+    var registerListItem = inject('registerListItem');
     var radioChecked = computed(function () {
-      return (attrs === null || attrs === void 0 ? void 0 : attrs['aria-checked']) == 'true';
+      return attrs['aria-checked'] == 'true';
     });
     var checkbox = computed(function () {
-      return !props.trailing && (attrs === null || attrs === void 0 ? void 0 : attrs.role) == 'checkbox';
+      return !props.trailing && attrs.role == 'checkbox';
     });
     var radio = computed(function () {
-      return !props.trailing && (attrs === null || attrs === void 0 ? void 0 : attrs.role) == 'radio';
+      return !props.trailing && attrs.role == 'radio';
     });
     var trailingRadio = computed(function () {
-      return props.trailing && (attrs === null || attrs === void 0 ? void 0 : attrs.role) == 'radio';
+      return props.trailing && attrs.role == 'radio';
     });
     var trailingCheckbox = computed(function () {
-      return props.trailing && (attrs === null || attrs === void 0 ? void 0 : attrs.role) == 'checkbox';
+      return props.trailing && attrs.role == 'checkbox';
     });
 
     var _useRipplePlugin = useRipplePlugin(root),
         rippleClasses = _useRipplePlugin.classes,
         styles = _useRipplePlugin.styles;
 
-    var classes = computed(function () {
-      return _objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes);
-    });
     var isTwoLine = computed(function () {
       return props.twoLine || slots['secondary-text'];
     });
@@ -3896,8 +3892,21 @@ var script$j = {
       return typeof props.icon === 'string' && props.icon || props.groupIcon;
     });
 
+    var focus = function focus() {
+      var _root$value$$el;
+
+      ((_root$value$$el = root.value.$el) !== null && _root$value$$el !== void 0 ? _root$value$$el : root.value).focus();
+    };
+
+    var myAttrs = computed(function () {
+      return _objectSpread2(_objectSpread2({}, attrs), {}, {
+        class: _objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes),
+        style: styles.value
+      }, uiState.attrs);
+    });
+
     var addClass = function addClass(className) {
-      return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+      uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
     };
 
     var removeClass = function removeClass(className) {
@@ -3919,15 +3928,11 @@ var script$j = {
     };
 
     var setAttribute = function setAttribute(attr, value) {
-      return uiState.attrs = _objectSpread2(_objectSpread2({}, uiState.attrs), {}, _defineProperty({}, attr, value));
+      uiState.attrs = _objectSpread2(_objectSpread2({}, uiState.attrs), {}, _defineProperty({}, attr, value));
     };
 
     var getAttribute = function getAttribute(attr) {
       return myAttrs.value[attr];
-    };
-
-    var addItemId = function addItemId(evt) {
-      evt.__itemId = itemId;
     };
 
     var classList = {
@@ -3937,54 +3942,30 @@ var script$j = {
         return !!uiState.classes[className];
       }
     };
-    addListElement({
-      itemId: itemId,
+    registerListItem({
+      itemId: myItemId,
+      removeAttribute: removeAttribute,
       setAttribute: setAttribute,
       getAttribute: getAttribute,
       classList: classList
-    });
+    }); // onMounted(() => {
+    //   root.value.$el.__myItemId = myItemId;
+    // });
 
-    var focus = function focus() {
-      var _root$value$$el;
-
-      ((_root$value$$el = root.value.$el) !== null && _root$value$$el !== void 0 ? _root$value$$el : root.value).focus();
-    };
-
-    var myListeners = {
-      click: addItemId,
-      focusin: addItemId
-    };
-    var myAttrs = computed(function () {
-      return _objectSpread2(_objectSpread2({
-        class: uiState.classes,
-        style: uiState.styles
-      }, uiState.attrs), {}, {
-        itemId: itemId
-      });
-    });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      myListeners: myListeners,
-      styles: styles,
       focus: focus,
       root: root,
-      classes: classes,
       isTwoLine: isTwoLine,
       needGraphic: needGraphic,
       listIcon: listIcon,
       groupClasses: groupClasses,
-      addClass: addClass,
-      removeClass: removeClass,
-      setAttribute: setAttribute,
-      getAttribute: getAttribute,
-      removeAttribute: removeAttribute,
-      itemId: itemId,
       checkbox: checkbox,
       radio: radio,
       radioChecked: radioChecked,
-      classList: classList,
       myAttrs: myAttrs,
       trailingRadio: trailingRadio,
-      trailingCheckbox: trailingCheckbox
+      trailingCheckbox: trailingCheckbox,
+      myItemId: myItemId
     });
   }
 };
@@ -4076,10 +4057,10 @@ const _hoisted_17 = {
 function render$j(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_custom_link = resolveComponent("custom-link");
 
-  return (openBlock(), createBlock(_component_custom_link, mergeProps({
-    ref: "root",
-    to: _ctx.to
-  }, toHandlers(_ctx.myListeners), _ctx.myAttrs, { tag: "a" }), {
+  return (openBlock(), createBlock(_component_custom_link, mergeProps({ ref: "root" }, _ctx.myAttrs, {
+    tag: "a",
+    "data-myItemId": _ctx.myItemId
+  }), {
     default: withCtx(() => [
       _hoisted_1$d,
       (_ctx.needGraphic)
@@ -4157,13 +4138,13 @@ function render$j(_ctx, _cache, $props, $setup, $data, $options) {
             : createCommentVNode("v-if", true)
     ]),
     _: 1
-  }, 16 /* FULL_PROPS */, ["to"]))
+  }, 16 /* FULL_PROPS */, ["data-myItemId"]))
 }
 
 script$j.render = render$j;
 script$j.__file = "packages/list/list-item.vue";
 
-var strings$2 = MDCListFoundation.strings,
+var strings$5 = MDCListFoundation.strings,
     cssClasses$1 = MDCListFoundation.cssClasses;
 var script$k = {
   name: 'mcw-list',
@@ -4214,13 +4195,6 @@ var script$k = {
       listn: 0,
       listRoot: null
     });
-    var le = ref([]);
-
-    var addListElement = function addListElement(item) {
-      le.value.push(item);
-    };
-
-    provide('addListElement', addListElement);
     var selectedIndex = ref(props.modelValue);
     var foundation;
     var slotObserver;
@@ -4229,6 +4203,13 @@ var script$k = {
       uiState.rootAttrs.role = 'listbox';
     }
 
+    var listItems = ref({});
+
+    var registerListItem = function registerListItem(item) {
+      listItems.value[item.itemId] = item;
+    };
+
+    provide('registerListItem', registerListItem);
     var selIndex = computed({
       get: function get() {
         return selectedIndex.value;
@@ -4238,35 +4219,35 @@ var script$k = {
         emit('update:modelValue', nv);
       }
     });
-    var listElements = computed(function () {
-      if (!uiState.listRoot) {
-        return [];
-      }
+    var listElements = ref([]);
 
-      return [].slice.call(uiState.listRoot.querySelectorAll(".".concat(cssClasses$1.LIST_ITEM_CLASS)));
-    }); // const updateListElements = () => {
-    //   const elements = [].slice.call(
-    //     uiState.listRoot.querySelectorAll(`.${cssClasses.LIST_ITEM_CLASS}`),
-    //   );
-    //   listElements.value = elements;
-    // };
+    var updateListElements = function updateListElements() {
+      var elements = [].slice.call(uiState.listRoot.querySelectorAll(".".concat(cssClasses$1.LIST_ITEM_CLASS)));
+      listElements.value = elements;
+    };
+
+    var getListItemByIndex = function getListItemByIndex(index) {
+      var element = listElements.value[index];
+      var myItemId = element.dataset.myitemid;
+      return listItems.value[myItemId];
+    };
 
     var getListItemIndex = function getListItemIndex(evt) {
-      if (evt.__itemId !== void 0) {
-        var listIndex = le.value.findIndex(function (_ref2) {
-          var itemId = _ref2.itemId;
-          return itemId == evt.__itemId;
+      var myItemId = evt.target.dataset.myitemid;
+
+      if (myItemId !== void 0) {
+        var lei = listElements.value.findIndex(function (_ref2) {
+          var myitemid = _ref2.dataset.myitemid;
+          return myitemid === myItemId;
         });
-        return listIndex; // return listElements.value.findIndex(
-        //   ({ itemId }) => itemId === evt.__itemId,
-        // );
+        return lei;
       }
 
       var eventTarget = evt.target;
       var nearestParent = closest(eventTarget, ".".concat(cssClasses$1.LIST_ITEM_CLASS, ", .").concat(cssClasses$1.ROOT)); // Get the index of the element if it is a list item.
 
       if (nearestParent && matches(nearestParent, ".".concat(cssClasses$1.LIST_ITEM_CLASS))) {
-        return listElements.value.indexOf(nearestParent.__vue__);
+        return listElements.value.indexOf(nearestParent);
       }
 
       return -1;
@@ -4279,23 +4260,23 @@ var script$k = {
         ele.setAttribute('tabindex', -1);
       }); // Child button/a elements are not tabbable until the list item is focused.
 
-      [].slice.call(uiState.listRoot.querySelectorAll(strings$2.FOCUSABLE_CHILD_ELEMENTS)).forEach(function (ele) {
+      [].slice.call(uiState.listRoot.querySelectorAll(strings$5.FOCUSABLE_CHILD_ELEMENTS)).forEach(function (ele) {
         return ele.setAttribute('tabindex', -1);
       });
       foundation.layout();
     };
 
     var initializeListType = function initializeListType() {
-      var checkboxListItems = uiState.listRoot.querySelectorAll(strings$2.ARIA_ROLE_CHECKBOX_SELECTOR);
-      var radioSelectedListItem = uiState.listRoot.querySelector(strings$2.ARIA_CHECKED_RADIO_SELECTOR);
+      var checkboxListItems = uiState.listRoot.querySelectorAll(strings$5.ARIA_ROLE_CHECKBOX_SELECTOR);
+      var radioSelectedListItem = uiState.listRoot.querySelector(strings$5.ARIA_CHECKED_RADIO_SELECTOR);
 
       if (checkboxListItems.length) {
-        var preselectedItems = uiState.listRoot.querySelectorAll(strings$2.ARIA_CHECKED_CHECKBOX_SELECTOR);
+        var preselectedItems = uiState.listRoot.querySelectorAll(strings$5.ARIA_CHECKED_CHECKBOX_SELECTOR);
         selIndex.value = [].map.call(preselectedItems, function (listItem) {
-          return listElements.value.indexOf(listItem.__vue__);
+          return listElements.value.indexOf(listItem);
         });
       } else if (radioSelectedListItem) {
-        selIndex.value = listElements.value.indexOf(radioSelectedListItem.__vue__);
+        selIndex.value = listElements.value.indexOf(radioSelectedListItem);
       }
     };
 
@@ -4340,7 +4321,7 @@ var script$k = {
       var index = getListItemIndex(evt);
       var target = evt.target; // Toggle the checkbox only if it's not the target of the event, or the checkbox will have 2 change events.
 
-      var toggleCheckbox = !matches(target, strings$2.CHECKBOX_RADIO_SELECTOR);
+      var toggleCheckbox = !matches(target, strings$5.CHECKBOX_RADIO_SELECTOR);
       foundation.handleClick(index, toggleCheckbox);
     };
 
@@ -4365,9 +4346,8 @@ var script$k = {
 
     var adapter = {
       addClassForElementIndex: function addClassForElementIndex(index, className) {
-        var item = le.value[index];
-        item.classList.add(className); // const element = listElements.value[index];
-        // element.classList.add(className);
+        var listItem = getListItemByIndex(index);
+        listItem.classList.add(className);
       },
       focusItemAtIndex: function focusItemAtIndex(index) {
         var element = listElements.value[index];
@@ -4377,15 +4357,14 @@ var script$k = {
         }
       },
       getAttributeForElementIndex: function getAttributeForElementIndex(index, attr) {
-        var item = le.value[index];
-        return item.getAttribute(attr); // const listItem = listElements.value[index];
-        // return listItem.getAttribute(attr);
+        var listItem = getListItemByIndex(index);
+        return listItem.getAttribute(attr);
       },
       getFocusedElementIndex: function getFocusedElementIndex() {
         return listElements.value.indexOf(document.activeElement);
       },
       getListItemCount: function getListItemCount() {
-        return le.value.length;
+        return listElements.value.length;
       },
       getPrimaryTextAtIndex: function getPrimaryTextAtIndex(index) {
         return getPrimaryText(listElements.value[index]);
@@ -4394,19 +4373,19 @@ var script$k = {
         var _listItem$$el;
 
         var listItem = listElements.value[index];
-        return listItem && !!((_listItem$$el = listItem.$el) !== null && _listItem$$el !== void 0 ? _listItem$$el : listItem).querySelector(strings$2.CHECKBOX_SELECTOR);
+        return listItem && !!((_listItem$$el = listItem.$el) !== null && _listItem$$el !== void 0 ? _listItem$$el : listItem).querySelector(strings$5.CHECKBOX_SELECTOR);
       },
       hasRadioAtIndex: function hasRadioAtIndex(index) {
         var _listItem$$el2;
 
         var listItem = listElements.value[index];
-        return listItem && !!((_listItem$$el2 = listItem.$el) !== null && _listItem$$el2 !== void 0 ? _listItem$$el2 : listItem).querySelector(strings$2.RADIO_SELECTOR);
+        return listItem && !!((_listItem$$el2 = listItem.$el) !== null && _listItem$$el2 !== void 0 ? _listItem$$el2 : listItem).querySelector(strings$5.RADIO_SELECTOR);
       },
       isCheckboxCheckedAtIndex: function isCheckboxCheckedAtIndex(index) {
         var _listItem$$el3;
 
         var listItem = listElements.value[index];
-        var toggleEl = ((_listItem$$el3 = listItem.$el) !== null && _listItem$$el3 !== void 0 ? _listItem$$el3 : listItem).querySelector(strings$2.CHECKBOX_SELECTOR);
+        var toggleEl = ((_listItem$$el3 = listItem.$el) !== null && _listItem$$el3 !== void 0 ? _listItem$$el3 : listItem).querySelector(strings$5.CHECKBOX_SELECTOR);
         return toggleEl.checked;
       },
       isFocusInsideList: function isFocusInsideList() {
@@ -4418,19 +4397,15 @@ var script$k = {
         return document.activeElement === uiState.listRoot;
       },
       listItemAtIndexHasClass: function listItemAtIndexHasClass(index, className) {
-        // const listItem = listElements.value[index];
-        var listItem = le.value[index];
+        var listItem = getListItemByIndex(index);
         listItem.classList.contains(className);
       },
       notifyAction: function notifyAction(index) {
-        emitCustomEvent(uiState.listRoot, 'mdc-list:action', {
+        emitCustomEvent(uiState.listRoot, strings$5.ACTION_EVENT, {
           index: index
         },
         /** shouldBubble */
         true);
-        emit('mcw-list-action', {
-          index: index
-        });
 
         if (Array.isArray(props.modelValue)) {
           emit('update:modelValue', foundation.getSelectedIndex());
@@ -4439,18 +4414,16 @@ var script$k = {
         }
       },
       removeClassForElementIndex: function removeClassForElementIndex(index, className) {
-        // const listItem = listElements.value[index];
-        var listItem = le.value[index];
+        var listItem = getListItemByIndex(index);
         listItem.classList.remove(className);
       },
       setAttributeForElementIndex: function setAttributeForElementIndex(index, attr, value) {
-        var item = le.value[index];
-        item.setAttribute(attr, value); // const listItem = listElements.value[index];
-        // listItem.setAttribute(attr, value);
+        var listItem = listElements.value[index];
+        listItem.setAttribute(attr, value);
       },
       setCheckedCheckboxOrRadioAtIndex: function setCheckedCheckboxOrRadioAtIndex(index, isChecked) {
         var listItem = listElements.value[index];
-        var toggleEl = listItem.querySelector(strings$2.CHECKBOX_RADIO_SELECTOR);
+        var toggleEl = listItem.querySelector(strings$5.CHECKBOX_RADIO_SELECTOR);
         toggleEl && (toggleEl.checked = isChecked);
         var event = document.createEvent('Event');
         event.initEvent('update:modelValue', true, true);
@@ -4458,9 +4431,12 @@ var script$k = {
       },
       setTabIndexForListItemChildren: function setTabIndexForListItemChildren(listItemIndex, tabIndexValue) {
         var element = listElements.value[listItemIndex];
-        var listItemChildren = [].slice.call(element.querySelectorAll(strings$2.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX));
+        var listItemChildren = [].slice.call(element.querySelectorAll(strings$5.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX));
         listItemChildren.forEach(function (el) {
-          return el.setAttribute('tabindex', tabIndexValue);
+          var _listItems$value$el$d;
+
+          var listItem = (_listItems$value$el$d = listItems.value[el.dataset.myitemid]) !== null && _listItems$value$el$d !== void 0 ? _listItems$value$el$d : el;
+          listItem.setAttribute('tabindex', tabIndexValue);
         });
       }
     };
@@ -4495,7 +4471,7 @@ var script$k = {
       return foundation.setHasTypeahead(nv);
     });
     onMounted(function () {
-      // updateListElements();
+      updateListElements();
       foundation = new MDCListFoundation(adapter);
       foundation.init(); // if a single selection list need to ensure the selected item has the selected or activated class
 
@@ -4521,13 +4497,11 @@ var script$k = {
       if (props.typeAhead) {
         foundation.setHasTypeahead(props.typeAhead);
       } // the list content could change outside of this component
-      // so use a mutation observer to trigger an update by
-      // incrementing the dependency variable "listn" referenced
-      // in the computed that selects the list elements
+      // so use a mutation observer to trigger an update
 
 
       slotObserver = new MutationObserver(function (mutationList, observer) {
-        uiState.listn++;
+        updateListElements();
       });
       slotObserver.observe(uiState.listRoot, {
         childList: true // subtree: true,
@@ -4539,6 +4513,7 @@ var script$k = {
       foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      listItems: listItems,
       listElements: listElements,
       rootListeners: rootListeners,
       layout: layout,
@@ -4633,7 +4608,8 @@ var mcwMenuItem = {
   }
 };
 
-var cssClasses$2 = MDCMenuSurfaceFoundation.cssClasses;
+var cssClasses$2 = MDCMenuSurfaceFoundation.cssClasses,
+    strings$6 = MDCMenuSurfaceFoundation.strings;
 var script$l = {
   name: 'mcw-menu-surface',
   props: {
@@ -4820,15 +4796,15 @@ var script$l = {
         return !!anchorElement;
       },
       notifyClose: function notifyClose() {
-        uiState.root && emitCustomEvent(uiState.root, 'mdc-menu-surface:closed', {});
+        uiState.root && emitCustomEvent(uiState.root, strings$6.CLOSED_EVENT, {});
         deregisterBodyClickListener();
-        emit('mdc-menu-surface-closed');
+        emit('mdcmenusurface:closed');
         emit('update:modelValue', false);
       },
       notifyOpen: function notifyOpen() {
-        emitCustomEvent(uiState.root, 'mdc-menu-surface:opened', {});
+        emitCustomEvent(uiState.root, strings$6.OPENED_EVENT, {});
         registerBodyClickListener();
-        emit('mdc-menu-surface-opened');
+        emit('mdcmenusurface:opened');
         emit('update:modelValue', true);
       },
       isElementInContainer: function isElementInContainer(el) {
@@ -4894,7 +4870,7 @@ script$l.render = render$l;
 script$l.__file = "packages/menu/menu-surface.vue";
 
 var cssClasses$3 = MDCMenuFoundation.cssClasses,
-    strings$3 = MDCMenuFoundation.strings;
+    strings$7 = MDCMenuFoundation.strings;
 var DefaultFocusState_ = {
   NONE: 0,
   LIST_ROOT: 1,
@@ -4932,10 +4908,22 @@ var script$m = {
     var foundation;
     var rootEl;
     var items = computed(function () {
-      var _uiState$list$listEle;
+      var _uiState$list$listEle, _uiState$list;
 
-      return (_uiState$list$listEle = uiState.list.listElements) !== null && _uiState$list$listEle !== void 0 ? _uiState$list$listEle : [];
+      return (_uiState$list$listEle = (_uiState$list = uiState.list) === null || _uiState$list === void 0 ? void 0 : _uiState$list.listElements) !== null && _uiState$list$listEle !== void 0 ? _uiState$list$listEle : [];
     });
+    var listItems = computed(function () {
+      var _uiState$list$listIte;
+
+      return (_uiState$list$listIte = uiState.list.listItems) !== null && _uiState$list$listIte !== void 0 ? _uiState$list$listIte : [];
+    });
+
+    var getListItemByIndex = function getListItemByIndex(index) {
+      var element = items.value[index];
+      var myItemId = element.dataset.myitemid;
+      return listItems.value[myItemId];
+    };
+
     var surfaceOpen = computed({
       get: function get() {
         return uiState.menuOpen;
@@ -4953,15 +4941,15 @@ var script$m = {
       }
     });
     var selectedIndex = computed(function () {
-      var _uiState$list;
+      var _uiState$list2;
 
-      return (_uiState$list = uiState.list) === null || _uiState$list === void 0 ? void 0 : _uiState$list.selIndex.value;
+      return (_uiState$list2 = uiState.list) === null || _uiState$list2 === void 0 ? void 0 : _uiState$list2.selIndex.value;
     });
 
     var layout = function layout() {
-      var _uiState$list2;
+      var _uiState$list3;
 
-      return (_uiState$list2 = uiState.list) === null || _uiState$list2 === void 0 ? void 0 : _uiState$list2.layout();
+      return (_uiState$list3 = uiState.list) === null || _uiState$list3 === void 0 ? void 0 : _uiState$list3.layout();
     };
 
     var handleAction = function handleAction(index) {
@@ -4974,11 +4962,11 @@ var script$m = {
 
     var handleMenuSurfaceOpened = function handleMenuSurfaceOpened() {
       foundation.handleMenuSurfaceOpened();
-      emit('mdc-menu-surface-opened');
+      emit('mdcmenusurface:opened');
     };
 
     var handleMenuSurfaceClosed = function handleMenuSurfaceClosed() {
-      emit('mdc-menu-surface-closed');
+      emit('mdcmenusurface:closed');
     };
 
     var onChange = function onChange(item) {
@@ -5062,20 +5050,20 @@ var script$m = {
 
     var adapter = {
       addClassToElementAtIndex: function addClassToElementAtIndex(index, className) {
-        var item = items.value[index];
-        item.classList.add(className);
+        var listItem = getListItemByIndex(index);
+        listItem.classList.add(className);
       },
       removeClassFromElementAtIndex: function removeClassFromElementAtIndex(index, className) {
-        var item = items.value[index];
-        item.classList.remove(className);
+        var listItem = getListItemByIndex(index);
+        listItem.classList.remove(className);
       },
       addAttributeToElementAtIndex: function addAttributeToElementAtIndex(index, attr, value) {
-        var item = items.value[index];
-        item.setAttribute(attr, value);
+        var listItem = getListItemByIndex(index);
+        listItem.setAttribute(attr, value);
       },
       removeAttributeFromElementAtIndex: function removeAttributeFromElementAtIndex(index, attr) {
-        var item = items.value[index];
-        item.removeAttribute(attr);
+        var listItem = getListItemByIndex(index);
+        listItem.removeAttribute(attr);
       },
       elementContainsClass: function elementContainsClass(element, className) {
         return element.classList.contains(className);
@@ -5090,7 +5078,7 @@ var script$m = {
         });
       },
       notifySelected: function notifySelected(evtData) {
-        emitCustomEvent(rootEl, 'mdc-menu:selected', {
+        emitCustomEvent(rootEl, strings$7.SELECTED_EVENT, {
           index: evtData.index,
           item: items.value[evtData.index]
         });
@@ -5106,7 +5094,7 @@ var script$m = {
         return items.value[index].focus();
       },
       focusListRoot: function focusListRoot() {
-        return uiState.menuSurface.$el.querySelector(strings$3.LIST_SELECTOR).focus();
+        return uiState.menuSurface.$el.querySelector(strings$7.LIST_SELECTOR).focus();
       },
       isSelectableItemAtIndex: function isSelectableItemAtIndex(index) {
         return !!closest(items.value[index], ".".concat(cssClasses$3.MENU_SELECTION_GROUP));
@@ -5167,6 +5155,7 @@ var script$m = {
       selectedIndex: selectedIndex,
       getPrimaryTextAtIndex: getPrimaryTextAtIndex,
       items: items,
+      listItems: listItems,
       typeaheadInProgress: typeaheadInProgress,
       typeaheadMatchItem: typeaheadMatchItem
     });
@@ -5184,8 +5173,8 @@ function render$m(_ctx, _cache, $props, $setup, $data, $options) {
     modelValue: _ctx.menuOpen,
     onKeydown: _ctx.handleKeydown,
     "onUpdate:modelValue": _ctx.onChange,
-    "onMdcMenuSurface:opened": _ctx.handleMenuSurfaceOpened,
-    "onMdcMenuSurface:closed": _ctx.handleMenuSurfaceClosed
+    "onMdcmenusurface:opened": _ctx.handleMenuSurfaceOpened,
+    "onMdcmenusurface:closed": _ctx.handleMenuSurfaceClosed
   }, {
     default: withCtx(() => [
       createVNode(_component_mcw_list, {
@@ -5205,7 +5194,7 @@ function render$m(_ctx, _cache, $props, $setup, $data, $options) {
       }, 8 /* PROPS */, ["wrap-focus", "onUpdate:modelValue", "type-ahead", "single-selection"])
     ]),
     _: 1
-  }, 8 /* PROPS */, ["quick-open", "modelValue", "onKeydown", "onUpdate:modelValue", "onMdcMenuSurface:opened", "onMdcMenuSurface:closed"]))
+  }, 8 /* PROPS */, ["quick-open", "modelValue", "onKeydown", "onUpdate:modelValue", "onMdcmenusurface:opened", "onMdcmenusurface:closed"]))
 }
 
 script$m.render = render$m;
@@ -5669,6 +5658,7 @@ function render$p(_ctx, _cache, $props, $setup, $data, $options) {
 script$p.render = render$p;
 script$p.__file = "packages/select/select-helper-text.vue";
 
+var strings$8 = MDCSelectIconFoundation.strings;
 var script$q = {
   name: 'select-icon',
   props: {
@@ -5710,7 +5700,7 @@ var script$q = {
         uiState.root.textContent = content;
       },
       registerInteractionHandler: function registerInteractionHandler(evtType, handler) {
-        return uiState.rootListeners = _objectSpread2(_objectSpread2({}, uiState.rootListeners), {}, _defineProperty({}, evtType, handler));
+        return uiState.rootListeners = _objectSpread2(_objectSpread2({}, uiState.rootListeners), {}, _defineProperty({}, evtType.toLowerCase(), handler));
       },
       deregisterInteractionHandler: function deregisterInteractionHandler(evtType, handler) {
         // eslint-disable-next-line no-unused-vars
@@ -5722,7 +5712,7 @@ var script$q = {
       },
       notifyIconAction: function notifyIconAction() {
         emit('click');
-        emitCustomEvent(uiState.root, 'mdc-select:icon', {}, true
+        emitCustomEvent(uiState.root, strings$8.ICON_EVENT, {}, true
         /* shouldBubble  */
         );
       }
@@ -5751,7 +5741,7 @@ function render$q(_ctx, _cache, $props, $setup, $data, $options) {
 script$q.render = render$q;
 script$q.__file = "packages/select/select-icon.vue";
 
-var strings$4 = MDCSelectFoundation.strings,
+var strings$9 = MDCSelectFoundation.strings,
     cssClasses$5 = MDCSelectFoundation.cssClasses;
 var uid_ = 0;
 var script$r = {
@@ -5830,6 +5820,19 @@ var script$r = {
 
       return (_uiState$menu = uiState.menu) === null || _uiState$menu === void 0 ? void 0 : _uiState$menu.items;
     });
+    var menuListItems = computed(function () {
+      var _uiState$menu2;
+
+      return (_uiState$menu2 = uiState.menu) === null || _uiState$menu2 === void 0 ? void 0 : _uiState$menu2.listItems;
+    });
+
+    var getMenuListItemByIndex = function getMenuListItemByIndex(index) {
+      var menuItem = menuItems.value[index];
+      var id = menuItem.dataset.myitemid;
+      var menuListItem = menuListItems.value[id];
+      return menuListItem;
+    };
+
     var foundation;
 
     var handleFocus = function handleFocus() {
@@ -5894,7 +5897,8 @@ var script$r = {
       // select methods
       getSelectedMenuItem: function getSelectedMenuItem() {
         var x = menuItems.value.find(function (item) {
-          return item.classList.contains(cssClasses$5.SELECTED_ITEM_CLASS);
+          var myItemId = item.dataset.myitemid;
+          return menuListItems.value[myItemId].classList.contains(cssClasses$5.SELECTED_ITEM_CLASS);
         });
         return x;
       },
@@ -5958,10 +5962,14 @@ var script$r = {
         uiState.menu.selectedIndex = index;
       },
       setAttributeAtIndex: function setAttributeAtIndex(index, attributeName, attributeValue) {
-        return menuItems.value[index].setAttribute(attributeName, attributeValue);
+        var _getMenuListItemByInd;
+
+        return (_getMenuListItemByInd = getMenuListItemByIndex(index)) === null || _getMenuListItemByInd === void 0 ? void 0 : _getMenuListItemByInd.setAttribute(attributeName, attributeValue);
       },
       removeAttributeAtIndex: function removeAttributeAtIndex(index, attributeName) {
-        return menuItems.value[index].removeAttribute(attributeName);
+        var _getMenuListItemByInd2;
+
+        return (_getMenuListItemByInd2 = getMenuListItemByIndex(index)) === null || _getMenuListItemByInd2 === void 0 ? void 0 : _getMenuListItemByInd2.removeAttribute(attributeName);
       },
       focusMenuItemAtIndex: function focusMenuItemAtIndex(index) {
         return menuItems.value[index].focus();
@@ -5971,25 +5979,29 @@ var script$r = {
       },
       getMenuItemValues: function getMenuItemValues() {
         return menuItems.value.map(function (el) {
-          return el.getAttribute(strings$4.VALUE_ATTR) || '';
+          return el.getAttribute(strings$9.VALUE_ATTR) || '';
         });
       },
       getMenuItemTextAtIndex: function getMenuItemTextAtIndex(index) {
         return menuItems.value[index].textContent;
       },
       addClassAtIndex: function addClassAtIndex(index, className) {
-        menuItems.value[index].classList.add(className);
+        var _getMenuListItemByInd3;
+
+        (_getMenuListItemByInd3 = getMenuListItemByIndex(index)) === null || _getMenuListItemByInd3 === void 0 ? void 0 : _getMenuListItemByInd3.classList.add(className);
       },
       removeClassAtIndex: function removeClassAtIndex(index, className) {
-        return menuItems.value[index].classList.remove(className);
+        var _getMenuListItemByInd4;
+
+        return (_getMenuListItemByInd4 = getMenuListItemByIndex(index)) === null || _getMenuListItemByInd4 === void 0 ? void 0 : _getMenuListItemByInd4.classList.remove(className);
       },
       isTypeaheadInProgress: function isTypeaheadInProgress() {
         return uiState.menu.typeaheadInProgress();
       },
       typeaheadMatchItem: function typeaheadMatchItem(nextChar, startingIndex) {
-        var _uiState$menu2;
+        var _uiState$menu3;
 
-        return (_uiState$menu2 = uiState.menu) === null || _uiState$menu2 === void 0 ? void 0 : _uiState$menu2.typeaheadMatchItem(nextChar, startingIndex);
+        return (_uiState$menu3 = uiState.menu) === null || _uiState$menu3 === void 0 ? void 0 : _uiState$menu3.typeaheadMatchItem(nextChar, startingIndex);
       },
       // common methods
       addClass: function addClass(className) {
@@ -6023,7 +6035,7 @@ var script$r = {
       },
       notifyChange: function notifyChange(value) {
         var index = selectedIndex();
-        emitCustomEvent(uiState.root, 'mdc-select:change', {
+        emitCustomEvent(uiState.root, strings$9.CHANGE_EVENT, {
           value: value,
           index: index
         }, true
@@ -6072,7 +6084,7 @@ var script$r = {
 
     var refreshIndex = function refreshIndex() {
       var items = menuItems.value.map(function (el) {
-        return el.getAttribute(strings$4.VALUE_ATTR) || '';
+        return el.getAttribute(strings$9.VALUE_ATTR) || '';
       });
       var idx = items.findIndex(function (value) {
         return props.modelValue === value;
@@ -6623,7 +6635,7 @@ var script$t = {
     var listeners = computed(function () {
       return {
         'update:reason': attrs['update:reason'],
-        'MDCSnackbar:closed': function MDCSnackbarClosed(_ref3) {
+        'mdcsnackbar:closed': function mdcsnackbarClosed(_ref3) {
           var reason = _ref3.reason;
 
           if (actionHandler_ && reason === 'action') {
@@ -6663,14 +6675,10 @@ function render$t(_ctx, _cache, $props, $setup, $data, $options) {
 script$t.render = render$t;
 script$t.__file = "packages/snackbar/snackbar-queue.vue";
 
-var strings$5 = MDCSnackbarFoundation.strings,
+var strings$a = MDCSnackbarFoundation.strings,
     numbers = MDCSnackbarFoundation.numbers;
 var script$u = {
   name: 'mcw-snackbar',
-  // model: {
-  //   prop: 'open',
-  //   event: 'change',
-  // },
   props: {
     modelValue: Boolean,
     stacked: Boolean,
@@ -6689,8 +6697,7 @@ var script$u = {
     reason: String
   },
   setup: function setup(props, _ref) {
-    var emit = _ref.emit,
-        attrs = _ref.attrs;
+    var emit = _ref.emit;
     var uiState = reactive({
       classes: {},
       hidden: false,
@@ -6758,12 +6765,12 @@ var script$u = {
       // (except in IE 11; see https://tink.uk/accessibility-support-for-css-generated-content/);
       // however, `aria-live` is turned off, so this DOM update will be ignored by screen readers.
 
-      labelEl.setAttribute(strings$5.ARIA_LIVE_LABEL_TEXT_ATTR, props.message);
+      labelEl.setAttribute(strings$a.ARIA_LIVE_LABEL_TEXT_ATTR, props.message);
       setTimeout(function () {
         // Allow screen readers to announce changes to the DOM again.
         ariaEl.setAttribute('aria-live', priority); // Remove the message from the ::before pseudo-element.
 
-        labelEl.removeAttribute(strings$5.ARIA_LIVE_LABEL_TEXT_ATTR); // Restore the original label text, which will be announced by screen readers.
+        labelEl.removeAttribute(strings$a.ARIA_LIVE_LABEL_TEXT_ATTR); // Restore the original label text, which will be announced by screen readers.
 
         uiState.showMessage = true;
       }, numbers.ARIA_LIVE_DELAY_MS);
@@ -6777,25 +6784,25 @@ var script$u = {
         return _announce(uiState.labelEl);
       },
       notifyClosed: function notifyClosed(reason) {
-        emit(strings$5.CLOSED_EVENT, reason ? {
+        emit(strings$a.CLOSED_EVENT.toLowerCase(), reason ? {
           reason: reason
         } : {});
         emit('update:modelValue', false);
         emit('hide');
       },
       notifyClosing: function notifyClosing(reason) {
-        emit(strings$5.CLOSING_EVENT, reason ? {
+        emit(strings$a.CLOSING_EVENT, reason ? {
           reason: reason
         } : {});
         emit('update:reason', reason);
       },
       notifyOpened: function notifyOpened() {
-        emit(strings$5.OPENED_EVENT, {});
+        emit(strings$a.OPENED_EVENT.toLowerCase(), {});
         emit('update:modelValue', true);
         emit('show', {});
       },
       notifyOpening: function notifyOpening() {
-        return emit(strings$5.OPENING_EVENT, {});
+        return emit(strings$a.OPENING_EVENT, {});
       },
       removeClass: function removeClass(className) {
         // eslint-disable-next-line no-unused-vars
@@ -6862,11 +6869,11 @@ var script$u = {
 // ===
 
 function isActionButton_(target) {
-  return Boolean(closest(target, strings$5.ACTION_SELECTOR));
+  return Boolean(closest(target, strings$a.ACTION_SELECTOR));
 }
 
 function isActionIcon_(target) {
-  return Boolean(closest(target, strings$5.DISMISS_SELECTOR));
+  return Boolean(closest(target, strings$a.DISMISS_SELECTOR));
 }
 
 const _hoisted_1$i = {
@@ -7087,7 +7094,7 @@ var switchControl = BasePlugin({
   mcwSwitch: script$v
 });
 
-var strings$6 = MDCTabBarFoundation.strings;
+var strings$b = MDCTabBarFoundation.strings;
 var script$w = {
   name: 'mcw-tab-bar',
   props: {
@@ -7124,7 +7131,7 @@ var script$w = {
     var foundation;
 
     var getTabElements_ = function getTabElements_() {
-      return [].slice.call(root.value.querySelectorAll(strings$6.TAB_SELECTOR));
+      return [].slice.call(root.value.querySelectorAll(strings$b.TAB_SELECTOR));
     };
 
     var activateTab = function activateTab(index) {
@@ -7199,7 +7206,7 @@ var script$w = {
         return tabList.value.length;
       },
       notifyTabActivated: function notifyTabActivated(index) {
-        emitCustomEvent(root.value, 'mdc-tab-bar:activated', {
+        emitCustomEvent(root.value, strings$b.TAB_ACTIVATED_EVENT, {
           index: index
         }, true);
         emit('update:modelValue', Number(index));
@@ -7506,6 +7513,7 @@ function render$y(_ctx, _cache, $props, $setup, $data, $options) {
 script$y.render = render$y;
 script$y.__file = "packages/tabs/tab-scroller.vue";
 
+var strings$c = MDCTabFoundation$1.strings;
 var tabId_ = 0;
 var script$z = {
   name: 'mcw-tab',
@@ -7624,7 +7632,7 @@ var script$z = {
         return uiState.tabIndicator.deactivate();
       },
       notifyInteracted: function notifyInteracted() {
-        emitCustomEvent(rootEl, 'mdc-tab:interacted', {
+        emitCustomEvent(rootEl, strings$c.INTERACTED_EVENT, {
           tabId: tabId
         }, true
         /* bubble */
@@ -7886,6 +7894,7 @@ function render$B(_ctx, _cache, $props, $setup, $data, $options) {
 script$B.render = render$B;
 script$B.__file = "packages/textfield/textfield-helper-text.vue";
 
+var strings$d = MDCTextFieldIconFoundation.strings;
 var script$C = {
   name: 'textfield-icon',
   props: {
@@ -7935,7 +7944,7 @@ var script$C = {
         return uiState.root.removeEventListener(evtType, handler);
       },
       notifyIconAction: function notifyIconAction() {
-        emitCustomEvent(uiState.root, 'mdc-textfield:icon', {}, true
+        emitCustomEvent(uiState.root, strings$d.ICON_EVENT, {}, true
         /* shouldBubble  */
         );
         emit('click');
@@ -8491,7 +8500,7 @@ var textfield = BasePlugin({
 });
 
 var cssClasses$7 = MDCTopAppBarFoundation.cssClasses,
-    strings$7 = MDCTopAppBarFoundation.strings;
+    strings$e = MDCTopAppBarFoundation.strings;
 var script$E = {
   name: 'mcw-top-app-bar',
   props: {
@@ -8552,7 +8561,7 @@ var script$E = {
       },
       notifyNavigationIconClicked: function notifyNavigationIconClicked() {
         emit('nav', {});
-        emitCustomEvent(uiState.root, 'mdc-top-app-bar:nav', {},
+        emitCustomEvent(uiState.root, strings$e.NAVIGATION_EVENT, {},
         /** shouldBubble */
         true);
       },
@@ -8561,7 +8570,7 @@ var script$E = {
         return st.pageYOffset !== void 0 ? st.pageYOffset : st.scrollTop;
       },
       getTotalActionItems: function getTotalActionItems() {
-        return uiState.root.querySelectorAll(strings$7.ACTION_ITEM_SELECTOR).length;
+        return uiState.root.querySelectorAll(strings$e.ACTION_ITEM_SELECTOR).length;
       }
     };
     watch(function () {
@@ -8593,9 +8602,9 @@ var script$E = {
       } // todo: hunt down icons for ripples
 
 
-      navIcon = uiState.root.querySelector(strings$7.NAVIGATION_ICON_SELECTOR); // Get all icons in the toolbar and instantiate the ripples
+      navIcon = uiState.root.querySelector(strings$e.NAVIGATION_ICON_SELECTOR); // Get all icons in the toolbar and instantiate the ripples
 
-      var icons = [].slice.call(uiState.root.querySelectorAll(strings$7.ACTION_ITEM_SELECTOR));
+      var icons = [].slice.call(uiState.root.querySelectorAll(strings$e.ACTION_ITEM_SELECTOR));
 
       if (navIcon) {
         navIcon.addEventListener('click', handleNavigationClick);
