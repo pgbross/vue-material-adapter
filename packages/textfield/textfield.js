@@ -64,7 +64,7 @@ export default {
     characterCounter: Boolean,
     characterCounterInternal: Boolean,
   },
-  setup(props, { emit, slots }) {
+  setup(props, { emit, slots, attrs }) {
     const uiState = reactive({
       text: props.modelValue,
       classes: {
@@ -86,6 +86,8 @@ export default {
       inputClasses: {
         'mdc-text-field__input': true,
       },
+
+      inputAttrs: {},
       labelClasses: {
         'mdc-floating-label': true,
       },
@@ -173,6 +175,11 @@ export default {
 
     const isValid = () => foundation.isValid();
 
+    const inputAttrs = computed(() => ({
+      ...attrs,
+      ...uiState.inputAttrs,
+    }));
+
     const adapter = {
       addClass: className =>
         (uiState.classes = { ...uiState.classes, [className]: true }),
@@ -215,6 +222,15 @@ export default {
       },
       getNativeInput: () => {
         return uiState.input;
+      },
+
+      setInputAttr: (attr, value) => {
+        uiState.inputAttrs = { ...uiState.inputAttrs, [attr]: value };
+      },
+      removeInputAttr: attr => {
+        // eslint-disable-next-line no-unused-vars
+        const { [attr]: removed, ...rest } = uiState.inputAttrs;
+        uiState.inputAttrs = rest;
       },
 
       // label adapter methods
@@ -318,6 +334,7 @@ export default {
       rootClasses,
       rippleStyles,
       isValid,
+      inputAttrs,
     };
   },
   components: { mcwLineRipple, mcwNotchedOutline },

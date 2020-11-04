@@ -30,6 +30,8 @@ export default {
       },
       hasClass: className => Boolean(uiState.classes[className]),
 
+      getAttr: attr => uiState.rootAttrs[attr],
+
       setAttr: (attr, value) =>
         (uiState.rootAttrs = { ...uiState.rootAttrs, [attr]: value }),
 
