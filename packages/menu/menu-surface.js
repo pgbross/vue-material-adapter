@@ -168,14 +168,14 @@ export default {
 
         deregisterBodyClickListener();
 
-        emit('mdc-menu-surface-closed');
+        emit('mdcmenusurface:closed');
         emit('update:modelValue', false);
       },
       notifyOpen: () => {
         emitCustomEvent(uiState.root, strings.OPENED_EVENT, {});
 
         registerBodyClickListener();
-        emit('mdc-menu-surface-opened');
+        emit('mdcmenusurface:opened');
         emit('update:modelValue', true);
       },
       isElementInContainer: el => uiState.root?.contains(el),

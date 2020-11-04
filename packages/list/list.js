@@ -4,6 +4,7 @@ import {
   computed,
   onBeforeUnmount,
   onMounted,
+  provide,
   reactive,
   ref,
   toRefs,
@@ -59,7 +60,13 @@ export default {
     if (props.singleSelection) {
       uiState.rootAttrs.role = 'listbox';
     }
+    const listItems = ref({});
 
+    const registerListItem = item => {
+      listItems.value[item.itemId] = item;
+    };
+
+    provide('registerListItem', registerListItem);
     const selIndex = computed({
       get() {
         return selectedIndex.value;
@@ -70,20 +77,6 @@ export default {
       },
     });
 
-    // const listElements = computed(() => {
-    //   if (!uiState.listRoot) {
-    //     return [];
-    //   }
-
-    //   const elements = [].slice.call(
-    //     uiState.listRoot.querySelectorAll(`.${cssClasses.LIST_ITEM_CLASS}`),
-    //   );
-
-    //   elements.forEach((e, i) => (e.__listItemId = i));
-
-    //   return elements;
-    // });
-
     const listElements = ref([]);
 
     const updateListElements = () => {
@@ -91,22 +84,24 @@ export default {
         uiState.listRoot.querySelectorAll(`.${cssClasses.LIST_ITEM_CLASS}`),
       );
 
-      elements.forEach((e, i) => (e.__listItemId = i));
-
       listElements.value = elements;
     };
 
+    const getListItemByIndex = index => {
+      const element = listElements.value[index];
+      const myItemId = element.dataset.myitemid;
+      return listItems.value[myItemId];
+    };
+
     const getListItemIndex = evt => {
-      if (evt.target.__listItemId !== void 0) {
-        // const listIndex = le.value.findIndex(
-        //   ({ itemId }) => itemId == evt.__itemId,
-        // );
+      const myItemId = evt.target.dataset.myitemid;
 
-        // return listIndex;
-
-        return listElements.value.findIndex(
-          ({ __listItemId }) => __listItemId === evt.target.__listItemId,
+      if (myItemId !== void 0) {
+        const lei = listElements.value.findIndex(
+          ({ dataset: { myitemid } }) => myitemid === myItemId,
         );
+
+        return lei;
       }
 
       const eventTarget = evt.target;
@@ -163,12 +158,10 @@ export default {
         );
 
         selIndex.value = [].map.call(preselectedItems, listItem =>
-          listElements.value.indexOf(listItem.__vue__),
+          listElements.value.indexOf(listItem),
         );
       } else if (radioSelectedListItem) {
-        selIndex.value = listElements.value.indexOf(
-          radioSelectedListItem.__vue__,
-        );
+        selIndex.value = listElements.value.indexOf(radioSelectedListItem);
       }
     };
 
@@ -222,8 +215,6 @@ export default {
       const index = getListItemIndex(evt);
       const target = evt.target;
 
-      // console.log('click target: ', target.__listItemId);
-
       // Toggle the checkbox only if it's not the target of the event, or the checkbox will have 2 change events.
       const toggleCheckbox = !matches(target, strings.CHECKBOX_RADIO_SELECTOR);
       foundation.handleClick(index, toggleCheckbox);
@@ -244,12 +235,8 @@ export default {
 
     const adapter = {
       addClassForElementIndex: (index, className) => {
-        // const item = le.value[index];
-        // item.classList.add(className);
-
-        const element = listElements.value[index];
-
-        element.classList.add(className);
+        const listItem = getListItemByIndex(index);
+        listItem.classList.add(className);
       },
       focusItemAtIndex: index => {
         const element = listElements.value[index];
@@ -258,10 +245,8 @@ export default {
         }
       },
       getAttributeForElementIndex: (index, attr) => {
-        // const item = le.value[index];
-        // return item.getAttribute(attr);
+        const listItem = getListItemByIndex(index);
 
-        const listItem = listElements.value[index];
         return listItem.getAttribute(attr);
       },
 
@@ -303,9 +288,7 @@ export default {
       isRootFocused: () => document.activeElement === uiState.listRoot,
 
       listItemAtIndexHasClass: (index, className) => {
-        const listItem = listElements.value[index];
-
-        // const listItem = le.value[index];
+        const listItem = getListItemByIndex(index);
 
         listItem.classList.contains(className);
       },
@@ -326,17 +309,11 @@ export default {
       },
 
       removeClassForElementIndex: (index, className) => {
-        const listItem = listElements.value[index];
-
-        // const listItem = le.value[index];
-
+        const listItem = getListItemByIndex(index);
         listItem.classList.remove(className);
       },
 
       setAttributeForElementIndex: (index, attr, value) => {
-        // const item = le.value[index];
-        // item.setAttribute(attr, value);
-
         const listItem = listElements.value[index];
         listItem.setAttribute(attr, value);
       },
@@ -358,9 +335,11 @@ export default {
         const listItemChildren = [].slice.call(
           element.querySelectorAll(strings.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX),
         );
-        listItemChildren.forEach(el =>
-          el.setAttribute('tabindex', tabIndexValue),
-        );
+        listItemChildren.forEach(el => {
+          const listItem = listItems.value[el.dataset.myitemid] ?? el;
+
+          listItem.setAttribute('tabindex', tabIndexValue);
+        });
       },
     };
 
@@ -455,6 +434,7 @@ export default {
 
     return {
       ...toRefs(uiState),
+      listItems,
       listElements,
       rootListeners,
       layout,

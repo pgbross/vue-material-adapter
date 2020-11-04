@@ -84,6 +84,14 @@ export default {
     });
 
     const menuItems = computed(() => uiState.menu?.items);
+    const menuListItems = computed(() => uiState.menu?.listItems);
+
+    const getMenuListItemByIndex = index => {
+      const menuItem = menuItems.value[index];
+      const id = menuItem.dataset.myitemid;
+      const menuListItem = menuListItems.value[id];
+      return menuListItem;
+    };
 
     let foundation;
 
@@ -125,9 +133,12 @@ export default {
     const adapter = {
       // select methods
       getSelectedMenuItem: () => {
-        const x = menuItems.value.find(item =>
-          item.classList.contains(cssClasses.SELECTED_ITEM_CLASS),
-        );
+        const x = menuItems.value.find(item => {
+          const myItemId = item.dataset.myitemid;
+          return menuListItems.value[myItemId].classList.contains(
+            cssClasses.SELECTED_ITEM_CLASS,
+          );
+        });
         return x;
       },
 
@@ -171,9 +182,12 @@ export default {
         uiState.menu.selectedIndex = index;
       },
       setAttributeAtIndex: (index, attributeName, attributeValue) =>
-        menuItems.value[index].setAttribute(attributeName, attributeValue),
+        getMenuListItemByIndex(index)?.setAttribute(
+          attributeName,
+          attributeValue,
+        ),
       removeAttributeAtIndex: (index, attributeName) =>
-        menuItems.value[index].removeAttribute(attributeName),
+        getMenuListItemByIndex(index)?.removeAttribute(attributeName),
       focusMenuItemAtIndex: index => menuItems.value[index].focus(),
       getMenuItemCount: () => menuItems.value.length,
       getMenuItemValues: () =>
@@ -182,10 +196,10 @@ export default {
         return menuItems.value[index].textContent;
       },
       addClassAtIndex: (index, className) => {
-        menuItems.value[index].classList.add(className);
+        getMenuListItemByIndex(index)?.classList.add(className);
       },
       removeClassAtIndex: (index, className) =>
-        menuItems.value[index].classList.remove(className),
+        getMenuListItemByIndex(index)?.classList.remove(className),
 
       isTypeaheadInProgress: () => uiState.menu.typeaheadInProgress(),
       typeaheadMatchItem: (nextChar, startingIndex) =>

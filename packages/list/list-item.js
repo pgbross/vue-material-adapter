@@ -1,9 +1,12 @@
-import { computed, reactive, ref, toRefs } from 'vue';
+import { computed, inject, reactive, ref, toRefs } from 'vue';
 import { CustomLink } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/index.js';
 
+let itemId = 0;
+
 export default {
   name: 'mcw-list-item',
+  inheritAttrs: false,
   props: {
     twoLine: String,
     disabled: Boolean,
@@ -16,12 +19,16 @@ export default {
   setup(props, { slots, attrs }) {
     const root = ref(null);
 
+    const myItemId = itemId++;
     const uiState = reactive({
       classes: {
         'mdc-list-item': 1,
         'mdc-list-item--disabled': props.disabled,
       },
+      attrs: {},
     });
+
+    const registerListItem = inject('registerListItem');
 
     const radioChecked = computed(() => {
       return attrs['aria-checked'] == 'true';
@@ -41,10 +48,6 @@ export default {
     );
 
     const { classes: rippleClasses, styles } = useRipplePlugin(root);
-
-    const classes = computed(() => {
-      return { ...rippleClasses.value, ...uiState.classes };
-    });
 
     const isTwoLine = computed(() => {
       return props.twoLine || slots['secondary-text'];
@@ -67,10 +70,55 @@ export default {
 
     const myAttrs = computed(() => {
       return {
-        class: classes.value,
+        // class: uiState.classes,
+        ...attrs,
+        class: { ...rippleClasses.value, ...uiState.classes },
         style: styles.value,
+        ...uiState.attrs,
       };
     });
+
+    const addClass = className => {
+      uiState.classes = { ...uiState.classes, [className]: true };
+    };
+
+    const removeClass = className => {
+      // eslint-disable-next-line no-unused-vars
+      const { [className]: removed, ...rest } = uiState.classes;
+      uiState.classes = rest;
+    };
+
+    const removeAttribute = attr => {
+      // eslint-disable-next-line no-unused-vars
+      const { [attr]: removed, ...rest } = uiState.attrs;
+      uiState.attrs = rest;
+    };
+
+    const setAttribute = (attr, value) => {
+      uiState.attrs = { ...uiState.attrs, [attr]: value };
+    };
+
+    const getAttribute = attr => {
+      return myAttrs.value[attr];
+    };
+
+    const classList = {
+      add: addClass,
+      remove: removeClass,
+      contains: className => !!uiState.classes[className],
+    };
+
+    registerListItem({
+      itemId: myItemId,
+      removeAttribute,
+      setAttribute,
+      getAttribute,
+      classList,
+    });
+
+    // onMounted(() => {
+    //   root.value.$el.__myItemId = myItemId;
+    // });
 
     return {
       ...toRefs(uiState),
@@ -86,6 +134,7 @@ export default {
       myAttrs,
       trailingRadio,
       trailingCheckbox,
+      myItemId,
     };
   },
 };

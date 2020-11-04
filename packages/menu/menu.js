@@ -46,7 +46,14 @@ export default {
     let foundation;
     let rootEl;
 
-    const items = computed(() => uiState.list.listElements ?? []);
+    const items = computed(() => uiState.list?.listElements ?? []);
+    const listItems = computed(() => uiState.list.listItems ?? []);
+
+    const getListItemByIndex = index => {
+      const element = items.value[index];
+      const myItemId = element.dataset.myitemid;
+      return listItems.value[myItemId];
+    };
 
     const surfaceOpen = computed({
       get() {
@@ -78,11 +85,11 @@ export default {
 
     const handleMenuSurfaceOpened = () => {
       foundation.handleMenuSurfaceOpened();
-      emit('mdc-menu-surface-opened');
+      emit('mdcmenusurface:opened');
     };
 
     const handleMenuSurfaceClosed = () => {
-      emit('mdc-menu-surface-closed');
+      emit('mdcmenusurface:closed');
     };
 
     const onChange = item => {
@@ -152,20 +159,20 @@ export default {
 
     const adapter = {
       addClassToElementAtIndex: (index, className) => {
-        const item = items.value[index];
-        item.classList.add(className);
+        const listItem = getListItemByIndex(index);
+        listItem.classList.add(className);
       },
       removeClassFromElementAtIndex: (index, className) => {
-        const item = items.value[index];
-        item.classList.remove(className);
+        const listItem = getListItemByIndex(index);
+        listItem.classList.remove(className);
       },
       addAttributeToElementAtIndex: (index, attr, value) => {
-        const item = items.value[index];
-        item.setAttribute(attr, value);
+        const listItem = getListItemByIndex(index);
+        listItem.setAttribute(attr, value);
       },
       removeAttributeFromElementAtIndex: (index, attr) => {
-        const item = items.value[index];
-        item.removeAttribute(attr);
+        const listItem = getListItemByIndex(index);
+        listItem.removeAttribute(attr);
       },
       elementContainsClass: (element, className) =>
         element.classList.contains(className),
@@ -264,6 +271,7 @@ export default {
       selectedIndex,
       getPrimaryTextAtIndex,
       items,
+      listItems,
       typeaheadInProgress,
       typeaheadMatchItem,
     };
