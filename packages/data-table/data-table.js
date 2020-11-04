@@ -166,15 +166,15 @@ export default {
       isRowsSelectable: () =>
         !!uiState.root.querySelector(selectors.ROW_CHECKBOX),
       notifyRowSelectionChanged: data => {
-        emit('mdc-data-table:rowselectionchanged', {
+        emit('mdcdatatable:rowselectionchanged', {
           row: getRowByIndex_(data.rowIndex),
           rowId: getRowIdByIndex_(data.rowIndex),
           rowIndex: data.rowIndex,
           selected: data.selected,
         });
       },
-      notifySelectedAll: () => emit('mdc-data-table:selectedall', {}),
-      notifyUnselectedAll: () => emit('mdc-data-table:unselectedall', {}),
+      notifySelectedAll: () => emit('mdcdatatable:selectedall', {}),
+      notifyUnselectedAll: () => emit('mdcdatatable:unselectedall', {}),
       registerHeaderRowCheckbox: () => {
         headerRowCheckbox?.destroy();
 

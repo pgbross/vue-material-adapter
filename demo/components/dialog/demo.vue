@@ -33,7 +33,7 @@
       aria-labelledby="my-basic-title"
       aria-describedby="my-basic-content"
       :auto-stack-buttons="true"
-      @mdc-dialog-closing="onClosed"
+      @mdcdialog:closing="onClosed"
     >
       <mcw-dialog-title id="my-basic-title">Lorem ipsum dolor</mcw-dialog-title>
       <mcw-dialog-content id="my-basic-content">
@@ -60,7 +60,7 @@
       escape-key-action="close"
       scrim-click-action="close"
       :auto-stack-buttons="true"
-      @mdc-dialog-closing="onClosed"
+      @mdcdialog:closing="onClosed"
     >
       <mcw-dialog-title>Select user</mcw-dialog-title>
       <mcw-dialog-content>
@@ -80,7 +80,7 @@
       escape-key-action="close"
       scrim-click-action="close"
       :auto-stack-buttons="true"
-      @mdc-dialog-closing="onClosed"
+      @mdcdialog:closing="onClosed"
     >
       <mcw-dialog-content>
         <p>Discard draft?</p>
@@ -100,7 +100,7 @@
       escape-key-action="close"
       scrim-click-action="close"
       :auto-stack-buttons="true"
-      @mdc-dialog-closing="onClosed"
+      @mdcdialog:closing="onClosed"
     >
       <mcw-dialog-title>Chose a Phone Ringtone</mcw-dialog-title>
       <mcw-dialog-content>
@@ -129,7 +129,7 @@
       escape-key-action="close"
       scrim-click-action="close"
       :auto-stack-buttons="true"
-      @mdc-dialog-closing="onClosed"
+      @mdcdialog:closing="onClosed"
     >
       <mcw-dialog-title>The Wonderful Wizard of Oz</mcw-dialog-title>
       <mcw-dialog-content>
@@ -217,7 +217,7 @@
       escape-key-action="close"
       scrim-click-action="close"
       :auto-stack-buttons="true"
-      @mdc-dialog-closing="onClosed"
+      @mdcdialog:closing="onClosed"
     >
       <mcw-dialog-title>Complete some task before submitting</mcw-dialog-title>
       <mcw-dialog-content>

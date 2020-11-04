@@ -10,7 +10,7 @@
   aria-labelledby="my-basic-title"
   aria-describedby="my-basic-content"
   :auto-stack-buttons="true"
-  @mdc-dialog-closing="onClosed"
+  @mdcdialog:closing="onClosed"
 >
   <mcw-dialog-title>Lorem ipsum dolor</mcw-dialog-title>
   <mcw-dialog-content>

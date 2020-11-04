@@ -114,16 +114,16 @@ export default {
         );
       },
       notifyOpening: () => {
-        emit('mdc-dialog-opening', {});
+        emit('mdcdialog:opening', {});
         LAYOUT_EVENTS.forEach(evt =>
           window.addEventListener(evt, handleLayout),
         );
         document.addEventListener('keydown', handleDocumentKeyDown);
       },
-      notifyOpened: () => emit('mdc-dialog-opened', {}),
+      notifyOpened: () => emit('mdcdialog:opened', {}),
       notifyClosing: action => {
         emit('update:modelValue', false);
-        emit('mdc-dialog-closing', action ? { action } : {});
+        emit('mdcdialog:closing', action ? { action } : {});
 
         LAYOUT_EVENTS.forEach(evt =>
           window.removeEventListener(evt, handleLayout),
@@ -131,7 +131,7 @@ export default {
         document.removeEventListener('keydown', handleDocumentKeyDown);
       },
       notifyClosed: action => {
-        emit('mdc-dialog-closed', action ? { action } : {});
+        emit('mdcdialog:closed', action ? { action } : {});
       },
     };
 

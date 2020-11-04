@@ -318,8 +318,6 @@ export default {
           /** shouldBubble */ true,
         );
 
-        emit('mcw-list-action', { index });
-
         if (Array.isArray(props.modelValue)) {
           emit('update:modelValue', foundation.getSelectedIndex());
         } else {

@@ -75,9 +75,9 @@
     <div class>
       <div class="mdc-typography--headline6">Row Selection</div>
       <mcw-data-table
-        @mdc-data-table:rowselectionchanged="onRowSelection"
-        @mdc-data-table:selectedall="onSelectAll"
-        @mdc-data-table:unselectedall="onUnselectAll"
+        @mdcdatatable:rowselectionchanged="onRowSelection"
+        @mdcdatatable:selectedall="onSelectAll"
+        @mdcdatatable:unselectedall="onUnselectAll"
       >
         <table class="mdc-data-table__table" aria-label="Dessert calories">
           <thead>
