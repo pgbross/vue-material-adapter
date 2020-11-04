@@ -180,7 +180,7 @@ export default {
       },
 
       notifySelected: evtData => {
-        emitCustomEvent(rootEl, 'mdc-menu:selected', {
+        emitCustomEvent(rootEl, strings.SELECTED_EVENT, {
           index: evtData.index,
           item: items.value[evtData.index],
         });

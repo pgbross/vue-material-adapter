@@ -1,4 +1,5 @@
 import { MDCChipSetFoundation } from '@material/chips/chip-set/foundation';
+import { MDCChipFoundation } from '@material/chips/chip/foundation';
 import { announce } from '@material/dom/announce';
 import {
   onBeforeUnmount,
@@ -8,6 +9,8 @@ import {
   ref,
   toRefs,
 } from 'vue';
+
+const { strings } = MDCChipFoundation;
 
 export default {
   name: 'mcw-chip-set',
@@ -89,13 +92,13 @@ export default {
       foundation.init();
 
       (uiState.myListeners = {
-        'mdc-chip:interaction': ({ detail }) =>
+        [strings.INTERACTION_EVENT.toLowerCase()]: ({ detail }) =>
           foundation.handleChipInteraction(detail),
-        'mdc-chip:selection': ({ detail }) =>
+        [strings.SELECTION_EVENT.toLowerCase()]: ({ detail }) =>
           foundation.handleChipSelection(detail),
-        'mdc-chip:removal': ({ detail }) =>
+        [strings.REMOVAL_EVENT.toLowerCase()]: ({ detail }) =>
           foundation.handleChipRemoval(detail),
-        'mdc-chip:navigation': ({ detail }) =>
+        [strings.NAVIGATION_EVENT.toLowerCase()]: ({ detail }) =>
           foundation.handleChipNavigation(detail),
       }),
         // the chips could change outside of this component

@@ -3,7 +3,7 @@ import * as util from '@material/menu-surface/util';
 import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
 
-const { cssClasses } = MDCMenuSurfaceFoundation;
+const { cssClasses, strings } = MDCMenuSurfaceFoundation;
 
 export default {
   name: 'mcw-menu-surface',
@@ -164,8 +164,7 @@ export default {
       hasClass: className => uiState.root.classList.contains(className),
       hasAnchor: () => !!anchorElement,
       notifyClose: () => {
-        uiState.root &&
-          emitCustomEvent(uiState.root, 'mdc-menu-surface:closed', {});
+        uiState.root && emitCustomEvent(uiState.root, strings.CLOSED_EVENT, {});
 
         deregisterBodyClickListener();
 
@@ -173,7 +172,7 @@ export default {
         emit('update:modelValue', false);
       },
       notifyOpen: () => {
-        emitCustomEvent(uiState.root, 'mdc-menu-surface:opened', {});
+        emitCustomEvent(uiState.root, strings.OPENED_EVENT, {});
 
         registerBodyClickListener();
         emit('mdc-menu-surface-opened');

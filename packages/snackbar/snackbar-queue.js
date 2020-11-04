@@ -62,7 +62,7 @@ export default {
     const listeners = computed(() => {
       return {
         'update:reason': attrs['update:reason'],
-        'MDCSnackbar:closed': ({ reason }) => {
+        'mdcsnackbar:closed': ({ reason }) => {
           if (actionHandler_ && reason === 'action') {
             actionHandler_({ reason });
           }

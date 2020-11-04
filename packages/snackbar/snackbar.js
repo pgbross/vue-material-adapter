@@ -13,10 +13,7 @@ const { strings, numbers } = MDCSnackbarFoundation;
 
 export default {
   name: 'mcw-snackbar',
-  // model: {
-  //   prop: 'open',
-  //   event: 'change',
-  // },
+
   props: {
     modelValue: Boolean,
     stacked: Boolean,
@@ -28,7 +25,7 @@ export default {
     dismissAction: { type: [String, Boolean], default: true },
     reason: String,
   },
-  setup(props, { emit, attrs }) {
+  setup(props, { emit }) {
     const uiState = reactive({
       classes: {},
       hidden: false,
@@ -120,7 +117,7 @@ export default {
         (uiState.classes = { ...uiState.classes, [className]: true }),
       announce: () => announce(uiState.labelEl),
       notifyClosed: reason => {
-        emit(strings.CLOSED_EVENT, reason ? { reason } : {});
+        emit(strings.CLOSED_EVENT.toLowerCase(), reason ? { reason } : {});
         emit('update:modelValue', false);
         emit('hide');
       },
@@ -129,7 +126,7 @@ export default {
         emit('update:reason', reason);
       },
       notifyOpened: () => {
-        emit(strings.OPENED_EVENT, {});
+        emit(strings.OPENED_EVENT.toLowerCase(), {});
         emit('update:modelValue', true);
         emit('show', {});
       },

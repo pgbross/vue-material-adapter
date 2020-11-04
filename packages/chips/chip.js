@@ -1,4 +1,6 @@
 import { MDCChipFoundation } from '@material/chips/chip/foundation';
+import { MDCChipTrailingActionFoundation } from '@material/chips/trailingaction/foundation';
+
 import {
   computed,
   inject,
@@ -13,6 +15,7 @@ import { emitCustomEvent } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 
 const { strings } = MDCChipFoundation;
+const { strings: trailingActionStrings } = MDCChipTrailingActionFoundation;
 
 let chipItemId_ = 0;
 
@@ -132,7 +135,7 @@ export default {
       notifyInteraction: () => {
         emitCustomEvent(
           uiState.root,
-          'mdc-chip:interaction',
+          strings.INTERACTION_EVENT,
           {
             chipId: id,
           },
@@ -142,7 +145,7 @@ export default {
       notifyNavigation: (key, source) =>
         emitCustomEvent(
           uiState.root,
-          'mdc-chip:navigation',
+          strings.NAVIGATION_EVENT,
           {
             chipId: id,
             key,
@@ -161,14 +164,14 @@ export default {
       notifySelection: (selected, shouldIgnore) =>
         emitCustomEvent(
           uiState.root,
-          'mdc-chip:selection',
+          strings.SELECTION_EVENT,
           { chipId: id, selected: selected, shouldIgnore },
           true /* shouldBubble */,
         ),
       notifyTrailingIconInteraction: () => {
         emitCustomEvent(
           uiState.root,
-          'mdc-chip:trailing-icon-interaction',
+          strings.TRAILING_ICON_INTERACTION_EVENT,
           {
             chipId: id,
           },
@@ -252,11 +255,13 @@ export default {
       };
 
       if (trailingAction_) {
-        uiState.myListeners['mdc-chip:trailing-action-interaction'] = evt =>
-          foundation.handleTrailingActionInteraction(evt);
+        uiState.myListeners[
+          trailingActionStrings.INTERACTION_EVENT.toLowerCase()
+        ] = evt => foundation.handleTrailingActionInteraction(evt);
 
-        uiState.myListeners['mdc-chip:trailing-action-navigation'] = evt =>
-          foundation.handleTrailingActionNavigation(evt);
+        uiState.myListeners[
+          trailingActionStrings.NAVIGATION_EVENT.toLowerCase()
+        ] = evt => foundation.handleTrailingActionNavigation(evt);
       }
 
       foundation.init();

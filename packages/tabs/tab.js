@@ -12,6 +12,7 @@ import {
 import { CustomLink, emitCustomEvent } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 
+const { strings } = MDCTabFoundation;
 let tabId_ = 0;
 
 export default {
@@ -107,7 +108,7 @@ export default {
       notifyInteracted: () => {
         emitCustomEvent(
           rootEl,
-          'mdc-tab:interacted',
+          strings.INTERACTED_EVENT,
           { tabId },
           true /* bubble */,
         );

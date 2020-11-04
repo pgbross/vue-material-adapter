@@ -2,6 +2,8 @@ import { MDCSelectIconFoundation } from '@material/select/icon/foundation.js';
 import { computed, onBeforeUnmount, onMounted, reactive, toRefs } from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
 
+const { strings } = MDCSelectIconFoundation;
+
 export default {
   name: 'select-icon',
   props: {
@@ -39,7 +41,7 @@ export default {
       registerInteractionHandler: (evtType, handler) =>
         (uiState.rootListeners = {
           ...uiState.rootListeners,
-          [evtType]: handler,
+          [evtType.toLowerCase()]: handler,
         }),
       deregisterInteractionHandler: (evtType, handler) => {
         // eslint-disable-next-line no-unused-vars
@@ -51,7 +53,7 @@ export default {
 
         emitCustomEvent(
           uiState.root,
-          'mdc-select:icon',
+          strings.ICON_EVENT,
           {},
           true /* shouldBubble  */,
         );

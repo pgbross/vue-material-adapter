@@ -2,6 +2,8 @@ import { MDCTextFieldIconFoundation } from '@material/textfield/icon/foundation.
 import { inject, onBeforeUnmount, onMounted, reactive, toRefs } from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
 
+const { strings } = MDCTextFieldIconFoundation;
+
 export default {
   name: 'textfield-icon',
   props: {
@@ -48,7 +50,7 @@ export default {
       notifyIconAction: () => {
         emitCustomEvent(
           uiState.root,
-          'mdc-textfield:icon',
+          strings.ICON_EVENT,
           {},
           true /* shouldBubble  */,
         );

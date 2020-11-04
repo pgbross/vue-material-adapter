@@ -231,7 +231,7 @@ export default {
         foundation.handleHeaderRowCheckboxChange();
 
       headerRow.addEventListener(
-        'mdc-checkbox:change',
+        'mdccheckbox:change',
         handleHeaderRowCheckboxChange,
       );
 
@@ -246,7 +246,7 @@ export default {
       handleRowCheckboxChange = event =>
         foundation.handleRowCheckboxChange(event);
 
-      content.addEventListener('mdc-checkbox:change', handleRowCheckboxChange);
+      content.addEventListener('mdccheckbox:change', handleRowCheckboxChange);
 
       foundation = new MDCDataTableFoundation(adapter);
       foundation.init();
@@ -256,13 +256,13 @@ export default {
 
     onBeforeUnmount(() => {
       headerRow.removeEventListener(
-        'mdc-checkbox:change',
+        'mdccheckbox:change',
         handleHeaderRowCheckboxChange,
       );
       headerRow.removeEventListener('click', headerRowClickListener);
 
       content.removeEventListener(
-        'mdc-checkbox:change',
+        'mdccheckbox:change',
         handleRowCheckboxChange,
       );
 

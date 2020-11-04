@@ -5,6 +5,7 @@ import * as util from '@material/drawer/util';
 import { MDCListFoundation } from '@material/list/foundation';
 import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
+const { strings } = MDCDismissibleDrawerFoundation;
 
 export default {
   name: 'mcw-drawer',
@@ -80,7 +81,7 @@ export default {
       notifyClose: () => {
         emitCustomEvent(
           uiState.drawer,
-          'mdc-drawer:closed',
+          strings.CLOSE_EVENT,
           {},
           true /* shouldBubble */,
         );
@@ -90,7 +91,7 @@ export default {
       notifyOpen: () => {
         emitCustomEvent(
           uiState.drawer,
-          'mdc-drawer:opened',
+          strings.OPEN_EVENT,
           {},
           true /* shouldBubble */,
         );

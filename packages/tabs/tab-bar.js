@@ -102,7 +102,12 @@ export default {
       },
       getTabListLength: () => tabList.value.length,
       notifyTabActivated: index => {
-        emitCustomEvent(root.value, 'mdc-tab-bar:activated', { index }, true);
+        emitCustomEvent(
+          root.value,
+          strings.TAB_ACTIVATED_EVENT,
+          { index },
+          true,
+        );
 
         emit('update:modelValue', Number(index));
       },

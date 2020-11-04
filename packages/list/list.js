@@ -4,7 +4,6 @@ import {
   computed,
   onBeforeUnmount,
   onMounted,
-  provide,
   reactive,
   ref,
   toRefs,
@@ -52,14 +51,6 @@ export default {
       listRoot: null,
     });
 
-    const le = ref([]);
-
-    const addListElement = item => {
-      le.value.push(item);
-    };
-
-    provide('addListElement', addListElement);
-
     const selectedIndex = ref(props.modelValue);
 
     let foundation;
@@ -79,35 +70,43 @@ export default {
       },
     });
 
-    const listElements = computed(() => {
-      if (!uiState.listRoot) {
-        return [];
-      }
+    // const listElements = computed(() => {
+    //   if (!uiState.listRoot) {
+    //     return [];
+    //   }
 
-      return [].slice.call(
-        uiState.listRoot.querySelectorAll(`.${cssClasses.LIST_ITEM_CLASS}`),
-      );
-    });
-
-    // const updateListElements = () => {
     //   const elements = [].slice.call(
     //     uiState.listRoot.querySelectorAll(`.${cssClasses.LIST_ITEM_CLASS}`),
     //   );
 
-    //   listElements.value = elements;
-    // };
+    //   elements.forEach((e, i) => (e.__listItemId = i));
+
+    //   return elements;
+    // });
+
+    const listElements = ref([]);
+
+    const updateListElements = () => {
+      const elements = [].slice.call(
+        uiState.listRoot.querySelectorAll(`.${cssClasses.LIST_ITEM_CLASS}`),
+      );
+
+      elements.forEach((e, i) => (e.__listItemId = i));
+
+      listElements.value = elements;
+    };
 
     const getListItemIndex = evt => {
-      if (evt.__itemId !== void 0) {
-        const listIndex = le.value.findIndex(
-          ({ itemId }) => itemId == evt.__itemId,
-        );
-
-        return listIndex;
-
-        // return listElements.value.findIndex(
-        //   ({ itemId }) => itemId === evt.__itemId,
+      if (evt.target.__listItemId !== void 0) {
+        // const listIndex = le.value.findIndex(
+        //   ({ itemId }) => itemId == evt.__itemId,
         // );
+
+        // return listIndex;
+
+        return listElements.value.findIndex(
+          ({ __listItemId }) => __listItemId === evt.target.__listItemId,
+        );
       }
 
       const eventTarget = evt.target;
@@ -121,7 +120,7 @@ export default {
         nearestParent &&
         matches(nearestParent, `.${cssClasses.LIST_ITEM_CLASS}`)
       ) {
-        return listElements.value.indexOf(nearestParent.__vue__);
+        return listElements.value.indexOf(nearestParent);
       }
 
       return -1;
@@ -223,6 +222,8 @@ export default {
       const index = getListItemIndex(evt);
       const target = evt.target;
 
+      // console.log('click target: ', target.__listItemId);
+
       // Toggle the checkbox only if it's not the target of the event, or the checkbox will have 2 change events.
       const toggleCheckbox = !matches(target, strings.CHECKBOX_RADIO_SELECTOR);
       foundation.handleClick(index, toggleCheckbox);
@@ -243,12 +244,12 @@ export default {
 
     const adapter = {
       addClassForElementIndex: (index, className) => {
-        const item = le.value[index];
-        item.classList.add(className);
+        // const item = le.value[index];
+        // item.classList.add(className);
 
-        // const element = listElements.value[index];
+        const element = listElements.value[index];
 
-        // element.classList.add(className);
+        element.classList.add(className);
       },
       focusItemAtIndex: index => {
         const element = listElements.value[index];
@@ -257,17 +258,17 @@ export default {
         }
       },
       getAttributeForElementIndex: (index, attr) => {
-        const item = le.value[index];
-        return item.getAttribute(attr);
+        // const item = le.value[index];
+        // return item.getAttribute(attr);
 
-        // const listItem = listElements.value[index];
-        // return listItem.getAttribute(attr);
+        const listItem = listElements.value[index];
+        return listItem.getAttribute(attr);
       },
 
       getFocusedElementIndex: () =>
         listElements.value.indexOf(document.activeElement),
 
-      getListItemCount: () => le.value.length,
+      getListItemCount: () => listElements.value.length,
 
       getPrimaryTextAtIndex: index => getPrimaryText(listElements.value[index]),
 
@@ -302,9 +303,9 @@ export default {
       isRootFocused: () => document.activeElement === uiState.listRoot,
 
       listItemAtIndexHasClass: (index, className) => {
-        // const listItem = listElements.value[index];
+        const listItem = listElements.value[index];
 
-        const listItem = le.value[index];
+        // const listItem = le.value[index];
 
         listItem.classList.contains(className);
       },
@@ -312,7 +313,7 @@ export default {
       notifyAction: index => {
         emitCustomEvent(
           uiState.listRoot,
-          'mdc-list:action',
+          strings.ACTION_EVENT,
           { index },
           /** shouldBubble */ true,
         );
@@ -327,19 +328,19 @@ export default {
       },
 
       removeClassForElementIndex: (index, className) => {
-        // const listItem = listElements.value[index];
+        const listItem = listElements.value[index];
 
-        const listItem = le.value[index];
+        // const listItem = le.value[index];
 
         listItem.classList.remove(className);
       },
 
       setAttributeForElementIndex: (index, attr, value) => {
-        const item = le.value[index];
-        item.setAttribute(attr, value);
+        // const item = le.value[index];
+        // item.setAttribute(attr, value);
 
-        // const listItem = listElements.value[index];
-        // listItem.setAttribute(attr, value);
+        const listItem = listElements.value[index];
+        listItem.setAttribute(attr, value);
       },
 
       setCheckedCheckboxOrRadioAtIndex: (index, isChecked) => {
@@ -398,7 +399,7 @@ export default {
     );
 
     onMounted(() => {
-      // updateListElements();
+      updateListElements();
       foundation = new MDCListFoundation(adapter);
       foundation.init();
 
@@ -439,11 +440,9 @@ export default {
       }
 
       // the list content could change outside of this component
-      // so use a mutation observer to trigger an update by
-      // incrementing the dependency variable "listn" referenced
-      // in the computed that selects the list elements
+      // so use a mutation observer to trigger an update
       slotObserver = new MutationObserver((mutationList, observer) => {
-        uiState.listn++;
+        updateListElements();
       });
       slotObserver.observe(uiState.listRoot, {
         childList: true,

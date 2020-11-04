@@ -209,7 +209,7 @@ export default {
         const index = selectedIndex();
         emitCustomEvent(
           uiState.root,
-          'mdc-select:change',
+          strings.CHANGE_EVENT,
           { value, index },
           true /* shouldBubble  */,
         );

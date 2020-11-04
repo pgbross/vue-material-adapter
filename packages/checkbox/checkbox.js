@@ -102,7 +102,7 @@ export default {
       } else {
         // emit a native event so that it bubbles to parent elements
         // e.g. data table row
-        emitCustomEvent(uiState.root, 'mdc-checkbox:change', {}, true);
+        emitCustomEvent(uiState.root, 'mdccheckbox:change', {}, true);
         emit('update:modelValue', checked);
       }
     };
