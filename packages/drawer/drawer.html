@@ -11,7 +11,7 @@
     <mcw-list
       :wrap-focus="true"
       tag="nav"
-      @mdc-list:action="onListAction"
+      @mcw-list-action="onListAction"
       single-selection
       :selected-index="0"
     >
@@ -33,7 +33,7 @@
         tag="nav"
         single-selection
         :selected-index="0"
-        @mdc-list:action="onListAction"
+        @mcw-list-action="onListAction"
       >
         <slot></slot>
       </mcw-list>

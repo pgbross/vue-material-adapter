@@ -3083,7 +3083,7 @@ function render$a(_ctx, _cache, $props, $setup, $data, $options) {
             createVNode(_component_mcw_list, {
               "wrap-focus": true,
               tag: "nav",
-              "onMdcList:action": _ctx.onListAction,
+              onMcwListAction: _ctx.onListAction,
               "single-selection": "",
               "selected-index": 0
             }, {
@@ -3091,7 +3091,7 @@ function render$a(_ctx, _cache, $props, $setup, $data, $options) {
                 renderSlot(_ctx.$slots, "default")
               ]),
               _: 3
-            }, 8 /* PROPS */, ["onMdcList:action"])
+            }, 8 /* PROPS */, ["onMcwListAction"])
           ])
         ], 34 /* CLASS, HYDRATE_EVENTS */))
       : (openBlock(), createBlock("div", _hoisted_2$7, [
@@ -3108,13 +3108,13 @@ function render$a(_ctx, _cache, $props, $setup, $data, $options) {
                 tag: "nav",
                 "single-selection": "",
                 "selected-index": 0,
-                "onMdcList:action": _ctx.onListAction
+                onMcwListAction: _ctx.onListAction
               }, {
                 default: withCtx(() => [
                   renderSlot(_ctx.$slots, "default")
                 ]),
                 _: 3
-              }, 8 /* PROPS */, ["onMdcList:action"])
+              }, 8 /* PROPS */, ["onMcwListAction"])
             ])
           ], 34 /* CLASS, HYDRATE_EVENTS */),
           (_ctx.modal)
@@ -4167,10 +4167,6 @@ var strings$2 = MDCListFoundation.strings,
     cssClasses$1 = MDCListFoundation.cssClasses;
 var script$k = {
   name: 'mcw-list',
-  // model: {
-  //   prop: 'selectedIndex',
-  //   event: 'change',
-  // },
   props: {
     nonInteractive: {
       type: Boolean,
@@ -4239,7 +4235,7 @@ var script$k = {
       },
       set: function set(nv) {
         selectedIndex.value = nv;
-        emit('change', nv);
+        emit('update:modelValue', nv);
       }
     });
     var listElements = computed(function () {
@@ -4432,7 +4428,9 @@ var script$k = {
         },
         /** shouldBubble */
         true);
-        emit('mcw-list-action');
+        emit('mcw-list-action', {
+          index: index
+        });
 
         if (Array.isArray(props.modelValue)) {
           emit('update:modelValue', foundation.getSelectedIndex());
@@ -4822,7 +4820,7 @@ var script$l = {
         return !!anchorElement;
       },
       notifyClose: function notifyClose() {
-        emitCustomEvent(uiState.root, 'mdc-menu-surface:closed', {});
+        uiState.root && emitCustomEvent(uiState.root, 'mdc-menu-surface:closed', {});
         deregisterBodyClickListener();
         emit('mdc-menu-surface-closed');
         emit('update:modelValue', false);
@@ -4834,7 +4832,9 @@ var script$l = {
         emit('update:modelValue', true);
       },
       isElementInContainer: function isElementInContainer(el) {
-        return uiState.root.contains(el);
+        var _uiState$root;
+
+        return (_uiState$root = uiState.root) === null || _uiState$root === void 0 ? void 0 : _uiState$root.contains(el);
       },
       isRtl: function isRtl() {
         return getComputedStyle(uiState.root).getPropertyValue('direction') === 'rtl';
@@ -6180,10 +6180,7 @@ function render$r(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_select_helper_text = resolveComponent("select-helper-text");
 
   return (openBlock(), createBlock("div", _hoisted_1$g, [
-    createVNode("div", {
-      ref: "root",
-      class: _ctx.rootClasses
-    }, [
+    createVNode("div", mergeProps({ ref: "root" }, _ctx.$attrs, { class: _ctx.rootClasses }), [
       createVNode("div", mergeProps({
         ref: "anchorEl",
         class: ["mdc-select__anchor", _ctx.rippleClasses],
@@ -6245,7 +6242,7 @@ function render$r(_ctx, _cache, $props, $setup, $data, $options) {
         ]),
         _: 3
       }, 8 /* PROPS */, ["class", "onUpdate:modelValue", "onSelect", "onMdcMenuSurface:opened", "onMdcMenuSurface:closed"])
-    ], 2 /* CLASS */),
+    ], 16 /* FULL_PROPS */),
     (_ctx.helptext)
       ? (openBlock(), createBlock(_component_select_helper_text, {
           key: 0,

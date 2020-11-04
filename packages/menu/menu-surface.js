@@ -164,7 +164,8 @@ export default {
       hasClass: className => uiState.root.classList.contains(className),
       hasAnchor: () => !!anchorElement,
       notifyClose: () => {
-        emitCustomEvent(uiState.root, 'mdc-menu-surface:closed', {});
+        uiState.root &&
+          emitCustomEvent(uiState.root, 'mdc-menu-surface:closed', {});
 
         deregisterBodyClickListener();
 
@@ -178,7 +179,7 @@ export default {
         emit('mdc-menu-surface-opened');
         emit('update:modelValue', true);
       },
-      isElementInContainer: el => uiState.root.contains(el),
+      isElementInContainer: el => uiState.root?.contains(el),
       isRtl: () =>
         getComputedStyle(uiState.root).getPropertyValue('direction') === 'rtl',
       setTransformOrigin: origin => {

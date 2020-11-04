@@ -16,10 +16,7 @@ const { strings, cssClasses } = MDCListFoundation;
 
 export default {
   name: 'mcw-list',
-  // model: {
-  //   prop: 'selectedIndex',
-  //   event: 'change',
-  // },
+
   props: {
     nonInteractive: { type: Boolean, default: false },
     dense: Boolean,
@@ -78,7 +75,7 @@ export default {
       },
       set(nv) {
         selectedIndex.value = nv;
-        emit('change', nv);
+        emit('update:modelValue', nv);
       },
     });
 
@@ -320,7 +317,7 @@ export default {
           /** shouldBubble */ true,
         );
 
-        emit('mcw-list-action');
+        emit('mcw-list-action', { index });
 
         if (Array.isArray(props.modelValue)) {
           emit('update:modelValue', foundation.getSelectedIndex());
