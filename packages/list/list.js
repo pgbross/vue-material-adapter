@@ -89,8 +89,10 @@ export default {
 
     const getListItemByIndex = index => {
       const element = listElements.value[index];
-      const myItemId = element.dataset.myitemid;
-      return listItems.value[myItemId];
+      if (element) {
+        const myItemId = element.dataset.myitemid;
+        return listItems.value[myItemId];
+      }
     };
 
     const getListItemIndex = evt => {
@@ -236,7 +238,7 @@ export default {
     const adapter = {
       addClassForElementIndex: (index, className) => {
         const listItem = getListItemByIndex(index);
-        listItem.classList.add(className);
+        listItem?.classList.add(className);
       },
       focusItemAtIndex: index => {
         const element = listElements.value[index];
@@ -247,7 +249,7 @@ export default {
       getAttributeForElementIndex: (index, attr) => {
         const listItem = getListItemByIndex(index);
 
-        return listItem.getAttribute(attr);
+        return listItem?.getAttribute(attr);
       },
 
       getFocusedElementIndex: () =>
@@ -290,7 +292,7 @@ export default {
       listItemAtIndexHasClass: (index, className) => {
         const listItem = getListItemByIndex(index);
 
-        listItem.classList.contains(className);
+        listItem?.classList.contains(className);
       },
 
       notifyAction: index => {
@@ -310,12 +312,12 @@ export default {
 
       removeClassForElementIndex: (index, className) => {
         const listItem = getListItemByIndex(index);
-        listItem.classList.remove(className);
+        listItem?.classList.remove(className);
       },
 
       setAttributeForElementIndex: (index, attr, value) => {
-        const listItem = listElements.value[index];
-        listItem.setAttribute(attr, value);
+        const listItem = getListItemByIndex(index);
+        listItem?.setAttribute(attr, value);
       },
 
       setCheckedCheckboxOrRadioAtIndex: (index, isChecked) => {
