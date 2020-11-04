@@ -4,9 +4,10 @@
   <div class="mdc-circular-progress__determinate-container">
     <svg
       class="mdc-circular-progress__determinate-circle-graphic"
-      viewBox="0 0 48 48"
+      :viewBox="viewbox"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <circle class="mdc-circular-progress__determinate-track"  v-bind="trackAttrs"/>
       <circle class="mdc-circular-progress__determinate-circle" v-bind="circleAttrs" />
     </svg>
   </div>
@@ -16,7 +17,7 @@
       <div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-left">
         <svg
           class="mdc-circular-progress__indeterminate-circle-graphic"
-          viewBox="0 0 48 48"
+          :viewBox="viewbox"
           xmlns="http://www.w3.org/2000/svg"
         >
           <circle v-bind="indeterminateAttrs" />
@@ -25,7 +26,7 @@
       </div><div class="mdc-circular-progress__gap-patch">
         <svg
           class="mdc-circular-progress__indeterminate-circle-graphic"
-          viewBox="0 0 48 48"
+          :viewBox="viewbox"
           xmlns="http://www.w3.org/2000/svg"
         >
           <circle v-bind="indeterminateAttrs" />
@@ -33,7 +34,7 @@
       </div><div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-right">
         <svg
           class="mdc-circular-progress__indeterminate-circle-graphic"
-          viewBox="0 0 48 48"
+          :viewBox="viewbox"
           xmlns="http://www.w3.org/2000/svg"
         >
           <circle v-bind="indeterminateAttrs" />
