@@ -116,10 +116,6 @@ export default {
       classList,
     });
 
-    // onMounted(() => {
-    //   root.value.$el.__myItemId = myItemId;
-    // });
-
     return {
       ...toRefs(uiState),
       focus,

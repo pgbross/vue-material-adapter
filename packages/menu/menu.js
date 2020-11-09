@@ -73,7 +73,7 @@ export default {
       },
     });
 
-    const selectedIndex = computed(() => uiState.list?.selIndex.value);
+    // const selectedIndex = computed(() => uiState.list?.selIndex);
 
     const layout = () => uiState.list?.layout();
 
@@ -109,8 +109,9 @@ export default {
     const setAnchorElement = element => {
       uiState.menuSurface.setMenuSurfaceAnchorElement(element);
     };
-    const setSelectedIndex = index =>
-      uiState.list && (uiState.list.selIndex.value = index);
+    const setSelectedIndex = index => uiState.list?.setSelectedIndex(index);
+
+    const getSelectedIndex = () => uiState.list?.getSelectedIndex();
 
     const setAnchorMargin = margin => {
       uiState.menuSurface.setAnchorMargin(margin);
@@ -183,7 +184,7 @@ export default {
       },
 
       getElementIndex: element => {
-        return items.value.findIndex($el => $el == element);
+        return items.value.findIndex(el => el == element);
       },
 
       notifySelected: evtData => {
@@ -201,8 +202,9 @@ export default {
       getMenuItemCount: () => items.value.length,
 
       focusItemAtIndex: index => items.value[index].focus(),
-      focusListRoot: () =>
-        uiState.menuSurface.$el.querySelector(strings.LIST_SELECTOR).focus(),
+      focusListRoot: () => {
+        uiState.menuSurface.$el.querySelector(strings.LIST_SELECTOR).focus();
+      },
 
       isSelectableItemAtIndex: index =>
         !!closest(items.value[index], `.${cssClasses.MENU_SELECTION_GROUP}`),
@@ -216,7 +218,7 @@ export default {
           `.${cssClasses.MENU_SELECTED_LIST_ITEM}`,
         );
         return selectedItemEl
-          ? items.value.findIndex($el => $el == selectedItemEl)
+          ? items.value.findIndex(el => el == selectedItemEl)
           : -1;
       },
     };
@@ -263,12 +265,12 @@ export default {
       setAnchorMargin,
       setAnchorElement,
       setAnchorCorner,
+      getSelectedIndex,
       setSelectedIndex,
       setDefaultFocusState,
       wrapFocus,
       surfaceOpen,
       layout,
-      selectedIndex,
       getPrimaryTextAtIndex,
       items,
       listItems,

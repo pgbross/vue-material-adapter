@@ -175,7 +175,7 @@ export default {
         uiState.menu.setAnchorCorner(anchorCorner),
       setMenuWrapFocus: wrapFocus => (uiState.menu.wrapFocus = wrapFocus),
       getSelectedIndex: () => {
-        const index = uiState.menu.selectedIndex;
+        const index = uiState.menu.selectedIndex ?? -1;
         return index instanceof Array ? index[0] : index;
       },
       setSelectedIndex: index => {

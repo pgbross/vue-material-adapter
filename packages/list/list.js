@@ -62,11 +62,14 @@ export default {
     }
     const listItems = ref({});
 
+    // keep a hash of child list items
+    // so we can set classes and attributes
     const registerListItem = item => {
       listItems.value[item.itemId] = item;
     };
 
     provide('registerListItem', registerListItem);
+
     const selIndex = computed({
       get() {
         return selectedIndex.value;
@@ -77,8 +80,17 @@ export default {
       },
     });
 
+    const setSelectedIndex = nv => (selIndex.value = nv);
+
+    const getSelectedIndex = () => selectedIndex.value;
+
+    // keep list of child elements that will have their item id in a data attribute
+    // so we can find the listItem from events or by index.
+
     const listElements = ref([]);
 
+    // all the child list elements
+    // may be refreshed if the list items are rerendered for example
     const updateListElements = () => {
       const elements = [].slice.call(
         uiState.listRoot.querySelectorAll(`.${cssClasses.LIST_ITEM_CLASS}`),
@@ -87,6 +99,9 @@ export default {
       listElements.value = elements;
     };
 
+    // find the list item by index.
+    // The list elements are in DOM order, so find it by index,
+    // then use its item id to lookup in the list item hash
     const getListItemByIndex = index => {
       const element = listElements.value[index];
       if (element) {
@@ -95,9 +110,11 @@ export default {
       }
     };
 
+    // find the index of a list item from the event target
     const getListItemIndex = evt => {
       const myItemId = evt.target.dataset.myitemid;
 
+      // if clicked on a list item then just search
       if (myItemId !== void 0) {
         const lei = listElements.value.findIndex(
           ({ dataset: { myitemid } }) => myitemid === myItemId,
@@ -105,6 +122,9 @@ export default {
 
         return lei;
       }
+
+      // if the click wasnt on a list item
+      // search up the DOM
 
       const eventTarget = evt.target;
       const nearestParent = closest(
@@ -222,6 +242,7 @@ export default {
       foundation.handleClick(index, toggleCheckbox);
     };
 
+    // set up the listeners and bind in the template with v-on
     const rootListeners = {
       click: event => handleClickEvent(event),
       focusin: event => {
@@ -261,30 +282,26 @@ export default {
 
       hasCheckboxAtIndex: index => {
         const listItem = listElements.value[index];
-        return (
-          listItem &&
-          !!(listItem.$el ?? listItem).querySelector(strings.CHECKBOX_SELECTOR)
-        );
+        return listItem && !!listItem.querySelector(strings.CHECKBOX_SELECTOR);
       },
 
       hasRadioAtIndex: index => {
         const listItem = listElements.value[index];
-        return (
-          listItem &&
-          !!(listItem.$el ?? listItem).querySelector(strings.RADIO_SELECTOR)
-        );
+        return listItem && !!listItem.querySelector(strings.RADIO_SELECTOR);
       },
 
       isCheckboxCheckedAtIndex: index => {
         const listItem = listElements.value[index];
-        const toggleEl = (listItem.$el ?? listItem).querySelector(
-          strings.CHECKBOX_SELECTOR,
-        );
+        const toggleEl = listItem.querySelector(strings.CHECKBOX_SELECTOR);
         return toggleEl.checked;
       },
 
       isFocusInsideList: () => {
-        return uiState.listRoot?.contains(document.activeElement);
+        const root = uiState.listRoot;
+        return (
+          root !== document.activeElement &&
+          root.contains(document.activeElement)
+        );
       },
 
       isRootFocused: () => document.activeElement === uiState.listRoot,
@@ -444,6 +461,8 @@ export default {
       typeaheadMatchItem,
       typeaheadInProgress,
       selIndex,
+      getSelectedIndex,
+      setSelectedIndex,
       getPrimaryText,
     };
   },
