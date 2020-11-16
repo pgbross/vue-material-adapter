@@ -73,8 +73,6 @@ export default {
       },
     });
 
-    // const selectedIndex = computed(() => uiState.list?.selIndex);
-
     const layout = () => uiState.list?.layout();
 
     const handleAction = index => {
@@ -111,7 +109,7 @@ export default {
     };
     const setSelectedIndex = index => uiState.list?.setSelectedIndex(index);
 
-    const getSelectedIndex = () => uiState.list?.getSelectedIndex();
+    const getSelectedIndex = () => uiState.list?.getSelectedIndex() ?? -1;
 
     const setAnchorMargin = margin => {
       uiState.menuSurface.setAnchorMargin(margin);
@@ -157,6 +155,9 @@ export default {
       }
       return -1;
     };
+
+    const setSingleSelection = singleSelection =>
+      uiState.list?.setSingleSelection(singleSelection);
 
     const adapter = {
       addClassToElementAtIndex: (index, className) => {
@@ -273,9 +274,10 @@ export default {
       layout,
       getPrimaryTextAtIndex,
       items,
-      listItems,
+      // listItems,
       typeaheadInProgress,
       typeaheadMatchItem,
+      setSingleSelection,
     };
   },
 };

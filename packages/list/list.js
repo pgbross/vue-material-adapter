@@ -1,7 +1,7 @@
 import { closest, matches } from '@material/dom/ponyfill';
 import { MDCListFoundation } from '@material/list/foundation';
 import {
-  computed,
+  // computed,
   onBeforeUnmount,
   onMounted,
   provide,
@@ -52,12 +52,13 @@ export default {
       listRoot: null,
     });
 
-    const selectedIndex = ref(props.modelValue);
+    const singleSelection = ref(props.singleSelection);
+    // const selectedIndex = ref(props.modelValue);
 
     let foundation;
     let slotObserver;
 
-    if (props.singleSelection) {
+    if (singleSelection.value) {
       uiState.rootAttrs.role = 'listbox';
     }
     const listItems = ref({});
@@ -70,19 +71,26 @@ export default {
 
     provide('registerListItem', registerListItem);
 
-    const selIndex = computed({
-      get() {
-        return selectedIndex.value;
-      },
-      set(nv) {
-        selectedIndex.value = nv;
-        emit('update:modelValue', nv);
-      },
-    });
+    // const selIndex = computed({
+    //   get() {
+    //     return selectedIndex.value;
+    //   },
+    //   set(nv) {
+    //     selectedIndex.value = nv;
+    //     emit('update:modelValue', nv);
+    //   },
+    // });
 
-    const setSelectedIndex = nv => (selIndex.value = nv);
+    const setSingleSelection = isSingleSelectionList => {
+      singleSelection.value = isSingleSelectionList;
+      foundation.setSingleSelection(isSingleSelectionList);
+    };
 
-    const getSelectedIndex = () => selectedIndex.value;
+    const setSelectedIndex = index => {
+      foundation.setSelectedIndex(index);
+    };
+
+    const getSelectedIndex = () => foundation.getSelectedIndex();
 
     // keep list of child elements that will have their item id in a data attribute
     // so we can find the listItem from events or by index.
@@ -179,11 +187,13 @@ export default {
           strings.ARIA_CHECKED_CHECKBOX_SELECTOR,
         );
 
-        selIndex.value = [].map.call(preselectedItems, listItem =>
-          listElements.value.indexOf(listItem),
+        setSelectedIndex(
+          [].map.call(preselectedItems, listItem =>
+            listElements.value.indexOf(listItem),
+          ),
         );
       } else if (radioSelectedListItem) {
-        selIndex.value = listElements.value.indexOf(radioSelectedListItem);
+        setSelectedIndex(listElements.value.indexOf(radioSelectedListItem));
       }
     };
 
@@ -362,10 +372,10 @@ export default {
       },
     };
 
-    watch(
-      () => props.singleSelection,
-      nv => foundation.setSingleSelection(nv),
-    );
+    // watch(
+    //   () => props.singleSelection,
+    //   nv => foundation.setSingleSelection(nv),
+    // );
 
     watch(
       () => props.modelValue,
@@ -373,7 +383,6 @@ export default {
         if (Array.isArray(nv)) {
           foundation.setSelectedIndex(nv);
         } else if (props.modelValue != nv) {
-          selectedIndex.value = nv;
           foundation.setSelectedIndex(nv);
         }
       },
@@ -401,7 +410,7 @@ export default {
 
       // if a single selection list need to ensure the selected item has the selected or activated class
       if (
-        props.singleSelection &&
+        singleSelection.value &&
         typeof props.modelValue === 'number' &&
         !isNaN(props.modelValue)
       ) {
@@ -460,10 +469,11 @@ export default {
       setEnabled,
       typeaheadMatchItem,
       typeaheadInProgress,
-      selIndex,
+      // selIndex,
       getSelectedIndex,
       setSelectedIndex,
       getPrimaryText,
+      setSingleSelection,
     };
   },
 };

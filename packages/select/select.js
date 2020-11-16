@@ -13,7 +13,7 @@ import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 import SelectHelperText from './select-helper-text.vue';
 import SelectIcon from './select-icon.vue';
 
-const { strings, cssClasses } = MDCSelectFoundation;
+const { strings } = MDCSelectFoundation;
 
 let uid_ = 0;
 
@@ -84,14 +84,6 @@ export default {
     });
 
     const menuItems = computed(() => uiState.menu?.items);
-    const menuListItems = computed(() => uiState.menu?.listItems);
-
-    const getMenuListItemByIndex = index => {
-      const menuItem = menuItems.value[index];
-      const id = menuItem.dataset.myitemid;
-      const menuListItem = menuListItems.value[id];
-      return menuListItem;
-    };
 
     let foundation;
 
@@ -108,7 +100,6 @@ export default {
       foundation[`handleMenu${isOpen ? 'Opened' : 'Closed'}`]();
 
     const layout = () => foundation.layout();
-    const selectedIndex = () => foundation.getSelectedIndex();
 
     const handleMenuOpened = () => foundation.handleMenuOpened();
     const handleMenuClosed = () => foundation.handleMenuClosed();
@@ -132,15 +123,15 @@ export default {
 
     const adapter = {
       // select methods
-      getSelectedMenuItem: () => {
-        const x = menuItems.value.find(item => {
-          const myItemId = item.dataset.myitemid;
-          return menuListItems.value[myItemId].classList.contains(
-            cssClasses.SELECTED_ITEM_CLASS,
-          );
-        });
-        return x;
-      },
+      // getSelectedMenuItem: () => {
+      //   const x = menuItems.value.find(item => {
+      //     const myItemId = item.dataset.myitemid;
+      //     return menuListItems.value[myItemId].classList.contains(
+      //       cssClasses.SELECTED_ITEM_CLASS,
+      //     );
+      //   });
+      //   return x;
+      // },
 
       getMenuItemAttr: (menuItem, attr) => menuItem.getAttribute(attr),
 
@@ -175,19 +166,12 @@ export default {
         uiState.menu.setAnchorCorner(anchorCorner),
       setMenuWrapFocus: wrapFocus => (uiState.menu.wrapFocus = wrapFocus),
       getSelectedIndex: () => {
-        const index = uiState.menu.selectedIndex ?? -1;
+        const index = uiState.menu?.getSelectedIndex() ?? -1;
         return index instanceof Array ? index[0] : index;
       },
       setSelectedIndex: index => {
-        uiState.menu.selectedIndex = index;
+        uiState.menu.setSelectedIndex(index);
       },
-      setAttributeAtIndex: (index, attributeName, attributeValue) =>
-        getMenuListItemByIndex(index)?.setAttribute(
-          attributeName,
-          attributeValue,
-        ),
-      removeAttributeAtIndex: (index, attributeName) =>
-        getMenuListItemByIndex(index)?.removeAttribute(attributeName),
       focusMenuItemAtIndex: index => menuItems.value[index].focus(),
       getMenuItemCount: () => menuItems.value.length,
       getMenuItemValues: () =>
@@ -195,12 +179,6 @@ export default {
       getMenuItemTextAtIndex: index => {
         return menuItems.value[index].textContent;
       },
-      addClassAtIndex: (index, className) => {
-        getMenuListItemByIndex(index)?.classList.add(className);
-      },
-      removeClassAtIndex: (index, className) =>
-        getMenuListItemByIndex(index)?.classList.remove(className),
-
       isTypeaheadInProgress: () => uiState.menu.typeaheadInProgress(),
       typeaheadMatchItem: (nextChar, startingIndex) =>
         uiState.menu?.typeaheadMatchItem(nextChar, startingIndex),
@@ -220,7 +198,7 @@ export default {
       deactivateBottomLine: () => uiState.lineRippleEl?.deactivate(),
 
       notifyChange: value => {
-        const index = selectedIndex();
+        const index = foundation.getSelectedIndex();
         emitCustomEvent(
           uiState.root,
           strings.CHANGE_EVENT,
@@ -239,7 +217,7 @@ export default {
       hasLabel: () => !!props.label,
       floatLabel: shouldFloat =>
         (uiState.labelEl || uiState.outlineEl)?.float(shouldFloat),
-      getLabelWidth: () => uiState.labelEl?.getWidth(),
+      getLabelWidth: () => uiState.labelEl?.getWidth() || 0,
       setLabelRequired: isRequired => uiState.labelEl?.setRequired(isRequired),
     };
 
@@ -253,7 +231,7 @@ export default {
       const idx = items.findIndex(value => {
         return props.modelValue === value;
       });
-      foundation.setSelectedIndex(idx);
+      uiState.menu.setSelectedIndex(idx);
     };
 
     watch(
@@ -269,16 +247,20 @@ export default {
     );
 
     onMounted(() => {
+      // menu setup
+      uiState.menu.hasTypeahead = true;
+      uiState.menu.setSingleSelection = true;
+
       foundation = new MDCSelectFoundation(adapter, {
         helperText: uiState.helperTextEl?.foundation,
         leadingIcon: uiState.leadingIconEl?.foundation,
       });
 
-      foundation = new MDCSelectFoundation(adapter);
-      foundation.init();
-
       // initial sync with DOM
       refreshIndex();
+
+      foundation = new MDCSelectFoundation(adapter);
+      foundation.init();
 
       // do we need a slotObserver here?
       // this.slotObserver = new MutationObserver(() => this.refreshIndex());
