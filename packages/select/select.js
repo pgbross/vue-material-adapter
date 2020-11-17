@@ -232,6 +232,8 @@ export default {
         return props.modelValue === value;
       });
       uiState.menu.setSelectedIndex(idx);
+
+      return idx;
     };
 
     watch(
@@ -242,7 +244,8 @@ export default {
     watch(
       () => props.modelValue,
       () => {
-        refreshIndex();
+        const idx = refreshIndex();
+        foundation.setSelectedIndex(idx);
       },
     );
 

@@ -309,6 +309,7 @@ export default {
       isFocusInsideList: () => {
         const root = uiState.listRoot;
         return (
+          root &&
           root !== document.activeElement &&
           root.contains(document.activeElement)
         );

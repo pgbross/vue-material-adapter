@@ -68,6 +68,7 @@ export default {
       return this.selectedType ? this.food[this.selectedType] : [];
     },
   },
+
   methods: {
     onTypeChanged(nv) {
       console.log(nv);
