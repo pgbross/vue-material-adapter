@@ -32,6 +32,7 @@ rules:
   prefer-const: error
   vue/name-property-casing: ['error', 'kebab-case']
   vue/require-default-prop: 'off'
+  vue/no-v-model-argument: 'off'
 env:
   browser: true
   commonjs: true
