@@ -10,7 +10,7 @@ This project defines Vue components that use the `Material Components Web` libra
 ## Install
 
 ```
-$ npm install vue-material-adapter
+$ npm install vue-material-adapter@next
 ```
 
 ## Documentation & Demo
@@ -30,7 +30,7 @@ See [Release Notes](https://github.com/pgbross/vue-material-adapter/release-note
 Install dependencies
 
 ```
-npm install vue-material-adapter
+npm install vue-material-adapter@next
 ```
 
 to build everything
