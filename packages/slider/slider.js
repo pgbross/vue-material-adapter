@@ -206,6 +206,15 @@ export default {
     );
 
     watch(
+      () => props.start,
+      nv => {
+        if (foundation.getValueStart() !== Number(nv)) {
+          foundation.setValueStart(nv);
+        }
+      },
+    );
+
+    watch(
       () => props.disabled,
       nv => {
         foundation.setDisabled(nv);
