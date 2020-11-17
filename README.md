@@ -2,9 +2,7 @@
 
 [![Build Status](https://travis-ci.com/pgbross/vue-material-adapter.svg?branch=master)](https://travis-ci.com/pgbross/vue-material-adapter)
 
-[vue-material-adapter](https://github.com/pgbross/vue-material-adapter) is an integration of
-[Material Web Components](https://material.io/components/web/)
-and [Vue.js](https://vuejs.org) which uses the
+Vue components (Vue 3.0) for [Material Web Components](https://material.io/components/web/) which uses the
 [`Using Foundations and Adapters`](https://github.com/material-components/material-components-web/blob/master/docs/integrating-into-frameworks.md#the-advanced-approach-using-foundations-and-adapters) integration technique.
 
 This project defines Vue components that use the `Material Components Web` library to implement Material Design.mization while sticking to the _Vue Spirit_ (approachable, versatile, and performant)
