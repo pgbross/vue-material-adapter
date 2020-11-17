@@ -3156,7 +3156,7 @@ function render$a(_ctx, _cache, $props, $setup, $data, $options) {
   }, [renderSlot(_ctx.$slots, "header"), createVNode("div", _hoisted_1$8, [createVNode(_component_mcw_list, {
     "wrap-focus": true,
     tag: "nav",
-    onMcwListAction: _ctx.onListAction,
+    "onMdclist:action": _ctx.onListAction,
     "single-selection": "",
     "selected-index": 0
   }, {
@@ -3166,7 +3166,7 @@ function render$a(_ctx, _cache, $props, $setup, $data, $options) {
     _: 3
   }, 8
   /* PROPS */
-  , ["onMcwListAction"])])], 34
+  , ["onMdclist:action"])])], 34
   /* CLASS, HYDRATE_EVENTS */
   )) : (openBlock(), createBlock("div", _hoisted_2$7, [createVNode("aside", {
     ref: "drawer",
@@ -3182,7 +3182,7 @@ function render$a(_ctx, _cache, $props, $setup, $data, $options) {
     tag: "nav",
     "single-selection": "",
     "selected-index": 0,
-    onMcwListAction: _ctx.onListAction
+    "onMdclist:action": _ctx.onListAction
   }, {
     default: withCtx(function () {
       return [renderSlot(_ctx.$slots, "default")];
@@ -3190,7 +3190,7 @@ function render$a(_ctx, _cache, $props, $setup, $data, $options) {
     _: 3
   }, 8
   /* PROPS */
-  , ["onMcwListAction"])])], 34
+  , ["onMdclist:action"])])], 34
   /* CLASS, HYDRATE_EVENTS */
   ), _ctx.modal ? (openBlock(), createBlock("div", {
     key: 0,
@@ -4510,7 +4510,7 @@ var script$k = {
       },
       isFocusInsideList: function isFocusInsideList() {
         var root = uiState.listRoot;
-        return root !== document.activeElement && root.contains(document.activeElement);
+        return root && root !== document.activeElement && root.contains(document.activeElement);
       },
       isRootFocused: function isRootFocused() {
         return document.activeElement === uiState.listRoot;
@@ -6230,6 +6230,7 @@ var script$r = {
         return props.modelValue === value;
       });
       uiState.menu.setSelectedIndex(idx);
+      return idx;
     };
 
     watch(function () {
@@ -6242,7 +6243,8 @@ var script$r = {
     watch(function () {
       return props.modelValue;
     }, function () {
-      refreshIndex();
+      var idx = refreshIndex();
+      foundation.setSelectedIndex(idx);
     });
     onMounted(function () {
       var _uiState$helperTextEl, _uiState$leadingIconE;
