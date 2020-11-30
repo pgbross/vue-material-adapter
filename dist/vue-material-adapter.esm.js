@@ -8266,10 +8266,6 @@ var uid_$1 = 0;
 var script$D = {
   name: 'mcw-textfield',
   inheritAttrs: false,
-  // model: {
-  //   prop: 'value',
-  //   event: 'model',
-  // },
   props: {
     modelValue: [String, Number],
     type: {
@@ -8435,7 +8431,11 @@ var script$D = {
     };
 
     var inputAttrs = computed(function () {
-      return _objectSpread2(_objectSpread2({}, attrs), uiState.inputAttrs);
+      // eslint-disable-next-line no-unused-vars
+      var _ = attrs.class,
+          rest = _objectWithoutProperties(attrs, ["class"]);
+
+      return _objectSpread2(_objectSpread2({}, rest), uiState.inputAttrs);
     });
     var adapter = {
       addClass: function addClass(className) {
@@ -8621,26 +8621,22 @@ var script$D = {
 };
 
 var _hoisted_1$m = {
-  ref: "wrapper",
-  class: "textfield-container"
-};
-var _hoisted_2$i = {
   key: 0,
   class: "mdc-text-field__ripple"
 };
-var _hoisted_3$d = {
+var _hoisted_2$i = {
   key: 3,
   class: "mdc-text-field__affix mdc-text-field__affix--prefix"
 };
-var _hoisted_4$a = {
+var _hoisted_3$d = {
   key: 4,
   class: "mdc-text-field__affix mdc-text-field__affix--suffix"
 };
-var _hoisted_5$6 = {
+var _hoisted_4$a = {
   key: 1,
   class: "mdc-text-field__resizer"
 };
-var _hoisted_6$4 = {
+var _hoisted_5$6 = {
   key: 2,
   class: "mdc-text-field-helper-line"
 };
@@ -8655,12 +8651,15 @@ function render$D(_ctx, _cache, $props, $setup, $data, $options) {
 
   var _component_mcw_textfield_helper_text = resolveComponent("mcw-textfield-helper-text");
 
-  return openBlock(), createBlock("div", _hoisted_1$m, [!_ctx.multiline ? (openBlock(), createBlock("label", {
+  return openBlock(), createBlock("div", {
+    ref: "wrapper",
+    class: ["textfield-container", _ctx.$attrs.class]
+  }, [!_ctx.multiline ? (openBlock(), createBlock("label", {
     key: 0,
     ref: "root",
     class: _ctx.rootClasses,
     style: _ctx.rippleStyles
-  }, [!_ctx.outline ? (openBlock(), createBlock("span", _hoisted_2$i)) : createCommentVNode("v-if", true), renderSlot(_ctx.$slots, "leading"), renderSlot(_ctx.$slots, "leadingIcon"), _ctx.hasLabel ? (openBlock(), createBlock(_component_mcw_floating_label, {
+  }, [!_ctx.outline ? (openBlock(), createBlock("span", _hoisted_1$m)) : createCommentVNode("v-if", true), renderSlot(_ctx.$slots, "leading"), renderSlot(_ctx.$slots, "leadingIcon"), _ctx.hasLabel ? (openBlock(), createBlock(_component_mcw_floating_label, {
     key: 1,
     ref: "labelEl",
     id: _ctx.labelId,
@@ -8686,7 +8685,7 @@ function render$D(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
   }, 512
   /* NEED_PATCH */
-  )) : createCommentVNode("v-if", true), _ctx.prefix ? (openBlock(), createBlock("span", _hoisted_3$d, toDisplayString(_ctx.prefix), 1
+  )) : createCommentVNode("v-if", true), _ctx.prefix ? (openBlock(), createBlock("span", _hoisted_2$i, toDisplayString(_ctx.prefix), 1
   /* TEXT */
   )) : createCommentVNode("v-if", true), createVNode("input", mergeProps({
     ref: "input",
@@ -8701,7 +8700,7 @@ function render$D(_ctx, _cache, $props, $setup, $data, $options) {
     "aria-describedby": _ctx.inputAriaControls
   }, toHandlers(_ctx.inputListeners)), null, 16
   /* FULL_PROPS */
-  , ["type", "minlength", "maxlength", "aria-label", "aria-controls", "aria-labelledby", "aria-describedby"]), _ctx.suffix ? (openBlock(), createBlock("span", _hoisted_4$a, toDisplayString(_ctx.suffix), 1
+  , ["type", "minlength", "maxlength", "aria-label", "aria-controls", "aria-labelledby", "aria-describedby"]), _ctx.suffix ? (openBlock(), createBlock("span", _hoisted_3$d, toDisplayString(_ctx.suffix), 1
   /* TEXT */
   )) : createCommentVNode("v-if", true), renderSlot(_ctx.$slots, "trailingIcon"), renderSlot(_ctx.$slots, "trailing"), _ctx.hasLineRipple ? (openBlock(), createBlock(_component_mcw_line_ripple, {
     key: 5,
@@ -8726,7 +8725,7 @@ function render$D(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
   }, 512
   /* NEED_PATCH */
-  )) : createCommentVNode("v-if", true), _ctx.resizer ? (openBlock(), createBlock("span", _hoisted_5$6, [createVNode("textarea", mergeProps({
+  )) : createCommentVNode("v-if", true), _ctx.resizer ? (openBlock(), createBlock("span", _hoisted_4$a, [createVNode("textarea", mergeProps({
     ref: "input",
     class: _ctx.inputClasses
   }, _ctx.inputAttrs, {
@@ -8758,7 +8757,7 @@ function render$D(_ctx, _cache, $props, $setup, $data, $options) {
   /* NEED_PATCH */
   )) : createCommentVNode("v-if", true)], 2
   /* CLASS */
-  )), _ctx.hasHelpline ? (openBlock(), createBlock("div", _hoisted_6$4, [_ctx.helptext ? (openBlock(), createBlock(_component_mcw_textfield_helper_text, {
+  )), _ctx.hasHelpline ? (openBlock(), createBlock("div", _hoisted_5$6, [_ctx.helptext ? (openBlock(), createBlock(_component_mcw_textfield_helper_text, {
     key: 0,
     ref: "helpertext",
     id: _ctx.helpTextId,
@@ -8772,8 +8771,8 @@ function render$D(_ctx, _cache, $props, $setup, $data, $options) {
     ref: "characterCounterEl"
   }, null, 512
   /* NEED_PATCH */
-  )) : createCommentVNode("v-if", true)])) : createCommentVNode("v-if", true)], 512
-  /* NEED_PATCH */
+  )) : createCommentVNode("v-if", true)])) : createCommentVNode("v-if", true)], 2
+  /* CLASS */
   );
 }
 
