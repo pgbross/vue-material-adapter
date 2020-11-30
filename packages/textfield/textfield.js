@@ -19,11 +19,6 @@ let uid_ = 0;
 export default {
   name: 'mcw-textfield',
   inheritAttrs: false,
-  // model: {
-  //   prop: 'value',
-  //   event: 'model',
-  // },
-
   props: {
     modelValue: [String, Number],
     type: {
@@ -175,10 +170,14 @@ export default {
 
     const isValid = () => foundation.isValid();
 
-    const inputAttrs = computed(() => ({
-      ...attrs,
-      ...uiState.inputAttrs,
-    }));
+    const inputAttrs = computed(() => {
+      // eslint-disable-next-line no-unused-vars
+      const { class: _, ...rest } = attrs;
+      return {
+        ...rest,
+        ...uiState.inputAttrs,
+      };
+    });
 
     const adapter = {
       addClass: className =>
