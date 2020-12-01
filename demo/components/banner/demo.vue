@@ -7,7 +7,6 @@
       secondary-action="Learn more"
       icon="error_outline"
       @mdcbanner:closing="onClosing"
-      fixed
     ></mcw-banner>
 
     <br />

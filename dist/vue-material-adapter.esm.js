@@ -1,4 +1,5 @@
-import { resolveDynamicComponent, h, toRefs, ref, shallowReactive, onMounted, onBeforeUnmount, computed, resolveComponent, openBlock, createBlock, withCtx, renderSlot, createVNode, toDisplayString, createCommentVNode, reactive, toRef, watch, createTextVNode, provide, mergeProps, toHandlers, inject, Fragment, renderList, nextTick, watchEffect } from 'vue';
+import { resolveDynamicComponent, h, openBlock, createBlock, createVNode, toDisplayString, withModifiers, createCommentVNode, reactive, watch, onMounted, toRefs, resolveComponent, ref, shallowReactive, onBeforeUnmount, computed, withCtx, renderSlot, toRef, createTextVNode, provide, mergeProps, toHandlers, inject, Fragment, renderList, nextTick, watchEffect } from 'vue';
+import { MDCBannerFoundation } from '@material/banner';
 import { applyPassive } from '@material/dom/events';
 import { matches, closest } from '@material/dom/ponyfill';
 import { MDCRippleFoundation } from '@material/ripple';
@@ -469,6 +470,245 @@ var index = /*#__PURE__*/Object.freeze({
   CustomLink: CustomLink
 });
 
+var script = {
+  props: {
+    text: String,
+    primaryAction: String,
+    secondaryAction: String,
+    icon: String
+  },
+  setup: function setup(props, _ref) {
+    var emit = _ref.emit;
+
+    var onPrimary = function onPrimary() {
+      return emit('click', {
+        target: 0
+      });
+    };
+
+    var onSecondary = function onSecondary() {
+      return emit('click', {
+        target: 1
+      });
+    };
+
+    return {
+      onPrimary: onPrimary,
+      onSecondary: onSecondary
+    };
+  }
+};
+
+var _hoisted_1 = {
+  class: "mdc-banner__content",
+  role: "status",
+  "aria-live": "assertive"
+};
+var _hoisted_2 = {
+  class: "mdc-banner__graphic-text-wrapper"
+};
+
+var _hoisted_3 = /*#__PURE__*/createVNode("div", {
+  class: "mdc-banner__graphic",
+  role: "img",
+  alt: ""
+}, [/*#__PURE__*/createVNode("i", {
+  class: "material-icons mdc-banner__icon"
+}, "error_outline")], -1
+/* HOISTED */
+);
+
+var _hoisted_4 = {
+  class: "mdc-banner__text"
+};
+var _hoisted_5 = {
+  class: "mdc-banner__actions"
+};
+
+var _hoisted_6 = /*#__PURE__*/createVNode("div", {
+  class: "mdc-button__ripple"
+}, null, -1
+/* HOISTED */
+);
+
+var _hoisted_7 = {
+  class: "mdc-button__label"
+};
+
+var _hoisted_8 = /*#__PURE__*/createVNode("div", {
+  class: "mdc-button__ripple"
+}, null, -1
+/* HOISTED */
+);
+
+var _hoisted_9 = {
+  class: "mdc-button__label"
+};
+function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createBlock("div", _hoisted_1, [createVNode("div", _hoisted_2, [_hoisted_3, createVNode("div", _hoisted_4, toDisplayString($props.text), 1
+  /* TEXT */
+  )]), createVNode("div", _hoisted_5, [$props.secondaryAction ? (openBlock(), createBlock("button", {
+    key: 0,
+    type: "button",
+    class: "mdc-button mdc-banner__secondary-action",
+    onClick: _cache[1] || (_cache[1] = withModifiers(function () {
+      return $setup.onSecondary.apply($setup, arguments);
+    }, ["stop"]))
+  }, [_hoisted_6, createVNode("div", _hoisted_7, toDisplayString($props.secondaryAction), 1
+  /* TEXT */
+  )])) : createCommentVNode("v-if", true), createVNode("button", {
+    type: "button",
+    class: "mdc-button mdc-banner__primary-action",
+    onClick: _cache[2] || (_cache[2] = withModifiers(function () {
+      return $setup.onPrimary.apply($setup, arguments);
+    }, ["stop"]))
+  }, [_hoisted_8, createVNode("div", _hoisted_9, toDisplayString($props.primaryAction), 1
+  /* TEXT */
+  )])])]);
+}
+
+script.render = render;
+script.__file = "packages/banner/banner-content.vue";
+
+var script$1 = {
+  name: 'mcw-banner',
+  props: {
+    centered: Boolean,
+    modelValue: Boolean,
+    text: String,
+    primaryAction: String,
+    secondaryAction: String,
+    mobile: Boolean,
+    fixed: Boolean,
+    icon: String
+  },
+  components: {
+    bannerContent: script
+  },
+  setup: function setup(props, _ref) {
+    var emit = _ref.emit;
+    var uiState = reactive({
+      classes: {
+        'mdc-banner--centered': props.centered,
+        'mdc-banner--mobile-stacked': props.mobile
+      },
+      styles: {},
+      root: null,
+      contentEl: null
+    });
+    var foundation;
+
+    var onOpen = function onOpen(nv) {
+      if (nv) {
+        foundation.open();
+      } else {
+        foundation.close();
+      }
+    };
+
+    var onContentClick = function onContentClick(_ref2) {
+      var target = _ref2.target;
+
+      if (target == 1) {
+        foundation.handleSecondaryActionClick();
+      } else {
+        foundation.handlePrimaryActionClick();
+      }
+    };
+
+    var adapter = {
+      addClass: function addClass(className) {
+        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+      },
+      getContentHeight: function getContentHeight() {
+        return uiState.contentEl.offsetHeight;
+      },
+      notifyOpening: function notifyOpening() {
+        emit('mdcbanner:opening', {});
+      },
+      notifyOpened: function notifyOpened() {
+        return emit('mdcbanner:opened', {});
+      },
+      notifyClosing: function notifyClosing(reason) {
+        emit('update:modelValue', false);
+        emit('mdcbanner:closing', {
+          reason: reason
+        });
+      },
+      notifyClosed: function notifyClosed(reason) {
+        emit('mdcbanner:closed', {
+          reason: reason
+        });
+      },
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$classes = uiState.classes,
+            removed = _uiState$classes[className],
+            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+
+        uiState.classes = rest;
+      },
+      setStyleProperty: function setStyleProperty(property, value) {
+        return uiState.styles = _objectSpread2(_objectSpread2({}, uiState.styles), {}, _defineProperty({}, property, value));
+      }
+    };
+    watch(function () {
+      return props.modelValue;
+    }, function (nv) {
+      onOpen(nv);
+    });
+    onMounted(function () {
+      foundation = new MDCBannerFoundation(adapter);
+      foundation.init();
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      onContentClick: onContentClick
+    });
+  }
+};
+
+var _hoisted_1$1 = {
+  key: 0,
+  class: "mdc-banner__fixed"
+};
+function render$1(_ctx, _cache, $props, $setup, $data, $options) {
+  var _component_banner_content = resolveComponent("banner-content");
+
+  return openBlock(), createBlock("div", {
+    class: ["mdc-banner demo-banner", _ctx.classes],
+    role: "banner",
+    style: _ctx.styles
+  }, [_ctx.fixed ? (openBlock(), createBlock("div", _hoisted_1$1, [createVNode(_component_banner_content, {
+    ref: "contentEl",
+    icon: _ctx.icon,
+    "primary-action": _ctx.primaryAction,
+    "secondary-action": _ctx.secondaryAction,
+    text: _ctx.text,
+    onClick: _ctx.onContentClick
+  }, null, 8
+  /* PROPS */
+  , ["icon", "primary-action", "secondary-action", "text", "onClick"])])) : (openBlock(), createBlock(_component_banner_content, {
+    key: 1,
+    ref: "contentEl",
+    icon: _ctx.icon,
+    "primary-action": _ctx.primaryAction,
+    "secondary-action": _ctx.secondaryAction,
+    text: _ctx.text,
+    onClick: _ctx.onContentClick
+  }, null, 8
+  /* PROPS */
+  , ["icon", "primary-action", "secondary-action", "text", "onClick"]))], 6
+  /* CLASS, STYLE */
+  );
+}
+
+script$1.render = render$1;
+script$1.__file = "packages/banner/banner.vue";
+
+var banner = BasePlugin({
+  mcwBanner: script$1
+});
+
 var RippleElement = /*#__PURE__*/function (_MDCRippleFoundation) {
   _inherits(RippleElement, _MDCRippleFoundation);
 
@@ -607,7 +847,7 @@ function useRipplePlugin(root, options) {
   });
 }
 
-var script = {
+var script$2 = {
   name: 'mcw-button',
   props: {
     raised: Boolean,
@@ -655,24 +895,24 @@ var script = {
   }
 };
 
-var _hoisted_1 = /*#__PURE__*/createVNode("div", {
+var _hoisted_1$2 = /*#__PURE__*/createVNode("div", {
   class: "mdc-button__ripple"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_2 = {
+var _hoisted_2$1 = {
   class: "material-icons mdc-button__icon",
   "aria-hidden": "true"
 };
-var _hoisted_3 = {
+var _hoisted_3$1 = {
   class: "mdc-button__label"
 };
-var _hoisted_4 = {
+var _hoisted_4$1 = {
   class: "material-icons mdc-button__icon",
   "aria-hidden": "true"
 };
-function render(_ctx, _cache, $props, $setup, $data, $options) {
+function render$2(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_custom_link = resolveComponent("custom-link");
 
   return openBlock(), createBlock(_component_custom_link, {
@@ -682,16 +922,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     tag: "button"
   }, {
     default: withCtx(function () {
-      return [_hoisted_1, _ctx.haveIcon ? renderSlot(_ctx.$slots, "icon", {
+      return [_hoisted_1$2, _ctx.haveIcon ? renderSlot(_ctx.$slots, "icon", {
         key: 0
       }, function () {
-        return [createVNode("i", _hoisted_2, toDisplayString(_ctx.icon), 1
+        return [createVNode("i", _hoisted_2$1, toDisplayString(_ctx.icon), 1
         /* TEXT */
         )];
-      }) : createCommentVNode("v-if", true), createVNode("span", _hoisted_3, [renderSlot(_ctx.$slots, "default")]), _ctx.haveTrailingIcon ? renderSlot(_ctx.$slots, "trailingIcon", {
+      }) : createCommentVNode("v-if", true), createVNode("span", _hoisted_3$1, [renderSlot(_ctx.$slots, "default")]), _ctx.haveTrailingIcon ? renderSlot(_ctx.$slots, "trailingIcon", {
         key: 1
       }, function () {
-        return [createVNode("i", _hoisted_4, toDisplayString(_ctx.trailingIcon), 1
+        return [createVNode("i", _hoisted_4$1, toDisplayString(_ctx.trailingIcon), 1
         /* TEXT */
         )];
       }) : createCommentVNode("v-if", true)];
@@ -702,11 +942,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   , ["class", "style"]);
 }
 
-script.render = render;
-script.__file = "packages/button/button.vue";
+script$2.render = render$2;
+script$2.__file = "packages/button/button.vue";
 
 var button = BasePlugin({
-  mcwButton: script
+  mcwButton: script$2
 });
 
 var mcwCardActionButtons = {
@@ -803,7 +1043,7 @@ var mcwCardMedia = {
   }
 };
 
-var script$1 = {
+var script$3 = {
   name: 'mcw-card-primary-action',
   components: {
     CustomLink: CustomLink
@@ -828,7 +1068,7 @@ var script$1 = {
   }
 };
 
-function render$1(_ctx, _cache, $props, $setup, $data, $options) {
+function render$3(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_custom_link = resolveComponent("custom-link");
 
   return openBlock(), createBlock(_component_custom_link, {
@@ -846,8 +1086,8 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   , ["class", "style"]);
 }
 
-script$1.render = render$1;
-script$1.__file = "packages/card/card-primary-action.vue";
+script$3.render = render$3;
+script$3.__file = "packages/card/card-primary-action.vue";
 
 var mcwCard = {
   name: 'mcw-card',
@@ -873,7 +1113,7 @@ var mcwCard = {
 
 var card = BasePlugin({
   mcwCard: mcwCard,
-  mcwCardPrimaryAction: script$1,
+  mcwCardPrimaryAction: script$3,
   mcwCardMedia: mcwCardMedia,
   mcwCardActions: mcwCardActions,
   mcwCardActionButtons: mcwCardActionButtons,
@@ -1036,7 +1276,7 @@ function useRipplePlugin$1(root, options) {
 
 var CB_PROTO_PROPS = ['checked', 'indeterminate'];
 var checkboxId_ = 0;
-var script$2 = {
+var script$4 = {
   name: 'mcw-checkbox',
   props: {
     modelValue: [Boolean, Array],
@@ -1292,7 +1532,7 @@ function validDescriptor(inputPropDesc) {
   return !!inputPropDesc && typeof inputPropDesc.set === 'function';
 }
 
-var _hoisted_1$1 = /*#__PURE__*/createVNode("div", {
+var _hoisted_1$3 = /*#__PURE__*/createVNode("div", {
   class: "mdc-checkbox__background"
 }, [/*#__PURE__*/createVNode("svg", {
   class: "mdc-checkbox__checkmark",
@@ -1307,13 +1547,13 @@ var _hoisted_1$1 = /*#__PURE__*/createVNode("div", {
 /* HOISTED */
 );
 
-var _hoisted_2$1 = /*#__PURE__*/createVNode("div", {
+var _hoisted_2$2 = /*#__PURE__*/createVNode("div", {
   class: "mdc-checkbox__ripple"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_3$1 = /*#__PURE__*/createVNode("div", {
+var _hoisted_3$2 = /*#__PURE__*/createVNode("div", {
   class: "mdc-checkbox__background"
 }, [/*#__PURE__*/createVNode("svg", {
   class: "mdc-checkbox__checkmark",
@@ -1328,13 +1568,13 @@ var _hoisted_3$1 = /*#__PURE__*/createVNode("div", {
 /* HOISTED */
 );
 
-var _hoisted_4$1 = /*#__PURE__*/createVNode("div", {
+var _hoisted_4$2 = /*#__PURE__*/createVNode("div", {
   class: "mdc-checkbox__ripple"
 }, null, -1
 /* HOISTED */
 );
 
-function render$2(_ctx, _cache, $props, $setup, $data, $options) {
+function render$4(_ctx, _cache, $props, $setup, $data, $options) {
   return _ctx.hasLabel ? (openBlock(), createBlock("div", {
     key: 0,
     class: [_ctx.formFieldClasses, "mdc-checkbox-wrapper"]
@@ -1354,7 +1594,7 @@ function render$2(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, null, 40
   /* PROPS, HYDRATE_EVENTS */
-  , ["id", "name", "value"]), _hoisted_1$1, _hoisted_2$1], 6
+  , ["id", "name", "value"]), _hoisted_1$3, _hoisted_2$2], 6
   /* CLASS, STYLE */
   ), createVNode("label", {
     ref: "labelEl",
@@ -1384,19 +1624,19 @@ function render$2(_ctx, _cache, $props, $setup, $data, $options) {
     })
   }, null, 40
   /* PROPS, HYDRATE_EVENTS */
-  , ["id", "name", "value"]), _hoisted_3$1, _hoisted_4$1], 6
+  , ["id", "name", "value"]), _hoisted_3$2, _hoisted_4$2], 6
   /* CLASS, STYLE */
   ));
 }
 
-script$2.render = render$2;
-script$2.__file = "packages/checkbox/checkbox.vue";
+script$4.render = render$4;
+script$4.__file = "packages/checkbox/checkbox.vue";
 
 var checkbox = BasePlugin({
-  mcwCheckbox: script$2
+  mcwCheckbox: script$4
 });
 
-var script$3 = {
+var script$5 = {
   name: 'mcw-chip-checkmark',
   setup: function setup() {
     var width = ref(0);
@@ -1411,12 +1651,12 @@ var script$3 = {
   }
 };
 
-var _hoisted_1$2 = {
+var _hoisted_1$4 = {
   ref: "root",
   class: "mdc-chip__checkmark"
 };
 
-var _hoisted_2$2 = /*#__PURE__*/createVNode("svg", {
+var _hoisted_2$3 = /*#__PURE__*/createVNode("svg", {
   class: "mdc-chip__checkmark-svg",
   viewBox: "-2 -3 30 30"
 }, [/*#__PURE__*/createVNode("path", {
@@ -1428,17 +1668,17 @@ var _hoisted_2$2 = /*#__PURE__*/createVNode("svg", {
 /* HOISTED */
 );
 
-function render$3(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createBlock("span", _hoisted_1$2, [_hoisted_2$2], 512
+function render$5(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createBlock("span", _hoisted_1$4, [_hoisted_2$3], 512
   /* NEED_PATCH */
   );
 }
 
-script$3.render = render$3;
-script$3.__file = "packages/chips/chip-checkmark.vue";
+script$5.render = render$5;
+script$5.__file = "packages/chips/chip-checkmark.vue";
 
 var strings = MDCChipFoundation.strings;
-var script$4 = {
+var script$6 = {
   name: 'mcw-chip-set',
   props: {
     choice: [Boolean],
@@ -1550,7 +1790,7 @@ var script$4 = {
   }
 };
 
-function render$4(_ctx, _cache, $props, $setup, $data, $options) {
+function render$6(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock("div", mergeProps({
     ref: "root",
     class: _ctx.classes,
@@ -1560,13 +1800,13 @@ function render$4(_ctx, _cache, $props, $setup, $data, $options) {
   );
 }
 
-script$4.render = render$4;
-script$4.__file = "packages/chips/chip-set.vue";
+script$6.render = render$6;
+script$6.__file = "packages/chips/chip-set.vue";
 
 var strings$1 = MDCChipFoundation.strings;
 var trailingActionStrings = MDCChipTrailingActionFoundation.strings;
 var chipItemId_ = 0;
-var script$5 = {
+var script$7 = {
   name: 'mcw-chip',
   props: {
     leadingIcon: [String],
@@ -1855,23 +2095,23 @@ var script$5 = {
   }
 };
 
-var _hoisted_1$3 = /*#__PURE__*/createVNode("div", {
+var _hoisted_1$5 = /*#__PURE__*/createVNode("div", {
   class: "mdc-chip__ripple"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_2$3 = {
+var _hoisted_2$4 = {
   role: "gridcell"
 };
-var _hoisted_3$2 = {
+var _hoisted_3$3 = {
   class: "mdc-chip__text"
 };
-var _hoisted_4$2 = {
+var _hoisted_4$3 = {
   key: 0,
   role: "gridcell"
 };
-function render$5(_ctx, _cache, $props, $setup, $data, $options) {
+function render$7(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_mcw_chip_checkmark = resolveComponent("mcw-chip-checkmark");
 
   var _component_mcw_chip_trailing_action = resolveComponent("mcw-chip-trailing-action");
@@ -1881,7 +2121,7 @@ function render$5(_ctx, _cache, $props, $setup, $data, $options) {
     class: ["mdc-chip", _ctx.classes],
     role: "row",
     style: _ctx.styles
-  }, toHandlers(_ctx.myListeners)), [_hoisted_1$3, renderSlot(_ctx.$slots, "leading-icon", {}, function () {
+  }, toHandlers(_ctx.myListeners)), [_hoisted_1$5, renderSlot(_ctx.$slots, "leading-icon", {}, function () {
     return [_ctx.haveleadingIcon ? (openBlock(), createBlock("i", {
       key: 0,
       ref: "leading-icon",
@@ -1894,14 +2134,14 @@ function render$5(_ctx, _cache, $props, $setup, $data, $options) {
     ref: "checkmarkEl"
   }, null, 512
   /* NEED_PATCH */
-  )) : createCommentVNode("v-if", true), createVNode("span", _hoisted_2$3, [createVNode("span", {
+  )) : createCommentVNode("v-if", true), createVNode("span", _hoisted_2$4, [createVNode("span", {
     role: _ctx.isFilter ? 'checkbox' : 'button',
     tabindex: "0",
     class: "mdc-chip__primary-action"
-  }, [createVNode("span", _hoisted_3$2, [renderSlot(_ctx.$slots, "default")])], 8
+  }, [createVNode("span", _hoisted_3$3, [renderSlot(_ctx.$slots, "default")])], 8
   /* PROPS */
   , ["role"])]), renderSlot(_ctx.$slots, "trailing-icon", {}, function () {
-    return [_ctx.havetrailingIcon ? (openBlock(), createBlock("span", _hoisted_4$2, [createVNode(_component_mcw_chip_trailing_action, {
+    return [_ctx.havetrailingIcon ? (openBlock(), createBlock("span", _hoisted_4$3, [createVNode(_component_mcw_chip_trailing_action, {
       ref: "trailingAction"
     }, {
       default: withCtx(function () {
@@ -1918,11 +2158,11 @@ function render$5(_ctx, _cache, $props, $setup, $data, $options) {
   );
 }
 
-script$5.render = render$5;
-script$5.__file = "packages/chips/chip.vue";
+script$7.render = render$7;
+script$7.__file = "packages/chips/chip.vue";
 
 var strings$2 = MDCChipTrailingActionFoundation.strings;
-var script$6 = {
+var script$8 = {
   name: 'mcw-chip-trailing-action',
   setup: function setup() {
     var root = ref(null);
@@ -1994,16 +2234,16 @@ var script$6 = {
   }
 };
 
-var _hoisted_1$4 = /*#__PURE__*/createVNode("span", {
+var _hoisted_1$6 = /*#__PURE__*/createVNode("span", {
   class: "mdc-chip-trailing-action__ripple"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_2$4 = {
+var _hoisted_2$5 = {
   class: "mdc-chip-trailing-action__icon material-icons"
 };
-function render$6(_ctx, _cache, $props, $setup, $data, $options) {
+function render$8(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock("button", {
     ref: "root",
     class: [_ctx.classes, "mdc-chip-trailing-action"],
@@ -2016,19 +2256,19 @@ function render$6(_ctx, _cache, $props, $setup, $data, $options) {
     onKeydown: _cache[2] || (_cache[2] = function () {
       return _ctx.onKeydown.apply(_ctx, arguments);
     })
-  }, [_hoisted_1$4, createVNode("span", _hoisted_2$4, [renderSlot(_ctx.$slots, "default")])], 38
+  }, [_hoisted_1$6, createVNode("span", _hoisted_2$5, [renderSlot(_ctx.$slots, "default")])], 38
   /* CLASS, STYLE, HYDRATE_EVENTS */
   );
 }
 
-script$6.render = render$6;
-script$6.__file = "packages/chips/trailing-action.vue";
+script$8.render = render$8;
+script$8.__file = "packages/chips/trailing-action.vue";
 
 var chips = BasePlugin({
-  mcwChip: script$5,
-  mcwChipSet: script$4,
-  mcwChipCheckmark: script$3,
-  mcwChipTrailingAction: script$6
+  mcwChip: script$7,
+  mcwChipSet: script$6,
+  mcwChipCheckmark: script$5,
+  mcwChipTrailingAction: script$8
 });
 
 var ProgressPropType = {
@@ -2037,7 +2277,7 @@ var ProgressPropType = {
     return Number(value) >= 0 && Number(value) <= 1;
   }
 };
-var script$7 = {
+var script$9 = {
   name: 'mcw-circular-progress',
   props: {
     open: {
@@ -2179,30 +2419,30 @@ function getTrackAttrs() {
   return rest;
 }
 
-var _hoisted_1$5 = {
+var _hoisted_1$7 = {
   class: "mdc-circular-progress__determinate-container"
 };
-var _hoisted_2$5 = {
+var _hoisted_2$6 = {
   class: "mdc-circular-progress__indeterminate-container"
 };
-var _hoisted_3$3 = {
+var _hoisted_3$4 = {
   class: "mdc-circular-progress__spinner-layer"
 };
-var _hoisted_4$3 = {
+var _hoisted_4$4 = {
   class: "mdc-circular-progress__circle-clipper mdc-circular-progress__circle-left"
 };
-var _hoisted_5 = {
+var _hoisted_5$1 = {
   class: "mdc-circular-progress__gap-patch"
 };
-var _hoisted_6 = {
+var _hoisted_6$1 = {
   class: "mdc-circular-progress__circle-clipper mdc-circular-progress__circle-right"
 };
-function render$7(_ctx, _cache, $props, $setup, $data, $options) {
+function render$9(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock(Fragment, null, [createCommentVNode("must be no space between divs"), createCommentVNode(" prettier-ignore "), createVNode("div", mergeProps({
     ref: "root",
     class: _ctx.classes,
     role: "progressbar"
-  }, _ctx.rootAttrs), [createVNode("div", _hoisted_1$5, [(openBlock(), createBlock("svg", {
+  }, _ctx.rootAttrs), [createVNode("div", _hoisted_1$7, [(openBlock(), createBlock("svg", {
     class: "mdc-circular-progress__determinate-circle-graphic",
     viewBox: _ctx.viewbox,
     xmlns: "http://www.w3.org/2000/svg"
@@ -2216,7 +2456,7 @@ function render$7(_ctx, _cache, $props, $setup, $data, $options) {
   /* FULL_PROPS */
   )], 8
   /* PROPS */
-  , ["viewBox"]))]), createVNode("div", _hoisted_2$5, [createVNode("div", _hoisted_3$3, [createVNode("div", _hoisted_4$3, [(openBlock(), createBlock("svg", {
+  , ["viewBox"]))]), createVNode("div", _hoisted_2$6, [createVNode("div", _hoisted_3$4, [createVNode("div", _hoisted_4$4, [(openBlock(), createBlock("svg", {
     class: "mdc-circular-progress__indeterminate-circle-graphic",
     viewBox: _ctx.viewbox,
     xmlns: "http://www.w3.org/2000/svg"
@@ -2224,7 +2464,7 @@ function render$7(_ctx, _cache, $props, $setup, $data, $options) {
   /* FULL_PROPS */
   )], 8
   /* PROPS */
-  , ["viewBox"])), createCommentVNode("must be no space between divs")]), createVNode("div", _hoisted_5, [(openBlock(), createBlock("svg", {
+  , ["viewBox"])), createCommentVNode("must be no space between divs")]), createVNode("div", _hoisted_5$1, [(openBlock(), createBlock("svg", {
     class: "mdc-circular-progress__indeterminate-circle-graphic",
     viewBox: _ctx.viewbox,
     xmlns: "http://www.w3.org/2000/svg"
@@ -2232,7 +2472,7 @@ function render$7(_ctx, _cache, $props, $setup, $data, $options) {
   /* FULL_PROPS */
   )], 8
   /* PROPS */
-  , ["viewBox"]))]), createVNode("div", _hoisted_6, [(openBlock(), createBlock("svg", {
+  , ["viewBox"]))]), createVNode("div", _hoisted_6$1, [(openBlock(), createBlock("svg", {
     class: "mdc-circular-progress__indeterminate-circle-graphic",
     viewBox: _ctx.viewbox,
     xmlns: "http://www.w3.org/2000/svg"
@@ -2247,11 +2487,11 @@ function render$7(_ctx, _cache, $props, $setup, $data, $options) {
   );
 }
 
-script$7.render = render$7;
-script$7.__file = "packages/circular-progress/circular-progress.vue";
+script$9.render = render$9;
+script$9.__file = "packages/circular-progress/circular-progress.vue";
 
 var circularProgress = BasePlugin({
-  mcwCircularProgress: script$7
+  mcwCircularProgress: script$9
 });
 
 var CheckboxAdapter = /*#__PURE__*/function () {
@@ -2295,7 +2535,7 @@ function _templateObject() {
 
   return data;
 }
-var script$8 = {
+var script$a = {
   name: 'mcw-data-table',
   props: {
     sticky: {
@@ -2583,23 +2823,23 @@ var script$8 = {
   }
 };
 
-var _hoisted_1$6 = {
+var _hoisted_1$8 = {
   class: "mdc-data-table__table-container"
 };
-function render$8(_ctx, _cache, $props, $setup, $data, $options) {
+function render$a(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock("div", {
     ref: "root",
     class: [_ctx.classes, "mdc-data-table"]
-  }, [createVNode("div", _hoisted_1$6, [renderSlot(_ctx.$slots, "default")])], 2
+  }, [createVNode("div", _hoisted_1$8, [renderSlot(_ctx.$slots, "default")])], 2
   /* CLASS */
   );
 }
 
-script$8.render = render$8;
-script$8.__file = "packages/data-table/data-table.vue";
+script$a.render = render$a;
+script$a.__file = "packages/data-table/data-table.vue";
 
 var dataTable = BasePlugin({
-  mcwDataTable: script$8
+  mcwDataTable: script$a
 });
 
 var mcwDialogButton = {
@@ -2698,10 +2938,10 @@ var mcwDialogTitle = {
 var cssClasses = MDCDialogFoundation.cssClasses,
     strings$3 = MDCDialogFoundation.strings;
 var LAYOUT_EVENTS = ['resize', 'orientationchange'];
-var script$9 = {
+var script$b = {
   name: 'mcw-dialog',
   components: {
-    mcwButton: script
+    mcwButton: script$2
   },
   props: {
     autoStackButtons: Boolean,
@@ -2908,18 +3148,18 @@ var script$9 = {
   }
 };
 
-var _hoisted_1$7 = {
+var _hoisted_1$9 = {
   ref: "container",
   class: "mdc-dialog__container"
 };
 
-var _hoisted_2$6 = /*#__PURE__*/createVNode("div", {
+var _hoisted_2$7 = /*#__PURE__*/createVNode("div", {
   class: "mdc-dialog__scrim"
 }, null, -1
 /* HOISTED */
 );
 
-function render$9(_ctx, _cache, $props, $setup, $data, $options) {
+function render$b(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock("div", {
     ref: "root",
     class: _ctx.classes,
@@ -2930,7 +3170,7 @@ function render$9(_ctx, _cache, $props, $setup, $data, $options) {
     onKeydown: _cache[2] || (_cache[2] = function () {
       return _ctx.onKeydown.apply(_ctx, arguments);
     })
-  }, [createVNode("div", _hoisted_1$7, [createVNode("div", {
+  }, [createVNode("div", _hoisted_1$9, [createVNode("div", {
     ref: "surface",
     class: "mdc-dialog__surface",
     role: "alertdialog",
@@ -2941,16 +3181,16 @@ function render$9(_ctx, _cache, $props, $setup, $data, $options) {
   /* PROPS */
   , ["aria-labelledby", "aria-describedby"])], 512
   /* NEED_PATCH */
-  ), _hoisted_2$6], 38
+  ), _hoisted_2$7], 38
   /* CLASS, STYLE, HYDRATE_EVENTS */
   );
 }
 
-script$9.render = render$9;
-script$9.__file = "packages/dialog/dialog.vue";
+script$b.render = render$b;
+script$b.__file = "packages/dialog/dialog.vue";
 
 var dialog = BasePlugin({
-  mcwDialog: script$9,
+  mcwDialog: script$b,
   mcwDialogTitle: mcwDialogTitle,
   mcwDialogFooter: mcwDialogFooter,
   mcwDialogButton: mcwDialogButton,
@@ -2958,7 +3198,7 @@ var dialog = BasePlugin({
 });
 
 var strings$4 = MDCDismissibleDrawerFoundation.strings;
-var script$a = {
+var script$c = {
   name: 'mcw-drawer',
   props: {
     modelValue: Boolean,
@@ -3130,17 +3370,17 @@ var script$a = {
   }
 };
 
-var _hoisted_1$8 = {
+var _hoisted_1$a = {
   class: "mdc-drawer__content"
 };
-var _hoisted_2$7 = {
+var _hoisted_2$8 = {
   key: 1,
   class: "drawer-wrapper"
 };
-var _hoisted_3$4 = {
+var _hoisted_3$5 = {
   class: "mdc-drawer__content"
 };
-function render$a(_ctx, _cache, $props, $setup, $data, $options) {
+function render$c(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_mcw_list = resolveComponent("mcw-list");
 
   return openBlock(), createBlock(Fragment, null, [createCommentVNode(" <div ref=\"root\"> "), !_ctx.modal ? (openBlock(), createBlock("aside", {
@@ -3153,7 +3393,7 @@ function render$a(_ctx, _cache, $props, $setup, $data, $options) {
     onTransitionend: _cache[2] || (_cache[2] = function () {
       return _ctx.handleTransitionEnd.apply(_ctx, arguments);
     })
-  }, [renderSlot(_ctx.$slots, "header"), createVNode("div", _hoisted_1$8, [createVNode(_component_mcw_list, {
+  }, [renderSlot(_ctx.$slots, "header"), createVNode("div", _hoisted_1$a, [createVNode(_component_mcw_list, {
     "wrap-focus": true,
     tag: "nav",
     "onMdclist:action": _ctx.onListAction,
@@ -3168,7 +3408,7 @@ function render$a(_ctx, _cache, $props, $setup, $data, $options) {
   /* PROPS */
   , ["onMdclist:action"])])], 34
   /* CLASS, HYDRATE_EVENTS */
-  )) : (openBlock(), createBlock("div", _hoisted_2$7, [createVNode("aside", {
+  )) : (openBlock(), createBlock("div", _hoisted_2$8, [createVNode("aside", {
     ref: "drawer",
     class: _ctx.classes,
     onKeydown: _cache[3] || (_cache[3] = function () {
@@ -3177,7 +3417,7 @@ function render$a(_ctx, _cache, $props, $setup, $data, $options) {
     onTransitionend: _cache[4] || (_cache[4] = function () {
       return _ctx.handleTransitionEnd.apply(_ctx, arguments);
     })
-  }, [renderSlot(_ctx.$slots, "header"), createVNode("div", _hoisted_3$4, [createVNode(_component_mcw_list, {
+  }, [renderSlot(_ctx.$slots, "header"), createVNode("div", _hoisted_3$5, [createVNode(_component_mcw_list, {
     "wrap-focus": true,
     tag: "nav",
     "single-selection": "",
@@ -3203,14 +3443,14 @@ function render$a(_ctx, _cache, $props, $setup, $data, $options) {
   );
 }
 
-script$a.render = render$a;
-script$a.__file = "packages/drawer/drawer.vue";
+script$c.render = render$c;
+script$c.__file = "packages/drawer/drawer.vue";
 
 var drawer = BasePlugin({
-  mcwDrawer: script$a
+  mcwDrawer: script$c
 });
 
-var script$b = {
+var script$d = {
   name: 'mcw-fab',
   props: {
     icon: String,
@@ -3269,19 +3509,19 @@ var script$b = {
   }
 };
 
-var _hoisted_1$9 = /*#__PURE__*/createVNode("div", {
+var _hoisted_1$b = /*#__PURE__*/createVNode("div", {
   class: "mdc-fab__ripple"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_2$8 = {
+var _hoisted_2$9 = {
   class: "mdc-fab__icon material-icons"
 };
-var _hoisted_3$5 = {
+var _hoisted_3$6 = {
   class: "mdc-fab__label"
 };
-function render$b(_ctx, _cache, $props, $setup, $data, $options) {
+function render$d(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_custom_link = resolveComponent("custom-link");
 
   return openBlock(), createBlock(_component_custom_link, {
@@ -3291,11 +3531,11 @@ function render$b(_ctx, _cache, $props, $setup, $data, $options) {
     tag: "button"
   }, {
     default: withCtx(function () {
-      return [_hoisted_1$9, renderSlot(_ctx.$slots, "icon", {}, function () {
-        return [createVNode("span", _hoisted_2$8, toDisplayString(_ctx.icon), 1
+      return [_hoisted_1$b, renderSlot(_ctx.$slots, "icon", {}, function () {
+        return [createVNode("span", _hoisted_2$9, toDisplayString(_ctx.icon), 1
         /* TEXT */
         )];
-      }), createVNode("span", _hoisted_3$5, [renderSlot(_ctx.$slots, "default", {}, function () {
+      }), createVNode("span", _hoisted_3$6, [renderSlot(_ctx.$slots, "default", {}, function () {
         return [createTextVNode(toDisplayString(_ctx.label), 1
         /* TEXT */
         )];
@@ -3307,14 +3547,14 @@ function render$b(_ctx, _cache, $props, $setup, $data, $options) {
   , ["class", "style"]);
 }
 
-script$b.render = render$b;
-script$b.__file = "packages/fab/fab.vue";
+script$d.render = render$d;
+script$d.__file = "packages/fab/fab.vue";
 
 var fab = BasePlugin({
-  mcwFAB: script$b
+  mcwFAB: script$d
 });
 
-var script$c = {
+var script$e = {
   name: 'mcw-floating-label',
   props: {
     required: {
@@ -3385,7 +3625,7 @@ var script$c = {
   }
 };
 
-function render$c(_ctx, _cache, $props, $setup, $data, $options) {
+function render$e(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock("span", {
     ref: "root",
     class: _ctx.labelClasses
@@ -3394,14 +3634,14 @@ function render$c(_ctx, _cache, $props, $setup, $data, $options) {
   );
 }
 
-script$c.render = render$c;
-script$c.__file = "packages/floating-label/floating-label.vue";
+script$e.render = render$e;
+script$e.__file = "packages/floating-label/floating-label.vue";
 
 var floatingLabel = BasePlugin({
-  mcwFloatingLabel: script$c
+  mcwFloatingLabel: script$e
 });
 
-var script$d = {
+var script$f = {
   name: 'mcw-icon-button',
   // model: {
   //   prop: 'isOn',
@@ -3493,7 +3733,7 @@ var script$d = {
   }
 };
 
-function render$d(_ctx, _cache, $props, $setup, $data, $options) {
+function render$f(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock(resolveDynamicComponent(_ctx.tag), {
     class: _ctx.classes,
     style: _ctx.styles,
@@ -3511,8 +3751,8 @@ function render$d(_ctx, _cache, $props, $setup, $data, $options) {
   , ["class", "style", "onClick", "disabled"]);
 }
 
-script$d.render = render$d;
-script$d.__file = "packages/icon-button/icon-button.vue";
+script$f.render = render$f;
+script$f.__file = "packages/icon-button/icon-button.vue";
 
 var mcwIconToggle = {
   name: 'mcw-icon-toggle',
@@ -3536,7 +3776,7 @@ var mcwIconToggle = {
 };
 
 var iconButton = BasePlugin({
-  mcwIconButton: script$d,
+  mcwIconButton: script$f,
   mcwIconToggle: mcwIconToggle
 });
 
@@ -3548,7 +3788,7 @@ var spanOptions_ = {
     return isFinite(num) && num <= 12 && num > 0;
   }
 };
-var script$e = {
+var script$g = {
   name: 'mcw-layout-cell',
   props: {
     span: spanOptions_,
@@ -3599,7 +3839,7 @@ var script$e = {
   }
 };
 
-function render$e(_ctx, _cache, $props, $setup, $data, $options) {
+function render$g(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock("div", {
     class: [_ctx.classes, "mdc-layout-cell mdc-layout-grid__cell"]
   }, [renderSlot(_ctx.$slots, "default")], 2
@@ -3607,10 +3847,10 @@ function render$e(_ctx, _cache, $props, $setup, $data, $options) {
   );
 }
 
-script$e.render = render$e;
-script$e.__file = "packages/layout-grid/layout-cell.vue";
+script$g.render = render$g;
+script$g.__file = "packages/layout-grid/layout-cell.vue";
 
-var script$f = {
+var script$h = {
   name: 'mcw-layout-grid',
   props: {
     fixedColumWidth: Boolean,
@@ -3632,41 +3872,41 @@ var script$f = {
   }
 };
 
-var _hoisted_1$a = {
+var _hoisted_1$c = {
   class: "mdc-layout-grid__inner"
 };
-function render$f(_ctx, _cache, $props, $setup, $data, $options) {
+function render$h(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock("div", {
     class: _ctx.classes
-  }, [createVNode("div", _hoisted_1$a, [renderSlot(_ctx.$slots, "default")])], 2
+  }, [createVNode("div", _hoisted_1$c, [renderSlot(_ctx.$slots, "default")])], 2
   /* CLASS */
   );
 }
 
-script$f.render = render$f;
-script$f.__file = "packages/layout-grid/layout-grid.vue";
+script$h.render = render$h;
+script$h.__file = "packages/layout-grid/layout-grid.vue";
 
-var script$g = {
+var script$i = {
   name: 'mcw-layout-inner-grid'
 };
 
-var _hoisted_1$b = {
+var _hoisted_1$d = {
   class: "mdc-layout-inner-grid mdc-layout-grid__inner"
 };
-function render$g(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createBlock("div", _hoisted_1$b, [renderSlot(_ctx.$slots, "default")]);
+function render$i(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createBlock("div", _hoisted_1$d, [renderSlot(_ctx.$slots, "default")]);
 }
 
-script$g.render = render$g;
-script$g.__file = "packages/layout-grid/layout-inner-grid.vue";
+script$i.render = render$i;
+script$i.__file = "packages/layout-grid/layout-inner-grid.vue";
 
 var layoutGrid = BasePlugin({
-  mcwLayoutGrid: script$f,
-  mcwLayoutCell: script$e,
-  mcwLayoutInnerGrid: script$g
+  mcwLayoutGrid: script$h,
+  mcwLayoutCell: script$g,
+  mcwLayoutInnerGrid: script$i
 });
 
-var script$h = {
+var script$j = {
   name: 'mcw-line-ripple',
   setup: function setup() {
     var uiState = reactive({
@@ -3730,7 +3970,7 @@ var script$h = {
   }
 };
 
-function render$h(_ctx, _cache, $props, $setup, $data, $options) {
+function render$j(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock("span", {
     class: _ctx.lineClasses,
     style: _ctx.lineStyles,
@@ -3742,11 +3982,11 @@ function render$h(_ctx, _cache, $props, $setup, $data, $options) {
   );
 }
 
-script$h.render = render$h;
-script$h.__file = "packages/line-ripple/line-ripple.vue";
+script$j.render = render$j;
+script$j.__file = "packages/line-ripple/line-ripple.vue";
 
 var lineRipple = BasePlugin({
-  mcwLineRipple: script$h
+  mcwLineRipple: script$j
 });
 
 var progressPropType_ = {
@@ -3755,7 +3995,7 @@ var progressPropType_ = {
     return Number(value) >= 0 && Number(value) <= 1;
   }
 };
-var script$i = {
+var script$k = {
   name: 'mcw-linear-progress',
   props: {
     open: {
@@ -3872,68 +4112,68 @@ var script$i = {
   }
 };
 
-var _hoisted_1$c = {
+var _hoisted_1$e = {
   ref: "buffer",
   class: "mdc-linear-progress__buffer"
 };
 
-var _hoisted_2$9 = /*#__PURE__*/createVNode("div", {
+var _hoisted_2$a = /*#__PURE__*/createVNode("div", {
   class: "mdc-linear-progress__buffer-dots"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_3$6 = /*#__PURE__*/createVNode("span", {
+var _hoisted_3$7 = /*#__PURE__*/createVNode("span", {
   class: "mdc-linear-progress__bar-inner"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_4$4 = {
+var _hoisted_4$5 = {
   ref: "secondary",
   class: "mdc-linear-progress__bar mdc-linear-progress__secondary-bar"
 };
 
-var _hoisted_5$1 = /*#__PURE__*/createVNode("span", {
+var _hoisted_5$2 = /*#__PURE__*/createVNode("span", {
   class: "mdc-linear-progress__bar-inner"
 }, null, -1
 /* HOISTED */
 );
 
-function render$i(_ctx, _cache, $props, $setup, $data, $options) {
+function render$k(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock("div", mergeProps({
     ref: "root",
     class: _ctx.classes,
     role: "progressbar"
-  }, _ctx.rootAttrs), [createVNode("div", _hoisted_1$c, [createVNode("div", {
+  }, _ctx.rootAttrs), [createVNode("div", _hoisted_1$e, [createVNode("div", {
     class: "mdc-linear-progress__buffer-bar",
     style: _ctx.bufferbarStyles
   }, null, 4
   /* STYLE */
-  ), _hoisted_2$9], 512
+  ), _hoisted_2$a], 512
   /* NEED_PATCH */
   ), createVNode("div", {
     ref: "primary",
     class: "mdc-linear-progress__bar mdc-linear-progress__primary-bar",
     style: _ctx.primaryStyles
-  }, [_hoisted_3$6], 4
+  }, [_hoisted_3$7], 4
   /* STYLE */
-  ), createVNode("div", _hoisted_4$4, [_hoisted_5$1], 512
+  ), createVNode("div", _hoisted_4$5, [_hoisted_5$2], 512
   /* NEED_PATCH */
   )], 16
   /* FULL_PROPS */
   );
 }
 
-script$i.render = render$i;
-script$i.__file = "packages/linear-progress/linear-progress.vue";
+script$k.render = render$k;
+script$k.__file = "packages/linear-progress/linear-progress.vue";
 
 var linearProgress = BasePlugin({
-  mcwLinearProgress: script$i
+  mcwLinearProgress: script$k
 });
 
 var itemId = 0;
-var script$j = {
+var script$l = {
   name: 'mcw-list-item',
   inheritAttrs: false,
   props: {
@@ -4070,22 +4310,22 @@ var script$j = {
   }
 };
 
-var _hoisted_1$d = /*#__PURE__*/createVNode("span", {
+var _hoisted_1$f = /*#__PURE__*/createVNode("span", {
   class: "mdc-list-item__ripple"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_2$a = {
+var _hoisted_2$b = {
   key: 0,
   class: "material-icons"
 };
-var _hoisted_3$7 = {
+var _hoisted_3$8 = {
   key: 1,
   class: "mdc-list-item__graphic"
 };
 
-var _hoisted_4$5 = /*#__PURE__*/createVNode("div", {
+var _hoisted_4$6 = /*#__PURE__*/createVNode("div", {
   class: "mdc-checkbox"
 }, [/*#__PURE__*/createVNode("input", {
   type: "checkbox",
@@ -4105,15 +4345,15 @@ var _hoisted_4$5 = /*#__PURE__*/createVNode("div", {
 /* HOISTED */
 );
 
-var _hoisted_5$2 = {
+var _hoisted_5$3 = {
   key: 2,
   class: "mdc-list-item__graphic"
 };
-var _hoisted_6$1 = {
+var _hoisted_6$2 = {
   class: "mdc-radio"
 };
 
-var _hoisted_7 = /*#__PURE__*/createVNode("div", {
+var _hoisted_7$1 = /*#__PURE__*/createVNode("div", {
   class: "mdc-radio__background"
 }, [/*#__PURE__*/createVNode("div", {
   class: "mdc-radio__outer-circle"
@@ -4123,11 +4363,11 @@ var _hoisted_7 = /*#__PURE__*/createVNode("div", {
 /* HOISTED */
 );
 
-var _hoisted_8 = {
+var _hoisted_8$1 = {
   key: 3,
   class: "mdc-list-item__text"
 };
-var _hoisted_9 = {
+var _hoisted_9$1 = {
   class: "mdc-list-item__primary-text"
 };
 var _hoisted_10 = {
@@ -4184,7 +4424,7 @@ var _hoisted_17 = {
   key: 7,
   class: "mdc-list-item__meta"
 };
-function render$j(_ctx, _cache, $props, $setup, $data, $options) {
+function render$l(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_custom_link = resolveComponent("custom-link");
 
   return openBlock(), createBlock(_component_custom_link, mergeProps({
@@ -4194,19 +4434,19 @@ function render$j(_ctx, _cache, $props, $setup, $data, $options) {
     "data-myItemId": _ctx.myItemId
   }), {
     default: withCtx(function () {
-      return [_hoisted_1$d, _ctx.needGraphic ? (openBlock(), createBlock("span", {
+      return [_hoisted_1$f, _ctx.needGraphic ? (openBlock(), createBlock("span", {
         key: 0,
         class: ["mdc-list-item__graphic", _ctx.groupClasses]
       }, [renderSlot(_ctx.$slots, "graphic", {}, function () {
-        return [_ctx.listIcon ? (openBlock(), createBlock("i", _hoisted_2$a, toDisplayString(_ctx.listIcon), 1
+        return [_ctx.listIcon ? (openBlock(), createBlock("i", _hoisted_2$b, toDisplayString(_ctx.listIcon), 1
         /* TEXT */
         )) : createCommentVNode("v-if", true)];
       })], 2
       /* CLASS */
-      )) : _ctx.checkbox ? (openBlock(), createBlock("span", _hoisted_3$7, [renderSlot(_ctx.$slots, "graphic", {}, function () {
-        return [_hoisted_4$5];
-      })])) : _ctx.radio ? (openBlock(), createBlock("span", _hoisted_5$2, [renderSlot(_ctx.$slots, "graphic", {}, function () {
-        return [createVNode("div", _hoisted_6$1, [createVNode("input", {
+      )) : _ctx.checkbox ? (openBlock(), createBlock("span", _hoisted_3$8, [renderSlot(_ctx.$slots, "graphic", {}, function () {
+        return [_hoisted_4$6];
+      })])) : _ctx.radio ? (openBlock(), createBlock("span", _hoisted_5$3, [renderSlot(_ctx.$slots, "graphic", {}, function () {
+        return [createVNode("div", _hoisted_6$2, [createVNode("input", {
           class: "mdc-radio__native-control",
           type: "radio",
           value: "1",
@@ -4214,8 +4454,8 @@ function render$j(_ctx, _cache, $props, $setup, $data, $options) {
           checked: _ctx.radioChecked
         }, null, 8
         /* PROPS */
-        , ["name", "checked"]), _hoisted_7])];
-      })])) : createCommentVNode("v-if", true), _ctx.isTwoLine ? (openBlock(), createBlock("span", _hoisted_8, [createVNode("span", _hoisted_9, [renderSlot(_ctx.$slots, "default")]), createVNode("span", _hoisted_10, [renderSlot(_ctx.$slots, "secondary-text", {}, function () {
+        , ["name", "checked"]), _hoisted_7$1])];
+      })])) : createCommentVNode("v-if", true), _ctx.isTwoLine ? (openBlock(), createBlock("span", _hoisted_8$1, [createVNode("span", _hoisted_9$1, [renderSlot(_ctx.$slots, "default")]), createVNode("span", _hoisted_10, [renderSlot(_ctx.$slots, "secondary-text", {}, function () {
         return [createTextVNode(toDisplayString(_ctx.twoLine), 1
         /* TEXT */
         )];
@@ -4239,12 +4479,12 @@ function render$j(_ctx, _cache, $props, $setup, $data, $options) {
   , ["data-myItemId"]);
 }
 
-script$j.render = render$j;
-script$j.__file = "packages/list/list-item.vue";
+script$l.render = render$l;
+script$l.__file = "packages/list/list-item.vue";
 
 var strings$5 = MDCListFoundation.strings,
     cssClasses$1 = MDCListFoundation.cssClasses;
-var script$k = {
+var script$m = {
   name: 'mcw-list',
   props: {
     nonInteractive: {
@@ -4646,7 +4886,7 @@ var script$k = {
   }
 };
 
-function render$k(_ctx, _cache, $props, $setup, $data, $options) {
+function render$m(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock(resolveDynamicComponent(_ctx.tag), mergeProps({
     ref: "listRoot",
     class: _ctx.classes
@@ -4660,12 +4900,12 @@ function render$k(_ctx, _cache, $props, $setup, $data, $options) {
   , ["class"]);
 }
 
-script$k.render = render$k;
-script$k.__file = "packages/list/list.vue";
+script$m.render = render$m;
+script$m.__file = "packages/list/list.vue";
 
 var list = BasePlugin({
-  mcwList: script$k,
-  mcwListItem: script$j
+  mcwList: script$m,
+  mcwListItem: script$l
 });
 
 var mcwMaterialIcon = {
@@ -4732,7 +4972,7 @@ var mcwMenuItem = {
 
 var cssClasses$2 = MDCMenuSurfaceFoundation.cssClasses,
     strings$6 = MDCMenuSurfaceFoundation.strings;
-var script$l = {
+var script$n = {
   name: 'mcw-menu-surface',
   props: {
     modelValue: [Boolean, Object],
@@ -4979,7 +5219,7 @@ var script$l = {
   }
 };
 
-function render$l(_ctx, _cache, $props, $setup, $data, $options) {
+function render$n(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock("div", mergeProps({
     ref: "root",
     class: _ctx.classes
@@ -4988,8 +5228,8 @@ function render$l(_ctx, _cache, $props, $setup, $data, $options) {
   );
 }
 
-script$l.render = render$l;
-script$l.__file = "packages/menu/menu-surface.vue";
+script$n.render = render$n;
+script$n.__file = "packages/menu/menu-surface.vue";
 
 var cssClasses$3 = MDCMenuFoundation.cssClasses,
     strings$7 = MDCMenuFoundation.strings;
@@ -4999,7 +5239,7 @@ var DefaultFocusState_ = {
   FIRST_ITEM: 2,
   LAST_ITEM: 3
 };
-var script$m = {
+var script$o = {
   name: 'mcw-menu',
   props: {
     modelValue: [Boolean, Object],
@@ -5294,7 +5534,7 @@ var script$m = {
   }
 };
 
-function render$m(_ctx, _cache, $props, $setup, $data, $options) {
+function render$o(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_mcw_list = resolveComponent("mcw-list");
 
   var _component_mcw_menu_surface = resolveComponent("mcw-menu-surface");
@@ -5334,22 +5574,22 @@ function render$m(_ctx, _cache, $props, $setup, $data, $options) {
   , ["quick-open", "modelValue", "onKeydown", "onUpdate:modelValue", "onMdcmenusurface:opened", "onMdcmenusurface:closed"]);
 }
 
-script$m.render = render$m;
-script$m.__file = "packages/menu/menu.vue";
+script$o.render = render$o;
+script$o.__file = "packages/menu/menu.vue";
 
 var menu = BasePlugin({
-  mcwMenu: script$m,
-  mcwMenuSurface: script$l,
+  mcwMenu: script$o,
+  mcwMenuSurface: script$n,
   mcwMenuItem: mcwMenuItem,
   mcwMenuAnchor: mcwMenuAnchor,
-  mcwList: script$k
+  mcwList: script$m
 });
 
 var cssClasses$4 = MDCNotchedOutlineFoundation.cssClasses;
-var script$n = {
+var script$p = {
   name: 'mcw-notched-outline',
   components: {
-    mcwFloatingLabel: script$c
+    mcwFloatingLabel: script$e
   },
   setup: function setup(props, _ref) {
     var slots = _ref.slots;
@@ -5433,25 +5673,25 @@ var script$n = {
   }
 };
 
-var _hoisted_1$e = /*#__PURE__*/createVNode("span", {
+var _hoisted_1$g = /*#__PURE__*/createVNode("span", {
   class: "mdc-notched-outline__leading"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_2$b = /*#__PURE__*/createVNode("span", {
+var _hoisted_2$c = /*#__PURE__*/createVNode("span", {
   class: "mdc-notched-outline__trailing"
 }, null, -1
 /* HOISTED */
 );
 
-function render$n(_ctx, _cache, $props, $setup, $data, $options) {
+function render$p(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_mcw_floating_label = resolveComponent("mcw-floating-label");
 
   return openBlock(), createBlock("span", {
     ref: "outlined",
     class: _ctx.outlinedClasses
-  }, [_hoisted_1$e, createVNode("span", {
+  }, [_hoisted_1$g, createVNode("span", {
     class: "mdc-notched-outline__notch",
     style: _ctx.notchStyles
   }, [_ctx.$slots.default ? (openBlock(), createBlock(_component_mcw_floating_label, {
@@ -5466,20 +5706,20 @@ function render$n(_ctx, _cache, $props, $setup, $data, $options) {
   /* NEED_PATCH */
   )) : createCommentVNode("v-if", true)], 4
   /* STYLE */
-  ), _hoisted_2$b], 2
+  ), _hoisted_2$c], 2
   /* CLASS */
   );
 }
 
-script$n.render = render$n;
-script$n.__file = "packages/notched-outline/notched-outline.vue";
+script$p.render = render$p;
+script$p.__file = "packages/notched-outline/notched-outline.vue";
 
 var notchedOutline = BasePlugin({
-  mcwNotchedOutline: script$n
+  mcwNotchedOutline: script$p
 });
 
 var radioId_ = 0;
-var script$o = {
+var script$q = {
   name: 'mcw-radio',
   // model: {
   //   prop: 'picked',
@@ -5643,7 +5883,7 @@ var script$o = {
   }
 };
 
-var _hoisted_1$f = /*#__PURE__*/createVNode("div", {
+var _hoisted_1$h = /*#__PURE__*/createVNode("div", {
   class: "mdc-radio__background"
 }, [/*#__PURE__*/createVNode("div", {
   class: "mdc-radio__outer-circle"
@@ -5653,13 +5893,13 @@ var _hoisted_1$f = /*#__PURE__*/createVNode("div", {
 /* HOISTED */
 );
 
-var _hoisted_2$c = /*#__PURE__*/createVNode("div", {
+var _hoisted_2$d = /*#__PURE__*/createVNode("div", {
   class: "mdc-radio__ripple"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_3$8 = /*#__PURE__*/createVNode("div", {
+var _hoisted_3$9 = /*#__PURE__*/createVNode("div", {
   class: "mdc-radio__background"
 }, [/*#__PURE__*/createVNode("div", {
   class: "mdc-radio__outer-circle"
@@ -5669,13 +5909,13 @@ var _hoisted_3$8 = /*#__PURE__*/createVNode("div", {
 /* HOISTED */
 );
 
-var _hoisted_4$6 = /*#__PURE__*/createVNode("div", {
+var _hoisted_4$7 = /*#__PURE__*/createVNode("div", {
   class: "mdc-radio__ripple"
 }, null, -1
 /* HOISTED */
 );
 
-function render$o(_ctx, _cache, $props, $setup, $data, $options) {
+function render$q(_ctx, _cache, $props, $setup, $data, $options) {
   return _ctx.label ? (openBlock(), createBlock("div", {
     key: 0,
     class: [_ctx.formFieldClasses, "mdc-radio-wrapper"]
@@ -5698,7 +5938,7 @@ function render$o(_ctx, _cache, $props, $setup, $data, $options) {
     disabled: _ctx.disabled
   }), null, 16
   /* FULL_PROPS */
-  , ["id", "name", "value", "checked", "disabled"]), _hoisted_1$f, _hoisted_2$c], 6
+  , ["id", "name", "value", "checked", "disabled"]), _hoisted_1$h, _hoisted_2$d], 6
   /* CLASS, STYLE */
   ), createVNode("label", {
     ref: "labelEl",
@@ -5731,19 +5971,19 @@ function render$o(_ctx, _cache, $props, $setup, $data, $options) {
     disabled: _ctx.disabled
   }), null, 16
   /* FULL_PROPS */
-  , ["id", "name", "value", "checked", "disabled"]), _hoisted_3$8, _hoisted_4$6], 6
+  , ["id", "name", "value", "checked", "disabled"]), _hoisted_3$9, _hoisted_4$7], 6
   /* CLASS, STYLE */
   ));
 }
 
-script$o.render = render$o;
-script$o.__file = "packages/radio/radio.vue";
+script$q.render = render$q;
+script$q.__file = "packages/radio/radio.vue";
 
 var radio = BasePlugin({
-  mcwRadio: script$o
+  mcwRadio: script$q
 });
 
-var script$p = {
+var script$r = {
   name: 'select-helper-text',
   props: {
     helptextPersistent: Boolean,
@@ -5819,7 +6059,7 @@ var script$p = {
   }
 };
 
-function render$p(_ctx, _cache, $props, $setup, $data, $options) {
+function render$r(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock("p", {
     class: _ctx.classes
   }, toDisplayString(_ctx.myHelptext), 3
@@ -5827,11 +6067,11 @@ function render$p(_ctx, _cache, $props, $setup, $data, $options) {
   );
 }
 
-script$p.render = render$p;
-script$p.__file = "packages/select/select-helper-text.vue";
+script$r.render = render$r;
+script$r.__file = "packages/select/select-helper-text.vue";
 
 var strings$8 = MDCSelectIconFoundation.strings;
-var script$q = {
+var script$s = {
   name: 'select-icon',
   props: {
     icon: String
@@ -5902,7 +6142,7 @@ var script$q = {
   }
 };
 
-function render$q(_ctx, _cache, $props, $setup, $data, $options) {
+function render$s(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock("i", mergeProps({
     ref: "root",
     class: _ctx.classes,
@@ -5912,12 +6152,12 @@ function render$q(_ctx, _cache, $props, $setup, $data, $options) {
   );
 }
 
-script$q.render = render$q;
-script$q.__file = "packages/select/select-icon.vue";
+script$s.render = render$s;
+script$s.__file = "packages/select/select-icon.vue";
 
 var strings$9 = MDCSelectFoundation.strings;
 var uid_ = 0;
-var script$r = {
+var script$t = {
   name: 'mcw-select',
   inheritAttrs: false,
   props: {
@@ -6289,8 +6529,8 @@ var script$r = {
     });
   },
   components: {
-    SelectHelperText: script$p,
-    SelectIcon: script$q
+    SelectHelperText: script$r,
+    SelectIcon: script$s
   }
 }; // ===
 // Private functions
@@ -6302,21 +6542,21 @@ function getNormalizedXCoordinate(evt) {
   return xCoordinate - targetClientRect.left;
 }
 
-var _hoisted_1$g = {
+var _hoisted_1$i = {
   class: "select-wrapper"
 };
-var _hoisted_2$d = {
+var _hoisted_2$e = {
   key: 1,
   class: "mdc-select__ripple"
 };
-var _hoisted_3$9 = {
+var _hoisted_3$a = {
   class: "mdc-select__selected-text-container"
 };
-var _hoisted_4$7 = {
+var _hoisted_4$8 = {
   class: "mdc-select__selected-text"
 };
 
-var _hoisted_5$3 = /*#__PURE__*/createVNode("span", {
+var _hoisted_5$4 = /*#__PURE__*/createVNode("span", {
   class: "mdc-select__dropdown-icon"
 }, [/*#__PURE__*/createVNode("svg", {
   class: "mdc-select__dropdown-icon-graphic",
@@ -6335,7 +6575,7 @@ var _hoisted_5$3 = /*#__PURE__*/createVNode("span", {
 /* HOISTED */
 );
 
-function render$r(_ctx, _cache, $props, $setup, $data, $options) {
+function render$t(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_select_icon = resolveComponent("select-icon");
 
   var _component_mcw_notched_outline = resolveComponent("mcw-notched-outline");
@@ -6348,7 +6588,7 @@ function render$r(_ctx, _cache, $props, $setup, $data, $options) {
 
   var _component_select_helper_text = resolveComponent("select-helper-text");
 
-  return openBlock(), createBlock("div", _hoisted_1$g, [createVNode("div", mergeProps({
+  return openBlock(), createBlock("div", _hoisted_1$i, [createVNode("div", mergeProps({
     ref: "root"
   }, _ctx.$attrs, {
     class: _ctx.rootClasses
@@ -6380,9 +6620,9 @@ function render$r(_ctx, _cache, $props, $setup, $data, $options) {
     role: "button"
   }, null, 8
   /* PROPS */
-  , ["icon"])) : createCommentVNode("v-if", true), !_ctx.outlined ? (openBlock(), createBlock("span", _hoisted_2$d)) : createCommentVNode("v-if", true), createVNode("span", _hoisted_3$9, [createVNode("span", _hoisted_4$7, toDisplayString(_ctx.selectedTextContent), 1
+  , ["icon"])) : createCommentVNode("v-if", true), !_ctx.outlined ? (openBlock(), createBlock("span", _hoisted_2$e)) : createCommentVNode("v-if", true), createVNode("span", _hoisted_3$a, [createVNode("span", _hoisted_4$8, toDisplayString(_ctx.selectedTextContent), 1
   /* TEXT */
-  )]), _hoisted_5$3, _ctx.outlined ? (openBlock(), createBlock(_component_mcw_notched_outline, {
+  )]), _hoisted_5$4, _ctx.outlined ? (openBlock(), createBlock(_component_mcw_notched_outline, {
     key: 2,
     ref: "outlineEl"
   }, {
@@ -6444,17 +6684,17 @@ function render$r(_ctx, _cache, $props, $setup, $data, $options) {
   , ["id", "helptextPersistent", "helptextValidation", "helptext"])) : createCommentVNode("v-if", true)]);
 }
 
-script$r.render = render$r;
-script$r.__file = "packages/select/select.vue";
+script$t.render = render$t;
+script$t.__file = "packages/select/select.vue";
 
 var select = BasePlugin({
-  mcwSelect: script$r,
-  mcwNotchedOutline: script$n,
-  mcwLineRipple: script$h,
-  mcwFloatingLabel: script$c
+  mcwSelect: script$t,
+  mcwNotchedOutline: script$p,
+  mcwLineRipple: script$j,
+  mcwFloatingLabel: script$e
 });
 
-var script$s = {
+var script$u = {
   name: 'mcw-slider',
   props: {
     modelValue: [Number, String],
@@ -6702,41 +6942,41 @@ var script$s = {
   }
 };
 
-var _hoisted_1$h = {
+var _hoisted_1$j = {
   class: "mdc-slider__track"
 };
 
-var _hoisted_2$e = /*#__PURE__*/createVNode("div", {
+var _hoisted_2$f = /*#__PURE__*/createVNode("div", {
   class: "mdc-slider__track--inactive"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_3$a = {
+var _hoisted_3$b = {
   class: "mdc-slider__track--active"
 };
-var _hoisted_4$8 = {
+var _hoisted_4$9 = {
   key: 0,
   class: "mdc-slider__tick-marks"
 };
-var _hoisted_5$4 = {
+var _hoisted_5$5 = {
   key: 0,
   class: "mdc-slider__value-indicator-container"
 };
-var _hoisted_6$2 = {
+var _hoisted_6$3 = {
   class: "mdc-slider__value-indicator"
 };
-var _hoisted_7$1 = {
+var _hoisted_7$2 = {
   class: "mdc-slider__value-indicator-text"
 };
 
-var _hoisted_8$1 = /*#__PURE__*/createVNode("div", {
+var _hoisted_8$2 = /*#__PURE__*/createVNode("div", {
   class: "mdc-slider__thumb-knob"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_9$1 = {
+var _hoisted_9$2 = {
   key: 0,
   class: "mdc-slider__value-indicator-container"
 };
@@ -6753,17 +6993,17 @@ var _hoisted_12$1 = /*#__PURE__*/createVNode("div", {
 /* HOISTED */
 );
 
-function render$s(_ctx, _cache, $props, $setup, $data, $options) {
+function render$u(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock("div", {
     ref: "root",
     class: _ctx.classes
-  }, [createVNode("div", _hoisted_1$h, [_hoisted_2$e, createVNode("div", _hoisted_3$a, [createVNode("div", {
+  }, [createVNode("div", _hoisted_1$j, [_hoisted_2$f, createVNode("div", _hoisted_3$b, [createVNode("div", {
     ref: "trackActive",
     dir: _ctx.dir,
     class: "mdc-slider__track--active_fill"
   }, null, 8
   /* PROPS */
-  , ["dir"])]), _ctx.tickMarks ? (openBlock(), createBlock("div", _hoisted_4$8, [(openBlock(true), createBlock(Fragment, null, renderList(_ctx.marks, function (mark) {
+  , ["dir"])]), _ctx.tickMarks ? (openBlock(), createBlock("div", _hoisted_4$9, [(openBlock(true), createBlock(Fragment, null, renderList(_ctx.marks, function (mark) {
     return openBlock(), createBlock("div", {
       class: mark
     }, null, 2
@@ -6778,9 +7018,9 @@ function render$s(_ctx, _cache, $props, $setup, $data, $options) {
     tabindex: "0",
     role: "slider",
     "aria-label": "Continuous slider demo"
-  }, _ctx.startThumbAttrs), [_ctx.discrete ? (openBlock(), createBlock("div", _hoisted_5$4, [createVNode("div", _hoisted_6$2, [createVNode("span", _hoisted_7$1, toDisplayString(_ctx.startValueText), 1
+  }, _ctx.startThumbAttrs), [_ctx.discrete ? (openBlock(), createBlock("div", _hoisted_5$5, [createVNode("div", _hoisted_6$3, [createVNode("span", _hoisted_7$2, toDisplayString(_ctx.startValueText), 1
   /* TEXT */
-  )])])) : createCommentVNode("v-if", true), _hoisted_8$1], 16
+  )])])) : createCommentVNode("v-if", true), _hoisted_8$2], 16
   /* FULL_PROPS */
   )) : createCommentVNode("v-if", true), createVNode("div", mergeProps({
     ref: "endThumb",
@@ -6788,7 +7028,7 @@ function render$s(_ctx, _cache, $props, $setup, $data, $options) {
     tabindex: "0",
     role: "slider",
     "aria-label": "Continuous slider demo"
-  }, _ctx.endThumbAttrs), [_ctx.discrete ? (openBlock(), createBlock("div", _hoisted_9$1, [createVNode("div", _hoisted_10$1, [createVNode("span", _hoisted_11$1, toDisplayString(_ctx.endValueText), 1
+  }, _ctx.endThumbAttrs), [_ctx.discrete ? (openBlock(), createBlock("div", _hoisted_9$2, [createVNode("div", _hoisted_10$1, [createVNode("span", _hoisted_11$1, toDisplayString(_ctx.endValueText), 1
   /* TEXT */
   )])])) : createCommentVNode("v-if", true), _hoisted_12$1], 16
   /* FULL_PROPS */
@@ -6797,16 +7037,16 @@ function render$s(_ctx, _cache, $props, $setup, $data, $options) {
   );
 }
 
-script$s.render = render$s;
-script$s.__file = "packages/slider/slider.vue";
+script$u.render = render$u;
+script$u.__file = "packages/slider/slider.vue";
 
 var slider = BasePlugin({
-  mcwSlider: script$s
+  mcwSlider: script$u
 });
 
 var noop = function noop() {};
 
-var script$t = {
+var script$v = {
   name: 'mcw-snackbar-queue',
   props: {
     snack: Object
@@ -6908,7 +7148,7 @@ var script$t = {
   }
 };
 
-function render$t(_ctx, _cache, $props, $setup, $data, $options) {
+function render$v(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_mcw_snackbar = resolveComponent("mcw-snackbar");
 
   return openBlock(), createBlock(_component_mcw_snackbar, mergeProps({
@@ -6918,12 +7158,12 @@ function render$t(_ctx, _cache, $props, $setup, $data, $options) {
   , ["modelValue"]);
 }
 
-script$t.render = render$t;
-script$t.__file = "packages/snackbar/snackbar-queue.vue";
+script$v.render = render$v;
+script$v.__file = "packages/snackbar/snackbar-queue.vue";
 
 var strings$a = MDCSnackbarFoundation.strings,
     numbers = MDCSnackbarFoundation.numbers;
-var script$u = {
+var script$w = {
   name: 'mcw-snackbar',
   props: {
     modelValue: Boolean,
@@ -7122,13 +7362,13 @@ function isActionIcon_(target) {
   return Boolean(closest(target, strings$a.DISMISS_SELECTOR));
 }
 
-var _hoisted_1$i = {
+var _hoisted_1$k = {
   ref: "labelEl",
   class: "mdc-snackbar__label",
   role: "status",
   "aria-live": "polite"
 };
-var _hoisted_2$f = {
+var _hoisted_2$g = {
   key: 1,
   style: {
     "display": "inline-block",
@@ -7136,32 +7376,32 @@ var _hoisted_2$f = {
     "height": "'1px'"
   }
 };
-var _hoisted_3$b = {
+var _hoisted_3$c = {
   class: "mdc-snackbar__actions"
 };
-var _hoisted_4$9 = {
+var _hoisted_4$a = {
   key: 0,
   ref: "actionEl",
   type: "button",
   class: "mdc-button mdc-snackbar__action"
 };
 
-var _hoisted_5$5 = /*#__PURE__*/createVNode("div", {
+var _hoisted_5$6 = /*#__PURE__*/createVNode("div", {
   class: "mdc-button__ripple"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_6$3 = {
+var _hoisted_6$4 = {
   class: "mdc-button__label"
 };
-var _hoisted_7$2 = {
+var _hoisted_7$3 = {
   key: 1,
   type: "button",
   class: "mdc-icon-button mdc-snackbar__dismiss material-icons",
   title: "Dismiss"
 };
-function render$u(_ctx, _cache, $props, $setup, $data, $options) {
+function render$w(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock("div", {
     class: _ctx.rootClasses
   }, [createVNode("div", {
@@ -7169,33 +7409,33 @@ function render$u(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[1] || (_cache[1] = function () {
       return _ctx.surfaceClickHandler.apply(_ctx, arguments);
     })
-  }, [createVNode("div", _hoisted_1$i, [_ctx.showMessage ? (openBlock(), createBlock(Fragment, {
+  }, [createVNode("div", _hoisted_1$k, [_ctx.showMessage ? (openBlock(), createBlock(Fragment, {
     key: 0
   }, [createTextVNode(toDisplayString(_ctx.message), 1
   /* TEXT */
   )], 64
   /* STABLE_FRAGMENT */
-  )) : (openBlock(), createBlock("span", _hoisted_2$f, " "))], 512
+  )) : (openBlock(), createBlock("span", _hoisted_2$g, " "))], 512
   /* NEED_PATCH */
-  ), createVNode("div", _hoisted_3$b, [_ctx.actionText ? (openBlock(), createBlock("button", _hoisted_4$9, [_hoisted_5$5, createVNode("span", _hoisted_6$3, toDisplayString(_ctx.actionText), 1
+  ), createVNode("div", _hoisted_3$c, [_ctx.actionText ? (openBlock(), createBlock("button", _hoisted_4$a, [_hoisted_5$6, createVNode("span", _hoisted_6$4, toDisplayString(_ctx.actionText), 1
   /* TEXT */
   )], 512
   /* NEED_PATCH */
-  )) : createCommentVNode("v-if", true), _ctx.showDismissAction ? (openBlock(), createBlock("button", _hoisted_7$2, " close ")) : createCommentVNode("v-if", true)])])], 2
+  )) : createCommentVNode("v-if", true), _ctx.showDismissAction ? (openBlock(), createBlock("button", _hoisted_7$3, " close ")) : createCommentVNode("v-if", true)])])], 2
   /* CLASS */
   );
 }
 
-script$u.render = render$u;
-script$u.__file = "packages/snackbar/snackbar.vue";
+script$w.render = render$w;
+script$w.__file = "packages/snackbar/snackbar.vue";
 
 var snackbar = BasePlugin({
-  mcwSnackbar: script$u,
-  mcwSnackbarQueue: script$t
+  mcwSnackbar: script$w,
+  mcwSnackbarQueue: script$v
 });
 
 var switchId_ = 0;
-var script$v = {
+var script$x = {
   name: 'mcw-switch',
   props: {
     modelValue: Boolean,
@@ -7296,23 +7536,23 @@ var script$v = {
   }
 };
 
-var _hoisted_1$j = /*#__PURE__*/createVNode("div", {
+var _hoisted_1$l = /*#__PURE__*/createVNode("div", {
   class: "mdc-switch__track"
 }, null, -1
 /* HOISTED */
 );
 
-var _hoisted_2$g = {
+var _hoisted_2$h = {
   class: "mdc-switch__thumb-underlay"
 };
 
-var _hoisted_3$c = /*#__PURE__*/createVNode("div", {
+var _hoisted_3$d = /*#__PURE__*/createVNode("div", {
   class: "mdc-switch__thumb"
 }, null, -1
 /* HOISTED */
 );
 
-function render$v(_ctx, _cache, $props, $setup, $data, $options) {
+function render$x(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock("div", {
     class: [{
       'mdc-form-field': _ctx.hasLabel,
@@ -7322,7 +7562,7 @@ function render$v(_ctx, _cache, $props, $setup, $data, $options) {
     ref: "root",
     class: [_ctx.classes, "mdc-switch"],
     style: _ctx.styles
-  }, [_hoisted_1$j, createVNode("div", _hoisted_2$g, [_hoisted_3$c, createVNode("input", mergeProps({
+  }, [_hoisted_1$l, createVNode("div", _hoisted_2$h, [_hoisted_3$d, createVNode("input", mergeProps({
     name: _ctx.name,
     id: _ctx.switchId,
     value: _ctx.value,
@@ -7354,15 +7594,15 @@ function render$v(_ctx, _cache, $props, $setup, $data, $options) {
   );
 }
 
-script$v.render = render$v;
-script$v.__file = "packages/switch/switch.vue";
+script$x.render = render$x;
+script$x.__file = "packages/switch/switch.vue";
 
 var switchControl = BasePlugin({
-  mcwSwitch: script$v
+  mcwSwitch: script$x
 });
 
 var strings$b = MDCTabBarFoundation.strings;
-var script$w = {
+var script$y = {
   name: 'mcw-tab-bar',
   props: {
     fade: Boolean,
@@ -7509,7 +7749,7 @@ var script$w = {
   }
 };
 
-function render$w(_ctx, _cache, $props, $setup, $data, $options) {
+function render$y(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_mcw_tab_scroller = resolveComponent("mcw-tab-scroller");
 
   return openBlock(), createBlock("div", mergeProps({
@@ -7531,11 +7771,11 @@ function render$w(_ctx, _cache, $props, $setup, $data, $options) {
   );
 }
 
-script$w.render = render$w;
-script$w.__file = "packages/tabs/tab-bar.vue";
+script$y.render = render$y;
+script$y.__file = "packages/tabs/tab-bar.vue";
 
 var cssClasses$5 = MDCTabIndicatorFoundation.cssClasses;
-var script$x = {
+var script$z = {
   name: 'mcw-tab-indicator',
   props: {
     fade: {
@@ -7628,7 +7868,7 @@ var script$x = {
   }
 };
 
-function render$x(_ctx, _cache, $props, $setup, $data, $options) {
+function render$z(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock("span", {
     class: ["mdc-tab-indicator", _ctx.classes]
   }, [createVNode("span", mergeProps({
@@ -7642,10 +7882,10 @@ function render$x(_ctx, _cache, $props, $setup, $data, $options) {
   );
 }
 
-script$x.render = render$x;
-script$x.__file = "packages/tabs/tab-indicator.vue";
+script$z.render = render$z;
+script$z.__file = "packages/tabs/tab-indicator.vue";
 
-var script$y = {
+var script$A = {
   name: 'mcw-tab-scroller',
   setup: function setup() {
     var uiState = reactive({
@@ -7766,7 +8006,7 @@ var script$y = {
   }
 };
 
-function render$y(_ctx, _cache, $props, $setup, $data, $options) {
+function render$A(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock("div", {
     class: _ctx.classes
   }, [createVNode("div", mergeProps({
@@ -7789,12 +8029,12 @@ function render$y(_ctx, _cache, $props, $setup, $data, $options) {
   );
 }
 
-script$y.render = render$y;
-script$y.__file = "packages/tabs/tab-scroller.vue";
+script$A.render = render$A;
+script$A.__file = "packages/tabs/tab-scroller.vue";
 
 var strings$c = MDCTabFoundation$1.strings;
 var tabId_ = 0;
-var script$z = {
+var script$B = {
   name: 'mcw-tab',
   props: {
     active: Boolean,
@@ -7990,15 +8230,15 @@ function extractIconProp(iconProp) {
   }
 }
 
-var _hoisted_1$k = {
+var _hoisted_1$m = {
   ref: "content",
   class: "mdc-tab__content"
 };
-var _hoisted_2$h = {
+var _hoisted_2$i = {
   key: 1,
   class: "mdc-tab__text-label"
 };
-function render$z(_ctx, _cache, $props, $setup, $data, $options) {
+function render$B(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_mcw_tab_indicator = resolveComponent("mcw-tab-indicator");
 
   var _component_custom_link = resolveComponent("custom-link");
@@ -8012,7 +8252,7 @@ function render$z(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _ctx.onClick
   }), {
     default: withCtx(function () {
-      return [createVNode("span", _hoisted_1$k, [_ctx.hasIcon ? (openBlock(), createBlock("i", {
+      return [createVNode("span", _hoisted_1$m, [_ctx.hasIcon ? (openBlock(), createBlock("i", {
         key: 0,
         ref: "iconEl",
         class: ["mdc-tab__icon", _ctx.hasIcon.classes],
@@ -8021,7 +8261,7 @@ function render$z(_ctx, _cache, $props, $setup, $data, $options) {
         slot: "icon"
       }, toDisplayString(_ctx.hasIcon.content), 3
       /* TEXT, CLASS */
-      )) : createCommentVNode("v-if", true), _ctx.hasText ? (openBlock(), createBlock("span", _hoisted_2$h, [renderSlot(_ctx.$slots, "default")])) : createCommentVNode("v-if", true), _ctx.spanContent ? (openBlock(), createBlock(_component_mcw_tab_indicator, {
+      )) : createCommentVNode("v-if", true), _ctx.hasText ? (openBlock(), createBlock("span", _hoisted_2$i, [renderSlot(_ctx.$slots, "default")])) : createCommentVNode("v-if", true), _ctx.spanContent ? (openBlock(), createBlock(_component_mcw_tab_indicator, {
         key: 2,
         ref: "tabIndicator",
         fade: _ctx.fade
@@ -8049,17 +8289,17 @@ function render$z(_ctx, _cache, $props, $setup, $data, $options) {
   , ["id", "class", "style", "onClick"]);
 }
 
-script$z.render = render$z;
-script$z.__file = "packages/tabs/tab.vue";
+script$B.render = render$B;
+script$B.__file = "packages/tabs/tab.vue";
 
 var tabs = BasePlugin({
-  mcwTab: script$z,
-  mcwTabBar: script$w,
-  mcwTabScroller: script$y,
-  mcwTabIndicator: script$x
+  mcwTab: script$B,
+  mcwTabBar: script$y,
+  mcwTabScroller: script$A,
+  mcwTabIndicator: script$z
 });
 
-var script$A = {
+var script$C = {
   name: 'mcw-character-counter',
   setup: function setup() {
     var uiState = reactive({
@@ -8082,19 +8322,19 @@ var script$A = {
   }
 };
 
-var _hoisted_1$l = {
+var _hoisted_1$n = {
   class: "mdc-text-field-character-counter"
 };
-function render$A(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createBlock("div", _hoisted_1$l, toDisplayString(_ctx.textContent), 1
+function render$C(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createBlock("div", _hoisted_1$n, toDisplayString(_ctx.textContent), 1
   /* TEXT */
   );
 }
 
-script$A.render = render$A;
-script$A.__file = "packages/textfield/character-counter.vue";
+script$C.render = render$C;
+script$C.__file = "packages/textfield/character-counter.vue";
 
-var script$B = {
+var script$D = {
   name: 'mcw-textfield-helper-text',
   props: {
     persistent: Boolean,
@@ -8168,7 +8408,7 @@ var script$B = {
   }
 };
 
-function render$B(_ctx, _cache, $props, $setup, $data, $options) {
+function render$D(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock("div", mergeProps({
     class: _ctx.classes
   }, _ctx.rootAttrs), toDisplayString(_ctx.helpertext), 17
@@ -8176,11 +8416,11 @@ function render$B(_ctx, _cache, $props, $setup, $data, $options) {
   );
 }
 
-script$B.render = render$B;
-script$B.__file = "packages/textfield/textfield-helper-text.vue";
+script$D.render = render$D;
+script$D.__file = "packages/textfield/textfield-helper-text.vue";
 
 var strings$d = MDCTextFieldIconFoundation.strings;
-var script$C = {
+var script$E = {
   name: 'textfield-icon',
   props: {
     disabled: Boolean,
@@ -8250,7 +8490,7 @@ var script$C = {
   }
 };
 
-function render$C(_ctx, _cache, $props, $setup, $data, $options) {
+function render$E(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock("i", mergeProps({
     ref: "root",
     class: ["material-icons", _ctx.classes]
@@ -8259,11 +8499,11 @@ function render$C(_ctx, _cache, $props, $setup, $data, $options) {
   );
 }
 
-script$C.render = render$C;
-script$C.__file = "packages/textfield/textfield-icon.vue";
+script$E.render = render$E;
+script$E.__file = "packages/textfield/textfield-icon.vue";
 
 var uid_$1 = 0;
-var script$D = {
+var script$F = {
   name: 'mcw-textfield',
   inheritAttrs: false,
   props: {
@@ -8615,32 +8855,32 @@ var script$D = {
     });
   },
   components: {
-    mcwLineRipple: script$h,
-    mcwNotchedOutline: script$n
+    mcwLineRipple: script$j,
+    mcwNotchedOutline: script$p
   }
 };
 
-var _hoisted_1$m = {
+var _hoisted_1$o = {
   key: 0,
   class: "mdc-text-field__ripple"
 };
-var _hoisted_2$i = {
+var _hoisted_2$j = {
   key: 3,
   class: "mdc-text-field__affix mdc-text-field__affix--prefix"
 };
-var _hoisted_3$d = {
+var _hoisted_3$e = {
   key: 4,
   class: "mdc-text-field__affix mdc-text-field__affix--suffix"
 };
-var _hoisted_4$a = {
+var _hoisted_4$b = {
   key: 1,
   class: "mdc-text-field__resizer"
 };
-var _hoisted_5$6 = {
+var _hoisted_5$7 = {
   key: 2,
   class: "mdc-text-field-helper-line"
 };
-function render$D(_ctx, _cache, $props, $setup, $data, $options) {
+function render$F(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_mcw_floating_label = resolveComponent("mcw-floating-label");
 
   var _component_mcw_notched_outline = resolveComponent("mcw-notched-outline");
@@ -8659,7 +8899,7 @@ function render$D(_ctx, _cache, $props, $setup, $data, $options) {
     ref: "root",
     class: _ctx.rootClasses,
     style: _ctx.rippleStyles
-  }, [!_ctx.outline ? (openBlock(), createBlock("span", _hoisted_1$m)) : createCommentVNode("v-if", true), renderSlot(_ctx.$slots, "leading"), renderSlot(_ctx.$slots, "leadingIcon"), _ctx.hasLabel ? (openBlock(), createBlock(_component_mcw_floating_label, {
+  }, [!_ctx.outline ? (openBlock(), createBlock("span", _hoisted_1$o)) : createCommentVNode("v-if", true), renderSlot(_ctx.$slots, "leading"), renderSlot(_ctx.$slots, "leadingIcon"), _ctx.hasLabel ? (openBlock(), createBlock(_component_mcw_floating_label, {
     key: 1,
     ref: "labelEl",
     id: _ctx.labelId,
@@ -8685,7 +8925,7 @@ function render$D(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
   }, 512
   /* NEED_PATCH */
-  )) : createCommentVNode("v-if", true), _ctx.prefix ? (openBlock(), createBlock("span", _hoisted_2$i, toDisplayString(_ctx.prefix), 1
+  )) : createCommentVNode("v-if", true), _ctx.prefix ? (openBlock(), createBlock("span", _hoisted_2$j, toDisplayString(_ctx.prefix), 1
   /* TEXT */
   )) : createCommentVNode("v-if", true), createVNode("input", mergeProps({
     ref: "input",
@@ -8700,7 +8940,7 @@ function render$D(_ctx, _cache, $props, $setup, $data, $options) {
     "aria-describedby": _ctx.inputAriaControls
   }, toHandlers(_ctx.inputListeners)), null, 16
   /* FULL_PROPS */
-  , ["type", "minlength", "maxlength", "aria-label", "aria-controls", "aria-labelledby", "aria-describedby"]), _ctx.suffix ? (openBlock(), createBlock("span", _hoisted_3$d, toDisplayString(_ctx.suffix), 1
+  , ["type", "minlength", "maxlength", "aria-label", "aria-controls", "aria-labelledby", "aria-describedby"]), _ctx.suffix ? (openBlock(), createBlock("span", _hoisted_3$e, toDisplayString(_ctx.suffix), 1
   /* TEXT */
   )) : createCommentVNode("v-if", true), renderSlot(_ctx.$slots, "trailingIcon"), renderSlot(_ctx.$slots, "trailing"), _ctx.hasLineRipple ? (openBlock(), createBlock(_component_mcw_line_ripple, {
     key: 5,
@@ -8725,7 +8965,7 @@ function render$D(_ctx, _cache, $props, $setup, $data, $options) {
     _: 1
   }, 512
   /* NEED_PATCH */
-  )) : createCommentVNode("v-if", true), _ctx.resizer ? (openBlock(), createBlock("span", _hoisted_4$a, [createVNode("textarea", mergeProps({
+  )) : createCommentVNode("v-if", true), _ctx.resizer ? (openBlock(), createBlock("span", _hoisted_4$b, [createVNode("textarea", mergeProps({
     ref: "input",
     class: _ctx.inputClasses
   }, _ctx.inputAttrs, {
@@ -8757,7 +8997,7 @@ function render$D(_ctx, _cache, $props, $setup, $data, $options) {
   /* NEED_PATCH */
   )) : createCommentVNode("v-if", true)], 2
   /* CLASS */
-  )), _ctx.hasHelpline ? (openBlock(), createBlock("div", _hoisted_5$6, [_ctx.helptext ? (openBlock(), createBlock(_component_mcw_textfield_helper_text, {
+  )), _ctx.hasHelpline ? (openBlock(), createBlock("div", _hoisted_5$7, [_ctx.helptext ? (openBlock(), createBlock(_component_mcw_textfield_helper_text, {
     key: 0,
     ref: "helpertext",
     id: _ctx.helpTextId,
@@ -8776,22 +9016,22 @@ function render$D(_ctx, _cache, $props, $setup, $data, $options) {
   );
 }
 
-script$D.render = render$D;
-script$D.__file = "packages/textfield/textfield.vue";
+script$F.render = render$F;
+script$F.__file = "packages/textfield/textfield.vue";
 
 var textfield = BasePlugin({
-  mcwTextfield: script$D,
-  mcwTextfieldIcon: script$C,
-  mcwCharacterCounter: script$A,
-  mcwTextfieldHelperText: script$B,
-  mcwLineRipple: script$h,
-  mcwNotchedOutline: script$n,
-  mcwFloatingLabel: script$c
+  mcwTextfield: script$F,
+  mcwTextfieldIcon: script$E,
+  mcwCharacterCounter: script$C,
+  mcwTextfieldHelperText: script$D,
+  mcwLineRipple: script$j,
+  mcwNotchedOutline: script$p,
+  mcwFloatingLabel: script$e
 });
 
 var cssClasses$6 = MDCTopAppBarFoundation.cssClasses,
     strings$e = MDCTopAppBarFoundation.strings;
-var script$E = {
+var script$G = {
   name: 'mcw-top-app-bar',
   props: {
     tag: {
@@ -8942,7 +9182,7 @@ var script$E = {
   }
 };
 
-function render$E(_ctx, _cache, $props, $setup, $data, $options) {
+function render$G(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock(resolveDynamicComponent(_ctx.tag), {
     ref: "root",
     class: _ctx.rootClasses,
@@ -8957,11 +9197,11 @@ function render$E(_ctx, _cache, $props, $setup, $data, $options) {
   , ["class", "style"]);
 }
 
-script$E.render = render$E;
-script$E.__file = "packages/top-app-bar/top-app-bar.vue";
+script$G.render = render$G;
+script$G.__file = "packages/top-app-bar/top-app-bar.vue";
 
 var topAppBar = BasePlugin({
-  mcwTopAppBar: script$E // mcwFixedAdjust,
+  mcwTopAppBar: script$G // mcwFixedAdjust,
   // mcwTopAppBarIcon,
   // mcwTopAppBarRow,
   // mcwTopAppBarSection,
@@ -8971,6 +9211,7 @@ var topAppBar = BasePlugin({
 
 var index$1 = {
   install: function install(vm) {
+    vm.use(banner);
     vm.use(button);
     vm.use(card);
     vm.use(circularProgress);
