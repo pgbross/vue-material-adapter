@@ -3,6 +3,7 @@
 
 );
 
+@use "@material/banner/styles" as banner;
 @use "@material/button/mdc-button";
 @use "@material/card/mdc-card";
 @use "@material/circular-progress/mdc-circular-progress";
@@ -27,7 +28,7 @@
 @use "@material/radio/mdc-radio";
 @use "@material/ripple/mdc-ripple";
 @use "@material/select/mdc-select";
-@use "@material/slider/styles";
+@use "@material/slider/styles" as slider;
 @use "@material/snackbar/mdc-snackbar";
 @use "@material/switch/mdc-switch";
 @use "@material/tab/mdc-tab";

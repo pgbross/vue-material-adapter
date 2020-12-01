@@ -33,6 +33,7 @@ function link(id, icon, name, title) {
 }
 
 export default [
+  link('banner', icComponent),
   link('button', icButton),
   link('card', icCard),
   link('checkbox', icSelectionControl),

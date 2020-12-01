@@ -1,4 +1,5 @@
 import * as base from '~/base/index.js';
+import banner from '~/banner/index.js';
 import button from '~/button/index.js';
 import card from '~/card/index.js';
 import checkbox from '~/checkbox/index.js';
@@ -28,6 +29,7 @@ import topAppBar from '~/top-app-bar/index.js';
 
 export default {
   install(vm) {
+    vm.use(banner);
     vm.use(button);
     vm.use(card);
     vm.use(circularProgress);

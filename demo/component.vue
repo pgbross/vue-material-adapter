@@ -32,6 +32,9 @@ const icons = links.reduce((result, link) => {
 
 export default {
   components: {
+    'banner-readme': defineAsyncComponent(() =>
+      import('./components/banner/README.md'),
+    ),
     'button-readme': defineAsyncComponent(() =>
       import('./components/button/README.md'),
     ),
@@ -100,6 +103,9 @@ export default {
     ),
     'top-app-bar-readme': defineAsyncComponent(() =>
       import('./components/top-app-bar/README.md'),
+    ),
+    'banner-demo': defineAsyncComponent(() =>
+      import('./components/banner/demo.vue'),
     ),
 
     'button-demo': defineAsyncComponent(() =>
