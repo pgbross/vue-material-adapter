@@ -1,4 +1,4 @@
-import { resolveDynamicComponent, h, openBlock, createBlock, createVNode, toDisplayString, withModifiers, createCommentVNode, reactive, watch, onMounted, toRefs, resolveComponent, ref, shallowReactive, onBeforeUnmount, computed, withCtx, renderSlot, toRef, createTextVNode, provide, mergeProps, toHandlers, inject, Fragment, renderList, nextTick, watchEffect } from 'vue';
+import { resolveDynamicComponent, h, openBlock, createBlock, createVNode, toDisplayString, withModifiers, createCommentVNode, reactive, watch, onMounted, toRefs, resolveComponent, ref, shallowReactive, onBeforeUnmount, computed, withCtx, renderSlot, toRef, createTextVNode, provide, mergeProps, toHandlers, inject, Fragment, renderList, nextTick, watchEffect, onUnmounted } from 'vue';
 import { MDCBannerFoundation } from '@material/banner';
 import { applyPassive } from '@material/dom/events';
 import { matches, closest } from '@material/dom/ponyfill';
@@ -50,6 +50,7 @@ import { MDCTextFieldCharacterCounterFoundation } from '@material/textfield/char
 import { MDCTextFieldHelperTextFoundation } from '@material/textfield/helper-text/foundation';
 import { MDCTextFieldIconFoundation } from '@material/textfield/icon/foundation.js';
 import { MDCTextFieldFoundation } from '@material/textfield/foundation';
+import { MDCTooltipFoundation, events as events$1 } from '@material/tooltip';
 import { MDCFixedTopAppBarFoundation } from '@material/top-app-bar/fixed/foundation';
 import { MDCShortTopAppBarFoundation } from '@material/top-app-bar/short/foundation';
 import { MDCTopAppBarFoundation } from '@material/top-app-bar/standard/foundation';
@@ -9029,9 +9030,244 @@ var textfield = BasePlugin({
   mcwFloatingLabel: script$e
 });
 
+var script$G = {
+  name: 'mcw-tooltip',
+  props: {
+    position: {
+      type: [Object, String]
+    },
+    boundaryType: {
+      type: [String, Number]
+    }
+  },
+  setup: function setup(props, _ref) {
+    var emit = _ref.emit;
+    var uiState = reactive({
+      classes: {},
+      styles: {},
+      rootAttrs: {
+        'aria-hidden': true
+      },
+      root: null
+    });
+    var foundation;
+    var anchorElem;
+    var adapter = {
+      getAttribute: function getAttribute(name) {
+        return uiState.root.getAttribute(name);
+      },
+      setAttribute: function setAttribute(attributeName, value) {
+        uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, _defineProperty({}, attributeName, value));
+      },
+      addClass: function addClass(className) {
+        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+      },
+      hasClass: function hasClass(className) {
+        return uiState.root.classList.contains(className);
+      },
+      removeClass: function removeClass(className) {
+        // eslint-disable-next-line no-unused-vars
+        var _uiState$classes = uiState.classes,
+            removed = _uiState$classes[className],
+            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+
+        uiState.classes = rest;
+      },
+      setStyleProperty: function setStyleProperty(property, value) {
+        return uiState.styles = _objectSpread2(_objectSpread2({}, uiState.styles), {}, _defineProperty({}, property, value));
+      },
+      getViewportWidth: function getViewportWidth() {
+        return window.innerWidth;
+      },
+      getViewportHeight: function getViewportHeight() {
+        return window.innerHeight;
+      },
+      getTooltipSize: function getTooltipSize() {
+        return {
+          width: uiState.root.offsetWidth,
+          height: uiState.root.offsetHeight
+        };
+      },
+      getAnchorBoundingRect: function getAnchorBoundingRect() {
+        return anchorElem ? anchorElem.getBoundingClientRect() : null;
+      },
+      getAnchorAttribute: function getAnchorAttribute(attr) {
+        return anchorElem ? anchorElem.getAttribute(attr) : null;
+      },
+      isRTL: function isRTL() {
+        return getComputedStyle(uiState.root).direction === 'rtl';
+      },
+      registerDocumentEventHandler: function registerDocumentEventHandler(evt, handler) {
+        document.body.addEventListener(evt, handler);
+      },
+      deregisterDocumentEventHandler: function deregisterDocumentEventHandler(evt, handler) {
+        document.body.removeEventListener(evt, handler);
+      },
+      notifyHidden: function notifyHidden() {
+        emit(events$1.HIDDEN.toLowerCase(), {});
+      }
+    };
+
+    var handleMouseEnter = function handleMouseEnter() {
+      foundation.handleAnchorMouseEnter();
+    };
+
+    var handleFocus = function handleFocus() {
+      foundation.handleAnchorFocus();
+    };
+
+    var handleMouseLeave = function handleMouseLeave() {
+      foundation.handleAnchorMouseLeave();
+    };
+
+    var handleBlur = function handleBlur() {
+      foundation.handleAnchorBlur();
+    };
+
+    var handleTransitionEnd = function handleTransitionEnd() {
+      foundation.handleTransitionEnd();
+    };
+
+    var onPosition = function onPosition(position) {
+      if (position) {
+        var xPos;
+        var yPos;
+
+        if (typeof position == 'string') {
+          var _position$split = position.split(',');
+
+          var _position$split2 = _slicedToArray(_position$split, 2);
+
+          xPos = _position$split2[0];
+          var _position$split2$ = _position$split2[1];
+          yPos = _position$split2$ === void 0 ? xPos : _position$split2$;
+        } else {
+          xPos = position.xPos;
+          yPos = position.yPos;
+        }
+
+        foundation.setTooltipPosition({
+          xPos: toXposition(xPos),
+          yPos: toYposition(yPos)
+        });
+      }
+    };
+
+    var onBoundaryType = function onBoundaryType(type) {
+      if (type != void 0) {
+        foundation.setAnchorBoundaryType(toAnchorBoundaryType(type));
+      }
+    };
+
+    onMounted(function () {
+      var tooltipId = uiState.root.getAttribute('id');
+
+      if (!tooltipId) {
+        throw new Error('MDCTooltip: Tooltip component must have an id.');
+      }
+
+      anchorElem = document.querySelector("[aria-describedby=\"".concat(tooltipId, "\"]")) || document.querySelector("[data-tooltip-id=\"".concat(tooltipId, "\"]"));
+
+      if (!anchorElem) {
+        throw new Error( // eslint-disable-next-line max-len
+        'MDCTooltip: Tooltip component requires an anchor element annotated with [aria-describedby] or [data-tooltip-id] anchor element.');
+      }
+
+      anchorElem.addEventListener('mouseenter', handleMouseEnter); // TODO(b/157075286): Listening for a 'focus' event is too broad.
+
+      anchorElem.addEventListener('focus', handleFocus);
+      anchorElem.addEventListener('mouseleave', handleMouseLeave);
+      anchorElem.addEventListener('blur', handleBlur);
+      foundation = new MDCTooltipFoundation(adapter);
+      foundation.init();
+      watchEffect(function () {
+        return onPosition(props.position);
+      });
+      watchEffect(function () {
+        return onBoundaryType(props.boundaryType);
+      });
+    });
+    onUnmounted(function () {
+      if (anchorElem) {
+        anchorElem.removeEventListener('mouseenter', handleMouseEnter); // TODO(b/157075286): Listening for a 'focus' event is too broad.
+
+        anchorElem.removeEventListener('focus', handleFocus);
+        anchorElem.removeEventListener('mouseleave', handleMouseLeave);
+        anchorElem.removeEventListener('blur', handleBlur);
+      }
+    });
+    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+      handleTransitionEnd: handleTransitionEnd
+    });
+  }
+}; // ===
+// Private functions
+// ===
+
+var XPosition_ = {
+  detected: 0,
+  start: 1,
+  center: 2,
+  end: 3
+};
+
+function toXposition(x) {
+  var _XPosition_$x;
+
+  return typeof x == 'string' ? (_XPosition_$x = XPosition_[x]) !== null && _XPosition_$x !== void 0 ? _XPosition_$x : 0 : x;
+}
+
+var YPosition_ = {
+  detected: 0,
+  above: 1,
+  below: 2
+};
+
+function toYposition(y) {
+  var _YPosition_$y;
+
+  return typeof y == 'string' ? (_YPosition_$y = YPosition_[y]) !== null && _YPosition_$y !== void 0 ? _YPosition_$y : 0 : y;
+}
+
+var AnchorBoundaryType_ = {
+  bounded: 0,
+  unbounded: 1
+};
+
+function toAnchorBoundaryType(type) {
+  var _AnchorBoundaryType_$;
+
+  return typeof type == 'string' ? (_AnchorBoundaryType_$ = AnchorBoundaryType_[type]) !== null && _AnchorBoundaryType_$ !== void 0 ? _AnchorBoundaryType_$ : '0' : type;
+}
+
+var _hoisted_1$p = {
+  class: "mdc-tooltip__surface"
+};
+function render$G(_ctx, _cache, $props, $setup, $data, $options) {
+  return openBlock(), createBlock("div", mergeProps({
+    ref: "root",
+    class: ["mdc-tooltip", _ctx.classes]
+  }, _ctx.rootAttrs, {
+    style: _ctx.styles,
+    role: "tooltip",
+    onTransitionend: _cache[1] || (_cache[1] = function () {
+      return _ctx.handleTransitionEnd.apply(_ctx, arguments);
+    })
+  }), [createVNode("div", _hoisted_1$p, [renderSlot(_ctx.$slots, "default")])], 16
+  /* FULL_PROPS */
+  );
+}
+
+script$G.render = render$G;
+script$G.__file = "packages/tooltip/tooltip.vue";
+
+var tooltip = BasePlugin({
+  mcwTooltip: script$G
+});
+
 var cssClasses$6 = MDCTopAppBarFoundation.cssClasses,
     strings$e = MDCTopAppBarFoundation.strings;
-var script$G = {
+var script$H = {
   name: 'mcw-top-app-bar',
   props: {
     tag: {
@@ -9182,7 +9418,7 @@ var script$G = {
   }
 };
 
-function render$G(_ctx, _cache, $props, $setup, $data, $options) {
+function render$H(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock(resolveDynamicComponent(_ctx.tag), {
     ref: "root",
     class: _ctx.rootClasses,
@@ -9197,11 +9433,11 @@ function render$G(_ctx, _cache, $props, $setup, $data, $options) {
   , ["class", "style"]);
 }
 
-script$G.render = render$G;
-script$G.__file = "packages/top-app-bar/top-app-bar.vue";
+script$H.render = render$H;
+script$H.__file = "packages/top-app-bar/top-app-bar.vue";
 
 var topAppBar = BasePlugin({
-  mcwTopAppBar: script$G // mcwFixedAdjust,
+  mcwTopAppBar: script$H // mcwFixedAdjust,
   // mcwTopAppBarIcon,
   // mcwTopAppBarRow,
   // mcwTopAppBarSection,
@@ -9237,9 +9473,10 @@ var index$1 = {
     vm.use(switchControl);
     vm.use(tabs);
     vm.use(textfield);
+    vm.use(tooltip);
     vm.use(topAppBar);
   }
 };
 
 export default index$1;
-export { index as base, button, card, checkbox, chips, circularProgress, dataTable, dialog, drawer, fab, floatingLabel, iconButton, layoutGrid, lineRipple, linearProgress, list, materialIcon, menu, notchedOutline, radio, select, slider, snackbar, switchControl, tabs, textfield, topAppBar };
+export { index as base, button, card, checkbox, chips, circularProgress, dataTable, dialog, drawer, fab, floatingLabel, iconButton, layoutGrid, lineRipple, linearProgress, list, materialIcon, menu, notchedOutline, radio, select, slider, snackbar, switchControl, tabs, textfield, tooltip, topAppBar };
