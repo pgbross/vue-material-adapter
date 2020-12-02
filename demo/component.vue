@@ -101,6 +101,9 @@ export default {
     'textfield-readme': defineAsyncComponent(() =>
       import('./components/textfield/README.md'),
     ),
+    'tooltip-readme': defineAsyncComponent(() =>
+      import('./components/tooltip/README.md'),
+    ),
     'top-app-bar-readme': defineAsyncComponent(() =>
       import('./components/top-app-bar/README.md'),
     ),
@@ -172,6 +175,10 @@ export default {
     'textfield-demo': defineAsyncComponent(() =>
       import('./components/textfield/demo.vue'),
     ),
+    'tooltip-demo': defineAsyncComponent(() =>
+      import('./components/tooltip/demo.vue'),
+    ),
+
     'top-app-bar-demo': defineAsyncComponent(() =>
       import('./components/top-app-bar/demo.vue'),
     ),

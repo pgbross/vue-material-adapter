@@ -57,5 +57,6 @@ export default [
   link('switch', icSwitch),
   link('tabs', icTabs),
   link('textfield', icTextField),
+  link('tooltip', icComponent),
   link('top-app-bar', icTopAppBar),
 ];

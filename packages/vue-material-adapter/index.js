@@ -25,6 +25,8 @@ import snackbar from '~/snackbar/index.js';
 import switchControl from '~/switch/index.js';
 import tabs from '~/tabs/index.js';
 import textfield from '~/textfield/index.js';
+import tooltip from '~/tooltip/index.js';
+
 import topAppBar from '~/top-app-bar/index.js';
 
 export default {
@@ -55,6 +57,7 @@ export default {
     vm.use(switchControl);
     vm.use(tabs);
     vm.use(textfield);
+    vm.use(tooltip);
     vm.use(topAppBar);
   },
 };
@@ -86,5 +89,6 @@ export {
   switchControl,
   tabs,
   textfield,
+  tooltip,
   topAppBar,
 };
