@@ -28,6 +28,10 @@ export default {
       attrs: {},
     });
 
+    if (attrs.class) {
+      uiState.classes[attrs.class] = 1;
+    }
+
     const registerListItem = inject('registerListItem');
 
     const radioChecked = computed(() => {

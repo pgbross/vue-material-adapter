@@ -3,7 +3,9 @@
     <div class="demo-list-example">
       <h3 class="mdc-typography--subtitle1">Single-Line</h3>
       <mcw-list v-model="selected" class="demo-list" @mdclist:action="onAction">
-        <mcw-list-item tabindex="0">One Single-line item 1 </mcw-list-item>
+        <mcw-list-item tabindex="0" name="wiffle"
+          >One Single-line item 1
+        </mcw-list-item>
         <mcw-list-item>Two Single-line item 2 </mcw-list-item>
         <mcw-list-item>Three Single-line item 3 </mcw-list-item>
       </mcw-list>

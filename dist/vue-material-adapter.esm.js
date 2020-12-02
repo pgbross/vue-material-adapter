@@ -4200,6 +4200,11 @@ var script$l = {
       },
       attrs: {}
     });
+
+    if (attrs.class) {
+      uiState.classes[attrs.class] = 1;
+    }
+
     var registerListItem = inject('registerListItem');
     var radioChecked = computed(function () {
       return attrs['aria-checked'] == 'true';
