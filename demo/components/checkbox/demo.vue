@@ -3,8 +3,8 @@
     <div class="mcw-demo--container">
       <mcw-checkbox
         v-model="checked"
-        :disabled="disabled"
         v-model:indeterminate="indeterminate"
+        :disabled="disabled"
         :label="checked ? 'Checked' : 'Unchecked'"
       />
 
@@ -21,16 +21,16 @@
     <div class="mcw-demo--container">
       <div>Array selection</div>
       <mcw-checkbox
-        :modelValue="ids"
-        @update:modelValue="onIds"
         value="abc"
         label="one"
+        :model-value="ids"
+        @update:modelValue="onIds"
       />
       <mcw-checkbox
-        :modelValue="ids"
-        @update:modelValue="onIds"
         value="xyz"
         label="two"
+        :model-value="ids"
+        @update:modelValue="onIds"
       />
     </div>
     <div>Selected IDs: {{ ids }}</div>
