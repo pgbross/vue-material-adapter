@@ -1,6 +1,6 @@
 <template>
-  <div class="mcw-demo mcw-demo--container">
-    <div>
+  <div class="my-demo">
+    <div class="mcw-demo--container">
       <mcw-checkbox
         v-model="checked"
         :disabled="disabled"
@@ -17,6 +17,23 @@
         >
       </div>
     </div>
+
+    <div class="mcw-demo--container">
+      <div>Array selection</div>
+      <mcw-checkbox
+        :modelValue="ids"
+        @update:modelValue="onIds"
+        value="abc"
+        label="one"
+      />
+      <mcw-checkbox
+        :modelValue="ids"
+        @update:modelValue="onIds"
+        value="xyz"
+        label="two"
+      />
+    </div>
+    <div>Selected IDs: {{ ids }}</div>
   </div>
 </template>
 
@@ -27,6 +44,8 @@ export default {
       checked: false,
       indeterminate_: false,
       disabled: false,
+
+      ids: [],
     };
   },
   computed: {
@@ -43,6 +62,20 @@ export default {
     onIndeterminate() {
       this.indeterminate = true;
     },
+    onIds(nv) {
+      console.dir(nv);
+      this.ids = nv;
+    },
   },
 };
 </script>
+
+<style>
+.my-demo {
+  width: 100%;
+}
+.my-demo .mcw-demo--container {
+  margin-bottom: 1em;
+  background-color: #f2f2f2;
+}
+</style>
