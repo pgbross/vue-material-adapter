@@ -83,6 +83,9 @@ export default {
     'radio-readme': defineAsyncComponent(() =>
       import('./components/radio/README.md'),
     ),
+    'segmented-button-readme': defineAsyncComponent(() =>
+      import('./components/segmented-button/README.md'),
+    ),
     'select-readme': defineAsyncComponent(() =>
       import('./components/select/README.md'),
     ),
@@ -159,6 +162,9 @@ export default {
     ),
     'select-demo': defineAsyncComponent(() =>
       import('./components/select/demo.vue'),
+    ),
+    'segmented-button-demo': defineAsyncComponent(() =>
+      import('./components/segmented-button/demo.vue'),
     ),
     'slider-demo': defineAsyncComponent(() =>
       import('./components/slider/demo.vue'),

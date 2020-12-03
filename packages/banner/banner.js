@@ -1,4 +1,4 @@
-import { onMounted, reactive, toRefs, watch } from 'vue';
+import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
 import { MDCBannerFoundation } from '@material/banner';
 import bannerContent from './banner-content.vue';
 
@@ -83,6 +83,10 @@ export default {
     onMounted(() => {
       foundation = new MDCBannerFoundation(adapter);
       foundation.init();
+    });
+
+    onBeforeUnmount(() => {
+      foundation?.destroy();
     });
 
     return { ...toRefs(uiState), onContentClick };

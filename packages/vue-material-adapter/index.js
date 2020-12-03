@@ -19,6 +19,7 @@ import materialIcon from '~/material-icon/index.js';
 import menu from '~/menu/index.js';
 import notchedOutline from '~/notched-outline/index.js';
 import radio from '~/radio/index.js';
+import segmentedButton from '~/segmented-button/index.js';
 import select from '~/select/index.js';
 import slider from '~/slider/index.js';
 import snackbar from '~/snackbar/index.js';
@@ -51,6 +52,7 @@ export default {
     vm.use(menu);
     vm.use(notchedOutline);
     vm.use(radio);
+    vm.use(segmentedButton);
     vm.use(select);
     vm.use(slider);
     vm.use(snackbar);
@@ -83,6 +85,7 @@ export {
   menu,
   notchedOutline,
   radio,
+  segmentedButton,
   select,
   slider,
   snackbar,

@@ -1,5 +1,5 @@
 import { events, MDCTooltipFoundation } from '@material/tooltip';
-import { onMounted, onUnmounted, reactive, toRefs, watchEffect } from 'vue';
+import { onBeforeUnmount, onMounted, reactive, toRefs, watchEffect } from 'vue';
 
 export default {
   name: 'mcw-tooltip',
@@ -132,7 +132,7 @@ export default {
       watchEffect(() => onBoundaryType(props.boundaryType));
     });
 
-    onUnmounted(() => {
+    onBeforeUnmount(() => {
       if (anchorElem) {
         anchorElem.removeEventListener('mouseenter', handleMouseEnter);
         // TODO(b/157075286): Listening for a 'focus' event is too broad.
@@ -140,6 +140,8 @@ export default {
         anchorElem.removeEventListener('mouseleave', handleMouseLeave);
         anchorElem.removeEventListener('blur', handleBlur);
       }
+
+      foundation?.destroy();
     });
 
     return { ...toRefs(uiState), handleTransitionEnd };

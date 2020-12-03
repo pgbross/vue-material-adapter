@@ -51,6 +51,7 @@ export default [
   link('material-icon', icComponent),
   link('menu', icMenu),
   link('radio', icRadioButton),
+  link('segmented-button', icComponent),
   link('select', icMenu),
   link('slider', icSlider),
   link('snackbar', icToast),
