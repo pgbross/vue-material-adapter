@@ -9,8 +9,9 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
+const isDev = process.env.NODE_ENV !== 'production';
 const resolve = relativePath => path.resolve(__dirname, relativePath);
+
 module.exports = [
   {
     target: 'web',
@@ -72,7 +73,7 @@ module.exports = [
             {
               loader: 'postcss-loader',
               options: {
-                config: { path: __dirname + '/postss.config.js' },
+                postcssOptions: { config: __dirname + '/postcss.config.js' },
               },
             },
             {
@@ -81,6 +82,7 @@ module.exports = [
                 implementation: require('dart-sass'),
                 sassOptions: {
                   includePaths: ['node_modules'],
+                  sourceMap: isDev,
                 },
               },
             },

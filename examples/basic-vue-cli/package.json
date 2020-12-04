@@ -10,7 +10,7 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "vue": "^3.0.2",
-    "vue-material-adapter": "^1.0.0-alpha.3"
+    "vue-material-adapter": "^1.0.0-beta.13"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.8",
