@@ -588,10 +588,11 @@ var script$1 = {
 
     var adapter = {
       addClass: function addClass(className) {
-        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+        uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+        uiState.root.classList.add(className);
       },
       getContentHeight: function getContentHeight() {
-        return uiState.contentEl.offsetHeight;
+        return uiState.contentEl.$el.offsetHeight;
       },
       notifyOpening: function notifyOpening() {
         emit('mdcbanner:opening', {});
@@ -651,6 +652,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_banner_content = resolveComponent("banner-content");
 
   return (openBlock(), createBlock("div", {
+    ref: "root",
     class: ["mdc-banner demo-banner", _ctx.classes],
     role: "banner",
     style: _ctx.styles
