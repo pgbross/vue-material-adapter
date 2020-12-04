@@ -44,11 +44,13 @@ export default {
     };
 
     const adapter = {
-      addClass: className =>
-        (uiState.classes = { ...uiState.classes, [className]: true }),
+      addClass: className => {
+        uiState.classes = { ...uiState.classes, [className]: true };
+        uiState.root.classList.add(className);
+      },
 
       getContentHeight: () => {
-        return uiState.contentEl.offsetHeight;
+        return uiState.contentEl.$el.offsetHeight;
       },
 
       notifyOpening: () => {

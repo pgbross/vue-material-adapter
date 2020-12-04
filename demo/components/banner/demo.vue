@@ -41,7 +41,4 @@ export default {
 .demo-controls {
   margin-top: 2em;
 }
-.demo-banner {
-  max-width: 50%;
-}
 </style>
