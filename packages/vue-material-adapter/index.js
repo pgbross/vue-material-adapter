@@ -66,6 +66,7 @@ export default {
 
 export {
   base,
+  banner,
   button,
   card,
   circularProgress,
