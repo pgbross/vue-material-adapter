@@ -38,7 +38,7 @@ import { MDCSegmentedButtonSegmentFoundation } from '@material/segmented-button/
 import { MDCSelectFoundation } from '@material/select/foundation';
 import { MDCSelectHelperTextFoundation } from '@material/select/helper-text/foundation.js';
 import { MDCSelectIconFoundation } from '@material/select/icon/foundation.js';
-import { MDCSliderFoundation, cssClasses as cssClasses$8, Thumb, events } from '@material/slider';
+import { MDCSliderFoundation, Thumb, cssClasses as cssClasses$8, events } from '@material/slider';
 import { MDCSnackbarFoundation } from '@material/snackbar/foundation';
 import { MDCSwitchFoundation } from '@material/switch/foundation';
 import { MDCTabBarFoundation } from '@material/tab-bar/foundation';
@@ -3932,7 +3932,10 @@ var script$k = {
       },
       bufferbarStyles: {},
       primaryStyles: {},
-      rootAttrs: {},
+      rootAttrs: {
+        'aria-valuemin': 0,
+        'aria-valuemax': 1
+      },
       root: null
     });
     var foundation;
@@ -6859,6 +6862,10 @@ var script$w = {
       type: [Number, String],
       default: 100
     },
+    step: {
+      type: [Number, String],
+      default: 1
+    },
     discrete: Boolean,
     tickMarks: Boolean,
     disabled: Boolean,
@@ -6884,11 +6891,14 @@ var script$w = {
       startThumbAttrs: {
         'aria-valuenow': '0'
       },
+      test: 50,
       endValueText: '',
       endThumbClasses: {},
       endThumbAttrs: {
         'aria-valuenow': '0'
       },
+      inputs: [],
+      thumbs: [],
       root: null,
       startThumb: null,
       endThumb: null,
@@ -6905,13 +6915,24 @@ var script$w = {
     };
 
     var getThumbEl = function getThumbEl(thumb) {
-      var thumbName = thumb == Thumb.END ? 'endThumb' : 'startThumb';
-      return uiState[thumbName];
+      return thumb === Thumb.END ? uiState.thumbs[uiState.thumbs.length - 1] : uiState.thumbs[0];
     };
 
     var getThumbName = function getThumbName(thumb, suffix) {
       var thumbName = thumb == Thumb.END ? 'endThumb' : 'startThumb';
       return "".concat(thumbName).concat(suffix);
+    };
+
+    var setInputRef = function setInputRef(el) {
+      return uiState.inputs.push(el);
+    };
+
+    var setThumbRef = function setThumbRef(el) {
+      return uiState.thumbs.push(el);
+    };
+
+    var getInput = function getInput(thumb) {
+      return thumb === Thumb.END ? uiState.inputs[uiState.inputs.length - 1] : uiState.inputs[0];
     };
 
     var adapter = {
@@ -6944,6 +6965,31 @@ var script$w = {
       },
       getAttribute: function getAttribute(name) {
         return uiState.root.getAttribute(name);
+      },
+      getInputValue: function getInputValue(thumb) {
+        return getInput(thumb).value;
+      },
+      setInputValue: function setInputValue(value, thumb) {
+        getInput(thumb).value = value;
+      },
+      getInputAttribute: function getInputAttribute(attribute, thumb) {
+        if (attribute == 'value') {
+          return adapter.getInputValue(thumb);
+        }
+
+        return getInput(thumb).getAttribute(attribute);
+      },
+      setInputAttribute: function setInputAttribute(attribute, value, thumb) {
+        getInput(thumb).setAttribute(attribute, value);
+      },
+      removeInputAttribute: function removeInputAttribute(attribute, thumb) {
+        getInput(thumb).removeAttribute(attribute);
+      },
+      focusInput: function focusInput(thumb) {
+        getInput(thumb).focus();
+      },
+      isInputFocused: function isInputFocused(thumb) {
+        return getInput(thumb) === document.activeElement;
       },
       getThumbAttribute: function getThumbAttribute(attribute, thumb) {
         var thumbName = getThumbName(thumb, 'Attrs');
@@ -7032,6 +7078,12 @@ var script$w = {
       deregisterThumbEventHandler: function deregisterThumbEventHandler(thumb, evtType, handler) {
         return getThumbEl(thumb).removeEventListener(evtType, handler);
       },
+      registerInputEventHandler: function registerInputEventHandler(thumb, evtType, handler) {
+        getInput(thumb).addEventListener(evtType, handler);
+      },
+      deregisterInputEventHandler: function deregisterInputEventHandler(thumb, evtType, handler) {
+        getInput(thumb).removeEventListener(evtType, handler);
+      },
       registerBodyEventHandler: function registerBodyEventHandler(evtType, handler) {
         return document.body.addEventListener(evtType, handler);
       },
@@ -7089,7 +7141,9 @@ var script$w = {
       foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      setValueToAriaValueTextFn: setValueToAriaValueTextFn
+      setValueToAriaValueTextFn: setValueToAriaValueTextFn,
+      setInputRef: setInputRef,
+      setThumbRef: setThumbRef
     });
   }
 };
@@ -7121,6 +7175,31 @@ function render$w(_ctx, _cache, $props, $setup, $data, $options) {
     ref: "root",
     class: _ctx.classes
   }, [
+    (_ctx.range)
+      ? (openBlock(), createBlock("input", {
+          key: 0,
+          ref: _ctx.setInputRef,
+          class: "mdc-slider__input",
+          type: "range",
+          min: _ctx.min,
+          max: _ctx.max,
+          step: _ctx.step,
+          value: _ctx.start,
+          name: "volume",
+          "aria-label": "slider"
+        }, null, 8 /* PROPS */, ["min", "max", "step", "value"]))
+      : createCommentVNode("v-if", true),
+    createVNode("input", {
+      ref: _ctx.setInputRef,
+      class: "mdc-slider__input",
+      type: "range",
+      min: _ctx.min,
+      max: _ctx.max,
+      step: _ctx.step,
+      value: _ctx.modelValue,
+      name: "volume",
+      "aria-label": "slider"
+    }, null, 8 /* PROPS */, ["min", "max", "step", "value"]),
     createVNode("div", _hoisted_1$k, [
       _hoisted_2$g,
       createVNode("div", _hoisted_3$c, [
@@ -7140,12 +7219,12 @@ function render$w(_ctx, _cache, $props, $setup, $data, $options) {
     ]),
     (_ctx.range)
       ? (openBlock(), createBlock("div", mergeProps({
-          key: 0,
-          ref: "startThumb",
+          key: 1,
+          ref: _ctx.setThumbRef,
           class: [_ctx.startThumbClasses, "mdc-slider__thumb"],
           tabindex: "0",
           role: "slider",
-          "aria-label": "Continuous slider demo"
+          "aria-label": "slider"
         }, _ctx.startThumbAttrs), [
           (_ctx.discrete)
             ? (openBlock(), createBlock("div", _hoisted_5$6, [
@@ -7158,11 +7237,11 @@ function render$w(_ctx, _cache, $props, $setup, $data, $options) {
         ], 16 /* FULL_PROPS */))
       : createCommentVNode("v-if", true),
     createVNode("div", mergeProps({
-      ref: "endThumb",
+      ref: _ctx.setThumbRef,
       class: [_ctx.endThumbClasses, "mdc-slider__thumb"],
       tabindex: "0",
       role: "slider",
-      "aria-label": "Continuous slider demo"
+      "aria-label": "slider"
     }, _ctx.endThumbAttrs), [
       (_ctx.discrete)
         ? (openBlock(), createBlock("div", _hoisted_9$2, [
@@ -9203,14 +9282,39 @@ var script$I = {
       getAnchorAttribute: function getAnchorAttribute(attr) {
         return anchorElem ? anchorElem.getAttribute(attr) : null;
       },
+      setAnchorAttribute: function setAnchorAttribute(attr, value) {
+        var _anchorElem;
+
+        (_anchorElem = anchorElem) === null || _anchorElem === void 0 ? void 0 : _anchorElem.setAttribute(attr, value);
+      },
       isRTL: function isRTL() {
         return getComputedStyle(uiState.root).direction === 'rtl';
+      },
+      anchorContainsElement: function anchorContainsElement(element) {
+        var _anchorElem2;
+
+        return !!((_anchorElem2 = anchorElem) !== null && _anchorElem2 !== void 0 && _anchorElem2.contains(element));
+      },
+      tooltipContainsElement: function tooltipContainsElement(element) {
+        return uiState.root.contains(element);
+      },
+      registerEventHandler: function registerEventHandler(evt, handler) {
+        uiState.root.addEventListener(evt, handler);
+      },
+      deregisterEventHandler: function deregisterEventHandler(evt, handler) {
+        uiState.root.removeEventListener(evt, handler);
       },
       registerDocumentEventHandler: function registerDocumentEventHandler(evt, handler) {
         document.body.addEventListener(evt, handler);
       },
       deregisterDocumentEventHandler: function deregisterDocumentEventHandler(evt, handler) {
         document.body.removeEventListener(evt, handler);
+      },
+      registerWindowEventHandler: function registerWindowEventHandler(evt, handler) {
+        window.addEventListener(evt, handler);
+      },
+      deregisterWindowEventHandler: function deregisterWindowEventHandler(evt, handler) {
+        window.removeEventListener(evt, handler);
       },
       notifyHidden: function notifyHidden() {
         emit(events$1.HIDDEN.toLowerCase(), {});
@@ -9221,20 +9325,24 @@ var script$I = {
       foundation.handleAnchorMouseEnter();
     };
 
-    var handleFocus = function handleFocus() {
-      foundation.handleAnchorFocus();
+    var handleFocus = function handleFocus(evt) {
+      foundation.handleAnchorFocus(evt);
     };
 
     var handleMouseLeave = function handleMouseLeave() {
       foundation.handleAnchorMouseLeave();
     };
 
-    var handleBlur = function handleBlur() {
-      foundation.handleAnchorBlur();
+    var handleBlur = function handleBlur(evt) {
+      foundation.handleAnchorBlur(evt);
     };
 
     var handleTransitionEnd = function handleTransitionEnd() {
       foundation.handleTransitionEnd();
+    };
+
+    var handleClick = function handleClick() {
+      foundation.handleAnchorClick();
     };
 
     var onPosition = function onPosition(position) {
@@ -9282,13 +9390,21 @@ var script$I = {
         'MDCTooltip: Tooltip component requires an anchor element annotated with [aria-describedby] or [data-tooltip-id] anchor element.');
       }
 
-      anchorElem.addEventListener('mouseenter', handleMouseEnter); // TODO(b/157075286): Listening for a 'focus' event is too broad.
-
-      anchorElem.addEventListener('focus', handleFocus);
-      anchorElem.addEventListener('mouseleave', handleMouseLeave);
-      anchorElem.addEventListener('blur', handleBlur);
       foundation = new MDCTooltipFoundation(adapter);
       foundation.init();
+      var isTooltipRich = foundation.getIsRich();
+      var isTooltipPersistent = foundation.getIsPersistent();
+
+      if (isTooltipRich && isTooltipPersistent) {
+        anchorElem.addEventListener('click', handleClick);
+      } else {
+        anchorElem.addEventListener('mouseenter', handleMouseEnter); // TODO(b/157075286): Listening for a 'focus' event is too broad.
+
+        anchorElem.addEventListener('focus', handleFocus);
+        anchorElem.addEventListener('mouseleave', handleMouseLeave);
+      }
+
+      anchorElem.addEventListener('blur', handleBlur);
       watchEffect(function () {
         return onPosition(props.position);
       });
