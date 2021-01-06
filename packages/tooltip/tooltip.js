@@ -73,6 +73,13 @@ export default {
       deregisterDocumentEventHandler: (evt, handler) => {
         document.body.removeEventListener(evt, handler);
       },
+      registerWindowEventHandler: (evt, handler) => {
+        window.addEventListener(evt, handler);
+      },
+      deregisterWindowEventHandler: (evt, handler) => {
+        window.removeEventListener(evt, handler);
+      },
+
       notifyHidden: () => {
         emit(events.HIDDEN.toLowerCase(), {});
       },
