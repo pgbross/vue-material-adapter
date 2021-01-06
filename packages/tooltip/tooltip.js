@@ -47,7 +47,26 @@ export default {
       getAnchorAttribute: attr => {
         return anchorElem ? anchorElem.getAttribute(attr) : null;
       },
+
+      setAnchorAttribute: (attr, value) => {
+        anchorElem?.setAttribute(attr, value);
+      },
+
       isRTL: () => getComputedStyle(uiState.root).direction === 'rtl',
+
+      anchorContainsElement: element => {
+        return !!anchorElem?.contains(element);
+      },
+      tooltipContainsElement: element => {
+        return uiState.root.contains(element);
+      },
+
+      registerEventHandler: (evt, handler) => {
+        uiState.root.addEventListener(evt, handler);
+      },
+      deregisterEventHandler: (evt, handler) => {
+        uiState.root.removeEventListener(evt, handler);
+      },
       registerDocumentEventHandler: (evt, handler) => {
         document.body.addEventListener(evt, handler);
       },
@@ -63,20 +82,24 @@ export default {
       foundation.handleAnchorMouseEnter();
     };
 
-    const handleFocus = () => {
-      foundation.handleAnchorFocus();
+    const handleFocus = evt => {
+      foundation.handleAnchorFocus(evt);
     };
 
     const handleMouseLeave = () => {
       foundation.handleAnchorMouseLeave();
     };
 
-    const handleBlur = () => {
-      foundation.handleAnchorBlur();
+    const handleBlur = evt => {
+      foundation.handleAnchorBlur(evt);
     };
 
     const handleTransitionEnd = () => {
       foundation.handleTransitionEnd();
+    };
+
+    const handleClick = () => {
+      foundation.handleAnchorClick();
     };
 
     const onPosition = position => {
@@ -119,14 +142,22 @@ export default {
         );
       }
 
-      anchorElem.addEventListener('mouseenter', handleMouseEnter);
-      // TODO(b/157075286): Listening for a 'focus' event is too broad.
-      anchorElem.addEventListener('focus', handleFocus);
-      anchorElem.addEventListener('mouseleave', handleMouseLeave);
-      anchorElem.addEventListener('blur', handleBlur);
-
       foundation = new MDCTooltipFoundation(adapter);
       foundation.init();
+
+      const isTooltipRich = foundation.getIsRich();
+      const isTooltipPersistent = foundation.getIsPersistent();
+
+      if (isTooltipRich && isTooltipPersistent) {
+        anchorElem.addEventListener('click', handleClick);
+      } else {
+        anchorElem.addEventListener('mouseenter', handleMouseEnter);
+        // TODO(b/157075286): Listening for a 'focus' event is too broad.
+        anchorElem.addEventListener('focus', handleFocus);
+        anchorElem.addEventListener('mouseleave', handleMouseLeave);
+      }
+
+      anchorElem.addEventListener('blur', handleBlur);
 
       watchEffect(() => onPosition(props.position));
       watchEffect(() => onBoundaryType(props.boundaryType));
