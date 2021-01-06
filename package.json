@@ -84,7 +84,7 @@
     }
   },
   "dependencies": {
-    "material-components-web": "^8.0.0"
+    "material-components-web": "^9.0.0"
   },
   "peerDependencies": {
     "vue": "^3.0.0"
