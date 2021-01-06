@@ -27,7 +27,7 @@ export default {
       },
       bufferbarStyles: {},
       primaryStyles: {},
-      rootAttrs: {},
+      rootAttrs: { 'aria-valuemin': 0, 'aria-valuemax': 1 },
       root: null,
     });
 

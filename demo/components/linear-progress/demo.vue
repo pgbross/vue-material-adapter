@@ -4,8 +4,6 @@
       <mcw-linear-progress
         progress="0.5"
         aria-label="Example Progress Bar"
-        aria-valuemin="0"
-        aria-valuemax="1"
       ></mcw-linear-progress>
       <div class="mdc-typography--caption linear-progress-demo--example">
         Determinate
