@@ -14,6 +14,7 @@ export default {
     start: [Number, String],
     min: { type: [Number, String], default: 0 },
     max: { type: [Number, String], default: 100 },
+    step: { type: [Number, String], default: 1 },
     discrete: Boolean,
     tickMarks: Boolean,
     disabled: Boolean,
@@ -35,13 +36,15 @@ export default {
       startThumbAttrs: {
         'aria-valuenow': '0',
       },
-
+      test: 50,
       endValueText: '',
       endThumbClasses: {},
       endThumbAttrs: {
         'aria-valuenow': '0',
       },
 
+      inputs: [],
+      thumbs: [],
       root: null,
       startThumb: null,
       endThumb: null,
@@ -56,13 +59,24 @@ export default {
     };
 
     const getThumbEl = thumb => {
-      const thumbName = thumb == Thumb.END ? 'endThumb' : 'startThumb';
-      return uiState[thumbName];
+      return thumb === Thumb.END
+        ? uiState.thumbs[uiState.thumbs.length - 1]
+        : uiState.thumbs[0];
     };
 
     const getThumbName = (thumb, suffix) => {
       const thumbName = thumb == Thumb.END ? 'endThumb' : 'startThumb';
       return `${thumbName}${suffix}`;
+    };
+
+    const setInputRef = el => uiState.inputs.push(el);
+
+    const setThumbRef = el => uiState.thumbs.push(el);
+
+    const getInput = thumb => {
+      return thumb === Thumb.END
+        ? uiState.inputs[uiState.inputs.length - 1]
+        : uiState.inputs[0];
     };
 
     const adapter = {
@@ -91,6 +105,28 @@ export default {
       },
 
       getAttribute: name => uiState.root.getAttribute(name),
+
+      getInputValue: thumb => getInput(thumb).value,
+      setInputValue: (value, thumb) => {
+        getInput(thumb).value = value;
+      },
+      getInputAttribute: (attribute, thumb) => {
+        if (attribute == 'value') {
+          return adapter.getInputValue(thumb);
+        }
+
+        return getInput(thumb).getAttribute(attribute);
+      },
+      setInputAttribute: (attribute, value, thumb) => {
+        getInput(thumb).setAttribute(attribute, value);
+      },
+      removeInputAttribute: (attribute, thumb) => {
+        getInput(thumb).removeAttribute(attribute);
+      },
+      focusInput: thumb => {
+        getInput(thumb).focus();
+      },
+      isInputFocused: thumb => getInput(thumb) === document.activeElement,
 
       getThumbAttribute: (attribute, thumb) => {
         const thumbName = getThumbName(thumb, 'Attrs');
@@ -182,7 +218,12 @@ export default {
 
       deregisterThumbEventHandler: (thumb, evtType, handler) =>
         getThumbEl(thumb).removeEventListener(evtType, handler),
-
+      registerInputEventHandler: (thumb, evtType, handler) => {
+        getInput(thumb).addEventListener(evtType, handler);
+      },
+      deregisterInputEventHandler: (thumb, evtType, handler) => {
+        getInput(thumb).removeEventListener(evtType, handler);
+      },
       registerBodyEventHandler: (evtType, handler) =>
         document.body.addEventListener(evtType, handler),
 
@@ -249,6 +290,11 @@ export default {
       foundation.destroy();
     });
 
-    return { ...toRefs(uiState), setValueToAriaValueTextFn };
+    return {
+      ...toRefs(uiState),
+      setValueToAriaValueTextFn,
+      setInputRef,
+      setThumbRef,
+    };
   },
 };

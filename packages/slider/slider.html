@@ -1,4 +1,27 @@
 <div ref="root" :class="classes">
+  <input
+    :ref="setInputRef"
+    v-if="range"
+    class="mdc-slider__input"
+    type="range"
+    :min="min"
+    :max="max"
+    :step="step"
+    :value="start"
+    name="volume"
+    aria-label="slider"
+  />
+  <input
+    :ref="setInputRef"
+    class="mdc-slider__input"
+    type="range"
+    :min="min"
+    :max="max"
+    :step="step"
+    :value="modelValue"
+    name="volume"
+    aria-label="slider"
+  />
   <div class="mdc-slider__track">
     <div class="mdc-slider__track--inactive"></div>
     <div class="mdc-slider__track--active">
@@ -10,12 +33,12 @@
     </div>
   </div>
   <div
-    ref="startThumb"
+    :ref="setThumbRef"
     :class="startThumbClasses"
     class="mdc-slider__thumb"
     tabindex="0"
     role="slider"
-    aria-label="Continuous slider demo"
+    aria-label="slider"
     v-bind="startThumbAttrs"
     v-if="range"
   >
@@ -29,12 +52,12 @@
   </div>
 
   <div
-    ref="endThumb"
+    :ref="setThumbRef"
     :class="endThumbClasses"
     class="mdc-slider__thumb"
     tabindex="0"
     role="slider"
-    aria-label="Continuous slider demo"
+    aria-label="slider"
     v-bind="endThumbAttrs"
   >
     <div class="mdc-slider__value-indicator-container" v-if="discrete">

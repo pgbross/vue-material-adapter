@@ -9,6 +9,7 @@
         v-model="sliderValueEnd"
         v-model:start="sliderValueStart"
         max="10"
+        start-max="5"
         range
       />
 
