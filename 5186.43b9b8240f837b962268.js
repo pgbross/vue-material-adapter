@@ -1,0 +1,2 @@
+(self.webpackChunkvue_material_adapter=self.webpackChunkvue_material_adapter||[]).push([[5186],{5186:function(a,e,r){"use strict";r.r(e),r.d(e,{default:function(){return c}});var i=r(5166),n={class:"mcw-demo mcw-demo--container"},t=(0,i.Wm)("i",{class:"material-icons"},"android",-1);var c={render:function(a,e){var r=(0,i.up)("mcw-material-icon");return(0,i.wg)(),(0,i.j4)("div",n,[(0,i.Wm)(r,{icon:"favorite"}),(0,i.Wm)(r,{icon:"aspect_ratio"}),t])}}}}]);
+//# sourceMappingURL=5186.43b9b8240f837b962268.js.map
