@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.com/pgbross/vue-material-adapter.svg?branch=master)](https://travis-ci.com/pgbross/vue-material-adapter)
 
-This is the Vue 2 version of `vue-material-adapter`, for the Vue 3 version see the `v-next` branch.
+This is the Vue 2 (legacy) version of `vue-material-adapter`, for the Vue 3 version see the `main` branch.
 
 Vue components (Vue 2.0) for [Material Web Components](https://material.io/components/web/) which uses the
 [`Using Foundations and Adapters`](https://github.com/material-components/material-components-web/blob/master/docs/integrating-into-frameworks.md#the-advanced-approach-using-foundations-and-adapters) integration technique.
@@ -12,7 +12,7 @@ This project defines Vue components that use the `Material Components Web` libra
 ## Install
 
 ```
-$ npm install vue-material-adapter
+$ npm install vue-material-adapter-legacy
 ```
 
 ## Documentation & Demo
@@ -32,7 +32,7 @@ See [Release Notes](https://github.com/pgbross/vue-material-adapter/release-note
 Install dependencies
 
 ```
-npm install vue-material-adapter
+npm install vue-material-adapter-legacy
 ```
 
 to build everything
