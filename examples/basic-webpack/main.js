@@ -14,7 +14,7 @@ export default async function main() {
           },
           {
             desc: 'To learn more about Vue Material Adapter, visit',
-            url: 'https://github.com/pgbross/vue-material-adapter/tree/alpha',
+            url: 'https://github.com/pgbross/vue-material-adapter',
           },
           {
             desc: 'To have a preview of Vue Material Adapter components, visit',
