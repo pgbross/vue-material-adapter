@@ -17,15 +17,15 @@ $ npm install vue-material-adapter-legacy
 
 ## Documentation & Demo
 
-See [Documentation & Demo](https://pgbross.github.io/vue-material-adapter) for working examples of how to structure the markup for Vue.
+See [Documentation & Demo](https://pgbross.github.io/vue-material-adapter/tree/legacy) for working examples of how to structure the markup for Vue.
 
 ## Examples
 
-There are examples of using `vue-material-adapter` both as a `basic-vue-cli` and a `basic-webpack` project [examples](https://github.com/pgbross/vue-material-adapter/tree/master/examples).
+There are examples of using `vue-material-adapter` both as a `basic-vue-cli` and a `basic-webpack` project [examples](https://github.com/pgbross/vue-material-adapter/tree/legacy/examples).
 
 ## Release Notes
 
-See [Release Notes](https://github.com/pgbross/vue-material-adapter/release-notes.md)
+See [Release Notes](https://github.com/pgbross/vue-material-adapter/tree/legacy/release-notes.md)
 
 ### Building and running demo
 

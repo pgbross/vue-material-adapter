@@ -1,5 +1,5 @@
 {
-  "name": "vue-material-adapter",
+  "name": "vue-material-adapter-legacy",
   "version": "0.17.3",
   "description": "Vue wrapper arround Material Components for the Web",
   "keywords": [
