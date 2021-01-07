@@ -1,3 +1,69 @@
+# [1.0.0](https://github.com/pgbross/vue-material-adapter/compare/v0.17.3...v1.0.0) (2021-01-07)
+
+
+### Bug Fixes
+
+* **banner:** set classlist directly so banner height is known ([2df3cbf](https://github.com/pgbross/vue-material-adapter/commit/2df3cbff11f52911112fc6d393527b1abb041968))
+* add attrs to select ([9fc4658](https://github.com/pgbross/vue-material-adapter/commit/9fc4658fe6ccfb98a94d2b0cea88ae48fe160893))
+* adding in markdown docs again ([7f09e89](https://github.com/pgbross/vue-material-adapter/commit/7f09e893ba35cc112618658ad49e81c71b41d790))
+* attrs on custom link ([c9cae29](https://github.com/pgbross/vue-material-adapter/commit/c9cae29178f42d358a32327338aa0763aa3556f7))
+* checkbox demo attribute order ([b52987c](https://github.com/pgbross/vue-material-adapter/commit/b52987c61b23daf4dd8f5e245cfa8c7564eb050a))
+* datatable event names ([e6cfa43](https://github.com/pgbross/vue-material-adapter/commit/e6cfa439518969103229f88b76f253d33af86eb8))
+* drawer update modelValue events ([5372a0a](https://github.com/pgbross/vue-material-adapter/commit/5372a0ac8d96bc49ec39264a0b9057a3cc803642))
+* emitted event case ([6a55842](https://github.com/pgbross/vue-material-adapter/commit/6a55842b01b48be71b5670add2f81a4b8d04ef0b))
+* examples for latest build ([5ee533e](https://github.com/pgbross/vue-material-adapter/commit/5ee533e7c55e60a8c69bcd6ff86603867c729fa1))
+* guard list against items no longer existing ([6bb7586](https://github.com/pgbross/vue-material-adapter/commit/6bb75864f32df72d8c3eaa73921c71fd9804f93b))
+* list item selection ([ae8dd35](https://github.com/pgbross/vue-material-adapter/commit/ae8dd35ed71c46c6c5ccb3f4ac381a9a893447b0))
+* missing banner export ([aaa6d51](https://github.com/pgbross/vue-material-adapter/commit/aaa6d51da709427d6d85c0819682086d2babe407))
+* pass classes onto text field root element ([6ba83e2](https://github.com/pgbross/vue-material-adapter/commit/6ba83e2abfff99d70e79a5c72c5181d7535acac5))
+* pass through class to list items ([100de74](https://github.com/pgbross/vue-material-adapter/commit/100de749680590b0634d5701c6d048feb045ffa9))
+* **drawer:** listen for lowercase list action event ([b41fa2b](https://github.com/pgbross/vue-material-adapter/commit/b41fa2bd62bf1a085e5241e81a76e42ab6937391))
+* **select:** set selected index on refresh ([3341f57](https://github.com/pgbross/vue-material-adapter/commit/3341f57abf851dc5a82d72702cb56fb7f2f90d42))
+* include other attrs for custom link ([b634d13](https://github.com/pgbross/vue-material-adapter/commit/b634d13023e947c1bb2cf76cc721b07b505ba980))
+* make vue-router an external ([127af72](https://github.com/pgbross/vue-material-adapter/commit/127af72c6a7141124ebd3a3dfd765c7fdf885c5c))
+* rationalise emitted event names ([c29ebdf](https://github.com/pgbross/vue-material-adapter/commit/c29ebdfaaebdc8e786b8f7c8cb17dd69e8567272))
+* remove created from button demo ([f5512c4](https://github.com/pgbross/vue-material-adapter/commit/f5512c467436950ee848ee94fdbfdc671765b0d9))
+* remove dependency on vue-router ([bf5d32d](https://github.com/pgbross/vue-material-adapter/commit/bf5d32db479a5d99eb4bd42ade79b61a853ad42c))
+* remove onchange logging in demo checkbox ([e6035ec](https://github.com/pgbross/vue-material-adapter/commit/e6035ec7ea0827f6d04f56b9df96a95ba57fefc9))
+* remove vue-router dependency in basic example ([b53b02b](https://github.com/pgbross/vue-material-adapter/commit/b53b02bbc4adfb23b710aee0ba4943fedc5619cf))
+* select ([1b3f768](https://github.com/pgbross/vue-material-adapter/commit/1b3f768b1c500d4720670fc2d6dc6ead676b9780))
+* select helper text and icon foundation references ([9202adf](https://github.com/pgbross/vue-material-adapter/commit/9202adf20980cad00908e4a19159a1854478f8b1))
+* slider start value update ([4ad1cd7](https://github.com/pgbross/vue-material-adapter/commit/4ad1cd78b47e5dc0b067e1c3c01f52bd223e7405))
+* snackbar listener ([6313367](https://github.com/pgbross/vue-material-adapter/commit/63133671311151a53661f39afbcbf584db2728c5))
+* tab custom event name ([3db3f9b](https://github.com/pgbross/vue-material-adapter/commit/3db3f9b6551975458d006bf8edf51c250c393c4d))
+* update events to be lowercase vor vue 3 ([e65d71d](https://github.com/pgbross/vue-material-adapter/commit/e65d71d140baf20cebb20bf05bf3479fdcb0758c))
+* update for latest packages ([c7fdb82](https://github.com/pgbross/vue-material-adapter/commit/c7fdb8275354bcf219b08147a333a4360d6dfae1))
+* upgrade textfield for v8 ([acf4cd0](https://github.com/pgbross/vue-material-adapter/commit/acf4cd053391398f9dc0243e0d6612f6ca41b854))
+* use object in custom link for default slot as router link calls with context ([6f0d4e7](https://github.com/pgbross/vue-material-adapter/commit/6f0d4e7b13bd5a99327ff1f4d1c54dda7a5f3734))
+* use resolveDynamicComponent to avoid runtime warning ([7076138](https://github.com/pgbross/vue-material-adapter/commit/7076138eefb2e7b157f3851917412dbfc3cee114))
+
+
+### Features
+
+* add array example to checkbox demo ([eaf05c1](https://github.com/pgbross/vue-material-adapter/commit/eaf05c1b81ecde5c5b7eb0029e582f2eba0daa10))
+* add banner component ([7d5585c](https://github.com/pgbross/vue-material-adapter/commit/7d5585c4125415181add1040dab54e241cd87fbe))
+* add preliminary support for rich tooltip ([5f4f980](https://github.com/pgbross/vue-material-adapter/commit/5f4f9808c35816dc625c201e8073889d29d58317))
+* add segmented-button ([884da6f](https://github.com/pgbross/vue-material-adapter/commit/884da6f3fb219b3733bcc6c4a56ef735e836a679))
+* add window event handler to tooltip ([3d6e522](https://github.com/pgbross/vue-material-adapter/commit/3d6e52281f0b0786534dea4c403ba0d8e4fdcb57))
+* circular-progress for v8 ([6252fa6](https://github.com/pgbross/vue-material-adapter/commit/6252fa674255ce6429544e9c8267bc0a812d2386))
+* demo starts and can render simple demos ([21dc2a5](https://github.com/pgbross/vue-material-adapter/commit/21dc2a5517a3f10377386ce21a648781c291f352))
+* fix aria-valuemin and aria-valuemax at 0 and 1 ([352f476](https://github.com/pgbross/vue-material-adapter/commit/352f476a718afe4adbc1c1e82c0e423f861a0c24))
+* implement mcw-tooltip ([393531c](https://github.com/pgbross/vue-material-adapter/commit/393531c593be40c235a6633ad5fd61fc5a3d3399))
+* support snack property for queueing snacks ([66e66a8](https://github.com/pgbross/vue-material-adapter/commit/66e66a8d4f0cc472a0b9f2fc4fe4bc77a4cc4355))
+* update basic cli example ([3d05e17](https://github.com/pgbross/vue-material-adapter/commit/3d05e1748adc644e18c74f9c1d077ee62e20c80f))
+* update basic-webpack example for vue 3/webpack 5 ([d806b53](https://github.com/pgbross/vue-material-adapter/commit/d806b53f16fbb29b046d4d460617bb82670211db))
+* update icon registration ([2a0b6fa](https://github.com/pgbross/vue-material-adapter/commit/2a0b6fa4c84a6fbb8124fe04f18839e86473acad))
+* update slider for new input range controls ([f338762](https://github.com/pgbross/vue-material-adapter/commit/f338762008a0db4c3377acc25e1649eac5b6fd1e))
+* update slider for v8 ([b7550e0](https://github.com/pgbross/vue-material-adapter/commit/b7550e02593937a15d441930eb34acfc5d3781b2))
+* updating package for vue 3 ([d7c8899](https://github.com/pgbross/vue-material-adapter/commit/d7c88996a82aa648ff1801c320c1703c8e61893e))
+* use attrs instead of custom link property ([0968cb1](https://github.com/pgbross/vue-material-adapter/commit/0968cb1422120889ea1fbed764369fb9c6cbdfc6))
+* use foundation events to lowercase in custom events ([70d67cc](https://github.com/pgbross/vue-material-adapter/commit/70d67cca51218f1dc1ecf43d96d9fa396be146f7))
+* working on buttons ([9ba4834](https://github.com/pgbross/vue-material-adapter/commit/9ba48341ba5ac907cce75a750bca58beb4ab11a0))
+* working on lists ([269ca04](https://github.com/pgbross/vue-material-adapter/commit/269ca04a2cb8d7d49fdfa3304fbf412eb373ddbc))
+* working on vue 3 updates ([bbb5d89](https://github.com/pgbross/vue-material-adapter/commit/bbb5d898dd862780e3c61df7b95e31af5593cd13))
+
+
+
 # [1.0.0-beta.13](https://github.com/pgbross/vue-material-adapter/compare/v0.17.3...v1.0.0-beta.13) (2020-12-04)
 
 ### Bug Fixes

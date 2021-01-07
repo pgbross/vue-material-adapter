@@ -1,3 +1,20 @@
+# [1.0.0](https://github.com/pgbross/vue-material-adapter/compare/v0.17.3...v1.0.0) (2021-01-07)
+
+### `v1.0.0` - This release targets `material-components-web v9.0.0`.
+
+Adds support for:
+
+- Banner
+- Segmented Button
+- Select (input range version)
+- Tooltip
+
+BREAKING CHANGE:
+
+`vue` 3.0 or greater is required as a peer dependency. Some event name may be changed because Vue 3 only handles lowercase event names. See [Documentation & Demo](https://pgbross.github.io/vue-material-adapter) for notes, information, and examples.
+
+Install `vue-material-adapter-legacy` for the Vue 2 version (see [legacy](https://github.com/pgbross/vue-material-adapter/tree/legacy))
+
 ## [0.17.3](https://github.com/pgbross/vue-material-adapter/compare/v0.17.2...v0.17.3) (2020-08-27)
 
 ### Bug Fixes
