@@ -1,10 +1,11 @@
-import { computed, reactive, toRefs } from '@vue/composition-api';
+import { computed, reactive, toRefs, nextTick, watch } from 'vue';
 
 const noop = () => {};
 
 export default {
   name: 'mcw-snackbar-queue',
-  setup(props, { emit, $listeners, root: $root }) {
+  props: { snack: Object },
+  setup(props, { emit, attrs }) {
     const uiState = reactive({
       open: false,
       queue: [],
@@ -54,14 +55,14 @@ export default {
       uiState.open = false;
       uiState.queue.shift();
       if (uiState.queue.length > 0) {
-        $root.$nextTick(() => uiState.queue[0]());
+        nextTick(() => uiState.queue[0]());
       }
     };
 
     const listeners = computed(() => {
       return {
-        ...$listeners,
-        'MDCSnackbar:closed': ({ reason }) => {
+        'update:reason': attrs['update:reason'],
+        'mdcsnackbar:closed': ({ reason }) => {
           if (actionHandler_ && reason === 'action') {
             actionHandler_({ reason });
           }
@@ -70,6 +71,16 @@ export default {
         },
       };
     });
+
+    watch(
+      () => props.snack,
+      (nv, ov) => {
+        if (nv) {
+          handleSnack(nv);
+          emit('update:snack', null);
+        }
+      },
+    );
 
     return { ...toRefs(uiState), handleSnack, listeners };
   },

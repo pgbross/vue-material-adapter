@@ -2,13 +2,7 @@ import { MDCDialogFoundation } from '@material/dialog/foundation';
 import * as util from '@material/dialog/util';
 import { FocusTrap } from '@material/dom/focus-trap.js';
 import { closest, matches } from '@material/dom/ponyfill.js';
-import {
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  toRefs,
-  watch,
-} from '@vue/composition-api';
+import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
 import { mcwButton } from '~/button/index.js';
 
 const { cssClasses, strings } = MDCDialogFoundation;
@@ -19,15 +13,12 @@ export default {
   components: {
     mcwButton: mcwButton,
   },
-  model: {
-    prop: 'open',
-    event: 'change',
-  },
+
   props: {
     autoStackButtons: Boolean,
     escapeKeyAction: String,
     scrollable: Boolean,
-    open: Boolean,
+    modelValue: Boolean,
     role: String,
     scrimClickAction: { type: String, default: 'close' },
     tag: { type: String, default: 'div' },
@@ -35,7 +26,7 @@ export default {
     ariaDescribedby: String,
   },
 
-  setup(props, { emit, attrs }) {
+  setup(props, { emit }) {
     const uiState = reactive({
       classes: { 'mdc-dialog': 1 },
       styles: {},
@@ -123,16 +114,16 @@ export default {
         );
       },
       notifyOpening: () => {
-        emit(strings.OPENING_EVENT, {});
+        emit('mdcdialog:opening', {});
         LAYOUT_EVENTS.forEach(evt =>
           window.addEventListener(evt, handleLayout),
         );
         document.addEventListener('keydown', handleDocumentKeyDown);
       },
-      notifyOpened: () => emit(strings.OPENED_EVENT, {}),
+      notifyOpened: () => emit('mdcdialog:opened', {}),
       notifyClosing: action => {
-        emit('change', false);
-        emit(strings.CLOSING_EVENT, action ? { action } : {});
+        emit('update:modelValue', false);
+        emit('mdcdialog:closing', action ? { action } : {});
 
         LAYOUT_EVENTS.forEach(evt =>
           window.removeEventListener(evt, handleLayout),
@@ -140,12 +131,12 @@ export default {
         document.removeEventListener('keydown', handleDocumentKeyDown);
       },
       notifyClosed: action => {
-        emit(strings.CLOSED_EVENT, action ? { action } : {});
+        emit('mdcdialog:closed', action ? { action } : {});
       },
     };
 
     watch(
-      () => props.open,
+      () => props.modelValue,
       nv => {
         onOpen(nv);
       },
@@ -153,7 +144,7 @@ export default {
 
     onMounted(() => {
       const {
-        open,
+        modelValue,
         autoStackButtons,
         escapeKeyAction,
         scrimClickAction,
@@ -192,7 +183,7 @@ export default {
         // set even if empty string
         foundation.setScrimClickAction(scrimClickAction);
       }
-      onOpen(open);
+      onOpen(modelValue);
     });
 
     onBeforeUnmount(() => {

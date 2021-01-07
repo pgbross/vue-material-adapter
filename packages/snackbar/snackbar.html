@@ -2,13 +2,12 @@
   <div class="mdc-snackbar__surface" @click="surfaceClickHandler">
     <div ref="labelEl" class="mdc-snackbar__label" role="status" aria-live="polite">
       <template v-if="showMessage">{{message}}</template>
-      <span style="display: inline-block; width: 0; height: '1px';" v-else>&nbsp;</span>
+      <span style="display: inline-block; width: 0; height: '1px'" v-else>&nbsp;</span>
     </div>
     <div class="mdc-snackbar__actions">
       <button
         ref="actionEl"
         type="button"
-        v-on="$listeners"
         class="mdc-button mdc-snackbar__action"
         v-if="actionText"
       >

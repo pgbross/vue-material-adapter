@@ -2,13 +2,7 @@ import { applyPassive } from '@material/dom/events';
 import { matches } from '@material/dom/ponyfill';
 import { MDCRippleFoundation } from '@material/ripple';
 import { supportsCssVariables } from '@material/ripple/util';
-import {
-  onBeforeUnmount,
-  onMounted,
-  ref,
-  shallowReactive,
-  toRefs,
-} from '@vue/composition-api';
+import { onBeforeUnmount, onMounted, ref, shallowReactive, toRefs } from 'vue';
 
 export class RippleElement extends MDCRippleFoundation {
   constructor(element, state, { unbounded = false, ...options } = {}) {

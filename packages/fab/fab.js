@@ -1,10 +1,9 @@
-import { computed, reactive, ref, toRefs, watch } from '@vue/composition-api';
+import { computed, reactive, ref, toRefs, watch } from 'vue';
 import { CustomLink } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 
 export default {
   name: 'mcw-fab',
-  inheritAttrs: false,
   props: {
     icon: String,
     mini: Boolean,
@@ -12,7 +11,7 @@ export default {
     label: String,
   },
   components: { CustomLink },
-  setup(props, { slots, listeners }) {
+  setup(props, { slots }) {
     const root = ref(null);
     const uiState = reactive({
       classes: {
@@ -49,6 +48,6 @@ export default {
       },
     );
 
-    return { ...toRefs(uiState), classes, root, styles, listeners };
+    return { ...toRefs(uiState), classes, root, styles };
   },
 };

@@ -1,4 +1,4 @@
-import { h } from '@vue/composition-api';
+import { h, resolveComponent } from 'vue';
 
 export default {
   name: 'mcw-dialog-button',
@@ -8,24 +8,18 @@ export default {
     isInitialFocus: Boolean,
   },
 
-  setup(props, { listeners, slots }) {
-    const onClick = listeners['click'] || (() => {});
-
+  setup(props, { attrs, slots }) {
     return () => {
       return h(
-        'mcw-button',
+        resolveComponent('mcw-button'),
         {
-          class: ['mdc-dialog__button'],
-          attrs: {
-            'data-mdc-dialog-action': props.action,
-            'data-mdc-dialog-button-default': props.isDefault,
-            'data-mdc-dialog-initial-focus': props.isInitialFocus,
-          },
-          on: {
-            click: onClick,
-          },
+          ...attrs,
+          class: ['mdc-button', 'mdc-dialog__button'],
+          'data-mdc-dialog-action': props.action,
+          'data-mdc-dialog-button-default': props.isDefault,
+          'data-mdc-dialog-initial-focus': props.isInitialFocus,
         },
-        slots.default?.(),
+        { default: () => slots.default?.() },
       );
     };
   },

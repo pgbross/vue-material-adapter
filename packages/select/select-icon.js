@@ -1,19 +1,15 @@
 import { MDCSelectIconFoundation } from '@material/select/icon/foundation.js';
-import {
-  computed,
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  toRefs,
-} from '@vue/composition-api';
+import { computed, onBeforeUnmount, onMounted, reactive, toRefs } from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
+
+const { strings } = MDCSelectIconFoundation;
 
 export default {
   name: 'select-icon',
   props: {
     icon: String,
   },
-  setup(props, { emit, listeners: $listeners }) {
+  setup(props, { emit, attrs }) {
     const uiState = reactive({
       classes: {
         'material-icons': true,
@@ -23,11 +19,11 @@ export default {
       root: null,
       rootAttrs: {},
       rootListeners: {},
+      foundation: {},
     });
 
-    let foundation;
     const listeners = computed(() => {
-      return { ...$listeners, ...uiState.rootListeners };
+      return { ...attrs, ...uiState.rootListeners };
     });
 
     const adapter = {
@@ -45,7 +41,7 @@ export default {
       registerInteractionHandler: (evtType, handler) =>
         (uiState.rootListeners = {
           ...uiState.rootListeners,
-          [evtType]: handler,
+          [evtType.toLowerCase()]: handler,
         }),
       deregisterInteractionHandler: (evtType, handler) => {
         // eslint-disable-next-line no-unused-vars
@@ -57,7 +53,7 @@ export default {
 
         emitCustomEvent(
           uiState.root,
-          MDCSelectIconFoundation.strings.ICON_EVENT,
+          strings.ICON_EVENT,
           {},
           true /* shouldBubble  */,
         );
@@ -65,12 +61,12 @@ export default {
     };
 
     onMounted(() => {
-      foundation = new MDCSelectIconFoundation(adapter);
-      foundation.init();
+      uiState.foundation = new MDCSelectIconFoundation(adapter);
+      uiState.foundation.init();
     });
 
     onBeforeUnmount(() => {
-      foundation.destroy();
+      uiState.foundation.destroy();
     });
 
     return { ...toRefs(uiState), listeners };

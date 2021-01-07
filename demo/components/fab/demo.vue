@@ -21,7 +21,7 @@
 export default {
   methods: {
     onClick() {
-      console.log('onClick');
+      console.log('fab onClick');
     },
   },
 };

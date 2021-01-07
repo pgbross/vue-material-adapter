@@ -3,6 +3,7 @@
 
 );
 
+@use "@material/banner/styles" as banner;
 @use "@material/button/mdc-button";
 @use "@material/card/mdc-card";
 @use "@material/circular-progress/mdc-circular-progress";
@@ -27,7 +28,8 @@
 @use "@material/radio/mdc-radio";
 @use "@material/ripple/mdc-ripple";
 @use "@material/select/mdc-select";
-@use "@material/slider/mdc-slider";
+@use "@material/segmented-button/styles" as segmentedButton;
+@use "@material/slider/styles" as slider;
 @use "@material/snackbar/mdc-snackbar";
 @use "@material/switch/mdc-switch";
 @use "@material/tab/mdc-tab";
@@ -35,6 +37,6 @@
 @use "@material/tab-indicator/mdc-tab-indicator";
 @use "@material/tab-scroller/mdc-tab-scroller";
 @use "@material/textfield/mdc-text-field";
-
+@use "@material/tooltip/styles" as tooltip;
 @use "@material/top-app-bar/mdc-top-app-bar";
 @use "@material/typography/mdc-typography";

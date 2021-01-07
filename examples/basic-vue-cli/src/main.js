@@ -1,13 +1,12 @@
-import VueCompositionAPI from '@vue/composition-api';
-import Vue from 'vue';
+import { createApp, h } from 'vue';
 import VueMaterialAdapter from 'vue-material-adapter';
 import App from './App.vue';
 
-Vue.use(VueCompositionAPI);
+// mount app
+const app = createApp({
+  render: () => h(App),
+});
 
-Vue.config.productionTip = false;
-Vue.use(VueMaterialAdapter);
+app.use(VueMaterialAdapter);
 
-new Vue({
-  render: h => h(App),
-}).$mount('#app');
+app.mount('#app');

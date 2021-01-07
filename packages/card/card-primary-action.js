@@ -1,12 +1,11 @@
-import { computed, ref } from '@vue/composition-api';
+import { computed, ref } from 'vue';
 import { CustomLink } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/index.js';
 
 export default {
   name: 'mcw-card-primary-action',
-  inheritAttrs: false,
   components: { CustomLink },
-  setup(props, { listeners }) {
+  setup() {
     const root = ref(null);
 
     const { classes: rippleClasses, styles } = useRipplePlugin(root);
@@ -14,6 +13,10 @@ export default {
       return { ...rippleClasses.value, 'mdc-card__primary-action': 1 };
     });
 
-    return { classes, styles, root, listeners };
+    return {
+      classes,
+      styles,
+      root,
+    };
   },
 };

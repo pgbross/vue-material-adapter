@@ -1,24 +1,22 @@
 import { closest, matches } from '@material/dom/ponyfill';
 import { MDCListFoundation } from '@material/list/foundation';
 import {
-  computed,
+  // computed,
   onBeforeUnmount,
   onMounted,
+  provide,
   reactive,
   ref,
   toRefs,
   watch,
-} from '@vue/composition-api';
+} from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
 
 const { strings, cssClasses } = MDCListFoundation;
 
 export default {
   name: 'mcw-list',
-  model: {
-    prop: 'selectedIndex',
-    event: 'change',
-  },
+
   props: {
     nonInteractive: { type: Boolean, default: false },
     dense: Boolean,
@@ -27,7 +25,7 @@ export default {
     singleSelection: Boolean,
     wrapFocus: Boolean,
     textualList: Boolean,
-    selectedIndex: { type: [String, Number, Array] },
+    modelValue: { type: [String, Number, Array] },
     tag: { type: String, default: 'ul' },
     ariaOrientation: { type: String, default: 'vertical' },
     thumbnailList: Boolean,
@@ -36,7 +34,7 @@ export default {
     typeAhead: Boolean,
   },
 
-  setup(props, { emit, slots }) {
+  setup(props, { emit }) {
     const uiState = reactive({
       classes: {
         'mdc-list': 1,
@@ -54,58 +52,87 @@ export default {
       listRoot: null,
     });
 
-    const selectedIndex = ref(props.selectedIndex);
+    const singleSelection = ref(props.singleSelection);
+    // const selectedIndex = ref(props.modelValue);
 
     let foundation;
     let slotObserver;
 
-    if (props.singleSelection) {
+    if (singleSelection.value) {
       uiState.rootAttrs.role = 'listbox';
     }
+    const listItems = ref({});
 
-    const selIndex = computed({
-      get() {
-        return selectedIndex.value;
-      },
-      set(nv) {
-        selectedIndex.value = nv;
-        emit('change', nv);
-      },
-    });
+    // keep a hash of child list items
+    // so we can set classes and attributes
+    const registerListItem = item => {
+      listItems.value[item.itemId] = item;
+    };
 
-    const listElements = computed(() => {
-      // eslint-disable-next-line no-unused-vars
-      const xx = uiState.listn; // for dependency
+    provide('registerListItem', registerListItem);
 
-      const processItem = item => {
-        const items = [];
-        if (item.componentInstance?.setAttribute) {
-          items.push(item.componentInstance);
-        }
+    // const selIndex = computed({
+    //   get() {
+    //     return selectedIndex.value;
+    //   },
+    //   set(nv) {
+    //     selectedIndex.value = nv;
+    //     emit('update:modelValue', nv);
+    //   },
+    // });
 
-        if (item.children) {
-          return item.children.reduce((p, v) => {
-            return p.concat(processItem(v));
-          }, items);
-        }
+    const setSingleSelection = isSingleSelectionList => {
+      singleSelection.value = isSingleSelectionList;
+      foundation.setSingleSelection(isSingleSelectionList);
+    };
 
-        return items;
-      };
+    const setSelectedIndex = index => {
+      foundation.setSelectedIndex(index);
+    };
 
-      // search depth first down the tree for vue components that match the signature of a mcw-list-item
-      const topList = slots.default?.().reduce((p, v) => {
-        return p.concat(processItem(v));
-      }, []);
+    const getSelectedIndex = () => foundation.getSelectedIndex();
 
-      return topList;
-    });
+    // keep list of child elements that will have their item id in a data attribute
+    // so we can find the listItem from events or by index.
 
-    const getListItemIndex = evt => {
-      if (evt.__itemId !== void 0) {
-        return listElements.value.findIndex(
-          ({ itemId }) => itemId === evt.__itemId,
-        );
+    const listElements = ref([]);
+
+    // all the child list elements
+    // may be refreshed if the list items are rerendered for example
+    const updateListElements = () => {
+      const elements = [].slice.call(
+        uiState.listRoot.querySelectorAll(`.${cssClasses.LIST_ITEM_CLASS}`),
+      );
+
+      listElements.value = elements;
+    };
+
+    // find the list item by index.
+    // The list elements are in DOM order, so find it by index,
+    // then use its item id to lookup in the list item hash
+    const getListItemByIndex = index => {
+      const element = listElements.value[index];
+      if (element) {
+        const myItemId = element.dataset.myitemid;
+        return listItems.value[myItemId];
       }
+    };
+
+    // find the index of a list item from the event target
+    const getListItemIndex = evt => {
+      const myItemId = evt.target.dataset.myitemid;
+
+      // if clicked on a list item then just search
+      if (myItemId !== void 0) {
+        const lei = listElements.value.findIndex(
+          ({ dataset: { myitemid } }) => myitemid === myItemId,
+        );
+
+        return lei;
+      }
+
+      // if the click wasnt on a list item
+      // search up the DOM
 
       const eventTarget = evt.target;
       const nearestParent = closest(
@@ -118,7 +145,7 @@ export default {
         nearestParent &&
         matches(nearestParent, `.${cssClasses.LIST_ITEM_CLASS}`)
       ) {
-        return listElements.value.indexOf(nearestParent.__vue__);
+        return listElements.value.indexOf(nearestParent);
       }
 
       return -1;
@@ -160,13 +187,13 @@ export default {
           strings.ARIA_CHECKED_CHECKBOX_SELECTOR,
         );
 
-        selIndex.value = [].map.call(preselectedItems, listItem =>
-          listElements.value.indexOf(listItem.__vue__),
+        setSelectedIndex(
+          [].map.call(preselectedItems, listItem =>
+            listElements.value.indexOf(listItem),
+          ),
         );
       } else if (radioSelectedListItem) {
-        selIndex.value = listElements.value.indexOf(
-          radioSelectedListItem.__vue__,
-        );
+        setSelectedIndex(listElements.value.indexOf(radioSelectedListItem));
       }
     };
 
@@ -225,6 +252,7 @@ export default {
       foundation.handleClick(index, toggleCheckbox);
     };
 
+    // set up the listeners and bind in the template with v-on
     const rootListeners = {
       click: event => handleClickEvent(event),
       focusin: event => {
@@ -240,9 +268,8 @@ export default {
 
     const adapter = {
       addClassForElementIndex: (index, className) => {
-        const element = listElements.value[index];
-
-        element.classList.add(className);
+        const listItem = getListItemByIndex(index);
+        listItem?.classList.add(className);
       },
       focusItemAtIndex: index => {
         const element = listElements.value[index];
@@ -251,8 +278,9 @@ export default {
         }
       },
       getAttributeForElementIndex: (index, attr) => {
-        const listItem = listElements.value[index];
-        return listItem.getAttribute(attr);
+        const listItem = getListItemByIndex(index);
+
+        return listItem?.getAttribute(attr);
       },
 
       getFocusedElementIndex: () =>
@@ -264,36 +292,35 @@ export default {
 
       hasCheckboxAtIndex: index => {
         const listItem = listElements.value[index];
-        return !!(listItem.$el ?? listItem).querySelector(
-          strings.CHECKBOX_SELECTOR,
-        );
+        return listItem && !!listItem.querySelector(strings.CHECKBOX_SELECTOR);
       },
 
       hasRadioAtIndex: index => {
         const listItem = listElements.value[index];
-        return !!(listItem.$el ?? listItem).querySelector(
-          strings.RADIO_SELECTOR,
-        );
+        return listItem && !!listItem.querySelector(strings.RADIO_SELECTOR);
       },
 
       isCheckboxCheckedAtIndex: index => {
         const listItem = listElements.value[index];
-        const toggleEl = (listItem.$el ?? listItem).querySelector(
-          strings.CHECKBOX_SELECTOR,
-        );
+        const toggleEl = listItem.querySelector(strings.CHECKBOX_SELECTOR);
         return toggleEl.checked;
       },
 
       isFocusInsideList: () => {
-        return uiState.listRoot.contains(document.activeElement);
+        const root = uiState.listRoot;
+        return (
+          root &&
+          root !== document.activeElement &&
+          root.contains(document.activeElement)
+        );
       },
 
       isRootFocused: () => document.activeElement === uiState.listRoot,
 
       listItemAtIndexHasClass: (index, className) => {
-        const listItem = listElements.value[index];
+        const listItem = getListItemByIndex(index);
 
-        listItem.classList.contains(className);
+        listItem?.classList.contains(className);
       },
 
       notifyAction: index => {
@@ -304,59 +331,59 @@ export default {
           /** shouldBubble */ true,
         );
 
-        if (Array.isArray(props.selectedIndex)) {
-          emit('change', foundation.getSelectedIndex());
+        if (Array.isArray(props.modelValue)) {
+          emit('update:modelValue', foundation.getSelectedIndex());
         } else {
-          emit('change', index);
+          emit('update:modelValue', index);
         }
       },
 
       removeClassForElementIndex: (index, className) => {
-        const listItem = listElements.value[index];
-
-        listItem.classList.remove(className);
+        const listItem = getListItemByIndex(index);
+        listItem?.classList.remove(className);
       },
 
       setAttributeForElementIndex: (index, attr, value) => {
-        const listItem = listElements.value[index];
-        listItem.setAttribute(attr, value);
+        const listItem = getListItemByIndex(index);
+        listItem?.setAttribute(attr, value);
       },
 
       setCheckedCheckboxOrRadioAtIndex: (index, isChecked) => {
         const listItem = listElements.value[index];
-        const toggleEl = listItem.$el.querySelector(
+        const toggleEl = listItem.querySelector(
           strings.CHECKBOX_RADIO_SELECTOR,
         );
         toggleEl && (toggleEl.checked = isChecked);
 
         const event = document.createEvent('Event');
-        event.initEvent('change', true, true);
+        event.initEvent('update:modelValue', true, true);
         toggleEl?.dispatchEvent(event);
       },
 
       setTabIndexForListItemChildren: (listItemIndex, tabIndexValue) => {
-        const element = listElements.value[listItemIndex].$el;
+        const element = listElements.value[listItemIndex];
         const listItemChildren = [].slice.call(
           element.querySelectorAll(strings.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX),
         );
-        listItemChildren.forEach(el =>
-          el.setAttribute('tabindex', tabIndexValue),
-        );
+        listItemChildren.forEach(el => {
+          const listItem = listItems.value[el.dataset.myitemid] ?? el;
+
+          listItem.setAttribute('tabindex', tabIndexValue);
+        });
       },
     };
 
-    watch(
-      () => props.singleSelection,
-      nv => foundation.setSingleSelection(nv),
-    );
+    // watch(
+    //   () => props.singleSelection,
+    //   nv => foundation.setSingleSelection(nv),
+    // );
 
     watch(
-      () => props.selectedIndex,
+      () => props.modelValue,
       nv => {
         if (Array.isArray(nv)) {
           foundation.setSelectedIndex(nv);
-        } else if (props.selectedIndex != nv) {
-          selectedIndex.value = nv;
+        } else if (props.modelValue != nv) {
           foundation.setSelectedIndex(nv);
         }
       },
@@ -378,16 +405,17 @@ export default {
     );
 
     onMounted(() => {
+      updateListElements();
       foundation = new MDCListFoundation(adapter);
       foundation.init();
 
       // if a single selection list need to ensure the selected item has the selected or activated class
       if (
-        props.singleSelection &&
-        typeof props.selectedIndex === 'number' &&
-        !isNaN(props.selectedIndex)
+        singleSelection.value &&
+        typeof props.modelValue === 'number' &&
+        !isNaN(props.modelValue)
       ) {
-        const i = props.selectedIndex;
+        const i = props.modelValue;
         const hasSelectedClass = adapter.listItemAtIndexHasClass(
           i,
           cssClasses.LIST_ITEM_SELECTED_CLASS,
@@ -398,7 +426,7 @@ export default {
         );
         if (!(hasSelectedClass || hasActivatedClass)) {
           adapter.addClassForElementIndex(
-            props.selectedIndex,
+            props.modelValue,
             'mdc-list-item--selected',
           );
         }
@@ -418,11 +446,9 @@ export default {
       }
 
       // the list content could change outside of this component
-      // so use a mutation observer to trigger an update by
-      // incrementing the dependency variable "listn" referenced
-      // in the computed that selects the list elements
+      // so use a mutation observer to trigger an update
       slotObserver = new MutationObserver((mutationList, observer) => {
-        uiState.listn++;
+        updateListElements();
       });
       slotObserver.observe(uiState.listRoot, {
         childList: true,
@@ -437,14 +463,18 @@ export default {
 
     return {
       ...toRefs(uiState),
+      listItems,
       listElements,
       rootListeners,
       layout,
       setEnabled,
       typeaheadMatchItem,
       typeaheadInProgress,
-      selIndex,
+      // selIndex,
+      getSelectedIndex,
+      setSelectedIndex,
       getPrimaryText,
+      setSingleSelection,
     };
   },
 };

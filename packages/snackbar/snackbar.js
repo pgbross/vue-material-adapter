@@ -7,18 +7,15 @@ import {
   reactive,
   toRefs,
   watch,
-} from '@vue/composition-api';
+} from 'vue';
 
 const { strings, numbers } = MDCSnackbarFoundation;
 
 export default {
   name: 'mcw-snackbar',
-  model: {
-    prop: 'open',
-    event: 'change',
-  },
+
   props: {
-    open: Boolean,
+    modelValue: Boolean,
     stacked: Boolean,
     leading: Boolean,
     message: String,
@@ -120,8 +117,8 @@ export default {
         (uiState.classes = { ...uiState.classes, [className]: true }),
       announce: () => announce(uiState.labelEl),
       notifyClosed: reason => {
-        emit(strings.CLOSED_EVENT, reason ? { reason } : {});
-        emit('change', false);
+        emit(strings.CLOSED_EVENT.toLowerCase(), reason ? { reason } : {});
+        emit('update:modelValue', false);
         emit('hide');
       },
       notifyClosing: reason => {
@@ -129,8 +126,8 @@ export default {
         emit('update:reason', reason);
       },
       notifyOpened: () => {
-        emit(strings.OPENED_EVENT, {});
-        emit('change', true);
+        emit(strings.OPENED_EVENT.toLowerCase(), {});
+        emit('update:modelValue', true);
         emit('show', {});
       },
 
@@ -152,7 +149,7 @@ export default {
     };
 
     watch(
-      () => props.open,
+      () => props.modelValue,
       nv => {
         if (nv) {
           foundation.open();

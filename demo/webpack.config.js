@@ -7,7 +7,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const { VueLoaderPlugin } = require('vue-loader');
 // const TerserPlugin = require('terser-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV === `production`;
@@ -25,9 +25,7 @@ const cssLoaders = [
   },
   {
     loader: 'postcss-loader',
-    options: {
-      config: { path: __dirname + '/postss.config.js' },
-    },
+    options: { postcssOptions: { config: 'postcss.config.js' } },
   },
   {
     loader: 'sass-loader',
@@ -104,6 +102,10 @@ const rules = [
 ];
 
 const plugins = [
+  new webpack.DefinePlugin({
+    __VUE_OPTIONS_API__: true,
+    __VUE_PROD_DEVTOOLS__: false,
+  }),
   new VueLoaderPlugin(),
   // create index.html
   new HtmlWebpackPlugin({
@@ -122,11 +124,11 @@ const plugins = [
       //   var: 'Vue',
       //   path: isProduction ? 'dist/vue.esm.min.js' : 'dist/vue.esm.js',
       // },
-      {
-        name: 'vue-router',
-        var: 'VueRouter',
-        path: isProduction ? 'dist/vue-router.min.js' : 'dist/vue-router.js',
-      },
+      // {
+      //   name: 'vue-router',
+      //   var: 'VueRouter',
+      //   path: 'dist/vue-router.esm-browser.js',
+      // },
     ],
   }),
 ];
@@ -143,7 +145,7 @@ const config = {
   },
   resolve: {
     alias: {
-      vue$: 'vue/dist/vue.esm.js',
+      vue$: 'vue/dist/vue.esm-bundler.js',
       'vue-material-adapter': resolve(
         '../packages/vue-material-adapter/index.js',
       ),
@@ -152,7 +154,7 @@ const config = {
     },
   },
   externals: {},
-  devtool: isProduction ? 'source-map' : 'cheap-eval-source-map',
+  devtool: isProduction ? 'source-map' : 'eval-cheap-source-map',
   module: { rules },
   plugins,
 };

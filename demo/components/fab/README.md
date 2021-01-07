@@ -22,21 +22,14 @@
 
 ### props
 
-| prop                 | Type           | Default                  | Description                                   |
-| -------------------- | -------------- | ------------------------ | --------------------------------------------- |
-| `icon`               | String         |                          | material-icon content (\*)                    |
-| `mini`               | Boolean        |                          | mini style (40x40 pixels) (\*)                |
-| `label`              | String         |                          | If label, is extended FAB                     |
-| `exited`             | Boolean        |                          | If true animates the FAB out of view.         |
-| `href`               | String         |                          | link's href, renders anchor (see notes below) |
-| `to`                 | String, Object | undefined                | router-link property _(\*)_                   |
-| `replace`            | Boolean        | false                    | router-link property _(\*)_                   |
-| `append`             | Boolean        | false                    | router-link property _(\*)_                   |
-| `exact`              | Boolean        | false                    | router-link property _(\*)_                   |
-| `active-class`       | String         | router-link-active       | router-link property _(\*)_                   |
-| `exact-active-class` | String         | router-link-exact-active | router-link property _(\*)_                   |
+| prop     | Type    | Default | Description                           |
+| -------- | ------- | ------- | ------------------------------------- |
+| `icon`   | String  |         | material-icon content (\*)            |
+| `mini`   | Boolean |         | mini style (40x40 pixels) (\*)        |
+| `label`  | String  |         | If label, is extended FAB             |
+| `exited` | Boolean |         | If true animates the FAB out of view. |
 
-> _(\*)_ Requires [vue-router](https://router.vuejs.org)
+> Supports Vue-Router props
 
 ### Custom Icons
 

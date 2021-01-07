@@ -10,21 +10,24 @@
 </template>
 
 <script>
+import { defineAsyncComponent, nextTick } from 'vue';
 import { capitalize } from './utils';
 
 export default {
   components: {
-    'getting-started': () => import('../docs/getting-started.md'),
-    theming: () => import('../docs/theming.md'),
+    'getting-started': defineAsyncComponent(() =>
+      import('../docs/getting-started.md'),
+    ),
+    theming: defineAsyncComponent(() => import('../docs/theming.md')),
+  },
+  beforeRouteUpdate(to, from, next) {
+    nextTick(() => scrollTo(0, 0));
+    next();
   },
   computed: {
     title() {
       return capitalize(this.$route.params.id);
     },
-  },
-  beforeRouteUpdate(to, from, next) {
-    this.$nextTick(() => scrollTo(0, 0));
-    next();
   },
 };
 </script>

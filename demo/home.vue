@@ -6,9 +6,10 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue';
 export default {
   components: {
-    about: () => import('../docs/about.md'),
+    about: defineAsyncComponent(() => import('../docs/about.md')),
   },
   data() {
     return {

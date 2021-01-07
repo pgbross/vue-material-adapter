@@ -1,10 +1,5 @@
 import { MDCLineRippleFoundation } from '@material/line-ripple/foundation';
-import {
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  toRefs,
-} from '@vue/composition-api';
+import { onBeforeUnmount, onMounted, reactive, toRefs } from 'vue';
 
 export default {
   name: 'mcw-line-ripple',

@@ -5,6 +5,7 @@
         <h3 class="mdc-typography--subtitle1">Filled with character counter</h3>
         <mcw-textfield
           v-model="textField"
+          class="my-textfield"
           :disabled="!enabled"
           label="textfield"
           helptext="Help text 1x..."

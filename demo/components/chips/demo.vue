@@ -33,12 +33,13 @@
       <mcw-chip-set filter>
         <mcw-chip leading-icon="add">Tops</mcw-chip>
         <mcw-chip>
-          <mcw-material-icon
-            slot="leading-icon"
-            class="mdc-chip__icon mdc-chip__icon--leading"
-            icon="add"
-          ></mcw-material-icon
-          >Bottoms
+          <template #leading-icon>
+            <mcw-material-icon
+              class="mdc-chip__icon mdc-chip__icon--leading"
+              icon="add"
+            ></mcw-material-icon
+          ></template>
+          Bottoms
         </mcw-chip>
         <mcw-chip>Shoes</mcw-chip>
         <mcw-chip>Accessories</mcw-chip>

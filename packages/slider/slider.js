@@ -1,64 +1,87 @@
-import { applyPassive } from '@material/dom/events';
-import { MDCSliderFoundation } from '@material/slider/foundation';
 import {
-  computed,
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  toRefs,
-  watch,
-} from '@vue/composition-api';
+  MDCSliderFoundation,
+  cssClasses,
+  events,
+  Thumb,
+} from '@material/slider';
+import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
+import { emitCustomEvent } from '~/base/index.js';
 
 export default {
   name: 'mcw-slider',
-  model: {
-    prop: 'value',
-    event: 'change',
-  },
   props: {
-    value: [Number, String],
+    modelValue: [Number, String],
+    start: [Number, String],
     min: { type: [Number, String], default: 0 },
     max: { type: [Number, String], default: 100 },
-    step: { type: [Number, String], default: 0 },
+    step: { type: [Number, String], default: 1 },
     discrete: Boolean,
-    displayMarkers: Boolean,
+    tickMarks: Boolean,
     disabled: Boolean,
-    layoutOn: String,
-    layoutOnSource: { type: Object, required: false },
+    range: { type: Boolean, default: false },
   },
-  setup(props, { emit, root: $root }) {
-    let stepSize = props.step;
-    if (props.discrete && !stepSize) {
-      stepSize = 1;
-    }
-
+  setup(props, { emit }) {
     const uiState = reactive({
+      skipInitialUIUpdate: false,
+      dir: null,
+      marks: [],
       classes: {
         'mdc-slider': 1,
         'mdc-slider--discrete': props.discrete,
-        'mdc-slider--display-markers': props.discrete && props.displayMarkers,
+        'mdc-slider--tick-marks': props.discrete && props.tickMarks,
+        'mdc-slider--range': props.range,
       },
-      sliderAttrs: {},
-      trackStyles: {},
-      lastTrackMarkersStyles: {},
-      markerBkgdShorthand: {},
-      thumbStyles: {},
-      markerValue: '',
-      numMarkers: 0,
-      stepSize,
+      startValueText: '',
+      startThumbClasses: {},
+      startThumbAttrs: {
+        'aria-valuenow': '0',
+      },
+      test: 50,
+      endValueText: '',
+      endThumbClasses: {},
+      endThumbAttrs: {
+        'aria-valuenow': '0',
+      },
+
+      inputs: [],
+      thumbs: [],
       root: null,
-      thumbContainer: null,
+      startThumb: null,
+      endThumb: null,
+      trackActive: null,
     });
 
     let foundation;
-    let layoutOnEventSource;
+    let valueToAriaValueTextFn = () => null;
 
-    const hasMarkers = computed(() => {
-      return props.discrete && props.displayMarkers;
-    });
+    const setValueToAriaValueTextFn = mapFn => {
+      valueToAriaValueTextFn = mapFn;
+    };
+
+    const getThumbEl = thumb => {
+      return thumb === Thumb.END
+        ? uiState.thumbs[uiState.thumbs.length - 1]
+        : uiState.thumbs[0];
+    };
+
+    const getThumbName = (thumb, suffix) => {
+      const thumbName = thumb == Thumb.END ? 'endThumb' : 'startThumb';
+      return `${thumbName}${suffix}`;
+    };
+
+    const setInputRef = el => uiState.inputs.push(el);
+
+    const setThumbRef = el => uiState.thumbs.push(el);
+
+    const getInput = thumb => {
+      return thumb === Thumb.END
+        ? uiState.inputs[uiState.inputs.length - 1]
+        : uiState.inputs[0];
+    };
 
     const adapter = {
       hasClass: className => uiState.root.classList.contains(className),
+
       addClass: className =>
         (uiState.classes = { ...uiState.classes, [className]: true }),
       removeClass: className => {
@@ -66,94 +89,156 @@ export default {
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
-      getAttribute: name => uiState.root.getAttribute(name),
-      setAttribute: (name, value) =>
-        (uiState.sliderAttrs = { ...uiState.sliderAttrs, [name]: value }),
 
-      removeAttribute: name => {
+      addThumbClass: (className, thumb) => {
+        const thumbName = getThumbName(thumb, 'Classes');
+
+        uiState[thumbName] = { ...uiState[thumbName], [className]: true };
+      },
+
+      removeThumbClass: (className, thumb) => {
+        const thumbName = getThumbName(thumb, 'Classes');
+
         // eslint-disable-next-line no-unused-vars
-        const { [name]: removed, ...rest } = uiState.sliderAttrs;
-        uiState.sliderAttrs = rest;
+        const { [className]: removed, ...rest } = uiState[thumbName];
+        uiState[thumbName] = rest;
       },
 
-      computeBoundingRect: () => uiState.root.getBoundingClientRect(),
-      getTabIndex: () => uiState.root.tabIndex,
-      registerInteractionHandler: (type, handler) => {
-        uiState.root.addEventListener(type, handler, applyPassive());
-      },
-      deregisterInteractionHandler: (type, handler) => {
-        uiState.root.removeEventListener(type, handler, applyPassive());
-      },
-      registerThumbContainerInteractionHandler: (type, handler) => {
-        uiState.thumbContainer.addEventListener(type, handler, applyPassive());
-      },
-      deregisterThumbContainerInteractionHandler: (type, handler) => {
-        uiState.thumbContainer.removeEventListener(
-          type,
-          handler,
-          applyPassive(),
-        );
-      },
-      registerBodyInteractionHandler: (type, handler) => {
-        document.body.addEventListener(type, handler);
-      },
-      deregisterBodyInteractionHandler: (type, handler) => {
-        document.body.removeEventListener(type, handler);
-      },
-      registerResizeHandler: handler => {
-        window.addEventListener('resize', handler);
-      },
-      deregisterResizeHandler: handler => {
-        window.removeEventListener('resize', handler);
-      },
-      notifyInput: () => {
-        emit('input', foundation.getValue());
-      },
-      notifyChange: () => {
-        emit('change', foundation.getValue());
-      },
-      setThumbContainerStyleProperty: (propertyName, value) =>
-        (uiState.thumbStyles = {
-          ...uiState.thumbStyles,
-          [propertyName]: value,
-        }),
+      getAttribute: name => uiState.root.getAttribute(name),
 
-      setTrackStyleProperty: (propertyName, value) =>
-        (uiState.trackStyles = {
-          ...uiState.trackStyles,
-          [propertyName]: value,
-        }),
-      setMarkerValue: value => {
-        uiState.markerValue = value;
+      getInputValue: thumb => getInput(thumb).value,
+      setInputValue: (value, thumb) => {
+        getInput(thumb).value = value;
+      },
+      getInputAttribute: (attribute, thumb) => {
+        if (attribute == 'value') {
+          return adapter.getInputValue(thumb);
+        }
+
+        return getInput(thumb).getAttribute(attribute);
+      },
+      setInputAttribute: (attribute, value, thumb) => {
+        getInput(thumb).setAttribute(attribute, value);
+      },
+      removeInputAttribute: (attribute, thumb) => {
+        getInput(thumb).removeAttribute(attribute);
+      },
+      focusInput: thumb => {
+        getInput(thumb).focus();
+      },
+      isInputFocused: thumb => getInput(thumb) === document.activeElement,
+
+      getThumbAttribute: (attribute, thumb) => {
+        const thumbName = getThumbName(thumb, 'Attrs');
+        return uiState[thumbName][attribute];
+      },
+      setThumbAttribute: (attribute, value, thumb) => {
+        const thumbName = getThumbName(thumb, 'Attrs');
+        uiState[thumbName] = { ...uiState[thumbName], [attribute]: value };
       },
 
-      setTrackMarkers: (step, max, min) => {
-        const stepStr = step.toLocaleString();
-        const maxStr = max.toLocaleString();
-        const minStr = min.toLocaleString();
-        // keep calculation in css for better rounding/subpixel behavior
-        const markerAmount = `((${maxStr} - ${minStr}) / ${stepStr})`;
-        const markerWidth = `2px`;
-        const markerBkgdImage = `linear-gradient(to right, currentColor ${markerWidth}, transparent 0)`;
-        const markerBkgdLayout = `0 center / calc((100% - ${markerWidth}) / ${markerAmount}) 100% repeat-x`;
-        const markerBkgdShorthand = `${markerBkgdImage} ${markerBkgdLayout}`;
-        uiState.markerBkgdShorthand = {
-          ...uiState.markerBkgdShorthand,
-          ['background']: markerBkgdShorthand,
-        };
+      isThumbFocused: thumb => {
+        return getThumbEl(thumb) === document.activeElement;
       },
+      focusThumb: thumb => getThumbEl(thumb).focus(),
+
+      getThumbKnobWidth: thumb =>
+        getThumbEl(thumb)
+          .querySelector(`.${cssClasses.THUMB_KNOB}`)
+          ?.getBoundingClientRect().width,
+
+      getThumbBoundingClientRect: thumb =>
+        getThumbEl(thumb).getBoundingClientRect(),
+
+      getBoundingClientRect: () => uiState.root.getBoundingClientRect(),
 
       isRTL: () => getComputedStyle(uiState.root).direction === 'rtl',
-    };
 
-    const layout = () => {
-      $root.$nextTick(() => {
-        foundation?.layout();
-      });
+      setThumbStyleProperty: (propertyName, value, thumb) => {
+        getThumbEl(thumb).style.setProperty(propertyName, value);
+      },
+
+      removeThumbStyleProperty: (propertyName, thumb) =>
+        getThumbEl(thumb).style.removeProperty(propertyName),
+
+      setTrackActiveStyleProperty: (propertyName, value) =>
+        uiState.trackActive.style.setProperty(propertyName, value),
+
+      removeTrackActiveStyleProperty: propertyName => {
+        uiState.trackActive.style.removeProperty(propertyName);
+      },
+
+      setValueIndicatorText: (value, thumb) => {
+        const thumbName =
+          thumb == Thumb.END ? 'endValueText' : 'startValueText';
+        uiState[thumbName] = String(value);
+      },
+
+      getValueToAriaValueTextFn: () => valueToAriaValueTextFn,
+
+      updateTickMarks: tickMarks => {
+        uiState.marks = tickMarks.map(mark =>
+          mark == 0
+            ? 'mdc-slider__tick-mark--active'
+            : 'mdc-slider__tick-mark--inactive',
+        );
+      },
+
+      setPointerCapture: pointerId => uiState.root.setPointerCapture(pointerId),
+
+      emitChangeEvent: (value, thumb) => {
+        emitCustomEvent(uiState.root, events.CHANGE, { value, thumb });
+        const eventName =
+          thumb == Thumb.END ? 'update:modelValue' : 'update:start';
+        emit(eventName, value);
+      },
+
+      emitInputEvent: (value, thumb) => {
+        emitCustomEvent(uiState.root, events.INPUT, { value, thumb });
+      },
+
+      emitDragStartEvent: () => {
+        // Not yet implemented. See issue:
+        // https://github.com/material-components/material-components-web/issues/6448
+      },
+
+      emitDragEndEvent: () => {
+        // Not yet implemented. See issue:
+        // https://github.com/material-components/material-components-web/issues/6448
+      },
+
+      registerEventHandler: (evtType, handler) =>
+        uiState.root.addEventListener(evtType, handler),
+
+      deregisterEventHandler: (evtType, handler) =>
+        uiState.root.removeEventListener(evtType, handler),
+
+      registerThumbEventHandler: (thumb, evtType, handler) =>
+        getThumbEl(thumb).addEventListener(evtType, handler),
+
+      deregisterThumbEventHandler: (thumb, evtType, handler) =>
+        getThumbEl(thumb).removeEventListener(evtType, handler),
+      registerInputEventHandler: (thumb, evtType, handler) => {
+        getInput(thumb).addEventListener(evtType, handler);
+      },
+      deregisterInputEventHandler: (thumb, evtType, handler) => {
+        getInput(thumb).removeEventListener(evtType, handler);
+      },
+      registerBodyEventHandler: (evtType, handler) =>
+        document.body.addEventListener(evtType, handler),
+
+      deregisterBodyEventHandler: (evtType, handler) =>
+        document.body.removeEventListener(evtType, handler),
+
+      registerWindowEventHandler: (evtType, handler) =>
+        window.addEventListener(evtType, handler),
+
+      deregisterWindowEventHandler: (evtType, handler) =>
+        window.removeEventListener(evtType, handler),
     };
 
     watch(
-      () => props.value,
+      () => props.modelValue,
       nv => {
         if (foundation.getValue() !== Number(nv)) {
           foundation.setValue(nv);
@@ -162,23 +247,11 @@ export default {
     );
 
     watch(
-      () => props.min,
+      () => props.start,
       nv => {
-        foundation.setMin(Number(nv));
-      },
-    );
-
-    watch(
-      () => props.max,
-      nv => {
-        foundation.setMax(Number(nv));
-      },
-    );
-
-    watch(
-      () => props.step,
-      nv => {
-        foundation.setStep(Number(nv));
+        if (foundation.getValueStart() !== Number(nv)) {
+          foundation.setValueStart(nv);
+        }
       },
     );
 
@@ -190,41 +263,38 @@ export default {
     );
 
     onMounted(() => {
+      uiState.dir = getComputedStyle(uiState.root).direction;
+
+      if (props.range) {
+        uiState.startThumbAttrs['aria-valuemin'] = props.min;
+        uiState.startThumbAttrs['aria-valuemax'] = props.max;
+
+        uiState.startThumbAttrs['aria-valuenow'] = props.start;
+        uiState.startValueText = String(props.start);
+      }
+
+      uiState.endThumbAttrs['aria-valuemin'] = props.min;
+      uiState.endThumbAttrs['aria-valuemax'] = props.max;
+      uiState.endThumbAttrs['aria-valuenow'] = props.modelValue;
+      uiState.endValueText = String(props.modelValue);
+
       foundation = new MDCSliderFoundation(adapter);
       foundation.init();
 
+      foundation.layout({ skipUpdateUI: uiState.skipInitialUIUpdate });
+
       foundation.setDisabled(props.disabled);
-
-      if (Number(props.min) <= foundation.getMax()) {
-        foundation.setMin(Number(props.min));
-        foundation.setMax(Number(props.max));
-      } else {
-        foundation.setMax(Number(props.max));
-        foundation.setMin(Number(props.min));
-      }
-      foundation.setStep(Number(uiState.stepSize));
-      foundation.setValue(Number(props.value));
-
-      if (hasMarkers.value) {
-        foundation.setupTrackMarker();
-      }
-
-      $root.$on('vma:layout', layout);
-
-      if (props.layoutOn) {
-        layoutOnEventSource = props.layoutOnSource ?? $root;
-        layoutOnEventSource.$on(props.layoutOn, layout);
-      }
     });
 
     onBeforeUnmount(() => {
-      $root.$off('vma:layout', layout);
-      if (layoutOnEventSource) {
-        layoutOnEventSource.$off(props.layoutOn, layout);
-      }
       foundation.destroy();
     });
 
-    return { ...toRefs(uiState), hasMarkers };
+    return {
+      ...toRefs(uiState),
+      setValueToAriaValueTextFn,
+      setInputRef,
+      setThumbRef,
+    };
   },
 };

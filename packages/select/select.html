@@ -1,5 +1,5 @@
 <div class="select-wrapper">
-  <div ref="root" :class="rootClasses">
+  <div ref="root" v-bind="$attrs" :class="rootClasses">
     <div
       ref="anchorEl"
       class="mdc-select__anchor"
@@ -22,7 +22,9 @@
         role="button"
       ></select-icon>
       <span class="mdc-select__ripple" v-if="!outlined"></span>
-      <span class="mdc-select__selected-text">{{selectedTextContent}}</span>
+      <span class="mdc-select__selected-text-container">
+        <span class="mdc-select__selected-text">{{selectedTextContent}}</span>
+      </span>
       <span class="mdc-select__dropdown-icon">
         <svg class="mdc-select__dropdown-icon-graphic" viewBox="7 10 10 5">
           <polygon
@@ -52,10 +54,10 @@
       ref="menu"
       class="mdc-select__menu"
       :class="menuClasses"
-      @change="handleChange"
+      @update:modelValue="handleChange"
       @select="handleMenuItemAction"
-      @MDCMenuSurface:opened.native="handleMenuOpened"
-      @MDCMenuSurface:closed.native="handleMenuClosed"
+      @mdc-menu-surface:opened="handleMenuOpened"
+      @mdc-menu-surface:closed="handleMenuClosed"
       role="listbox"
     >
       <slot></slot>

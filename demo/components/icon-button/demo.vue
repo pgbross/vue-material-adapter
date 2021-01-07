@@ -2,17 +2,11 @@
   <div class>
     <section class="mcw-demo">
       <div class="mcw-demo mcw-demo--container">
-        <mcw-icon-button href="#">
-          menu
-        </mcw-icon-button>
+        <mcw-icon-button href=""> menu </mcw-icon-button>
 
         <mcw-icon-button v-model="isOn" :disabled="disabled">
-          <mcw-icon-toggle is-on>
-            favorite
-          </mcw-icon-toggle>
-          <mcw-icon-toggle>
-            favorite_border
-          </mcw-icon-toggle>
+          <mcw-icon-toggle is-on> favorite </mcw-icon-toggle>
+          <mcw-icon-toggle> favorite_border </mcw-icon-toggle>
         </mcw-icon-button>
 
         <mcw-icon-button v-model="isOn" :disabled="disabled">

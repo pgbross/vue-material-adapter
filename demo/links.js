@@ -33,11 +33,13 @@ function link(id, icon, name, title) {
 }
 
 export default [
+  link('banner', icComponent),
   link('button', icButton),
   link('card', icCard),
-  link('circular-progress', icProgressActivity),
   link('checkbox', icSelectionControl),
   link('chips', icChips),
+  link('circular-progress', icProgressActivity),
+
   link('data-table', icComponent),
   link('dialog', icDialog),
   link('drawer', icSideNavigation),
@@ -49,11 +51,13 @@ export default [
   link('material-icon', icComponent),
   link('menu', icMenu),
   link('radio', icRadioButton),
+  link('segmented-button', icComponent),
   link('select', icMenu),
   link('slider', icSlider),
   link('snackbar', icToast),
   link('switch', icSwitch),
   link('tabs', icTabs),
   link('textfield', icTextField),
+  link('tooltip', icComponent),
   link('top-app-bar', icTopAppBar),
 ];

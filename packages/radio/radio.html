@@ -9,7 +9,7 @@
       @change="onChange"
       v-bind="$attrs"
       :value="value"
-      :checked="picked==value"
+      :checked="modelValue==value"
       :disabled="disabled"
     />
 
@@ -33,7 +33,7 @@
     @change="onChange"
     v-bind="$attrs"
     :value="value"
-    :checked="picked==value"
+    :checked="modelValue==value"
     :disabled="disabled"
   />
 

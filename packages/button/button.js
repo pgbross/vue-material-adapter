@@ -1,10 +1,9 @@
-import { computed, ref } from '@vue/composition-api';
+import { computed, ref } from 'vue';
 import { CustomLink } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/index.js';
 
 export default {
   name: 'mcw-button',
-  inheritAttrs: false,
   props: {
     raised: Boolean,
     unelevated: Boolean,
@@ -13,7 +12,7 @@ export default {
     trailingIcon: String,
   },
   components: { CustomLink },
-  setup(props, { listeners, slots }) {
+  setup(props, { slots }) {
     const root = ref(null);
 
     const { classes: rippleClasses, styles } = useRipplePlugin(root);
@@ -39,7 +38,6 @@ export default {
     return {
       styles,
       classes,
-      listeners,
       root,
       haveIcon,
       haveTrailingIcon,

@@ -8,26 +8,25 @@ import {
   reactive,
   toRefs,
   toRef,
-} from '@vue/composition-api';
+} from 'vue';
 import { CustomLink, emitCustomEvent } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 
+const { strings } = MDCTabFoundation;
 let tabId_ = 0;
 
 export default {
   name: 'mcw-tab',
-  inheritAttrs: false,
   props: {
     active: Boolean,
     icon: [String, Array, Object],
     minWidth: Boolean,
   },
   components: { CustomLink },
-  setup(props, { slots, attrs }) {
+  setup(props, { slots }) {
     const uiState = reactive({
       classes: {
         'mdc-tab': 1,
-
         'mdc-tab--min-width': props.minWidth,
       },
       rootAttrs: {
@@ -45,7 +44,7 @@ export default {
       rippleSurface: null,
     });
 
-    const { classes: rippleClasses, styles } = useRipplePlugin(
+    const { classes: rippleClasses, styles: rippleStyles } = useRipplePlugin(
       toRef(uiState, 'root'),
     );
     const { fade, stacked, spanContent, tabList } = inject('mcwTabList');
@@ -62,8 +61,6 @@ export default {
     const hasText = computed(() => {
       return !!slots.default;
     });
-
-    const linkAttrs = computed(() => ({ ...attrs, ...uiState.rootAttrs }));
 
     let foundation;
     const tabId = `__mcw-tab-${tabId_++}`;
@@ -90,7 +87,9 @@ export default {
 
     const focus = () => rootEl.focus();
 
-    const onClick = evt => foundation.handleClick(evt);
+    const onClick = evt => {
+      foundation.handleClick(evt);
+    };
 
     const adapter = {
       setAttr: (attr, value) =>
@@ -106,13 +105,14 @@ export default {
       activateIndicator: previousIndicatorClientRect =>
         uiState.tabIndicator.activate(previousIndicatorClientRect),
       deactivateIndicator: () => uiState.tabIndicator.deactivate(),
-      notifyInteracted: () =>
+      notifyInteracted: () => {
         emitCustomEvent(
           rootEl,
-          MDCTabFoundation.strings.INTERACTED_EVENT,
+          strings.INTERACTED_EVENT,
           { tabId },
           true /* bubble */,
-        ),
+        );
+      },
       getOffsetLeft: () => rootEl.offsetLeft,
       getOffsetWidth: () => rootEl.offsetWidth,
       getContentOffsetLeft: () => uiState.content.offsetLeft,
@@ -150,8 +150,7 @@ export default {
       fade,
       spanContent,
       rippleClasses,
-      styles,
-      linkAttrs,
+      rippleStyles,
     };
   },
 };

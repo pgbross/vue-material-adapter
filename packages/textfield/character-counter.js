@@ -1,10 +1,5 @@
 import { MDCTextFieldCharacterCounterFoundation } from '@material/textfield/character-counter/foundation';
-import {
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  toRefs,
-} from '@vue/composition-api';
+import { onBeforeUnmount, onMounted, reactive, toRefs } from 'vue';
 
 export default {
   name: 'mcw-character-counter',

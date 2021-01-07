@@ -4,28 +4,23 @@ import {
   computed,
   onBeforeUnmount,
   onMounted,
+  provide,
   reactive,
+  ref,
   toRef,
   toRefs,
   watch,
-} from '@vue/composition-api';
+} from 'vue';
 import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 import { mcwLineRipple } from '~/line-ripple/index.js';
 import { mcwNotchedOutline } from '~/notched-outline/index.js';
-
-const { strings } = MDCTextFieldFoundation;
 
 let uid_ = 0;
 export default {
   name: 'mcw-textfield',
   inheritAttrs: false,
-  model: {
-    prop: 'value',
-    event: 'model',
-  },
-
   props: {
-    value: [String, Number],
+    modelValue: [String, Number],
     type: {
       type: String,
       default: 'text',
@@ -64,9 +59,9 @@ export default {
     characterCounter: Boolean,
     characterCounterInternal: Boolean,
   },
-  setup(props, { emit, root: { $root }, slots, listeners }) {
+  setup(props, { emit, slots, attrs }) {
     const uiState = reactive({
-      text: props.value,
+      text: props.modelValue,
       classes: {
         'mdc-textfield': true,
         'mdc-text-field': true,
@@ -86,6 +81,8 @@ export default {
       inputClasses: {
         'mdc-text-field__input': true,
       },
+
+      inputAttrs: {},
       labelClasses: {
         'mdc-floating-label': true,
       },
@@ -111,6 +108,14 @@ export default {
 
     let rippleClasses;
     let rippleStyles;
+
+    const icons = ref({});
+
+    const addIconFoundation = ({ foundation, trailing }) => {
+      icons.value[trailing ? 'trailing' : 'leading'] = foundation;
+    };
+
+    provide('addIconFoundation', addIconFoundation);
 
     if (!props.multiline && !props.outline) {
       const { classes, styles } = useRipplePlugin(toRef(uiState, 'root'));
@@ -157,13 +162,22 @@ export default {
     }));
 
     const inputListeners = {
-      ...listeners,
-      input: ({ target: { value } }) => emit('model', value),
+      // ...listeners,
+      input: ({ target: { value } }) => emit('update:modelValue', value),
     };
 
     const focus = () => uiState.input?.focus();
 
     const isValid = () => foundation.isValid();
+
+    const inputAttrs = computed(() => {
+      // eslint-disable-next-line no-unused-vars
+      const { class: _, ...rest } = attrs;
+      return {
+        ...rest,
+        ...uiState.inputAttrs,
+      };
+    });
 
     const adapter = {
       addClass: className =>
@@ -207,6 +221,15 @@ export default {
       },
       getNativeInput: () => {
         return uiState.input;
+      },
+
+      setInputAttr: (attr, value) => {
+        uiState.inputAttrs = { ...uiState.inputAttrs, [attr]: value };
+      },
+      removeInputAttr: attr => {
+        // eslint-disable-next-line no-unused-vars
+        const { [attr]: removed, ...rest } = uiState.inputAttrs;
+        uiState.inputAttrs = rest;
       },
 
       // label adapter methods
@@ -260,7 +283,7 @@ export default {
     );
 
     watch(
-      () => props.value,
+      () => props.modelValue,
       nv => {
         if (foundation) {
           if (nv !== foundation.getValue()) {
@@ -271,26 +294,19 @@ export default {
     );
 
     onMounted(() => {
-      const leadingIconEl = uiState.wrapper.querySelector(
-        strings.LEADING_ICON_SELECTOR,
-      );
-      const trailingIconEl = uiState.wrapper.querySelector(
-        strings.TRAILING_ICON_SELECTOR,
-      );
-
       foundation = new MDCTextFieldFoundation(
         { ...adapter },
         {
           characterCounter: uiState.characterCounterEl?.foundation,
           helperText: uiState.helpertext?.foundation,
-          leadingIcon: leadingIconEl?.__vue__.foundation,
-          trailingIcon: trailingIconEl?.__vue__.foundation,
+          leadingIcon: icons.leading?.foundation,
+          trailingIcon: icons.trailing?.foundation,
         },
       );
 
       foundation.init();
 
-      foundation.setValue(props.value);
+      foundation.setValue(props.modelValue);
       props.disabled && foundation.setDisabled(props.disabled);
       uiState.input && (uiState.input.required = props.required);
       if (typeof props.valid !== 'undefined') {
@@ -317,6 +333,7 @@ export default {
       rootClasses,
       rippleStyles,
       isValid,
+      inputAttrs,
     };
   },
   components: { mcwLineRipple, mcwNotchedOutline },

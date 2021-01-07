@@ -21,30 +21,22 @@ var vm = new Vue({
 
 ### events
 
-| event       | args | Description              |
-| ----------- | ---- | ------------------------ |
-| {listeners} |      | Button proxies listeners |
+| event | args | Description           |
+| ----- | ---- | --------------------- |
+|       |      | Button inherits attrs |
 
 ### props
 
-| prop                 | Type           | Default                  | Description                                             |
-| -------------------- | -------------- | ------------------------ | ------------------------------------------------------- |
-| `disabled`           | Boolean        |                          | disable the button                                      |
-| `raised`             | Boolean        |                          | Contained button high-emphasis, with elevation and fill |
-| `unelevated`         | Boolean        |                          | Flush with the surface                                  |
-| `outlined`           | Boolean        |                          | Medium emphasis button                                  |
-| `icon`               | String         | optional                 | leading material icon                                   |
-| `trailingIcon`       | String         | optional                 | trailing material icon                                  |
-|                      |                |                          |                                                         |
-| `href`               | String         |                          | link's href, renders anchor (see notes below)           |
-| `to`                 | String, Object | undefined                | router-link property _(\*)_                             |
-| `replace`            | Boolean        | false                    | router-link property _(\*)_                             |
-| `append`             | Boolean        | false                    | router-link property _(\*)_                             |
-| `exact`              | Boolean        | false                    | router-link property _(\*)_                             |
-| `active-class`       | String         | router-link-active       | router-link property _(\*)_                             |
-| `exact-active-class` | String         | router-link-exact-active | router-link property _(\*)_                             |
+| prop           | Type    | Default  | Description                                             |
+| -------------- | ------- | -------- | ------------------------------------------------------- |
+| `disabled`     | Boolean |          | disable the button                                      |
+| `raised`       | Boolean |          | Contained button high-emphasis, with elevation and fill |
+| `unelevated`   | Boolean |          | Flush with the surface                                  |
+| `outlined`     | Boolean |          | Medium emphasis button                                  |
+| `icon`         | String  | optional | leading material icon                                   |
+| `trailingIcon` | String  | optional | trailing material icon                                  |
 
-> _(\*)_ Requires [vue-router](https://router.vuejs.org)
+> Supports Vue-Router props
 
 ### Text button
 
@@ -72,9 +64,9 @@ and `unelevated` is applied for a contained button flush with the surface.**
 
 ```html
 <mcw-button icon="favorite">like</mcw-button>
-<mcw-button
-  ><mcw-material-icon slot="icon" icon="add"></mcw-material-icon
-  >like</mcw-button
+<mcw-button>
+  <template #icon> <mcw-material-icon icon="add"></mcw-material-icon></template>
+  like</mcw-button
 >
 <mcw-button
   ><mcw-material-icon slot="trailingIcon" icon="done"></mcw-material-icon

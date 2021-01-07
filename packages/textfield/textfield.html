@@ -1,9 +1,15 @@
-<div ref="wrapper" class="textfield-container">
+<div ref="wrapper" class="textfield-container" :class="$attrs.class">
   <label ref="root" :class="rootClasses" :style="rippleStyles" v-if="!multiline">
     <span class="mdc-text-field__ripple" v-if="!outline"></span>
 
     <slot name="leading"></slot>
     <slot name="leadingIcon"></slot>
+
+    <mcw-floating-label ref="labelEl" v-if="hasLabel" :id="labelId" :required="required"
+      >{{label}}</mcw-floating-label
+    >
+
+    <mcw-notched-outline ref="labelEl" v-if="outline">{{label}}</mcw-notched-outline>
 
     <span class="mdc-text-field__affix mdc-text-field__affix--prefix" v-if="prefix"
       >{{prefix}}</span
@@ -11,7 +17,7 @@
     <input
       ref="input"
       :class="inputClasses"
-      v-bind="$attrs"
+      v-bind="inputAttrs"
       :type="type"
       :minlength="minlength"
       :maxlength="maxlength"
@@ -25,23 +31,19 @@
       >{{suffix}}</span
     >
 
-    <mcw-floating-label ref="labelEl" v-if="hasLabel" :id="labelId" :required="required"
-      >{{label}}</mcw-floating-label
-    >
-
     <slot name="trailingIcon"></slot>
     <slot name="trailing"></slot>
 
-    <mcw-notched-outline ref="labelEl" v-if="outline">{{label}}</mcw-notched-outline>
     <mcw-line-ripple ref="lineRippleEl" v-if="hasLineRipple"></mcw-line-ripple>
   </label>
 
   <label ref="root" :class="classes" v-else>
+    <mcw-notched-outline ref="labelEl" v-if="outline">{{label}}</mcw-notched-outline>
     <span class="mdc-text-field__resizer" v-if="resizer">
       <textarea
         ref="input"
         :class="inputClasses"
-        v-bind="$attrs"
+        v-bind="inputAttrs"
         :minlength="minlength"
         :maxlength="maxlength"
         :aria-label="label"
@@ -54,7 +56,7 @@
     <textarea
       ref="input"
       :class="inputClasses"
-      v-bind="$attrs"
+      v-bind="inputAttrs"
       :minlength="minlength"
       :maxlength="maxlength"
       :aria-label="label"
@@ -69,7 +71,6 @@
       ref="characterCounterEl"
       v-if="internalCharacterCounter"
     ></mcw-character-counter>
-    <mcw-notched-outline ref="labelEl" v-if="outline">{{label}}</mcw-notched-outline>
   </label>
 
   <div class="mdc-text-field-helper-line" v-if="hasHelpline">

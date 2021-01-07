@@ -7,25 +7,22 @@ import {
   toRefs,
   watch,
   toRef,
-} from '@vue/composition-api';
+} from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
-import SelectHelperText from './select-helper-text.js';
+import SelectHelperText from './select-helper-text.vue';
 import SelectIcon from './select-icon.vue';
 
-const { strings, cssClasses } = MDCSelectFoundation;
+const { strings } = MDCSelectFoundation;
 
 let uid_ = 0;
 
 export default {
   name: 'mcw-select',
   inheritAttrs: false,
-  model: {
-    prop: 'value',
-    event: 'change',
-  },
+
   props: {
-    value: String,
+    modelValue: String,
     helptext: String,
     leadingIcon: String,
     helptextPersistent: Boolean,
@@ -103,7 +100,6 @@ export default {
       foundation[`handleMenu${isOpen ? 'Opened' : 'Closed'}`]();
 
     const layout = () => foundation.layout();
-    const selectedIndex = () => foundation.getSelectedIndex();
 
     const handleMenuOpened = () => foundation.handleMenuOpened();
     const handleMenuClosed = () => foundation.handleMenuClosed();
@@ -127,12 +123,15 @@ export default {
 
     const adapter = {
       // select methods
-      getSelectedMenuItem: () => {
-        const x = menuItems.value.find(item =>
-          item.classList.contains(cssClasses.SELECTED_ITEM_CLASS),
-        );
-        return x?.$el;
-      },
+      // getSelectedMenuItem: () => {
+      //   const x = menuItems.value.find(item => {
+      //     const myItemId = item.dataset.myitemid;
+      //     return menuListItems.value[myItemId].classList.contains(
+      //       cssClasses.SELECTED_ITEM_CLASS,
+      //     );
+      //   });
+      //   return x;
+      // },
 
       getMenuItemAttr: (menuItem, attr) => menuItem.getAttribute(attr),
 
@@ -167,29 +166,19 @@ export default {
         uiState.menu.setAnchorCorner(anchorCorner),
       setMenuWrapFocus: wrapFocus => (uiState.menu.wrapFocus = wrapFocus),
       getSelectedIndex: () => {
-        const index = uiState.menu.selectedIndex;
+        const index = uiState.menu?.getSelectedIndex() ?? -1;
         return index instanceof Array ? index[0] : index;
       },
       setSelectedIndex: index => {
-        uiState.menu.selectedIndex = index;
+        uiState.menu.setSelectedIndex(index);
       },
-      setAttributeAtIndex: (index, attributeName, attributeValue) =>
-        menuItems.value[index].setAttribute(attributeName, attributeValue),
-      removeAttributeAtIndex: (index, attributeName) =>
-        menuItems.value[index].removeAttribute(attributeName),
-      focusMenuItemAtIndex: index => menuItems.value[index].$el.focus(),
+      focusMenuItemAtIndex: index => menuItems.value[index].focus(),
       getMenuItemCount: () => menuItems.value.length,
       getMenuItemValues: () =>
         menuItems.value.map(el => el.getAttribute(strings.VALUE_ATTR) || ''),
       getMenuItemTextAtIndex: index => {
-        return menuItems.value[index].$el.textContent;
+        return menuItems.value[index].textContent;
       },
-      addClassAtIndex: (index, className) => {
-        menuItems.value[index].classList.add(className);
-      },
-      removeClassAtIndex: (index, className) =>
-        menuItems.value[index].classList.remove(className),
-
       isTypeaheadInProgress: () => uiState.menu.typeaheadInProgress(),
       typeaheadMatchItem: (nextChar, startingIndex) =>
         uiState.menu?.typeaheadMatchItem(nextChar, startingIndex),
@@ -209,14 +198,14 @@ export default {
       deactivateBottomLine: () => uiState.lineRippleEl?.deactivate(),
 
       notifyChange: value => {
-        const index = selectedIndex();
+        const index = foundation.getSelectedIndex();
         emitCustomEvent(
           uiState.root,
           strings.CHANGE_EVENT,
           { value, index },
           true /* shouldBubble  */,
         );
-        value != props.value && emit('change', value);
+        value != props.modelValue && emit('update:modelValue', value);
       },
 
       // outline methods
@@ -227,8 +216,8 @@ export default {
       // label methods
       hasLabel: () => !!props.label,
       floatLabel: shouldFloat =>
-        (uiState.labelEl || uiState.outlineEl).float(shouldFloat),
-      getLabelWidth: () => uiState.labelEl?.getWidth(),
+        (uiState.labelEl || uiState.outlineEl)?.float(shouldFloat),
+      getLabelWidth: () => uiState.labelEl?.getWidth() || 0,
       setLabelRequired: isRequired => uiState.labelEl?.setRequired(isRequired),
     };
 
@@ -240,9 +229,11 @@ export default {
       );
 
       const idx = items.findIndex(value => {
-        return props.value === value;
+        return props.modelValue === value;
       });
-      foundation.setSelectedIndex(idx);
+      uiState.menu.setSelectedIndex(idx);
+
+      return idx;
     };
 
     watch(
@@ -251,23 +242,28 @@ export default {
     );
 
     watch(
-      () => props.value,
+      () => props.modelValue,
       () => {
-        refreshIndex();
+        const idx = refreshIndex();
+        foundation.setSelectedIndex(idx);
       },
     );
 
     onMounted(() => {
+      // menu setup
+      uiState.menu.hasTypeahead = true;
+      uiState.menu.setSingleSelection = true;
+
       foundation = new MDCSelectFoundation(adapter, {
         helperText: uiState.helperTextEl?.foundation,
         leadingIcon: uiState.leadingIconEl?.foundation,
       });
 
-      foundation = new MDCSelectFoundation(adapter);
-      foundation.init();
-
       // initial sync with DOM
       refreshIndex();
+
+      foundation = new MDCSelectFoundation(adapter);
+      foundation.init();
 
       // do we need a slotObserver here?
       // this.slotObserver = new MutationObserver(() => this.refreshIndex());

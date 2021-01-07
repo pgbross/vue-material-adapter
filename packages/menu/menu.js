@@ -7,7 +7,7 @@ import {
   reactive,
   toRefs,
   watch,
-} from '@vue/composition-api';
+} from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
 
 const { cssClasses, strings } = MDCMenuFoundation;
@@ -20,12 +20,9 @@ const DefaultFocusState_ = {
 
 export default {
   name: 'mcw-menu',
-  model: {
-    prop: 'open',
-    event: 'change',
-  },
+
   props: {
-    open: [Boolean, Object],
+    modelValue: [Boolean, Object],
     quickOpen: Boolean,
     anchorCorner: [String, Number],
     anchorMargin: Object,
@@ -49,7 +46,14 @@ export default {
     let foundation;
     let rootEl;
 
-    const items = computed(() => uiState.list.listElements ?? []);
+    const items = computed(() => uiState.list?.listElements ?? []);
+    const listItems = computed(() => uiState.list.listItems ?? []);
+
+    const getListItemByIndex = index => {
+      const element = items.value[index];
+      const myItemId = element.dataset.myitemid;
+      return listItems.value[myItemId];
+    };
 
     const surfaceOpen = computed({
       get() {
@@ -69,28 +73,26 @@ export default {
       },
     });
 
-    const selectedIndex = computed(() => uiState.list?.selIndex.value);
-
     const layout = () => uiState.list?.layout();
 
     const handleAction = index => {
-      foundation.handleItemAction(items.value[index].$el);
+      foundation.handleItemAction(items.value[index]);
     };
 
     const handleKeydown = evt => foundation.handleKeydown(evt);
 
-    const handleMenuSurfaceOpened = () => foundation.handleMenuSurfaceOpened();
+    const handleMenuSurfaceOpened = () => {
+      foundation.handleMenuSurfaceOpened();
+      emit('mdcmenusurface:opened');
+    };
+
+    const handleMenuSurfaceClosed = () => {
+      emit('mdcmenusurface:closed');
+    };
 
     const onChange = item => {
       uiState.menuOpen = item;
-      emit('change', item);
-    };
-
-    const listen = (evtType, handler, options) => {
-      uiState.menuSurface.addEventListener(evtType, handler, options);
-    };
-    const unlisten = (evtType, handler, options) => {
-      uiState.menuSurface.removeEventListener(evtType, handler, options);
+      emit('update:modelValue', item);
     };
 
     const setDefaultFocusState = focusState => {
@@ -105,8 +107,9 @@ export default {
     const setAnchorElement = element => {
       uiState.menuSurface.setMenuSurfaceAnchorElement(element);
     };
-    const setSelectedIndex = index =>
-      uiState.list && (uiState.list.selIndex.value = index);
+    const setSelectedIndex = index => uiState.list?.setSelectedIndex(index);
+
+    const getSelectedIndex = () => uiState.list?.getSelectedIndex() ?? -1;
 
     const setAnchorMargin = margin => {
       uiState.menuSurface.setAnchorMargin(margin);
@@ -153,33 +156,36 @@ export default {
       return -1;
     };
 
+    const setSingleSelection = singleSelection =>
+      uiState.list?.setSingleSelection(singleSelection);
+
     const adapter = {
       addClassToElementAtIndex: (index, className) => {
-        const item = items.value[index];
-        item.classList.add(className);
+        const listItem = getListItemByIndex(index);
+        listItem.classList.add(className);
       },
       removeClassFromElementAtIndex: (index, className) => {
-        const item = items.value[index];
-        item.classList.remove(className);
+        const listItem = getListItemByIndex(index);
+        listItem.classList.remove(className);
       },
       addAttributeToElementAtIndex: (index, attr, value) => {
-        const item = items.value[index];
-        item.setAttribute(attr, value);
+        const listItem = getListItemByIndex(index);
+        listItem.setAttribute(attr, value);
       },
       removeAttributeFromElementAtIndex: (index, attr) => {
-        const item = items.value[index];
-        item.removeAttribute(attr);
+        const listItem = getListItemByIndex(index);
+        listItem.removeAttribute(attr);
       },
       elementContainsClass: (element, className) =>
         element.classList.contains(className),
 
       closeSurface: skipRestoreFocus => {
         uiState.menuSurface.close(skipRestoreFocus);
-        emit('change', false);
+        emit('update:modelValue', false);
       },
 
       getElementIndex: element => {
-        return items.value.findIndex(({ $el }) => $el == element);
+        return items.value.findIndex(el => el == element);
       },
 
       notifySelected: evtData => {
@@ -196,32 +202,30 @@ export default {
 
       getMenuItemCount: () => items.value.length,
 
-      focusItemAtIndex: index => items.value[index].$el.focus(),
-      focusListRoot: () =>
-        uiState.menuSurface.querySelector(strings.LIST_SELECTOR).focus(),
+      focusItemAtIndex: index => items.value[index].focus(),
+      focusListRoot: () => {
+        uiState.menuSurface.$el.querySelector(strings.LIST_SELECTOR).focus();
+      },
 
       isSelectableItemAtIndex: index =>
-        !!closest(
-          items.value[index].$el,
-          `.${cssClasses.MENU_SELECTION_GROUP}`,
-        ),
+        !!closest(items.value[index], `.${cssClasses.MENU_SELECTION_GROUP}`),
 
       getSelectedSiblingOfItemAtIndex: index => {
         const selectionGroupEl = closest(
-          items.value[index].$el,
+          items.value[index],
           `.${cssClasses.MENU_SELECTION_GROUP}`,
         );
         const selectedItemEl = selectionGroupEl.querySelector(
           `.${cssClasses.MENU_SELECTED_LIST_ITEM}`,
         );
         return selectedItemEl
-          ? items.value.findIndex(({ $el }) => $el == selectedItemEl)
+          ? items.value.findIndex(el => el == selectedItemEl)
           : -1;
       },
     };
 
     watch(
-      () => props.open,
+      () => props.modelValue,
       nv => {
         uiState.menuOpen = nv;
       },
@@ -229,7 +233,7 @@ export default {
 
     onMounted(() => {
       rootEl = uiState.menuSurface.$el;
-      uiState.menuOpen = props.open;
+      uiState.menuOpen = props.modelValue;
       foundation = new MDCMenuFoundation(adapter);
       foundation.init();
 
@@ -253,6 +257,7 @@ export default {
       handleKeydown,
       onChange,
       handleMenuSurfaceOpened,
+      handleMenuSurfaceClosed,
       setAbsolutePosition,
       setIsHoisted,
       hoistMenuToBody,
@@ -261,18 +266,18 @@ export default {
       setAnchorMargin,
       setAnchorElement,
       setAnchorCorner,
+      getSelectedIndex,
       setSelectedIndex,
-      listen,
-      unlisten,
       setDefaultFocusState,
       wrapFocus,
       surfaceOpen,
       layout,
-      selectedIndex,
       getPrimaryTextAtIndex,
       items,
+      // listItems,
       typeaheadInProgress,
       typeaheadMatchItem,
+      setSingleSelection,
     };
   },
 };

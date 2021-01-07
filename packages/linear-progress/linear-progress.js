@@ -1,11 +1,5 @@
 import { MDCLinearProgressFoundation } from '@material/linear-progress/foundation';
-import {
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  toRefs,
-  watch,
-} from '@vue/composition-api';
+import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
 
 const progressPropType_ = {
   type: [Number, String],
@@ -33,7 +27,7 @@ export default {
       },
       bufferbarStyles: {},
       primaryStyles: {},
-      rootAttrs: {},
+      rootAttrs: { 'aria-valuemin': 0, 'aria-valuemax': 1 },
       root: null,
     });
 

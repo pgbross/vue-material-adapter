@@ -1,11 +1,5 @@
 import { MDCTextFieldHelperTextFoundation } from '@material/textfield/helper-text/foundation';
-import {
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  toRefs,
-  watch,
-} from '@vue/composition-api';
+import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
 
 export default {
   name: 'mcw-textfield-helper-text',
@@ -35,6 +29,8 @@ export default {
         uiState.classes = rest;
       },
       hasClass: className => Boolean(uiState.classes[className]),
+
+      getAttr: attr => uiState.rootAttrs[attr],
 
       setAttr: (attr, value) =>
         (uiState.rootAttrs = { ...uiState.rootAttrs, [attr]: value }),

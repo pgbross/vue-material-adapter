@@ -2,8 +2,10 @@
   <div class="demo-list-wrapper">
     <div class="demo-list-example">
       <h3 class="mdc-typography--subtitle1">Single-Line</h3>
-      <mcw-list v-model="selected" class="demo-list">
-        <mcw-list-item tabindex="0">One Single-line item 1 </mcw-list-item>
+      <mcw-list v-model="selected" class="demo-list" @mdclist:action="onAction">
+        <mcw-list-item tabindex="0" name="wiffle"
+          >One Single-line item 1
+        </mcw-list-item>
         <mcw-list-item>Two Single-line item 2 </mcw-list-item>
         <mcw-list-item>Three Single-line item 3 </mcw-list-item>
       </mcw-list>
@@ -15,7 +17,7 @@
       <mcw-list v-model="selected" two-line class="demo-list">
         <mcw-list-item
           >Two-line item
-          <span slot="secondary-text">Secondary text</span>
+          <template #secondary-text> <span>Secondary text</span></template>
         </mcw-list-item>
 
         <mcw-list-item two-line="Other secondary text"
@@ -24,7 +26,7 @@
 
         <mcw-list-item
           >Two-line item
-          <span slot="secondary-text">More secondary text</span>
+          <template #secondary-text> <span>More secondary text</span></template>
         </mcw-list-item>
       </mcw-list>
     </div>
@@ -205,8 +207,8 @@ export default {
     },
   },
   methods: {
-    onAction(index) {
-      this.selected = index;
+    onAction({ detail }) {
+      console.log(detail.index);
     },
   },
 };

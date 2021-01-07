@@ -1,4 +1,4 @@
-import { h } from '@vue/composition-api';
+import { h } from 'vue';
 
 export default {
   name: 'mcw-material-icon',
@@ -6,16 +6,9 @@ export default {
     icon: String,
     tag: { type: String, default: 'i' },
   },
-  setup(props, { listeners }) {
+  setup(props, { attrs }) {
     return () => {
-      return h(
-        props.tag,
-        {
-          class: 'material-icons',
-          on: listeners,
-        },
-        props.icon,
-      );
+      return h(props.tag, { ...attrs, class: 'material-icons' }, props.icon);
     };
   },
 };

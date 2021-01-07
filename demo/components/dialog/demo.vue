@@ -1,7 +1,7 @@
 <template>
   <div class="mcw-demo">
     <div class="mcw-demo mcw-demo--container">
-      <mcw-button @click="openBasic = !openBasic">Basic Dialog</mcw-button>
+      <mcw-button @click="onOpen('Basic')">Basic Dialog</mcw-button>
       <mcw-button @click="openSimple = !openSimple">Simple Dialog</mcw-button>
       <mcw-button @click="openAlert = !openAlert">Alert Dialog</mcw-button>
       <mcw-button @click="openConfirmation = !openConfirmation"
@@ -33,7 +33,7 @@
       aria-labelledby="my-basic-title"
       aria-describedby="my-basic-content"
       :auto-stack-buttons="true"
-      @MDCDialog:closing="onClosed"
+      @mdcdialog:closing="onClosed"
     >
       <mcw-dialog-title id="my-basic-title">Lorem ipsum dolor</mcw-dialog-title>
       <mcw-dialog-content id="my-basic-content">
@@ -60,7 +60,7 @@
       escape-key-action="close"
       scrim-click-action="close"
       :auto-stack-buttons="true"
-      @MDCDialog:closing="onClosed"
+      @mdcdialog:closing="onClosed"
     >
       <mcw-dialog-title>Select user</mcw-dialog-title>
       <mcw-dialog-content>
@@ -68,9 +68,7 @@
           <mcw-list-item data-mdc-dialog-action="test" tabindex="0">
             test
           </mcw-list-item>
-          <mcw-list-item data-mdc-dialog-action="help">
-            help
-          </mcw-list-item>
+          <mcw-list-item data-mdc-dialog-action="help"> help </mcw-list-item>
         </mcw-list>
       </mcw-dialog-content>
     </mcw-dialog>
@@ -82,7 +80,7 @@
       escape-key-action="close"
       scrim-click-action="close"
       :auto-stack-buttons="true"
-      @MDCDialog:closing="onClosed"
+      @mdcdialog:closing="onClosed"
     >
       <mcw-dialog-content>
         <p>Discard draft?</p>
@@ -102,7 +100,7 @@
       escape-key-action="close"
       scrim-click-action="close"
       :auto-stack-buttons="true"
-      @MDCDialog:closing="onClosed"
+      @mdcdialog:closing="onClosed"
     >
       <mcw-dialog-title>Chose a Phone Ringtone</mcw-dialog-title>
       <mcw-dialog-content>
@@ -114,7 +112,7 @@
             name="ringtone"
             aria-checked="false"
           >
-            <span :for="choice | clean">{{ choice }}</span>
+            <span :for="clean(choice)">{{ choice }}</span>
           </mcw-list-item>
         </mcw-list>
       </mcw-dialog-content>
@@ -131,7 +129,7 @@
       escape-key-action="close"
       scrim-click-action="close"
       :auto-stack-buttons="true"
-      @MDCDialog:closing="onClosed"
+      @mdcdialog:closing="onClosed"
     >
       <mcw-dialog-title>The Wonderful Wizard of Oz</mcw-dialog-title>
       <mcw-dialog-content>
@@ -219,7 +217,7 @@
       escape-key-action="close"
       scrim-click-action="close"
       :auto-stack-buttons="true"
-      @MDCDialog:closing="onClosed"
+      @mdcdialog:closing="onClosed"
     >
       <mcw-dialog-title>Complete some task before submitting</mcw-dialog-title>
       <mcw-dialog-content>
@@ -260,6 +258,12 @@ export default {
   },
 
   methods: {
+    clean(value) {
+      return value.replace(/\s/g, '-');
+    },
+    onOpen(action) {
+      this[`open${action}`] = !this[`open${action}`];
+    },
     onClosed({ action }) {
       this.hasBeenOpened = true;
       this.action =

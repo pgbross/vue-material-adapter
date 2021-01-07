@@ -2,14 +2,19 @@
 <aside
   ref="drawer"
   :class="classes"
-  @MDCList:action="onListAction"
   @keydown="handleKeydown"
   @transitionend="handleTransitionEnd"
   v-if="!modal"
 >
   <slot name="header"></slot>
   <div class="mdc-drawer__content">
-    <mcw-list :wrap-focus="true" tag="nav" single-selection :selected-index="0">
+    <mcw-list
+      :wrap-focus="true"
+      tag="nav"
+      @mdclist:action="onListAction"
+      single-selection
+      :selected-index="0"
+    >
       <slot></slot>
     </mcw-list>
   </div>
@@ -18,13 +23,18 @@
   <aside
     ref="drawer"
     :class="classes"
-    @MDCList:action="onListAction"
     @keydown="handleKeydown"
     @transitionend="handleTransitionEnd"
   >
     <slot name="header"></slot>
     <div class="mdc-drawer__content">
-      <mcw-list :wrap-focus="true" tag="nav" single-selection :selected-index="0">
+      <mcw-list
+        :wrap-focus="true"
+        tag="nav"
+        single-selection
+        :selected-index="0"
+        @mdclist:action="onListAction"
+      >
         <slot></slot>
       </mcw-list>
     </div>

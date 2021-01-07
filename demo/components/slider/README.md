@@ -3,8 +3,8 @@
 ```html
 <mcw-slider v-model="sliderValue1" max="10" />
 <mcw-slider v-model="sliderValue1" max="10" dir="rtl" />
-<mcw-slider v-model="sliderValue1" discrete max="10" />
-<mcw-slider v-model="sliderValue2" discrete step="2" max="10" display-markers />
+<mcw-slider v-model="sliderValue1" discrete max="10" data-step="1" />
+<mcw-slider v-model="sliderValue2" discrete max="10" data-step="2" tick-marks />
 ```
 
 ```javascript
@@ -25,7 +25,7 @@ var vm = new Vue({
 ### Discrete Slider
 
 ```html
-<mcw-slider min="0" max="10" discrete v-model="sliderValue" />
+<mcw-slider min="0" max="10" discrete data-step="1" v-model="sliderValue" />
 ```
 
 ### Discrete Slider with Markers
@@ -34,29 +34,24 @@ var vm = new Vue({
 <mcw-slider
   min="0"
   max="10"
-  step="1"
+  data-step="2"
   discrete
-  display-markers
+  tick-marks
   v-model="sliderValue"
 />
 ```
 
 ### Props
 
-| props              | Type    | Default   | Description                                                  |
-| ------------------ | ------- | --------- | ------------------------------------------------------------ |
-| `value`            | Number  |           | The current value of the slider.                             |
-| `min`              | Number  | 0         | The minimum value a slider can have.                         |
-| `max`              | Number  | 100       | The maximum value a slider can have.                         |
-| `step`             | Number  | 0         | The slider will quantize all values to match that step value |
-| `disabled`         | Boolean | false     | Disables slider if true                                      |
-| `display-markers`  | Boolean | false     | Display discrete markers if true                             |
-| `layout-on`        | String  | undefined | optional event to trigger a re-layout _(\*)_                 |
-| `layout-on-source` | Object  | vm.\$root | optional layout event source, defaults to root bus           |
+| props        | Type    | Default | Description                          |
+| ------------ | ------- | ------- | ------------------------------------ |
+| `value`      | Number  |         | The current value of the slider.     |
+| `min`        | Number  | 0       | The minimum value a slider can have. |
+| `max`        | Number  | 100     | The maximum value a slider can have. |
+| `disabled`   | Boolean | false   | Disables slider if true              |
+| `tick-marks` | Boolean | false   | Display discrete markers if true     |
 
 > NOTE: If a slider contains a step value it does not mean that the slider is a "discrete" slider. "Discrete slider" is a UX treatment, while having a step value is behavioral.
-
-> The step value can be any positive floating-point number, or 0. When the step value is 0, the slider is considered to not have any step. A error will be thrown if you are trying to set step value to be a negative number.
 
 > Discrete sliders are required to have a positive step value other than 0. If a step value of 0 is provided, or no value is provided, the step value will default to 1.
 

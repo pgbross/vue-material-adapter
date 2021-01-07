@@ -5,7 +5,7 @@
 ```html
 <div class="demo-list-example">
   <h3 class="mdc-typography--subtitle1">Single-Line</h3>
-  <mcw-list @change="onAction" class="demo-list">
+  <mcw-list @update:modelValue="onAction" class="demo-list">
     <mcw-list-item tabindex="0">Single-line item 1</mcw-list-item>
     <mcw-list-item>Single-line item 2</mcw-list-item>
     <mcw-list-item>Single-line item 3</mcw-list-item>
@@ -52,14 +52,14 @@ Add attribute `two-line`
 <mcw-list v-model="selected" two-line class="demo-list">
   <mcw-list-item
     >Two-line item
-    <span slot="secondary-text">Secondary text</span>
+    <template #secondary-text> <span>Secondary text</span></template>
   </mcw-list-item>
 
   <mcw-list-item two-line="Other secondary text">Two-line item </mcw-list-item>
 
   <mcw-list-item
     >Two-line item
-    <span slot="secondary-text">More secondary text</span>
+    <template #secondary-text> <span>More secondary text</span></template>
   </mcw-list-item>
 </mcw-list>
 ```

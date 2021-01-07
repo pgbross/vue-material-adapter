@@ -1,0 +1,11 @@
+<div
+  ref="root"
+  class="mdc-tooltip"
+  :class="classes"
+  v-bind="rootAttrs"
+  :style="styles"
+  role="tooltip"
+  @transitionend="handleTransitionEnd"
+>
+  <div class="mdc-tooltip__surface"><slot></slot></div>
+</div>

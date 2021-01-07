@@ -1,24 +1,14 @@
 import { MDCMenuSurfaceFoundation } from '@material/menu-surface/foundation';
 import * as util from '@material/menu-surface/util';
-import {
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  toRefs,
-  watch,
-} from '@vue/composition-api';
+import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
 
-const { strings, cssClasses } = MDCMenuSurfaceFoundation;
+const { cssClasses, strings } = MDCMenuSurfaceFoundation;
 
 export default {
   name: 'mcw-menu-surface',
-  model: {
-    prop: 'open',
-    event: 'change',
-  },
   props: {
-    open: [Boolean, Object],
+    modelValue: [Boolean, Object],
     'quick-open': Boolean,
     'anchor-corner': [String, Number],
     'anchor-margin': Object,
@@ -103,8 +93,8 @@ export default {
 
     const rootListeners = {
       keydown: evt => handleKeydown(evt),
-      'MDCMenuSurface:opened': evt => registerBodyClickListener(evt),
-      'MDCMenuSurface:closed': evt => deregisterBodyClickListener(evt),
+      // 'MDCMenuSurface:opened': evt => registerBodyClickListener(evt),
+      // 'MDCMenuSurface:closed': evt => deregisterBodyClickListener(evt),
     };
 
     const onOpen_ = value => {
@@ -174,16 +164,21 @@ export default {
       hasClass: className => uiState.root.classList.contains(className),
       hasAnchor: () => !!anchorElement,
       notifyClose: () => {
-        emitCustomEvent(uiState.root, strings.CLOSED_EVENT, {});
+        uiState.root && emitCustomEvent(uiState.root, strings.CLOSED_EVENT, {});
 
-        emit('change', false);
+        deregisterBodyClickListener();
+
+        emit('mdcmenusurface:closed');
+        emit('update:modelValue', false);
       },
       notifyOpen: () => {
         emitCustomEvent(uiState.root, strings.OPENED_EVENT, {});
 
-        emit('change', true);
+        registerBodyClickListener();
+        emit('mdcmenusurface:opened');
+        emit('update:modelValue', true);
       },
-      isElementInContainer: el => uiState.root.contains(el),
+      isElementInContainer: el => uiState.root?.contains(el),
       isRtl: () =>
         getComputedStyle(uiState.root).getPropertyValue('direction') === 'rtl',
       setTransformOrigin: origin => {
@@ -195,7 +190,7 @@ export default {
     };
 
     watch(
-      () => props.open,
+      () => props.modelValue,
       nv => onOpen_(nv),
     );
 

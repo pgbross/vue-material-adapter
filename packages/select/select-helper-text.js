@@ -1,12 +1,5 @@
 import { MDCSelectHelperTextFoundation } from '@material/select/helper-text/foundation.js';
-import {
-  h,
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  watch,
-} from '@vue/composition-api';
-
+import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
 export default {
   name: 'select-helper-text',
   props: {
@@ -14,7 +7,7 @@ export default {
     helptextValidation: Boolean,
     helptext: String,
   },
-  setup(props, { slots }) {
+  setup(props) {
     const uiState = reactive({
       classes: {
         'mdc-select-helper-text': true,
@@ -23,9 +16,8 @@ export default {
       },
       attrs: { 'aria-hidden': 'true' },
       myHelptext: props.helptext,
+      foundation: {},
     });
-
-    let foundation;
 
     const adapter = {
       addClass: className =>
@@ -54,12 +46,12 @@ export default {
 
     watch(
       () => props.helptextPersistent,
-      nv => foundation.setPersistent(nv),
+      nv => uiState.foundation.setPersistent(nv),
     );
 
     watch(
       () => props.helptextValidation,
-      nv => foundation.setValidation(nv),
+      nv => uiState.foundation.setValidation(nv),
     );
 
     watch(
@@ -68,23 +60,14 @@ export default {
     );
 
     onMounted(() => {
-      foundation = new MDCSelectHelperTextFoundation(adapter);
-      foundation.init();
+      uiState.foundation = new MDCSelectHelperTextFoundation(adapter);
+      uiState.foundation.init();
     });
 
     onBeforeUnmount(() => {
-      foundation.destroy();
+      uiState.foundation.destroy();
     });
 
-    return () => {
-      return h(
-        'p',
-        {
-          class: uiState.classes,
-          attrs: uiState.attrs,
-        },
-        [uiState.myHelptext],
-      );
-    };
+    return { ...toRefs(uiState) };
   },
 };

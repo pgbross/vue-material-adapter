@@ -2,7 +2,7 @@
   <mcw-top-app-bar
     class="main-toolbar"
     :scroll-target="scrollTarget"
-    @nav="$emit('nav')"
+    @nav="onNav"
   >
     <div class="mdc-top-app-bar__row">
       <section
@@ -39,6 +39,7 @@ import githubLogo from './assets/github-logo.svg';
 
 export default {
   props: { scrollTarget: HTMLElement },
+  emits: ['toggle'],
   data() {
     return {
       githubLogo,
@@ -47,6 +48,10 @@ export default {
   methods: {
     goto(href) {
       window.open(href, '_blank');
+    },
+
+    onNav() {
+      this.$emit('toggle');
     },
   },
 };

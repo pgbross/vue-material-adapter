@@ -9,17 +9,17 @@ import {
   toRefs,
   watch,
   toRef,
-} from '@vue/composition-api';
+} from 'vue';
 import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 
 let radioId_ = 0;
 
 export default {
   name: 'mcw-radio',
-  model: {
-    prop: 'picked',
-    event: 'change',
-  },
+  // model: {
+  //   prop: 'picked',
+  //   event: 'change',
+  // },
   props: {
     label: String,
     alignEnd: Boolean,
@@ -27,7 +27,7 @@ export default {
     name: { type: String, required: true },
     id: { type: String },
     value: String,
-    picked: String,
+    modelValue: String,
     disabled: Boolean,
     checked: Boolean,
   },
@@ -83,7 +83,8 @@ export default {
 
     const onChange = () => {
       const nativeValue = uiState.controlEl.value;
-      nativeValue != props.picked && emit('change', uiState.controlEl.value);
+      nativeValue != props.modelValue &&
+        emit('update:modelValue', uiState.controlEl.value);
     };
 
     const setChecked = checked => {
@@ -122,7 +123,7 @@ export default {
     );
 
     watch(
-      () => props.picked,
+      () => props.modelValue,
       nv => {
         onPicked(nv);
       },
@@ -147,10 +148,10 @@ export default {
       foundation.init();
       formField.init();
 
-      const { checked, disabled, picked, value } = props;
+      const { checked, disabled, modelValue, value } = props;
 
       foundation.setDisabled(disabled);
-      setChecked(checked || picked == value);
+      setChecked(checked || modelValue == value);
 
       // if checked, need to sync any change of value
       checked && onChange();

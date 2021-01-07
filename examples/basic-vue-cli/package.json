@@ -1,6 +1,6 @@
 {
   "name": "basic-vue-cli",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -8,20 +8,19 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@vue/composition-api": "^1.0.0-beta.10",
     "core-js": "^3.6.5",
-    "vue": "^2.6.12",
-    "vue-material-adapter": "^0.17.2"
+    "vue": "^3.0.2",
+    "vue-material-adapter": "^1.0.0-beta.13"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.5.4",
-    "@vue/cli-plugin-eslint": "^4.5.4",
-    "@vue/cli-service": "^4.5.4",
+    "@vue/cli-plugin-babel": "^4.5.8",
+    "@vue/cli-plugin-eslint": "^4.5.8",
+    "@vue/cli-service": "^4.5.8",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.7.0",
-    "eslint-plugin-vue": "^6.2.2",
-    "sass": "^1.26.10",
-    "sass-loader": "^9.0.3",
+    "eslint": "^7.12.1",
+    "eslint-plugin-vue": "^7.1.0",
+    "sass": "^1.27.0",
+    "sass-loader": "^10.0.4",
     "vue-template-compiler": "^2.6.12"
   },
   "eslintConfig": {

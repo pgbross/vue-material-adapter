@@ -3,46 +3,21 @@ import { MDCDismissibleDrawerFoundation } from '@material/drawer/dismissible/fou
 import { MDCModalDrawerFoundation } from '@material/drawer/modal/foundation';
 import * as util from '@material/drawer/util';
 import { MDCListFoundation } from '@material/list/foundation';
-import {
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  toRefs,
-  watch,
-} from '@vue/composition-api';
+import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
-
 const { strings } = MDCDismissibleDrawerFoundation;
 
 export default {
   name: 'mcw-drawer',
-  model: {
-    prop: 'open',
-    event: 'change',
-  },
+
   props: {
+    modelValue: Boolean,
     modal: Boolean,
     dismissible: Boolean,
-    open: Boolean,
     toolbarSpacer: Boolean,
-    toggleOn: String,
-    toggleOnSource: {
-      type: Object,
-      required: false,
-    },
-    openOn: String,
-    openOnSource: {
-      type: Object,
-      required: false,
-    },
-    closeOn: String,
-    closeOnSource: {
-      type: Object,
-      required: false,
-    },
   },
 
-  setup(props, { emit, root: $root }) {
+  setup(props, { emit }) {
     const uiState = reactive({
       classes: {
         'mdc-drawer': 1,
@@ -70,8 +45,7 @@ export default {
     const handleTransitionEnd = evt => foundation.handleTransitionEnd(evt);
 
     const onChange = event => {
-      emit('change', event);
-      $root.$emit('vma:layout');
+      emit('update:modelValue', event);
     };
 
     const onListAction = () => props.modal && close();
@@ -111,7 +85,7 @@ export default {
           {},
           true /* shouldBubble */,
         );
-        emit('change', false);
+        emit('update:modelValue', false);
         emit('close');
       },
       notifyOpen: () => {
@@ -121,7 +95,7 @@ export default {
           {},
           true /* shouldBubble */,
         );
-        emit('change', true);
+        emit('update:modelValue', true);
         emit('open');
       },
       trapFocus: () => focusTrap_.trapFocus(),
@@ -129,7 +103,7 @@ export default {
     };
 
     watch(
-      () => props.open,
+      () => props.modelValue,
       nv => {
         if (nv) {
           foundation?.open();
@@ -158,19 +132,6 @@ export default {
           focusTrapFactory_,
         );
       }
-
-      if (props.toggleOn) {
-        props.toggleOnEventSource = props.toggleOnSource || $root;
-        props.toggleOnEventSource.$on(props.toggleOn, props.toggle);
-      }
-      if (props.openOn) {
-        props.openOnEventSource = props.openOnSource || $root;
-        props.openOnEventSource.$on(props.openOn, props.show);
-      }
-      if (props.closeOn) {
-        props.closeOnEventSource = props.closeOnSource || $root;
-        props.closeOnEventSource.$on(props.closeOn, props.close);
-      }
     });
 
     onBeforeUnmount(() => {
@@ -178,16 +139,6 @@ export default {
       foundation.destroy();
 
       foundation = null;
-
-      if (props.toggleOnEventSource) {
-        props.toggleOnEventSource.$off(props.toggleOn, props.toggle);
-      }
-      if (props.openOnEventSource) {
-        props.openOnEventSource.$off(props.openOn, props.show);
-      }
-      if (props.closeOnEventSource) {
-        props.closeOnEventSource.$off(props.closeOn, props.close);
-      }
     });
 
     return {

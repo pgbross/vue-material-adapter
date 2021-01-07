@@ -1,11 +1,5 @@
 import { MDCCircularProgressFoundation } from '@material/circular-progress/foundation';
-import {
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  toRefs,
-  watch,
-} from '@vue/composition-api';
+import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
 
 const ProgressPropType = {
   type: [Number, String],
@@ -31,9 +25,13 @@ export default {
         'mdc-circular-progress--medium': props.medium,
         'mdc-circular-progress--large': !props.medium,
       },
-      rootAttrs: {},
+      rootAttrs: !props.medium
+        ? { style: { width: '48px', height: '48px' } }
+        : { style: { width: '36px', height: '36px' } },
       circleAttrs: getCircleAttrs(props.medium, false),
+      trackAttrs: getTrackAttrs(props.medium, false),
       indeterminateAttrs: getCircleAttrs(props.medium, true),
+      viewbox: props.medium ? '0 0 36 36' : '0 0 48 48',
       root: null,
     });
 
@@ -129,6 +127,7 @@ function getCircleAttrs(medium = false, indeterminate = true) {
         r: '12.5',
         'stroke-dasharray': '78.54',
         'stroke-dashoffset': indeterminate ? '39.27' : '78.54',
+        'stroke-width': '3',
       }
     : {
         cx: '24',
@@ -136,5 +135,18 @@ function getCircleAttrs(medium = false, indeterminate = true) {
         r: '18',
         'stroke-dasharray': '113.097',
         'stroke-dashoffset': indeterminate ? '56.549' : '113.097',
+        'stroke-width': '4',
       };
+}
+
+function getTrackAttrs(medium = false) {
+  const {
+    // eslint-disable-next-line no-unused-vars
+    ['stroke-dasharray']: sda,
+    // eslint-disable-next-line no-unused-vars
+    ['stroke-dashoffset']: sdo,
+    ...rest
+  } = getCircleAttrs(medium);
+
+  return rest;
 }

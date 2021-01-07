@@ -6,6 +6,7 @@ const resolve = relativePath => path.resolve(__dirname, relativePath);
 const plugins = [];
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { importer } = require('./webpack.util');
+const webpack = require('webpack');
 
 module.exports = [
   {
@@ -74,6 +75,10 @@ module.exports = [
       ],
     },
     plugins: [
+      new webpack.DefinePlugin({
+        __VUE_OPTIONS_API__: true,
+        __VUE_PROD_DEVTOOLS__: false,
+      }),
       // new CleanWebpackPlugin({ verbose: true }),
       ...plugins,
       new MiniCssExtractPlugin({
@@ -296,6 +301,10 @@ module.exports = [
       ],
     },
     plugins: [
+      new webpack.DefinePlugin({
+        __VUE_OPTIONS_API__: true,
+        __VUE_PROD_DEVTOOLS__: false,
+      }),
       ...plugins,
       new MiniCssExtractPlugin({
         // Options similar to the same options in webpackOptions.output

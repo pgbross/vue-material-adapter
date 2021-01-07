@@ -1,13 +1,7 @@
 import { MDCFixedTopAppBarFoundation } from '@material/top-app-bar/fixed/foundation';
 import { MDCShortTopAppBarFoundation } from '@material/top-app-bar/short/foundation';
 import { MDCTopAppBarFoundation } from '@material/top-app-bar/standard/foundation';
-import {
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  toRefs,
-  watch,
-} from '@vue/composition-api';
+import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
 import { RippleElement } from '~/ripple/index.js';
 
@@ -19,7 +13,10 @@ export default {
     tag: { type: String, default: 'header' },
     scrollTarget: HTMLElement,
   },
-  setup(props, { emit, listeners }) {
+
+  emits: ['nav'],
+
+  setup(props, { emit, attrs }) {
     const uiState = reactive({
       rootStyles: {},
       rootClasses: {
@@ -154,6 +151,6 @@ export default {
       foundation.destroy();
     });
 
-    return { ...toRefs(uiState), listeners, setScrollTarget };
+    return { ...toRefs(uiState), setScrollTarget };
   },
 };

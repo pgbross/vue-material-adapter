@@ -1,4 +1,5 @@
 import * as base from '~/base/index.js';
+import banner from '~/banner/index.js';
 import button from '~/button/index.js';
 import card from '~/card/index.js';
 import checkbox from '~/checkbox/index.js';
@@ -18,16 +19,20 @@ import materialIcon from '~/material-icon/index.js';
 import menu from '~/menu/index.js';
 import notchedOutline from '~/notched-outline/index.js';
 import radio from '~/radio/index.js';
+import segmentedButton from '~/segmented-button/index.js';
 import select from '~/select/index.js';
 import slider from '~/slider/index.js';
 import snackbar from '~/snackbar/index.js';
 import switchControl from '~/switch/index.js';
 import tabs from '~/tabs/index.js';
 import textfield from '~/textfield/index.js';
+import tooltip from '~/tooltip/index.js';
+
 import topAppBar from '~/top-app-bar/index.js';
 
 export default {
   install(vm) {
+    vm.use(banner);
     vm.use(button);
     vm.use(card);
     vm.use(circularProgress);
@@ -47,18 +52,21 @@ export default {
     vm.use(menu);
     vm.use(notchedOutline);
     vm.use(radio);
+    vm.use(segmentedButton);
     vm.use(select);
     vm.use(slider);
     vm.use(snackbar);
     vm.use(switchControl);
     vm.use(tabs);
     vm.use(textfield);
+    vm.use(tooltip);
     vm.use(topAppBar);
   },
 };
 
 export {
   base,
+  banner,
   button,
   card,
   circularProgress,
@@ -78,11 +86,13 @@ export {
   menu,
   notchedOutline,
   radio,
+  segmentedButton,
   select,
   slider,
   snackbar,
   switchControl,
   tabs,
   textfield,
+  tooltip,
   topAppBar,
 };

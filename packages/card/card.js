@@ -1,4 +1,4 @@
-import { h } from '@vue/composition-api';
+import { h } from 'vue';
 
 export default {
   name: 'mcw-card',
@@ -18,7 +18,7 @@ export default {
               'mdc-card--outlined': outlined,
             },
           ],
-          attrs,
+          ...attrs,
         },
         slots.default?.(),
       );

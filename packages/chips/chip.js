@@ -1,4 +1,6 @@
 import { MDCChipFoundation } from '@material/chips/chip/foundation';
+import { MDCChipTrailingActionFoundation } from '@material/chips/trailingaction/foundation';
+
 import {
   computed,
   inject,
@@ -8,11 +10,14 @@ import {
   toRef,
   toRefs,
   watch,
-} from '@vue/composition-api';
+} from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
 
 const { strings } = MDCChipFoundation;
+const { strings: trailingActionStrings } = MDCChipTrailingActionFoundation;
+
+let chipItemId_ = 0;
 
 export default {
   name: 'mcw-chip',
@@ -39,17 +44,20 @@ export default {
       styles: {},
       primaryAttrs: {},
       trailingAttrs: {},
-      myListeners: null,
+      myListeners: {},
       root: null,
       checkmarkEl: null,
       trailingAction: null,
     });
 
     const mcwChipSet = inject('mcwChipSet');
+    const addChipElement = inject('addChipElement');
 
     const { classes: rippleClasses, styles: rippleStyles } = useRipplePlugin(
       toRef(uiState, 'root'),
     );
+
+    const id = chipItemId_++;
 
     let foundation;
 
@@ -63,10 +71,6 @@ export default {
 
     let trailingAction_;
     let leadingIcon_;
-
-    const id = computed(() => {
-      return uiState.root.id;
-    });
 
     const selected = computed({
       get() {
@@ -133,7 +137,7 @@ export default {
           uiState.root,
           strings.INTERACTION_EVENT,
           {
-            chipId: id.value,
+            chipId: id,
           },
           true,
         );
@@ -143,7 +147,7 @@ export default {
           uiState.root,
           strings.NAVIGATION_EVENT,
           {
-            chipId: id.value,
+            chipId: id,
             key,
             source,
           },
@@ -152,8 +156,8 @@ export default {
       notifyRemoval: removedAnnouncement => {
         emitCustomEvent(
           uiState.root,
-          strings.REMOVAL_EVENT,
-          { chipId: id.value, removedAnnouncement },
+          'mdc-chip:removal',
+          { chipId: id, removedAnnouncement },
           true,
         );
       },
@@ -161,7 +165,7 @@ export default {
         emitCustomEvent(
           uiState.root,
           strings.SELECTION_EVENT,
-          { chipId: id.value, selected: selected, shouldIgnore },
+          { chipId: id, selected: selected, shouldIgnore },
           true /* shouldBubble */,
         ),
       notifyTrailingIconInteraction: () => {
@@ -169,7 +173,7 @@ export default {
           uiState.root,
           strings.TRAILING_ICON_INTERACTION_EVENT,
           {
-            chipId: id.value,
+            chipId: id,
           },
           true,
         );
@@ -222,6 +226,15 @@ export default {
       },
     );
 
+    addChipElement({
+      id,
+      removeFocus,
+      focusPrimaryAction,
+      focusTrailingAction,
+      setSelectedFromChipSet,
+      remove,
+    });
+
     onMounted(() => {
       leadingIcon_ = uiState.root.querySelector(strings.LEADING_ICON_SELECTOR);
 
@@ -232,7 +245,9 @@ export default {
       foundation = new MDCChipFoundation(adapter);
 
       uiState.myListeners = {
-        click: evt => foundation.handleClick(evt),
+        click: evt => {
+          foundation.handleClick(evt);
+        },
         keydown: evt => foundation.handleKeydown(evt),
         transitionend: evt => foundation.handleTransitionEnd(evt),
         focusin: evt => foundation.handleFocusIn(evt),
@@ -240,11 +255,13 @@ export default {
       };
 
       if (trailingAction_) {
-        uiState.myListeners[strings.INTERACTION_EVENT] = evt =>
-          foundation.handleTrailingActionInteraction(evt);
+        uiState.myListeners[
+          trailingActionStrings.INTERACTION_EVENT.toLowerCase()
+        ] = evt => foundation.handleTrailingActionInteraction(evt);
 
-        uiState.myListeners[strings.NAVIGATION_EVENT] = evt =>
-          foundation.handleTrailingActionNavigation(evt);
+        uiState.myListeners[
+          trailingActionStrings.NAVIGATION_EVENT.toLowerCase()
+        ] = evt => foundation.handleTrailingActionNavigation(evt);
       }
 
       foundation.init();

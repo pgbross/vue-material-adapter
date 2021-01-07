@@ -32,32 +32,20 @@
     <tbody class="mdc-data-table__content">
       <tr class="mdc-data-table__row">
         <td class="mdc-data-table__cell">Frozen yogurt</td>
-        <td class="mdc-data-table__cell mdc-data-table__cell--numeric">
-          24
-        </td>
-        <td class="mdc-data-table__cell mdc-data-table__cell--numeric">
-          4.0
-        </td>
+        <td class="mdc-data-table__cell mdc-data-table__cell--numeric">24</td>
+        <td class="mdc-data-table__cell mdc-data-table__cell--numeric">4.0</td>
         <td class="mdc-data-table__cell">Super tasty</td>
       </tr>
       <tr class="mdc-data-table__row">
         <td class="mdc-data-table__cell">Ice cream sandwich</td>
-        <td class="mdc-data-table__cell mdc-data-table__cell--numeric">
-          37
-        </td>
-        <td class="mdc-data-table__cell mdc-data-table__cell--numeric">
-          4.3
-        </td>
+        <td class="mdc-data-table__cell mdc-data-table__cell--numeric">37</td>
+        <td class="mdc-data-table__cell mdc-data-table__cell--numeric">4.3</td>
         <td class="mdc-data-table__cell">I like ice cream more</td>
       </tr>
       <tr class="mdc-data-table__row">
         <td class="mdc-data-table__cell">Eclair</td>
-        <td class="mdc-data-table__cell mdc-data-table__cell--numeric">
-          24
-        </td>
-        <td class="mdc-data-table__cell mdc-data-table__cell--numeric">
-          6.0
-        </td>
+        <td class="mdc-data-table__cell mdc-data-table__cell--numeric">24</td>
+        <td class="mdc-data-table__cell mdc-data-table__cell--numeric">6.0</td>
         <td class="mdc-data-table__cell">New filing flavor</td>
       </tr>
     </tbody>
@@ -132,9 +120,7 @@ var vm = new Vue({
         <td class="mdc-data-table__cell">Online</td>
         <td class="mdc-data-table__cell">Medium</td>
         <td class="mdc-data-table__cell">Triaged</td>
-        <td class="mdc-data-table__cell mdc-data-table__cell--numeric">
-          0:33
-        </td>
+        <td class="mdc-data-table__cell mdc-data-table__cell--numeric">0:33</td>
         <td class="mdc-data-table__cell">Allison Brie</td>
       </tr>
       <tr class="mdc-data-table__row" aria-selected="true" data-row-id="u1">
@@ -150,9 +136,7 @@ var vm = new Vue({
         <td class="mdc-data-table__cell">Offline</td>
         <td class="mdc-data-table__cell">Huge</td>
         <td class="mdc-data-table__cell">Triaged</td>
-        <td class="mdc-data-table__cell mdc-data-table__cell--numeric">
-          0:33
-        </td>
+        <td class="mdc-data-table__cell mdc-data-table__cell--numeric">0:33</td>
         <td class="mdc-data-table__cell">Brie Larson</td>
       </tr>
     </tbody>
@@ -183,9 +167,7 @@ var vm = new Vue({
           data-column-id="dessert"
         >
           <div class="mdc-data-table__header-cell-wrapper">
-            <div class="mdc-data-table__header-cell-label">
-              Dessert
-            </div>
+            <div class="mdc-data-table__header-cell-label">Dessert</div>
             <button
               class="mdc-icon-button material-icons mdc-data-table__sort-icon-button"
               aria-label="Sort by dessert"
@@ -215,9 +197,7 @@ var vm = new Vue({
             >
               arrow_upward
             </button>
-            <div class="mdc-data-table__header-cell-label">
-              Carbs (g)
-            </div>
+            <div class="mdc-data-table__header-cell-label">Carbs (g)</div>
             <div
               id="carbs-status-label"
               class="mdc-data-table__sort-status-label"
@@ -240,9 +220,7 @@ var vm = new Vue({
             >
               arrow_upward
             </button>
-            <div class="mdc-data-table__header-cell-label">
-              Protein (g)
-            </div>
+            <div class="mdc-data-table__header-cell-label">Protein (g)</div>
             <div
               id="protein-status-label"
               class="mdc-data-table__sort-status-label"
@@ -368,12 +346,12 @@ function getProperty(o, s) {
 
 ### events
 
-| event                             | args                                       | Description                                          |
-| --------------------------------- | ------------------------------------------ | ---------------------------------------------------- |
-| @MDCDataTable:sorted              | SortActionEventDetail                      | Event emitted when clicked on sortable header cell.  |
-| @MDCDataTable:rowSelectionChanged | MDCDataTableRowSelectionChangedEventDetail | emitted on focus gained                              |
-| @MDCDataTable:selectedAll         | void                                       | Event emitted when header row checkbox is checked.   |
-| @MDCDataTable:unselectedAll       | void                                       | Event emitted when header row checkbox is unchecked. |
+| event                               | args                                       | Description                                          |
+| ----------------------------------- | ------------------------------------------ | ---------------------------------------------------- |
+| @mdc-data-table:sorted              | SortActionEventDetail                      | Event emitted when clicked on sortable header cell.  |
+| @mdc-data-table:rowselectionchanged | MDCDataTableRowSelectionChangedEventDetail | emitted on focus gained                              |
+| @mdc-data-table:selectedall         | void                                       | Event emitted when header row checkbox is checked.   |
+| @mdc-data-table:unselectedall       | void                                       | Event emitted when header row checkbox is unchecked. |
 
 ```javascript
 export interface SortActionEventDetail {
