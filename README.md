@@ -25,7 +25,7 @@ There are examples of using `vue-material-adapter` both as a `basic-vue-cli` and
 
 ## Release Notes
 
-See [Release Notes](https://github.com/pgbross/vue-material-adapter/release-notes.md)
+See [Release Notes](https://github.com/pgbross/vue-material-adapter/tree/main/release-notes.md)
 
 ### Building and running demo
 
