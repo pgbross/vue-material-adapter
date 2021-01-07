@@ -21,7 +21,7 @@ See [Documentation & Demo](https://pgbross.github.io/vue-material-adapter) for w
 
 ## Examples
 
-There are examples of using `vue-material-adapter` both as a `basic-vue-cli` and a `basic-webpack` project [examples](https://github.com/pgbross/vue-material-adapter/examples).
+There are examples of using `vue-material-adapter` both as a `basic-vue-cli` and a `basic-webpack` project [examples](https://github.com/pgbross/vue-material-adapter/tree/main/examples).
 
 ## Release Notes
 
