@@ -13,7 +13,7 @@ import { announce } from '@material/dom/announce';
 import { MDCChipTrailingActionFoundation } from '@material/chips/trailingaction/foundation';
 import { MDCCircularProgressFoundation } from '@material/circular-progress/foundation';
 import { MDCCheckbox } from '@material/checkbox';
-import { cssClasses as cssClasses$7, selectors, dataAttributes, SortValue, messages } from '@material/data-table';
+import * as test from '@material/data-table';
 import { MDCDataTableFoundation } from '@material/data-table/foundation';
 import { MDCDialogFoundation } from '@material/dialog/foundation';
 import { createFocusTrapInstance, isScrollable, areTopsMisaligned } from '@material/dialog/util';
@@ -38,7 +38,7 @@ import { MDCSegmentedButtonSegmentFoundation } from '@material/segmented-button/
 import { MDCSelectFoundation } from '@material/select/foundation';
 import { MDCSelectHelperTextFoundation } from '@material/select/helper-text/foundation.js';
 import { MDCSelectIconFoundation } from '@material/select/icon/foundation.js';
-import { MDCSliderFoundation, Thumb, cssClasses as cssClasses$8, events } from '@material/slider';
+import { MDCSliderFoundation, Thumb, cssClasses as cssClasses$7, events } from '@material/slider';
 import { MDCSnackbarFoundation } from '@material/snackbar/foundation';
 import { MDCSwitchFoundation } from '@material/switch/foundation';
 import { MDCTabBarFoundation } from '@material/tab-bar/foundation';
@@ -57,42 +57,41 @@ import { MDCFixedTopAppBarFoundation } from '@material/top-app-bar/fixed/foundat
 import { MDCShortTopAppBarFoundation } from '@material/top-app-bar/short/foundation';
 import { MDCTopAppBarFoundation } from '@material/top-app-bar/standard/foundation';
 
-function _typeof(obj) {
-  "@babel/helpers - typeof";
+function BasePlugin(components) {
+  return {
+    version: '__VERSION__',
+    install: vm => {
+      Object.entries(components).forEach(([key, component]) => {
+        const name = key.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase(); // eslint-disable-next-line no-unused-vars
 
-  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-    _typeof = function (obj) {
-      return typeof obj;
-    };
-  } else {
-    _typeof = function (obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    };
-  }
+        const [pfx, ...rest] = name.split('-');
+        const mdcName = ['mdc', ...rest].join('-');
+        const mcwName = ['mcw', ...rest].join('-');
+        const haveComponent = vm._context.components[mcwName];
 
-  return _typeof(obj);
+        if (!haveComponent) {
+          vm.component(mcwName, component);
+          vm.component(mdcName, component);
+        }
+      });
+    },
+    components
+  };
 }
 
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
+function emitCustomEvent(el, evtType, evtData, shouldBubble = false) {
+  evtType = evtType.toLowerCase();
 
-function _defineProperties(target, props) {
-  for (var i = 0; i < props.length; i++) {
-    var descriptor = props[i];
-    descriptor.enumerable = descriptor.enumerable || false;
-    descriptor.configurable = true;
-    if ("value" in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
-  }
-}
+  const createCustomEvent = () => {
+    const evt = document.createEvent('CustomEvent');
+    return evt.initCustomEvent(evtType, shouldBubble, false, evtData);
+  };
 
-function _createClass(Constructor, protoProps, staticProps) {
-  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-  if (staticProps) _defineProperties(Constructor, staticProps);
-  return Constructor;
+  const evt = typeof CustomEvent === 'function' ? new CustomEvent(evtType, {
+    detail: evtData,
+    bubbles: shouldBubble
+  }) : createCustomEvent();
+  el.dispatchEvent(evt);
 }
 
 function _defineProperty(obj, key, value) {
@@ -144,50 +143,6 @@ function _objectSpread2(target) {
   return target;
 }
 
-function _inherits(subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function");
-  }
-
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) _setPrototypeOf(subClass, superClass);
-}
-
-function _getPrototypeOf(o) {
-  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-    return o.__proto__ || Object.getPrototypeOf(o);
-  };
-  return _getPrototypeOf(o);
-}
-
-function _setPrototypeOf(o, p) {
-  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-    o.__proto__ = p;
-    return o;
-  };
-
-  return _setPrototypeOf(o, p);
-}
-
-function _isNativeReflectConstruct() {
-  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-  if (Reflect.construct.sham) return false;
-  if (typeof Proxy === "function") return true;
-
-  try {
-    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
 function _objectWithoutPropertiesLoose(source, excluded) {
   if (source == null) return {};
   var target = {};
@@ -224,41 +179,6 @@ function _objectWithoutProperties(source, excluded) {
   return target;
 }
 
-function _assertThisInitialized(self) {
-  if (self === void 0) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
-
-  return self;
-}
-
-function _possibleConstructorReturn(self, call) {
-  if (call && (typeof call === "object" || typeof call === "function")) {
-    return call;
-  }
-
-  return _assertThisInitialized(self);
-}
-
-function _createSuper(Derived) {
-  var hasNativeReflectConstruct = _isNativeReflectConstruct();
-
-  return function _createSuperInternal() {
-    var Super = _getPrototypeOf(Derived),
-        result;
-
-    if (hasNativeReflectConstruct) {
-      var NewTarget = _getPrototypeOf(this).constructor;
-
-      result = Reflect.construct(Super, arguments, NewTarget);
-    } else {
-      result = Super.apply(this, arguments);
-    }
-
-    return _possibleConstructorReturn(this, result);
-  };
-}
-
 function _taggedTemplateLiteral(strings, raw) {
   if (!raw) {
     raw = strings.slice(0);
@@ -269,82 +189,6 @@ function _taggedTemplateLiteral(strings, raw) {
       value: Object.freeze(raw)
     }
   }));
-}
-
-function _slicedToArray(arr, i) {
-  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
-}
-
-function _toArray(arr) {
-  return _arrayWithHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableRest();
-}
-
-function _toConsumableArray(arr) {
-  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
-}
-
-function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) return _arrayLikeToArray(arr);
-}
-
-function _arrayWithHoles(arr) {
-  if (Array.isArray(arr)) return arr;
-}
-
-function _iterableToArray(iter) {
-  if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
-}
-
-function _iterableToArrayLimit(arr, i) {
-  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
-  var _arr = [];
-  var _n = true;
-  var _d = false;
-  var _e = undefined;
-
-  try {
-    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-      _arr.push(_s.value);
-
-      if (i && _arr.length === i) break;
-    }
-  } catch (err) {
-    _d = true;
-    _e = err;
-  } finally {
-    try {
-      if (!_n && _i["return"] != null) _i["return"]();
-    } finally {
-      if (_d) throw _e;
-    }
-  }
-
-  return _arr;
-}
-
-function _unsupportedIterableToArray(o, minLen) {
-  if (!o) return;
-  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
-  var n = Object.prototype.toString.call(o).slice(8, -1);
-  if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(o);
-  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
-}
-
-function _arrayLikeToArray(arr, len) {
-  if (len == null || len > arr.length) len = arr.length;
-
-  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
-
-  return arr2;
-}
-
-function _nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-
-function _nonIterableRest() {
-  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 
 function _toPrimitive(input, hint) {
@@ -366,84 +210,42 @@ function _toPropertyKey(arg) {
   return typeof key === "symbol" ? key : String(key);
 }
 
-function BasePlugin(components) {
-  return {
-    version: '__VERSION__',
-    install: function install(vm) {
-      Object.entries(components).forEach(function (_ref) {
-        var _ref2 = _slicedToArray(_ref, 2),
-            key = _ref2[0],
-            component = _ref2[1];
-
-        var name = key.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase(); // eslint-disable-next-line no-unused-vars
-
-        var _name$split = name.split('-'),
-            _name$split2 = _toArray(_name$split),
-            pfx = _name$split2[0],
-            rest = _name$split2.slice(1);
-
-        var mdcName = ['mdc'].concat(_toConsumableArray(rest)).join('-');
-        var mcwName = ['mcw'].concat(_toConsumableArray(rest)).join('-');
-        var haveComponent = vm._context.components[mcwName];
-
-        if (!haveComponent) {
-          vm.component(mcwName, component);
-          vm.component(mdcName, component);
-        }
-      });
-    },
-    components: components
-  };
-}
-
-function emitCustomEvent(el, evtType, evtData) {
-  var shouldBubble = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
-  evtType = evtType.toLowerCase();
-
-  var createCustomEvent = function createCustomEvent() {
-    var evt = document.createEvent('CustomEvent');
-    return evt.initCustomEvent(evtType, shouldBubble, false, evtData);
-  };
-
-  var evt = typeof CustomEvent === 'function' ? new CustomEvent(evtType, {
-    detail: evtData,
-    bubbles: shouldBubble
-  }) : createCustomEvent();
-  el.dispatchEvent(evt);
-}
-
-var CustomLink = {
+const CustomLink = {
   name: 'custom-link',
   props: {
     tag: String,
     to: [String, Object]
   },
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots,
-        attrs = _ref.attrs;
-    return function () {
+
+  setup(props, {
+    slots,
+    attrs
+  }) {
+    return () => {
       var _props$tag2, _slots$default2;
 
       // destructure the props in the render function so we use the current value
       // if their value has changed since we were created
-      var to = props.to,
-          href = props.href;
-      var routerLink = resolveDynamicComponent('router-link');
+      const {
+        to,
+        href
+      } = props;
+      const routerLink = resolveDynamicComponent('router-link');
 
       if (to && routerLink) {
         var _props$tag;
 
-        var rtag = (_props$tag = props.tag) !== null && _props$tag !== void 0 ? _props$tag : 'a';
+        const rtag = (_props$tag = props.tag) !== null && _props$tag !== void 0 ? _props$tag : 'a';
         return h(routerLink, _objectSpread2(_objectSpread2({
           custom: true
         }, attrs), {}, {
-          to: to
+          to
         }), {
-          default: function _default(props) {
+          default: props => {
             var _slots$default;
 
             return h(rtag, _objectSpread2(_objectSpread2({}, attrs), {}, {
-              onClick: function onClick(evt) {
+              onClick: evt => {
                 evt.__itemId = attrs.itemId;
                 props.navigate(evt);
               }
@@ -452,18 +254,17 @@ var CustomLink = {
         });
       }
 
-      var element = href ? 'a' : (_props$tag2 = props.tag) !== null && _props$tag2 !== void 0 ? _props$tag2 : 'a';
-      var role = href ? 'button' : element !== 'button' ? 'button' : null;
-      var children = (_slots$default2 = slots.default) === null || _slots$default2 === void 0 ? void 0 : _slots$default2.call(slots);
+      const element = href ? 'a' : (_props$tag2 = props.tag) !== null && _props$tag2 !== void 0 ? _props$tag2 : 'a';
+      const role = href ? 'button' : element !== 'button' ? 'button' : null;
+      const children = (_slots$default2 = slots.default) === null || _slots$default2 === void 0 ? void 0 : _slots$default2.call(slots);
       return h(element, _objectSpread2(_objectSpread2({}, attrs), {}, {
-        role: role
+        role
       }), {
-        default: function _default() {
-          return children;
-        }
+        default: () => children
       });
     };
   }
+
 };
 
 var index = /*#__PURE__*/Object.freeze({
@@ -555,9 +356,11 @@ var script$1 = {
   components: {
     bannerContent: script
   },
-  setup: function setup(props, _ref) {
-    var emit = _ref.emit;
-    var uiState = reactive({
+
+  setup(props, {
+    emit
+  }) {
+    const uiState = reactive({
       classes: {
         'mdc-banner--centered': props.centered,
         'mdc-banner--mobile-stacked': props.mobile
@@ -566,9 +369,9 @@ var script$1 = {
       root: null,
       contentEl: null
     });
-    var foundation;
+    let foundation;
 
-    var onOpen = function onOpen(nv) {
+    const onOpen = nv => {
       if (nv) {
         foundation.open();
       } else {
@@ -576,9 +379,9 @@ var script$1 = {
       }
     };
 
-    var onContentClick = function onContentClick(_ref2) {
-      var target = _ref2.target;
-
+    const onContentClick = ({
+      target
+    }) => {
       if (target == 1) {
         foundation.handleSecondaryActionClick();
       } else {
@@ -586,61 +389,59 @@ var script$1 = {
       }
     };
 
-    var adapter = {
-      addClass: function addClass(className) {
-        uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+    const adapter = {
+      addClass: className => {
+        uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+          [className]: true
+        });
         uiState.root.classList.add(className);
       },
-      getContentHeight: function getContentHeight() {
+      getContentHeight: () => {
         return uiState.contentEl.$el.offsetHeight;
       },
-      notifyOpening: function notifyOpening() {
+      notifyOpening: () => {
         emit('mdcbanner:opening', {});
       },
-      notifyOpened: function notifyOpened() {
-        return emit('mdcbanner:opened', {});
-      },
-      notifyClosing: function notifyClosing(reason) {
+      notifyOpened: () => emit('mdcbanner:opened', {}),
+      notifyClosing: reason => {
         emit('update:modelValue', false);
         emit('mdcbanner:closing', {
-          reason: reason
+          reason
         });
       },
-      notifyClosed: function notifyClosed(reason) {
+      notifyClosed: reason => {
         emit('mdcbanner:closed', {
-          reason: reason
+          reason
         });
       },
-      removeClass: function removeClass(className) {
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes = uiState.classes,
-            removed = _uiState$classes[className],
-            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+        const _uiState$classes = uiState.classes,
+              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
         uiState.classes = rest;
       },
-      setStyleProperty: function setStyleProperty(property, value) {
-        return uiState.styles = _objectSpread2(_objectSpread2({}, uiState.styles), {}, _defineProperty({}, property, value));
-      }
+      setStyleProperty: (property, value) => uiState.styles = _objectSpread2(_objectSpread2({}, uiState.styles), {}, {
+        [property]: value
+      })
     };
-    watch(function () {
-      return props.modelValue;
-    }, function (nv) {
+    watch(() => props.modelValue, nv => {
       onOpen(nv);
     });
-    onMounted(function () {
+    onMounted(() => {
       foundation = new MDCBannerFoundation(adapter);
       foundation.init();
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       var _foundation;
 
       (_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      onContentClick: onContentClick
+      onContentClick
     });
   }
+
 };
 
 const _hoisted_1$1 = {
@@ -687,141 +488,110 @@ var banner = BasePlugin({
   mcwBanner: script$1
 });
 
-var RippleElement = /*#__PURE__*/function (_MDCRippleFoundation) {
-  _inherits(RippleElement, _MDCRippleFoundation);
-
-  var _super = _createSuper(RippleElement);
-
-  function RippleElement(element, state) {
+class RippleElement extends MDCRippleFoundation {
+  constructor(element, state, _ref = {}) {
     var _element$$el;
 
-    var _this;
-
-    var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
-        _ref$unbounded = _ref.unbounded,
-        unbounded = _ref$unbounded === void 0 ? false : _ref$unbounded,
+    let {
+      unbounded = false
+    } = _ref,
         options = _objectWithoutProperties(_ref, ["unbounded"]);
 
-    _classCallCheck(this, RippleElement);
-
-    var $el = (_element$$el = element.$el) !== null && _element$$el !== void 0 ? _element$$el : element;
-    _this = _super.call(this, _objectSpread2({
-      addClass: function addClass(className) {
+    const $el = (_element$$el = element.$el) !== null && _element$$el !== void 0 ? _element$$el : element;
+    super(_objectSpread2({
+      addClass: className => {
         if (state) {
-          state.classes = _objectSpread2(_objectSpread2({}, state.classes), {}, _defineProperty({}, className, true));
+          state.classes = _objectSpread2(_objectSpread2({}, state.classes), {}, {
+            [className]: true
+          });
         } else {
           $el.classList.add(className);
         }
       },
-      browserSupportsCssVars: function browserSupportsCssVars() {
-        return supportsCssVariables(window);
-      },
-      computeBoundingRect: function computeBoundingRect() {
-        return $el.getBoundingClientRect();
-      },
-      containsEventTarget: function containsEventTarget(target) {
-        return $el.contains(target);
-      },
-      deregisterDocumentInteractionHandler: function deregisterDocumentInteractionHandler(evtType, handler) {
-        return document.documentElement.removeEventListener(evtType, handler, applyPassive());
-      },
-      deregisterInteractionHandler: function deregisterInteractionHandler(evt, handler) {
-        return $el.removeEventListener(evt, handler, applyPassive());
-      },
-      deregisterResizeHandler: function deregisterResizeHandler(handler) {
-        return window.removeEventListener('resize', handler);
-      },
-      getWindowPageOffset: function getWindowPageOffset() {
-        return {
-          x: window.pageXOffset,
-          y: window.pageYOffset
-        };
-      },
-      isSurfaceActive: function isSurfaceActive() {
-        return matches($el, ':active');
-      },
-      isSurfaceDisabled: function isSurfaceDisabled() {
-        return false;
-      },
+      browserSupportsCssVars: () => supportsCssVariables(window),
+      computeBoundingRect: () => $el.getBoundingClientRect(),
+      containsEventTarget: target => $el.contains(target),
+      deregisterDocumentInteractionHandler: (evtType, handler) => document.documentElement.removeEventListener(evtType, handler, applyPassive()),
+      deregisterInteractionHandler: (evt, handler) => $el.removeEventListener(evt, handler, applyPassive()),
+      deregisterResizeHandler: handler => window.removeEventListener('resize', handler),
+      getWindowPageOffset: () => ({
+        x: window.pageXOffset,
+        y: window.pageYOffset
+      }),
+      isSurfaceActive: () => matches($el, ':active'),
+      isSurfaceDisabled: () => false,
       // todo: consider if this is right
-      isUnbounded: function isUnbounded() {
-        return _this.unbounded_;
-      },
-      registerDocumentInteractionHandler: function registerDocumentInteractionHandler(evtType, handler) {
-        return document.documentElement.addEventListener(evtType, handler, applyPassive());
-      },
-      registerInteractionHandler: function registerInteractionHandler(evt, handler) {
+      isUnbounded: () => this.unbounded_,
+      registerDocumentInteractionHandler: (evtType, handler) => document.documentElement.addEventListener(evtType, handler, applyPassive()),
+      registerInteractionHandler: (evt, handler) => {
         $el.addEventListener(evt, handler, applyPassive());
       },
-      registerResizeHandler: function registerResizeHandler(handler) {
+      registerResizeHandler: handler => {
         return window.addEventListener('resize', handler);
       },
-      removeClass: function removeClass(className) {
+      removeClass: className => {
         if (state) {
           // eslint-disable-next-line no-unused-vars
-          var _state$classes = state.classes,
-              removed = _state$classes[className],
-              rest = _objectWithoutProperties(_state$classes, [className].map(_toPropertyKey));
+          const _state$classes = state.classes,
+                rest = _objectWithoutProperties(_state$classes, [className].map(_toPropertyKey));
 
           state.classes = rest;
         } else {
           $el.classList.remove(className);
         }
       },
-      updateCssVariable: function updateCssVariable(varName, value) {
+      updateCssVariable: (varName, value) => {
         if (state) {
-          state.styles = _objectSpread2(_objectSpread2({}, state.styles), {}, _defineProperty({}, varName, value));
+          state.styles = _objectSpread2(_objectSpread2({}, state.styles), {}, {
+            [varName]: value
+          });
         } else {
           $el.style.setProperty(varName, value);
         }
       }
     }, options));
-    _this.unbounded_ = unbounded;
-    return _this;
+    this.unbounded_ = unbounded;
   }
 
-  _createClass(RippleElement, [{
-    key: "unbounded",
-    get: function get() {
-      return this.unbounded_;
-    },
-    set: function set(unbounded) {
-      this.unbounded_ = Boolean(unbounded);
-      this.setUnbounded(this.unbounded_);
-    }
-  }]);
+  get unbounded() {
+    return this.unbounded_;
+  }
 
-  return RippleElement;
-}(MDCRippleFoundation);
+  set unbounded(unbounded) {
+    this.unbounded_ = Boolean(unbounded);
+    this.setUnbounded(this.unbounded_);
+  }
+
+}
 function useRipplePlugin(root, options) {
-  var ripple = ref(null);
-  var state = shallowReactive({
+  const ripple = ref(null);
+  const state = shallowReactive({
     classes: {},
     styles: {}
   });
 
-  var activate = function activate() {
+  const activate = () => {
     var _ripple$value;
 
     return (_ripple$value = ripple.value) === null || _ripple$value === void 0 ? void 0 : _ripple$value.activate();
   };
 
-  var deactivate = function deactivate() {
+  const deactivate = () => {
     var _ripple$value2;
 
     return (_ripple$value2 = ripple.value) === null || _ripple$value2 === void 0 ? void 0 : _ripple$value2.deactivate();
   };
 
-  onMounted(function () {
+  onMounted(() => {
     ripple.value = new RippleElement(root.value, state, options);
     ripple.value.init();
   });
-  onBeforeUnmount(function () {
+  onBeforeUnmount(() => {
     ripple.value.destroy();
   });
   return _objectSpread2(_objectSpread2({}, toRefs(state)), {}, {
-    activate: activate,
-    deactivate: deactivate
+    activate,
+    deactivate
   });
 }
 
@@ -835,17 +605,18 @@ var script$2 = {
     trailingIcon: String
   },
   components: {
-    CustomLink: CustomLink
+    CustomLink
   },
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots;
-    var root = ref(null);
 
-    var _useRipplePlugin = useRipplePlugin(root),
-        rippleClasses = _useRipplePlugin.classes,
-        styles = _useRipplePlugin.styles;
-
-    var classes = computed(function () {
+  setup(props, {
+    slots
+  }) {
+    const root = ref(null);
+    const {
+      classes: rippleClasses,
+      styles
+    } = useRipplePlugin(root);
+    const classes = computed(() => {
       return _objectSpread2(_objectSpread2({}, rippleClasses.value), {}, {
         'mdc-button': true,
         'mdc-button--raised': props.raised,
@@ -853,24 +624,25 @@ var script$2 = {
         'mdc-button--outlined': props.outlined
       });
     });
-    var haveIcon = computed(function () {
+    const haveIcon = computed(() => {
       var _slots$icon;
 
       return (_slots$icon = slots.icon) !== null && _slots$icon !== void 0 ? _slots$icon : props.icon;
     });
-    var haveTrailingIcon = computed(function () {
+    const haveTrailingIcon = computed(() => {
       var _slots$trailingIcon;
 
       return (_slots$trailingIcon = slots.trailingIcon) !== null && _slots$trailingIcon !== void 0 ? _slots$trailingIcon : props.trailingIcon;
     });
     return {
-      styles: styles,
-      classes: classes,
-      root: root,
-      haveIcon: haveIcon,
-      haveTrailingIcon: haveTrailingIcon
+      styles,
+      classes,
+      root,
+      haveIcon,
+      haveTrailingIcon
     };
   }
+
 };
 
 const _hoisted_1$2 = /*#__PURE__*/createVNode("div", { class: "mdc-button__ripple" }, null, -1 /* HOISTED */);
@@ -922,9 +694,11 @@ var button = BasePlugin({
 
 var mcwCardActionButtons = {
   name: 'mcw-card-action-buttons',
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots;
-    return function () {
+
+  setup(props, {
+    slots
+  }) {
+    return () => {
       var _slots$default;
 
       return h('div', {
@@ -932,13 +706,16 @@ var mcwCardActionButtons = {
       }, [(_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots)]);
     };
   }
+
 };
 
 var mcwCardActionIcons = {
   name: 'mcw-card-action-icons',
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots;
-    return function () {
+
+  setup(props, {
+    slots
+  }) {
+    return () => {
       var _slots$default;
 
       return h('div', {
@@ -946,6 +723,7 @@ var mcwCardActionIcons = {
       }, [(_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots)]);
     };
   }
+
 };
 
 var mcwCardActions = {
@@ -953,9 +731,11 @@ var mcwCardActions = {
   props: {
     fullBleed: Boolean
   },
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots;
-    return function () {
+
+  setup(props, {
+    slots
+  }) {
+    return () => {
       var _slots$default;
 
       return h('section', {
@@ -966,6 +746,7 @@ var mcwCardActions = {
       }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
     };
   }
+
 };
 
 var mcwCardMedia = {
@@ -974,25 +755,31 @@ var mcwCardMedia = {
     src: String,
     square: {
       type: Boolean,
-      default: function _default() {
+
+      default() {
         return false;
       }
+
     },
     wide: {
       type: Boolean,
-      default: function _default() {
+
+      default() {
         return false;
       }
+
     },
     contentClass: String
   },
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots;
-    return function () {
+
+  setup(props, {
+    slots
+  }) {
+    return () => {
       var _slots$default;
 
-      var nodes = [];
-      var content = (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots);
+      const nodes = [];
+      const content = (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots);
 
       if (content) {
         nodes.push(h('div', {
@@ -1012,31 +799,33 @@ var mcwCardMedia = {
       }, nodes);
     };
   }
+
 };
 
 var script$3 = {
   name: 'mcw-card-primary-action',
   components: {
-    CustomLink: CustomLink
+    CustomLink
   },
-  setup: function setup() {
-    var root = ref(null);
 
-    var _useRipplePlugin = useRipplePlugin(root),
-        rippleClasses = _useRipplePlugin.classes,
-        styles = _useRipplePlugin.styles;
-
-    var classes = computed(function () {
+  setup() {
+    const root = ref(null);
+    const {
+      classes: rippleClasses,
+      styles
+    } = useRipplePlugin(root);
+    const classes = computed(() => {
       return _objectSpread2(_objectSpread2({}, rippleClasses.value), {}, {
         'mdc-card__primary-action': 1
       });
     });
     return {
-      classes: classes,
-      styles: styles,
-      root: root
+      classes,
+      styles,
+      root
     };
   }
+
 };
 
 function render$3(_ctx, _cache, $props, $setup, $data, $options) {
@@ -1063,13 +852,17 @@ var mcwCard = {
   props: {
     outlined: Boolean
   },
-  setup: function setup(props, _ref) {
-    var attrs = _ref.attrs,
-        slots = _ref.slots;
-    return function () {
+
+  setup(props, {
+    attrs,
+    slots
+  }) {
+    return () => {
       var _slots$default;
 
-      var outlined = props.outlined;
+      const {
+        outlined
+      } = props;
       return h('div', _objectSpread2({
         class: [{
           'mdc-card': 1,
@@ -1078,173 +871,142 @@ var mcwCard = {
       }, attrs), (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
     };
   }
+
 };
 
 var card = BasePlugin({
-  mcwCard: mcwCard,
+  mcwCard,
   mcwCardPrimaryAction: script$3,
-  mcwCardMedia: mcwCardMedia,
-  mcwCardActions: mcwCardActions,
-  mcwCardActionButtons: mcwCardActionButtons,
-  mcwCardActionIcons: mcwCardActionIcons
+  mcwCardMedia,
+  mcwCardActions,
+  mcwCardActionButtons,
+  mcwCardActionIcons
 });
 
-function emitCustomEvent$1(el, evtType, evtData) {
-  var shouldBubble = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+function emitCustomEvent$1(el, evtType, evtData, shouldBubble = false) {
   evtType = evtType.toLowerCase();
 
-  var createCustomEvent = function createCustomEvent() {
-    var evt = document.createEvent('CustomEvent');
+  const createCustomEvent = () => {
+    const evt = document.createEvent('CustomEvent');
     return evt.initCustomEvent(evtType, shouldBubble, false, evtData);
   };
 
-  var evt = typeof CustomEvent === 'function' ? new CustomEvent(evtType, {
+  const evt = typeof CustomEvent === 'function' ? new CustomEvent(evtType, {
     detail: evtData,
     bubbles: shouldBubble
   }) : createCustomEvent();
   el.dispatchEvent(evt);
 }
 
-var RippleElement$1 = /*#__PURE__*/function (_MDCRippleFoundation) {
-  _inherits(RippleElement, _MDCRippleFoundation);
-
-  var _super = _createSuper(RippleElement);
-
-  function RippleElement(element, state) {
+class RippleElement$1 extends MDCRippleFoundation {
+  constructor(element, state, _ref = {}) {
     var _element$$el;
 
-    var _this;
-
-    var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
-        _ref$unbounded = _ref.unbounded,
-        unbounded = _ref$unbounded === void 0 ? false : _ref$unbounded,
+    let {
+      unbounded = false
+    } = _ref,
         options = _objectWithoutProperties(_ref, ["unbounded"]);
 
-    _classCallCheck(this, RippleElement);
-
-    var $el = (_element$$el = element.$el) !== null && _element$$el !== void 0 ? _element$$el : element;
-    _this = _super.call(this, _objectSpread2({
-      addClass: function addClass(className) {
+    const $el = (_element$$el = element.$el) !== null && _element$$el !== void 0 ? _element$$el : element;
+    super(_objectSpread2({
+      addClass: className => {
         if (state) {
-          state.classes = _objectSpread2(_objectSpread2({}, state.classes), {}, _defineProperty({}, className, true));
+          state.classes = _objectSpread2(_objectSpread2({}, state.classes), {}, {
+            [className]: true
+          });
         } else {
           $el.classList.add(className);
         }
       },
-      browserSupportsCssVars: function browserSupportsCssVars() {
-        return supportsCssVariables(window);
-      },
-      computeBoundingRect: function computeBoundingRect() {
-        return $el.getBoundingClientRect();
-      },
-      containsEventTarget: function containsEventTarget(target) {
-        return $el.contains(target);
-      },
-      deregisterDocumentInteractionHandler: function deregisterDocumentInteractionHandler(evtType, handler) {
-        return document.documentElement.removeEventListener(evtType, handler, applyPassive());
-      },
-      deregisterInteractionHandler: function deregisterInteractionHandler(evt, handler) {
-        return $el.removeEventListener(evt, handler, applyPassive());
-      },
-      deregisterResizeHandler: function deregisterResizeHandler(handler) {
-        return window.removeEventListener('resize', handler);
-      },
-      getWindowPageOffset: function getWindowPageOffset() {
-        return {
-          x: window.pageXOffset,
-          y: window.pageYOffset
-        };
-      },
-      isSurfaceActive: function isSurfaceActive() {
-        return matches($el, ':active');
-      },
-      isSurfaceDisabled: function isSurfaceDisabled() {
-        return false;
-      },
+      browserSupportsCssVars: () => supportsCssVariables(window),
+      computeBoundingRect: () => $el.getBoundingClientRect(),
+      containsEventTarget: target => $el.contains(target),
+      deregisterDocumentInteractionHandler: (evtType, handler) => document.documentElement.removeEventListener(evtType, handler, applyPassive()),
+      deregisterInteractionHandler: (evt, handler) => $el.removeEventListener(evt, handler, applyPassive()),
+      deregisterResizeHandler: handler => window.removeEventListener('resize', handler),
+      getWindowPageOffset: () => ({
+        x: window.pageXOffset,
+        y: window.pageYOffset
+      }),
+      isSurfaceActive: () => matches($el, ':active'),
+      isSurfaceDisabled: () => false,
       // todo: consider if this is right
-      isUnbounded: function isUnbounded() {
-        return _this.unbounded_;
-      },
-      registerDocumentInteractionHandler: function registerDocumentInteractionHandler(evtType, handler) {
-        return document.documentElement.addEventListener(evtType, handler, applyPassive());
-      },
-      registerInteractionHandler: function registerInteractionHandler(evt, handler) {
+      isUnbounded: () => this.unbounded_,
+      registerDocumentInteractionHandler: (evtType, handler) => document.documentElement.addEventListener(evtType, handler, applyPassive()),
+      registerInteractionHandler: (evt, handler) => {
         $el.addEventListener(evt, handler, applyPassive());
       },
-      registerResizeHandler: function registerResizeHandler(handler) {
+      registerResizeHandler: handler => {
         return window.addEventListener('resize', handler);
       },
-      removeClass: function removeClass(className) {
+      removeClass: className => {
         if (state) {
           // eslint-disable-next-line no-unused-vars
-          var _state$classes = state.classes,
-              removed = _state$classes[className],
-              rest = _objectWithoutProperties(_state$classes, [className].map(_toPropertyKey));
+          const _state$classes = state.classes,
+                rest = _objectWithoutProperties(_state$classes, [className].map(_toPropertyKey));
 
           state.classes = rest;
         } else {
           $el.classList.remove(className);
         }
       },
-      updateCssVariable: function updateCssVariable(varName, value) {
+      updateCssVariable: (varName, value) => {
         if (state) {
-          state.styles = _objectSpread2(_objectSpread2({}, state.styles), {}, _defineProperty({}, varName, value));
+          state.styles = _objectSpread2(_objectSpread2({}, state.styles), {}, {
+            [varName]: value
+          });
         } else {
           $el.style.setProperty(varName, value);
         }
       }
     }, options));
-    _this.unbounded_ = unbounded;
-    return _this;
+    this.unbounded_ = unbounded;
   }
 
-  _createClass(RippleElement, [{
-    key: "unbounded",
-    get: function get() {
-      return this.unbounded_;
-    },
-    set: function set(unbounded) {
-      this.unbounded_ = Boolean(unbounded);
-      this.setUnbounded(this.unbounded_);
-    }
-  }]);
+  get unbounded() {
+    return this.unbounded_;
+  }
 
-  return RippleElement;
-}(MDCRippleFoundation);
+  set unbounded(unbounded) {
+    this.unbounded_ = Boolean(unbounded);
+    this.setUnbounded(this.unbounded_);
+  }
+
+}
 function useRipplePlugin$1(root, options) {
-  var ripple = ref(null);
-  var state = shallowReactive({
+  const ripple = ref(null);
+  const state = shallowReactive({
     classes: {},
     styles: {}
   });
 
-  var activate = function activate() {
+  const activate = () => {
     var _ripple$value;
 
     return (_ripple$value = ripple.value) === null || _ripple$value === void 0 ? void 0 : _ripple$value.activate();
   };
 
-  var deactivate = function deactivate() {
+  const deactivate = () => {
     var _ripple$value2;
 
     return (_ripple$value2 = ripple.value) === null || _ripple$value2 === void 0 ? void 0 : _ripple$value2.deactivate();
   };
 
-  onMounted(function () {
+  onMounted(() => {
     ripple.value = new RippleElement$1(root.value, state, options);
     ripple.value.init();
   });
-  onBeforeUnmount(function () {
+  onBeforeUnmount(() => {
     ripple.value.destroy();
   });
   return _objectSpread2(_objectSpread2({}, toRefs(state)), {}, {
-    activate: activate,
-    deactivate: deactivate
+    activate,
+    deactivate
   });
 }
 
-var CB_PROTO_PROPS = ['checked', 'indeterminate'];
-var checkboxId_ = 0;
+const CB_PROTO_PROPS = ['checked', 'indeterminate'];
+let checkboxId_ = 0;
 var script$4 = {
   name: 'mcw-checkbox',
   props: {
@@ -1255,16 +1017,20 @@ var script$4 = {
     alignEnd: Boolean,
     value: {
       type: [String, Number],
-      default: function _default() {
+
+      default() {
         return 'on';
       }
+
     },
     name: String
   },
-  setup: function setup(props, _ref) {
-    var emit = _ref.emit,
-        slots = _ref.slots;
-    var uiState = reactive({
+
+  setup(props, {
+    emit,
+    slots
+  }) {
+    const uiState = reactive({
       classes: {
         'mdc-checkbox': 1
       },
@@ -1272,56 +1038,55 @@ var script$4 = {
       labelEl: null,
       root: null
     });
-    var foundation;
-    var formField;
-    var checkboxId = "__mcw-checkbox-".concat(checkboxId_++);
-
-    var _useRipplePlugin = useRipplePlugin$1(toRef(uiState, 'root'), {
-      isUnbounded: function isUnbounded() {
-        return true;
-      },
-      isSurfaceActive: function isSurfaceActive() {
+    let foundation;
+    let formField;
+    const checkboxId = "__mcw-checkbox-".concat(checkboxId_++);
+    const {
+      classes: rippleClasses,
+      styles,
+      activate,
+      deactivate
+    } = useRipplePlugin$1(toRef(uiState, 'root'), {
+      isUnbounded: () => true,
+      isSurfaceActive: () => {
         return matches(uiState.control, ':active');
       },
-      registerInteractionHandler: function registerInteractionHandler(evt, handler) {
+      registerInteractionHandler: (evt, handler) => {
         uiState.control.addEventListener(evt, handler, applyPassive());
       },
-      deregisterInteractionHandler: function deregisterInteractionHandler(evt, handler) {
+      deregisterInteractionHandler: (evt, handler) => {
         uiState.control.removeEventListener(evt, handler, applyPassive());
       },
-      computeBoundingRect: function computeBoundingRect() {
+      computeBoundingRect: () => {
         return uiState.root.getBoundingClientRect();
       }
-    }),
-        rippleClasses = _useRipplePlugin.classes,
-        styles = _useRipplePlugin.styles,
-        activate = _useRipplePlugin.activate,
-        deactivate = _useRipplePlugin.deactivate;
-
-    var rootClasses = computed(function () {
+    });
+    const rootClasses = computed(() => {
       return _objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes);
     });
-    var hasLabel = computed(function () {
+    const hasLabel = computed(() => {
       var _props$label;
 
       return (_props$label = props.label) !== null && _props$label !== void 0 ? _props$label : slots.default;
     });
-    var formFieldClasses = computed(function () {
+    const formFieldClasses = computed(() => {
       return {
         'mdc-form-field': hasLabel.value,
         'mdc-form-field--align-end': hasLabel.value && props.alignEnd
       };
     });
 
-    var onChange = function onChange(_ref2) {
-      var _ref2$target = _ref2.target,
-          indeterminate = _ref2$target.indeterminate,
-          checked = _ref2$target.checked;
+    const onChange = ({
+      target: {
+        indeterminate,
+        checked
+      }
+    }) => {
       // note indeterminate will not currently work with the array model
       emit('update:indeterminate', indeterminate);
 
       if (Array.isArray(props.modelValue)) {
-        var idx = props.modelValue.indexOf(props.value);
+        const idx = props.modelValue.indexOf(props.value);
 
         if (checked) {
           idx < 0 && emit('update:modelValue', props.modelValue.concat(props.value));
@@ -1336,73 +1101,56 @@ var script$4 = {
       }
     };
 
-    var isChecked = function isChecked() {
-      return uiState.control.checked;
-    };
+    const isChecked = () => uiState.control.checked;
 
-    var adapter = {
-      addClass: function addClass(className) {
-        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
-      },
-      forceLayout: function forceLayout() {
-        return uiState.root.offsetWidth;
-      },
-      hasNativeControl: function hasNativeControl() {
-        return true;
-      },
-      isAttachedToDOM: function isAttachedToDOM() {
-        return true;
-      },
-      isChecked: function isChecked() {
-        return uiState.control.checked;
-      },
-      isIndeterminate: function isIndeterminate() {
-        return uiState.control.indeterminate;
-      },
-      removeClass: function removeClass(className) {
+    const adapter = {
+      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        [className]: true
+      }),
+      forceLayout: () => uiState.root.offsetWidth,
+      hasNativeControl: () => true,
+      isAttachedToDOM: () => true,
+      isChecked: () => uiState.control.checked,
+      isIndeterminate: () => uiState.control.indeterminate,
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes = uiState.classes,
-            removed = _uiState$classes[className],
-            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+        const _uiState$classes = uiState.classes,
+              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
         uiState.classes = rest;
       },
-      removeNativeControlAttr: function removeNativeControlAttr(attr) {
+      removeNativeControlAttr: attr => {
         uiState.control.removeAttribute(attr);
       },
-      setNativeControlAttr: function setNativeControlAttr(attr, value) {
+      setNativeControlAttr: (attr, value) => {
         uiState.control.setAttribute(attr, value);
       },
-      setNativeControlDisabled: function setNativeControlDisabled(disabled) {
-        return uiState.control.disabled = disabled;
-      }
+      setNativeControlDisabled: disabled => uiState.control.disabled = disabled
     };
 
-    var handleAnimationEnd = function handleAnimationEnd() {
-      return foundation.handleAnimationEnd();
-    };
+    const handleAnimationEnd = () => foundation.handleAnimationEnd();
 
-    var setChecked = function setChecked(checked) {
+    const setChecked = checked => {
       uiState.control.checked = Array.isArray(checked) ? checked.indexOf(props.value) > -1 : checked;
     };
 
-    var setIndeterminate = function setIndeterminate(indeterminate) {
+    const setIndeterminate = indeterminate => {
       uiState.control && (uiState.control.indeterminate = indeterminate);
     };
 
-    var installPropertyChangeHooks_ = function installPropertyChangeHooks_() {
-      var nativeCb = uiState.control;
-      var cbProto = Object.getPrototypeOf(nativeCb);
-      CB_PROTO_PROPS.forEach(function (controlState) {
-        var desc = Object.getOwnPropertyDescriptor(cbProto, controlState); // We have to check for this descriptor, since some browsers (Safari) don't support its return.
+    const installPropertyChangeHooks_ = () => {
+      const nativeCb = uiState.control;
+      const cbProto = Object.getPrototypeOf(nativeCb);
+      CB_PROTO_PROPS.forEach(controlState => {
+        const desc = Object.getOwnPropertyDescriptor(cbProto, controlState); // We have to check for this descriptor, since some browsers (Safari) don't support its return.
         // See: https://bugs.webkit.org/show_bug.cgi?id=49739
 
         if (validDescriptor(desc)) {
-          var nativeCbDesc =
+          const nativeCbDesc =
           /** @type {!ObjectPropertyDescriptor} */
           {
             get: desc.get,
-            set: function set(state) {
+            set: state => {
               desc.set.call(nativeCb, state);
               foundation.handleChange();
             },
@@ -1414,11 +1162,11 @@ var script$4 = {
       });
     };
 
-    var uninstallPropertyChangeHooks_ = function uninstallPropertyChangeHooks_() {
-      var nativeCb = uiState.control;
-      var cbProto = Object.getPrototypeOf(nativeCb);
-      CB_PROTO_PROPS.forEach(function (controlState) {
-        var desc =
+    const uninstallPropertyChangeHooks_ = () => {
+      const nativeCb = uiState.control;
+      const cbProto = Object.getPrototypeOf(nativeCb);
+      CB_PROTO_PROPS.forEach(controlState => {
+        const desc =
         /** @type {!ObjectPropertyDescriptor} */
         Object.getOwnPropertyDescriptor(cbProto, controlState);
 
@@ -1428,40 +1176,34 @@ var script$4 = {
       });
     };
 
-    watch(function () {
-      return props.disabled;
-    }, function (nv, ov) {
+    watch(() => props.disabled, (nv, ov) => {
       var _foundation;
 
       nv != ov && ((_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.setDisabled(nv));
     });
-    watch(function () {
-      return props.modelValue;
-    }, function (nv, ov) {
+    watch(() => props.modelValue, (nv, ov) => {
       nv != ov && setChecked(nv);
     });
-    watch(function () {
-      return props.indeterminate;
-    }, function (nv, ov) {
+    watch(() => props.indeterminate, (nv, ov) => {
       nv != ov && setIndeterminate(nv);
     });
-    onMounted(function () {
+    onMounted(() => {
       foundation = new MDCCheckboxFoundation(adapter);
       uiState.root.addEventListener(getCorrectEventName(window, 'animationend'), handleAnimationEnd);
       installPropertyChangeHooks_();
 
       if (hasLabel.value) {
         formField = new MDCFormFieldFoundation({
-          registerInteractionHandler: function registerInteractionHandler(type, handler) {
+          registerInteractionHandler: (type, handler) => {
             uiState.labelEl.addEventListener(type, handler);
           },
-          deregisterInteractionHandler: function deregisterInteractionHandler(type, handler) {
+          deregisterInteractionHandler: (type, handler) => {
             uiState.labelEl.removeEventListener(type, handler);
           },
-          activateInputRipple: function activateInputRipple() {
+          activateInputRipple: () => {
             activate();
           },
-          deactivateInputRipple: function deactivateInputRipple() {
+          deactivateInputRipple: () => {
             deactivate();
           }
         });
@@ -1473,7 +1215,7 @@ var script$4 = {
       foundation.setDisabled(props.disabled);
       setIndeterminate(props.indeterminate);
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       var _formField;
 
       uiState.root.removeEventListener(getCorrectEventName(window, 'animationend'), handleAnimationEnd);
@@ -1482,17 +1224,18 @@ var script$4 = {
       foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      rootClasses: rootClasses,
-      formFieldClasses: formFieldClasses,
-      onChange: onChange,
-      styles: styles,
-      hasLabel: hasLabel,
-      setChecked: setChecked,
-      setIndeterminate: setIndeterminate,
-      isChecked: isChecked,
-      checkboxId: checkboxId
+      rootClasses,
+      formFieldClasses,
+      onChange,
+      styles,
+      hasLabel,
+      setChecked,
+      setIndeterminate,
+      isChecked,
+      checkboxId
     });
   }
+
 }; // ===
 // Private functions
 // ===
@@ -1591,17 +1334,17 @@ var checkbox = BasePlugin({
 
 var script$5 = {
   name: 'mcw-chip-checkmark',
-  setup: function setup() {
-    var width = ref(0);
-    var root = ref(null);
-    onMounted(function () {
-      return width.value = root.value.getBoundingClientRect().height;
-    });
+
+  setup() {
+    const width = ref(0);
+    const root = ref(null);
+    onMounted(() => width.value = root.value.getBoundingClientRect().height);
     return {
-      width: width,
-      root: root
+      width,
+      root
     };
   }
+
 };
 
 const _hoisted_1$4 = {
@@ -1629,7 +1372,9 @@ function render$5(_ctx, _cache, $props, $setup, $data, $options) {
 script$5.render = render$5;
 script$5.__file = "packages/chips/chip-checkmark.vue";
 
-var strings = MDCChipFoundation.strings;
+const {
+  strings
+} = MDCChipFoundation;
 var script$6 = {
   name: 'mcw-chip-set',
   props: {
@@ -1637,8 +1382,9 @@ var script$6 = {
     filter: [Boolean],
     input: [Boolean]
   },
-  setup: function setup(props) {
-    var uiState = reactive({
+
+  setup(props) {
+    const uiState = reactive({
       classes: {
         'mdc-chip-set': true,
         'mdc-chip-set--choice': props.choice,
@@ -1649,53 +1395,48 @@ var script$6 = {
       myListeners: {},
       root: null
     });
-    var foundation;
-    var slotObserver;
-    var ce = ref([]);
+    let foundation;
+    let slotObserver;
+    const ce = ref([]);
 
-    var addChipElement = function addChipElement(item) {
+    const addChipElement = item => {
       ce.value.push(item);
     };
 
     provide('addChipElement', addChipElement);
-    var adapter = {
-      announceMessage: function announceMessage(message) {
+    const adapter = {
+      announceMessage: message => {
         announce(message);
       },
-      focusChipPrimaryActionAtIndex: function focusChipPrimaryActionAtIndex(index) {
-        var chip = ce.value[index];
+      focusChipPrimaryActionAtIndex: index => {
+        const chip = ce.value[index];
         chip && chip.focusPrimaryAction();
       },
-      focusChipTrailingActionAtIndex: function focusChipTrailingActionAtIndex(index) {
-        var chip = ce.value[index];
+      focusChipTrailingActionAtIndex: index => {
+        const chip = ce.value[index];
         chip && chip.focusTrailingAction();
       },
-      getChipListCount: function getChipListCount() {
+      getChipListCount: () => {
         return ce.value.length;
       },
-      getIndexOfChipById: function getIndexOfChipById(chipId) {
-        return ce.value.findIndex(function (_ref) {
-          var id = _ref.id;
-          return id == chipId;
-        });
+      getIndexOfChipById: chipId => {
+        return ce.value.findIndex(({
+          id
+        }) => id == chipId);
       },
-      hasClass: function hasClass(className) {
-        return uiState.root.classList.contains(className);
-      },
-      isRTL: function isRTL() {
-        return window.getComputedStyle(uiState.root).getPropertyValue('direction') === 'rtl';
-      },
-      removeChipAtIndex: function removeChipAtIndex(index) {
+      hasClass: className => uiState.root.classList.contains(className),
+      isRTL: () => window.getComputedStyle(uiState.root).getPropertyValue('direction') === 'rtl',
+      removeChipAtIndex: index => {
         if (index >= 0 && index < ce.value.length) {
           // tell chip to remove itself from the DOM
           ce.value[index].remove();
           ce.value.splice(index, 1);
         }
       },
-      removeFocusFromChipAtIndex: function removeFocusFromChipAtIndex(index) {
+      removeFocusFromChipAtIndex: index => {
         ce.value[index].removeFocus();
       },
-      selectChipAtIndex: function selectChipAtIndex(index, selected, shouldNotifyClients) {
+      selectChipAtIndex: (index, selected, shouldNotifyClients) => {
         if (index >= 0 && index < ce.value.length) {
           ce.value[index].setSelectedFromChipSet(selected, shouldNotifyClients);
         }
@@ -1705,28 +1446,27 @@ var script$6 = {
       filter: props.filter,
       input: props.input
     });
-    onMounted(function () {
-      var _uiState$myListeners;
-
+    onMounted(() => {
       foundation = new MDCChipSetFoundation(adapter);
       foundation.init();
-      uiState.myListeners = (_uiState$myListeners = {}, _defineProperty(_uiState$myListeners, strings.INTERACTION_EVENT.toLowerCase(), function (_ref2) {
-        var detail = _ref2.detail;
-        return foundation.handleChipInteraction(detail);
-      }), _defineProperty(_uiState$myListeners, strings.SELECTION_EVENT.toLowerCase(), function (_ref3) {
-        var detail = _ref3.detail;
-        return foundation.handleChipSelection(detail);
-      }), _defineProperty(_uiState$myListeners, strings.REMOVAL_EVENT.toLowerCase(), function (_ref4) {
-        var detail = _ref4.detail;
-        return foundation.handleChipRemoval(detail);
-      }), _defineProperty(_uiState$myListeners, strings.NAVIGATION_EVENT.toLowerCase(), function (_ref5) {
-        var detail = _ref5.detail;
-        return foundation.handleChipNavigation(detail);
-      }), _uiState$myListeners), // the chips could change outside of this component
+      uiState.myListeners = {
+        [strings.INTERACTION_EVENT.toLowerCase()]: ({
+          detail
+        }) => foundation.handleChipInteraction(detail),
+        [strings.SELECTION_EVENT.toLowerCase()]: ({
+          detail
+        }) => foundation.handleChipSelection(detail),
+        [strings.REMOVAL_EVENT.toLowerCase()]: ({
+          detail
+        }) => foundation.handleChipRemoval(detail),
+        [strings.NAVIGATION_EVENT.toLowerCase()]: ({
+          detail
+        }) => foundation.handleChipNavigation(detail)
+      }, // the chips could change outside of this component
       // so use a mutation observer to trigger an update by
       // incrementing the dependency variable "listn" referenced
       // in the computed that selects the chip elements
-      slotObserver = new MutationObserver(function (mutationList, observer) {
+      slotObserver = new MutationObserver((mutationList, observer) => {
         uiState.listn++;
       });
       slotObserver.observe(uiState.root, {
@@ -1734,12 +1474,13 @@ var script$6 = {
 
       });
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       slotObserver.disconnect();
       foundation.destroy();
     });
     return _objectSpread2({}, toRefs(uiState));
   }
+
 };
 
 function render$6(_ctx, _cache, $props, $setup, $data, $options) {
@@ -1755,9 +1496,13 @@ function render$6(_ctx, _cache, $props, $setup, $data, $options) {
 script$6.render = render$6;
 script$6.__file = "packages/chips/chip-set.vue";
 
-var strings$1 = MDCChipFoundation.strings;
-var trailingActionStrings = MDCChipTrailingActionFoundation.strings;
-var chipItemId_ = 0;
+const {
+  strings: strings$1
+} = MDCChipFoundation;
+const {
+  strings: trailingActionStrings
+} = MDCChipTrailingActionFoundation;
+let chipItemId_ = 0;
 var script$7 = {
   name: 'mcw-chip',
   props: {
@@ -1765,14 +1510,18 @@ var script$7 = {
     trailingIcon: [String],
     shouldRemoveOnTrailingIconClick: {
       type: Boolean,
-      default: function _default() {
+
+      default() {
         return true;
       }
+
     }
   },
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots;
-    var uiState = reactive({
+
+  setup(props, {
+    slots
+  }) {
+    const uiState = reactive({
       classes: {
         'mdc-chip': true
       },
@@ -1789,91 +1538,74 @@ var script$7 = {
       checkmarkEl: null,
       trailingAction: null
     });
-    var mcwChipSet = inject('mcwChipSet');
-    var addChipElement = inject('addChipElement');
-
-    var _useRipplePlugin = useRipplePlugin$1(toRef(uiState, 'root')),
-        rippleClasses = _useRipplePlugin.classes,
-        rippleStyles = _useRipplePlugin.styles;
-
-    var id = chipItemId_++;
-    var foundation;
-    var classes = computed(function () {
+    const mcwChipSet = inject('mcwChipSet');
+    const addChipElement = inject('addChipElement');
+    const {
+      classes: rippleClasses,
+      styles: rippleStyles
+    } = useRipplePlugin$1(toRef(uiState, 'root'));
+    const id = chipItemId_++;
+    let foundation;
+    const classes = computed(() => {
       return _objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes);
     });
-    var styles = computed(function () {
+    const styles = computed(() => {
       return _objectSpread2(_objectSpread2({}, rippleStyles.value), uiState.styles);
     });
-    var trailingAction_;
-    var leadingIcon_;
-    var selected = computed({
-      get: function get() {
+    let trailingAction_;
+    let leadingIcon_;
+    const selected = computed({
+      get() {
         return foundation.isSelected();
       },
-      set: function set(nv) {
+
+      set(nv) {
         foundation.setSelected(nv);
       }
+
     });
-    var isFilter = computed(function () {
-      return mcwChipSet === null || mcwChipSet === void 0 ? void 0 : mcwChipSet.filter;
-    });
-    var isInput = computed(function () {
-      return mcwChipSet === null || mcwChipSet === void 0 ? void 0 : mcwChipSet.input;
-    });
-    var haveleadingIcon = computed(function () {
-      var slot = slots['leading-icon'];
+    const isFilter = computed(() => mcwChipSet === null || mcwChipSet === void 0 ? void 0 : mcwChipSet.filter);
+    const isInput = computed(() => mcwChipSet === null || mcwChipSet === void 0 ? void 0 : mcwChipSet.input);
+    const haveleadingIcon = computed(() => {
+      const slot = slots['leading-icon'];
       return slot && slot[0] || !!props.leadingIcon;
     });
-    var havetrailingIcon = computed(function () {
-      var slot = slots['trailing-icon'];
+    const havetrailingIcon = computed(() => {
+      const slot = slots['trailing-icon'];
       return isInput.value && (slot && slot[0] || !!props.trailingIcon);
     });
-    var adapter = {
-      addClass: function addClass(className) {
-        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
-      },
-      addClassToLeadingIcon: function addClassToLeadingIcon(className) {
+    const adapter = {
+      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        [className]: true
+      }),
+      addClassToLeadingIcon: className => {
         if (leadingIcon_) {
           leadingIcon_.classList.add(className);
         }
       },
-      eventTargetHasClass: function eventTargetHasClass(target, className) {
-        return target.classList.contains(className);
-      },
-      focusPrimaryAction: function focusPrimaryAction() {
+      eventTargetHasClass: (target, className) => target.classList.contains(className),
+      focusPrimaryAction: () => {
         var _uiState$root$querySe;
 
         (_uiState$root$querySe = uiState.root.querySelector(strings$1.PRIMARY_ACTION_SELECTOR)) === null || _uiState$root$querySe === void 0 ? void 0 : _uiState$root$querySe.focus();
       },
-      focusTrailingAction: function focusTrailingAction() {
+      focusTrailingAction: () => {
         var _trailingAction_;
 
         (_trailingAction_ = trailingAction_) === null || _trailingAction_ === void 0 ? void 0 : _trailingAction_.focus();
       },
-      getAttribute: function getAttribute(attr) {
-        return uiState.root.getAttribute(attr);
-      },
-      getCheckmarkBoundingClientRect: function getCheckmarkBoundingClientRect() {
+      getAttribute: attr => uiState.root.getAttribute(attr),
+      getCheckmarkBoundingClientRect: () => {
         var _uiState$checkmarkEl;
 
         return (_uiState$checkmarkEl = uiState.checkmarkEl) === null || _uiState$checkmarkEl === void 0 ? void 0 : _uiState$checkmarkEl.getBoundingClientRect();
       },
-      getComputedStyleValue: function getComputedStyleValue(propertyName) {
-        return window.getComputedStyle(uiState.root).getPropertyValue(propertyName);
-      },
-      getRootBoundingClientRect: function getRootBoundingClientRect() {
-        return uiState.root.getBoundingClientRect();
-      },
-      hasClass: function hasClass(className) {
-        return uiState.root.classList.contains(className);
-      },
-      hasLeadingIcon: function hasLeadingIcon() {
-        return !!haveleadingIcon.value;
-      },
-      isRTL: function isRTL() {
-        return window.getComputedStyle(uiState.root).getPropertyValue('direction') === 'rtl';
-      },
-      isTrailingActionNavigable: function isTrailingActionNavigable() {
+      getComputedStyleValue: propertyName => window.getComputedStyle(uiState.root).getPropertyValue(propertyName),
+      getRootBoundingClientRect: () => uiState.root.getBoundingClientRect(),
+      hasClass: className => uiState.root.classList.contains(className),
+      hasLeadingIcon: () => !!haveleadingIcon.value,
+      isRTL: () => window.getComputedStyle(uiState.root).getPropertyValue('direction') === 'rtl',
+      isTrailingActionNavigable: () => {
         if (trailingAction_) {
           var _uiState$trailingActi;
 
@@ -1882,139 +1614,110 @@ var script$7 = {
 
         return false;
       },
-      notifyInteraction: function notifyInteraction() {
+      notifyInteraction: () => {
         emitCustomEvent(uiState.root, strings$1.INTERACTION_EVENT, {
           chipId: id
         }, true);
       },
-      notifyNavigation: function notifyNavigation(key, source) {
-        return emitCustomEvent(uiState.root, strings$1.NAVIGATION_EVENT, {
-          chipId: id,
-          key: key,
-          source: source
-        }, true);
-      },
-      notifyRemoval: function notifyRemoval(removedAnnouncement) {
+      notifyNavigation: (key, source) => emitCustomEvent(uiState.root, strings$1.NAVIGATION_EVENT, {
+        chipId: id,
+        key,
+        source
+      }, true),
+      notifyRemoval: removedAnnouncement => {
         emitCustomEvent(uiState.root, 'mdc-chip:removal', {
           chipId: id,
-          removedAnnouncement: removedAnnouncement
+          removedAnnouncement
         }, true);
       },
-      notifySelection: function notifySelection(selected, shouldIgnore) {
-        return emitCustomEvent(uiState.root, strings$1.SELECTION_EVENT, {
-          chipId: id,
-          selected: selected,
-          shouldIgnore: shouldIgnore
-        }, true
-        /* shouldBubble */
-        );
-      },
-      notifyTrailingIconInteraction: function notifyTrailingIconInteraction() {
+      notifySelection: (selected, shouldIgnore) => emitCustomEvent(uiState.root, strings$1.SELECTION_EVENT, {
+        chipId: id,
+        selected: selected,
+        shouldIgnore
+      }, true
+      /* shouldBubble */
+      ),
+      notifyTrailingIconInteraction: () => {
         emitCustomEvent(uiState.root, strings$1.TRAILING_ICON_INTERACTION_EVENT, {
           chipId: id
         }, true);
       },
-      removeClass: function removeClass(className) {
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes = uiState.classes,
-            removed = _uiState$classes[className],
-            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+        const _uiState$classes = uiState.classes,
+              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
         uiState.classes = rest;
       },
-      removeClassFromLeadingIcon: function removeClassFromLeadingIcon(className) {
+      removeClassFromLeadingIcon: className => {
         if (leadingIcon_) {
           leadingIcon_.classList.remove(className);
         }
       },
-      removeTrailingActionFocus: function removeTrailingActionFocus() {
+      removeTrailingActionFocus: () => {
         var _uiState$trailingActi2;
 
         (_uiState$trailingActi2 = uiState.trailingAction) === null || _uiState$trailingActi2 === void 0 ? void 0 : _uiState$trailingActi2.removeFocus();
       },
-      setPrimaryActionAttr: function setPrimaryActionAttr(attr, value) {
-        return uiState.primaryAttrs = _objectSpread2(_objectSpread2({}, uiState.primaryAttrs), {}, _defineProperty({}, attr, value));
-      },
-      setStyleProperty: function setStyleProperty(property, value) {
-        return uiState.styles = _objectSpread2(_objectSpread2({}, uiState.styles), {}, _defineProperty({}, property, value));
-      }
+      setPrimaryActionAttr: (attr, value) => uiState.primaryAttrs = _objectSpread2(_objectSpread2({}, uiState.primaryAttrs), {}, {
+        [attr]: value
+      }),
+      setStyleProperty: (property, value) => uiState.styles = _objectSpread2(_objectSpread2({}, uiState.styles), {}, {
+        [property]: value
+      })
     };
 
-    var setSelectedFromChipSet = function setSelectedFromChipSet(selected, shouldNotifyClients) {
+    const setSelectedFromChipSet = (selected, shouldNotifyClients) => {
       foundation.setSelectedFromChipSet(selected, shouldNotifyClients);
     };
 
-    var focusPrimaryAction = function focusPrimaryAction() {
-      return foundation.focusPrimaryAction();
-    };
+    const focusPrimaryAction = () => foundation.focusPrimaryAction();
 
-    var focusTrailingAction = function focusTrailingAction() {
-      return foundation.focusTrailingAction();
-    };
+    const focusTrailingAction = () => foundation.focusTrailingAction();
 
-    var removeFocus = function removeFocus() {
-      return foundation.removeFocus();
-    };
+    const removeFocus = () => foundation.removeFocus();
 
-    var toggleSelected = function toggleSelected() {
-      return foundation.toggleSelected();
-    };
+    const toggleSelected = () => foundation.toggleSelected();
 
-    var isSelected = function isSelected() {
-      return foundation.isSelected();
-    };
+    const isSelected = () => foundation.isSelected();
 
-    var remove = function remove() {
-      var parent = uiState.root.parentNode;
+    const remove = () => {
+      const parent = uiState.root.parentNode;
 
       if (parent != null) {
         parent.removeChild(uiState.root);
       }
     };
 
-    watch(function () {
-      return props.shouldRemoveOnTrailingIconClick;
-    }, function (nv) {
+    watch(() => props.shouldRemoveOnTrailingIconClick, nv => {
       foundation.setShouldRemoveOnTrailingIconClick(nv);
     });
     addChipElement({
-      id: id,
-      removeFocus: removeFocus,
-      focusPrimaryAction: focusPrimaryAction,
-      focusTrailingAction: focusTrailingAction,
-      setSelectedFromChipSet: setSelectedFromChipSet,
-      remove: remove
+      id,
+      removeFocus,
+      focusPrimaryAction,
+      focusTrailingAction,
+      setSelectedFromChipSet,
+      remove
     });
-    onMounted(function () {
+    onMounted(() => {
       leadingIcon_ = uiState.root.querySelector(strings$1.LEADING_ICON_SELECTOR);
       trailingAction_ = uiState.root.querySelector(strings$1.TRAILING_ACTION_SELECTOR);
       foundation = new MDCChipFoundation(adapter);
       uiState.myListeners = {
-        click: function click(evt) {
+        click: evt => {
           foundation.handleClick(evt);
         },
-        keydown: function keydown(evt) {
-          return foundation.handleKeydown(evt);
-        },
-        transitionend: function transitionend(evt) {
-          return foundation.handleTransitionEnd(evt);
-        },
-        focusin: function focusin(evt) {
-          return foundation.handleFocusIn(evt);
-        },
-        focusout: function focusout(evt) {
-          return foundation.handleFocusOut(evt);
-        }
+        keydown: evt => foundation.handleKeydown(evt),
+        transitionend: evt => foundation.handleTransitionEnd(evt),
+        focusin: evt => foundation.handleFocusIn(evt),
+        focusout: evt => foundation.handleFocusOut(evt)
       };
 
       if (trailingAction_) {
-        uiState.myListeners[trailingActionStrings.INTERACTION_EVENT.toLowerCase()] = function (evt) {
-          return foundation.handleTrailingActionInteraction(evt);
-        };
+        uiState.myListeners[trailingActionStrings.INTERACTION_EVENT.toLowerCase()] = evt => foundation.handleTrailingActionInteraction(evt);
 
-        uiState.myListeners[trailingActionStrings.NAVIGATION_EVENT.toLowerCase()] = function (evt) {
-          return foundation.handleTrailingActionNavigation(evt);
-        };
+        uiState.myListeners[trailingActionStrings.NAVIGATION_EVENT.toLowerCase()] = evt => foundation.handleTrailingActionNavigation(evt);
       }
 
       foundation.init();
@@ -2024,27 +1727,28 @@ var script$7 = {
         foundation.setShouldRemoveOnTrailingIconClick(props.shouldRemoveOnTrailingIconClick);
       }
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      classes: classes,
-      styles: styles,
-      id: id,
-      isInput: isInput,
-      isFilter: isFilter,
-      selected: selected,
-      haveleadingIcon: haveleadingIcon,
-      havetrailingIcon: havetrailingIcon,
-      remove: remove,
-      isSelected: isSelected,
-      toggleSelected: toggleSelected,
-      removeFocus: removeFocus,
-      focusPrimaryAction: focusPrimaryAction,
-      focusTrailingAction: focusTrailingAction,
-      setSelectedFromChipSet: setSelectedFromChipSet
+      classes,
+      styles,
+      id,
+      isInput,
+      isFilter,
+      selected,
+      haveleadingIcon,
+      havetrailingIcon,
+      remove,
+      isSelected,
+      toggleSelected,
+      removeFocus,
+      focusPrimaryAction,
+      focusTrailingAction,
+      setSelectedFromChipSet
     });
   }
+
 };
 
 const _hoisted_1$5 = /*#__PURE__*/createVNode("div", { class: "mdc-chip__ripple" }, null, -1 /* HOISTED */);
@@ -2110,77 +1814,64 @@ function render$7(_ctx, _cache, $props, $setup, $data, $options) {
 script$7.render = render$7;
 script$7.__file = "packages/chips/chip.vue";
 
-var strings$2 = MDCChipTrailingActionFoundation.strings;
+const {
+  strings: strings$2
+} = MDCChipTrailingActionFoundation;
 var script$8 = {
   name: 'mcw-chip-trailing-action',
-  setup: function setup() {
-    var root = ref(null);
-    var foundation;
 
-    var _useRipplePlugin = useRipplePlugin$1(root),
-        classes = _useRipplePlugin.classes,
-        styles = _useRipplePlugin.styles;
-
-    var adapter = {
-      focus: function focus() {
+  setup() {
+    const root = ref(null);
+    let foundation;
+    const {
+      classes,
+      styles
+    } = useRipplePlugin$1(root);
+    const adapter = {
+      focus: () => {
         root.value.focus();
       },
-      getAttribute: function getAttribute(attr) {
-        return root.value.getAttribute(attr);
-      },
-      notifyInteraction: function notifyInteraction(trigger) {
-        return emitCustomEvent(root.value, strings$2.INTERACTION_EVENT, {
-          trigger: trigger
-        }, true);
-      },
-      notifyNavigation: function notifyNavigation(key) {
-        return emitCustomEvent(root.value, strings$2.NAVIGATION_EVENT, {
-          key: key
-        }, true);
-      },
-      setAttribute: function setAttribute(attr, value) {
+      getAttribute: attr => root.value.getAttribute(attr),
+      notifyInteraction: trigger => emitCustomEvent(root.value, strings$2.INTERACTION_EVENT, {
+        trigger
+      }, true),
+      notifyNavigation: key => emitCustomEvent(root.value, strings$2.NAVIGATION_EVENT, {
+        key
+      }, true),
+      setAttribute: (attr, value) => {
         root.value.setAttribute(attr, value);
       }
     };
 
-    var onClick = function onClick(evt) {
-      return foundation.handleClick(evt);
-    };
+    const onClick = evt => foundation.handleClick(evt);
 
-    var onKeydown = function onKeydown(evt) {
-      return foundation.handleKeydown(evt);
-    };
+    const onKeydown = evt => foundation.handleKeydown(evt);
 
-    var isNavigable = function isNavigable() {
-      return foundation.isNavigable();
-    };
+    const isNavigable = () => foundation.isNavigable();
 
-    var focus = function focus() {
-      return foundation.focus();
-    };
+    const focus = () => foundation.focus();
 
-    var removeFocus = function removeFocus() {
-      return foundation.removeFocus();
-    };
+    const removeFocus = () => foundation.removeFocus();
 
-    onMounted(function () {
+    onMounted(() => {
       foundation = new MDCChipTrailingActionFoundation(adapter);
       foundation.init();
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       foundation.destroy();
     });
     return {
-      root: root,
-      styles: styles,
-      classes: classes,
-      onClick: onClick,
-      onKeydown: onKeydown,
-      isNavigable: isNavigable,
-      focus: focus,
-      removeFocus: removeFocus
+      root,
+      styles,
+      classes,
+      onClick,
+      onKeydown,
+      isNavigable,
+      focus,
+      removeFocus
     };
   }
+
 };
 
 const _hoisted_1$6 = /*#__PURE__*/createVNode("span", { class: "mdc-chip-trailing-action__ripple" }, null, -1 /* HOISTED */);
@@ -2213,11 +1904,13 @@ var chips = BasePlugin({
   mcwChipTrailingAction: script$8
 });
 
-var ProgressPropType = {
+const ProgressPropType = {
   type: [Number, String],
-  validator: function validator(value) {
+
+  validator(value) {
     return Number(value) >= 0 && Number(value) <= 1;
   }
+
 };
 var script$9 = {
   name: 'mcw-circular-progress',
@@ -2234,8 +1927,9 @@ var script$9 = {
       default: 'div'
     }
   },
-  setup: function setup(props) {
-    var uiState = reactive({
+
+  setup(props) {
+    const uiState = reactive({
       classes: {
         'mdc-circular-progress': 1,
         'mdc-circular-progress--medium': props.medium,
@@ -2253,65 +1947,59 @@ var script$9 = {
         }
       },
       circleAttrs: getCircleAttrs(props.medium, false),
-      trackAttrs: getTrackAttrs(props.medium, false),
+      trackAttrs: getTrackAttrs(props.medium),
       indeterminateAttrs: getCircleAttrs(props.medium, true),
       viewbox: props.medium ? '0 0 36 36' : '0 0 48 48',
       root: null
     });
-    var foundation;
-    var adapter = {
-      addClass: function addClass(className) {
-        uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+    let foundation;
+    const adapter = {
+      addClass: className => {
+        uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+          [className]: true
+        });
       },
-      getDeterminateCircleAttribute: function getDeterminateCircleAttribute(attributeName) {
+      getDeterminateCircleAttribute: attributeName => {
         return uiState.circleAttrs[attributeName];
       },
-      hasClass: function hasClass(className) {
-        return uiState.root.classList.contains(className);
-      },
-      removeClass: function removeClass(className) {
+      hasClass: className => uiState.root.classList.contains(className),
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes = uiState.classes,
-            removed = _uiState$classes[className],
-            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+        const _uiState$classes = uiState.classes,
+              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
         uiState.classes = rest;
       },
-      removeAttribute: function removeAttribute(attributeName) {
+      removeAttribute: attributeName => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$rootAttrs = uiState.rootAttrs,
-            removed = _uiState$rootAttrs[attributeName],
-            rest = _objectWithoutProperties(_uiState$rootAttrs, [attributeName].map(_toPropertyKey));
+        const _uiState$rootAttrs = uiState.rootAttrs,
+              rest = _objectWithoutProperties(_uiState$rootAttrs, [attributeName].map(_toPropertyKey));
 
         uiState.rootAttrs = rest;
       },
-      setAttribute: function setAttribute(attributeName, value) {
-        uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, _defineProperty({}, attributeName, value));
+      setAttribute: (attributeName, value) => {
+        uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, {
+          [attributeName]: value
+        });
       },
-      setDeterminateCircleAttribute: function setDeterminateCircleAttribute(attributeName, value) {
-        return uiState.circleAttrs = _objectSpread2(_objectSpread2({}, uiState.circleAttrs), {}, _defineProperty({}, attributeName, value));
-      }
+      setDeterminateCircleAttribute: (attributeName, value) => uiState.circleAttrs = _objectSpread2(_objectSpread2({}, uiState.circleAttrs), {}, {
+        [attributeName]: value
+      })
     };
-    watch(function () {
-      return props.open;
-    }, function (nv) {
+    watch(() => props.open, nv => {
       if (nv) {
         foundation.open();
       } else {
         foundation.close();
       }
     });
-    watch(function () {
-      return props.progress;
-    }, function (nv) {
+    watch(() => props.progress, nv => {
       foundation.setProgress(Number(nv));
     });
-    watch(function () {
-      return props.indeterminate;
-    }, function (nv) {
+    watch(() => props.indeterminate, nv => {
       foundation.setDeterminate(!nv);
     });
-    onMounted(function () {
+    onMounted(() => {
       foundation = new MDCCircularProgressFoundation(adapter);
       foundation.init();
       foundation.setProgress(Number(props.progress));
@@ -2323,18 +2011,15 @@ var script$9 = {
         foundation.close();
       }
     });
-    onBeforeUnmount(function () {
-      return foundation.destroy();
-    });
+    onBeforeUnmount(() => foundation.destroy());
     return _objectSpread2({}, toRefs(uiState));
   }
+
 }; // ===
 // Private functions
 // ===
 
-function getCircleAttrs() {
-  var medium = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-  var indeterminate = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+function getCircleAttrs(medium = false, indeterminate = true) {
   return medium ? {
     cx: '16',
     cy: '16',
@@ -2352,11 +2037,9 @@ function getCircleAttrs() {
   };
 }
 
-function getTrackAttrs() {
-  var medium = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-
-  var _getCircleAttrs = getCircleAttrs(medium),
-      rest = _objectWithoutProperties(_getCircleAttrs, ["stroke-dasharray", "stroke-dashoffset"]);
+function getTrackAttrs(medium = false) {
+  const _getCircleAttrs = getCircleAttrs(medium),
+        rest = _objectWithoutProperties(_getCircleAttrs, ["stroke-dasharray", "stroke-dashoffset"]);
 
   return rest;
 }
@@ -2430,47 +2113,33 @@ var circularProgress = BasePlugin({
   mcwCircularProgress: script$9
 });
 
-var CheckboxAdapter = /*#__PURE__*/function () {
-  function CheckboxAdapter(mcwCheckbox) {
-    _classCallCheck(this, CheckboxAdapter);
-
+class CheckboxAdapter {
+  constructor(mcwCheckbox) {
     this.checkbox = mcwCheckbox;
   }
 
-  _createClass(CheckboxAdapter, [{
-    key: "destroy",
-    value: function destroy() {// noop
-    }
-  }, {
-    key: "checked",
-    get: function get() {
-      return this.checkbox.isChecked();
-    },
-    set: function set(checked) {
-      this.checkbox.setChecked(checked);
-    }
-  }, {
-    key: "indeterminate",
-    get: function get() {
-      return this.checkbox.isIndeterminate();
-    },
-    set: function set(indeterminate) {
-      this.checkbox.setIndeterminate(indeterminate);
-    }
-  }]);
+  get checked() {
+    return this.checkbox.isChecked();
+  }
 
-  return CheckboxAdapter;
-}();
+  set checked(checked) {
+    this.checkbox.setChecked(checked);
+  }
 
-function _templateObject() {
-  var data = _taggedTemplateLiteral([".", ""]);
+  get indeterminate() {
+    return this.checkbox.isIndeterminate();
+  }
 
-  _templateObject = function _templateObject() {
-    return data;
-  };
+  set indeterminate(indeterminate) {
+    this.checkbox.setIndeterminate(indeterminate);
+  }
 
-  return data;
+  destroy() {// noop
+  }
+
 }
+
+var _templateObject;
 var script$a = {
   name: 'mcw-data-table',
   props: {
@@ -2478,128 +2147,127 @@ var script$a = {
       type: Boolean
     }
   },
-  setup: function setup(props, _ref) {
-    var emit = _ref.emit;
-    var uiState = reactive({
+
+  setup(props, {
+    emit
+  }) {
+    const uiState = reactive({
       classes: {
         'mdc-data-table--sticky-header': props.sticky
       },
       root: null
     });
 
-    var checkboxFactory = function checkboxFactory(el) {
+    const checkboxFactory = el => {
       return el.__vue__ ? new CheckboxAdapter(el.__vue__) : new MDCCheckbox(el);
     };
 
-    var cssClasses = cssClasses$7,
-        selectors$1 = selectors,
-        dataAttributes$1 = dataAttributes,
-        SortValue$1 = SortValue,
-        messages$1 = messages;
-    var foundation;
-    var headerRow;
-    var rowCheckboxList;
-    var content;
-    var headerRowCheckbox;
-    var handleHeaderRowCheckboxChange;
-    var handleRowCheckboxChange;
-    var headerRowClickListener;
+    const {
+      cssClasses,
+      selectors,
+      dataAttributes,
+      SortValue,
+      messages
+    } = test;
+    let foundation;
+    let headerRow;
+    let rowCheckboxList;
+    let content;
+    let headerRowCheckbox;
+    let handleHeaderRowCheckboxChange;
+    let handleRowCheckboxChange;
+    let headerRowClickListener;
 
-    var getRows = function getRows() {
+    const getRows = () => {
       return foundation.getRows();
     };
 
-    var layout = function layout() {
+    const layout = () => {
       foundation.layout();
     };
 
-    var getHeaderCells = function getHeaderCells() {
-      return [].slice.call(uiState.root.querySelectorAll(selectors$1.HEADER_CELL));
+    const getHeaderCells = () => {
+      return [].slice.call(uiState.root.querySelectorAll(selectors.HEADER_CELL));
     };
 
-    var getRowByIndex_ = function getRowByIndex_(index) {
+    const getRowByIndex_ = index => {
       return getRows()[index];
     };
 
-    var getRowIdByIndex_ = function getRowIdByIndex_(index) {
-      return getRowByIndex_(index).getAttribute(dataAttributes$1.ROW_ID);
+    const getRowIdByIndex_ = index => {
+      return getRowByIndex_(index).getAttribute(dataAttributes.ROW_ID);
     };
 
-    var getSelectedRowIds = function getSelectedRowIds() {
+    const getSelectedRowIds = () => {
       return foundation.getSelectedRowIds();
     };
 
-    var getSortStatusMessageBySortValue = function getSortStatusMessageBySortValue(sortValue) {
+    const getSortStatusMessageBySortValue = sortValue => {
       switch (sortValue) {
-        case SortValue$1.ASCENDING:
-          return messages$1.SORTED_IN_ASCENDING;
+        case SortValue.ASCENDING:
+          return messages.SORTED_IN_ASCENDING;
 
-        case SortValue$1.DESCENDING:
-          return messages$1.SORTED_IN_DESCENDING;
+        case SortValue.DESCENDING:
+          return messages.SORTED_IN_DESCENDING;
 
         default:
           return '';
       }
     };
 
-    var handleHeaderRowClick = function handleHeaderRowClick(event) {
-      var headerCell = closest(event.target, selectors$1.HEADER_CELL_WITH_SORT);
+    const handleHeaderRowClick = event => {
+      const headerCell = closest(event.target, selectors.HEADER_CELL_WITH_SORT);
 
       if (!headerCell) {
         return;
       }
 
-      var columnId = headerCell.getAttribute(dataAttributes$1.COLUMN_ID);
-      var columnIndex = getHeaderCells().indexOf(headerCell);
+      const columnId = headerCell.getAttribute(dataAttributes.COLUMN_ID);
+      const columnIndex = getHeaderCells().indexOf(headerCell);
 
       if (columnIndex === -1) {
         return;
       }
 
       foundation.handleSortAction({
-        columnId: columnId,
-        columnIndex: columnIndex,
-        headerCell: headerCell
+        columnId,
+        columnIndex,
+        headerCell
       });
     };
 
-    var adapter = {
-      addClass: function addClass(className) {
-        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
-      },
-      removeClass: function removeClass(className) {
+    const adapter = {
+      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        [className]: true
+      }),
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes = uiState.classes,
-            removed = _uiState$classes[className],
-            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+        const _uiState$classes = uiState.classes,
+              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
         uiState.classes = rest;
       },
-      getHeaderCellElements: function getHeaderCellElements() {
-        return getHeaderCells();
-      },
-      getHeaderCellCount: function getHeaderCellCount() {
-        return getHeaderCells().length;
-      },
-      getAttributeByHeaderCellIndex: function getAttributeByHeaderCellIndex(index, attribute) {
+      getHeaderCellElements: () => getHeaderCells(),
+      getHeaderCellCount: () => getHeaderCells().length,
+      getAttributeByHeaderCellIndex: (index, attribute) => {
         return getHeaderCells()[index].getAttribute(attribute);
       },
-      setAttributeByHeaderCellIndex: function setAttributeByHeaderCellIndex(index, attribute, value) {
+      setAttributeByHeaderCellIndex: (index, attribute, value) => {
         getHeaderCells()[index].setAttribute(attribute, value);
       },
-      setClassNameByHeaderCellIndex: function setClassNameByHeaderCellIndex(index, className) {
+      setClassNameByHeaderCellIndex: (index, className) => {
         getHeaderCells()[index].classList.add(className);
       },
-      removeClassNameByHeaderCellIndex: function removeClassNameByHeaderCellIndex(index, className) {
+      removeClassNameByHeaderCellIndex: (index, className) => {
         getHeaderCells()[index].classList.remove(className);
       },
-      notifySortAction: function notifySortAction(data) {
+      notifySortAction: data => {
         emit('mdc-data-table:sorted', {
-          data: data
+          data
         }, true);
       },
-      getTableContainerHeight: function getTableContainerHeight() {
-        var tableContainer = uiState.root.querySelector(_templateObject(), cssClasses.CONTAINER);
+      getTableContainerHeight: () => {
+        const tableContainer = uiState.root.querySelector(_templateObject || (_templateObject = _taggedTemplateLiteral([".", ""])), cssClasses.CONTAINER);
 
         if (!tableContainer) {
           throw new Error('MDCDataTable: Table container element not found.');
@@ -2607,8 +2275,8 @@ var script$a = {
 
         return tableContainer.getBoundingClientRect().height;
       },
-      getTableHeaderHeight: function getTableHeaderHeight() {
-        var tableHeader = uiState.root.querySelector(selectors$1.HEADER_ROW);
+      getTableHeaderHeight: () => {
+        const tableHeader = uiState.root.querySelector(selectors.HEADER_ROW);
 
         if (!tableHeader) {
           throw new Error('MDCDataTable: Table header element not found.');
@@ -2616,8 +2284,8 @@ var script$a = {
 
         return tableHeader.getBoundingClientRect().height;
       },
-      setProgressIndicatorStyles: function setProgressIndicatorStyles(styles) {
-        var progressIndicator = uiState.root.querySelector(selectors$1.PROGRESS_INDICATOR);
+      setProgressIndicatorStyles: styles => {
+        const progressIndicator = uiState.root.querySelector(selectors.PROGRESS_INDICATOR);
 
         if (!progressIndicator) {
           throw new Error('MDCDataTable: Progress indicator element not found.');
@@ -2625,34 +2293,18 @@ var script$a = {
 
         Object.assign(progressIndicator.style, styles);
       },
-      addClassAtRowIndex: function addClassAtRowIndex(rowIndex, className) {
-        return getRows()[rowIndex].classList.add(className);
+      addClassAtRowIndex: (rowIndex, className) => getRows()[rowIndex].classList.add(className),
+      getRowCount: () => getRows().length,
+      getRowElements: () => [].slice.call(uiState.root.querySelectorAll(selectors.ROW)),
+      getRowIdAtIndex: rowIndex => getRows()[rowIndex].getAttribute(dataAttributes.ROW_ID),
+      getRowIndexByChildElement: el => {
+        return getRows().indexOf(closest(el, selectors.ROW));
       },
-      getRowCount: function getRowCount() {
-        return getRows().length;
-      },
-      getRowElements: function getRowElements() {
-        return [].slice.call(uiState.root.querySelectorAll(selectors$1.ROW));
-      },
-      getRowIdAtIndex: function getRowIdAtIndex(rowIndex) {
-        return getRows()[rowIndex].getAttribute(dataAttributes$1.ROW_ID);
-      },
-      getRowIndexByChildElement: function getRowIndexByChildElement(el) {
-        return getRows().indexOf(closest(el, selectors$1.ROW));
-      },
-      getSelectedRowCount: function getSelectedRowCount() {
-        return uiState.root.querySelectorAll(selectors$1.ROW_SELECTED).length;
-      },
-      isCheckboxAtRowIndexChecked: function isCheckboxAtRowIndexChecked(rowIndex) {
-        return rowCheckboxList[rowIndex].checked;
-      },
-      isHeaderRowCheckboxChecked: function isHeaderRowCheckboxChecked() {
-        return headerRowCheckbox.checked;
-      },
-      isRowsSelectable: function isRowsSelectable() {
-        return !!uiState.root.querySelector(selectors$1.ROW_CHECKBOX);
-      },
-      notifyRowSelectionChanged: function notifyRowSelectionChanged(data) {
+      getSelectedRowCount: () => uiState.root.querySelectorAll(selectors.ROW_SELECTED).length,
+      isCheckboxAtRowIndexChecked: rowIndex => rowCheckboxList[rowIndex].checked,
+      isHeaderRowCheckboxChecked: () => headerRowCheckbox.checked,
+      isRowsSelectable: () => !!uiState.root.querySelector(selectors.ROW_CHECKBOX),
+      notifyRowSelectionChanged: data => {
         emit('mdcdatatable:rowselectionchanged', {
           row: getRowByIndex_(data.rowIndex),
           rowId: getRowIdByIndex_(data.rowIndex),
@@ -2660,51 +2312,39 @@ var script$a = {
           selected: data.selected
         });
       },
-      notifySelectedAll: function notifySelectedAll() {
-        return emit('mdcdatatable:selectedall', {});
-      },
-      notifyUnselectedAll: function notifyUnselectedAll() {
-        return emit('mdcdatatable:unselectedall', {});
-      },
-      registerHeaderRowCheckbox: function registerHeaderRowCheckbox() {
+      notifySelectedAll: () => emit('mdcdatatable:selectedall', {}),
+      notifyUnselectedAll: () => emit('mdcdatatable:unselectedall', {}),
+      registerHeaderRowCheckbox: () => {
         var _headerRowCheckbox;
 
         (_headerRowCheckbox = headerRowCheckbox) === null || _headerRowCheckbox === void 0 ? void 0 : _headerRowCheckbox.destroy();
-        var checkboxEl = uiState.root.querySelector(selectors$1.HEADER_ROW_CHECKBOX);
+        const checkboxEl = uiState.root.querySelector(selectors.HEADER_ROW_CHECKBOX);
         headerRowCheckbox = checkboxFactory(checkboxEl);
       },
-      registerRowCheckboxes: function registerRowCheckboxes() {
+      registerRowCheckboxes: () => {
         if (rowCheckboxList) {
-          rowCheckboxList.forEach(function (checkbox) {
-            return checkbox.destroy();
-          });
+          rowCheckboxList.forEach(checkbox => checkbox.destroy());
         }
 
         rowCheckboxList = [];
-        getRows().forEach(function (rowEl) {
-          var el = rowEl.querySelector(selectors$1.ROW_CHECKBOX);
-          var checkbox = checkboxFactory(el);
+        getRows().forEach(rowEl => {
+          const el = rowEl.querySelector(selectors.ROW_CHECKBOX);
+          const checkbox = checkboxFactory(el);
           rowCheckboxList.push(checkbox);
         });
       },
-      removeClassAtRowIndex: function removeClassAtRowIndex(rowIndex, className) {
+      removeClassAtRowIndex: (rowIndex, className) => {
         getRows()[rowIndex].classList.remove(className);
       },
-      setAttributeAtRowIndex: function setAttributeAtRowIndex(rowIndex, attr, value) {
+      setAttributeAtRowIndex: (rowIndex, attr, value) => {
         getRows()[rowIndex].setAttribute(attr, value);
       },
-      setHeaderRowCheckboxChecked: function setHeaderRowCheckboxChecked(checked) {
-        return headerRowCheckbox.checked = checked;
-      },
-      setHeaderRowCheckboxIndeterminate: function setHeaderRowCheckboxIndeterminate(indeterminate) {
-        return headerRowCheckbox.indeterminate = indeterminate;
-      },
-      setRowCheckboxCheckedAtIndex: function setRowCheckboxCheckedAtIndex(rowIndex, checked) {
-        return rowCheckboxList[rowIndex].checked = checked;
-      },
-      setSortStatusLabelByHeaderCellIndex: function setSortStatusLabelByHeaderCellIndex(columnIndex, sortValue) {
-        var headerCell = getHeaderCells()[columnIndex];
-        var sortStatusLabel = headerCell.querySelector(selectors$1.SORT_STATUS_LABEL);
+      setHeaderRowCheckboxChecked: checked => headerRowCheckbox.checked = checked,
+      setHeaderRowCheckboxIndeterminate: indeterminate => headerRowCheckbox.indeterminate = indeterminate,
+      setRowCheckboxCheckedAtIndex: (rowIndex, checked) => rowCheckboxList[rowIndex].checked = checked,
+      setSortStatusLabelByHeaderCellIndex: (columnIndex, sortValue) => {
+        const headerCell = getHeaderCells()[columnIndex];
+        const sortStatusLabel = headerCell.querySelector(selectors.SORT_STATUS_LABEL);
 
         if (!sortStatusLabel) {
           return;
@@ -2713,39 +2353,35 @@ var script$a = {
         sortStatusLabel.textContent = getSortStatusMessageBySortValue(sortValue);
       }
     };
-    onMounted(function () {
+    onMounted(() => {
       headerRow = uiState.root.querySelector(".".concat(cssClasses.HEADER_ROW));
 
-      handleHeaderRowCheckboxChange = function handleHeaderRowCheckboxChange() {
-        return foundation.handleHeaderRowCheckboxChange();
-      };
+      handleHeaderRowCheckboxChange = () => foundation.handleHeaderRowCheckboxChange();
 
       headerRow.addEventListener('mdccheckbox:change', handleHeaderRowCheckboxChange);
 
-      headerRowClickListener = function headerRowClickListener(event) {
+      headerRowClickListener = event => {
         handleHeaderRowClick(event);
       };
 
       headerRow.addEventListener('click', headerRowClickListener);
       content = uiState.root.querySelector(".".concat(cssClasses.CONTENT));
 
-      handleRowCheckboxChange = function handleRowCheckboxChange(event) {
-        return foundation.handleRowCheckboxChange(event);
-      };
+      handleRowCheckboxChange = event => foundation.handleRowCheckboxChange(event);
 
       content.addEventListener('mdccheckbox:change', handleRowCheckboxChange);
       foundation = new MDCDataTableFoundation(adapter);
       foundation.init();
       layout();
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       var _headerRowCheckbox2, _headerRowCheckbox2$d, _rowCheckboxList;
 
       headerRow.removeEventListener('mdccheckbox:change', handleHeaderRowCheckboxChange);
       headerRow.removeEventListener('click', headerRowClickListener);
       content.removeEventListener('mdccheckbox:change', handleRowCheckboxChange);
       (_headerRowCheckbox2 = headerRowCheckbox) === null || _headerRowCheckbox2 === void 0 ? void 0 : (_headerRowCheckbox2$d = _headerRowCheckbox2.destroy) === null || _headerRowCheckbox2$d === void 0 ? void 0 : _headerRowCheckbox2$d.call(_headerRowCheckbox2);
-      (_rowCheckboxList = rowCheckboxList) === null || _rowCheckboxList === void 0 ? void 0 : _rowCheckboxList.forEach(function (checkbox) {
+      (_rowCheckboxList = rowCheckboxList) === null || _rowCheckboxList === void 0 ? void 0 : _rowCheckboxList.forEach(checkbox => {
         var _checkbox$destroy;
 
         (_checkbox$destroy = checkbox.destroy) === null || _checkbox$destroy === void 0 ? void 0 : _checkbox$destroy.call(checkbox);
@@ -2753,10 +2389,11 @@ var script$a = {
       foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      getSelectedRowIds: getSelectedRowIds,
-      layout: layout
+      getSelectedRowIds,
+      layout
     });
   }
+
 };
 
 const _hoisted_1$8 = { class: "mdc-data-table__table-container" };
@@ -2786,17 +2423,19 @@ var mcwDialogButton = {
     isDefault: Boolean,
     isInitialFocus: Boolean
   },
-  setup: function setup(props, _ref) {
-    var attrs = _ref.attrs,
-        slots = _ref.slots;
-    return function () {
+
+  setup(props, {
+    attrs,
+    slots
+  }) {
+    return () => {
       return h(resolveComponent('mcw-button'), _objectSpread2(_objectSpread2({}, attrs), {}, {
         class: ['mdc-button', 'mdc-dialog__button'],
         'data-mdc-dialog-action': props.action,
         'data-mdc-dialog-button-default': props.isDefault,
         'data-mdc-dialog-initial-focus': props.isInitialFocus
       }), {
-        default: function _default() {
+        default: () => {
           var _slots$default;
 
           return (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots);
@@ -2804,6 +2443,7 @@ var mcwDialogButton = {
       });
     };
   }
+
 };
 
 var mcwDialogContent = {
@@ -2811,14 +2451,18 @@ var mcwDialogContent = {
   props: {
     tag: {
       type: String,
-      default: function _default() {
+
+      default() {
         return 'div';
       }
+
     }
   },
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots;
-    return function () {
+
+  setup(props, {
+    slots
+  }) {
+    return () => {
       var _slots$default;
 
       return h(props.tag, {
@@ -2826,6 +2470,7 @@ var mcwDialogContent = {
       }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
     };
   }
+
 };
 
 var mcwDialogFooter = {
@@ -2833,14 +2478,18 @@ var mcwDialogFooter = {
   props: {
     tag: {
       type: String,
-      default: function _default() {
+
+      default() {
         return 'div';
       }
+
     }
   },
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots;
-    return function () {
+
+  setup(props, {
+    slots
+  }) {
+    return () => {
       var _slots$default;
 
       return h(props.tag, {
@@ -2848,6 +2497,7 @@ var mcwDialogFooter = {
       }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
     };
   }
+
 };
 
 var mcwDialogTitle = {
@@ -2855,14 +2505,18 @@ var mcwDialogTitle = {
   props: {
     tag: {
       type: String,
-      default: function _default() {
+
+      default() {
         return 'h2';
       }
+
     }
   },
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots;
-    return function () {
+
+  setup(props, {
+    slots
+  }) {
+    return () => {
       var _slots$default;
 
       return h(props.tag, {
@@ -2870,11 +2524,14 @@ var mcwDialogTitle = {
       }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
     };
   }
+
 };
 
-var cssClasses = MDCDialogFoundation.cssClasses,
-    strings$3 = MDCDialogFoundation.strings;
-var LAYOUT_EVENTS = ['resize', 'orientationchange'];
+const {
+  cssClasses,
+  strings: strings$3
+} = MDCDialogFoundation;
+const LAYOUT_EVENTS = ['resize', 'orientationchange'];
 var script$b = {
   name: 'mcw-dialog',
   components: {
@@ -2897,9 +2554,11 @@ var script$b = {
     ariaLabelledby: String,
     ariaDescribedby: String
   },
-  setup: function setup(props, _ref) {
-    var emit = _ref.emit;
-    var uiState = reactive({
+
+  setup(props, {
+    emit
+  }) {
+    const uiState = reactive({
       classes: {
         'mdc-dialog': 1
       },
@@ -2907,37 +2566,35 @@ var script$b = {
       container: null,
       root: null
     });
-    var foundation;
-    var content_;
-    var buttons_;
-    var focusTrap;
-    var defaultButton;
+    let foundation;
+    let content_;
+    let buttons_;
+    let focusTrap;
+    let defaultButton;
 
-    var focusTrapFactory_ = function focusTrapFactory_(el) {
-      return new FocusTrap(el);
-    };
+    const focusTrapFactory_ = el => new FocusTrap(el);
 
-    var handleLayout = function handleLayout() {
+    const handleLayout = () => {
       foundation.layout();
     };
 
-    var handleDocumentKeyDown = function handleDocumentKeyDown(e) {
+    const handleDocumentKeyDown = e => {
       foundation.handleDocumentKeydown(e);
     };
 
-    var getInitialFocusEl_ = function getInitialFocusEl_() {
+    const getInitialFocusEl_ = () => {
       return document.querySelector("[".concat(MDCDialogFoundation.strings.INITIAL_FOCUS_ATTRIBUTE, "]"));
     };
 
-    var onClick = function onClick(evt) {
+    const onClick = evt => {
       foundation.handleClick(evt);
     };
 
-    var onKeydown = function onKeydown(evt) {
+    const onKeydown = evt => {
       foundation.handleKeydown(evt);
     };
 
-    var onOpen = function onOpen(nv) {
+    const onOpen = nv => {
       if (nv) {
         if (uiState.container) {
           focusTrap = createFocusTrapInstance(uiState.root, focusTrapFactory_, getInitialFocusEl_() || void 0);
@@ -2949,105 +2606,84 @@ var script$b = {
       }
     };
 
-    var adapter = {
-      addClass: function addClass(className) {
-        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
-      },
-      removeClass: function removeClass(className) {
+    const adapter = {
+      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        [className]: true
+      }),
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes = uiState.classes,
-            removed = _uiState$classes[className],
-            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+        const _uiState$classes = uiState.classes,
+              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
         uiState.classes = rest;
       },
-      hasClass: function hasClass(className) {
-        return uiState.root.classList.contains(className);
-      },
-      addBodyClass: function addBodyClass(className) {
-        return document.body.classList.add(className);
-      },
-      removeBodyClass: function removeBodyClass(className) {
-        return document.body.classList.remove(className);
-      },
-      eventTargetMatches: function eventTargetMatches(target, selector) {
-        return matches$1(target, selector);
-      },
-      trapFocus: function trapFocus(initialFocusEl) {
+      hasClass: className => uiState.root.classList.contains(className),
+      addBodyClass: className => document.body.classList.add(className),
+      removeBodyClass: className => document.body.classList.remove(className),
+      eventTargetMatches: (target, selector) => matches$1(target, selector),
+      trapFocus: initialFocusEl => {
         var _focusTrap;
 
         return (_focusTrap = focusTrap) === null || _focusTrap === void 0 ? void 0 : _focusTrap.trapFocus();
       },
-      releaseFocus: function releaseFocus() {
+      releaseFocus: () => {
         var _focusTrap2;
 
         return (_focusTrap2 = focusTrap) === null || _focusTrap2 === void 0 ? void 0 : _focusTrap2.releaseFocus();
       },
-      getInitialFocusEl: function getInitialFocusEl() {
-        return getInitialFocusEl_();
-      },
-      isContentScrollable: function isContentScrollable() {
-        return isScrollable(content_);
-      },
-      areButtonsStacked: function areButtonsStacked() {
-        return areTopsMisaligned(buttons_);
-      },
-      getActionFromEvent: function getActionFromEvent(event) {
-        var elem = closest$1(event.target, "[".concat(strings$3.ACTION_ATTRIBUTE, "]"));
+      getInitialFocusEl: () => getInitialFocusEl_(),
+      isContentScrollable: () => isScrollable(content_),
+      areButtonsStacked: () => areTopsMisaligned(buttons_),
+      getActionFromEvent: event => {
+        const elem = closest$1(event.target, "[".concat(strings$3.ACTION_ATTRIBUTE, "]"));
         return elem === null || elem === void 0 ? void 0 : elem.getAttribute(strings$3.ACTION_ATTRIBUTE);
       },
-      clickDefaultButton: function clickDefaultButton() {
+      clickDefaultButton: () => {
         var _defaultButton;
 
         (_defaultButton = defaultButton) === null || _defaultButton === void 0 ? void 0 : _defaultButton.click();
       },
-      reverseButtons: function reverseButtons() {
-        var buttons = buttons_;
-        return buttons && buttons.reverse().forEach(function (button) {
+      reverseButtons: () => {
+        const buttons = buttons_;
+        return buttons && buttons.reverse().forEach(button => {
           var _button$parentElement;
 
           return (_button$parentElement = button.parentElement) === null || _button$parentElement === void 0 ? void 0 : _button$parentElement.appendChild(button);
         });
       },
-      notifyOpening: function notifyOpening() {
+      notifyOpening: () => {
         emit('mdcdialog:opening', {});
-        LAYOUT_EVENTS.forEach(function (evt) {
-          return window.addEventListener(evt, handleLayout);
-        });
+        LAYOUT_EVENTS.forEach(evt => window.addEventListener(evt, handleLayout));
         document.addEventListener('keydown', handleDocumentKeyDown);
       },
-      notifyOpened: function notifyOpened() {
-        return emit('mdcdialog:opened', {});
-      },
-      notifyClosing: function notifyClosing(action) {
+      notifyOpened: () => emit('mdcdialog:opened', {}),
+      notifyClosing: action => {
         emit('update:modelValue', false);
         emit('mdcdialog:closing', action ? {
-          action: action
+          action
         } : {});
-        LAYOUT_EVENTS.forEach(function (evt) {
-          return window.removeEventListener(evt, handleLayout);
-        });
+        LAYOUT_EVENTS.forEach(evt => window.removeEventListener(evt, handleLayout));
         document.removeEventListener('keydown', handleDocumentKeyDown);
       },
-      notifyClosed: function notifyClosed(action) {
+      notifyClosed: action => {
         emit('mdcdialog:closed', action ? {
-          action: action
+          action
         } : {});
       }
     };
-    watch(function () {
-      return props.modelValue;
-    }, function (nv) {
+    watch(() => props.modelValue, nv => {
       onOpen(nv);
     });
-    onMounted(function () {
-      var modelValue = props.modelValue,
-          autoStackButtons = props.autoStackButtons,
-          escapeKeyAction = props.escapeKeyAction,
-          scrimClickAction = props.scrimClickAction;
+    onMounted(() => {
+      const {
+        modelValue,
+        autoStackButtons,
+        escapeKeyAction,
+        scrimClickAction
+      } = props;
       buttons_ = [].slice.call(uiState.root.querySelectorAll(cssClasses.BUTTON));
       defaultButton = uiState.root.querySelector("[".concat(strings$3.BUTTON_DEFAULT_ATTRIBUTE, "]"));
-      var container = uiState.root.querySelector(strings$3.CONTAINER_SELECTOR);
+      const container = uiState.root.querySelector(strings$3.CONTAINER_SELECTOR);
 
       if (!container) {
         throw new Error("Dialog component requires a ".concat(strings$3.CONTAINER_SELECTOR, " container element"));
@@ -3073,16 +2709,17 @@ var script$b = {
 
       onOpen(modelValue);
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      handleLayout: handleLayout,
-      handleDocumentKeyDown: handleDocumentKeyDown,
-      onKeydown: onKeydown,
-      onClick: onClick
+      handleLayout,
+      handleDocumentKeyDown,
+      onKeydown,
+      onClick
     });
   }
+
 };
 
 const _hoisted_1$9 = {
@@ -3120,13 +2757,15 @@ script$b.__file = "packages/dialog/dialog.vue";
 
 var dialog = BasePlugin({
   mcwDialog: script$b,
-  mcwDialogTitle: mcwDialogTitle,
-  mcwDialogFooter: mcwDialogFooter,
-  mcwDialogButton: mcwDialogButton,
-  mcwDialogContent: mcwDialogContent
+  mcwDialogTitle,
+  mcwDialogFooter,
+  mcwDialogButton,
+  mcwDialogContent
 });
 
-var strings$4 = MDCDismissibleDrawerFoundation.strings;
+const {
+  strings: strings$4
+} = MDCDismissibleDrawerFoundation;
 var script$c = {
   name: 'mcw-drawer',
   props: {
@@ -3135,9 +2774,11 @@ var script$c = {
     dismissible: Boolean,
     toolbarSpacer: Boolean
   },
-  setup: function setup(props, _ref) {
-    var emit = _ref.emit;
-    var uiState = reactive({
+
+  setup(props, {
+    emit
+  }) {
+    const uiState = reactive({
       classes: {
         'mdc-drawer': 1,
         'mdc-drawer--modal': props.modal,
@@ -3146,111 +2787,82 @@ var script$c = {
       drawer: null
     });
 
-    var focusTrapFactory_ = function focusTrapFactory_(el) {
-      return new FocusTrap$1(el);
-    };
+    const focusTrapFactory_ = el => new FocusTrap$1(el);
 
-    var show = function show() {
-      return foundation.open();
-    };
+    const show = () => foundation.open();
 
-    var close = function close() {
-      return foundation.close();
-    };
+    const close = () => foundation.close();
 
-    var toggle = function toggle() {
-      return foundation.isOpen() ? foundation.close() : foundation.open();
-    };
+    const toggle = () => foundation.isOpen() ? foundation.close() : foundation.open();
 
-    var isOpen = function isOpen() {
-      return foundation.isOpen();
-    };
+    const isOpen = () => foundation.isOpen();
 
-    var foundation;
-    var focusTrap_;
-    var previousFocus_;
+    let foundation;
+    let focusTrap_;
+    let previousFocus_;
 
-    var handleScrimClick = function handleScrimClick() {
-      return foundation.handleScrimClick();
-    };
+    const handleScrimClick = () => foundation.handleScrimClick();
 
-    var handleKeydown = function handleKeydown(evt) {
-      return foundation.handleKeydown(evt);
-    };
+    const handleKeydown = evt => foundation.handleKeydown(evt);
 
-    var handleTransitionEnd = function handleTransitionEnd(evt) {
-      return foundation.handleTransitionEnd(evt);
-    };
+    const handleTransitionEnd = evt => foundation.handleTransitionEnd(evt);
 
-    var onChange = function onChange(event) {
+    const onChange = event => {
       emit('update:modelValue', event);
     };
 
-    var onListAction = function onListAction() {
-      return props.modal && close();
-    };
+    const onListAction = () => props.modal && close();
 
-    var adapter = {
-      addClass: function addClass(className) {
-        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
-      },
-      removeClass: function removeClass(className) {
+    const adapter = {
+      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        [className]: true
+      }),
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes = uiState.classes,
-            removed = _uiState$classes[className],
-            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+        const _uiState$classes = uiState.classes,
+              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
         uiState.classes = rest;
       },
-      hasClass: function hasClass(className) {
-        return !!uiState.classes[className];
-      },
-      elementHasClass: function elementHasClass(element, className) {
-        return element.classList.contains(className);
-      },
-      saveFocus: function saveFocus() {
+      hasClass: className => !!uiState.classes[className],
+      elementHasClass: (element, className) => element.classList.contains(className),
+      saveFocus: () => {
         previousFocus_ = document.activeElement;
       },
-      restoreFocus: function restoreFocus() {
+      restoreFocus: () => {
         var _previousFocus_;
 
-        var previousFocus = (_previousFocus_ = previousFocus_) === null || _previousFocus_ === void 0 ? void 0 : _previousFocus_.focus;
+        const previousFocus = (_previousFocus_ = previousFocus_) === null || _previousFocus_ === void 0 ? void 0 : _previousFocus_.focus;
 
         if (previousFocus && uiState.drawer.contains(document.activeElement)) {
           previousFocus_.focus();
         }
       },
-      focusActiveNavigationItem: function focusActiveNavigationItem() {
-        var activeNavItemEl = uiState.drawer.querySelector(".".concat(MDCListFoundation.cssClasses.LIST_ITEM_ACTIVATED_CLASS));
+      focusActiveNavigationItem: () => {
+        const activeNavItemEl = uiState.drawer.querySelector(".".concat(MDCListFoundation.cssClasses.LIST_ITEM_ACTIVATED_CLASS));
 
         if (activeNavItemEl) {
           activeNavItemEl.focus();
         }
       },
-      notifyClose: function notifyClose() {
+      notifyClose: () => {
         emitCustomEvent(uiState.drawer, strings$4.CLOSE_EVENT, {}, true
         /* shouldBubble */
         );
         emit('update:modelValue', false);
         emit('close');
       },
-      notifyOpen: function notifyOpen() {
+      notifyOpen: () => {
         emitCustomEvent(uiState.drawer, strings$4.OPEN_EVENT, {}, true
         /* shouldBubble */
         );
         emit('update:modelValue', true);
         emit('open');
       },
-      trapFocus: function trapFocus() {
-        return focusTrap_.trapFocus();
-      },
-      releaseFocus: function releaseFocus() {
-        return focusTrap_.releaseFocus();
-      }
+      trapFocus: () => focusTrap_.trapFocus(),
+      releaseFocus: () => focusTrap_.releaseFocus()
     };
-    watch(function () {
-      return props.modelValue;
-    }, function (nv) {
+    watch(() => props.modelValue, nv => {
       if (nv) {
         var _foundation;
 
@@ -3261,10 +2873,11 @@ var script$c = {
         (_foundation2 = foundation) === null || _foundation2 === void 0 ? void 0 : _foundation2.close();
       }
     });
-    onMounted(function () {
-      var _MDCDismissibleDrawer = MDCDismissibleDrawerFoundation.cssClasses,
-          DISMISSIBLE = _MDCDismissibleDrawer.DISMISSIBLE,
-          MODAL = _MDCDismissibleDrawer.MODAL;
+    onMounted(() => {
+      const {
+        DISMISSIBLE,
+        MODAL
+      } = MDCDismissibleDrawerFoundation.cssClasses;
 
       if (props.dismissible) {
         foundation = new MDCDismissibleDrawerFoundation(adapter);
@@ -3280,23 +2893,24 @@ var script$c = {
         focusTrap_ = createFocusTrapInstance$1(uiState.drawer, focusTrapFactory_);
       }
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       foundation.close();
       foundation.destroy();
       foundation = null;
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      onChange: onChange,
-      show: show,
-      close: close,
-      toggle: toggle,
-      isOpen: isOpen,
-      onListAction: onListAction,
-      handleScrimClick: handleScrimClick,
-      handleKeydown: handleKeydown,
-      handleTransitionEnd: handleTransitionEnd
+      onChange,
+      show,
+      close,
+      toggle,
+      isOpen,
+      onListAction,
+      handleScrimClick,
+      handleKeydown,
+      handleTransitionEnd
     });
   }
+
 };
 
 const _hoisted_1$a = { class: "mdc-drawer__content" };
@@ -3385,12 +2999,14 @@ var script$d = {
     label: String
   },
   components: {
-    CustomLink: CustomLink
+    CustomLink
   },
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots;
-    var root = ref(null);
-    var uiState = reactive({
+
+  setup(props, {
+    slots
+  }) {
+    const root = ref(null);
+    const uiState = reactive({
       classes: {
         'mdc-fab': 1,
         'mdc-fab--mini': props.mini,
@@ -3398,41 +3014,35 @@ var script$d = {
         'mdc-fab--exited': props.exited
       }
     });
-
-    var _useRipplePlugin = useRipplePlugin$1(root),
-        rippleClasses = _useRipplePlugin.classes,
-        styles = _useRipplePlugin.styles;
-
-    var classes = computed(function () {
+    const {
+      classes: rippleClasses,
+      styles
+    } = useRipplePlugin$1(root);
+    const classes = computed(() => {
       return _objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes);
     });
-    watch(function () {
-      return props.icon;
-    }, function (nv) {
+    watch(() => props.icon, nv => {
       uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
         'material-icons': nv
       });
     });
-    watch(function () {
-      return props.mini;
-    }, function (nv) {
+    watch(() => props.mini, nv => {
       uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
         'mdc-fab--mini': nv
       });
     });
-    watch(function () {
-      return props.exited;
-    }, function (nv) {
+    watch(() => props.exited, nv => {
       uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
         'mdc-fab--exited': nv
       });
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      classes: classes,
-      root: root,
-      styles: styles
+      classes,
+      root,
+      styles
     });
   }
+
 };
 
 const _hoisted_1$b = /*#__PURE__*/createVNode("div", { class: "mdc-fab__ripple" }, null, -1 /* HOISTED */);
@@ -3477,68 +3087,67 @@ var script$e = {
       type: Boolean
     }
   },
-  setup: function setup(props) {
-    var uiState = reactive({
+
+  setup(props) {
+    const uiState = reactive({
       labelClasses: {
         'mdc-floating-label': true,
         'mdc-floating-label--required': props.required
       },
       root: null
     });
-    var foundation;
-    var adapter = {
-      addClass: function addClass(className) {
-        return uiState.labelClasses = _objectSpread2(_objectSpread2({}, uiState.labelClasses), {}, _defineProperty({}, className, true));
-      },
-      removeClass: function removeClass(className) {
+    let foundation;
+    const adapter = {
+      addClass: className => uiState.labelClasses = _objectSpread2(_objectSpread2({}, uiState.labelClasses), {}, {
+        [className]: true
+      }),
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$labelClasses = uiState.labelClasses,
-            removed = _uiState$labelClasses[className],
-            rest = _objectWithoutProperties(_uiState$labelClasses, [className].map(_toPropertyKey));
+        const _uiState$labelClasses = uiState.labelClasses,
+              rest = _objectWithoutProperties(_uiState$labelClasses, [className].map(_toPropertyKey));
 
         uiState.labelClasses = rest;
       },
-      getWidth: function getWidth() {
-        return uiState.root.scrollWidth;
-      },
-      registerInteractionHandler: function registerInteractionHandler(evtType, handler) {
+      getWidth: () => uiState.root.scrollWidth,
+      registerInteractionHandler: (evtType, handler) => {
         uiState.root.addEventListener(evtType, handler);
       },
-      deregisterInteractionHandler: function deregisterInteractionHandler(evtType, handler) {
+      deregisterInteractionHandler: (evtType, handler) => {
         uiState.root.removeEventListener(evtType, handler);
       }
     };
 
-    var getWidth = function getWidth() {
+    const getWidth = () => {
       return foundation.getWidth();
     };
 
-    var setRequired = function setRequired(isRequired) {
+    const setRequired = isRequired => {
       return foundation.setRequired(isRequired);
     };
 
-    var float = function float(shouldFloat) {
+    const float = shouldFloat => {
       foundation.float(shouldFloat);
     };
 
-    var shake = function shake(shouldShake) {
+    const shake = shouldShake => {
       foundation.shake(shouldShake);
     };
 
-    onMounted(function () {
+    onMounted(() => {
       foundation = new MDCFloatingLabelFoundation(adapter);
       foundation.init();
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      getWidth: getWidth,
-      float: float,
-      shake: shake,
-      setRequired: setRequired
+      getWidth,
+      float,
+      shake,
+      setRequired
     });
   }
+
 };
 
 function render$e(_ctx, _cache, $props, $setup, $data, $options) {
@@ -3567,86 +3176,77 @@ var script$f = {
     modelValue: Boolean,
     disabled: Boolean
   },
-  setup: function setup(props, _ref) {
-    var emit = _ref.emit,
-        attrs = _ref.attrs;
-    var uiState = reactive({
+
+  setup(props, {
+    emit,
+    attrs
+  }) {
+    const uiState = reactive({
       classes: {
         'mdc-icon-button': 1,
         'material-icons': 1
       }
     });
-    var root = ref(null);
-    var CHANGE_EVENT = MDCIconButtonToggleFoundation.strings.CHANGE_EVENT;
-
-    var _useRipplePlugin = useRipplePlugin$1(root, {
-      isUnbounded: function isUnbounded() {
-        return true;
-      }
-    }),
-        rippleClasses = _useRipplePlugin.classes,
-        styles = _useRipplePlugin.styles;
-
-    var foundation;
-    var adapter = {
-      addClass: function addClass(className) {
-        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
-      },
-      removeClass: function removeClass(className) {
+    const root = ref(null);
+    const {
+      CHANGE_EVENT
+    } = MDCIconButtonToggleFoundation.strings;
+    const {
+      classes: rippleClasses,
+      styles
+    } = useRipplePlugin$1(root, {
+      isUnbounded: () => true
+    });
+    let foundation;
+    const adapter = {
+      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        [className]: true
+      }),
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes = uiState.classes,
-            removed = _uiState$classes[className],
-            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+        const _uiState$classes = uiState.classes,
+              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
         uiState.classes = rest;
       },
-      hasClass: function hasClass(className) {
-        return Boolean(uiState.classes[className]);
-      },
-      setAttr: function setAttr(attrName, attrValue) {
-        return root.value.setAttribute(attrName, attrValue);
-      },
-      getAttr: function getAttr(attrName) {
-        return root.value.getAttribute(attrName);
-      },
-      notifyChange: function notifyChange(evtData) {
+      hasClass: className => Boolean(uiState.classes[className]),
+      setAttr: (attrName, attrValue) => root.value.setAttribute(attrName, attrValue),
+      getAttr: attrName => root.value.getAttribute(attrName),
+      notifyChange: evtData => {
         emit(CHANGE_EVENT, evtData);
         emit('update:modelValue', evtData.isOn);
       }
     };
-    var classes = computed(function () {
+    const classes = computed(() => {
       return _objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes);
     });
-    watch(function () {
-      return props.modelValue;
-    }, function (nv) {
+    watch(() => props.modelValue, nv => {
       foundation.toggle(nv);
     });
-    var tag = computed(function () {
-      var isLink = Boolean(attrs.href);
+    const tag = computed(() => {
+      const isLink = Boolean(attrs.href);
       return isLink ? 'a' : 'button';
     });
 
-    var onClick = function onClick(evt) {
-      return foundation.handleClick(evt);
-    };
+    const onClick = evt => foundation.handleClick(evt);
 
-    onMounted(function () {
+    onMounted(() => {
       foundation = new MDCIconButtonToggleFoundation(adapter);
       foundation.init();
       foundation.toggle(props.modelValue);
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      classes: classes,
-      styles: styles,
-      root: root,
-      tag: tag,
-      onClick: onClick
+      classes,
+      styles,
+      root,
+      tag,
+      onClick
     });
   }
+
 };
 
 function render$f(_ctx, _cache, $props, $setup, $data, $options) {
@@ -3673,9 +3273,11 @@ var mcwIconToggle = {
   props: {
     isOn: Boolean
   },
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots;
-    return function () {
+
+  setup(props, {
+    slots
+  }) {
+    return () => {
       var _slots$default;
 
       return h('i', {
@@ -3687,18 +3289,19 @@ var mcwIconToggle = {
       }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
     };
   }
+
 };
 
 var iconButton = BasePlugin({
   mcwIconButton: script$f,
-  mcwIconToggle: mcwIconToggle
+  mcwIconToggle
 });
 
-var spanOptions_ = {
+const spanOptions_ = {
   type: [String, Number],
   default: null,
-  validator: function validator(value) {
-    var num = Number(value);
+  validator: value => {
+    const num = Number(value);
     return isFinite(num) && num <= 12 && num > 0;
   }
 };
@@ -3712,14 +3315,13 @@ var script$g = {
     desktop: spanOptions_,
     align: {
       type: String,
-      validator: function validator(value) {
-        return ['top', 'bottom', 'middle'].indexOf(value) !== -1;
-      }
+      validator: value => ['top', 'bottom', 'middle'].indexOf(value) !== -1
     }
   },
-  setup: function setup(props) {
-    var classes = computed(function () {
-      var cssClasses = [];
+
+  setup(props) {
+    const classes = computed(() => {
+      const cssClasses = [];
 
       if (props.span) {
         cssClasses.push("mdc-layout-grid__cell--span-".concat(props.span));
@@ -3748,9 +3350,10 @@ var script$g = {
       return cssClasses;
     });
     return {
-      classes: classes
+      classes
     };
   }
+
 };
 
 function render$g(_ctx, _cache, $props, $setup, $data, $options) {
@@ -3771,8 +3374,9 @@ var script$h = {
     alignLeft: Boolean,
     alignRight: Boolean
   },
-  setup: function setup(props) {
-    var classes = computed(function () {
+
+  setup(props) {
+    const classes = computed(() => {
       return {
         'mdc-layout-grid': true,
         'mdc-layout-grid--fixed-column-width': props.fixedColumnWidth,
@@ -3781,9 +3385,10 @@ var script$h = {
       };
     });
     return {
-      classes: classes
+      classes
     };
   }
+
 };
 
 const _hoisted_1$c = { class: "mdc-layout-grid__inner" };
@@ -3822,8 +3427,9 @@ var layoutGrid = BasePlugin({
 
 var script$j = {
   name: 'mcw-line-ripple',
-  setup: function setup() {
-    var uiState = reactive({
+
+  setup() {
+    const uiState = reactive({
       lineClasses: {
         'mdc-line-ripple': 1
       },
@@ -3831,57 +3437,55 @@ var script$j = {
     }); // note: do not call the property 'foundation' as the tests will then
     // expect all methods to be implemented, and we handle transitionend locally.
 
-    var foundation_;
-    var adapter = {
-      addClass: function addClass(className) {
-        return uiState.lineClasses = _objectSpread2(_objectSpread2({}, uiState.lineClasses), {}, _defineProperty({}, className, true));
-      },
-      removeClass: function removeClass(className) {
+    let foundation_;
+    const adapter = {
+      addClass: className => uiState.lineClasses = _objectSpread2(_objectSpread2({}, uiState.lineClasses), {}, {
+        [className]: true
+      }),
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$lineClasses = uiState.lineClasses,
-            removed = _uiState$lineClasses[className],
-            rest = _objectWithoutProperties(_uiState$lineClasses, [className].map(_toPropertyKey));
+        const _uiState$lineClasses = uiState.lineClasses,
+              rest = _objectWithoutProperties(_uiState$lineClasses, [className].map(_toPropertyKey));
 
         uiState.lineClasses = rest;
       },
-      hasClass: function hasClass(className) {
+      hasClass: className => {
         return Boolean(uiState.lineClasses[className]);
       },
-      setStyle: function setStyle(name, value) {
-        return uiState.lineStyles = _objectSpread2(_objectSpread2({}, uiState.lineStyles), {}, _defineProperty({}, name, value));
-      }
+      setStyle: (name, value) => uiState.lineStyles = _objectSpread2(_objectSpread2({}, uiState.lineStyles), {}, {
+        [name]: value
+      })
     };
 
-    var setRippleCenter = function setRippleCenter(xCoordinate) {
+    const setRippleCenter = xCoordinate => {
       foundation_.setRippleCenter(xCoordinate);
     };
 
-    var activate = function activate() {
+    const activate = () => {
       foundation_.activate();
     };
 
-    var deactivate = function deactivate() {
+    const deactivate = () => {
       foundation_.deactivate();
     };
 
-    var onTransitionEnd = function onTransitionEnd(evt) {
-      return foundation_.handleTransitionEnd(evt);
-    };
+    const onTransitionEnd = evt => foundation_.handleTransitionEnd(evt);
 
-    onMounted(function () {
+    onMounted(() => {
       foundation_ = new MDCLineRippleFoundation(adapter);
       foundation_.init();
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       foundation_.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      setRippleCenter: setRippleCenter,
-      activate: activate,
-      deactivate: deactivate,
-      onTransitionEnd: onTransitionEnd
+      setRippleCenter,
+      activate,
+      deactivate,
+      onTransitionEnd
     });
   }
+
 };
 
 function render$j(_ctx, _cache, $props, $setup, $data, $options) {
@@ -3899,11 +3503,13 @@ var lineRipple = BasePlugin({
   mcwLineRipple: script$j
 });
 
-var progressPropType_ = {
+const progressPropType_ = {
   type: [Number, String],
-  validator: function validator(value) {
+
+  validator(value) {
     return Number(value) >= 0 && Number(value) <= 1;
   }
+
 };
 var script$k = {
   name: 'mcw-linear-progress',
@@ -3925,8 +3531,9 @@ var script$k = {
       default: 'div'
     }
   },
-  setup: function setup(props) {
-    var uiState = reactive({
+
+  setup(props) {
+    const uiState = reactive({
       classes: {
         'mdc-linear-progress': 1
       },
@@ -3938,73 +3545,57 @@ var script$k = {
       },
       root: null
     });
-    var foundation;
-    var adapter = {
-      addClass: function addClass(className) {
-        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
-      },
-      forceLayout: function forceLayout() {
-        return uiState.root.offsetWidth;
-      },
-      setBufferBarStyle: function setBufferBarStyle(styleProperty, value) {
-        return uiState.bufferbarStyles = _objectSpread2(_objectSpread2({}, uiState.bufferbarStyles), {}, _defineProperty({}, styleProperty, value));
-      },
-      setPrimaryBarStyle: function setPrimaryBarStyle(styleProperty, value) {
-        return uiState.primaryStyles = _objectSpread2(_objectSpread2({}, uiState.primaryStyles), {}, _defineProperty({}, styleProperty, value));
-      },
-      hasClass: function hasClass(className) {
-        return uiState.root.classList.contains(className);
-      },
-      removeClass: function removeClass(className) {
+    let foundation;
+    const adapter = {
+      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        [className]: true
+      }),
+      forceLayout: () => uiState.root.offsetWidth,
+      setBufferBarStyle: (styleProperty, value) => uiState.bufferbarStyles = _objectSpread2(_objectSpread2({}, uiState.bufferbarStyles), {}, {
+        [styleProperty]: value
+      }),
+      setPrimaryBarStyle: (styleProperty, value) => uiState.primaryStyles = _objectSpread2(_objectSpread2({}, uiState.primaryStyles), {}, {
+        [styleProperty]: value
+      }),
+      hasClass: className => uiState.root.classList.contains(className),
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes = uiState.classes,
-            removed = _uiState$classes[className],
-            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+        const _uiState$classes = uiState.classes,
+              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
         uiState.classes = rest;
       },
-      setAttribute: function setAttribute(attributeName, value) {
-        return uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, _defineProperty({}, attributeName, value));
-      },
-      removeAttribute: function removeAttribute(attributeName) {
+      setAttribute: (attributeName, value) => uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, {
+        [attributeName]: value
+      }),
+      removeAttribute: attributeName => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$rootAttrs = uiState.rootAttrs,
-            removed = _uiState$rootAttrs[attributeName],
-            rest = _objectWithoutProperties(_uiState$rootAttrs, [attributeName].map(_toPropertyKey));
+        const _uiState$rootAttrs = uiState.rootAttrs,
+              rest = _objectWithoutProperties(_uiState$rootAttrs, [attributeName].map(_toPropertyKey));
 
         uiState.rootAttrs = rest;
       }
     };
-    watch(function () {
-      return props.open;
-    }, function (nv) {
+    watch(() => props.open, nv => {
       if (nv) {
         foundation.open();
       } else {
         foundation.close();
       }
     });
-    watch(function () {
-      return props.progress;
-    }, function (nv) {
+    watch(() => props.progress, nv => {
       foundation.setProgress(Number(nv));
     });
-    watch(function () {
-      return props.buffer;
-    }, function (nv) {
+    watch(() => props.buffer, nv => {
       foundation.setBuffer(Number(nv));
     });
-    watch(function () {
-      return props.indeterminate;
-    }, function (nv) {
+    watch(() => props.indeterminate, nv => {
       foundation.setDeterminate(!nv);
     });
-    watch(function () {
-      return props.reversed;
-    }, function (nv) {
+    watch(() => props.reversed, nv => {
       foundation.setReverse(nv);
     });
-    onMounted(function () {
+    onMounted(() => {
       foundation = new MDCLinearProgressFoundation(adapter);
       foundation.init();
       foundation.setReverse(props.reversed);
@@ -4018,11 +3609,10 @@ var script$k = {
         foundation.close();
       }
     });
-    onBeforeUnmount(function () {
-      return foundation.destroy();
-    });
+    onBeforeUnmount(() => foundation.destroy());
     return _objectSpread2({}, toRefs(uiState));
   }
+
 };
 
 const _hoisted_1$e = {
@@ -4070,7 +3660,7 @@ var linearProgress = BasePlugin({
   mcwLinearProgress: script$k
 });
 
-var itemId = 0;
+let itemId = 0;
 var script$l = {
   name: 'mcw-list-item',
   inheritAttrs: false,
@@ -4083,14 +3673,16 @@ var script$l = {
     trailing: Boolean
   },
   components: {
-    CustomLink: CustomLink
+    CustomLink
   },
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots,
-        attrs = _ref.attrs;
-    var root = ref(null);
-    var myItemId = itemId++;
-    var uiState = reactive({
+
+  setup(props, {
+    slots,
+    attrs
+  }) {
+    const root = ref(null);
+    const myItemId = itemId++;
+    const uiState = reactive({
       classes: {
         'mdc-list-item': 1,
         'mdc-list-item--disabled': props.disabled
@@ -4102,115 +3694,101 @@ var script$l = {
       uiState.classes[attrs.class] = 1;
     }
 
-    var registerListItem = inject('registerListItem');
-    var radioChecked = computed(function () {
+    const registerListItem = inject('registerListItem');
+    const radioChecked = computed(() => {
       return attrs['aria-checked'] == 'true';
     });
-    var checkbox = computed(function () {
-      return !props.trailing && attrs.role == 'checkbox';
-    });
-    var radio = computed(function () {
-      return !props.trailing && attrs.role == 'radio';
-    });
-    var trailingRadio = computed(function () {
-      return props.trailing && attrs.role == 'radio';
-    });
-    var trailingCheckbox = computed(function () {
-      return props.trailing && attrs.role == 'checkbox';
-    });
-
-    var _useRipplePlugin = useRipplePlugin(root),
-        rippleClasses = _useRipplePlugin.classes,
-        styles = _useRipplePlugin.styles;
-
-    var isTwoLine = computed(function () {
+    const checkbox = computed(() => !props.trailing && attrs.role == 'checkbox');
+    const radio = computed(() => !props.trailing && attrs.role == 'radio');
+    const trailingRadio = computed(() => props.trailing && attrs.role == 'radio');
+    const trailingCheckbox = computed(() => props.trailing && attrs.role == 'checkbox');
+    const {
+      classes: rippleClasses,
+      styles
+    } = useRipplePlugin(root);
+    const isTwoLine = computed(() => {
       return props.twoLine || slots['secondary-text'];
     });
-    var groupClasses = computed(function () {
-      return {
-        'mdc-menu__selection-group-icon': props.groupIcon
-      };
-    });
-    var needGraphic = computed(function () {
-      return typeof props.icon == 'string' || !!props.groupIcon;
-    });
-    var listIcon = computed(function () {
-      return typeof props.icon === 'string' && props.icon || props.groupIcon;
-    });
+    const groupClasses = computed(() => ({
+      'mdc-menu__selection-group-icon': props.groupIcon
+    }));
+    const needGraphic = computed(() => typeof props.icon == 'string' || !!props.groupIcon);
+    const listIcon = computed(() => typeof props.icon === 'string' && props.icon || props.groupIcon);
 
-    var focus = function focus() {
+    const focus = () => {
       var _root$value$$el;
 
       ((_root$value$$el = root.value.$el) !== null && _root$value$$el !== void 0 ? _root$value$$el : root.value).focus();
     };
 
-    var myAttrs = computed(function () {
+    const myAttrs = computed(() => {
       return _objectSpread2(_objectSpread2({}, attrs), {}, {
         class: _objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes),
         style: styles.value
       }, uiState.attrs);
     });
 
-    var addClass = function addClass(className) {
-      uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
+    const addClass = className => {
+      uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        [className]: true
+      });
     };
 
-    var removeClass = function removeClass(className) {
+    const removeClass = className => {
       // eslint-disable-next-line no-unused-vars
-      var _uiState$classes = uiState.classes,
-          removed = _uiState$classes[className],
-          rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+      const _uiState$classes = uiState.classes,
+            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
       uiState.classes = rest;
     };
 
-    var removeAttribute = function removeAttribute(attr) {
+    const removeAttribute = attr => {
       // eslint-disable-next-line no-unused-vars
-      var _uiState$attrs = uiState.attrs,
-          removed = _uiState$attrs[attr],
-          rest = _objectWithoutProperties(_uiState$attrs, [attr].map(_toPropertyKey));
+      const _uiState$attrs = uiState.attrs,
+            rest = _objectWithoutProperties(_uiState$attrs, [attr].map(_toPropertyKey));
 
       uiState.attrs = rest;
     };
 
-    var setAttribute = function setAttribute(attr, value) {
-      uiState.attrs = _objectSpread2(_objectSpread2({}, uiState.attrs), {}, _defineProperty({}, attr, value));
+    const setAttribute = (attr, value) => {
+      uiState.attrs = _objectSpread2(_objectSpread2({}, uiState.attrs), {}, {
+        [attr]: value
+      });
     };
 
-    var getAttribute = function getAttribute(attr) {
+    const getAttribute = attr => {
       return myAttrs.value[attr];
     };
 
-    var classList = {
+    const classList = {
       add: addClass,
       remove: removeClass,
-      contains: function contains(className) {
-        return !!uiState.classes[className];
-      }
+      contains: className => !!uiState.classes[className]
     };
     registerListItem({
       itemId: myItemId,
-      removeAttribute: removeAttribute,
-      setAttribute: setAttribute,
-      getAttribute: getAttribute,
-      classList: classList
+      removeAttribute,
+      setAttribute,
+      getAttribute,
+      classList
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      focus: focus,
-      root: root,
-      isTwoLine: isTwoLine,
-      needGraphic: needGraphic,
-      listIcon: listIcon,
-      groupClasses: groupClasses,
-      checkbox: checkbox,
-      radio: radio,
-      radioChecked: radioChecked,
-      myAttrs: myAttrs,
-      trailingRadio: trailingRadio,
-      trailingCheckbox: trailingCheckbox,
-      myItemId: myItemId
+      focus,
+      root,
+      isTwoLine,
+      needGraphic,
+      listIcon,
+      groupClasses,
+      checkbox,
+      radio,
+      radioChecked,
+      myAttrs,
+      trailingRadio,
+      trailingCheckbox,
+      myItemId
     });
   }
+
 };
 
 const _hoisted_1$f = /*#__PURE__*/createVNode("span", { class: "mdc-list-item__ripple" }, null, -1 /* HOISTED */);
@@ -4387,8 +3965,10 @@ function render$l(_ctx, _cache, $props, $setup, $data, $options) {
 script$l.render = render$l;
 script$l.__file = "packages/list/list-item.vue";
 
-var strings$5 = MDCListFoundation.strings,
-    cssClasses$1 = MDCListFoundation.cssClasses;
+const {
+  strings: strings$5,
+  cssClasses: cssClasses$1
+} = MDCListFoundation;
 var script$m = {
   name: 'mcw-list',
   props: {
@@ -4418,9 +3998,11 @@ var script$m = {
     videoList: Boolean,
     typeAhead: Boolean
   },
-  setup: function setup(props, _ref) {
-    var emit = _ref.emit;
-    var uiState = reactive({
+
+  setup(props, {
+    emit
+  }) {
+    const uiState = reactive({
       classes: {
         'mdc-list': 1,
         'mdc-list--dense': props.dense,
@@ -4438,19 +4020,19 @@ var script$m = {
       listn: 0,
       listRoot: null
     });
-    var singleSelection = ref(props.singleSelection); // const selectedIndex = ref(props.modelValue);
+    const singleSelection = ref(props.singleSelection); // const selectedIndex = ref(props.modelValue);
 
-    var foundation;
-    var slotObserver;
+    let foundation;
+    let slotObserver;
 
     if (singleSelection.value) {
       uiState.rootAttrs.role = 'listbox';
     }
 
-    var listItems = ref({}); // keep a hash of child list items
+    const listItems = ref({}); // keep a hash of child list items
     // so we can set classes and attributes
 
-    var registerListItem = function registerListItem(item) {
+    const registerListItem = item => {
       listItems.value[item.itemId] = item;
     };
 
@@ -4464,57 +4046,56 @@ var script$m = {
     //   },
     // });
 
-    var setSingleSelection = function setSingleSelection(isSingleSelectionList) {
+    const setSingleSelection = isSingleSelectionList => {
       singleSelection.value = isSingleSelectionList;
       foundation.setSingleSelection(isSingleSelectionList);
     };
 
-    var setSelectedIndex = function setSelectedIndex(index) {
+    const setSelectedIndex = index => {
       foundation.setSelectedIndex(index);
     };
 
-    var getSelectedIndex = function getSelectedIndex() {
-      return foundation.getSelectedIndex();
-    }; // keep list of child elements that will have their item id in a data attribute
+    const getSelectedIndex = () => foundation.getSelectedIndex(); // keep list of child elements that will have their item id in a data attribute
     // so we can find the listItem from events or by index.
 
 
-    var listElements = ref([]); // all the child list elements
+    const listElements = ref([]); // all the child list elements
     // may be refreshed if the list items are rerendered for example
 
-    var updateListElements = function updateListElements() {
-      var elements = [].slice.call(uiState.listRoot.querySelectorAll(".".concat(cssClasses$1.LIST_ITEM_CLASS)));
+    const updateListElements = () => {
+      const elements = [].slice.call(uiState.listRoot.querySelectorAll(".".concat(cssClasses$1.LIST_ITEM_CLASS)));
       listElements.value = elements;
     }; // find the list item by index.
     // The list elements are in DOM order, so find it by index,
     // then use its item id to lookup in the list item hash
 
 
-    var getListItemByIndex = function getListItemByIndex(index) {
-      var element = listElements.value[index];
+    const getListItemByIndex = index => {
+      const element = listElements.value[index];
 
       if (element) {
-        var myItemId = element.dataset.myitemid;
+        const myItemId = element.dataset.myitemid;
         return listItems.value[myItemId];
       }
     }; // find the index of a list item from the event target
 
 
-    var getListItemIndex = function getListItemIndex(evt) {
-      var myItemId = evt.target.dataset.myitemid; // if clicked on a list item then just search
+    const getListItemIndex = evt => {
+      const myItemId = evt.target.dataset.myitemid; // if clicked on a list item then just search
 
       if (myItemId !== void 0) {
-        var lei = listElements.value.findIndex(function (_ref2) {
-          var myitemid = _ref2.dataset.myitemid;
-          return myitemid === myItemId;
-        });
+        const lei = listElements.value.findIndex(({
+          dataset: {
+            myitemid
+          }
+        }) => myitemid === myItemId);
         return lei;
       } // if the click wasnt on a list item
       // search up the DOM
 
 
-      var eventTarget = evt.target;
-      var nearestParent = closest(eventTarget, ".".concat(cssClasses$1.LIST_ITEM_CLASS, ", .").concat(cssClasses$1.ROOT)); // Get the index of the element if it is a list item.
+      const eventTarget = evt.target;
+      const nearestParent = closest(eventTarget, ".".concat(cssClasses$1.LIST_ITEM_CLASS, ", .").concat(cssClasses$1.ROOT)); // Get the index of the element if it is a list item.
 
       if (nearestParent && matches(nearestParent, ".".concat(cssClasses$1.LIST_ITEM_CLASS))) {
         return listElements.value.indexOf(nearestParent);
@@ -4523,150 +4104,132 @@ var script$m = {
       return -1;
     };
 
-    var layout = function layout() {
+    const layout = () => {
       foundation.setVerticalOrientation(props.ariaOrientation == 'vertical'); // List items need to have at least tabindex=-1 to be focusable.
 
-      [].slice.call(uiState.listRoot.querySelectorAll('.mdc-list-item:not([tabindex])')).forEach(function (ele) {
+      [].slice.call(uiState.listRoot.querySelectorAll('.mdc-list-item:not([tabindex])')).forEach(ele => {
         ele.setAttribute('tabindex', -1);
       }); // Child button/a elements are not tabbable until the list item is focused.
 
-      [].slice.call(uiState.listRoot.querySelectorAll(strings$5.FOCUSABLE_CHILD_ELEMENTS)).forEach(function (ele) {
-        return ele.setAttribute('tabindex', -1);
-      });
+      [].slice.call(uiState.listRoot.querySelectorAll(strings$5.FOCUSABLE_CHILD_ELEMENTS)).forEach(ele => ele.setAttribute('tabindex', -1));
       foundation.layout();
     };
 
-    var initializeListType = function initializeListType() {
-      var checkboxListItems = uiState.listRoot.querySelectorAll(strings$5.ARIA_ROLE_CHECKBOX_SELECTOR);
-      var radioSelectedListItem = uiState.listRoot.querySelector(strings$5.ARIA_CHECKED_RADIO_SELECTOR);
+    const initializeListType = () => {
+      const checkboxListItems = uiState.listRoot.querySelectorAll(strings$5.ARIA_ROLE_CHECKBOX_SELECTOR);
+      const radioSelectedListItem = uiState.listRoot.querySelector(strings$5.ARIA_CHECKED_RADIO_SELECTOR);
 
       if (checkboxListItems.length) {
-        var preselectedItems = uiState.listRoot.querySelectorAll(strings$5.ARIA_CHECKED_CHECKBOX_SELECTOR);
-        setSelectedIndex([].map.call(preselectedItems, function (listItem) {
-          return listElements.value.indexOf(listItem);
-        }));
+        const preselectedItems = uiState.listRoot.querySelectorAll(strings$5.ARIA_CHECKED_CHECKBOX_SELECTOR);
+        setSelectedIndex([].map.call(preselectedItems, listItem => listElements.value.indexOf(listItem)));
       } else if (radioSelectedListItem) {
         setSelectedIndex(listElements.value.indexOf(radioSelectedListItem));
       }
     };
 
-    var getPrimaryText = function getPrimaryText(item) {
-      var primaryText = item.querySelector(".".concat(cssClasses$1.LIST_ITEM_PRIMARY_TEXT_CLASS));
+    const getPrimaryText = item => {
+      const primaryText = item.querySelector(".".concat(cssClasses$1.LIST_ITEM_PRIMARY_TEXT_CLASS));
 
       if (primaryText) {
         return primaryText.textContent || '';
       }
 
-      var singleLineText = item.querySelector(".".concat(cssClasses$1.LIST_ITEM_TEXT_CLASS));
+      const singleLineText = item.querySelector(".".concat(cssClasses$1.LIST_ITEM_TEXT_CLASS));
       return singleLineText && singleLineText.textContent || '';
     };
 
-    var setEnabled = function setEnabled(itemIndex, isEnabled) {
+    const setEnabled = (itemIndex, isEnabled) => {
       foundation.setEnabled(itemIndex, isEnabled);
     };
 
-    var typeaheadMatchItem = function typeaheadMatchItem(nextChar, startingIndex) {
+    const typeaheadMatchItem = (nextChar, startingIndex) => {
       return foundation.typeaheadMatchItem(nextChar, startingIndex,
       /** skipFocus */
       true);
     };
 
-    var handleFocusInEvent = function handleFocusInEvent(evt) {
-      var index = getListItemIndex(evt);
+    const handleFocusInEvent = evt => {
+      const index = getListItemIndex(evt);
       foundation.handleFocusIn(evt, index);
     };
 
-    var handleFocusOutEvent = function handleFocusOutEvent(evt) {
-      var index = getListItemIndex(evt);
+    const handleFocusOutEvent = evt => {
+      const index = getListItemIndex(evt);
       foundation.handleFocusOut(evt, index);
     };
 
-    var handleKeydownEvent = function handleKeydownEvent(evt) {
-      var index = getListItemIndex(evt);
-      var target = evt.target;
+    const handleKeydownEvent = evt => {
+      const index = getListItemIndex(evt);
+      const target = evt.target;
       foundation.handleKeydown(evt, target.classList.contains(cssClasses$1.LIST_ITEM_CLASS), index);
     };
 
-    var handleClickEvent = function handleClickEvent(evt) {
-      var index = getListItemIndex(evt);
-      var target = evt.target; // Toggle the checkbox only if it's not the target of the event, or the checkbox will have 2 change events.
+    const handleClickEvent = evt => {
+      const index = getListItemIndex(evt);
+      const target = evt.target; // Toggle the checkbox only if it's not the target of the event, or the checkbox will have 2 change events.
 
-      var toggleCheckbox = !matches(target, strings$5.CHECKBOX_RADIO_SELECTOR);
+      const toggleCheckbox = !matches(target, strings$5.CHECKBOX_RADIO_SELECTOR);
       foundation.handleClick(index, toggleCheckbox);
     }; // set up the listeners and bind in the template with v-on
 
 
-    var rootListeners = {
-      click: function click(event) {
-        return handleClickEvent(event);
-      },
-      focusin: function focusin(event) {
+    const rootListeners = {
+      click: event => handleClickEvent(event),
+      focusin: event => {
         handleFocusInEvent(event);
       },
-      focusout: function focusout(event) {
+      focusout: event => {
         handleFocusOutEvent(event);
       },
-      keydown: function keydown(event) {
-        return handleKeydownEvent(event);
-      }
+      keydown: event => handleKeydownEvent(event)
     };
 
-    var typeaheadInProgress = function typeaheadInProgress() {
-      return foundation.isTypeaheadInProgress();
-    };
+    const typeaheadInProgress = () => foundation.isTypeaheadInProgress();
 
-    var adapter = {
-      addClassForElementIndex: function addClassForElementIndex(index, className) {
-        var listItem = getListItemByIndex(index);
+    const adapter = {
+      addClassForElementIndex: (index, className) => {
+        const listItem = getListItemByIndex(index);
         listItem === null || listItem === void 0 ? void 0 : listItem.classList.add(className);
       },
-      focusItemAtIndex: function focusItemAtIndex(index) {
-        var element = listElements.value[index];
+      focusItemAtIndex: index => {
+        const element = listElements.value[index];
 
         if (element) {
           element.focus();
         }
       },
-      getAttributeForElementIndex: function getAttributeForElementIndex(index, attr) {
-        var listItem = getListItemByIndex(index);
+      getAttributeForElementIndex: (index, attr) => {
+        const listItem = getListItemByIndex(index);
         return listItem === null || listItem === void 0 ? void 0 : listItem.getAttribute(attr);
       },
-      getFocusedElementIndex: function getFocusedElementIndex() {
-        return listElements.value.indexOf(document.activeElement);
-      },
-      getListItemCount: function getListItemCount() {
-        return listElements.value.length;
-      },
-      getPrimaryTextAtIndex: function getPrimaryTextAtIndex(index) {
-        return getPrimaryText(listElements.value[index]);
-      },
-      hasCheckboxAtIndex: function hasCheckboxAtIndex(index) {
-        var listItem = listElements.value[index];
+      getFocusedElementIndex: () => listElements.value.indexOf(document.activeElement),
+      getListItemCount: () => listElements.value.length,
+      getPrimaryTextAtIndex: index => getPrimaryText(listElements.value[index]),
+      hasCheckboxAtIndex: index => {
+        const listItem = listElements.value[index];
         return listItem && !!listItem.querySelector(strings$5.CHECKBOX_SELECTOR);
       },
-      hasRadioAtIndex: function hasRadioAtIndex(index) {
-        var listItem = listElements.value[index];
+      hasRadioAtIndex: index => {
+        const listItem = listElements.value[index];
         return listItem && !!listItem.querySelector(strings$5.RADIO_SELECTOR);
       },
-      isCheckboxCheckedAtIndex: function isCheckboxCheckedAtIndex(index) {
-        var listItem = listElements.value[index];
-        var toggleEl = listItem.querySelector(strings$5.CHECKBOX_SELECTOR);
+      isCheckboxCheckedAtIndex: index => {
+        const listItem = listElements.value[index];
+        const toggleEl = listItem.querySelector(strings$5.CHECKBOX_SELECTOR);
         return toggleEl.checked;
       },
-      isFocusInsideList: function isFocusInsideList() {
-        var root = uiState.listRoot;
+      isFocusInsideList: () => {
+        const root = uiState.listRoot;
         return root && root !== document.activeElement && root.contains(document.activeElement);
       },
-      isRootFocused: function isRootFocused() {
-        return document.activeElement === uiState.listRoot;
-      },
-      listItemAtIndexHasClass: function listItemAtIndexHasClass(index, className) {
-        var listItem = getListItemByIndex(index);
+      isRootFocused: () => document.activeElement === uiState.listRoot,
+      listItemAtIndexHasClass: (index, className) => {
+        const listItem = getListItemByIndex(index);
         listItem === null || listItem === void 0 ? void 0 : listItem.classList.contains(className);
       },
-      notifyAction: function notifyAction(index) {
+      notifyAction: index => {
         emitCustomEvent(uiState.listRoot, strings$5.ACTION_EVENT, {
-          index: index
+          index
         },
         /** shouldBubble */
         true);
@@ -4677,29 +4240,29 @@ var script$m = {
           emit('update:modelValue', index);
         }
       },
-      removeClassForElementIndex: function removeClassForElementIndex(index, className) {
-        var listItem = getListItemByIndex(index);
+      removeClassForElementIndex: (index, className) => {
+        const listItem = getListItemByIndex(index);
         listItem === null || listItem === void 0 ? void 0 : listItem.classList.remove(className);
       },
-      setAttributeForElementIndex: function setAttributeForElementIndex(index, attr, value) {
-        var listItem = getListItemByIndex(index);
+      setAttributeForElementIndex: (index, attr, value) => {
+        const listItem = getListItemByIndex(index);
         listItem === null || listItem === void 0 ? void 0 : listItem.setAttribute(attr, value);
       },
-      setCheckedCheckboxOrRadioAtIndex: function setCheckedCheckboxOrRadioAtIndex(index, isChecked) {
-        var listItem = listElements.value[index];
-        var toggleEl = listItem.querySelector(strings$5.CHECKBOX_RADIO_SELECTOR);
+      setCheckedCheckboxOrRadioAtIndex: (index, isChecked) => {
+        const listItem = listElements.value[index];
+        const toggleEl = listItem.querySelector(strings$5.CHECKBOX_RADIO_SELECTOR);
         toggleEl && (toggleEl.checked = isChecked);
-        var event = document.createEvent('Event');
+        const event = document.createEvent('Event');
         event.initEvent('update:modelValue', true, true);
         toggleEl === null || toggleEl === void 0 ? void 0 : toggleEl.dispatchEvent(event);
       },
-      setTabIndexForListItemChildren: function setTabIndexForListItemChildren(listItemIndex, tabIndexValue) {
-        var element = listElements.value[listItemIndex];
-        var listItemChildren = [].slice.call(element.querySelectorAll(strings$5.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX));
-        listItemChildren.forEach(function (el) {
+      setTabIndexForListItemChildren: (listItemIndex, tabIndexValue) => {
+        const element = listElements.value[listItemIndex];
+        const listItemChildren = [].slice.call(element.querySelectorAll(strings$5.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX));
+        listItemChildren.forEach(el => {
           var _listItems$value$el$d;
 
-          var listItem = (_listItems$value$el$d = listItems.value[el.dataset.myitemid]) !== null && _listItems$value$el$d !== void 0 ? _listItems$value$el$d : el;
+          const listItem = (_listItems$value$el$d = listItems.value[el.dataset.myitemid]) !== null && _listItems$value$el$d !== void 0 ? _listItems$value$el$d : el;
           listItem.setAttribute('tabindex', tabIndexValue);
         });
       }
@@ -4708,39 +4271,25 @@ var script$m = {
     //   nv => foundation.setSingleSelection(nv),
     // );
 
-    watch(function () {
-      return props.modelValue;
-    }, function (nv) {
+    watch(() => props.modelValue, nv => {
       if (Array.isArray(nv)) {
         foundation.setSelectedIndex(nv);
       } else if (props.modelValue != nv) {
         foundation.setSelectedIndex(nv);
       }
     });
-    watch(function () {
-      return props.wrapFocus;
-    }, function (nv) {
-      return foundation.setWrapFocus(nv);
-    });
-    watch(function () {
-      return props.ariaOrientation;
-    }, function (nv) {
-      return foundation.setVerticalOrientation(nv === 'vertical');
-    });
-    watch(function () {
-      return props.typeAhead;
-    }, function (nv) {
-      return foundation.setHasTypeahead(nv);
-    });
-    onMounted(function () {
+    watch(() => props.wrapFocus, nv => foundation.setWrapFocus(nv));
+    watch(() => props.ariaOrientation, nv => foundation.setVerticalOrientation(nv === 'vertical'));
+    watch(() => props.typeAhead, nv => foundation.setHasTypeahead(nv));
+    onMounted(() => {
       updateListElements();
       foundation = new MDCListFoundation(adapter);
       foundation.init(); // if a single selection list need to ensure the selected item has the selected or activated class
 
       if (singleSelection.value && typeof props.modelValue === 'number' && !isNaN(props.modelValue)) {
-        var i = props.modelValue;
-        var hasSelectedClass = adapter.listItemAtIndexHasClass(i, cssClasses$1.LIST_ITEM_SELECTED_CLASS);
-        var hasActivatedClass = adapter.listItemAtIndexHasClass(i, cssClasses$1.LIST_ITEM_ACTIVATED_CLASS);
+        const i = props.modelValue;
+        const hasSelectedClass = adapter.listItemAtIndexHasClass(i, cssClasses$1.LIST_ITEM_SELECTED_CLASS);
+        const hasActivatedClass = adapter.listItemAtIndexHasClass(i, cssClasses$1.LIST_ITEM_ACTIVATED_CLASS);
 
         if (!(hasSelectedClass || hasActivatedClass)) {
           adapter.addClassForElementIndex(props.modelValue, 'mdc-list-item--selected');
@@ -4762,7 +4311,7 @@ var script$m = {
       // so use a mutation observer to trigger an update
 
 
-      slotObserver = new MutationObserver(function (mutationList, observer) {
+      slotObserver = new MutationObserver((mutationList, observer) => {
         updateListElements();
       });
       slotObserver.observe(uiState.listRoot, {
@@ -4770,25 +4319,26 @@ var script$m = {
 
       });
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       slotObserver.disconnect();
       foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      listItems: listItems,
-      listElements: listElements,
-      rootListeners: rootListeners,
-      layout: layout,
-      setEnabled: setEnabled,
-      typeaheadMatchItem: typeaheadMatchItem,
-      typeaheadInProgress: typeaheadInProgress,
+      listItems,
+      listElements,
+      rootListeners,
+      layout,
+      setEnabled,
+      typeaheadMatchItem,
+      typeaheadInProgress,
       // selIndex,
-      getSelectedIndex: getSelectedIndex,
-      setSelectedIndex: setSelectedIndex,
-      getPrimaryText: getPrimaryText,
-      setSingleSelection: setSingleSelection
+      getSelectedIndex,
+      setSelectedIndex,
+      getPrimaryText,
+      setSingleSelection
     });
   }
+
 };
 
 function render$m(_ctx, _cache, $props, $setup, $data, $options) {
@@ -4820,25 +4370,30 @@ var mcwMaterialIcon = {
       default: 'i'
     }
   },
-  setup: function setup(props, _ref) {
-    var attrs = _ref.attrs;
-    return function () {
+
+  setup(props, {
+    attrs
+  }) {
+    return () => {
       return h(props.tag, _objectSpread2(_objectSpread2({}, attrs), {}, {
         class: 'material-icons'
       }), props.icon);
     };
   }
+
 };
 
 var materialIcon = BasePlugin({
-  mcwMaterialIcon: mcwMaterialIcon
+  mcwMaterialIcon
 });
 
 var mcwMenuAnchor = {
   name: 'mcw-menu-anchor',
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots;
-    return function () {
+
+  setup(props, {
+    slots
+  }) {
+    return () => {
       var _slots$default;
 
       return h('div', {
@@ -4848,6 +4403,7 @@ var mcwMenuAnchor = {
       }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
     };
   }
+
 };
 
 var mcwMenuItem = {
@@ -4855,9 +4411,11 @@ var mcwMenuItem = {
   props: {
     disabled: Boolean
   },
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots;
-    return function () {
+
+  setup(props, {
+    slots
+  }) {
+    return () => {
       var _slots$default;
 
       return h('li', {
@@ -4871,10 +4429,13 @@ var mcwMenuItem = {
       }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
     };
   }
+
 };
 
-var cssClasses$2 = MDCMenuSurfaceFoundation.cssClasses,
-    strings$6 = MDCMenuSurfaceFoundation.strings;
+const {
+  cssClasses: cssClasses$2,
+  strings: strings$6
+} = MDCMenuSurfaceFoundation;
 var script$n = {
   name: 'mcw-menu-surface',
   props: {
@@ -4883,43 +4444,43 @@ var script$n = {
     'anchor-corner': [String, Number],
     'anchor-margin': Object
   },
-  setup: function setup(props, _ref) {
-    var emit = _ref.emit;
-    var uiState = reactive({
+
+  setup(props, {
+    emit
+  }) {
+    const uiState = reactive({
       classes: {
         'mdc-menu-surface': 1
       },
       root: null
     });
-    var foundation;
-    var anchorElement;
-    var previousFocus_;
+    let foundation;
+    let anchorElement;
+    let previousFocus_;
 
-    var handleBodyClick = function handleBodyClick(evt) {
+    const handleBodyClick = evt => {
       foundation.handleBodyClick(evt);
     };
 
-    var registerBodyClickListener = function registerBodyClickListener() {
+    const registerBodyClickListener = () => {
       document.body.addEventListener('click', handleBodyClick);
     };
 
-    var deregisterBodyClickListener = function deregisterBodyClickListener() {
+    const deregisterBodyClickListener = () => {
       document.body.removeEventListener('click', handleBodyClick);
     };
 
-    var handleKeydown = function handleKeydown(evt) {
+    const handleKeydown = evt => {
       foundation.handleKeydown(evt);
     };
 
-    var getFocusAdapterMethods = function getFocusAdapterMethods() {
+    const getFocusAdapterMethods = () => {
       return {
-        isFocused: function isFocused() {
-          return document.activeElement === uiState.root;
-        },
-        saveFocus: function saveFocus() {
+        isFocused: () => document.activeElement === uiState.root,
+        saveFocus: () => {
           previousFocus_ = document.activeElement;
         },
-        restoreFocus: function restoreFocus() {
+        restoreFocus: () => {
           if (uiState.root.contains(document.activeElement)) {
             if (previousFocus_ && previousFocus_.focus) {
               previousFocus_.focus();
@@ -4929,78 +4490,75 @@ var script$n = {
       };
     };
 
-    var getDimensionAdapterMethods = function getDimensionAdapterMethods() {
+    const getDimensionAdapterMethods = () => {
       return {
-        getInnerDimensions: function getInnerDimensions() {
+        getInnerDimensions: () => {
           return {
             width: uiState.root.offsetWidth,
             height: uiState.root.offsetHeight
           };
         },
-        getAnchorDimensions: function getAnchorDimensions() {
-          return anchorElement ? anchorElement.getBoundingClientRect() : null;
-        },
-        getWindowDimensions: function getWindowDimensions() {
+        getAnchorDimensions: () => anchorElement ? anchorElement.getBoundingClientRect() : null,
+        getWindowDimensions: () => {
           return {
             width: window.innerWidth,
             height: window.innerHeight
           };
         },
-        getBodyDimensions: function getBodyDimensions() {
+        getBodyDimensions: () => {
           return {
             width: document.body.clientWidth,
             height: document.body.clientHeight
           };
         },
-        getWindowScroll: function getWindowScroll() {
+        getWindowScroll: () => {
           return {
             x: window.pageXOffset,
             y: window.pageYOffset
           };
         },
-        setPosition: function setPosition(position) {
+        setPosition: position => {
           uiState.root.style.left = 'left' in position ? "".concat(position.left, "px") : null;
           uiState.root.style.right = 'right' in position ? "".concat(position.right, "px") : null;
           uiState.root.style.top = 'top' in position ? "".concat(position.top, "px") : null;
           uiState.root.style.bottom = 'bottom' in position ? "".concat(position.bottom, "px") : null;
         },
-        setMaxHeight: function setMaxHeight(height) {
+        setMaxHeight: height => {
           uiState.root.style.maxHeight = height;
         }
       };
     };
 
-    var rootListeners = {
-      keydown: function keydown(evt) {
-        return handleKeydown(evt);
-      } // 'MDCMenuSurface:opened': evt => registerBodyClickListener(evt),
+    const rootListeners = {
+      keydown: evt => handleKeydown(evt) // 'MDCMenuSurface:opened': evt => registerBodyClickListener(evt),
       // 'MDCMenuSurface:closed': evt => deregisterBodyClickListener(evt),
 
     };
 
-    var onOpen_ = function onOpen_(value) {
-      var method = value ? 'open' : 'close';
+    const onOpen_ = value => {
+      const method = value ? 'open' : 'close';
       foundation[method]();
     };
 
-    var setIsHoisted = function setIsHoisted(isHoisted) {
+    const setIsHoisted = isHoisted => {
       foundation.setIsHoisted(isHoisted);
     };
 
-    var hoistMenuToBody = function hoistMenuToBody() {
+    const hoistMenuToBody = () => {
       document.body.appendChild(uiState.root.parentElement.removeChild(uiState.root));
       setIsHoisted(true);
     };
 
-    var setFixedPosition = function setFixedPosition(isFixed) {
+    const setFixedPosition = isFixed => {
       if (isFixed) {
-        uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, cssClasses$2.FIXED, true));
+        uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+          [cssClasses$2.FIXED]: true
+        });
       } else {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes = uiState.classes,
-            _cssClasses$FIXED = cssClasses$2.FIXED,
-            removed = _uiState$classes[_cssClasses$FIXED],
-            rest = _objectWithoutProperties(_uiState$classes, [_cssClasses$FIXED].map(_toPropertyKey));
+        const _uiState$classes = uiState.classes,
+              _cssClasses$FIXED = cssClasses$2.FIXED,
+              rest = _objectWithoutProperties(_uiState$classes, [_cssClasses$FIXED].map(_toPropertyKey));
 
         uiState.classes = rest;
       }
@@ -5008,93 +4566,77 @@ var script$n = {
       foundation.setFixedPosition(isFixed);
     };
 
-    var setAbsolutePosition = function setAbsolutePosition(x, y) {
+    const setAbsolutePosition = (x, y) => {
       foundation.setAbsolutePosition(x, y);
       setIsHoisted(true);
     };
 
-    var setAnchorCorner = function setAnchorCorner(corner) {
+    const setAnchorCorner = corner => {
       foundation.setAnchorCorner(corner);
     };
 
-    var setAnchorMargin = function setAnchorMargin(margin) {
+    const setAnchorMargin = margin => {
       foundation.setAnchorMargin(margin);
     };
 
-    var setMenuSurfaceAnchorElement = function setMenuSurfaceAnchorElement(element) {
+    const setMenuSurfaceAnchorElement = element => {
       anchorElement = element;
     };
 
-    var show = function show(options) {
+    const show = options => {
       foundation.open(options);
     };
 
-    var close = function close() {
-      var skipRestoreFocus = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+    const close = (skipRestoreFocus = false) => {
       foundation.close(skipRestoreFocus);
     };
 
-    var hide = function hide() {
+    const hide = () => {
       close();
     };
 
-    var isOpen = function isOpen() {
+    const isOpen = () => {
       return foundation ? foundation.isOpen() : false;
     };
 
-    var adapter = {
-      addClass: function addClass(className) {
-        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
-      },
-      removeClass: function removeClass(className) {
+    const adapter = {
+      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        [className]: true
+      }),
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes2 = uiState.classes,
-            removed = _uiState$classes2[className],
-            rest = _objectWithoutProperties(_uiState$classes2, [className].map(_toPropertyKey));
+        const _uiState$classes2 = uiState.classes,
+              rest = _objectWithoutProperties(_uiState$classes2, [className].map(_toPropertyKey));
 
         uiState.classes = rest;
       },
-      hasClass: function hasClass(className) {
-        return uiState.root.classList.contains(className);
-      },
-      hasAnchor: function hasAnchor() {
-        return !!anchorElement;
-      },
-      notifyClose: function notifyClose() {
+      hasClass: className => uiState.root.classList.contains(className),
+      hasAnchor: () => !!anchorElement,
+      notifyClose: () => {
         uiState.root && emitCustomEvent(uiState.root, strings$6.CLOSED_EVENT, {});
         deregisterBodyClickListener();
         emit('mdcmenusurface:closed');
         emit('update:modelValue', false);
       },
-      notifyOpen: function notifyOpen() {
+      notifyOpen: () => {
         emitCustomEvent(uiState.root, strings$6.OPENED_EVENT, {});
         registerBodyClickListener();
         emit('mdcmenusurface:opened');
         emit('update:modelValue', true);
       },
-      isElementInContainer: function isElementInContainer(el) {
+      isElementInContainer: el => {
         var _uiState$root;
 
         return (_uiState$root = uiState.root) === null || _uiState$root === void 0 ? void 0 : _uiState$root.contains(el);
       },
-      isRtl: function isRtl() {
-        return getComputedStyle(uiState.root).getPropertyValue('direction') === 'rtl';
-      },
-      setTransformOrigin: function setTransformOrigin(origin) {
+      isRtl: () => getComputedStyle(uiState.root).getPropertyValue('direction') === 'rtl',
+      setTransformOrigin: origin => {
         uiState.root.style.setProperty("".concat(getTransformPropertyName(window), "-origin"), origin);
       }
     };
-    watch(function () {
-      return props.modelValue;
-    }, function (nv) {
-      return onOpen_(nv);
-    });
-    watch(function () {
-      return props.quickOpen;
-    }, function (nv) {
-      return foundation.setQuickOpen(nv);
-    });
-    onMounted(function () {
+    watch(() => props.modelValue, nv => onOpen_(nv));
+    watch(() => props.quickOpen, nv => foundation.setQuickOpen(nv));
+    onMounted(() => {
       foundation = new MDCMenuSurfaceFoundation(_objectSpread2(_objectSpread2(_objectSpread2({}, adapter), getFocusAdapterMethods()), getDimensionAdapterMethods()));
       foundation.init();
 
@@ -5102,24 +4644,25 @@ var script$n = {
         anchorElement = uiState.root.parentElement;
       }
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       previousFocus_ = null;
       foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      rootListeners: rootListeners,
-      hoistMenuToBody: hoistMenuToBody,
-      setFixedPosition: setFixedPosition,
-      setAbsolutePosition: setAbsolutePosition,
-      setAnchorCorner: setAnchorCorner,
-      setAnchorMargin: setAnchorMargin,
-      setMenuSurfaceAnchorElement: setMenuSurfaceAnchorElement,
-      show: show,
-      hide: hide,
-      isOpen: isOpen,
-      close: close
+      rootListeners,
+      hoistMenuToBody,
+      setFixedPosition,
+      setAbsolutePosition,
+      setAnchorCorner,
+      setAnchorMargin,
+      setMenuSurfaceAnchorElement,
+      show,
+      hide,
+      isOpen,
+      close
     });
   }
+
 };
 
 function render$n(_ctx, _cache, $props, $setup, $data, $options) {
@@ -5134,9 +4677,11 @@ function render$n(_ctx, _cache, $props, $setup, $data, $options) {
 script$n.render = render$n;
 script$n.__file = "packages/menu/menu-surface.vue";
 
-var cssClasses$3 = MDCMenuFoundation.cssClasses,
-    strings$7 = MDCMenuFoundation.strings;
-var DefaultFocusState_ = {
+const {
+  cssClasses: cssClasses$3,
+  strings: strings$7
+} = MDCMenuFoundation;
+const DefaultFocusState_ = {
   NONE: 0,
   LIST_ROOT: 1,
   FIRST_ITEM: 2,
@@ -5155,14 +4700,14 @@ var script$o = {
     singleSelection: Boolean,
     defaultFocusState: {
       type: String,
-      default: function _default() {
-        return 'LIST_ROOT';
-      }
+      default: () => 'LIST_ROOT'
     }
   },
-  setup: function setup(props, _ref) {
-    var emit = _ref.emit;
-    var uiState = reactive({
+
+  setup(props, {
+    emit
+  }) {
+    const uiState = reactive({
       classes: {},
       styles: {},
       menuOpen: false,
@@ -5170,71 +4715,73 @@ var script$o = {
       menuSurface: null,
       list: null
     });
-    var foundation;
-    var rootEl;
-    var items = computed(function () {
+    let foundation;
+    let rootEl;
+    const items = computed(() => {
       var _uiState$list$listEle, _uiState$list;
 
       return (_uiState$list$listEle = (_uiState$list = uiState.list) === null || _uiState$list === void 0 ? void 0 : _uiState$list.listElements) !== null && _uiState$list$listEle !== void 0 ? _uiState$list$listEle : [];
     });
-    var listItems = computed(function () {
+    const listItems = computed(() => {
       var _uiState$list$listIte;
 
       return (_uiState$list$listIte = uiState.list.listItems) !== null && _uiState$list$listIte !== void 0 ? _uiState$list$listIte : [];
     });
 
-    var getListItemByIndex = function getListItemByIndex(index) {
-      var element = items.value[index];
-      var myItemId = element.dataset.myitemid;
+    const getListItemByIndex = index => {
+      const element = items.value[index];
+      const myItemId = element.dataset.myitemid;
       return listItems.value[myItemId];
     };
 
-    var surfaceOpen = computed({
-      get: function get() {
+    const surfaceOpen = computed({
+      get() {
         return uiState.menuOpen;
       },
-      set: function set(value) {
+
+      set(value) {
         uiState.menuOpen = value;
       }
+
     });
-    var wrapFocus = computed({
-      get: function get() {
+    const wrapFocus = computed({
+      get() {
         return uiState.myWrapFocus;
       },
-      set: function set(nv) {
+
+      set(nv) {
         uiState.myWrapFocus = nv;
       }
+
     });
 
-    var layout = function layout() {
+    const layout = () => {
       var _uiState$list2;
 
       return (_uiState$list2 = uiState.list) === null || _uiState$list2 === void 0 ? void 0 : _uiState$list2.layout();
     };
 
-    var handleAction = function handleAction(index) {
+    const handleAction = index => {
       foundation.handleItemAction(items.value[index]);
     };
 
-    var handleKeydown = function handleKeydown(evt) {
-      return foundation.handleKeydown(evt);
-    };
+    const handleKeydown = evt => foundation.handleKeydown(evt);
 
-    var handleMenuSurfaceOpened = function handleMenuSurfaceOpened() {
+    const handleMenuSurfaceOpened = () => {
       foundation.handleMenuSurfaceOpened();
       emit('mdcmenusurface:opened');
     };
 
-    var handleMenuSurfaceClosed = function handleMenuSurfaceClosed() {
+    const handleMenuSurfaceClosed = () => {
       emit('mdcmenusurface:closed');
     };
 
-    var onChange = function onChange(item) {
+    const onChange = item => {
       uiState.menuOpen = item;
       emit('update:modelValue', item);
     };
 
-    var setDefaultFocusState = function setDefaultFocusState(focusState) {
+    const setDefaultFocusState = focusState => {
       if (typeof focusState == 'string') {
         focusState = DefaultFocusState_[focusState];
       }
@@ -5242,32 +4789,32 @@ var script$o = {
       foundation.setDefaultFocusState(focusState);
     };
 
-    var setAnchorCorner = function setAnchorCorner(corner) {
+    const setAnchorCorner = corner => {
       uiState.menuSurface.setAnchorCorner(corner);
     };
 
-    var setAnchorElement = function setAnchorElement(element) {
+    const setAnchorElement = element => {
       uiState.menuSurface.setMenuSurfaceAnchorElement(element);
     };
 
-    var setSelectedIndex = function setSelectedIndex(index) {
+    const setSelectedIndex = index => {
       var _uiState$list3;
 
       return (_uiState$list3 = uiState.list) === null || _uiState$list3 === void 0 ? void 0 : _uiState$list3.setSelectedIndex(index);
     };
 
-    var getSelectedIndex = function getSelectedIndex() {
+    const getSelectedIndex = () => {
       var _uiState$list$getSele, _uiState$list4;
 
       return (_uiState$list$getSele = (_uiState$list4 = uiState.list) === null || _uiState$list4 === void 0 ? void 0 : _uiState$list4.getSelectedIndex()) !== null && _uiState$list$getSele !== void 0 ? _uiState$list$getSele : -1;
     };
 
-    var setAnchorMargin = function setAnchorMargin(margin) {
+    const setAnchorMargin = margin => {
       uiState.menuSurface.setAnchorMargin(margin);
     };
 
-    var getOptionByIndex = function getOptionByIndex(index) {
-      var itms = items.value;
+    const getOptionByIndex = index => {
+      const itms = items.value;
 
       if (index < itms.length) {
         return itms[index];
@@ -5276,8 +4823,8 @@ var script$o = {
       return null;
     };
 
-    var getPrimaryTextAtIndex = function getPrimaryTextAtIndex(index) {
-      var item = getOptionByIndex(index);
+    const getPrimaryTextAtIndex = index => {
+      const item = getOptionByIndex(index);
 
       if (item && uiState.list) {
         return uiState.list.getPrimaryText(item) || '';
@@ -5286,29 +4833,29 @@ var script$o = {
       return '';
     };
 
-    var setFixedPosition = function setFixedPosition(isFixed) {
+    const setFixedPosition = isFixed => {
       uiState.menuSurface.setFixedPosition(isFixed);
     };
 
-    var hoistMenuToBody = function hoistMenuToBody() {
+    const hoistMenuToBody = () => {
       uiState.menuSurface.hoistMenuToBody();
     };
 
-    var setIsHoisted = function setIsHoisted(isHoisted) {
+    const setIsHoisted = isHoisted => {
       uiState.menuSurface.setIsHoisted(isHoisted);
     };
 
-    var setAbsolutePosition = function setAbsolutePosition(x, y) {
+    const setAbsolutePosition = (x, y) => {
       uiState.menuSurface.setAbsolutePosition(x, y);
     };
 
-    var typeaheadInProgress = function typeaheadInProgress() {
+    const typeaheadInProgress = () => {
       var _uiState$list$typeAhe;
 
       return (_uiState$list$typeAhe = uiState.list.typeAheadInProgress) !== null && _uiState$list$typeAhe !== void 0 ? _uiState$list$typeAhe : false;
     };
 
-    var typeaheadMatchItem = function typeaheadMatchItem(nextChar, startingIndex) {
+    const typeaheadMatchItem = (nextChar, startingIndex) => {
       if (uiState.list) {
         return uiState.list.typeaheadMatchItem(nextChar, startingIndex);
       }
@@ -5316,42 +4863,38 @@ var script$o = {
       return -1;
     };
 
-    var setSingleSelection = function setSingleSelection(singleSelection) {
+    const setSingleSelection = singleSelection => {
       var _uiState$list5;
 
       return (_uiState$list5 = uiState.list) === null || _uiState$list5 === void 0 ? void 0 : _uiState$list5.setSingleSelection(singleSelection);
     };
 
-    var adapter = {
-      addClassToElementAtIndex: function addClassToElementAtIndex(index, className) {
-        var listItem = getListItemByIndex(index);
+    const adapter = {
+      addClassToElementAtIndex: (index, className) => {
+        const listItem = getListItemByIndex(index);
         listItem.classList.add(className);
       },
-      removeClassFromElementAtIndex: function removeClassFromElementAtIndex(index, className) {
-        var listItem = getListItemByIndex(index);
+      removeClassFromElementAtIndex: (index, className) => {
+        const listItem = getListItemByIndex(index);
         listItem.classList.remove(className);
       },
-      addAttributeToElementAtIndex: function addAttributeToElementAtIndex(index, attr, value) {
-        var listItem = getListItemByIndex(index);
+      addAttributeToElementAtIndex: (index, attr, value) => {
+        const listItem = getListItemByIndex(index);
         listItem.setAttribute(attr, value);
       },
-      removeAttributeFromElementAtIndex: function removeAttributeFromElementAtIndex(index, attr) {
-        var listItem = getListItemByIndex(index);
+      removeAttributeFromElementAtIndex: (index, attr) => {
+        const listItem = getListItemByIndex(index);
         listItem.removeAttribute(attr);
       },
-      elementContainsClass: function elementContainsClass(element, className) {
-        return element.classList.contains(className);
-      },
-      closeSurface: function closeSurface(skipRestoreFocus) {
+      elementContainsClass: (element, className) => element.classList.contains(className),
+      closeSurface: skipRestoreFocus => {
         uiState.menuSurface.close(skipRestoreFocus);
         emit('update:modelValue', false);
       },
-      getElementIndex: function getElementIndex(element) {
-        return items.value.findIndex(function (el) {
-          return el == element;
-        });
+      getElementIndex: element => {
+        return items.value.findIndex(el => el == element);
       },
-      notifySelected: function notifySelected(evtData) {
+      notifySelected: evtData => {
         emitCustomEvent(rootEl, strings$7.SELECTED_EVENT, {
           index: evtData.index,
           item: items.value[evtData.index]
@@ -5361,32 +4904,22 @@ var script$o = {
           item: items.value[evtData.index]
         });
       },
-      getMenuItemCount: function getMenuItemCount() {
-        return items.value.length;
-      },
-      focusItemAtIndex: function focusItemAtIndex(index) {
-        return items.value[index].focus();
-      },
-      focusListRoot: function focusListRoot() {
+      getMenuItemCount: () => items.value.length,
+      focusItemAtIndex: index => items.value[index].focus(),
+      focusListRoot: () => {
         uiState.menuSurface.$el.querySelector(strings$7.LIST_SELECTOR).focus();
       },
-      isSelectableItemAtIndex: function isSelectableItemAtIndex(index) {
-        return !!closest(items.value[index], ".".concat(cssClasses$3.MENU_SELECTION_GROUP));
-      },
-      getSelectedSiblingOfItemAtIndex: function getSelectedSiblingOfItemAtIndex(index) {
-        var selectionGroupEl = closest(items.value[index], ".".concat(cssClasses$3.MENU_SELECTION_GROUP));
-        var selectedItemEl = selectionGroupEl.querySelector(".".concat(cssClasses$3.MENU_SELECTED_LIST_ITEM));
-        return selectedItemEl ? items.value.findIndex(function (el) {
-          return el == selectedItemEl;
-        }) : -1;
+      isSelectableItemAtIndex: index => !!closest(items.value[index], ".".concat(cssClasses$3.MENU_SELECTION_GROUP)),
+      getSelectedSiblingOfItemAtIndex: index => {
+        const selectionGroupEl = closest(items.value[index], ".".concat(cssClasses$3.MENU_SELECTION_GROUP));
+        const selectedItemEl = selectionGroupEl.querySelector(".".concat(cssClasses$3.MENU_SELECTED_LIST_ITEM));
+        return selectedItemEl ? items.value.findIndex(el => el == selectedItemEl) : -1;
       }
     };
-    watch(function () {
-      return props.modelValue;
-    }, function (nv) {
+    watch(() => props.modelValue, nv => {
       uiState.menuOpen = nv;
     });
-    onMounted(function () {
+    onMounted(() => {
       rootEl = uiState.menuSurface.$el;
       uiState.menuOpen = props.modelValue;
       foundation = new MDCMenuFoundation(adapter);
@@ -5397,44 +4930,42 @@ var script$o = {
       }
 
       if (props.absolutePosition) {
-        var _props$absolutePositi = _slicedToArray(props.absolutePosition, 2),
-            x = _props$absolutePositi[0],
-            y = _props$absolutePositi[1];
-
+        const [x, y] = props.absolutePosition;
         uiState.menuSurface.setAbsolutePosition(x, y);
       }
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      handleAction: handleAction,
-      handleKeydown: handleKeydown,
-      onChange: onChange,
-      handleMenuSurfaceOpened: handleMenuSurfaceOpened,
-      handleMenuSurfaceClosed: handleMenuSurfaceClosed,
-      setAbsolutePosition: setAbsolutePosition,
-      setIsHoisted: setIsHoisted,
-      hoistMenuToBody: hoistMenuToBody,
-      setFixedPosition: setFixedPosition,
-      getOptionByIndex: getOptionByIndex,
-      setAnchorMargin: setAnchorMargin,
-      setAnchorElement: setAnchorElement,
-      setAnchorCorner: setAnchorCorner,
-      getSelectedIndex: getSelectedIndex,
-      setSelectedIndex: setSelectedIndex,
-      setDefaultFocusState: setDefaultFocusState,
-      wrapFocus: wrapFocus,
-      surfaceOpen: surfaceOpen,
-      layout: layout,
-      getPrimaryTextAtIndex: getPrimaryTextAtIndex,
-      items: items,
+      handleAction,
+      handleKeydown,
+      onChange,
+      handleMenuSurfaceOpened,
+      handleMenuSurfaceClosed,
+      setAbsolutePosition,
+      setIsHoisted,
+      hoistMenuToBody,
+      setFixedPosition,
+      getOptionByIndex,
+      setAnchorMargin,
+      setAnchorElement,
+      setAnchorCorner,
+      getSelectedIndex,
+      setSelectedIndex,
+      setDefaultFocusState,
+      wrapFocus,
+      surfaceOpen,
+      layout,
+      getPrimaryTextAtIndex,
+      items,
       // listItems,
-      typeaheadInProgress: typeaheadInProgress,
-      typeaheadMatchItem: typeaheadMatchItem,
-      setSingleSelection: setSingleSelection
+      typeaheadInProgress,
+      typeaheadMatchItem,
+      setSingleSelection
     });
   }
+
 };
 
 function render$o(_ctx, _cache, $props, $setup, $data, $options) {
@@ -5478,97 +5009,100 @@ script$o.__file = "packages/menu/menu.vue";
 var menu = BasePlugin({
   mcwMenu: script$o,
   mcwMenuSurface: script$n,
-  mcwMenuItem: mcwMenuItem,
-  mcwMenuAnchor: mcwMenuAnchor,
+  mcwMenuItem,
+  mcwMenuAnchor,
   mcwList: script$m
 });
 
-var cssClasses$4 = MDCNotchedOutlineFoundation.cssClasses;
+const {
+  cssClasses: cssClasses$4
+} = MDCNotchedOutlineFoundation;
 var script$p = {
   name: 'mcw-notched-outline',
   components: {
     mcwFloatingLabel: script$e
   },
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots;
-    var uiState = reactive({
+
+  setup(props, {
+    slots
+  }) {
+    const uiState = reactive({
       outlinedClasses: {
         'mdc-notched-outline': true
       },
       notchStyles: {},
       labelEl: null
     });
-    var foundation;
-    var adapter = {
-      addClass: function addClass(className) {
-        return uiState.outlinedClasses = _objectSpread2(_objectSpread2({}, uiState.outlinedClasses), {}, _defineProperty({}, className, true));
-      },
-      removeClass: function removeClass(className) {
+    let foundation;
+    const adapter = {
+      addClass: className => uiState.outlinedClasses = _objectSpread2(_objectSpread2({}, uiState.outlinedClasses), {}, {
+        [className]: true
+      }),
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$outlinedClas = uiState.outlinedClasses,
-            removed = _uiState$outlinedClas[className],
-            rest = _objectWithoutProperties(_uiState$outlinedClas, [className].map(_toPropertyKey));
+        const _uiState$outlinedClas = uiState.outlinedClasses,
+              rest = _objectWithoutProperties(_uiState$outlinedClas, [className].map(_toPropertyKey));
 
         uiState.outlinedClasses = rest;
       },
-      setNotchWidthProperty: function setNotchWidthProperty(width) {
-        return uiState.notchStyles = _objectSpread2(_objectSpread2({}, uiState.notchStyles), {}, {
-          width: "".concat(width, "px")
-        });
-      },
-      removeNotchWidthProperty: function removeNotchWidthProperty() {
+      setNotchWidthProperty: width => uiState.notchStyles = _objectSpread2(_objectSpread2({}, uiState.notchStyles), {}, {
+        width: "".concat(width, "px")
+      }),
+      removeNotchWidthProperty: () => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$notchStyles = uiState.notchStyles,
-            removed = _uiState$notchStyles.width,
-            rest = _objectWithoutProperties(_uiState$notchStyles, ["width"]);
+        const _uiState$notchStyles = uiState.notchStyles,
+              rest = _objectWithoutProperties(_uiState$notchStyles, ["width"]);
 
         uiState.notchStyles = rest;
       }
     };
 
-    var notch = function notch(notchWidth) {
+    const notch = notchWidth => {
       foundation.notch(notchWidth);
     };
 
-    var closeNotch = function closeNotch() {
+    const closeNotch = () => {
       foundation.closeNotch();
     };
 
-    var float = function float(shouldFloat) {
+    const float = shouldFloat => {
       var _uiState$labelEl;
 
       (_uiState$labelEl = uiState.labelEl) === null || _uiState$labelEl === void 0 ? void 0 : _uiState$labelEl.float(shouldFloat);
     };
 
-    var shake = function shake(shouldShake) {
+    const shake = shouldShake => {
       var _uiState$labelEl2;
 
       (_uiState$labelEl2 = uiState.labelEl) === null || _uiState$labelEl2 === void 0 ? void 0 : _uiState$labelEl2.shake(shouldShake);
     };
 
-    var getWidth = function getWidth() {
+    const getWidth = () => {
       var _uiState$labelEl3;
 
       return (_uiState$labelEl3 = uiState.labelEl) === null || _uiState$labelEl3 === void 0 ? void 0 : _uiState$labelEl3.getWidth();
     };
 
-    onMounted(function () {
+    onMounted(() => {
       foundation = new MDCNotchedOutlineFoundation(adapter);
       foundation.init();
-      var key = slots.default ? cssClasses$4.OUTLINE_UPGRADED : cssClasses$4.NO_LABEL;
-      uiState.outlinedClasses = _objectSpread2(_objectSpread2({}, uiState.outlinedClasses), {}, _defineProperty({}, key, true));
+      const key = slots.default ? cssClasses$4.OUTLINE_UPGRADED : cssClasses$4.NO_LABEL;
+      uiState.outlinedClasses = _objectSpread2(_objectSpread2({}, uiState.outlinedClasses), {}, {
+        [key]: true
+      });
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      getWidth: getWidth,
-      shake: shake,
-      float: float,
-      closeNotch: closeNotch,
-      notch: notch
+      getWidth,
+      shake,
+      float,
+      closeNotch,
+      notch
     });
   }
+
 };
 
 const _hoisted_1$g = /*#__PURE__*/createVNode("span", { class: "mdc-notched-outline__leading" }, null, -1 /* HOISTED */);
@@ -5609,7 +5143,7 @@ var notchedOutline = BasePlugin({
   mcwNotchedOutline: script$p
 });
 
-var radioId_ = 0;
+let radioId_ = 0;
 var script$q = {
   name: 'mcw-radio',
   // model: {
@@ -5632,12 +5166,14 @@ var script$q = {
     disabled: Boolean,
     checked: Boolean
   },
-  setup: function setup(props, _ref) {
+
+  setup(props, {
+    emit,
+    attrs
+  }) {
     var _props$id;
 
-    var emit = _ref.emit,
-        attrs = _ref.attrs;
-    var uiState = reactive({
+    const uiState = reactive({
       classes: {
         'mdc-radio': 1
       },
@@ -5645,133 +5181,122 @@ var script$q = {
       labelEl: null,
       root: null
     });
-
-    var _useRipplePlugin = useRipplePlugin$1(toRef(uiState, 'root'), {
-      isUnbounded: function isUnbounded() {
-        return true;
-      },
+    const {
+      classes: rippleClasses,
+      styles,
+      activate,
+      deactivate
+    } = useRipplePlugin$1(toRef(uiState, 'root'), {
+      isUnbounded: () => true,
       // Radio buttons technically go "active" whenever there is *any* keyboard interaction. This is not the
       // UI we desire.
-      isSurfaceActive: function isSurfaceActive() {
-        return false;
-      },
-      registerInteractionHandler: function registerInteractionHandler(evt, handler) {
+      isSurfaceActive: () => false,
+      registerInteractionHandler: (evt, handler) => {
         uiState.controlEl.addEventListener(evt, handler, applyPassive());
       },
-      deregisterInteractionHandler: function deregisterInteractionHandler(evt, handler) {
+      deregisterInteractionHandler: (evt, handler) => {
         uiState.controlEl.removeEventListener(evt, handler, applyPassive());
       },
-      computeBoundingRect: function computeBoundingRect() {
+      computeBoundingRect: () => {
         return uiState.root.getBoundingClientRect();
       }
-    }),
-        rippleClasses = _useRipplePlugin.classes,
-        styles = _useRipplePlugin.styles,
-        activate = _useRipplePlugin.activate,
-        deactivate = _useRipplePlugin.deactivate;
-
-    var foundation;
-    var formField;
-    var radioId = (_props$id = props.id) !== null && _props$id !== void 0 ? _props$id : "__mcw-radio-".concat(radioId_++);
-    var rootClasses = computed(function () {
+    });
+    let foundation;
+    let formField;
+    const radioId = (_props$id = props.id) !== null && _props$id !== void 0 ? _props$id : "__mcw-radio-".concat(radioId_++);
+    const rootClasses = computed(() => {
       return _objectSpread2(_objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes), props.radioClasses);
     });
-    var formFieldClasses = computed(function () {
+    const formFieldClasses = computed(() => {
       return {
         'mdc-form-field': 1,
         'mdc-form-field--align-end': props.alignEnd
       };
     });
 
-    var onChange = function onChange() {
-      var nativeValue = uiState.controlEl.value;
+    const onChange = () => {
+      const nativeValue = uiState.controlEl.value;
       nativeValue != props.modelValue && emit('update:modelValue', uiState.controlEl.value);
     };
 
-    var setChecked = function setChecked(checked) {
+    const setChecked = checked => {
       uiState.controlEl.checked = checked;
     };
 
-    var onPicked = function onPicked(nv) {
+    const onPicked = nv => {
       setChecked(nv == uiState.controlEl.value);
     };
 
-    var adapter = {
-      addClass: function addClass(className) {
-        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
-      },
-      removeClass: function removeClass(className) {
+    const adapter = {
+      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        [className]: true
+      }),
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes = uiState.classes,
-            removed = _uiState$classes[className],
-            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+        const _uiState$classes = uiState.classes,
+              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
         uiState.classes = rest;
       },
-      setNativeControlDisabled: function setNativeControlDisabled(disabled) {
-        return uiState.controlEl && uiState.controlEl.disabled == disabled;
-      }
+      setNativeControlDisabled: disabled => uiState.controlEl && uiState.controlEl.disabled == disabled
     };
-    watch(function () {
-      return props.checked;
-    }, function (nv) {
+    watch(() => props.checked, nv => {
       setChecked(nv);
     });
-    watch(function () {
-      return props.disabled;
-    }, function (nv) {
+    watch(() => props.disabled, nv => {
       foundation.setDisabled(nv);
     });
-    watch(function () {
-      return props.modelValue;
-    }, function (nv) {
+    watch(() => props.modelValue, nv => {
       onPicked(nv);
     });
-    onMounted(function () {
+    onMounted(() => {
       foundation = new MDCRadioFoundation(adapter);
       formField = new MDCFormFieldFoundation({
-        registerInteractionHandler: function registerInteractionHandler(type, handler) {
+        registerInteractionHandler: (type, handler) => {
           var _uiState$labelEl;
 
           return (_uiState$labelEl = uiState.labelEl) === null || _uiState$labelEl === void 0 ? void 0 : _uiState$labelEl.addEventListener(type, handler);
         },
-        deregisterInteractionHandler: function deregisterInteractionHandler(type, handler) {
+        deregisterInteractionHandler: (type, handler) => {
           var _uiState$labelEl2;
 
           return (_uiState$labelEl2 = uiState.labelEl) === null || _uiState$labelEl2 === void 0 ? void 0 : _uiState$labelEl2.removeEventListener(type, handler);
         },
-        activateInputRipple: function activateInputRipple() {
+        activateInputRipple: () => {
           activate();
         },
-        deactivateInputRipple: function deactivateInputRipple() {
+        deactivateInputRipple: () => {
           deactivate();
         }
       });
       foundation.init();
       formField.init();
-      var checked = props.checked,
-          disabled = props.disabled,
-          modelValue = props.modelValue,
-          value = props.value;
+      const {
+        checked,
+        disabled,
+        modelValue,
+        value
+      } = props;
       foundation.setDisabled(disabled);
       setChecked(checked || modelValue == value); // if checked, need to sync any change of value
 
       checked && onChange();
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       foundation.destroy();
       formField.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      rootClasses: rootClasses,
-      formFieldClasses: formFieldClasses,
-      styles: styles,
-      onChange: onChange,
-      onPicked: onPicked,
-      setChecked: setChecked,
-      radioId: radioId
+      rootClasses,
+      formFieldClasses,
+      styles,
+      onChange,
+      onPicked,
+      setChecked,
+      radioId
     });
   }
+
 };
 
 const _hoisted_1$h = /*#__PURE__*/createVNode("div", { class: "mdc-radio__background" }, [
@@ -5856,9 +5381,11 @@ var script$r = {
     singleSelect: Boolean,
     touch: Boolean
   },
-  setup: function setup(props, _ref) {
-    var emit = _ref.emit;
-    var uiState = reactive({
+
+  setup(props, {
+    emit
+  }) {
+    const uiState = reactive({
       classes: {
         'mdc-segmented-button--single-select': props.singleSelect
       },
@@ -5866,12 +5393,12 @@ var script$r = {
       root: null,
       contentEl: null
     });
-    var foundation;
-    var segmentIdx = 0;
-    var segments_ = [];
+    let foundation;
+    let segmentIdx = 0;
+    const segments_ = [];
 
-    var getSegmentIdx = function getSegmentIdx(segment) {
-      var sg = _objectSpread2(_objectSpread2({}, segment), {}, {
+    const getSegmentIdx = segment => {
+      const sg = _objectSpread2(_objectSpread2({}, segment), {}, {
         index: segmentIdx++
       });
 
@@ -5882,70 +5409,61 @@ var script$r = {
     provide('getSegmentIdx', getSegmentIdx);
     provide('isSingleSelect', props.singleSelect);
     provide('isTouch', props.touch);
-    var mappedSegments = computed(function () {
-      return segments_.map(function (_ref2) {
-        var index = _ref2.index,
-            isSelected = _ref2.isSelected,
-            getSegmentId = _ref2.getSegmentId;
-        return {
-          index: index,
-          selected: isSelected(),
-          segmentId: getSegmentId()
-        };
-      });
-    });
+    const mappedSegments = computed(() => segments_.map(({
+      index,
+      isSelected,
+      getSegmentId
+    }) => ({
+      index,
+      selected: isSelected(),
+      segmentId: getSegmentId()
+    })));
 
-    var onSelected = function onSelected(_ref3) {
-      var detail = _ref3.detail;
+    const onSelected = ({
+      detail
+    }) => {
       foundation.handleSelected(detail);
     };
 
-    var adapter = {
-      hasClass: function hasClass(className) {
-        return uiState.root.classList.contains(className);
-      },
-      getSegments: function getSegments() {
+    const adapter = {
+      hasClass: className => uiState.root.classList.contains(className),
+      getSegments: () => {
         return mappedSegments.value;
       },
-      selectSegment: function selectSegment(indexOrSegmentId) {
-        var segmentDetail = mappedSegments.value.find(function (_segmentDetail) {
-          return _segmentDetail.index === indexOrSegmentId || _segmentDetail.segmentId === indexOrSegmentId;
-        });
+      selectSegment: indexOrSegmentId => {
+        const segmentDetail = mappedSegments.value.find(_segmentDetail => _segmentDetail.index === indexOrSegmentId || _segmentDetail.segmentId === indexOrSegmentId);
 
         if (segmentDetail) {
           segments_[segmentDetail.index].setSelected();
         }
       },
-      unselectSegment: function unselectSegment(indexOrSegmentId) {
-        var segmentDetail = mappedSegments.value.find(function (_segmentDetail) {
-          return _segmentDetail.index === indexOrSegmentId || _segmentDetail.segmentId === indexOrSegmentId;
-        });
+      unselectSegment: indexOrSegmentId => {
+        const segmentDetail = mappedSegments.value.find(_segmentDetail => _segmentDetail.index === indexOrSegmentId || _segmentDetail.segmentId === indexOrSegmentId);
 
         if (segmentDetail) {
           segments_[segmentDetail.index].setUnselected();
         }
       },
-      notifySelectedChange: function notifySelectedChange(detail) {
+      notifySelectedChange: detail => {
         emit('change', detail);
       }
     };
-    var role = computed(function () {
-      return props.singleSelect ? 'radiogroup' : 'group';
-    });
-    onMounted(function () {
+    const role = computed(() => props.singleSelect ? 'radiogroup' : 'group');
+    onMounted(() => {
       foundation = new MDCSegmentedButtonFoundation(adapter);
       foundation.init();
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       var _foundation;
 
       (_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      role: role,
-      onSelected: onSelected
+      role,
+      onSelected
     });
   }
+
 };
 
 function render$r(_ctx, _cache, $props, $setup, $data, $options) {
@@ -5969,27 +5487,25 @@ var script$s = {
     label: String,
     ripple: {
       type: Boolean,
-      default: function _default() {
-        return true;
-      }
+      default: () => true
     }
   },
-  setup: function setup(props, _ref) {
-    var emit = _ref.emit,
-        attrs = _ref.attrs;
-    var uiState = reactive({
+
+  setup(props, {
+    emit,
+    attrs
+  }) {
+    const uiState = reactive({
       classes: {},
       attrs: {},
       root: null
     });
-    var foundation;
-    var getSegmentIdx = inject('getSegmentIdx');
+    let foundation;
+    const getSegmentIdx = inject('getSegmentIdx');
+    const isSingleSelect = inject('isSingleSelect');
+    const isTouch = inject('isTouch');
 
-    var _isSingleSelect = inject('isSingleSelect');
-
-    var isTouch = inject('isTouch');
-
-    if (_isSingleSelect) {
+    if (isSingleSelect) {
       var _attrs$ariaChecked;
 
       uiState.attrs['role'] = 'radio';
@@ -6000,98 +5516,85 @@ var script$s = {
       uiState.attrs['aria-pressed'] = (_attrs$ariaPressed = attrs['aria-pressed']) !== null && _attrs$ariaPressed !== void 0 ? _attrs$ariaPressed : 'false';
     }
 
-    var getSegmentId = function getSegmentId() {
-      return foundation.getSegmentId();
-    };
+    const getSegmentId = () => foundation.getSegmentId();
 
-    var isSelected = function isSelected() {
-      return foundation.isSelected();
-    };
+    const isSelected = () => foundation.isSelected();
 
-    var setSelected = function setSelected() {
-      return foundation.setSelected();
-    };
+    const setSelected = () => foundation.setSelected();
 
-    var setUnselected = function setUnselected() {
-      return foundation.setUnselected();
-    };
+    const setUnselected = () => foundation.setUnselected();
 
-    var segmentIdx = getSegmentIdx({
-      getSegmentId: getSegmentId,
-      isSelected: isSelected,
-      setSelected: setSelected,
-      setUnselected: setUnselected
+    const segmentIdx = getSegmentIdx({
+      getSegmentId,
+      isSelected,
+      setSelected,
+      setUnselected
     });
-
-    var _useRipplePlugin = useRipplePlugin(toRef(uiState, 'root'), {
-      computeBoundingRect: function computeBoundingRect() {
+    const {
+      classes: rippleClasses,
+      styles
+    } = useRipplePlugin(toRef(uiState, 'root'), {
+      computeBoundingRect: () => {
         return foundation.getDimensions();
       }
-    }),
-        rippleClasses = _useRipplePlugin.classes,
-        styles = _useRipplePlugin.styles;
-
-    var myAttrs = computed(function () {
+    });
+    const myAttrs = computed(() => {
       return _objectSpread2(_objectSpread2({}, uiState.attrs), {}, {
         class: _objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes),
         style: styles.value
       });
     });
 
-    var onClick = function onClick() {
-      return foundation.handleClick();
-    };
+    const onClick = () => foundation.handleClick();
 
-    var adapter = {
-      isSingleSelect: function isSingleSelect() {
-        return _isSingleSelect;
+    const adapter = {
+      isSingleSelect: () => {
+        return isSingleSelect;
       },
-      getAttr: function getAttr(name) {
-        return uiState.root.getAttribute(name);
+      getAttr: name => uiState.root.getAttribute(name),
+      setAttr: (attributeName, value) => {
+        uiState.attrs = _objectSpread2(_objectSpread2({}, uiState.attrs), {}, {
+          [attributeName]: value
+        });
       },
-      setAttr: function setAttr(attributeName, value) {
-        uiState.attrs = _objectSpread2(_objectSpread2({}, uiState.attrs), {}, _defineProperty({}, attributeName, value));
-      },
-      addClass: function addClass(className) {
-        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
-      },
-      hasClass: function hasClass(className) {
-        return !!uiState.classes[className];
-      },
-      removeClass: function removeClass(className) {
+      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        [className]: true
+      }),
+      hasClass: className => !!uiState.classes[className],
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes = uiState.classes,
-            removed = _uiState$classes[className],
-            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+        const _uiState$classes = uiState.classes,
+              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
         uiState.classes = rest;
       },
-      notifySelectedChange: function notifySelectedChange(selected) {
+      notifySelectedChange: selected => {
         emitCustomEvent(uiState.root, 'selected', {
           index: segmentIdx,
-          selected: selected,
+          selected,
           segmentId: getSegmentId()
         }, true);
       },
-      getRootBoundingClientRect: function getRootBoundingClientRect() {
+      getRootBoundingClientRect: () => {
         return uiState.root.getBoundingClientRect();
       }
     };
-    onMounted(function () {
+    onMounted(() => {
       foundation = new MDCSegmentedButtonSegmentFoundation(adapter);
       foundation.init();
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       var _foundation;
 
       (_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      myAttrs: myAttrs,
-      onClick: onClick,
-      isTouch: isTouch
+      myAttrs,
+      onClick,
+      isTouch
     });
   }
+
 };
 
 const _hoisted_1$i = {
@@ -6179,8 +5682,9 @@ var script$t = {
     helptextValidation: Boolean,
     helptext: String
   },
-  setup: function setup(props) {
-    var uiState = reactive({
+
+  setup(props) {
+    const uiState = reactive({
       classes: {
         'mdc-select-helper-text': true,
         'mdc-select-helper-text--persistent': props.helptextPersistent,
@@ -6192,60 +5696,45 @@ var script$t = {
       myHelptext: props.helptext,
       foundation: {}
     });
-    var adapter = {
-      addClass: function addClass(className) {
-        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
-      },
-      removeClass: function removeClass(className) {
+    const adapter = {
+      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        [className]: true
+      }),
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes = uiState.classes,
-            removed = _uiState$classes[className],
-            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+        const _uiState$classes = uiState.classes,
+              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
         uiState.classes = rest;
       },
-      hasClass: function hasClass(className) {
-        return Boolean(uiState.classes[className]);
-      },
-      setAttr: function setAttr(attr, value) {
-        return uiState.attrs = _objectSpread2(_objectSpread2({}, uiState.attrs), {}, _defineProperty({}, attr, value));
-      },
-      removeAttr: function removeAttr(attr) {
+      hasClass: className => Boolean(uiState.classes[className]),
+      setAttr: (attr, value) => uiState.attrs = _objectSpread2(_objectSpread2({}, uiState.attrs), {}, {
+        [attr]: value
+      }),
+      removeAttr: attr => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$attrs = uiState.attrs,
-            removed = _uiState$attrs[attr],
-            rest = _objectWithoutProperties(_uiState$attrs, [attr].map(_toPropertyKey));
+        const _uiState$attrs = uiState.attrs,
+              rest = _objectWithoutProperties(_uiState$attrs, [attr].map(_toPropertyKey));
 
         uiState.attrs = rest;
       },
-      setContent: function setContent(content) {
+      setContent: content => {
         uiState.myHelptext = content;
       }
     };
-    watch(function () {
-      return props.helptextPersistent;
-    }, function (nv) {
-      return uiState.foundation.setPersistent(nv);
-    });
-    watch(function () {
-      return props.helptextValidation;
-    }, function (nv) {
-      return uiState.foundation.setValidation(nv);
-    });
-    watch(function () {
-      return props.helptext;
-    }, function (nv) {
-      return uiState.myHelptext = nv;
-    });
-    onMounted(function () {
+    watch(() => props.helptextPersistent, nv => uiState.foundation.setPersistent(nv));
+    watch(() => props.helptextValidation, nv => uiState.foundation.setValidation(nv));
+    watch(() => props.helptext, nv => uiState.myHelptext = nv);
+    onMounted(() => {
       uiState.foundation = new MDCSelectHelperTextFoundation(adapter);
       uiState.foundation.init();
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       uiState.foundation.destroy();
     });
     return _objectSpread2({}, toRefs(uiState));
   }
+
 };
 
 function render$t(_ctx, _cache, $props, $setup, $data, $options) {
@@ -6255,16 +5744,20 @@ function render$t(_ctx, _cache, $props, $setup, $data, $options) {
 script$t.render = render$t;
 script$t.__file = "packages/select/select-helper-text.vue";
 
-var strings$8 = MDCSelectIconFoundation.strings;
+const {
+  strings: strings$8
+} = MDCSelectIconFoundation;
 var script$u = {
   name: 'select-icon',
   props: {
     icon: String
   },
-  setup: function setup(props, _ref) {
-    var emit = _ref.emit,
-        attrs = _ref.attrs;
-    var uiState = reactive({
+
+  setup(props, {
+    emit,
+    attrs
+  }) {
+    const uiState = reactive({
       classes: {
         'material-icons': true,
         'mdc-select__icon': true
@@ -6275,56 +5768,53 @@ var script$u = {
       rootListeners: {},
       foundation: {}
     });
-    var listeners = computed(function () {
+    const listeners = computed(() => {
       return _objectSpread2(_objectSpread2({}, attrs), uiState.rootListeners);
     });
-    var adapter = {
-      getAttr: function getAttr(attr) {
-        return uiState.rootAttrs[attr];
-      },
-      setAttr: function setAttr(attr, value) {
-        return uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, _defineProperty({}, attr, value));
-      },
-      removeAttr: function removeAttr(attr) {
+    const adapter = {
+      getAttr: attr => uiState.rootAttrs[attr],
+      setAttr: (attr, value) => uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, {
+        [attr]: value
+      }),
+      removeAttr: attr => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$rootAttrs = uiState.rootAttrs,
-            removed = _uiState$rootAttrs[attr],
-            rest = _objectWithoutProperties(_uiState$rootAttrs, [attr].map(_toPropertyKey));
+        const _uiState$rootAttrs = uiState.rootAttrs,
+              rest = _objectWithoutProperties(_uiState$rootAttrs, [attr].map(_toPropertyKey));
 
         uiState.rootAttrs = rest;
       },
-      setContent: function setContent(content) {
+      setContent: content => {
         uiState.root.textContent = content;
       },
-      registerInteractionHandler: function registerInteractionHandler(evtType, handler) {
-        return uiState.rootListeners = _objectSpread2(_objectSpread2({}, uiState.rootListeners), {}, _defineProperty({}, evtType.toLowerCase(), handler));
-      },
-      deregisterInteractionHandler: function deregisterInteractionHandler(evtType, handler) {
+      registerInteractionHandler: (evtType, handler) => uiState.rootListeners = _objectSpread2(_objectSpread2({}, uiState.rootListeners), {}, {
+        [evtType.toLowerCase()]: handler
+      }),
+      deregisterInteractionHandler: (evtType, handler) => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$rootListener = uiState.rootListeners,
-            removed = _uiState$rootListener[evtType],
-            rest = _objectWithoutProperties(_uiState$rootListener, [evtType].map(_toPropertyKey));
+        const _uiState$rootListener = uiState.rootListeners,
+              rest = _objectWithoutProperties(_uiState$rootListener, [evtType].map(_toPropertyKey));
 
         uiState.rootListeners = rest;
       },
-      notifyIconAction: function notifyIconAction() {
+      notifyIconAction: () => {
         emit('click');
         emitCustomEvent(uiState.root, strings$8.ICON_EVENT, {}, true
         /* shouldBubble  */
         );
       }
     };
-    onMounted(function () {
+    onMounted(() => {
       uiState.foundation = new MDCSelectIconFoundation(adapter);
       uiState.foundation.init();
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       uiState.foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      listeners: listeners
+      listeners
     });
   }
+
 };
 
 function render$u(_ctx, _cache, $props, $setup, $data, $options) {
@@ -6338,8 +5828,10 @@ function render$u(_ctx, _cache, $props, $setup, $data, $options) {
 script$u.render = render$u;
 script$u.__file = "packages/select/select-icon.vue";
 
-var strings$9 = MDCSelectFoundation.strings;
-var uid_ = 0;
+const {
+  strings: strings$9
+} = MDCSelectFoundation;
+let uid_ = 0;
 var script$v = {
   name: 'mcw-select',
   inheritAttrs: false,
@@ -6355,14 +5847,14 @@ var script$v = {
     required: Boolean,
     menuFullwidth: {
       type: Boolean,
-      default: function _default() {
-        return true;
-      }
+      default: () => true
     }
   },
-  setup: function setup(props, _ref) {
-    var emit = _ref.emit;
-    var uiState = reactive({
+
+  setup(props, {
+    emit
+  }) {
+    const uiState = reactive({
       styles: {},
       classes: {},
       selectedTextContent: '',
@@ -6381,26 +5873,26 @@ var script$v = {
       menu: null,
       anchorEl: null
     });
-    var rippleClasses;
-    var rippleStyles;
+    let rippleClasses;
+    let rippleStyles;
 
     if (props.outlined) {
-      var _useRipplePlugin = useRipplePlugin$1(toRef(uiState, 'anchorEl'), {
-        registerInteractionHandler: function registerInteractionHandler(evtType, handler) {
+      const {
+        classes,
+        styles
+      } = useRipplePlugin$1(toRef(uiState, 'anchorEl'), {
+        registerInteractionHandler: (evtType, handler) => {
           uiState.anchorEl.addEventListener(evtType, handler);
         },
-        deregisterInteractionHandler: function deregisterInteractionHandler(evtType, handler) {
+        deregisterInteractionHandler: (evtType, handler) => {
           uiState.anchorEl.removeEventListener(evtType, handler);
         }
-      }),
-          classes = _useRipplePlugin.classes,
-          styles = _useRipplePlugin.styles;
-
+      });
       rippleClasses = classes;
       rippleStyles = styles;
     }
 
-    var rootClasses = computed(function () {
+    const rootClasses = computed(() => {
       return _objectSpread2({
         'mdc-select': 1,
         'mdc-select--required': props.required,
@@ -6411,59 +5903,44 @@ var script$v = {
         'mdc-select--no-label': !props.label
       }, uiState.classes);
     });
-    var menuItems = computed(function () {
+    const menuItems = computed(() => {
       var _uiState$menu;
 
       return (_uiState$menu = uiState.menu) === null || _uiState$menu === void 0 ? void 0 : _uiState$menu.items;
     });
-    var foundation;
+    let foundation;
 
-    var handleFocus = function handleFocus() {
-      return foundation.handleFocus();
-    };
+    const handleFocus = () => foundation.handleFocus();
 
-    var handleBlur = function handleBlur() {
-      return foundation.handleBlur();
-    };
+    const handleBlur = () => foundation.handleBlur();
 
-    var handleClick = function handleClick(evt) {
+    const handleClick = evt => {
       uiState.anchorEl.focus();
       handleFocus();
       foundation.handleClick(getNormalizedXCoordinate(evt));
     };
 
-    var handleKeydown = function handleKeydown(evt) {
-      return foundation.handleKeydown(evt);
-    };
+    const handleKeydown = evt => foundation.handleKeydown(evt);
 
-    var handleChange = function handleChange(isOpen) {
-      return foundation["handleMenu".concat(isOpen ? 'Opened' : 'Closed')]();
-    };
+    const handleChange = isOpen => foundation["handleMenu".concat(isOpen ? 'Opened' : 'Closed')]();
 
-    var layout = function layout() {
-      return foundation.layout();
-    };
+    const layout = () => foundation.layout();
 
-    var handleMenuOpened = function handleMenuOpened() {
-      return foundation.handleMenuOpened();
-    };
+    const handleMenuOpened = () => foundation.handleMenuOpened();
 
-    var handleMenuClosed = function handleMenuClosed() {
-      return foundation.handleMenuClosed();
-    };
+    const handleMenuClosed = () => foundation.handleMenuClosed();
 
-    var handleMenuItemAction = function handleMenuItemAction(_ref2) {
-      var index = _ref2.index;
-      return foundation.handleMenuItemAction(index);
-    };
+    const handleMenuItemAction = ({
+      index
+    }) => foundation.handleMenuItemAction(index);
 
-    var layoutOptions = function layoutOptions() {
+    const layoutOptions = () => {
       foundation.layoutOptions();
       uiState.menu.layout();
     };
 
-    var selectedTextAttrs = computed(function () {
-      var attrs = _objectSpread2({}, uiState.selTextAttrs);
+    const selectedTextAttrs = computed(() => {
+      const attrs = _objectSpread2({}, uiState.selTextAttrs);
 
       if (props.helptext) {
         attrs['aria-controls'] = uiState.helpId;
@@ -6472,7 +5949,7 @@ var script$v = {
 
       return attrs;
     });
-    var adapter = {
+    const adapter = {
       // select methods
       // getSelectedMenuItem: () => {
       //   const x = menuItems.value.find(item => {
@@ -6483,193 +5960,148 @@ var script$v = {
       //   });
       //   return x;
       // },
-      getMenuItemAttr: function getMenuItemAttr(menuItem, attr) {
-        return menuItem.getAttribute(attr);
-      },
-      setSelectedText: function setSelectedText(text) {
+      getMenuItemAttr: (menuItem, attr) => menuItem.getAttribute(attr),
+      setSelectedText: text => {
         uiState.selectedTextContent = text;
       },
-      isSelectAnchorFocused: function isSelectAnchorFocused() {
-        return document.activeElement === uiState.anchorEl;
-      },
-      getSelectAnchorAttr: function getSelectAnchorAttr(attr) {
-        return uiState.selectAnchorAttrs[attr];
-      },
-      setSelectAnchorAttr: function setSelectAnchorAttr(attr, value) {
-        return uiState.selectAnchorAttrs = _objectSpread2(_objectSpread2({}, uiState.selectAnchorAttrs), {}, _defineProperty({}, attr, value));
-      },
-      removeSelectAnchorAttr: function removeSelectAnchorAttr(attr) {
+      isSelectAnchorFocused: () => document.activeElement === uiState.anchorEl,
+      getSelectAnchorAttr: attr => uiState.selectAnchorAttrs[attr],
+      setSelectAnchorAttr: (attr, value) => uiState.selectAnchorAttrs = _objectSpread2(_objectSpread2({}, uiState.selectAnchorAttrs), {}, {
+        [attr]: value
+      }),
+      removeSelectAnchorAttr: attr => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$selectAnchor = uiState.selectAnchorAttrs,
-            removed = _uiState$selectAnchor[attr],
-            rest = _objectWithoutProperties(_uiState$selectAnchor, [attr].map(_toPropertyKey));
+        const _uiState$selectAnchor = uiState.selectAnchorAttrs,
+              rest = _objectWithoutProperties(_uiState$selectAnchor, [attr].map(_toPropertyKey));
 
         uiState.selectAnchorAttrs = rest;
       },
-      addMenuClass: function addMenuClass(className) {
-        return uiState.menuClasses = _objectSpread2(_objectSpread2({}, uiState.menuClasses), {}, _defineProperty({}, className, true));
-      },
-      removeMenuClass: function removeMenuClass(className) {
+      addMenuClass: className => uiState.menuClasses = _objectSpread2(_objectSpread2({}, uiState.menuClasses), {}, {
+        [className]: true
+      }),
+      removeMenuClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$menuClasses = uiState.menuClasses,
-            removed = _uiState$menuClasses[className],
-            rest = _objectWithoutProperties(_uiState$menuClasses, [className].map(_toPropertyKey));
+        const _uiState$menuClasses = uiState.menuClasses,
+              rest = _objectWithoutProperties(_uiState$menuClasses, [className].map(_toPropertyKey));
 
         uiState.menuClasses = rest;
       },
-      openMenu: function openMenu() {
-        return uiState.menu.surfaceOpen = true;
-      },
-      closeMenu: function closeMenu() {
-        return uiState.menu.surfaceOpen = false;
-      },
-      getAnchorElement: function getAnchorElement() {
-        return uiState.anchorEl;
-      },
-      setMenuAnchorElement: function setMenuAnchorElement(anchorEl) {
-        return uiState.menu.setAnchorElement(anchorEl);
-      },
-      setMenuAnchorCorner: function setMenuAnchorCorner(anchorCorner) {
-        return uiState.menu.setAnchorCorner(anchorCorner);
-      },
-      setMenuWrapFocus: function setMenuWrapFocus(wrapFocus) {
-        return uiState.menu.wrapFocus = wrapFocus;
-      },
-      getSelectedIndex: function getSelectedIndex() {
+      openMenu: () => uiState.menu.surfaceOpen = true,
+      closeMenu: () => uiState.menu.surfaceOpen = false,
+      getAnchorElement: () => uiState.anchorEl,
+      setMenuAnchorElement: anchorEl => uiState.menu.setAnchorElement(anchorEl),
+      setMenuAnchorCorner: anchorCorner => uiState.menu.setAnchorCorner(anchorCorner),
+      setMenuWrapFocus: wrapFocus => uiState.menu.wrapFocus = wrapFocus,
+      getSelectedIndex: () => {
         var _uiState$menu$getSele, _uiState$menu2;
 
-        var index = (_uiState$menu$getSele = (_uiState$menu2 = uiState.menu) === null || _uiState$menu2 === void 0 ? void 0 : _uiState$menu2.getSelectedIndex()) !== null && _uiState$menu$getSele !== void 0 ? _uiState$menu$getSele : -1;
+        const index = (_uiState$menu$getSele = (_uiState$menu2 = uiState.menu) === null || _uiState$menu2 === void 0 ? void 0 : _uiState$menu2.getSelectedIndex()) !== null && _uiState$menu$getSele !== void 0 ? _uiState$menu$getSele : -1;
         return index instanceof Array ? index[0] : index;
       },
-      setSelectedIndex: function setSelectedIndex(index) {
+      setSelectedIndex: index => {
         uiState.menu.setSelectedIndex(index);
       },
-      focusMenuItemAtIndex: function focusMenuItemAtIndex(index) {
-        return menuItems.value[index].focus();
-      },
-      getMenuItemCount: function getMenuItemCount() {
-        return menuItems.value.length;
-      },
-      getMenuItemValues: function getMenuItemValues() {
-        return menuItems.value.map(function (el) {
-          return el.getAttribute(strings$9.VALUE_ATTR) || '';
-        });
-      },
-      getMenuItemTextAtIndex: function getMenuItemTextAtIndex(index) {
+      focusMenuItemAtIndex: index => menuItems.value[index].focus(),
+      getMenuItemCount: () => menuItems.value.length,
+      getMenuItemValues: () => menuItems.value.map(el => el.getAttribute(strings$9.VALUE_ATTR) || ''),
+      getMenuItemTextAtIndex: index => {
         return menuItems.value[index].textContent;
       },
-      isTypeaheadInProgress: function isTypeaheadInProgress() {
-        return uiState.menu.typeaheadInProgress();
-      },
-      typeaheadMatchItem: function typeaheadMatchItem(nextChar, startingIndex) {
+      isTypeaheadInProgress: () => uiState.menu.typeaheadInProgress(),
+      typeaheadMatchItem: (nextChar, startingIndex) => {
         var _uiState$menu3;
 
         return (_uiState$menu3 = uiState.menu) === null || _uiState$menu3 === void 0 ? void 0 : _uiState$menu3.typeaheadMatchItem(nextChar, startingIndex);
       },
       // common methods
-      addClass: function addClass(className) {
-        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
-      },
-      removeClass: function removeClass(className) {
+      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        [className]: true
+      }),
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes = uiState.classes,
-            removed = _uiState$classes[className],
-            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+        const _uiState$classes = uiState.classes,
+              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
         uiState.classes = rest;
       },
-      hasClass: function hasClass(className) {
-        return Boolean(rootClasses.value[className]);
-      },
-      setRippleCenter: function setRippleCenter(normalizedX) {
+      hasClass: className => Boolean(rootClasses.value[className]),
+      setRippleCenter: normalizedX => {
         var _uiState$lineRippleEl;
 
         return (_uiState$lineRippleEl = uiState.lineRippleEl) === null || _uiState$lineRippleEl === void 0 ? void 0 : _uiState$lineRippleEl.setRippleCenter(normalizedX);
       },
-      activateBottomLine: function activateBottomLine() {
+      activateBottomLine: () => {
         var _uiState$lineRippleEl2;
 
         return (_uiState$lineRippleEl2 = uiState.lineRippleEl) === null || _uiState$lineRippleEl2 === void 0 ? void 0 : _uiState$lineRippleEl2.activate();
       },
-      deactivateBottomLine: function deactivateBottomLine() {
+      deactivateBottomLine: () => {
         var _uiState$lineRippleEl3;
 
         return (_uiState$lineRippleEl3 = uiState.lineRippleEl) === null || _uiState$lineRippleEl3 === void 0 ? void 0 : _uiState$lineRippleEl3.deactivate();
       },
-      notifyChange: function notifyChange(value) {
-        var index = foundation.getSelectedIndex();
+      notifyChange: value => {
+        const index = foundation.getSelectedIndex();
         emitCustomEvent(uiState.root, strings$9.CHANGE_EVENT, {
-          value: value,
-          index: index
+          value,
+          index
         }, true
         /* shouldBubble  */
         );
         value != props.modelValue && emit('update:modelValue', value);
       },
       // outline methods
-      hasOutline: function hasOutline() {
-        return props.outlined;
-      },
-      notchOutline: function notchOutline(labelWidth) {
+      hasOutline: () => props.outlined,
+      notchOutline: labelWidth => {
         var _uiState$outlineEl;
 
         return (_uiState$outlineEl = uiState.outlineEl) === null || _uiState$outlineEl === void 0 ? void 0 : _uiState$outlineEl.notch(labelWidth);
       },
-      closeOutline: function closeOutline() {
+      closeOutline: () => {
         var _uiState$outlineEl2;
 
         return (_uiState$outlineEl2 = uiState.outlineEl) === null || _uiState$outlineEl2 === void 0 ? void 0 : _uiState$outlineEl2.closeNotch();
       },
       // label methods
-      hasLabel: function hasLabel() {
-        return !!props.label;
-      },
-      floatLabel: function floatLabel(shouldFloat) {
-        var _ref3;
+      hasLabel: () => !!props.label,
+      floatLabel: shouldFloat => {
+        var _ref;
 
-        return (_ref3 = uiState.labelEl || uiState.outlineEl) === null || _ref3 === void 0 ? void 0 : _ref3.float(shouldFloat);
+        return (_ref = uiState.labelEl || uiState.outlineEl) === null || _ref === void 0 ? void 0 : _ref.float(shouldFloat);
       },
-      getLabelWidth: function getLabelWidth() {
+      getLabelWidth: () => {
         var _uiState$labelEl;
 
         return ((_uiState$labelEl = uiState.labelEl) === null || _uiState$labelEl === void 0 ? void 0 : _uiState$labelEl.getWidth()) || 0;
       },
-      setLabelRequired: function setLabelRequired(isRequired) {
+      setLabelRequired: isRequired => {
         var _uiState$labelEl2;
 
         return (_uiState$labelEl2 = uiState.labelEl) === null || _uiState$labelEl2 === void 0 ? void 0 : _uiState$labelEl2.setRequired(isRequired);
       }
     };
 
-    var setFixedPosition = function setFixedPosition(isFixed) {
-      return uiState.menu.setFixedPosition(isFixed);
-    };
+    const setFixedPosition = isFixed => uiState.menu.setFixedPosition(isFixed);
 
-    var refreshIndex = function refreshIndex() {
-      var items = menuItems.value.map(function (el) {
-        return el.getAttribute(strings$9.VALUE_ATTR) || '';
-      });
-      var idx = items.findIndex(function (value) {
+    const refreshIndex = () => {
+      const items = menuItems.value.map(el => el.getAttribute(strings$9.VALUE_ATTR) || '');
+      const idx = items.findIndex(value => {
         return props.modelValue === value;
       });
       uiState.menu.setSelectedIndex(idx);
       return idx;
     };
 
-    watch(function () {
-      return props.disabled;
-    }, function (nv) {
+    watch(() => props.disabled, nv => {
       var _foundation;
 
       return (_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.updateDisabledStyle(nv);
     });
-    watch(function () {
-      return props.modelValue;
-    }, function () {
-      var idx = refreshIndex();
+    watch(() => props.modelValue, () => {
+      const idx = refreshIndex();
       foundation.setSelectedIndex(idx);
     });
-    onMounted(function () {
+    onMounted(() => {
       var _uiState$helperTextEl, _uiState$leadingIconE;
 
       // menu setup
@@ -6689,28 +6121,29 @@ var script$v = {
       //   subtree: true,
       // });
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      rootClasses: rootClasses,
-      handleBlur: handleBlur,
-      handleFocus: handleFocus,
-      handleClick: handleClick,
-      handleChange: handleChange,
-      handleKeydown: handleKeydown,
-      layout: layout,
-      layoutOptions: layoutOptions,
-      rippleClasses: rippleClasses,
-      rippleStyles: rippleStyles,
-      selectedTextAttrs: selectedTextAttrs,
-      handleMenuItemAction: handleMenuItemAction,
-      refreshIndex: refreshIndex,
-      setFixedPosition: setFixedPosition,
-      handleMenuOpened: handleMenuOpened,
-      handleMenuClosed: handleMenuClosed
+      rootClasses,
+      handleBlur,
+      handleFocus,
+      handleClick,
+      handleChange,
+      handleKeydown,
+      layout,
+      layoutOptions,
+      rippleClasses,
+      rippleStyles,
+      selectedTextAttrs,
+      handleMenuItemAction,
+      refreshIndex,
+      setFixedPosition,
+      handleMenuOpened,
+      handleMenuClosed
     });
   },
+
   components: {
     SelectHelperText: script$t,
     SelectIcon: script$u
@@ -6720,8 +6153,8 @@ var script$v = {
 // ===
 
 function getNormalizedXCoordinate(evt) {
-  var targetClientRect = evt.target.getBoundingClientRect();
-  var xCoordinate = evt.clientX;
+  const targetClientRect = evt.target.getBoundingClientRect();
+  const xCoordinate = evt.clientX;
   return xCoordinate - targetClientRect.left;
 }
 
@@ -6874,9 +6307,11 @@ var script$w = {
       default: false
     }
   },
-  setup: function setup(props, _ref) {
-    var emit = _ref.emit;
-    var uiState = reactive({
+
+  setup(props, {
+    emit
+  }) {
+    const uiState = reactive({
       skipInitialUIUpdate: false,
       dir: null,
       marks: [],
@@ -6904,219 +6339,167 @@ var script$w = {
       endThumb: null,
       trackActive: null
     });
-    var foundation;
+    let foundation;
 
-    var valueToAriaValueTextFn = function valueToAriaValueTextFn() {
-      return null;
-    };
+    let valueToAriaValueTextFn = () => null;
 
-    var setValueToAriaValueTextFn = function setValueToAriaValueTextFn(mapFn) {
+    const setValueToAriaValueTextFn = mapFn => {
       valueToAriaValueTextFn = mapFn;
     };
 
-    var getThumbEl = function getThumbEl(thumb) {
+    const getThumbEl = thumb => {
       return thumb === Thumb.END ? uiState.thumbs[uiState.thumbs.length - 1] : uiState.thumbs[0];
     };
 
-    var getThumbName = function getThumbName(thumb, suffix) {
-      var thumbName = thumb == Thumb.END ? 'endThumb' : 'startThumb';
+    const getThumbName = (thumb, suffix) => {
+      const thumbName = thumb == Thumb.END ? 'endThumb' : 'startThumb';
       return "".concat(thumbName).concat(suffix);
     };
 
-    var setInputRef = function setInputRef(el) {
-      return uiState.inputs.push(el);
-    };
+    const setInputRef = el => uiState.inputs.push(el);
 
-    var setThumbRef = function setThumbRef(el) {
-      return uiState.thumbs.push(el);
-    };
+    const setThumbRef = el => uiState.thumbs.push(el);
 
-    var getInput = function getInput(thumb) {
+    const getInput = thumb => {
       return thumb === Thumb.END ? uiState.inputs[uiState.inputs.length - 1] : uiState.inputs[0];
     };
 
-    var adapter = {
-      hasClass: function hasClass(className) {
-        return uiState.root.classList.contains(className);
-      },
-      addClass: function addClass(className) {
-        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
-      },
-      removeClass: function removeClass(className) {
+    const adapter = {
+      hasClass: className => uiState.root.classList.contains(className),
+      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        [className]: true
+      }),
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes = uiState.classes,
-            removed = _uiState$classes[className],
-            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+        const _uiState$classes = uiState.classes,
+              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
         uiState.classes = rest;
       },
-      addThumbClass: function addThumbClass(className, thumb) {
-        var thumbName = getThumbName(thumb, 'Classes');
-        uiState[thumbName] = _objectSpread2(_objectSpread2({}, uiState[thumbName]), {}, _defineProperty({}, className, true));
+      addThumbClass: (className, thumb) => {
+        const thumbName = getThumbName(thumb, 'Classes');
+        uiState[thumbName] = _objectSpread2(_objectSpread2({}, uiState[thumbName]), {}, {
+          [className]: true
+        });
       },
-      removeThumbClass: function removeThumbClass(className, thumb) {
-        var thumbName = getThumbName(thumb, 'Classes'); // eslint-disable-next-line no-unused-vars
+      removeThumbClass: (className, thumb) => {
+        const thumbName = getThumbName(thumb, 'Classes'); // eslint-disable-next-line no-unused-vars
 
-        var _uiState$thumbName = uiState[thumbName],
-            removed = _uiState$thumbName[className],
-            rest = _objectWithoutProperties(_uiState$thumbName, [className].map(_toPropertyKey));
+        const _uiState$thumbName = uiState[thumbName],
+              rest = _objectWithoutProperties(_uiState$thumbName, [className].map(_toPropertyKey));
 
         uiState[thumbName] = rest;
       },
-      getAttribute: function getAttribute(name) {
-        return uiState.root.getAttribute(name);
-      },
-      getInputValue: function getInputValue(thumb) {
-        return getInput(thumb).value;
-      },
-      setInputValue: function setInputValue(value, thumb) {
+      getAttribute: name => uiState.root.getAttribute(name),
+      getInputValue: thumb => getInput(thumb).value,
+      setInputValue: (value, thumb) => {
         getInput(thumb).value = value;
       },
-      getInputAttribute: function getInputAttribute(attribute, thumb) {
+      getInputAttribute: (attribute, thumb) => {
         if (attribute == 'value') {
           return adapter.getInputValue(thumb);
         }
 
         return getInput(thumb).getAttribute(attribute);
       },
-      setInputAttribute: function setInputAttribute(attribute, value, thumb) {
+      setInputAttribute: (attribute, value, thumb) => {
         getInput(thumb).setAttribute(attribute, value);
       },
-      removeInputAttribute: function removeInputAttribute(attribute, thumb) {
+      removeInputAttribute: (attribute, thumb) => {
         getInput(thumb).removeAttribute(attribute);
       },
-      focusInput: function focusInput(thumb) {
+      focusInput: thumb => {
         getInput(thumb).focus();
       },
-      isInputFocused: function isInputFocused(thumb) {
-        return getInput(thumb) === document.activeElement;
-      },
-      getThumbAttribute: function getThumbAttribute(attribute, thumb) {
-        var thumbName = getThumbName(thumb, 'Attrs');
+      isInputFocused: thumb => getInput(thumb) === document.activeElement,
+      getThumbAttribute: (attribute, thumb) => {
+        const thumbName = getThumbName(thumb, 'Attrs');
         return uiState[thumbName][attribute];
       },
-      setThumbAttribute: function setThumbAttribute(attribute, value, thumb) {
-        var thumbName = getThumbName(thumb, 'Attrs');
-        uiState[thumbName] = _objectSpread2(_objectSpread2({}, uiState[thumbName]), {}, _defineProperty({}, attribute, value));
+      setThumbAttribute: (attribute, value, thumb) => {
+        const thumbName = getThumbName(thumb, 'Attrs');
+        uiState[thumbName] = _objectSpread2(_objectSpread2({}, uiState[thumbName]), {}, {
+          [attribute]: value
+        });
       },
-      isThumbFocused: function isThumbFocused(thumb) {
+      isThumbFocused: thumb => {
         return getThumbEl(thumb) === document.activeElement;
       },
-      focusThumb: function focusThumb(thumb) {
-        return getThumbEl(thumb).focus();
-      },
-      getThumbKnobWidth: function getThumbKnobWidth(thumb) {
+      focusThumb: thumb => getThumbEl(thumb).focus(),
+      getThumbKnobWidth: thumb => {
         var _getThumbEl$querySele;
 
-        return (_getThumbEl$querySele = getThumbEl(thumb).querySelector(".".concat(cssClasses$8.THUMB_KNOB))) === null || _getThumbEl$querySele === void 0 ? void 0 : _getThumbEl$querySele.getBoundingClientRect().width;
+        return (_getThumbEl$querySele = getThumbEl(thumb).querySelector(".".concat(cssClasses$7.THUMB_KNOB))) === null || _getThumbEl$querySele === void 0 ? void 0 : _getThumbEl$querySele.getBoundingClientRect().width;
       },
-      getThumbBoundingClientRect: function getThumbBoundingClientRect(thumb) {
-        return getThumbEl(thumb).getBoundingClientRect();
-      },
-      getBoundingClientRect: function getBoundingClientRect() {
-        return uiState.root.getBoundingClientRect();
-      },
-      isRTL: function isRTL() {
-        return getComputedStyle(uiState.root).direction === 'rtl';
-      },
-      setThumbStyleProperty: function setThumbStyleProperty(propertyName, value, thumb) {
+      getThumbBoundingClientRect: thumb => getThumbEl(thumb).getBoundingClientRect(),
+      getBoundingClientRect: () => uiState.root.getBoundingClientRect(),
+      isRTL: () => getComputedStyle(uiState.root).direction === 'rtl',
+      setThumbStyleProperty: (propertyName, value, thumb) => {
         getThumbEl(thumb).style.setProperty(propertyName, value);
       },
-      removeThumbStyleProperty: function removeThumbStyleProperty(propertyName, thumb) {
-        return getThumbEl(thumb).style.removeProperty(propertyName);
-      },
-      setTrackActiveStyleProperty: function setTrackActiveStyleProperty(propertyName, value) {
-        return uiState.trackActive.style.setProperty(propertyName, value);
-      },
-      removeTrackActiveStyleProperty: function removeTrackActiveStyleProperty(propertyName) {
+      removeThumbStyleProperty: (propertyName, thumb) => getThumbEl(thumb).style.removeProperty(propertyName),
+      setTrackActiveStyleProperty: (propertyName, value) => uiState.trackActive.style.setProperty(propertyName, value),
+      removeTrackActiveStyleProperty: propertyName => {
         uiState.trackActive.style.removeProperty(propertyName);
       },
-      setValueIndicatorText: function setValueIndicatorText(value, thumb) {
-        var thumbName = thumb == Thumb.END ? 'endValueText' : 'startValueText';
+      setValueIndicatorText: (value, thumb) => {
+        const thumbName = thumb == Thumb.END ? 'endValueText' : 'startValueText';
         uiState[thumbName] = String(value);
       },
-      getValueToAriaValueTextFn: function getValueToAriaValueTextFn() {
-        return valueToAriaValueTextFn;
+      getValueToAriaValueTextFn: () => valueToAriaValueTextFn,
+      updateTickMarks: tickMarks => {
+        uiState.marks = tickMarks.map(mark => mark == 0 ? 'mdc-slider__tick-mark--active' : 'mdc-slider__tick-mark--inactive');
       },
-      updateTickMarks: function updateTickMarks(tickMarks) {
-        uiState.marks = tickMarks.map(function (mark) {
-          return mark == 0 ? 'mdc-slider__tick-mark--active' : 'mdc-slider__tick-mark--inactive';
-        });
-      },
-      setPointerCapture: function setPointerCapture(pointerId) {
-        return uiState.root.setPointerCapture(pointerId);
-      },
-      emitChangeEvent: function emitChangeEvent(value, thumb) {
+      setPointerCapture: pointerId => uiState.root.setPointerCapture(pointerId),
+      emitChangeEvent: (value, thumb) => {
         emitCustomEvent(uiState.root, events.CHANGE, {
-          value: value,
-          thumb: thumb
+          value,
+          thumb
         });
-        var eventName = thumb == Thumb.END ? 'update:modelValue' : 'update:start';
+        const eventName = thumb == Thumb.END ? 'update:modelValue' : 'update:start';
         emit(eventName, value);
       },
-      emitInputEvent: function emitInputEvent(value, thumb) {
+      emitInputEvent: (value, thumb) => {
         emitCustomEvent(uiState.root, events.INPUT, {
-          value: value,
-          thumb: thumb
+          value,
+          thumb
         });
       },
-      emitDragStartEvent: function emitDragStartEvent() {// Not yet implemented. See issue:
+      emitDragStartEvent: () => {// Not yet implemented. See issue:
         // https://github.com/material-components/material-components-web/issues/6448
       },
-      emitDragEndEvent: function emitDragEndEvent() {// Not yet implemented. See issue:
+      emitDragEndEvent: () => {// Not yet implemented. See issue:
         // https://github.com/material-components/material-components-web/issues/6448
       },
-      registerEventHandler: function registerEventHandler(evtType, handler) {
-        return uiState.root.addEventListener(evtType, handler);
-      },
-      deregisterEventHandler: function deregisterEventHandler(evtType, handler) {
-        return uiState.root.removeEventListener(evtType, handler);
-      },
-      registerThumbEventHandler: function registerThumbEventHandler(thumb, evtType, handler) {
-        return getThumbEl(thumb).addEventListener(evtType, handler);
-      },
-      deregisterThumbEventHandler: function deregisterThumbEventHandler(thumb, evtType, handler) {
-        return getThumbEl(thumb).removeEventListener(evtType, handler);
-      },
-      registerInputEventHandler: function registerInputEventHandler(thumb, evtType, handler) {
+      registerEventHandler: (evtType, handler) => uiState.root.addEventListener(evtType, handler),
+      deregisterEventHandler: (evtType, handler) => uiState.root.removeEventListener(evtType, handler),
+      registerThumbEventHandler: (thumb, evtType, handler) => getThumbEl(thumb).addEventListener(evtType, handler),
+      deregisterThumbEventHandler: (thumb, evtType, handler) => getThumbEl(thumb).removeEventListener(evtType, handler),
+      registerInputEventHandler: (thumb, evtType, handler) => {
         getInput(thumb).addEventListener(evtType, handler);
       },
-      deregisterInputEventHandler: function deregisterInputEventHandler(thumb, evtType, handler) {
+      deregisterInputEventHandler: (thumb, evtType, handler) => {
         getInput(thumb).removeEventListener(evtType, handler);
       },
-      registerBodyEventHandler: function registerBodyEventHandler(evtType, handler) {
-        return document.body.addEventListener(evtType, handler);
-      },
-      deregisterBodyEventHandler: function deregisterBodyEventHandler(evtType, handler) {
-        return document.body.removeEventListener(evtType, handler);
-      },
-      registerWindowEventHandler: function registerWindowEventHandler(evtType, handler) {
-        return window.addEventListener(evtType, handler);
-      },
-      deregisterWindowEventHandler: function deregisterWindowEventHandler(evtType, handler) {
-        return window.removeEventListener(evtType, handler);
-      }
+      registerBodyEventHandler: (evtType, handler) => document.body.addEventListener(evtType, handler),
+      deregisterBodyEventHandler: (evtType, handler) => document.body.removeEventListener(evtType, handler),
+      registerWindowEventHandler: (evtType, handler) => window.addEventListener(evtType, handler),
+      deregisterWindowEventHandler: (evtType, handler) => window.removeEventListener(evtType, handler)
     };
-    watch(function () {
-      return props.modelValue;
-    }, function (nv) {
+    watch(() => props.modelValue, nv => {
       if (foundation.getValue() !== Number(nv)) {
         foundation.setValue(nv);
       }
     });
-    watch(function () {
-      return props.start;
-    }, function (nv) {
+    watch(() => props.start, nv => {
       if (foundation.getValueStart() !== Number(nv)) {
         foundation.setValueStart(nv);
       }
     });
-    watch(function () {
-      return props.disabled;
-    }, function (nv) {
+    watch(() => props.disabled, nv => {
       foundation.setDisabled(nv);
     });
-    onMounted(function () {
+    onMounted(() => {
       uiState.dir = getComputedStyle(uiState.root).direction;
 
       if (props.range) {
@@ -7137,15 +6520,16 @@ var script$w = {
       });
       foundation.setDisabled(props.disabled);
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      setValueToAriaValueTextFn: setValueToAriaValueTextFn,
-      setInputRef: setInputRef,
-      setThumbRef: setThumbRef
+      setValueToAriaValueTextFn,
+      setInputRef,
+      setThumbRef
     });
   }
+
 };
 
 const _hoisted_1$k = { class: "mdc-slider__track" };
@@ -7262,17 +6646,19 @@ var slider = BasePlugin({
   mcwSlider: script$w
 });
 
-var noop = function noop() {};
+const noop = () => {};
 
 var script$x = {
   name: 'mcw-snackbar-queue',
   props: {
     snack: Object
   },
-  setup: function setup(props, _ref) {
-    var emit = _ref.emit,
-        attrs = _ref.attrs;
-    var uiState = reactive({
+
+  setup(props, {
+    emit,
+    attrs
+  }) {
+    const uiState = reactive({
       open: false,
       queue: [],
       snack: {
@@ -7285,32 +6671,28 @@ var script$x = {
         stacked: false
       }
     });
-    var actionHandler_;
+    let actionHandler_;
 
-    var handleSnack = function handleSnack(_ref2) {
-      var _ref2$timeoutMs = _ref2.timeoutMs,
-          timeoutMs = _ref2$timeoutMs === void 0 ? 5000 : _ref2$timeoutMs,
-          closeOnEscape = _ref2.closeOnEscape,
-          _ref2$message = _ref2.message,
-          message = _ref2$message === void 0 ? '' : _ref2$message,
-          _ref2$actionText = _ref2.actionText,
-          actionText = _ref2$actionText === void 0 ? '' : _ref2$actionText,
-          _ref2$dismissAction = _ref2.dismissAction,
-          dismissAction = _ref2$dismissAction === void 0 ? true : _ref2$dismissAction,
-          stacked = _ref2.stacked,
-          leading = _ref2.leading,
-          _ref2$actionHandler = _ref2.actionHandler,
-          actionHandler = _ref2$actionHandler === void 0 ? noop : _ref2$actionHandler;
-      uiState.queue.push(function () {
+    const handleSnack = ({
+      timeoutMs = 5000,
+      closeOnEscape,
+      message = '',
+      actionText = '',
+      dismissAction = true,
+      stacked,
+      leading,
+      actionHandler = noop
+    }) => {
+      uiState.queue.push(() => {
         uiState.snack = {
-          timeoutMs: timeoutMs,
-          closeOnEscape: closeOnEscape,
-          message: message,
-          actionText: actionText,
-          actionHandler: actionHandler,
-          dismissAction: dismissAction,
-          stacked: stacked,
-          leading: leading
+          timeoutMs,
+          closeOnEscape,
+          message,
+          actionText,
+          actionHandler,
+          dismissAction,
+          stacked,
+          leading
         };
         actionHandler_ = actionHandler;
         uiState.open = true;
@@ -7321,49 +6703,46 @@ var script$x = {
       }
     };
 
-    var handleClosed = function handleClosed() {
+    const handleClosed = () => {
       uiState.open = false;
       uiState.queue.shift();
 
       if (uiState.queue.length > 0) {
-        nextTick(function () {
-          return uiState.queue[0]();
-        });
+        nextTick(() => uiState.queue[0]());
       }
     };
 
-    var listeners = computed(function () {
+    const listeners = computed(() => {
       return {
         'update:reason': attrs['update:reason'],
-        'mdcsnackbar:closed': function mdcsnackbarClosed(_ref3) {
-          var reason = _ref3.reason;
-
+        'mdcsnackbar:closed': ({
+          reason
+        }) => {
           if (actionHandler_ && reason === 'action') {
             actionHandler_({
-              reason: reason
+              reason
             });
           }
 
           handleClosed();
           emit('closed', {
-            reason: reason
+            reason
           });
         }
       };
     });
-    watch(function () {
-      return props.snack;
-    }, function (nv, ov) {
+    watch(() => props.snack, (nv, ov) => {
       if (nv) {
         handleSnack(nv);
         emit('update:snack', null);
       }
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      handleSnack: handleSnack,
-      listeners: listeners
+      handleSnack,
+      listeners
     });
   }
+
 };
 
 function render$x(_ctx, _cache, $props, $setup, $data, $options) {
@@ -7375,8 +6754,10 @@ function render$x(_ctx, _cache, $props, $setup, $data, $options) {
 script$x.render = render$x;
 script$x.__file = "packages/snackbar/snackbar-queue.vue";
 
-var strings$a = MDCSnackbarFoundation.strings,
-    numbers = MDCSnackbarFoundation.numbers;
+const {
+  strings: strings$a,
+  numbers
+} = MDCSnackbarFoundation;
 var script$y = {
   name: 'mcw-snackbar',
   props: {
@@ -7396,35 +6777,34 @@ var script$y = {
     },
     reason: String
   },
-  setup: function setup(props, _ref) {
-    var emit = _ref.emit;
-    var uiState = reactive({
+
+  setup(props, {
+    emit
+  }) {
+    const uiState = reactive({
       classes: {},
       hidden: false,
       actionHidden: false,
       showMessage: true,
       labelEl: null
     });
-    var foundation;
-    var rootClasses = computed(function () {
+    let foundation;
+    const rootClasses = computed(() => {
       return _objectSpread2({
         'mdc-snackbar': 1,
         'mdc-snackbar--leading': props.leading,
         'mdc-snackbar--stacked': props.stacked
       }, uiState.classes);
     });
-    var showDismissAction = computed(function () {
+    const showDismissAction = computed(() => {
       return typeof props.dismissAction === 'string' ? props.dismissAction != 'false' : props.dismissAction;
     });
 
-    var handleKeydownEvent = function handleKeydownEvent(evt) {
-      return foundation.handleKeyDown(evt);
-    };
+    const handleKeydownEvent = evt => foundation.handleKeyDown(evt);
 
-    var _announce = function announce(ariaEl) {
-      var labelEl = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ariaEl;
-      var priority = ariaEl.getAttribute('aria-live');
-      var text = props.message;
+    const announce = (ariaEl, labelEl = ariaEl) => {
+      const priority = ariaEl.getAttribute('aria-live');
+      const text = props.message;
 
       if (!text) {
         return;
@@ -7466,7 +6846,7 @@ var script$y = {
       // however, `aria-live` is turned off, so this DOM update will be ignored by screen readers.
 
       labelEl.setAttribute(strings$a.ARIA_LIVE_LABEL_TEXT_ATTR, props.message);
-      setTimeout(function () {
+      setTimeout(() => {
         // Allow screen readers to announce changes to the DOM again.
         ariaEl.setAttribute('aria-live', priority); // Remove the message from the ::before pseudo-element.
 
@@ -7476,45 +6856,40 @@ var script$y = {
       }, numbers.ARIA_LIVE_DELAY_MS);
     };
 
-    var adapter = {
-      addClass: function addClass(className) {
-        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
-      },
-      announce: function announce() {
-        return _announce(uiState.labelEl);
-      },
-      notifyClosed: function notifyClosed(reason) {
+    const adapter = {
+      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        [className]: true
+      }),
+      announce: () => announce(uiState.labelEl),
+      notifyClosed: reason => {
         emit(strings$a.CLOSED_EVENT.toLowerCase(), reason ? {
-          reason: reason
+          reason
         } : {});
         emit('update:modelValue', false);
         emit('hide');
       },
-      notifyClosing: function notifyClosing(reason) {
+      notifyClosing: reason => {
         emit(strings$a.CLOSING_EVENT, reason ? {
-          reason: reason
+          reason
         } : {});
         emit('update:reason', reason);
       },
-      notifyOpened: function notifyOpened() {
+      notifyOpened: () => {
         emit(strings$a.OPENED_EVENT.toLowerCase(), {});
         emit('update:modelValue', true);
         emit('show', {});
       },
-      notifyOpening: function notifyOpening() {
-        return emit(strings$a.OPENING_EVENT, {});
-      },
-      removeClass: function removeClass(className) {
+      notifyOpening: () => emit(strings$a.OPENING_EVENT, {}),
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes = uiState.classes,
-            removed = _uiState$classes[className],
-            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+        const _uiState$classes = uiState.classes,
+              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
         uiState.classes = rest;
       }
     };
 
-    var surfaceClickHandler = function surfaceClickHandler(evt) {
+    const surfaceClickHandler = evt => {
       if (isActionButton_(evt.target)) {
         foundation.handleActionButtonClick(evt);
       } else if (isActionIcon_(evt.target)) {
@@ -7522,28 +6897,20 @@ var script$y = {
       }
     };
 
-    watch(function () {
-      return props.modelValue;
-    }, function (nv) {
+    watch(() => props.modelValue, nv => {
       if (nv) {
         foundation.open();
       } else {
         foundation.close(props.reason ? props.reason : '');
       }
     });
-    watch(function () {
-      return props.timeoutMs;
-    }, function (nv) {
+    watch(() => props.timeoutMs, nv => {
       if (nv !== void 0) {
         foundation.setTimeoutMs(nv);
       }
     });
-    watch(function () {
-      return props.closeOnEscape;
-    }, function (nv) {
-      return foundation.setCloseOnEscape(nv);
-    });
-    onMounted(function () {
+    watch(() => props.closeOnEscape, nv => foundation.setCloseOnEscape(nv));
+    onMounted(() => {
       window.addEventListener('keydown', handleKeydownEvent);
       foundation = new MDCSnackbarFoundation(adapter);
       foundation.init();
@@ -7554,16 +6921,17 @@ var script$y = {
 
       foundation.setCloseOnEscape(props.closeOnEscape);
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       window.removeEventListener('keydown', handleKeydownEvent);
       foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      rootClasses: rootClasses,
-      showDismissAction: showDismissAction,
-      surfaceClickHandler: surfaceClickHandler
+      rootClasses,
+      showDismissAction,
+      surfaceClickHandler
     });
   }
+
 }; // ===
 // Private functions
 // ===
@@ -7638,7 +7006,7 @@ var snackbar = BasePlugin({
   mcwSnackbarQueue: script$x
 });
 
-var switchId_ = 0;
+let switchId_ = 0;
 var script$z = {
   name: 'mcw-switch',
   props: {
@@ -7650,12 +7018,14 @@ var script$z = {
     name: String,
     id: String
   },
-  setup: function setup(props, _ref) {
+
+  setup(props, {
+    slots,
+    emit
+  }) {
     var _props$id;
 
-    var slots = _ref.slots,
-        emit = _ref.emit;
-    var uiState = reactive({
+    const uiState = reactive({
       classes: {
         'mdc-switch': 1
       },
@@ -7664,80 +7034,71 @@ var script$z = {
       nativeAttrs: {},
       root: null
     });
-
-    var _useRipplePlugin = useRipplePlugin$1(toRef(uiState, 'root')),
-        rippleClasses = _useRipplePlugin.classes,
-        styles = _useRipplePlugin.styles;
-
-    var foundation;
-    var switchId = (_props$id = props.id) !== null && _props$id !== void 0 ? _props$id : "__mcw-switch-".concat(switchId_++);
-    var classes = computed(function () {
+    const {
+      classes: rippleClasses,
+      styles
+    } = useRipplePlugin$1(toRef(uiState, 'root'));
+    let foundation;
+    const switchId = (_props$id = props.id) !== null && _props$id !== void 0 ? _props$id : "__mcw-switch-".concat(switchId_++);
+    const classes = computed(() => {
       return _objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes);
     });
-    var hasLabel = computed(function () {
+    const hasLabel = computed(() => {
       return props.label || slots.default;
     });
 
-    var onChanged = function onChanged(event) {
+    const onChanged = event => {
       var _foundation;
 
       (_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.handleChange(event);
       emit('update:modelValue', event.target.checked);
     };
 
-    var adapter = {
-      addClass: function addClass(className) {
-        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
-      },
-      removeClass: function removeClass(className) {
+    const adapter = {
+      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        [className]: true
+      }),
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes = uiState.classes,
-            removed = _uiState$classes[className],
-            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+        const _uiState$classes = uiState.classes,
+              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
         uiState.classes = rest;
       },
-      setNativeControlChecked: function setNativeControlChecked(checked) {
-        return uiState.nativeControlChecked = checked;
-      },
-      setNativeControlDisabled: function setNativeControlDisabled(disabled) {
-        return uiState.nativeControlDisabled = disabled;
-      },
-      setNativeControlAttr: function setNativeControlAttr(attr, value) {
+      setNativeControlChecked: checked => uiState.nativeControlChecked = checked,
+      setNativeControlDisabled: disabled => uiState.nativeControlDisabled = disabled,
+      setNativeControlAttr: (attr, value) => {
         uiState.nativeAttrs[attr] = value;
       }
     };
-    watch(function () {
-      return props.modelValue;
-    }, function (nv, ov) {
+    watch(() => props.modelValue, (nv, ov) => {
       var _foundation2;
 
       nv != ov && ((_foundation2 = foundation) === null || _foundation2 === void 0 ? void 0 : _foundation2.setChecked(nv));
     });
-    watch(function () {
-      return props.disabled;
-    }, function (nv, ov) {
+    watch(() => props.disabled, (nv, ov) => {
       var _foundation3;
 
       nv != ov && ((_foundation3 = foundation) === null || _foundation3 === void 0 ? void 0 : _foundation3.setDisabled(nv));
     });
-    onMounted(function () {
+    onMounted(() => {
       foundation = new MDCSwitchFoundation(adapter);
       foundation.init();
       foundation.setChecked(props.modelValue);
       foundation.setDisabled(props.disabled);
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      classes: classes,
-      hasLabel: hasLabel,
-      onChanged: onChanged,
-      styles: styles,
-      switchId: switchId
+      classes,
+      hasLabel,
+      onChanged,
+      styles,
+      switchId
     });
   }
+
 };
 
 const _hoisted_1$m = /*#__PURE__*/createVNode("div", { class: "mdc-switch__track" }, null, -1 /* HOISTED */);
@@ -7794,7 +7155,9 @@ var switchControl = BasePlugin({
   mcwSwitch: script$z
 });
 
-var strings$b = MDCTabBarFoundation.strings;
+const {
+  strings: strings$b
+} = MDCTabBarFoundation;
 var script$A = {
   name: 'mcw-tab-bar',
   props: {
@@ -7803,84 +7166,67 @@ var script$A = {
     spanContent: Boolean,
     modelValue: Number
   },
-  setup: function setup(props, _ref) {
-    var emit = _ref.emit,
-        attrs = _ref.attrs;
-    var scroller = ref(null);
-    var root = ref(null);
-    var tabList = ref([]);
+
+  setup(props, {
+    emit,
+    attrs
+  }) {
+    const scroller = ref(null);
+    const root = ref(null);
+    const tabList = ref([]);
     provide('mcwTabList', {
       fade: props.fade,
       stacked: props.stacked,
       spanContent: props.spanContent,
-      tabList: tabList
+      tabList
     });
-    var listeners = computed(function () {
-      var _ref2;
-
-      return _ref2 = {
-        change: attrs.onChange
-      }, _defineProperty(_ref2, MDCTabFoundation.strings.INTERACTED_EVENT, function (evt) {
-        foundation.handleTabInteraction(evt);
-      }), _defineProperty(_ref2, 'mdc-tab:interacted', function mdcTabInteracted(evt) {
-        foundation.handleTabInteraction(evt);
-      }), _defineProperty(_ref2, "keydown", function keydown(evt) {
-        return foundation.handleKeyDown(evt);
-      }), _ref2;
+    const listeners = computed(() => {
+      return {
+        change: attrs.onChange,
+        [MDCTabFoundation.strings.INTERACTED_EVENT]: evt => {
+          foundation.handleTabInteraction(evt);
+        },
+        'mdc-tab:interacted': evt => {
+          foundation.handleTabInteraction(evt);
+        },
+        keydown: evt => foundation.handleKeyDown(evt)
+      };
     });
-    var foundation;
+    let foundation;
 
-    var getTabElements_ = function getTabElements_() {
+    const getTabElements_ = () => {
       return [].slice.call(root.value.querySelectorAll(strings$b.TAB_SELECTOR));
     };
 
-    var activateTab = function activateTab(index) {
-      return foundation.activateTab(index);
-    };
+    const activateTab = index => foundation.activateTab(index);
 
-    var adapter = {
-      scrollTo: function scrollTo(scrollX) {
-        return scroller.value.scrollTo(scrollX);
-      },
-      incrementScroll: function incrementScroll(scrollXIncrement) {
-        return scroller.value.incrementScroll(scrollXIncrement);
-      },
-      getScrollPosition: function getScrollPosition() {
-        return scroller.value.getScrollPosition();
-      },
-      getScrollContentWidth: function getScrollContentWidth() {
-        return scroller.value.getScrollContentWidth();
-      },
-      getOffsetWidth: function getOffsetWidth() {
-        return root.value.offsetWidth;
-      },
-      isRTL: function isRTL() {
-        return window.getComputedStyle(root.value).getPropertyValue('direction') === 'rtl';
-      },
-      setActiveTab: function setActiveTab(index) {
+    const adapter = {
+      scrollTo: scrollX => scroller.value.scrollTo(scrollX),
+      incrementScroll: scrollXIncrement => scroller.value.incrementScroll(scrollXIncrement),
+      getScrollPosition: () => scroller.value.getScrollPosition(),
+      getScrollContentWidth: () => scroller.value.getScrollContentWidth(),
+      getOffsetWidth: () => root.value.offsetWidth,
+      isRTL: () => window.getComputedStyle(root.value).getPropertyValue('direction') === 'rtl',
+      setActiveTab: index => {
         foundation.activateTab(index);
       },
-      activateTabAtIndex: function activateTabAtIndex(index, clientRect) {
+      activateTabAtIndex: (index, clientRect) => {
         tabList.value[index].activate(clientRect);
       },
-      deactivateTabAtIndex: function deactivateTabAtIndex(index) {
+      deactivateTabAtIndex: index => {
         var _tabList$value$index;
 
         return (_tabList$value$index = tabList.value[index]) === null || _tabList$value$index === void 0 ? void 0 : _tabList$value$index.deactivate();
       },
-      focusTabAtIndex: function focusTabAtIndex(index) {
-        return tabList.value[index].focus();
-      },
-      getTabIndicatorClientRectAtIndex: function getTabIndicatorClientRectAtIndex(index) {
+      focusTabAtIndex: index => tabList.value[index].focus(),
+      getTabIndicatorClientRectAtIndex: index => {
         var _tabList$value$index2;
 
         return (_tabList$value$index2 = tabList.value[index]) === null || _tabList$value$index2 === void 0 ? void 0 : _tabList$value$index2.computeIndicatorClientRect();
       },
-      getTabDimensionsAtIndex: function getTabDimensionsAtIndex(index) {
-        return tabList.value[index].computeDimensions();
-      },
-      getPreviousActiveTabIndex: function getPreviousActiveTabIndex() {
-        for (var i = 0; i < tabList.value.length; i++) {
+      getTabDimensionsAtIndex: index => tabList.value[index].computeDimensions(),
+      getPreviousActiveTabIndex: () => {
+        for (let i = 0; i < tabList.value.length; i++) {
           if (tabList.value[i].isActive()) {
             return i;
           }
@@ -7888,13 +7234,13 @@ var script$A = {
 
         return -1;
       },
-      getFocusedTabIndex: function getFocusedTabIndex() {
-        var tabElements = getTabElements_();
-        var activeElement = document.activeElement;
+      getFocusedTabIndex: () => {
+        const tabElements = getTabElements_();
+        const activeElement = document.activeElement;
         return tabElements.indexOf(activeElement);
       },
-      getIndexOfTabById: function getIndexOfTabById(id) {
-        for (var i = 0; i < tabList.value.length; i++) {
+      getIndexOfTabById: id => {
+        for (let i = 0; i < tabList.value.length; i++) {
           if (tabList.value[i].id === id) {
             return i;
           }
@@ -7902,44 +7248,43 @@ var script$A = {
 
         return -1;
       },
-      getTabListLength: function getTabListLength() {
-        return tabList.value.length;
-      },
-      notifyTabActivated: function notifyTabActivated(index) {
+      getTabListLength: () => tabList.value.length,
+      notifyTabActivated: index => {
         emitCustomEvent(root.value, strings$b.TAB_ACTIVATED_EVENT, {
-          index: index
+          index
         }, true);
         emit('update:modelValue', Number(index));
       }
     };
-    onMounted(function () {
+    onMounted(() => {
       foundation = foundation = new MDCTabBarFoundation(adapter);
       foundation.init(); // ensure active tab
 
       props.modelValue !== void 0;
       foundation.activateTab(Number(props.modelValue) || 0);
 
-      for (var i = 0; i < tabList.value.length; i++) {
+      for (let i = 0; i < tabList.value.length; i++) {
         if (tabList.value[i].active) {
           foundation.scrollIntoView(i);
           break;
         }
       }
 
-      watchEffect(function () {
+      watchEffect(() => {
         foundation.activateTab(Number(props.modelValue));
       });
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       foundation.destroy();
     });
     return {
-      root: root,
-      scroller: scroller,
-      listeners: listeners,
-      activateTab: activateTab
+      root,
+      scroller,
+      listeners,
+      activateTab
     };
   }
+
 };
 
 function render$A(_ctx, _cache, $props, $setup, $data, $options) {
@@ -7961,7 +7306,9 @@ function render$A(_ctx, _cache, $props, $setup, $data, $options) {
 script$A.render = render$A;
 script$A.__file = "packages/tabs/tab-bar.vue";
 
-var cssClasses$5 = MDCTabIndicatorFoundation.cssClasses;
+const {
+  cssClasses: cssClasses$5
+} = MDCTabIndicatorFoundation;
 var script$B = {
   name: 'mcw-tab-indicator',
   props: {
@@ -7972,8 +7319,9 @@ var script$B = {
       type: String
     }
   },
-  setup: function setup(props) {
-    var uiState = reactive({
+
+  setup(props) {
+    const uiState = reactive({
       classes: {
         'mdc-tab-indicator--fade': props.fade
       },
@@ -7988,36 +7336,29 @@ var script$B = {
       styles: {},
       contentEl: null
     });
-    var foundation;
-    var adapter = {
-      addClass: function addClass(className) {
-        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
-      },
-      removeClass: function removeClass(className) {
+    let foundation;
+    const adapter = {
+      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        [className]: true
+      }),
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes = uiState.classes,
-            removed = _uiState$classes[className],
-            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+        const _uiState$classes = uiState.classes,
+              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
         uiState.classes = rest;
       },
-      computeContentClientRect: function computeContentClientRect() {
-        return uiState.contentEl.getBoundingClientRect();
-      },
-      setContentStyleProperty: function setContentStyleProperty(prop, value) {
-        return uiState.styles = _objectSpread2(_objectSpread2({}, uiState.styles), {}, _defineProperty({}, prop, value));
-      }
+      computeContentClientRect: () => uiState.contentEl.getBoundingClientRect(),
+      setContentStyleProperty: (prop, value) => uiState.styles = _objectSpread2(_objectSpread2({}, uiState.styles), {}, {
+        [prop]: value
+      })
     };
 
-    var deactivate = function deactivate() {
-      return foundation.deactivate();
-    };
+    const deactivate = () => foundation.deactivate();
 
-    var computeContentClientRect = function computeContentClientRect() {
-      return foundation.computeContentClientRect();
-    };
+    const computeContentClientRect = () => foundation.computeContentClientRect();
 
-    var activate = function activate(previousIndicatorClientRect) {
+    const activate = previousIndicatorClientRect => {
       // Early exit if no indicator is present to handle cases where an indicator
       // may be activated without a prior indicator state
       if (!previousIndicatorClientRect) {
@@ -8025,14 +7366,14 @@ var script$B = {
         return;
       }
 
-      var currentClientRect = computeContentClientRect();
-      var widthDelta = previousIndicatorClientRect.width / currentClientRect.width;
-      var xPosition = previousIndicatorClientRect.left - currentClientRect.left; // THE FIX - use request animation frame to ensure framework has rendered DOM
+      const currentClientRect = computeContentClientRect();
+      const widthDelta = previousIndicatorClientRect.width / currentClientRect.width;
+      const xPosition = previousIndicatorClientRect.left - currentClientRect.left; // THE FIX - use request animation frame to ensure framework has rendered DOM
 
-      requestAnimationFrame(function () {
+      requestAnimationFrame(() => {
         adapter.addClass(cssClasses$5.NO_TRANSITION);
         adapter.setContentStyleProperty('transform', "translateX(".concat(xPosition, "px) scaleX(").concat(widthDelta, ")"));
-        requestAnimationFrame(function () {
+        requestAnimationFrame(() => {
           adapter.removeClass(cssClasses$5.NO_TRANSITION);
           adapter.addClass(cssClasses$5.ACTIVE);
           adapter.setContentStyleProperty('transform', '');
@@ -8040,19 +7381,20 @@ var script$B = {
       });
     };
 
-    onMounted(function () {
+    onMounted(() => {
       foundation = props.fade ? new MDCFadingTabIndicatorFoundation(adapter) : new MDCSlidingTabIndicatorFoundation(adapter);
       foundation.init();
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      activate: activate,
-      deactivate: deactivate,
-      computeContentClientRect: computeContentClientRect
+      activate,
+      deactivate,
+      computeContentClientRect
     });
   }
+
 };
 
 function render$B(_ctx, _cache, $props, $setup, $data, $options) {
@@ -8072,8 +7414,9 @@ script$B.__file = "packages/tabs/tab-indicator.vue";
 
 var script$C = {
   name: 'mcw-tab-scroller',
-  setup: function setup() {
-    var uiState = reactive({
+
+  setup() {
+    const uiState = reactive({
       classes: {
         'mdc-tab-scroller': 1
       },
@@ -8085,110 +7428,74 @@ var script$C = {
       content: null,
       area: null
     });
-    var foundation;
+    let foundation;
 
-    var getScrollPosition = function getScrollPosition() {
-      return foundation.getScrollPosition();
-    };
+    const getScrollPosition = () => foundation.getScrollPosition();
 
-    var getScrollContentWidth = function getScrollContentWidth() {
-      return uiState.content.offsetWidth;
-    };
+    const getScrollContentWidth = () => uiState.content.offsetWidth;
 
-    var incrementScroll = function incrementScroll(scrollXIncrement) {
-      return foundation.incrementScroll(scrollXIncrement);
-    };
+    const incrementScroll = scrollXIncrement => foundation.incrementScroll(scrollXIncrement);
 
-    var scrollTo = function scrollTo(scrollX) {
-      return foundation.scrollTo(scrollX);
-    };
+    const scrollTo = scrollX => foundation.scrollTo(scrollX);
 
-    var onTransitionEnd = function onTransitionEnd(evt) {
-      return foundation.handleTransitionEnd(evt);
-    };
+    const onTransitionEnd = evt => foundation.handleTransitionEnd(evt);
 
-    var areaListeners = {
-      mousedown: function mousedown(evt) {
-        return foundation.handleInteraction(evt);
-      },
-      wheel: function wheel(evt) {
-        return foundation.handleInteraction(evt);
-      },
-      pointerdown: function pointerdown(evt) {
-        return foundation.handleInteraction(evt);
-      },
-      touchstart: function touchstart(evt) {
-        return foundation.handleInteraction(evt);
-      },
-      keydown: function keydown(evt) {
-        return foundation.handleInteraction(evt);
-      }
+    const areaListeners = {
+      mousedown: evt => foundation.handleInteraction(evt),
+      wheel: evt => foundation.handleInteraction(evt),
+      pointerdown: evt => foundation.handleInteraction(evt),
+      touchstart: evt => foundation.handleInteraction(evt),
+      keydown: evt => foundation.handleInteraction(evt)
     };
-    var adapter = {
-      eventTargetMatchesSelector: function eventTargetMatchesSelector(evtTarget, selector) {
+    const adapter = {
+      eventTargetMatchesSelector: (evtTarget, selector) => {
         return matches(evtTarget, selector);
       },
-      addClass: function addClass(className) {
-        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
-      },
-      removeClass: function removeClass(className) {
+      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        [className]: true
+      }),
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes = uiState.classes,
-            removed = _uiState$classes[className],
-            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+        const _uiState$classes = uiState.classes,
+              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
         uiState.classes = rest;
       },
-      addScrollAreaClass: function addScrollAreaClass(className) {
-        return uiState.areaClasses = _objectSpread2(_objectSpread2({}, uiState.areaClasses), {}, _defineProperty({}, className, true));
-      },
-      setScrollAreaStyleProperty: function setScrollAreaStyleProperty(prop, value) {
-        return uiState.areaStyles = _objectSpread2(_objectSpread2({}, uiState.areaStyles), {}, _defineProperty({}, prop, value));
-      },
-      setScrollContentStyleProperty: function setScrollContentStyleProperty(prop, value) {
-        return uiState.contentStyles = _objectSpread2(_objectSpread2({}, uiState.contentStyles), {}, _defineProperty({}, prop, value));
-      },
-      getScrollContentStyleValue: function getScrollContentStyleValue(propName) {
-        return window.getComputedStyle(uiState.content).getPropertyValue(propName);
-      },
-      setScrollAreaScrollLeft: function setScrollAreaScrollLeft(scrollX) {
-        return uiState.area.scrollLeft = scrollX;
-      },
-      getScrollAreaScrollLeft: function getScrollAreaScrollLeft() {
-        return uiState.area.scrollLeft;
-      },
-      getScrollContentOffsetWidth: function getScrollContentOffsetWidth() {
-        return uiState.content.offsetWidth;
-      },
-      getScrollAreaOffsetWidth: function getScrollAreaOffsetWidth() {
-        return uiState.area.offsetWidth;
-      },
-      computeScrollAreaClientRect: function computeScrollAreaClientRect() {
-        return uiState.area.getBoundingClientRect();
-      },
-      computeScrollContentClientRect: function computeScrollContentClientRect() {
-        return uiState.content.getBoundingClientRect();
-      },
-      computeHorizontalScrollbarHeight: function computeHorizontalScrollbarHeight$1() {
-        return computeHorizontalScrollbarHeight(document);
-      }
+      addScrollAreaClass: className => uiState.areaClasses = _objectSpread2(_objectSpread2({}, uiState.areaClasses), {}, {
+        [className]: true
+      }),
+      setScrollAreaStyleProperty: (prop, value) => uiState.areaStyles = _objectSpread2(_objectSpread2({}, uiState.areaStyles), {}, {
+        [prop]: value
+      }),
+      setScrollContentStyleProperty: (prop, value) => uiState.contentStyles = _objectSpread2(_objectSpread2({}, uiState.contentStyles), {}, {
+        [prop]: value
+      }),
+      getScrollContentStyleValue: propName => window.getComputedStyle(uiState.content).getPropertyValue(propName),
+      setScrollAreaScrollLeft: scrollX => uiState.area.scrollLeft = scrollX,
+      getScrollAreaScrollLeft: () => uiState.area.scrollLeft,
+      getScrollContentOffsetWidth: () => uiState.content.offsetWidth,
+      getScrollAreaOffsetWidth: () => uiState.area.offsetWidth,
+      computeScrollAreaClientRect: () => uiState.area.getBoundingClientRect(),
+      computeScrollContentClientRect: () => uiState.content.getBoundingClientRect(),
+      computeHorizontalScrollbarHeight: () => computeHorizontalScrollbarHeight(document)
     };
-    onMounted(function () {
+    onMounted(() => {
       foundation = new MDCTabScrollerFoundation(adapter);
       foundation.init();
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      scrollTo: scrollTo,
-      incrementScroll: incrementScroll,
-      getScrollPosition: getScrollPosition,
-      getScrollContentWidth: getScrollContentWidth,
-      areaListeners: areaListeners,
-      onTransitionEnd: onTransitionEnd
+      scrollTo,
+      incrementScroll,
+      getScrollPosition,
+      getScrollContentWidth,
+      areaListeners,
+      onTransitionEnd
     });
   }
+
 };
 
 function render$C(_ctx, _cache, $props, $setup, $data, $options) {
@@ -8213,8 +7520,10 @@ function render$C(_ctx, _cache, $props, $setup, $data, $options) {
 script$C.render = render$C;
 script$C.__file = "packages/tabs/tab-scroller.vue";
 
-var strings$c = MDCTabFoundation$1.strings;
-var tabId_ = 0;
+const {
+  strings: strings$c
+} = MDCTabFoundation$1;
+let tabId_ = 0;
 var script$D = {
   name: 'mcw-tab',
   props: {
@@ -8223,11 +7532,13 @@ var script$D = {
     minWidth: Boolean
   },
   components: {
-    CustomLink: CustomLink
+    CustomLink
   },
-  setup: function setup(props, _ref) {
-    var slots = _ref.slots;
-    var uiState = reactive({
+
+  setup(props, {
+    slots
+  }) {
+    const uiState = reactive({
       classes: {
         'mdc-tab': 1,
         'mdc-tab--min-width': props.minWidth
@@ -8245,45 +7556,38 @@ var script$D = {
       root: null,
       rippleSurface: null
     });
-
-    var _useRipplePlugin = useRipplePlugin$1(toRef(uiState, 'root')),
-        rippleClasses = _useRipplePlugin.classes,
-        rippleStyles = _useRipplePlugin.styles;
-
-    var _inject = inject('mcwTabList'),
-        fade = _inject.fade,
-        stacked = _inject.stacked,
-        spanContent = _inject.spanContent,
-        tabList = _inject.tabList;
-
+    const {
+      classes: rippleClasses,
+      styles: rippleStyles
+    } = useRipplePlugin$1(toRef(uiState, 'root'));
+    const {
+      fade,
+      stacked,
+      spanContent,
+      tabList
+    } = inject('mcwTabList');
     uiState.classes['mdc-tab--stacked'] = stacked;
-    var hasIcon = computed(function () {
+    const hasIcon = computed(() => {
       if (props.icon || slots.icon) {
         return props.icon ? extractIconProp(props.icon) : {};
       }
 
       return false;
     });
-    var hasText = computed(function () {
+    const hasText = computed(() => {
       return !!slots.default;
     });
-    var foundation;
-    var tabId = "__mcw-tab-".concat(tabId_++);
-    var rootEl;
+    let foundation;
+    const tabId = "__mcw-tab-".concat(tabId_++);
+    let rootEl;
 
-    var activate = function activate(computeIndicatorClientRect) {
-      return foundation.activate(computeIndicatorClientRect);
-    };
+    const activate = computeIndicatorClientRect => foundation.activate(computeIndicatorClientRect);
 
-    var deactivate = function deactivate() {
-      return foundation.deactivate();
-    };
+    const deactivate = () => foundation.deactivate();
 
-    var isActive = function isActive() {
-      return foundation.isActive();
-    };
+    const isActive = () => foundation.isActive();
 
-    var setActive = function setActive(isActive) {
+    const setActive = isActive => {
       if (isActive) {
         uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
           'mdc-tab--active': true
@@ -8291,98 +7595,76 @@ var script$D = {
       }
     };
 
-    var computeIndicatorClientRect = function computeIndicatorClientRect() {
-      return uiState.tabIndicator.computeContentClientRect();
-    };
+    const computeIndicatorClientRect = () => uiState.tabIndicator.computeContentClientRect();
 
-    var computeDimensions = function computeDimensions() {
-      return foundation.computeDimensions();
-    };
+    const computeDimensions = () => foundation.computeDimensions();
 
-    var focus = function focus() {
-      return rootEl.focus();
-    };
+    const focus = () => rootEl.focus();
 
-    var onClick = function onClick(evt) {
+    const onClick = evt => {
       foundation.handleClick(evt);
     };
 
-    var adapter = {
-      setAttr: function setAttr(attr, value) {
-        return uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, _defineProperty({}, attr, value));
-      },
-      addClass: function addClass(className) {
-        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
-      },
-      removeClass: function removeClass(className) {
+    const adapter = {
+      setAttr: (attr, value) => uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, {
+        [attr]: value
+      }),
+      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        [className]: true
+      }),
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes = uiState.classes,
-            removed = _uiState$classes[className],
-            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+        const _uiState$classes = uiState.classes,
+              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
         uiState.classes = rest;
       },
-      hasClass: function hasClass(className) {
-        return !!uiState.classes[className];
-      },
-      activateIndicator: function activateIndicator(previousIndicatorClientRect) {
-        return uiState.tabIndicator.activate(previousIndicatorClientRect);
-      },
-      deactivateIndicator: function deactivateIndicator() {
-        return uiState.tabIndicator.deactivate();
-      },
-      notifyInteracted: function notifyInteracted() {
+      hasClass: className => !!uiState.classes[className],
+      activateIndicator: previousIndicatorClientRect => uiState.tabIndicator.activate(previousIndicatorClientRect),
+      deactivateIndicator: () => uiState.tabIndicator.deactivate(),
+      notifyInteracted: () => {
         emitCustomEvent(rootEl, strings$c.INTERACTED_EVENT, {
-          tabId: tabId
+          tabId
         }, true
         /* bubble */
         );
       },
-      getOffsetLeft: function getOffsetLeft() {
-        return rootEl.offsetLeft;
-      },
-      getOffsetWidth: function getOffsetWidth() {
-        return rootEl.offsetWidth;
-      },
-      getContentOffsetLeft: function getContentOffsetLeft() {
-        return uiState.content.offsetLeft;
-      },
-      getContentOffsetWidth: function getContentOffsetWidth() {
-        return uiState.content.offsetWidth;
-      },
-      focus: function focus() {
-        return rootEl.focus();
-      }
+      getOffsetLeft: () => rootEl.offsetLeft,
+      getOffsetWidth: () => rootEl.offsetWidth,
+      getContentOffsetLeft: () => uiState.content.offsetLeft,
+      getContentOffsetWidth: () => uiState.content.offsetWidth,
+      focus: () => rootEl.focus()
     };
-    onMounted(function () {
+    onMounted(() => {
       rootEl = uiState.root.$el;
       foundation = new MDCTabFoundation$1(adapter);
       foundation.init();
       tabList.value.push({
         id: tabId,
-        activate: activate,
-        deactivate: deactivate,
-        focus: focus,
-        computeIndicatorClientRect: computeIndicatorClientRect,
-        computeDimensions: computeDimensions,
-        isActive: isActive
+        activate,
+        deactivate,
+        focus,
+        computeIndicatorClientRect,
+        computeDimensions,
+        isActive
       });
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      hasIcon: hasIcon,
-      hasText: hasText,
-      onClick: onClick,
-      setActive: setActive,
-      tabId: tabId,
-      fade: fade,
-      spanContent: spanContent,
-      rippleClasses: rippleClasses,
-      rippleStyles: rippleStyles
+      hasIcon,
+      hasText,
+      onClick,
+      setActive,
+      tabId,
+      fade,
+      spanContent,
+      rippleClasses,
+      rippleStyles
     });
   }
+
 }; // ===
 // Private functions
 // ===
@@ -8397,15 +7679,15 @@ function extractIconProp(iconProp) {
     };
   } else if (iconProp instanceof Array) {
     return {
-      classes: iconProp.reduce(function (result, value) {
-        return Object.assign(result, _defineProperty({}, value, true));
-      }, {})
+      classes: iconProp.reduce((result, value) => Object.assign(result, {
+        [value]: true
+      }), {})
     };
-  } else if (_typeof(iconProp) === 'object') {
+  } else if (typeof iconProp === 'object') {
     return {
-      classes: iconProp.className.split(' ').reduce(function (result, value) {
-        return Object.assign(result, _defineProperty({}, value, true));
-      }, {}),
+      classes: iconProp.className.split(' ').reduce((result, value) => Object.assign(result, {
+        [value]: true
+      }), {}),
       content: iconProp.textContent
     };
   }
@@ -8486,25 +7768,27 @@ var tabs = BasePlugin({
 
 var script$E = {
   name: 'mcw-character-counter',
-  setup: function setup() {
-    var uiState = reactive({
+
+  setup() {
+    const uiState = reactive({
       textContent: '',
       foundation: {}
     });
-    var adapter = {
-      setContent: function setContent(content) {
+    const adapter = {
+      setContent: content => {
         uiState.textContent = content;
       }
     };
-    onMounted(function () {
+    onMounted(() => {
       uiState.foundation = new MDCTextFieldCharacterCounterFoundation(adapter);
       uiState.foundation.init();
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       uiState.foundation.destroy();
     });
     return _objectSpread2({}, toRefs(uiState));
   }
+
 };
 
 const _hoisted_1$o = { class: "mdc-text-field-character-counter" };
@@ -8523,8 +7807,9 @@ var script$F = {
     validation: Boolean,
     helptext: String
   },
-  setup: function setup(props) {
-    var uiState = reactive({
+
+  setup(props) {
+    const uiState = reactive({
       classes: {
         'mdc-text-field-helper-text': true,
         'mdc-text-field-helper-text--persistent': props.persistent,
@@ -8536,58 +7821,43 @@ var script$F = {
       helpertext: props.helptext,
       foundation: {}
     });
-    var adapter = {
-      addClass: function addClass(className) {
-        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
-      },
-      removeClass: function removeClass(className) {
+    const adapter = {
+      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        [className]: true
+      }),
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes = uiState.classes,
-            removed = _uiState$classes[className],
-            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+        const _uiState$classes = uiState.classes,
+              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
         uiState.classes = rest;
       },
-      hasClass: function hasClass(className) {
-        return Boolean(uiState.classes[className]);
-      },
-      getAttr: function getAttr(attr) {
-        return uiState.rootAttrs[attr];
-      },
-      setAttr: function setAttr(attr, value) {
-        return uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, _defineProperty({}, attr, value));
-      },
-      removeAttr: function removeAttr(attr) {
+      hasClass: className => Boolean(uiState.classes[className]),
+      getAttr: attr => uiState.rootAttrs[attr],
+      setAttr: (attr, value) => uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, {
+        [attr]: value
+      }),
+      removeAttr: attr => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$rootAttrs = uiState.rootAttrs,
-            removed = _uiState$rootAttrs[attr],
-            rest = _objectWithoutProperties(_uiState$rootAttrs, [attr].map(_toPropertyKey));
+        const _uiState$rootAttrs = uiState.rootAttrs,
+              rest = _objectWithoutProperties(_uiState$rootAttrs, [attr].map(_toPropertyKey));
 
         uiState.rootAttrs = rest;
       },
-      setContent: function setContent(content) {
-        return uiState.helpertext = content;
-      }
+      setContent: content => uiState.helpertext = content
     };
-    watch(function () {
-      return props.persistent;
-    }, function (nv) {
-      return uiState.foundation.setPersistent(nv);
-    });
-    watch(function () {
-      return props.validation;
-    }, function (nv) {
-      return uiState.foundation.setValidation(nv);
-    });
-    onMounted(function () {
+    watch(() => props.persistent, nv => uiState.foundation.setPersistent(nv));
+    watch(() => props.validation, nv => uiState.foundation.setValidation(nv));
+    onMounted(() => {
       uiState.foundation = new MDCTextFieldHelperTextFoundation(adapter);
       uiState.foundation.init();
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       uiState.foundation.destroy();
     });
     return _objectSpread2({}, toRefs(uiState));
   }
+
 };
 
 function render$F(_ctx, _cache, $props, $setup, $data, $options) {
@@ -8597,7 +7867,9 @@ function render$F(_ctx, _cache, $props, $setup, $data, $options) {
 script$F.render = render$F;
 script$F.__file = "packages/textfield/textfield-helper-text.vue";
 
-var strings$d = MDCTextFieldIconFoundation.strings;
+const {
+  strings: strings$d
+} = MDCTextFieldIconFoundation;
 var script$G = {
   name: 'textfield-icon',
   props: {
@@ -8605,12 +7877,15 @@ var script$G = {
     trailing: Boolean,
     trailingIcon: Boolean
   },
-  setup: function setup(props, _ref) {
-    var emit = _ref.emit;
-    var uiState = reactive({
-      classes: _defineProperty({
-        'mdc-text-field__icon': 1
-      }, "mdc-text-field__icon--".concat(props.trailing || props.trailingIcon ? 'trailing' : 'leading'), 1),
+
+  setup(props, {
+    emit
+  }) {
+    const uiState = reactive({
+      classes: {
+        'mdc-text-field__icon': 1,
+        ["mdc-text-field__icon--".concat(props.trailing || props.trailingIcon ? 'trailing' : 'leading')]: 1
+      },
       rootAttrs: {
         tabindex: props.disabled ? '-1' : '0',
         role: props.disabled ? void 0 : 'button'
@@ -8618,42 +7893,35 @@ var script$G = {
       root: null,
       foundation: {}
     });
-    var addIconFoundation = inject('addIconFoundation');
-    var adapter = {
-      getAttr: function getAttr(attr) {
-        return uiState.rootAttrs[attr];
-      },
-      setAttr: function setAttr(attr, value) {
-        return uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, _defineProperty({}, attr, value));
-      },
-      removeAttr: function removeAttr(attr) {
+    const addIconFoundation = inject('addIconFoundation');
+    const adapter = {
+      getAttr: attr => uiState.rootAttrs[attr],
+      setAttr: (attr, value) => uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, {
+        [attr]: value
+      }),
+      removeAttr: attr => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$rootAttrs = uiState.rootAttrs,
-            removed = _uiState$rootAttrs[attr],
-            rest = _objectWithoutProperties(_uiState$rootAttrs, [attr].map(_toPropertyKey));
+        const _uiState$rootAttrs = uiState.rootAttrs,
+              rest = _objectWithoutProperties(_uiState$rootAttrs, [attr].map(_toPropertyKey));
 
         uiState.rootAttrs = rest;
       },
-      setContent: function setContent()
+      setContent: () =>
       /* content */
       {// set content is done through vue in templates
         // so we dont expose a method to set content
         // thus this is a no-op
       },
-      registerInteractionHandler: function registerInteractionHandler(evtType, handler) {
-        return uiState.root.addEventListener(evtType, handler);
-      },
-      deregisterInteractionHandler: function deregisterInteractionHandler(evtType, handler) {
-        return uiState.root.removeEventListener(evtType, handler);
-      },
-      notifyIconAction: function notifyIconAction() {
+      registerInteractionHandler: (evtType, handler) => uiState.root.addEventListener(evtType, handler),
+      deregisterInteractionHandler: (evtType, handler) => uiState.root.removeEventListener(evtType, handler),
+      notifyIconAction: () => {
         emitCustomEvent(uiState.root, strings$d.ICON_EVENT, {}, true
         /* shouldBubble  */
         );
         emit('click');
       }
     };
-    onMounted(function () {
+    onMounted(() => {
       uiState.foundation = new MDCTextFieldIconFoundation(adapter);
       uiState.foundation.init();
       addIconFoundation({
@@ -8661,11 +7929,12 @@ var script$G = {
         trailing: props.trailing || props.trailingIcon
       });
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       uiState.foundation.destroy();
     });
     return _objectSpread2({}, toRefs(uiState));
   }
+
 };
 
 function render$G(_ctx, _cache, $props, $setup, $data, $options) {
@@ -8680,7 +7949,7 @@ function render$G(_ctx, _cache, $props, $setup, $data, $options) {
 script$G.render = render$G;
 script$G.__file = "packages/textfield/textfield-icon.vue";
 
-var uid_$1 = 0;
+let uid_$1 = 0;
 var script$H = {
   name: 'mcw-textfield',
   inheritAttrs: false,
@@ -8689,7 +7958,7 @@ var script$H = {
     type: {
       type: String,
       default: 'text',
-      validator: function validator(value) {
+      validator: function (value) {
         return ['text', 'email', 'search', 'password', 'tel', 'url', 'number'].indexOf(value) !== -1;
       }
     },
@@ -8730,20 +7999,20 @@ var script$H = {
     helptextValidation: Boolean,
     resizer: {
       type: Boolean,
-      default: function _default() {
-        return true;
-      }
+      default: () => true
     },
     prefix: String,
     suffix: String,
     characterCounter: Boolean,
     characterCounterInternal: Boolean
   },
-  setup: function setup(props, _ref) {
-    var emit = _ref.emit,
-        slots = _ref.slots,
-        attrs = _ref.attrs;
-    var uiState = reactive({
+
+  setup(props, {
+    emit,
+    slots,
+    attrs
+  }) {
+    const uiState = reactive({
       text: props.modelValue,
       classes: {
         'mdc-textfield': true,
@@ -8781,220 +8050,191 @@ var script$H = {
       characterCounterEl: null,
       helpertextEl: null
     });
-    var foundation;
-    var rippleClasses;
-    var rippleStyles;
-    var icons = ref({});
+    let foundation;
+    let rippleClasses;
+    let rippleStyles;
+    const icons = ref({});
 
-    var addIconFoundation = function addIconFoundation(_ref2) {
-      var foundation = _ref2.foundation,
-          trailing = _ref2.trailing;
+    const addIconFoundation = ({
+      foundation,
+      trailing
+    }) => {
       icons.value[trailing ? 'trailing' : 'leading'] = foundation;
     };
 
     provide('addIconFoundation', addIconFoundation);
 
     if (!props.multiline && !props.outline) {
-      var _useRipplePlugin = useRipplePlugin$1(toRef(uiState, 'root')),
-          classes = _useRipplePlugin.classes,
-          styles = _useRipplePlugin.styles;
-
+      const {
+        classes,
+        styles
+      } = useRipplePlugin$1(toRef(uiState, 'root'));
       rippleClasses = classes;
       rippleStyles = styles;
     }
 
-    var inputAriaControls = computed(function () {
+    const inputAriaControls = computed(() => {
       return props.helptext ? uiState.helpTextId : undefined;
     });
-    var hasLabel = computed(function () {
+    const hasLabel = computed(() => {
       return !props.outline && props.label;
     });
-    var hasOutlineLabel = computed(function () {
+    const hasOutlineLabel = computed(() => {
       return props.outline && props.label;
     });
-    var hasLineRipple = computed(function () {
+    const hasLineRipple = computed(() => {
       return !(props.outline || props.multiline);
     });
-    var hasHelptext = computed(function () {
+    const hasHelptext = computed(() => {
       return slots.helpText || props.helptext;
     });
-    var internalCharacterCounter = computed(function () {
-      return props.characterCounter && props.characterCounterInternal;
-    });
-    var helperCharacterCounter = computed(function () {
-      return props.characterCounter && !(props.multiline && props.characterCounterInternal);
-    });
-    var hasHelpline = computed(function () {
+    const internalCharacterCounter = computed(() => props.characterCounter && props.characterCounterInternal);
+    const helperCharacterCounter = computed(() => props.characterCounter && !(props.multiline && props.characterCounterInternal));
+    const hasHelpline = computed(() => {
       return props.helptext || helperCharacterCounter.value;
     });
-    var rootClasses = computed(function () {
-      return _objectSpread2(_objectSpread2({}, rippleClasses), uiState.classes);
-    });
-    var inputListeners = {
+    const rootClasses = computed(() => _objectSpread2(_objectSpread2({}, rippleClasses), uiState.classes));
+    const inputListeners = {
       // ...listeners,
-      input: function input(_ref3) {
-        var value = _ref3.target.value;
-        return emit('update:modelValue', value);
-      }
+      input: ({
+        target: {
+          value
+        }
+      }) => emit('update:modelValue', value)
     };
 
-    var focus = function focus() {
+    const focus = () => {
       var _uiState$input;
 
       return (_uiState$input = uiState.input) === null || _uiState$input === void 0 ? void 0 : _uiState$input.focus();
     };
 
-    var isValid = function isValid() {
-      return foundation.isValid();
-    };
+    const isValid = () => foundation.isValid();
 
-    var inputAttrs = computed(function () {
+    const inputAttrs = computed(() => {
       // eslint-disable-next-line no-unused-vars
-      var _ = attrs.class,
-          rest = _objectWithoutProperties(attrs, ["class"]);
+      const rest = _objectWithoutProperties(attrs, ["class"]);
 
       return _objectSpread2(_objectSpread2({}, rest), uiState.inputAttrs);
     });
-    var adapter = {
-      addClass: function addClass(className) {
-        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
-      },
-      removeClass: function removeClass(className) {
+    const adapter = {
+      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        [className]: true
+      }),
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes = uiState.classes,
-            removed = _uiState$classes[className],
-            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+        const _uiState$classes = uiState.classes,
+              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
         uiState.classes = rest;
       },
-      hasClass: function hasClass(className) {
-        return Boolean(uiState.classes[className]);
-      },
-      registerTextFieldInteractionHandler: function registerTextFieldInteractionHandler(evtType, handler) {
+      hasClass: className => Boolean(uiState.classes[className]),
+      registerTextFieldInteractionHandler: (evtType, handler) => {
         uiState.root.addEventListener(evtType, handler);
       },
-      deregisterTextFieldInteractionHandler: function deregisterTextFieldInteractionHandler(evtType, handler) {
+      deregisterTextFieldInteractionHandler: (evtType, handler) => {
         uiState.root.removeEventListener(evtType, handler);
       },
-      isFocused: function isFocused() {
+      isFocused: () => {
         return document.activeElement === uiState.input;
       },
-      registerValidationAttributeChangeHandler: function registerValidationAttributeChangeHandler(handler) {
-        var getAttributesList = function getAttributesList(mutationsList) {
-          return mutationsList.map(function (mutation) {
-            return mutation.attributeName;
-          });
-        };
+      registerValidationAttributeChangeHandler: handler => {
+        const getAttributesList = mutationsList => mutationsList.map(mutation => mutation.attributeName);
 
-        var observer = new MutationObserver(function (mutationsList) {
-          return handler(getAttributesList(mutationsList));
-        });
-        var targetNode = uiState.input;
-        var config = {
+        const observer = new MutationObserver(mutationsList => handler(getAttributesList(mutationsList)));
+        const targetNode = uiState.input;
+        const config = {
           attributes: true
         };
         observer.observe(targetNode, config);
         return observer;
       },
-      deregisterValidationAttributeChangeHandler: function deregisterValidationAttributeChangeHandler(observer) {
+      deregisterValidationAttributeChangeHandler: observer => {
         observer.disconnect();
       },
       // input adapter methods
-      registerInputInteractionHandler: function registerInputInteractionHandler(evtType, handler) {
+      registerInputInteractionHandler: (evtType, handler) => {
         uiState.input.addEventListener(evtType, handler, applyPassive());
       },
-      deregisterInputInteractionHandler: function deregisterInputInteractionHandler(evtType, handler) {
+      deregisterInputInteractionHandler: (evtType, handler) => {
         uiState.input.removeEventListener(evtType, handler, applyPassive());
       },
-      getNativeInput: function getNativeInput() {
+      getNativeInput: () => {
         return uiState.input;
       },
-      setInputAttr: function setInputAttr(attr, value) {
-        uiState.inputAttrs = _objectSpread2(_objectSpread2({}, uiState.inputAttrs), {}, _defineProperty({}, attr, value));
+      setInputAttr: (attr, value) => {
+        uiState.inputAttrs = _objectSpread2(_objectSpread2({}, uiState.inputAttrs), {}, {
+          [attr]: value
+        });
       },
-      removeInputAttr: function removeInputAttr(attr) {
+      removeInputAttr: attr => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$inputAttrs = uiState.inputAttrs,
-            removed = _uiState$inputAttrs[attr],
-            rest = _objectWithoutProperties(_uiState$inputAttrs, [attr].map(_toPropertyKey));
+        const _uiState$inputAttrs = uiState.inputAttrs,
+              rest = _objectWithoutProperties(_uiState$inputAttrs, [attr].map(_toPropertyKey));
 
         uiState.inputAttrs = rest;
       },
       // label adapter methods
-      shakeLabel: function shakeLabel(shouldShake) {
+      shakeLabel: shouldShake => {
         var _uiState$labelEl;
 
         (_uiState$labelEl = uiState.labelEl) === null || _uiState$labelEl === void 0 ? void 0 : _uiState$labelEl.shake(shouldShake);
       },
-      floatLabel: function floatLabel(shouldFloat) {
+      floatLabel: shouldFloat => {
         var _uiState$labelEl2;
 
         (_uiState$labelEl2 = uiState.labelEl) === null || _uiState$labelEl2 === void 0 ? void 0 : _uiState$labelEl2.float(shouldFloat);
       },
-      hasLabel: function hasLabel() {
+      hasLabel: () => {
         return !!uiState.labelEl || !!uiState.notchedEl;
       },
-      getLabelWidth: function getLabelWidth() {
+      getLabelWidth: () => {
         return uiState.labelEl.getWidth();
       },
       // line ripple adapter methods
-      deactivateLineRipple: function deactivateLineRipple() {
+      deactivateLineRipple: () => {
         var _uiState$lineRippleEl;
 
         return (_uiState$lineRippleEl = uiState.lineRippleEl) === null || _uiState$lineRippleEl === void 0 ? void 0 : _uiState$lineRippleEl.deactivate();
       },
-      activateLineRipple: function activateLineRipple() {
+      activateLineRipple: () => {
         var _uiState$lineRippleEl2;
 
         return (_uiState$lineRippleEl2 = uiState.lineRippleEl) === null || _uiState$lineRippleEl2 === void 0 ? void 0 : _uiState$lineRippleEl2.activate();
       },
-      setLineRippleTransformOrigin: function setLineRippleTransformOrigin(normalizedX) {
+      setLineRippleTransformOrigin: normalizedX => {
         var _uiState$lineRippleEl3;
 
         return (_uiState$lineRippleEl3 = uiState.lineRippleEl) === null || _uiState$lineRippleEl3 === void 0 ? void 0 : _uiState$lineRippleEl3.setRippleCenter(normalizedX);
       },
       // outline adapter methods
-      hasOutline: function hasOutline() {
-        return !!props.outline;
-      },
-      notchOutline: function notchOutline(notchWidth, isRtl) {
-        return uiState.labelEl.notch(notchWidth, isRtl);
-      },
-      closeOutline: function closeOutline() {
-        return uiState.labelEl.closeNotch();
-      }
+      hasOutline: () => !!props.outline,
+      notchOutline: (notchWidth, isRtl) => uiState.labelEl.notch(notchWidth, isRtl),
+      closeOutline: () => uiState.labelEl.closeNotch()
     };
-    watch(function () {
-      return props.disabled;
-    }, function (nv) {
+    watch(() => props.disabled, nv => {
       var _foundation;
 
       return (_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.setDisabled(nv);
     });
-    watch(function () {
-      return props.required;
-    }, function (nv) {
+    watch(() => props.required, nv => {
       uiState.input && (uiState.input.required = nv);
     });
-    watch(function () {
-      return props.valid;
-    }, function (nv) {
+    watch(() => props.valid, nv => {
       if (typeof nv !== 'undefined') {
         var _foundation2;
 
         (_foundation2 = foundation) === null || _foundation2 === void 0 ? void 0 : _foundation2.setValid(nv);
       }
     });
-    watch(function () {
-      return props.modelValue;
-    }, function (nv) {
+    watch(() => props.modelValue, nv => {
       if (foundation) {
         if (nv !== foundation.getValue()) {
           foundation.setValue(nv);
         }
       }
     });
-    onMounted(function () {
+    onMounted(() => {
       var _uiState$characterCou, _uiState$helpertext, _icons$leading, _icons$trailing;
 
       foundation = new MDCTextFieldFoundation(_objectSpread2({}, adapter), {
@@ -9012,26 +8252,27 @@ var script$H = {
         foundation.setValid(props.valid);
       }
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      inputAriaControls: inputAriaControls,
-      hasLabel: hasLabel,
-      hasOutlineLabel: hasOutlineLabel,
-      inputListeners: inputListeners,
-      hasLineRipple: hasLineRipple,
-      hasHelptext: hasHelptext,
-      hasHelpline: hasHelpline,
-      focus: focus,
-      helperCharacterCounter: helperCharacterCounter,
-      internalCharacterCounter: internalCharacterCounter,
-      rootClasses: rootClasses,
-      rippleStyles: rippleStyles,
-      isValid: isValid,
-      inputAttrs: inputAttrs
+      inputAriaControls,
+      hasLabel,
+      hasOutlineLabel,
+      inputListeners,
+      hasLineRipple,
+      hasHelptext,
+      hasHelpline,
+      focus,
+      helperCharacterCounter,
+      internalCharacterCounter,
+      rootClasses,
+      rippleStyles,
+      isValid,
+      inputAttrs
     });
   },
+
   components: {
     mcwLineRipple: script$j,
     mcwNotchedOutline: script$p
@@ -9228,9 +8469,11 @@ var script$I = {
       type: [String, Number]
     }
   },
-  setup: function setup(props, _ref) {
-    var emit = _ref.emit;
-    var uiState = reactive({
+
+  setup(props, {
+    emit
+  }) {
+    const uiState = reactive({
       classes: {},
       styles: {},
       rootAttrs: {
@@ -9238,129 +8481,116 @@ var script$I = {
       },
       root: null
     });
-    var foundation;
-    var anchorElem;
-    var adapter = {
-      getAttribute: function getAttribute(name) {
-        return uiState.root.getAttribute(name);
+    let foundation;
+    let anchorElem;
+    const adapter = {
+      getAttribute: name => uiState.root.getAttribute(name),
+      setAttribute: (attributeName, value) => {
+        uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, {
+          [attributeName]: value
+        });
       },
-      setAttribute: function setAttribute(attributeName, value) {
-        uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, _defineProperty({}, attributeName, value));
-      },
-      addClass: function addClass(className) {
-        return uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, _defineProperty({}, className, true));
-      },
-      hasClass: function hasClass(className) {
-        return uiState.root.classList.contains(className);
-      },
-      removeClass: function removeClass(className) {
+      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        [className]: true
+      }),
+      hasClass: className => uiState.root.classList.contains(className),
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$classes = uiState.classes,
-            removed = _uiState$classes[className],
-            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
+        const _uiState$classes = uiState.classes,
+              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
 
         uiState.classes = rest;
       },
-      setStyleProperty: function setStyleProperty(property, value) {
-        return uiState.styles = _objectSpread2(_objectSpread2({}, uiState.styles), {}, _defineProperty({}, property, value));
-      },
-      getViewportWidth: function getViewportWidth() {
-        return window.innerWidth;
-      },
-      getViewportHeight: function getViewportHeight() {
-        return window.innerHeight;
-      },
-      getTooltipSize: function getTooltipSize() {
+      setStyleProperty: (property, value) => uiState.styles = _objectSpread2(_objectSpread2({}, uiState.styles), {}, {
+        [property]: value
+      }),
+      getViewportWidth: () => window.innerWidth,
+      getViewportHeight: () => window.innerHeight,
+      getTooltipSize: () => {
         return {
           width: uiState.root.offsetWidth,
           height: uiState.root.offsetHeight
         };
       },
-      getAnchorBoundingRect: function getAnchorBoundingRect() {
+      getAnchorBoundingRect: () => {
         return anchorElem ? anchorElem.getBoundingClientRect() : null;
       },
-      getAnchorAttribute: function getAnchorAttribute(attr) {
+      getAnchorAttribute: attr => {
         return anchorElem ? anchorElem.getAttribute(attr) : null;
       },
-      setAnchorAttribute: function setAnchorAttribute(attr, value) {
+      setAnchorAttribute: (attr, value) => {
         var _anchorElem;
 
         (_anchorElem = anchorElem) === null || _anchorElem === void 0 ? void 0 : _anchorElem.setAttribute(attr, value);
       },
-      isRTL: function isRTL() {
-        return getComputedStyle(uiState.root).direction === 'rtl';
-      },
-      anchorContainsElement: function anchorContainsElement(element) {
+      isRTL: () => getComputedStyle(uiState.root).direction === 'rtl',
+      anchorContainsElement: element => {
         var _anchorElem2;
 
         return !!((_anchorElem2 = anchorElem) !== null && _anchorElem2 !== void 0 && _anchorElem2.contains(element));
       },
-      tooltipContainsElement: function tooltipContainsElement(element) {
+      tooltipContainsElement: element => {
         return uiState.root.contains(element);
       },
-      registerEventHandler: function registerEventHandler(evt, handler) {
+      registerEventHandler: (evt, handler) => {
         uiState.root.addEventListener(evt, handler);
       },
-      deregisterEventHandler: function deregisterEventHandler(evt, handler) {
+      deregisterEventHandler: (evt, handler) => {
         uiState.root.removeEventListener(evt, handler);
       },
-      registerDocumentEventHandler: function registerDocumentEventHandler(evt, handler) {
+      registerDocumentEventHandler: (evt, handler) => {
         document.body.addEventListener(evt, handler);
       },
-      deregisterDocumentEventHandler: function deregisterDocumentEventHandler(evt, handler) {
+      deregisterDocumentEventHandler: (evt, handler) => {
         document.body.removeEventListener(evt, handler);
       },
-      registerWindowEventHandler: function registerWindowEventHandler(evt, handler) {
+      registerWindowEventHandler: (evt, handler) => {
         window.addEventListener(evt, handler);
       },
-      deregisterWindowEventHandler: function deregisterWindowEventHandler(evt, handler) {
+      deregisterWindowEventHandler: (evt, handler) => {
         window.removeEventListener(evt, handler);
       },
-      notifyHidden: function notifyHidden() {
+      notifyHidden: () => {
         emit(events$1.HIDDEN.toLowerCase(), {});
       }
     };
 
-    var handleMouseEnter = function handleMouseEnter() {
+    const handleMouseEnter = () => {
       foundation.handleAnchorMouseEnter();
     };
 
-    var handleFocus = function handleFocus(evt) {
+    const handleFocus = evt => {
       foundation.handleAnchorFocus(evt);
     };
 
-    var handleMouseLeave = function handleMouseLeave() {
+    const handleMouseLeave = () => {
       foundation.handleAnchorMouseLeave();
     };
 
-    var handleBlur = function handleBlur(evt) {
+    const handleBlur = evt => {
       foundation.handleAnchorBlur(evt);
     };
 
-    var handleTransitionEnd = function handleTransitionEnd() {
+    const handleTransitionEnd = () => {
       foundation.handleTransitionEnd();
     };
 
-    var handleClick = function handleClick() {
+    const handleClick = () => {
       foundation.handleAnchorClick();
     };
 
-    var onPosition = function onPosition(position) {
+    const onPosition = position => {
       if (position) {
-        var xPos;
-        var yPos;
+        let xPos;
+        let yPos;
 
         if (typeof position == 'string') {
-          var _position$split = position.split(',');
-
-          var _position$split2 = _slicedToArray(_position$split, 2);
-
-          xPos = _position$split2[0];
-          var _position$split2$ = _position$split2[1];
-          yPos = _position$split2$ === void 0 ? xPos : _position$split2$;
+          [xPos, yPos = xPos] = position.split(',');
         } else {
-          xPos = position.xPos;
-          yPos = position.yPos;
+          ({
+            xPos,
+            yPos
+          } = position);
         }
 
         foundation.setTooltipPosition({
@@ -9370,14 +8600,14 @@ var script$I = {
       }
     };
 
-    var onBoundaryType = function onBoundaryType(type) {
+    const onBoundaryType = type => {
       if (type != void 0) {
         foundation.setAnchorBoundaryType(toAnchorBoundaryType(type));
       }
     };
 
-    onMounted(function () {
-      var tooltipId = uiState.root.getAttribute('id');
+    onMounted(() => {
+      const tooltipId = uiState.root.getAttribute('id');
 
       if (!tooltipId) {
         throw new Error('MDCTooltip: Tooltip component must have an id.');
@@ -9392,8 +8622,8 @@ var script$I = {
 
       foundation = new MDCTooltipFoundation(adapter);
       foundation.init();
-      var isTooltipRich = foundation.getIsRich();
-      var isTooltipPersistent = foundation.getIsPersistent();
+      const isTooltipRich = foundation.getIsRich();
+      const isTooltipPersistent = foundation.getIsPersistent();
 
       if (isTooltipRich && isTooltipPersistent) {
         anchorElem.addEventListener('click', handleClick);
@@ -9405,14 +8635,10 @@ var script$I = {
       }
 
       anchorElem.addEventListener('blur', handleBlur);
-      watchEffect(function () {
-        return onPosition(props.position);
-      });
-      watchEffect(function () {
-        return onBoundaryType(props.boundaryType);
-      });
+      watchEffect(() => onPosition(props.position));
+      watchEffect(() => onBoundaryType(props.boundaryType));
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       var _foundation;
 
       if (anchorElem) {
@@ -9426,14 +8652,15 @@ var script$I = {
       (_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      handleTransitionEnd: handleTransitionEnd
+      handleTransitionEnd
     });
   }
+
 }; // ===
 // Private functions
 // ===
 
-var XPosition_ = {
+const XPosition_ = {
   detected: 0,
   start: 1,
   center: 2,
@@ -9446,7 +8673,7 @@ function toXposition(x) {
   return typeof x == 'string' ? (_XPosition_$x = XPosition_[x]) !== null && _XPosition_$x !== void 0 ? _XPosition_$x : 0 : x;
 }
 
-var YPosition_ = {
+const YPosition_ = {
   detected: 0,
   above: 1,
   below: 2
@@ -9458,7 +8685,7 @@ function toYposition(y) {
   return typeof y == 'string' ? (_YPosition_$y = YPosition_[y]) !== null && _YPosition_$y !== void 0 ? _YPosition_$y : 0 : y;
 }
 
-var AnchorBoundaryType_ = {
+const AnchorBoundaryType_ = {
   bounded: 0,
   unbounded: 1
 };
@@ -9493,8 +8720,10 @@ var tooltip = BasePlugin({
   mcwTooltip: script$I
 });
 
-var cssClasses$6 = MDCTopAppBarFoundation.cssClasses,
-    strings$e = MDCTopAppBarFoundation.strings;
+const {
+  cssClasses: cssClasses$6,
+  strings: strings$e
+} = MDCTopAppBarFoundation;
 var script$J = {
   name: 'mcw-top-app-bar',
   props: {
@@ -9505,10 +8734,12 @@ var script$J = {
     scrollTarget: HTMLElement
   },
   emits: ['nav'],
-  setup: function setup(props, _ref) {
-    var emit = _ref.emit,
-        attrs = _ref.attrs;
-    var uiState = reactive({
+
+  setup(props, {
+    emit,
+    attrs
+  }) {
+    const uiState = reactive({
       rootStyles: {},
       rootClasses: {
         'mdc-top-app-bar': true
@@ -9516,60 +8747,45 @@ var script$J = {
       myScrollTarget: props.scrollTarget || window,
       root: null
     });
-    var foundation;
-    var navIcon;
-    var iconRipples = [];
+    let foundation;
+    let navIcon;
+    let iconRipples = [];
 
-    var handleNavigationClick = function handleNavigationClick(event) {
-      return foundation.handleNavigationClick(event);
-    };
+    const handleNavigationClick = event => foundation.handleNavigationClick(event);
 
-    var handleTargetScroll = function handleTargetScroll(evt) {
-      return foundation.handleTargetScroll(evt);
-    };
+    const handleTargetScroll = evt => foundation.handleTargetScroll(evt);
 
-    var handleWindowResize = function handleWindowResize(evt) {
-      return foundation.handleWindowResize(evt);
-    };
+    const handleWindowResize = evt => foundation.handleWindowResize(evt);
 
-    var adapter = {
-      addClass: function addClass(className) {
-        return uiState.rootClasses = _objectSpread2(_objectSpread2({}, uiState.rootClasses), {}, _defineProperty({}, className, true));
-      },
-      removeClass: function removeClass(className) {
+    const adapter = {
+      addClass: className => uiState.rootClasses = _objectSpread2(_objectSpread2({}, uiState.rootClasses), {}, {
+        [className]: true
+      }),
+      removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        var _uiState$rootClasses = uiState.rootClasses,
-            removed = _uiState$rootClasses[className],
-            rest = _objectWithoutProperties(_uiState$rootClasses, [className].map(_toPropertyKey));
+        const _uiState$rootClasses = uiState.rootClasses,
+              rest = _objectWithoutProperties(_uiState$rootClasses, [className].map(_toPropertyKey));
 
         uiState.rootClasses = rest;
       },
-      hasClass: function hasClass(className) {
-        return Boolean(uiState.rootClasses[className]);
-      },
-      setStyle: function setStyle(property, value) {
-        return uiState.rootStyles = _objectSpread2(_objectSpread2({}, uiState.rootStyles), {}, _defineProperty({}, property, value));
-      },
-      getTopAppBarHeight: function getTopAppBarHeight() {
-        return uiState.root.clientHeight;
-      },
-      notifyNavigationIconClicked: function notifyNavigationIconClicked() {
+      hasClass: className => Boolean(uiState.rootClasses[className]),
+      setStyle: (property, value) => uiState.rootStyles = _objectSpread2(_objectSpread2({}, uiState.rootStyles), {}, {
+        [property]: value
+      }),
+      getTopAppBarHeight: () => uiState.root.clientHeight,
+      notifyNavigationIconClicked: () => {
         emit('nav', {});
         emitCustomEvent(uiState.root, strings$e.NAVIGATION_EVENT, {},
         /** shouldBubble */
         true);
       },
-      getViewportScrollY: function getViewportScrollY() {
-        var st = uiState.myScrollTarget;
+      getViewportScrollY: () => {
+        const st = uiState.myScrollTarget;
         return st.pageYOffset !== void 0 ? st.pageYOffset : st.scrollTop;
       },
-      getTotalActionItems: function getTotalActionItems() {
-        return uiState.root.querySelectorAll(strings$e.ACTION_ITEM_SELECTOR).length;
-      }
+      getTotalActionItems: () => uiState.root.querySelectorAll(strings$e.ACTION_ITEM_SELECTOR).length
     };
-    watch(function () {
-      return props.scrollTarget;
-    }, function (nv, ov) {
+    watch(() => props.scrollTarget, (nv, ov) => {
       if (nv !== ov) {
         uiState.myScrollTarget.removeEventListener('scroll', handleTargetScroll);
         uiState.myScrollTarget = nv;
@@ -9577,15 +8793,15 @@ var script$J = {
       }
     });
 
-    var setScrollTarget = function setScrollTarget(nv) {
+    const setScrollTarget = nv => {
       uiState.myScrollTarget.removeEventListener('scroll', handleTargetScroll);
       uiState.myScrollTarget = nv;
       uiState.myScrollTarget.addEventListener('scroll', handleTargetScroll);
     };
 
-    onMounted(function () {
-      var isFixed = uiState.root.classList.contains(cssClasses$6.FIXED_CLASS);
-      var isShort = uiState.root.classList.contains(cssClasses$6.SHORT_CLASS);
+    onMounted(() => {
+      const isFixed = uiState.root.classList.contains(cssClasses$6.FIXED_CLASS);
+      const isShort = uiState.root.classList.contains(cssClasses$6.SHORT_CLASS);
 
       if (isShort) {
         foundation = new MDCShortTopAppBarFoundation(adapter);
@@ -9598,15 +8814,15 @@ var script$J = {
 
       navIcon = uiState.root.querySelector(strings$e.NAVIGATION_ICON_SELECTOR); // Get all icons in the toolbar and instantiate the ripples
 
-      var icons = [].slice.call(uiState.root.querySelectorAll(strings$e.ACTION_ITEM_SELECTOR));
+      const icons = [].slice.call(uiState.root.querySelectorAll(strings$e.ACTION_ITEM_SELECTOR));
 
       if (navIcon) {
         navIcon.addEventListener('click', handleNavigationClick);
         icons.push(navIcon);
       }
 
-      iconRipples = icons.map(function (icon) {
-        var ripple = new RippleElement(icon);
+      iconRipples = icons.map(icon => {
+        const ripple = new RippleElement(icon);
         ripple.init();
         ripple.unbounded = true;
         return ripple;
@@ -9619,20 +8835,18 @@ var script$J = {
 
       foundation.init();
     });
-    onBeforeUnmount(function () {
+    onBeforeUnmount(() => {
       var _uiState$myScrollTarg;
 
       if (navIcon) {
         navIcon.removeEventListener('click', handleNavigationClick);
       }
 
-      iconRipples.forEach(function (iconRipple) {
-        return iconRipple.destroy();
-      });
+      iconRipples.forEach(iconRipple => iconRipple.destroy());
       uiState.myScrollTarget.removeEventListener('scroll', handleTargetScroll);
       (_uiState$myScrollTarg = uiState.myScrollTarget) === null || _uiState$myScrollTarg === void 0 ? void 0 : _uiState$myScrollTarg.removeEventListener('scroll', foundation.handleTargetScroll);
-      var isFixed = uiState.root.classList.contains(cssClasses$6.FIXED_CLASS);
-      var isShort = uiState.root.classList.contains(cssClasses$6.SHORT_CLASS);
+      const isFixed = uiState.root.classList.contains(cssClasses$6.FIXED_CLASS);
+      const isShort = uiState.root.classList.contains(cssClasses$6.SHORT_CLASS);
 
       if (!isShort && !isFixed) {
         window.removeEventListener('resize', handleWindowResize);
@@ -9641,9 +8855,10 @@ var script$J = {
       foundation.destroy();
     });
     return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      setScrollTarget: setScrollTarget
+      setScrollTarget
     });
   }
+
 };
 
 function render$J(_ctx, _cache, $props, $setup, $data, $options) {
@@ -9672,7 +8887,7 @@ var topAppBar = BasePlugin({
 });
 
 var index$1 = {
-  install: function install(vm) {
+  install(vm) {
     vm.use(banner);
     vm.use(button);
     vm.use(card);
@@ -9703,6 +8918,7 @@ var index$1 = {
     vm.use(tooltip);
     vm.use(topAppBar);
   }
+
 };
 
 export default index$1;
