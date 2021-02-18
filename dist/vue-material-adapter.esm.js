@@ -29,7 +29,7 @@ import { MDCIconButtonToggleFoundation } from '@material/icon-button/foundation'
 import { MDCLineRippleFoundation } from '@material/line-ripple/foundation';
 import { MDCLinearProgressFoundation } from '@material/linear-progress/foundation';
 import { MDCMenuSurfaceFoundation } from '@material/menu-surface/foundation';
-import { getTransformPropertyName } from '@material/menu-surface/util';
+import { getCorrectPropertyName } from '@material/animation/util';
 import { MDCMenuFoundation } from '@material/menu/foundation';
 import { MDCNotchedOutlineFoundation } from '@material/notched-outline/foundation';
 import { MDCRadioFoundation } from '@material/radio/foundation';
@@ -52,7 +52,7 @@ import { MDCTextFieldCharacterCounterFoundation } from '@material/textfield/char
 import { MDCTextFieldHelperTextFoundation } from '@material/textfield/helper-text/foundation';
 import { MDCTextFieldIconFoundation } from '@material/textfield/icon/foundation.js';
 import { MDCTextFieldFoundation } from '@material/textfield/foundation';
-import { MDCTooltipFoundation, events as events$1 } from '@material/tooltip';
+import { MDCTooltipFoundation, CssClasses, events as events$1 } from '@material/tooltip';
 import { MDCFixedTopAppBarFoundation } from '@material/top-app-bar/fixed/foundation';
 import { MDCShortTopAppBarFoundation } from '@material/top-app-bar/short/foundation';
 import { MDCTopAppBarFoundation } from '@material/top-app-bar/standard/foundation';
@@ -3519,7 +3519,6 @@ var script$k = {
       default: true
     },
     indeterminate: Boolean,
-    reversed: Boolean,
     progress: progressPropType_,
     buffer: progressPropType_,
     bufferingDots: {
@@ -3592,13 +3591,9 @@ var script$k = {
     watch(() => props.indeterminate, nv => {
       foundation.setDeterminate(!nv);
     });
-    watch(() => props.reversed, nv => {
-      foundation.setReverse(nv);
-    });
     onMounted(() => {
       foundation = new MDCLinearProgressFoundation(adapter);
       foundation.init();
-      foundation.setReverse(props.reversed);
       foundation.setProgress(Number(props.progress));
       foundation.setBuffer(Number(props.buffer));
       foundation.setDeterminate(!props.indeterminate);
@@ -4631,7 +4626,7 @@ var script$n = {
       },
       isRtl: () => getComputedStyle(uiState.root).getPropertyValue('direction') === 'rtl',
       setTransformOrigin: origin => {
-        uiState.root.style.setProperty("".concat(getTransformPropertyName(window), "-origin"), origin);
+        uiState.root.style.setProperty("".concat(getCorrectPropertyName(window, 'transform'), "-origin"), origin);
       }
     };
     watch(() => props.modelValue, nv => onOpen_(nv));
@@ -6541,14 +6536,16 @@ const _hoisted_4$a = {
 };
 const _hoisted_5$6 = {
   key: 0,
-  class: "mdc-slider__value-indicator-container"
+  class: "mdc-slider__value-indicator-container",
+  "aria-hidden": "true"
 };
 const _hoisted_6$4 = { class: "mdc-slider__value-indicator" };
 const _hoisted_7$3 = { class: "mdc-slider__value-indicator-text" };
 const _hoisted_8$3 = /*#__PURE__*/createVNode("div", { class: "mdc-slider__thumb-knob" }, null, -1 /* HOISTED */);
 const _hoisted_9$2 = {
   key: 0,
-  class: "mdc-slider__value-indicator-container"
+  class: "mdc-slider__value-indicator-container",
+  "aria-hidden": "true"
 };
 const _hoisted_10$1 = { class: "mdc-slider__value-indicator" };
 const _hoisted_11$1 = { class: "mdc-slider__value-indicator-text" };
@@ -8501,9 +8498,16 @@ var script$I = {
 
         uiState.classes = rest;
       },
+      getComputedStyleProperty: propertyName => {
+        return window.getComputedStyle(uiState.root).getPropertyValue(propertyName);
+      },
       setStyleProperty: (property, value) => uiState.styles = _objectSpread2(_objectSpread2({}, uiState.styles), {}, {
         [property]: value
       }),
+      setSurfaceStyleProperty: (propertyName, value) => {
+        const surface = uiState.root.querySelector(".".concat(CssClasses.SURFACE));
+        surface === null || surface === void 0 ? void 0 : surface.style.setProperty(propertyName, value);
+      },
       getViewportWidth: () => window.innerWidth,
       getViewportHeight: () => window.innerHeight,
       getTooltipSize: () => {
@@ -8514,6 +8518,11 @@ var script$I = {
       },
       getAnchorBoundingRect: () => {
         return anchorElem ? anchorElem.getBoundingClientRect() : null;
+      },
+      getParentBoundingRect: () => {
+        var _uiState$root$parentE, _uiState$root$parentE2;
+
+        return (_uiState$root$parentE = (_uiState$root$parentE2 = uiState.root.parentElement) === null || _uiState$root$parentE2 === void 0 ? void 0 : _uiState$root$parentE2.getBoundingClientRect()) !== null && _uiState$root$parentE !== void 0 ? _uiState$root$parentE : null;
       },
       getAnchorAttribute: attr => {
         return anchorElem ? anchorElem.getAttribute(attr) : null;
@@ -8622,8 +8631,8 @@ var script$I = {
 
       foundation = new MDCTooltipFoundation(adapter);
       foundation.init();
-      const isTooltipRich = foundation.getIsRich();
-      const isTooltipPersistent = foundation.getIsPersistent();
+      const isTooltipRich = foundation.isRich();
+      const isTooltipPersistent = foundation.isPersistent();
 
       if (isTooltipRich && isTooltipPersistent) {
         anchorElem.addEventListener('click', handleClick);
