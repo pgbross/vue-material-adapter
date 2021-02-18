@@ -20,7 +20,7 @@
         Buffer
       </div>
       <br />
-      <mcw-linear-progress reversed progress="0.5"></mcw-linear-progress>
+      <mcw-linear-progress dir="rtl" progress="0.5"></mcw-linear-progress>
       <div class="mdc-typography--caption linear-progress-demo--example">
         Reversed
       </div>

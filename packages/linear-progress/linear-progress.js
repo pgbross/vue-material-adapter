@@ -13,7 +13,6 @@ export default {
   props: {
     open: { type: Boolean, default: true },
     indeterminate: Boolean,
-    reversed: Boolean,
     progress: progressPropType_,
     buffer: progressPropType_,
     bufferingDots: { type: Boolean, default: true },
@@ -96,17 +95,10 @@ export default {
         foundation.setDeterminate(!nv);
       },
     );
-    watch(
-      () => props.reversed,
-      nv => {
-        foundation.setReverse(nv);
-      },
-    );
 
     onMounted(() => {
       foundation = new MDCLinearProgressFoundation(adapter);
       foundation.init();
-      foundation.setReverse(props.reversed);
       foundation.setProgress(Number(props.progress));
       foundation.setBuffer(Number(props.buffer));
       foundation.setDeterminate(!props.indeterminate);

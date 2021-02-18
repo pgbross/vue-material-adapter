@@ -22,7 +22,6 @@ var vm = new Vue({
 | --------------- | ------- | --------- | ------------------------------------------------------------ |
 | `open`          | Boolean | true      | When changed to `false`, closes the component                |
 | `indeterminate` | Boolean | false     | If `true`, renders the indeterminate variant                 |
-| `reversed`      | Boolean | false     | If `true`, renders the reversed variant                      |
 | `progress`      | Number  | undefined | Decimal value between 0 and 1, sets the progress bar width   |
 | `buffer`        | Number  | undefined | Decimal value between 0 and 1, sets the buffer bar width     |
 | `bufferingDots` | Boolean | true      | Whether to show the buffer dots in the un-progressed section |
@@ -49,7 +48,7 @@ var vm = new Vue({
 - Reversed
 
 ```html
-<mcw-linear-progress reversed progress="0.5"></mcw-linear-progress>
+<mcw-linear-progress dir="rtl" progress="0.5"></mcw-linear-progress>
 ```
 
 ### Reference
