@@ -1,4 +1,4 @@
-import { events, MDCTooltipFoundation } from '@material/tooltip';
+import { events, CssClasses, MDCTooltipFoundation } from '@material/tooltip';
 import { onBeforeUnmount, onMounted, reactive, toRefs, watchEffect } from 'vue';
 
 export default {
@@ -30,8 +30,17 @@ export default {
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
+      getComputedStyleProperty: propertyName => {
+        return window
+          .getComputedStyle(uiState.root)
+          .getPropertyValue(propertyName);
+      },
       setStyleProperty: (property, value) =>
         (uiState.styles = { ...uiState.styles, [property]: value }),
+      setSurfaceStyleProperty: (propertyName, value) => {
+        const surface = uiState.root.querySelector(`.${CssClasses.SURFACE}`);
+        surface?.style.setProperty(propertyName, value);
+      },
       getViewportWidth: () => window.innerWidth,
       getViewportHeight: () => window.innerHeight,
       getTooltipSize: () => {
@@ -43,6 +52,9 @@ export default {
 
       getAnchorBoundingRect: () => {
         return anchorElem ? anchorElem.getBoundingClientRect() : null;
+      },
+      getParentBoundingRect: () => {
+        return uiState.root.parentElement?.getBoundingClientRect() ?? null;
       },
       getAnchorAttribute: attr => {
         return anchorElem ? anchorElem.getAttribute(attr) : null;
@@ -152,8 +164,8 @@ export default {
       foundation = new MDCTooltipFoundation(adapter);
       foundation.init();
 
-      const isTooltipRich = foundation.getIsRich();
-      const isTooltipPersistent = foundation.getIsPersistent();
+      const isTooltipRich = foundation.isRich();
+      const isTooltipPersistent = foundation.isPersistent();
 
       if (isTooltipRich && isTooltipPersistent) {
         anchorElem.addEventListener('click', handleClick);
