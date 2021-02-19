@@ -7,5 +7,5 @@
   role="tooltip"
   @transitionend="handleTransitionEnd"
 >
-  <div class="mdc-tooltip__surface"><slot></slot></div>
+  <div :style="surfaceStyle" class="mdc-tooltip__surface"><slot></slot></div>
 </div>

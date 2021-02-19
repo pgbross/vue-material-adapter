@@ -1,4 +1,4 @@
-import { events, CssClasses, MDCTooltipFoundation } from '@material/tooltip';
+import { events, MDCTooltipFoundation } from '@material/tooltip';
 import { onBeforeUnmount, onMounted, reactive, toRefs, watchEffect } from 'vue';
 
 export default {
@@ -11,6 +11,7 @@ export default {
     const uiState = reactive({
       classes: {},
       styles: {},
+      surfaceStyle: {},
       rootAttrs: { 'aria-hidden': true },
       root: null,
     });
@@ -38,8 +39,10 @@ export default {
       setStyleProperty: (property, value) =>
         (uiState.styles = { ...uiState.styles, [property]: value }),
       setSurfaceStyleProperty: (propertyName, value) => {
-        const surface = uiState.root.querySelector(`.${CssClasses.SURFACE}`);
-        surface?.style.setProperty(propertyName, value);
+        uiState.surfaceStyle = {
+          ...uiState.surfaceStyle,
+          [propertyName]: value,
+        };
       },
       getViewportWidth: () => window.innerWidth,
       getViewportHeight: () => window.innerHeight,
