@@ -14,12 +14,16 @@ export default {
       surfaceStyle: {},
       rootAttrs: { 'aria-hidden': true },
       root: null,
+      isTooltipPersistent: false,
+      isTooltipRich: false,
     });
     let foundation;
     let anchorElem;
 
     const adapter = {
-      getAttribute: name => uiState.root.getAttribute(name),
+      getAttribute: name => {
+        return uiState.root.getAttribute(name);
+      },
       setAttribute: (attributeName, value) => {
         uiState.rootAttrs = { ...uiState.rootAttrs, [attributeName]: value };
       },
@@ -167,10 +171,10 @@ export default {
       foundation = new MDCTooltipFoundation(adapter);
       foundation.init();
 
-      const isTooltipRich = foundation.isRich();
-      const isTooltipPersistent = foundation.isPersistent();
+      uiState.isTooltipRich = foundation.isRich();
+      uiState.isTooltipPersistent = foundation.isPersistent();
 
-      if (isTooltipRich && isTooltipPersistent) {
+      if (uiState.isTooltipRich && uiState.isTooltipPersistent) {
         anchorElem.addEventListener('click', handleClick);
       } else {
         anchorElem.addEventListener('mouseenter', handleMouseEnter);
@@ -187,11 +191,15 @@ export default {
 
     onBeforeUnmount(() => {
       if (anchorElem) {
-        anchorElem.removeEventListener('mouseenter', handleMouseEnter);
-        // TODO(b/157075286): Listening for a 'focus' event is too broad.
-        anchorElem.removeEventListener('focus', handleFocus);
-        anchorElem.removeEventListener('mouseleave', handleMouseLeave);
-        anchorElem.removeEventListener('blur', handleBlur);
+        if (uiState.isTooltipRich && uiState.isTooltipPersistent) {
+          anchorElem.removeEventListener('click', handleClick);
+        } else {
+          anchorElem.removeEventListener('mouseenter', handleMouseEnter);
+          // TODO(b/157075286): Listening for a 'focus' event is too broad.
+          anchorElem.removeEventListener('focus', handleFocus);
+          anchorElem.removeEventListener('mouseleave', handleMouseLeave);
+          anchorElem.removeEventListener('blur', handleBlur);
+        }
       }
 
       foundation?.destroy();
