@@ -27,6 +27,7 @@ export default {
       bufferbarStyles: {},
       primaryStyles: {},
       rootAttrs: { 'aria-valuemin': 0, 'aria-valuemax': 1 },
+      rootStyles: {},
       root: null,
     });
 
@@ -64,6 +65,23 @@ export default {
         const { [attributeName]: removed, ...rest } = uiState.rootAttrs;
         uiState.rootAttrs = rest;
       },
+      setStyle: (name, value) => {
+        uiState.rootStyles = {
+          ...uiState.rootStyles,
+          [name]: value,
+        };
+      },
+
+      attachResizeObserver: callback => {
+        if (window.ResizeObserver) {
+          const ro = new ResizeObserver(callback);
+          ro.observe(uiState.root);
+          return ro;
+        }
+
+        return null;
+      },
+      getWidth: () => uiState.root.offsetWidth,
     };
 
     watch(
