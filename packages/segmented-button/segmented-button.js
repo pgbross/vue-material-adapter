@@ -6,11 +6,16 @@ import {
   provide,
   reactive,
   toRefs,
+  watch,
 } from 'vue';
 
 export default {
   name: 'mcw-segmented-button',
-  props: { singleSelect: Boolean, touch: Boolean },
+  props: {
+    singleSelect: Boolean,
+    touch: Boolean,
+    modelValue: { type: Number },
+  },
   setup(props, { emit }) {
     const uiState = reactive({
       classes: {
@@ -75,6 +80,8 @@ export default {
       },
       notifySelectedChange: detail => {
         emit('change', detail);
+
+        emit('update:modelValue', detail.index);
       },
     };
 
@@ -83,6 +90,18 @@ export default {
     onMounted(() => {
       foundation = new MDCSegmentedButtonFoundation(adapter);
       foundation.init();
+
+      if (props.singleSelect && props.modelValue !== void 0) {
+        foundation.selectSegment(props.modelValue);
+
+        watch(
+          () => props.modelValue,
+          nv => {
+            foundation.selectSegment(nv);
+            foundation.handleSelected({ index: nv });
+          },
+        );
+      }
     });
 
     onBeforeUnmount(() => {
