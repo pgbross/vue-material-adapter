@@ -5397,7 +5397,10 @@ var script$r = {
   name: 'mcw-segmented-button',
   props: {
     singleSelect: Boolean,
-    touch: Boolean
+    touch: Boolean,
+    modelValue: {
+      type: Number
+    }
   },
 
   setup(props, {
@@ -5464,12 +5467,23 @@ var script$r = {
       },
       notifySelectedChange: detail => {
         emit('change', detail);
+        emit('update:modelValue', detail.index);
       }
     };
     const role = computed(() => props.singleSelect ? 'radiogroup' : 'group');
     onMounted(() => {
       foundation = new MDCSegmentedButtonFoundation(adapter);
       foundation.init();
+
+      if (props.singleSelect && props.modelValue !== void 0) {
+        foundation.selectSegment(props.modelValue);
+        watch(() => props.modelValue, nv => {
+          foundation.selectSegment(nv);
+          foundation.handleSelected({
+            index: nv
+          });
+        });
+      }
     });
     onBeforeUnmount(() => {
       var _foundation;
