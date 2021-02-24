@@ -52,7 +52,7 @@ import { MDCTextFieldCharacterCounterFoundation } from '@material/textfield/char
 import { MDCTextFieldHelperTextFoundation } from '@material/textfield/helper-text/foundation';
 import { MDCTextFieldIconFoundation } from '@material/textfield/icon/foundation.js';
 import { MDCTextFieldFoundation } from '@material/textfield/foundation';
-import { MDCTooltipFoundation, CssClasses, events as events$1 } from '@material/tooltip';
+import { MDCTooltipFoundation, events as events$1 } from '@material/tooltip';
 import { MDCFixedTopAppBarFoundation } from '@material/top-app-bar/fixed/foundation';
 import { MDCShortTopAppBarFoundation } from '@material/top-app-bar/short/foundation';
 import { MDCTopAppBarFoundation } from '@material/top-app-bar/standard/foundation';
@@ -80,19 +80,22 @@ function BasePlugin(components) {
 }
 
 function emitCustomEvent(el, evtType, evtData, shouldBubble = false) {
-  evtType = evtType.toLowerCase();
+  if (el) {
+    evtType = evtType.toLowerCase();
+    const evt = typeof CustomEvent === 'function' ? new CustomEvent(evtType, {
+      detail: evtData,
+      bubbles: shouldBubble
+    }) : createCustomEvent(evtType, shouldBubble, evtData);
+    el.dispatchEvent(evt);
+  }
+} // ===
+// Private functions
+// ===
 
-  const createCustomEvent = () => {
-    const evt = document.createEvent('CustomEvent');
-    return evt.initCustomEvent(evtType, shouldBubble, false, evtData);
-  };
-
-  const evt = typeof CustomEvent === 'function' ? new CustomEvent(evtType, {
-    detail: evtData,
-    bubbles: shouldBubble
-  }) : createCustomEvent();
-  el.dispatchEvent(evt);
-}
+const createCustomEvent = (evtType, shouldBubble, evtData) => {
+  const evt = document.createEvent('CustomEvent');
+  return evt.initCustomEvent(evtType, shouldBubble, false, evtData);
+};
 
 function _defineProperty(obj, key, value) {
   if (key in obj) {
@@ -884,19 +887,22 @@ var card = BasePlugin({
 });
 
 function emitCustomEvent$1(el, evtType, evtData, shouldBubble = false) {
-  evtType = evtType.toLowerCase();
+  if (el) {
+    evtType = evtType.toLowerCase();
+    const evt = typeof CustomEvent === 'function' ? new CustomEvent(evtType, {
+      detail: evtData,
+      bubbles: shouldBubble
+    }) : createCustomEvent$1(evtType, shouldBubble, evtData);
+    el.dispatchEvent(evt);
+  }
+} // ===
+// Private functions
+// ===
 
-  const createCustomEvent = () => {
-    const evt = document.createEvent('CustomEvent');
-    return evt.initCustomEvent(evtType, shouldBubble, false, evtData);
-  };
-
-  const evt = typeof CustomEvent === 'function' ? new CustomEvent(evtType, {
-    detail: evtData,
-    bubbles: shouldBubble
-  }) : createCustomEvent();
-  el.dispatchEvent(evt);
-}
+const createCustomEvent$1 = (evtType, shouldBubble, evtData) => {
+  const evt = document.createEvent('CustomEvent');
+  return evt.initCustomEvent(evtType, shouldBubble, false, evtData);
+};
 
 class RippleElement$1 extends MDCRippleFoundation {
   constructor(element, state, _ref = {}) {
@@ -3542,6 +3548,7 @@ var script$k = {
         'aria-valuemin': 0,
         'aria-valuemax': 1
       },
+      rootStyles: {},
       root: null
     });
     let foundation;
@@ -3573,7 +3580,22 @@ var script$k = {
               rest = _objectWithoutProperties(_uiState$rootAttrs, [attributeName].map(_toPropertyKey));
 
         uiState.rootAttrs = rest;
-      }
+      },
+      setStyle: (name, value) => {
+        uiState.rootStyles = _objectSpread2(_objectSpread2({}, uiState.rootStyles), {}, {
+          [name]: value
+        });
+      },
+      attachResizeObserver: callback => {
+        if (window.ResizeObserver) {
+          const ro = new ResizeObserver(callback);
+          ro.observe(uiState.root);
+          return ro;
+        }
+
+        return null;
+      },
+      getWidth: () => uiState.root.offsetWidth
     };
     watch(() => props.open, nv => {
       if (nv) {
@@ -3626,6 +3648,7 @@ function render$k(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("div", mergeProps({
     ref: "root",
     class: _ctx.classes,
+    style: _ctx.rootStyles,
     role: "progressbar"
   }, _ctx.rootAttrs), [
     createVNode("div", _hoisted_1$e, [
@@ -7265,10 +7288,12 @@ var script$A = {
           foundation.scrollIntoView(i);
           break;
         }
-      }
+      } // watch for changes in the modelValue
+      // note watchEffect does not give the correct behaviour
 
-      watchEffect(() => {
-        foundation.activateTab(Number(props.modelValue));
+
+      watch(() => props.modelValue, nv => {
+        foundation.activateTab(Number(nv));
       });
     });
     onBeforeUnmount(() => {
@@ -8473,15 +8498,20 @@ var script$I = {
     const uiState = reactive({
       classes: {},
       styles: {},
+      surfaceStyle: {},
       rootAttrs: {
         'aria-hidden': true
       },
-      root: null
+      root: null,
+      isTooltipPersistent: false,
+      isTooltipRich: false
     });
     let foundation;
     let anchorElem;
     const adapter = {
-      getAttribute: name => uiState.root.getAttribute(name),
+      getAttribute: name => {
+        return uiState.root.getAttribute(name);
+      },
       setAttribute: (attributeName, value) => {
         uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, {
           [attributeName]: value
@@ -8505,8 +8535,9 @@ var script$I = {
         [property]: value
       }),
       setSurfaceStyleProperty: (propertyName, value) => {
-        const surface = uiState.root.querySelector(".".concat(CssClasses.SURFACE));
-        surface === null || surface === void 0 ? void 0 : surface.style.setProperty(propertyName, value);
+        uiState.surfaceStyle = _objectSpread2(_objectSpread2({}, uiState.surfaceStyle), {}, {
+          [propertyName]: value
+        });
       },
       getViewportWidth: () => window.innerWidth,
       getViewportHeight: () => window.innerHeight,
@@ -8631,10 +8662,10 @@ var script$I = {
 
       foundation = new MDCTooltipFoundation(adapter);
       foundation.init();
-      const isTooltipRich = foundation.isRich();
-      const isTooltipPersistent = foundation.isPersistent();
+      uiState.isTooltipRich = foundation.isRich();
+      uiState.isTooltipPersistent = foundation.isPersistent();
 
-      if (isTooltipRich && isTooltipPersistent) {
+      if (uiState.isTooltipRich && uiState.isTooltipPersistent) {
         anchorElem.addEventListener('click', handleClick);
       } else {
         anchorElem.addEventListener('mouseenter', handleMouseEnter); // TODO(b/157075286): Listening for a 'focus' event is too broad.
@@ -8651,11 +8682,15 @@ var script$I = {
       var _foundation;
 
       if (anchorElem) {
-        anchorElem.removeEventListener('mouseenter', handleMouseEnter); // TODO(b/157075286): Listening for a 'focus' event is too broad.
+        if (uiState.isTooltipRich && uiState.isTooltipPersistent) {
+          anchorElem.removeEventListener('click', handleClick);
+        } else {
+          anchorElem.removeEventListener('mouseenter', handleMouseEnter); // TODO(b/157075286): Listening for a 'focus' event is too broad.
 
-        anchorElem.removeEventListener('focus', handleFocus);
-        anchorElem.removeEventListener('mouseleave', handleMouseLeave);
-        anchorElem.removeEventListener('blur', handleBlur);
+          anchorElem.removeEventListener('focus', handleFocus);
+          anchorElem.removeEventListener('mouseleave', handleMouseLeave);
+          anchorElem.removeEventListener('blur', handleBlur);
+        }
       }
 
       (_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.destroy();
@@ -8705,8 +8740,6 @@ function toAnchorBoundaryType(type) {
   return typeof type == 'string' ? (_AnchorBoundaryType_$ = AnchorBoundaryType_[type]) !== null && _AnchorBoundaryType_$ !== void 0 ? _AnchorBoundaryType_$ : '0' : type;
 }
 
-const _hoisted_1$q = { class: "mdc-tooltip__surface" };
-
 function render$I(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("div", mergeProps({
     ref: "root",
@@ -8716,9 +8749,12 @@ function render$I(_ctx, _cache, $props, $setup, $data, $options) {
     role: "tooltip",
     onTransitionend: _cache[1] || (_cache[1] = (...args) => (_ctx.handleTransitionEnd && _ctx.handleTransitionEnd(...args)))
   }), [
-    createVNode("div", _hoisted_1$q, [
+    createVNode("div", {
+      style: _ctx.surfaceStyle,
+      class: "mdc-tooltip__surface"
+    }, [
       renderSlot(_ctx.$slots, "default")
-    ])
+    ], 4 /* STYLE */)
   ], 16 /* FULL_PROPS */))
 }
 
