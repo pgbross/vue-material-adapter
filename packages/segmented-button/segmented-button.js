@@ -118,11 +118,15 @@ export default {
             const selectedSegments = mappedSegments.value
               .filter(({ selected }) => selected)
               .map(({ index }) => index);
+
+            // select the new ones
             nv.forEach(v => {
               if (selectedSegments.indexOf(v) < 0) {
                 foundation.selectSegment(v);
               }
             });
+
+            // unselect the ones that not there anymore
             selectedSegments.forEach(v => {
               if (nv.indexOf(v) < 0) {
                 foundation.unselectSegment(v);

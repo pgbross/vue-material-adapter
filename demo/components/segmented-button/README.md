@@ -3,24 +3,29 @@
 ```html
 <div class="mcw-demo">
   <div>Single select</div>
-  <mcw-segmented-button single-select @change="onChange">
+  <mcw-segmented-button v-model="singleIndex" single-select @change="onChange">
     <mcw-segment icon="favorite" label="Some text"></mcw-segment>
     <mcw-segment label="Some text"></mcw-segment>
     <mcw-segment icon="delete" :ripple="false"></mcw-segment>
   </mcw-segmented-button>
 
+  <div>Value: {{ singleIndex }}</div>
+
   <div style="margin-top: 2em">Multi select</div>
-  <mcw-segmented-button>
+  <mcw-segmented-button v-model="multiIndex">
     <mcw-segment icon="favorite" label="Some text"></mcw-segment>
     <mcw-segment label="Some text"></mcw-segment>
     <mcw-segment icon="delete" :ripple="false"></mcw-segment>
   </mcw-segmented-button>
+
+  <div>Value: {{ multiIndex }}</div>
 </div>
 ```
 
 ```javascript
 var vm = new Vue({
   data:{
+    return { singleIndex: null, multiIndex: [] };
   },
   methods: {
     onChange (detail) {...}
@@ -38,10 +43,11 @@ var vm = new Vue({
 
 ### props
 
-| prop            | Type    | Default | Description                                          |
-| --------------- | ------- | ------- | ---------------------------------------------------- |
-| `single-select` | Boolean | false   | Limits selection to one segment at a time.           |
-| `touch`         | Boolean | false   | Set to ensure touch targets are at least 48 x 48 px. |
+| prop            | Type            | Default | Description                                          |
+| --------------- | --------------- | ------- | ---------------------------------------------------- |
+| `modelValue`    | Number or Array |         | The selected indexes or segmentids                   |
+| `single-select` | Boolean         | false   | Limits selection to one segment at a time.           |
+| `touch`         | Boolean         | false   | Set to ensure touch targets are at least 48 x 48 px. |
 
 ### `mcw-segment`
 
