@@ -1,5 +1,4 @@
 import { MDCTabBarFoundation } from '@material/tab-bar/foundation';
-import { MDCTabFoundation } from '@material/tab/foundation';
 import { computed, onBeforeUnmount, onMounted, provide, ref, watch } from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
 
@@ -31,7 +30,7 @@ export default {
     const listeners = computed(() => {
       return {
         change: attrs.onChange,
-        [MDCTabFoundation.strings.INTERACTED_EVENT]: evt => {
+        'mdctab:interacted': evt => {
           foundation.handleTabInteraction(evt);
         },
         'mdc-tab:interacted': evt => {
