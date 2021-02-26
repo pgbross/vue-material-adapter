@@ -5399,7 +5399,7 @@ var script$r = {
     singleSelect: Boolean,
     touch: Boolean,
     modelValue: {
-      type: Number
+      type: [Number, Array]
     }
   },
 
@@ -5467,7 +5467,22 @@ var script$r = {
       },
       notifySelectedChange: detail => {
         emit('change', detail);
-        emit('update:modelValue', detail.index);
+
+        if (Array.isArray(props.modelValue)) {
+          const {
+            selected,
+            index
+          } = detail;
+          const idx = props.modelValue.indexOf(detail.index);
+
+          if (selected) {
+            idx < 1 && emit('update:modelValue', props.modelValue.concat(index));
+          } else {
+            idx > -1 && emit('update:modelValue', props.modelValue.slice(0, idx).concat(props.modelValue.slice(idx + 1)));
+          }
+        } else {
+          emit('update:modelValue', detail.index);
+        }
       }
     };
     const role = computed(() => props.singleSelect ? 'radiogroup' : 'group');
@@ -5477,13 +5492,34 @@ var script$r = {
 
       if (props.singleSelect && props.modelValue !== void 0) {
         foundation.selectSegment(props.modelValue);
-        watch(() => props.modelValue, nv => {
+      }
+
+      watch(() => props.modelValue, nv => {
+        if (Array.isArray(nv)) {
+          const selectedSegments = mappedSegments.value.filter(({
+            selected
+          }) => selected).map(({
+            index
+          }) => index); // select the new ones
+
+          nv.forEach(v => {
+            if (selectedSegments.indexOf(v) < 0) {
+              foundation.selectSegment(v);
+            }
+          }); // unselect the ones that not there anymore
+
+          selectedSegments.forEach(v => {
+            if (nv.indexOf(v) < 0) {
+              foundation.unselectSegment(v);
+            }
+          });
+        } else {
           foundation.selectSegment(nv);
           foundation.handleSelected({
             index: nv
           });
-        });
-      }
+        }
+      });
     });
     onBeforeUnmount(() => {
       var _foundation;
