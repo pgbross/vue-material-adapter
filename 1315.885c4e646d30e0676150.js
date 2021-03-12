@@ -1,2 +1,0 @@
-(self.webpackChunkvue_material_adapter=self.webpackChunkvue_material_adapter||[]).push([[1315],{1315:function(e,r,a){"use strict";a.r(r),a.d(r,{default:function(){return u}});var t=a(5166);var u={render:function(e,r){return(0,t.wg)(),(0,t.j4)("article")}}}}]);
-//# sourceMappingURL=1315.885c4e646d30e0676150.js.map
