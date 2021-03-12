@@ -1,6 +1,6 @@
 {
   "name": "vue-material-adapter",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Vue 3 wrapper arround Material Components for the Web",
   "keywords": [
     "vue",
