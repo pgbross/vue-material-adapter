@@ -1,3 +1,14 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [2.0.1](https://github.com/pgbross/vue-material-adapter/compare/v2.0.0-beta.3...v2.0.1) (2021-03-12)
+
+
+### Bug Fixes
+
+* tabbar listener event name ([0bb39ae](https://github.com/pgbross/vue-material-adapter/commit/0bb39ae25a6dbae8c3e472dd97577963e4f97112))
+
 # [1.0.0](https://github.com/pgbross/vue-material-adapter/compare/v0.17.3...v1.0.0) (2021-01-07)
 
 
