@@ -1,3 +1,9 @@
+### `v2.0.0` - This release targets `material-components-web v10.0.0`.
+
+Adds support for:
+
+- Segmented Button multi-select
+
 ### `v2.0.0-beta.2` - This release targets `material-components-web v10.0.0`.
 
 Adds support for:
