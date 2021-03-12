@@ -42,7 +42,7 @@
     v-bind="startThumbAttrs"
     v-if="range"
   >
-    <div class="mdc-slider__value-indicator-container" v-if="discrete">
+    <div class="mdc-slider__value-indicator-container" aria-hidden="true" v-if="discrete">
       <div class="mdc-slider__value-indicator">
         <span class="mdc-slider__value-indicator-text"> {{startValueText}} </span>
       </div>
@@ -60,7 +60,7 @@
     aria-label="slider"
     v-bind="endThumbAttrs"
   >
-    <div class="mdc-slider__value-indicator-container" v-if="discrete">
+    <div class="mdc-slider__value-indicator-container" aria-hidden="true" v-if="discrete">
       <div class="mdc-slider__value-indicator">
         <span class="mdc-slider__value-indicator-text"> {{endValueText}} </span>
       </div>

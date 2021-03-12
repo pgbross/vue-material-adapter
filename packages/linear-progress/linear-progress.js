@@ -13,7 +13,6 @@ export default {
   props: {
     open: { type: Boolean, default: true },
     indeterminate: Boolean,
-    reversed: Boolean,
     progress: progressPropType_,
     buffer: progressPropType_,
     bufferingDots: { type: Boolean, default: true },
@@ -28,6 +27,7 @@ export default {
       bufferbarStyles: {},
       primaryStyles: {},
       rootAttrs: { 'aria-valuemin': 0, 'aria-valuemax': 1 },
+      rootStyles: {},
       root: null,
     });
 
@@ -65,6 +65,23 @@ export default {
         const { [attributeName]: removed, ...rest } = uiState.rootAttrs;
         uiState.rootAttrs = rest;
       },
+      setStyle: (name, value) => {
+        uiState.rootStyles = {
+          ...uiState.rootStyles,
+          [name]: value,
+        };
+      },
+
+      attachResizeObserver: callback => {
+        if (window.ResizeObserver) {
+          const ro = new ResizeObserver(callback);
+          ro.observe(uiState.root);
+          return ro;
+        }
+
+        return null;
+      },
+      getWidth: () => uiState.root.offsetWidth,
     };
 
     watch(
@@ -96,17 +113,10 @@ export default {
         foundation.setDeterminate(!nv);
       },
     );
-    watch(
-      () => props.reversed,
-      nv => {
-        foundation.setReverse(nv);
-      },
-    );
 
     onMounted(() => {
       foundation = new MDCLinearProgressFoundation(adapter);
       foundation.init();
-      foundation.setReverse(props.reversed);
       foundation.setProgress(Number(props.progress));
       foundation.setBuffer(Number(props.buffer));
       foundation.setDeterminate(!props.indeterminate);

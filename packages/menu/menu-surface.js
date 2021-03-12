@@ -1,5 +1,6 @@
 import { MDCMenuSurfaceFoundation } from '@material/menu-surface/foundation';
-import * as util from '@material/menu-surface/util';
+import { getCorrectPropertyName } from '@material/animation/util';
+
 import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
 
@@ -183,7 +184,7 @@ export default {
         getComputedStyle(uiState.root).getPropertyValue('direction') === 'rtl',
       setTransformOrigin: origin => {
         uiState.root.style.setProperty(
-          `${util.getTransformPropertyName(window)}-origin`,
+          `${getCorrectPropertyName(window, 'transform')}-origin`,
           origin,
         );
       },

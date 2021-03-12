@@ -30,7 +30,7 @@ const cssLoaders = [
   {
     loader: 'sass-loader',
     options: {
-      implementation: require('dart-sass'),
+      implementation: require('sass'),
       sassOptions: {
         includePaths: [resolve('../node_modules')],
       },

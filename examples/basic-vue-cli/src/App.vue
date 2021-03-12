@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <mcw-button raised @click="toggleOpen">Show dialog</mcw-button>
-    <mcw-dialog v-model="open" id="demo-dialog" @MDCDialog:closing="onClosed">
+    <mcw-dialog v-model="open" id="demo-dialog" @mdcdialog:closing="onClosed">
       <mcw-dialog-title>Lorem ipsum dolor</mcw-dialog-title>
       <mcw-dialog-content>
         <div>

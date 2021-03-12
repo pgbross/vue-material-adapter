@@ -1,3 +1,15 @@
+### `v2.0.0` - This release targets `material-components-web v10.0.0`.
+
+Adds support for:
+
+- Segmented Button multi-select
+
+### `v2.0.0-beta.2` - This release targets `material-components-web v10.0.0`.
+
+Adds support for:
+
+- Segmented Button v-model
+
 # [1.0.0](https://github.com/pgbross/vue-material-adapter/compare/v0.17.3...v1.0.0) (2021-01-07)
 
 ### `v1.0.0` - This release targets `material-components-web v9.0.0`.

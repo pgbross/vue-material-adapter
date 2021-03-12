@@ -11,9 +11,11 @@ $dark-mode-on-primary: white;
   $medium-component-radius: 16px,
 );
 
-@use '@material/button' with (
-  $height: 48px
-);
+// @use '@material/button' with (
+//   $height: 48px
+// );
+
+@use '@material/button/styles';
 
 @use '@material/icon-button';
 @use '@material/snackbar';
@@ -29,7 +31,6 @@ $dark-mode-on-primary: white;
     }
 }
 
-@include button.core-styles;
 @include icon-button.core-styles;
 
 @include snackbar.core-styles;

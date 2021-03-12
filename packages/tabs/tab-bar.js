@@ -1,13 +1,5 @@
 import { MDCTabBarFoundation } from '@material/tab-bar/foundation';
-import { MDCTabFoundation } from '@material/tab/foundation';
-import {
-  computed,
-  onBeforeUnmount,
-  onMounted,
-  provide,
-  ref,
-  watchEffect,
-} from 'vue';
+import { computed, onBeforeUnmount, onMounted, provide, ref, watch } from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
 
 const { strings } = MDCTabBarFoundation;
@@ -38,7 +30,7 @@ export default {
     const listeners = computed(() => {
       return {
         change: attrs.onChange,
-        [MDCTabFoundation.strings.INTERACTED_EVENT]: evt => {
+        'mdctab:interacted': evt => {
           foundation.handleTabInteraction(evt);
         },
         'mdc-tab:interacted': evt => {
@@ -128,9 +120,14 @@ export default {
         }
       }
 
-      watchEffect(() => {
-        foundation.activateTab(Number(props.modelValue));
-      });
+      // watch for changes in the modelValue
+      // note watchEffect does not give the correct behaviour
+      watch(
+        () => props.modelValue,
+        nv => {
+          foundation.activateTab(Number(nv));
+        },
+      );
     });
 
     onBeforeUnmount(() => {
