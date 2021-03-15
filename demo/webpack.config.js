@@ -7,6 +7,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const { ESBuildPlugin, ESBuildMinifyPlugin } = require('esbuild-loader');
 const { VueLoaderPlugin } = require('vue-loader');
 // const TerserPlugin = require('terser-webpack-plugin');
 
@@ -51,25 +52,15 @@ const rules = [
       loaders: ['vue-style-loader'].concat(cssLoaders),
     },
   },
+
   {
     test: /\.js$/,
-    exclude: /node_modules/,
-    loader: 'babel-loader',
+    loader: 'esbuild-loader',
     options: {
-      cacheDirectory: true,
-      presets: [
-        [
-          '@babel/preset-env',
-          {
-            modules: false,
-            useBuiltIns: 'entry',
-            corejs: 3,
-          },
-        ],
-      ],
-      plugins: ['@babel/plugin-syntax-dynamic-import'],
+      target: 'es2019',
     },
   },
+
   {
     test: /\.md$/,
     use: [
@@ -102,6 +93,7 @@ const rules = [
 ];
 
 const plugins = [
+  new ESBuildPlugin(),
   new webpack.DefinePlugin({
     __VUE_OPTIONS_API__: true,
     __VUE_PROD_DEVTOOLS__: false,
@@ -163,8 +155,8 @@ const config = {
 if (isProduction) {
   config.mode = 'production';
 
-  (config.optimization = {
-    runtimeChunk: 'single',
+  config.optimization = {
+    usedExports: true,
     splitChunks: {
       chunks: 'all',
       maxInitialRequests: Infinity,
@@ -180,25 +172,20 @@ if (isProduction) {
             )[1];
 
             // npm package names are URL-safe, but some servers don't like @ symbols
-            return `npm.${packageName.replace('@', '')}`;
+            return `npm/npm.${packageName.replace('@', '')}`;
           },
         },
-        styles: {
-          name: 'style',
-          test: /\.css$/,
-          chunks: 'all',
-          enforce: true,
-        },
-        // extra: {
-        //   name: 'extra',
-        //   test: /\.scss$/,
-        //   chunks: 'all',
-        //   enforce: true,
-        // },
       },
     },
-  }),
-    (config.output.publicPath = '/vue-material-adapter/');
+
+    minimizer: [
+      new ESBuildMinifyPlugin({
+        target: 'es2019',
+      }),
+    ],
+  };
+
+  config.output.publicPath = '/vue-material-adapter/';
 
   // extract css rule
   config.module.rules.push({
@@ -232,6 +219,7 @@ if (isProduction) {
         {
           from: path.resolve(__dirname, '../static'),
           to: config.output.path,
+          toType: 'dir',
         },
       ],
     }),
