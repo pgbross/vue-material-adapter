@@ -1,0 +1,3 @@
+(self.webpackChunkvue_material_adapter=self.webpackChunkvue_material_adapter||[]).push([[5203],{5203:function(m,t,n){"use strict";n.r(t),n.d(t,{default:function(){return s}});var e=n(8770);const o={class:"mcw-demo mcw-demo--container"},i=(0,e.Wm)("i",{class:"material-icons"},"android",-1);function r(d,u){const a=(0,e.up)("mcw-material-icon");return(0,e.wg)(),(0,e.j4)("div",o,[(0,e.Wm)(a,{icon:"favorite"}),(0,e.Wm)(a,{icon:"aspect_ratio"}),i])}const c={};c.render=r;var s=c}}]);
+
+//# sourceMappingURL=5203.8b11e431516d13ef4e86.js.map
