@@ -2578,7 +2578,7 @@ var script$y = {
     let focusTrap;
     let defaultButton;
 
-    const focusTrapFactory_ = el => new FocusTrap(el);
+    const focusTrapFactory_ = (el, options) => new FocusTrap(el, options);
 
     const handleLayout = () => {
       foundation.layout();
@@ -2793,7 +2793,7 @@ var script$x = {
       drawer: null
     });
 
-    const focusTrapFactory_ = el => new FocusTrap$1(el);
+    const focusTrapFactory_ = (el, options) => new FocusTrap$1(el, options);
 
     const show = () => foundation.open();
 
