@@ -27,7 +27,7 @@ export default {
       drawer: null,
     });
 
-    const focusTrapFactory_ = el => new FocusTrap(el);
+    const focusTrapFactory_ = (el, options) => new FocusTrap(el, options);
 
     const show = () => foundation.open();
     const close = () => foundation.close();
