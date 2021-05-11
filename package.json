@@ -35,7 +35,7 @@
     "test": "NODE_ENV=test; jest --runInBand",
     "Xtestnc": "NODE_ENV=test; jest --runInBand --no-cache",
     "Xbuild": "webpack --progress --colors --mode production",
-    "build": "BROWSERSLIST_ENV=defaults node --experimental-json-modules scripts/build.mjs",
+    "build": "cross-env BROWSERSLIST_ENV=defaults node --experimental-json-modules scripts/build.mjs",
     "build:develop": "webpack --progress --colors --mode development",
     "build:demo": "cross-env NODE_ENV=production BROWSERLISTS_ENV=evergreen webpack --config=demo/webpack.config.js --progress",
     "build:demoX": "cross-env NODE_ENV=development BROWSERLISTS_ENV=evergreen webpack --config=demo/webpack.config.js --progress",
