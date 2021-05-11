@@ -86,6 +86,14 @@ export default {
       deregisterEventHandler: (evt, handler) => {
         uiState.root.removeEventListener(evt, handler);
       },
+
+      registerAnchorEventHandler: (evt, handler) => {
+        anchorElem?.addEventListener(evt, handler);
+      },
+      deregisterAnchorEventHandler: (evt, handler) => {
+        anchorElem?.removeEventListener(evt, handler);
+      },
+
       registerDocumentEventHandler: (evt, handler) => {
         document.body.addEventListener(evt, handler);
       },
@@ -114,10 +122,6 @@ export default {
 
     const handleMouseLeave = () => {
       foundation.handleAnchorMouseLeave();
-    };
-
-    const handleBlur = evt => {
-      foundation.handleAnchorBlur(evt);
     };
 
     const handleTransitionEnd = () => {
@@ -159,12 +163,13 @@ export default {
       }
 
       anchorElem =
-        document.querySelector(`[aria-describedby="${tooltipId}"]`) ||
-        document.querySelector(`[data-tooltip-id="${tooltipId}"]`);
+        document.querySelector(`[data-tooltip-id="${tooltipId}"]`) ||
+        document.querySelector(`[aria-describedby="${tooltipId}"]`);
+
       if (!anchorElem) {
         throw new Error(
           // eslint-disable-next-line max-len
-          'MDCTooltip: Tooltip component requires an anchor element annotated with [aria-describedby] or [data-tooltip-id] anchor element.',
+          'MDCTooltip: Tooltip component requires an anchor element annotated with [aria-describedby] or [data-tooltip-id].',
         );
       }
 
@@ -183,8 +188,6 @@ export default {
         anchorElem.addEventListener('mouseleave', handleMouseLeave);
       }
 
-      anchorElem.addEventListener('blur', handleBlur);
-
       watchEffect(() => onPosition(props.position));
       watchEffect(() => onBoundaryType(props.boundaryType));
     });
@@ -198,7 +201,6 @@ export default {
           // TODO(b/157075286): Listening for a 'focus' event is too broad.
           anchorElem.removeEventListener('focus', handleFocus);
           anchorElem.removeEventListener('mouseleave', handleMouseLeave);
-          anchorElem.removeEventListener('blur', handleBlur);
         }
       }
 
