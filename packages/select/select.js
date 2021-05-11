@@ -4,9 +4,9 @@ import {
   onBeforeUnmount,
   onMounted,
   reactive,
+  toRef,
   toRefs,
   watch,
-  toRef,
 } from 'vue';
 import { emitCustomEvent } from '~/base/index.js';
 import { useRipplePlugin } from '~/ripple/ripple-plugin.js';
@@ -51,6 +51,7 @@ export default {
       labelEl: null,
       menu: null,
       anchorEl: null,
+      hiddenEl: null,
     });
 
     let rippleClasses;
@@ -198,6 +199,8 @@ export default {
       deactivateBottomLine: () => uiState.lineRippleEl?.deactivate(),
 
       notifyChange: value => {
+        uiState.hiddenEl && (uiState.hiddenEl.value = value);
+
         const index = foundation.getSelectedIndex();
         emitCustomEvent(
           uiState.root,
@@ -238,7 +241,7 @@ export default {
 
     watch(
       () => props.disabled,
-      nv => foundation?.updateDisabledStyle(nv),
+      nv => foundation?.setDisabled(nv),
     );
 
     watch(
@@ -262,7 +265,7 @@ export default {
       // initial sync with DOM
       refreshIndex();
 
-      foundation = new MDCSelectFoundation(adapter);
+      // foundation = new MDCSelectFoundation(adapter);
       foundation.init();
 
       // do we need a slotObserver here?
