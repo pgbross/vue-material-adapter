@@ -1,8 +1,5 @@
 import icButton from './assets/ic_button_24px.svg';
-import {
-  default as icCard,
-  default as icChips,
-} from './assets/ic_card_24px.svg';
+import { default as icCard } from './assets/ic_card_24px.svg';
 import icComponent from './assets/ic_component_24px.svg';
 import icDialog from './assets/ic_dialog_24px.svg';
 import icList from './assets/ic_list_24px.svg';
@@ -37,7 +34,7 @@ export default [
   link('button', icButton),
   link('card', icCard),
   link('checkbox', icSelectionControl),
-  link('chips', icChips),
+  // link('chips', icChips),
   link('circular-progress', icProgressActivity),
 
   link('data-table', icComponent),

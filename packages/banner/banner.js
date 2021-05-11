@@ -1,5 +1,6 @@
-import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
 import { MDCBannerFoundation } from '@material/banner';
+import { FocusTrap } from '@material/dom/focus-trap';
+import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
 import bannerContent from './banner-content.vue';
 
 export default {
@@ -26,9 +27,20 @@ export default {
       contentEl: null,
     });
     let foundation;
+    let focusTrap;
+
+    const focusTrapFactory_ = (el, options) => new FocusTrap(el, options);
 
     const onOpen = nv => {
       if (nv) {
+        const primaryActionEl = uiState.root.querySelector(
+          '.mdc-banner__primary-action',
+        );
+
+        focusTrap = focusTrapFactory_(uiState.root, {
+          initialFocusEl: primaryActionEl,
+        });
+
         foundation.open();
       } else {
         foundation.close();
@@ -73,6 +85,10 @@ export default {
 
       setStyleProperty: (property, value) =>
         (uiState.styles = { ...uiState.styles, [property]: value }),
+
+      trapFocus: () => {
+        focusTrap.trapFocus();
+      },
     };
 
     watch(

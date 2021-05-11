@@ -1,9 +1,8 @@
-import * as base from '~/base/index.js';
 import banner from '~/banner/index.js';
+import * as base from '~/base/index.js';
 import button from '~/button/index.js';
 import card from '~/card/index.js';
 import checkbox from '~/checkbox/index.js';
-import chips from '~/chips/index.js';
 import circularProgress from '~/circular-progress/index.js';
 import dataTable from '~/data-table/index.js';
 import dialog from '~/dialog/index.js';
@@ -27,7 +26,6 @@ import switchControl from '~/switch/index.js';
 import tabs from '~/tabs/index.js';
 import textfield from '~/textfield/index.js';
 import tooltip from '~/tooltip/index.js';
-
 import topAppBar from '~/top-app-bar/index.js';
 
 export default {
@@ -37,7 +35,7 @@ export default {
     vm.use(card);
     vm.use(circularProgress);
     vm.use(checkbox);
-    vm.use(chips);
+    // vm.use(chips);
     vm.use(dataTable);
     vm.use(dialog);
     vm.use(drawer);
@@ -71,7 +69,7 @@ export {
   card,
   circularProgress,
   checkbox,
-  chips,
+  // chips,
   dataTable,
   dialog,
   drawer,

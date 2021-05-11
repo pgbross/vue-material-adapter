@@ -6,8 +6,8 @@ const WebpackCdnPlugin = require('webpack-cdn-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
-const { ESBuildPlugin, ESBuildMinifyPlugin } = require('esbuild-loader');
+// const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const { ESBuildMinifyPlugin } = require('esbuild-loader');
 const { VueLoaderPlugin } = require('vue-loader');
 // const TerserPlugin = require('terser-webpack-plugin');
 
@@ -93,7 +93,7 @@ const rules = [
 ];
 
 const plugins = [
-  new ESBuildPlugin(),
+  // new ESBuildPlugin(),
   new webpack.DefinePlugin({
     __VUE_OPTIONS_API__: true,
     __VUE_PROD_DEVTOOLS__: false,
@@ -239,7 +239,7 @@ if (isDevelopment) {
   config.plugins.push(
     // HMR
     new webpack.HotModuleReplacementPlugin(),
-    new FriendlyErrorsWebpackPlugin(),
+    // new FriendlyErrorsWebpackPlugin(),
   );
 
   config.devServer = {

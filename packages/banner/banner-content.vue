@@ -1,5 +1,5 @@
 <template>
-  <div class="mdc-banner__content" role="status" aria-live="assertive">
+  <div class="mdc-banner__content" role="alertdialog" aria-live="assertive">
     <div class="mdc-banner__graphic-text-wrapper">
       <div class="mdc-banner__graphic" role="img" alt="">
         <i class="material-icons mdc-banner__icon">error_outline</i>

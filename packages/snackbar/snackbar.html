@@ -1,4 +1,4 @@
-<div :class="rootClasses">
+<aside :class="rootClasses">
   <div class="mdc-snackbar__surface" @click="surfaceClickHandler">
     <div ref="labelEl" class="mdc-snackbar__label" role="status" aria-live="polite">
       <template v-if="showMessage">{{message}}</template>
@@ -25,4 +25,4 @@
       </button>
     </div>
   </div>
-</div>
+</aside>
