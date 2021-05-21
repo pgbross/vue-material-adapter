@@ -121,7 +121,7 @@ export default {
     };
 
     onMounted(() => {
-      rootEl = uiState.root.$el;
+      rootEl = (uiState.root.$el.nodeType === 3) ? uiState.root.$el.nextSibling : uiState.root.$el;
       foundation = new MDCTabFoundation(adapter);
       foundation.init();
 
