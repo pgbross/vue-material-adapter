@@ -16,13 +16,13 @@ import { MDCCheckbox } from '@material/checkbox';
 import * as test from '@material/data-table';
 import { MDCDataTableFoundation } from '@material/data-table/foundation';
 import { MDCDialogFoundation } from '@material/dialog/foundation';
-import { createFocusTrapInstance, isScrollable, areTopsMisaligned } from '@material/dialog/util';
+import * as util from '@material/dialog/util';
 import { FocusTrap } from '@material/dom/focus-trap.js';
 import { matches as matches$1, closest as closest$1 } from '@material/dom/ponyfill.js';
 import { FocusTrap as FocusTrap$1 } from '@material/dom/focus-trap';
 import { MDCDismissibleDrawerFoundation } from '@material/drawer/dismissible/foundation';
 import { MDCModalDrawerFoundation } from '@material/drawer/modal/foundation';
-import { createFocusTrapInstance as createFocusTrapInstance$1 } from '@material/drawer/util';
+import * as util$1 from '@material/drawer/util';
 import { MDCListFoundation } from '@material/list/foundation';
 import { MDCFloatingLabelFoundation } from '@material/floating-label/foundation';
 import { MDCIconButtonToggleFoundation } from '@material/icon-button/foundation';
@@ -46,7 +46,7 @@ import { MDCFadingTabIndicatorFoundation } from '@material/tab-indicator/fading-
 import { MDCTabIndicatorFoundation } from '@material/tab-indicator/foundation';
 import { MDCSlidingTabIndicatorFoundation } from '@material/tab-indicator/sliding-foundation';
 import { MDCTabScrollerFoundation } from '@material/tab-scroller/foundation';
-import { computeHorizontalScrollbarHeight } from '@material/tab-scroller/util';
+import * as util$2 from '@material/tab-scroller/util';
 import MDCTabFoundation from '@material/tab/foundation';
 import { MDCTextFieldCharacterCounterFoundation } from '@material/textfield/character-counter/foundation';
 import { MDCTextFieldHelperTextFoundation } from '@material/textfield/helper-text/foundation';
@@ -97,29 +97,18 @@ const createCustomEvent$1 = (evtType, shouldBubble, evtData) => {
   return evt.initCustomEvent(evtType, shouldBubble, false, evtData);
 };
 
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
 function ownKeys(object, enumerableOnly) {
   var keys = Object.keys(object);
 
   if (Object.getOwnPropertySymbols) {
     var symbols = Object.getOwnPropertySymbols(object);
-    if (enumerableOnly) symbols = symbols.filter(function (sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    });
+
+    if (enumerableOnly) {
+      symbols = symbols.filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+      });
+    }
+
     keys.push.apply(keys, symbols);
   }
 
@@ -144,6 +133,21 @@ function _objectSpread2(target) {
   }
 
   return target;
+}
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
 }
 
 function _objectWithoutPropertiesLoose(source, excluded) {
@@ -491,6 +495,7 @@ var banner = BasePlugin({
   mcwBanner: script$I
 });
 
+const _excluded$4 = ["unbounded"];
 class RippleElement$1 extends MDCRippleFoundation {
   constructor(element, state, _ref = {}) {
     var _element$$el;
@@ -498,7 +503,7 @@ class RippleElement$1 extends MDCRippleFoundation {
     let {
       unbounded = false
     } = _ref,
-        options = _objectWithoutProperties(_ref, ["unbounded"]);
+        options = _objectWithoutProperties(_ref, _excluded$4);
 
     const $el = (_element$$el = element.$el) !== null && _element$$el !== void 0 ? _element$$el : element;
     super(_objectSpread2({
@@ -904,6 +909,7 @@ const createCustomEvent = (evtType, shouldBubble, evtData) => {
   return evt.initCustomEvent(evtType, shouldBubble, false, evtData);
 };
 
+const _excluded$3 = ["unbounded"];
 class RippleElement extends MDCRippleFoundation {
   constructor(element, state, _ref = {}) {
     var _element$$el;
@@ -911,7 +917,7 @@ class RippleElement extends MDCRippleFoundation {
     let {
       unbounded = false
     } = _ref,
-        options = _objectWithoutProperties(_ref, ["unbounded"]);
+        options = _objectWithoutProperties(_ref, _excluded$3);
 
     const $el = (_element$$el = element.$el) !== null && _element$$el !== void 0 ? _element$$el : element;
     super(_objectSpread2({
@@ -1910,6 +1916,7 @@ var chips = BasePlugin({
   mcwChipTrailingAction: script$B
 });
 
+const _excluded$2 = ["stroke-dasharray", "stroke-dashoffset"];
 const ProgressPropType = {
   type: [Number, String],
 
@@ -2045,7 +2052,7 @@ function getCircleAttrs(medium = false, indeterminate = true) {
 
 function getTrackAttrs(medium = false) {
   const _getCircleAttrs = getCircleAttrs(medium),
-        rest = _objectWithoutProperties(_getCircleAttrs, ["stroke-dasharray", "stroke-dashoffset"]);
+        rest = _objectWithoutProperties(_getCircleAttrs, _excluded$2);
 
   return rest;
 }
@@ -2603,7 +2610,7 @@ var script$y = {
     const onOpen = nv => {
       if (nv) {
         if (uiState.container) {
-          focusTrap = createFocusTrapInstance(uiState.root, focusTrapFactory_, getInitialFocusEl_() || void 0);
+          focusTrap = util.createFocusTrapInstance(uiState.root, focusTrapFactory_, getInitialFocusEl_() || void 0);
         }
 
         foundation.open();
@@ -2638,8 +2645,8 @@ var script$y = {
         return (_focusTrap2 = focusTrap) === null || _focusTrap2 === void 0 ? void 0 : _focusTrap2.releaseFocus();
       },
       getInitialFocusEl: () => getInitialFocusEl_(),
-      isContentScrollable: () => isScrollable(content_),
-      areButtonsStacked: () => areTopsMisaligned(buttons_),
+      isContentScrollable: () => util.isScrollable(content_),
+      areButtonsStacked: () => util.areTopsMisaligned(buttons_),
       getActionFromEvent: event => {
         const elem = closest$1(event.target, "[".concat(strings$b.ACTION_ATTRIBUTE, "]"));
         return elem === null || elem === void 0 ? void 0 : elem.getAttribute(strings$b.ACTION_ATTRIBUTE);
@@ -2896,7 +2903,7 @@ var script$x = {
       foundation.init();
 
       if (props.modal) {
-        focusTrap_ = createFocusTrapInstance$1(uiState.drawer, focusTrapFactory_);
+        focusTrap_ = util$1.createFocusTrapInstance(uiState.drawer, focusTrapFactory_);
       }
     });
     onBeforeUnmount(() => {
@@ -3976,7 +3983,7 @@ function render$o(_ctx, _cache, $props, $setup, $data, $options) {
               ]))
             : createCommentVNode("v-if", true)
     ]),
-    _: 1 /* STABLE */
+    _: 3 /* FORWARDED */
   }, 16 /* FULL_PROPS */, ["data-myItemId"]))
 }
 
@@ -5032,6 +5039,7 @@ var menu = BasePlugin({
   mcwList: script$n
 });
 
+const _excluded$1 = ["width"];
 const {
   cssClasses: cssClasses$2
 } = MDCNotchedOutlineFoundation;
@@ -5069,7 +5077,7 @@ var script$k = {
       removeNotchWidthProperty: () => {
         // eslint-disable-next-line no-unused-vars
         const _uiState$notchStyles = uiState.notchStyles,
-              rest = _objectWithoutProperties(_uiState$notchStyles, ["width"]);
+              rest = _objectWithoutProperties(_uiState$notchStyles, _excluded$1);
 
         uiState.notchStyles = rest;
       }
@@ -7050,7 +7058,7 @@ function render$b(_ctx, _cache, $props, $setup, $data, $options) {
         (_ctx.showMessage)
           ? (openBlock(), createBlock(Fragment, { key: 0 }, [
               createTextVNode(toDisplayString(_ctx.message), 1 /* TEXT */)
-            ], 64 /* STABLE_FRAGMENT */))
+            ], 2112 /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */))
           : (openBlock(), createBlock("span", _hoisted_2$3, " "))
       ], 512 /* NEED_PATCH */),
       createVNode("div", _hoisted_3$2, [
@@ -7549,7 +7557,7 @@ var script$7 = {
       getScrollAreaOffsetWidth: () => uiState.area.offsetWidth,
       computeScrollAreaClientRect: () => uiState.area.getBoundingClientRect(),
       computeScrollContentClientRect: () => uiState.content.getBoundingClientRect(),
-      computeHorizontalScrollbarHeight: () => computeHorizontalScrollbarHeight(document)
+      computeHorizontalScrollbarHeight: () => util$2.computeHorizontalScrollbarHeight(document)
     };
     onMounted(() => {
       foundation = new MDCTabScrollerFoundation(adapter);
@@ -7708,7 +7716,9 @@ var script$6 = {
       focus: () => rootEl.focus()
     };
     onMounted(() => {
-      rootEl = uiState.root.$el;
+      // Quick fix to https://github.com/pgbross/vue-material-adapter/issues/178
+      // uiState.root gets set to the wrong element when "to" is set
+      rootEl = uiState.root.$el.nodeType === 3 ? uiState.root.$el.nextSibling : uiState.root.$el;
       foundation = new MDCTabFoundation(adapter);
       foundation.init();
       tabList.value.push({
@@ -7824,7 +7834,7 @@ function render$6(_ctx, _cache, $props, $setup, $data, $options) {
           }, null, 8 /* PROPS */, ["fade"]))
         : createCommentVNode("v-if", true)
     ]),
-    _: 1 /* STABLE */
+    _: 3 /* FORWARDED */
   }, 16 /* FULL_PROPS */, ["id", "class", "style", "onClick"]))
 }
 
@@ -8021,6 +8031,7 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
 script$3.render = render$3;
 script$3.__file = "packages/textfield/textfield-icon.vue";
 
+const _excluded = ["class"];
 let uid_ = 0;
 var script$2 = {
   name: 'mcw-textfield',
@@ -8185,7 +8196,7 @@ var script$2 = {
 
     const inputAttrs = computed(() => {
       // eslint-disable-next-line no-unused-vars
-      const rest = _objectWithoutProperties(attrs, ["class"]);
+      const rest = _objectWithoutProperties(attrs, _excluded);
 
       return _objectSpread2(_objectSpread2({}, rest), uiState.inputAttrs);
     });
