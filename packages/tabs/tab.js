@@ -121,7 +121,9 @@ export default {
     };
 
     onMounted(() => {
-      rootEl = uiState.root.$el;
+      // Quick fix to https://github.com/pgbross/vue-material-adapter/issues/178
+      // uiState.root gets set to the wrong element when "to" is set
+      rootEl = (uiState.root.$el.nodeType === 3) ? uiState.root.$el.nextSibling : uiState.root.$el;
       foundation = new MDCTabFoundation(adapter);
       foundation.init();
 
