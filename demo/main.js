@@ -3,7 +3,7 @@ import VueMaterialAdapter from 'vue-material-adapter';
 import { createRouter, createWebHashHistory } from 'vue-router';
 import index from './index.vue';
 import routes from './routes.js';
-import './styles';
+import './styles/index.js';
 
 // Vue.config.productionTip = true;
 const router = createRouter({

@@ -1,6 +1,6 @@
 {
   "name": "vue-material-adapter",
-  "version": "2.0.3",
+  "version": "3.0.0",
   "description": "Vue 3 wrapper arround Material Components for the Web",
   "keywords": [
     "vue",
@@ -14,8 +14,9 @@
   ],
   "author": "Philip Ross <philip@satchel.scot>",
   "license": "ISC",
+  "type": "module",
   "main": "dist/vue-material-adapter.amd.min.js",
-  "module": "dist/vue-material-adapter.esm.js",
+  "module": "src/index.js",
   "files": [
     "dist",
     "static",
@@ -36,6 +37,7 @@
     "Xtestnc": "NODE_ENV=test; jest --runInBand --no-cache",
     "Xbuild": "webpack --progress --colors --mode production",
     "build": "cross-env BROWSERSLIST_ENV=defaults node --experimental-json-modules scripts/build.mjs",
+    "build:webpack": "cross-env BROWSERSLIST_ENV=evergreen webpack --mode development --progress --color",
     "build:develop": "webpack --progress --colors --mode development",
     "build:demo": "cross-env NODE_ENV=production BROWSERLISTS_ENV=evergreen webpack --config=demo/webpack.config.js --progress",
     "build:demoX": "cross-env NODE_ENV=development BROWSERLISTS_ENV=evergreen webpack --config=demo/webpack.config.js --progress",
@@ -136,6 +138,7 @@
     "eslint-loader": "^4.0.2",
     "eslint-plugin-babel": "^5.3.1",
     "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-unicorn": "^34.0.1",
     "eslint-plugin-vue": "^7.11.1",
     "extract-loader": "^5.1.0",
     "extract-text-webpack-plugin": "^3.0.2",
@@ -176,9 +179,10 @@
     "vue-analytics": "^5.22.1",
     "vue-eslint-parser": "^7.6.0",
     "vue-jest": "^3.0.7",
-    "vue-loader": "^16.2.0",
+    "vue-loader": "^16.3.0",
     "vue-markdown-loader": "^2.4.1",
     "vue-router": "^4.0.8",
+    "vue-template-compiler": "^2.6.14",
     "webpack": "^5.39.0",
     "webpack-cdn-plugin": "^3.3.1",
     "webpack-cli": "^4.7.2",
@@ -204,6 +208,54 @@
       "last 2 iOS versions",
       "last 2 Edge versions",
       "last 2 Opera versions"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "eslint:recommended",
+      "plugin:unicorn/recommended"
+    ],
+    "env": {
+      "browser": true
+    },
+    "rules": {
+      "no-unused-vars": "error",
+      "no-else-return": 1,
+      "prefer-const": "error",
+      "no-var": "error",
+      "no-nested-ternary": "off",
+      "unicorn/no-array-reduce": [
+        "off"
+      ],
+      "unicorn/no-nested-ternary": [
+        "off"
+      ],
+      "unicorn/prevent-abbreviations": [
+        "error",
+        {
+          "replacements": {
+            "props": false
+          },
+          "allowList": {
+            "i18n": true
+          }
+        }
+      ]
+    }
+  },
+  "prettier": {
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "bracketSpacing": true,
+    "arrowParens": "avoid",
+    "overrides": [
+      {
+        "files": "*.html",
+        "options": {
+          "printWidth": 100
+        }
+      }
     ]
   }
 }

@@ -1,17 +1,16 @@
-import rimraf from 'rimraf';
-import { promisify } from 'util';
-import fs from 'fs';
+import pb from '@rollup/plugin-babel';
 import codeFrame from 'babel-code-frame';
 import chalk from 'chalk';
-import { rollup } from 'rollup';
-import alias from '@rollup/plugin-alias';
-import VuePlugin from 'rollup-plugin-vue';
-import pkg from '../package.json';
-import mkdirp from 'mkdirp';
-import path from 'path';
 import cpy from 'cpy';
+import mkdirp from 'mkdirp';
+import fs from 'node:fs';
+import path from 'node:path';
+import { promisify } from 'node:util';
+import rimraf from 'rimraf';
+import { rollup } from 'rollup';
 import { terser } from 'rollup-plugin-terser';
-import pb from '@rollup/plugin-babel';
+import VuePlugin from 'rollup-plugin-vue';
+import package_ from '../package.json';
 
 const { babel } = pb;
 
@@ -19,15 +18,15 @@ const asyncRimraf = promisify(rimraf);
 
 // Errors in promises should be fatal.
 const loggedErrors = new Set();
-process.on('unhandledRejection', err => {
-  if (loggedErrors.has(err)) {
+process.on('unhandledRejection', error => {
+  if (loggedErrors.has(error)) {
     // No need to print it twice.
     process.exit(1);
   }
-  throw err;
+  throw error;
 });
 
-const externals = getDependencies().concat(['@material', '@vue', 'vue-router']);
+const externals = [...getDependencies(), '@material', '@vue', 'vue-router'];
 
 async function createBundle(bundleType, { minimize } = {}) {
   const filename = 'vue-material-adapter';
@@ -38,10 +37,11 @@ async function createBundle(bundleType, { minimize } = {}) {
     chalk.white.bold(filename) + chalk.dim(` (${bundleType.toLowerCase()})`);
 
   const rollupConfig = {
-    input: 'packages/vue-material-adapter/index.js',
+    input: 'src/index.js',
 
     external(id) {
-      const containsThisModule = pkg => id === pkg || id.startsWith(pkg + '/');
+      const containsThisModule = package__ =>
+        id === package__ || id.startsWith(package__ + '/');
       const isProvidedByDependency = externals.some(containsThisModule);
 
       return isProvidedByDependency;
@@ -71,8 +71,8 @@ async function createBundle(bundleType, { minimize } = {}) {
     handleRollupError(error);
     throw error;
   }
-  for (let i = 0; i < otherOutputPaths.length; i++) {
-    await asyncCopyTo(mainOutputPath, otherOutputPaths[i]);
+  for (const otherOutputPath of otherOutputPaths) {
+    await asyncCopyTo(mainOutputPath, otherOutputPath);
   }
   console.log(`${chalk.bgGreen.black(' COMPLETE ')} ${logKey}\n`);
 }
@@ -80,9 +80,10 @@ async function createBundle(bundleType, { minimize } = {}) {
 async function buildEverything() {
   await asyncRimraf('dist/*');
 
-  await createBundle('esm');
   await createBundle('cjs', { minimize: true });
   await createBundle('amd', { minimize: true });
+
+  await createBundle('esm');
 }
 
 buildEverything();
@@ -94,12 +95,12 @@ buildEverything();
 // Determines node_modules packages that are safe to assume will exist.
 function getDependencies() {
   // Both deps and peerDeps are assumed as accessible.
-  return Array.from(
-    new Set([
-      ...Object.keys(pkg.dependencies || {}),
-      ...Object.keys(pkg.peerDependencies || {}),
+  return [
+    ...new Set([
+      ...Object.keys(package_.dependencies || {}),
+      ...Object.keys(package_.peerDependencies || {}),
     ]),
-  );
+  ];
 }
 
 function handleRollupError(error) {
@@ -109,7 +110,7 @@ function handleRollupError(error) {
     return;
   }
   console.error(
-    `\x1b[31m-- ${error.code}${error.plugin ? ` (${error.plugin})` : ''} --`,
+    `\u001B[31m-- ${error.code}${error.plugin ? ` (${error.plugin})` : ''} --`,
   );
   console.error(error.message);
   const { file, line, column } = error.loc;
@@ -137,12 +138,14 @@ function getRollupOutputOptions(outputPath, format, globals, globalName) {
     {},
     {
       file: outputPath,
+      // dir: 'dist',
       format,
       globals,
       interop: false,
       sourcemap: false,
       name: globalName,
       exports: 'named',
+      // preserveModules: true,
     },
   );
 }
@@ -153,9 +156,9 @@ function getBundleOutputPaths(bundleType, filename, minimize) {
 
 function getPlugins(bundleType, minimize) {
   const plugins = [
-    alias({
-      entries: [{ find: '~', replacement: 'packages' }],
-    }),
+    // alias({
+    //   entries: [{ find: 'src', replacement: 'src' }],
+    // }),
     VuePlugin({ css: false }),
     babel({ babelHelpers: 'bundled' }),
   ];

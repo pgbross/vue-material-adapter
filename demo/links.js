@@ -18,7 +18,7 @@ import icTabs from './assets/ic_tabs_24px.svg';
 import icTextField from './assets/ic_text_field_24px.svg';
 import icToast from './assets/ic_toast_24px.svg';
 import icTopAppBar from './assets/ic_toolbar_24px.svg';
-import { capitalize } from './utils';
+import { capitalize } from './utils/index.js';
 
 function link(id, icon, name, title) {
   name = name || capitalize(id);

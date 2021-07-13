@@ -1,0 +1,38 @@
+<script src="./chip.js"></script>
+<template>
+  <div
+    ref="root"
+    class="mdc-chip"
+    role="row"
+    :class="classes"
+    :style="styles"
+    v-on="myListeners"
+  >
+    <div class="mdc-chip__ripple"></div>
+    <slot name="leading-icon">
+      <i
+        ref="leading-icon"
+        class="material-icons mdc-chip__icon mdc-chip__icon--leading"
+        v-if="haveleadingIcon"
+        >{{ leadingIcon }}</i
+      >
+    </slot>
+    <mcw-chip-checkmark ref="checkmarkEl" v-if="isFilter"></mcw-chip-checkmark>
+    <span role="gridcell">
+      <span
+        :role="isFilter ? 'checkbox' : 'button'"
+        tabindex="0"
+        class="mdc-chip__primary-action"
+      >
+        <span class="mdc-chip__text"><slot></slot></span>
+      </span>
+    </span>
+    <slot name="trailing-icon">
+      <span role="gridcell" v-if="havetrailingIcon">
+        <mcw-chip-trailing-action ref="trailingAction">{{
+          trailingIcon
+        }}</mcw-chip-trailing-action>
+      </span></slot
+    >
+  </div>
+</template>

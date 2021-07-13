@@ -1,61 +1,59 @@
 import { resolveDynamicComponent, h, openBlock, createBlock, createVNode, toDisplayString, withModifiers, createCommentVNode, reactive, watch, onMounted, onBeforeUnmount, toRefs, resolveComponent, ref, shallowReactive, computed, withCtx, renderSlot, toRef, createTextVNode, provide, mergeProps, toHandlers, inject, Fragment, renderList, nextTick, watchEffect } from 'vue';
-import { MDCBannerFoundation } from '@material/banner';
-import { applyPassive } from '@material/dom/events';
-import { matches, closest } from '@material/dom/ponyfill';
-import { MDCRippleFoundation } from '@material/ripple';
-import { supportsCssVariables } from '@material/ripple/util';
-import { getCorrectEventName } from '@material/animation';
-import { MDCCheckboxFoundation } from '@material/checkbox/foundation';
-import { MDCFormFieldFoundation } from '@material/form-field/foundation';
-import { MDCChipSetFoundation } from '@material/chips/chip-set/foundation';
-import { MDCChipFoundation } from '@material/chips/chip/foundation';
-import { announce } from '@material/dom/announce';
-import { MDCChipTrailingActionFoundation } from '@material/chips/trailingaction/foundation';
-import { MDCCircularProgressFoundation } from '@material/circular-progress/foundation';
-import { MDCCheckbox } from '@material/checkbox';
-import * as test from '@material/data-table';
-import { MDCDataTableFoundation } from '@material/data-table/foundation';
-import { MDCDialogFoundation } from '@material/dialog/foundation';
-import * as util from '@material/dialog/util';
+import { MDCBannerFoundation } from '@material/banner/index.js';
+import { applyPassive } from '@material/dom/events.js';
+import { matches, closest } from '@material/dom/ponyfill.js';
+import { MDCRippleFoundation } from '@material/ripple/index.js';
+import { supportsCssVariables } from '@material/ripple/util.js';
+import { getCorrectEventName } from '@material/animation/index.js';
+import { MDCCheckboxFoundation } from '@material/checkbox/foundation.js';
+import { MDCFormFieldFoundation } from '@material/form-field/foundation.js';
+import { MDCChipSetFoundation } from '@material/chips/chip-set/foundation.js';
+import { MDCChipFoundation } from '@material/chips/chip/foundation.js';
+import { announce } from '@material/dom/announce.js';
+import { MDCChipTrailingActionFoundation } from '@material/chips/trailingaction/foundation.js';
+import { MDCCircularProgressFoundation } from '@material/circular-progress/foundation.js';
+import { MDCCheckbox } from '@material/checkbox/index.js';
+import { MDCDataTableFoundation } from '@material/data-table/foundation.js';
+import * as test from '@material/data-table/index.js';
+import { MDCDialogFoundation } from '@material/dialog/foundation.js';
+import * as util from '@material/dialog/util.js';
 import { FocusTrap } from '@material/dom/focus-trap.js';
-import { matches as matches$1, closest as closest$1 } from '@material/dom/ponyfill.js';
-import { FocusTrap as FocusTrap$1 } from '@material/dom/focus-trap';
-import { MDCDismissibleDrawerFoundation } from '@material/drawer/dismissible/foundation';
-import { MDCModalDrawerFoundation } from '@material/drawer/modal/foundation';
-import * as util$1 from '@material/drawer/util';
-import { MDCListFoundation } from '@material/list/foundation';
-import { MDCFloatingLabelFoundation } from '@material/floating-label/foundation';
-import { MDCIconButtonToggleFoundation } from '@material/icon-button/foundation';
-import { MDCLineRippleFoundation } from '@material/line-ripple/foundation';
-import { MDCLinearProgressFoundation } from '@material/linear-progress/foundation';
-import { MDCMenuSurfaceFoundation } from '@material/menu-surface/foundation';
-import { getCorrectPropertyName } from '@material/animation/util';
-import { MDCMenuFoundation } from '@material/menu/foundation';
-import { MDCNotchedOutlineFoundation } from '@material/notched-outline/foundation';
-import { MDCRadioFoundation } from '@material/radio/foundation';
-import { MDCSegmentedButtonFoundation } from '@material/segmented-button';
-import { MDCSegmentedButtonSegmentFoundation } from '@material/segmented-button/segment';
-import { MDCSelectFoundation } from '@material/select/foundation';
+import { MDCDismissibleDrawerFoundation } from '@material/drawer/dismissible/foundation.js';
+import { MDCModalDrawerFoundation } from '@material/drawer/modal/foundation.js';
+import * as util$1 from '@material/drawer/util.js';
+import { MDCListFoundation } from '@material/list/foundation.js';
+import { MDCFloatingLabelFoundation } from '@material/floating-label/foundation.js';
+import { MDCIconButtonToggleFoundation } from '@material/icon-button/foundation.js';
+import { MDCLineRippleFoundation } from '@material/line-ripple/foundation.js';
+import { MDCLinearProgressFoundation } from '@material/linear-progress/foundation.js';
+import { getCorrectPropertyName } from '@material/animation/util.js';
+import { MDCMenuSurfaceFoundation } from '@material/menu-surface/foundation.js';
+import { MDCMenuFoundation } from '@material/menu/foundation.js';
+import { MDCNotchedOutlineFoundation } from '@material/notched-outline/foundation.js';
+import { MDCRadioFoundation } from '@material/radio/foundation.js';
+import { MDCSegmentedButtonSegmentFoundation } from '@material/segmented-button/segment/index.js';
+import { MDCSegmentedButtonFoundation } from '@material/segmented-button/index.js';
+import { MDCSelectFoundation } from '@material/select/foundation.js';
 import { MDCSelectHelperTextFoundation } from '@material/select/helper-text/foundation.js';
 import { MDCSelectIconFoundation } from '@material/select/icon/foundation.js';
 import { MDCSliderFoundation, Thumb, cssClasses as cssClasses$7, events } from '@material/slider';
-import { MDCSnackbarFoundation } from '@material/snackbar/foundation';
-import { MDCSwitchFoundation } from '@material/switch/foundation';
-import { MDCTabBarFoundation } from '@material/tab-bar/foundation';
-import { MDCFadingTabIndicatorFoundation } from '@material/tab-indicator/fading-foundation';
-import { MDCTabIndicatorFoundation } from '@material/tab-indicator/foundation';
-import { MDCSlidingTabIndicatorFoundation } from '@material/tab-indicator/sliding-foundation';
-import { MDCTabScrollerFoundation } from '@material/tab-scroller/foundation';
-import * as util$2 from '@material/tab-scroller/util';
-import MDCTabFoundation from '@material/tab/foundation';
-import { MDCTextFieldCharacterCounterFoundation } from '@material/textfield/character-counter/foundation';
-import { MDCTextFieldHelperTextFoundation } from '@material/textfield/helper-text/foundation';
+import { MDCSnackbarFoundation } from '@material/snackbar/foundation.js';
+import { MDCSwitchFoundation } from '@material/switch/foundation.js';
+import { MDCTabBarFoundation } from '@material/tab-bar/foundation.js';
+import { MDCFadingTabIndicatorFoundation } from '@material/tab-indicator/fading-foundation.js';
+import { MDCTabIndicatorFoundation } from '@material/tab-indicator/foundation.js';
+import { MDCSlidingTabIndicatorFoundation } from '@material/tab-indicator/sliding-foundation.js';
+import { MDCTabScrollerFoundation } from '@material/tab-scroller/foundation.js';
+import * as util$2 from '@material/tab-scroller/util.js';
+import MDCTabFoundation from '@material/tab/foundation.js';
+import { MDCTextFieldCharacterCounterFoundation } from '@material/textfield/character-counter/foundation.js';
+import { MDCTextFieldHelperTextFoundation } from '@material/textfield/helper-text/foundation.js';
 import { MDCTextFieldIconFoundation } from '@material/textfield/icon/foundation.js';
-import { MDCTextFieldFoundation } from '@material/textfield/foundation';
+import { MDCTextFieldFoundation } from '@material/textfield/foundation.js';
 import { MDCTooltipFoundation, events as events$1 } from '@material/tooltip';
-import { MDCFixedTopAppBarFoundation } from '@material/top-app-bar/fixed/foundation';
-import { MDCShortTopAppBarFoundation } from '@material/top-app-bar/short/foundation';
-import { MDCTopAppBarFoundation } from '@material/top-app-bar/standard/foundation';
+import { MDCFixedTopAppBarFoundation } from '@material/top-app-bar/fixed/foundation.js';
+import { MDCShortTopAppBarFoundation } from '@material/top-app-bar/short/foundation.js';
+import { MDCTopAppBarFoundation } from '@material/top-app-bar/standard/foundation.js';
 
 function BasePlugin(components) {
   return {
@@ -79,143 +77,23 @@ function BasePlugin(components) {
   };
 }
 
-function emitCustomEvent$1(el, evtType, evtData, shouldBubble = false) {
+function emitCustomEvent(el, evtType, evtData, shouldBubble = false) {
   if (el) {
     evtType = evtType.toLowerCase();
     const evt = typeof CustomEvent === 'function' ? new CustomEvent(evtType, {
       detail: evtData,
       bubbles: shouldBubble
-    }) : createCustomEvent$1(evtType, shouldBubble, evtData);
+    }) : createCustomEvent(evtType, shouldBubble, evtData);
     el.dispatchEvent(evt);
   }
 } // ===
 // Private functions
 // ===
 
-const createCustomEvent$1 = (evtType, shouldBubble, evtData) => {
+const createCustomEvent = (evtType, shouldBubble, evtData) => {
   const evt = document.createEvent('CustomEvent');
   return evt.initCustomEvent(evtType, shouldBubble, false, evtData);
 };
-
-function ownKeys(object, enumerableOnly) {
-  var keys = Object.keys(object);
-
-  if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-
-    if (enumerableOnly) {
-      symbols = symbols.filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-      });
-    }
-
-    keys.push.apply(keys, symbols);
-  }
-
-  return keys;
-}
-
-function _objectSpread2(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-
-    if (i % 2) {
-      ownKeys(Object(source), true).forEach(function (key) {
-        _defineProperty(target, key, source[key]);
-      });
-    } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-    } else {
-      ownKeys(Object(source)).forEach(function (key) {
-        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-      });
-    }
-  }
-
-  return target;
-}
-
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-function _objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
-  }
-
-  return target;
-}
-
-function _objectWithoutProperties(source, excluded) {
-  if (source == null) return {};
-
-  var target = _objectWithoutPropertiesLoose(source, excluded);
-
-  var key, i;
-
-  if (Object.getOwnPropertySymbols) {
-    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
-
-    for (i = 0; i < sourceSymbolKeys.length; i++) {
-      key = sourceSymbolKeys[i];
-      if (excluded.indexOf(key) >= 0) continue;
-      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
-      target[key] = source[key];
-    }
-  }
-
-  return target;
-}
-
-function _taggedTemplateLiteral(strings, raw) {
-  if (!raw) {
-    raw = strings.slice(0);
-  }
-
-  return Object.freeze(Object.defineProperties(strings, {
-    raw: {
-      value: Object.freeze(raw)
-    }
-  }));
-}
-
-function _toPrimitive(input, hint) {
-  if (typeof input !== "object" || input === null) return input;
-  var prim = input[Symbol.toPrimitive];
-
-  if (prim !== undefined) {
-    var res = prim.call(input, hint || "default");
-    if (typeof res !== "object") return res;
-    throw new TypeError("@@toPrimitive must return a primitive value.");
-  }
-
-  return (hint === "string" ? String : Number)(input);
-}
-
-function _toPropertyKey(arg) {
-  var key = _toPrimitive(arg, "string");
-
-  return typeof key === "symbol" ? key : String(key);
-}
 
 const CustomLink = {
   name: 'custom-link',
@@ -229,8 +107,6 @@ const CustomLink = {
     attrs
   }) {
     return () => {
-      var _props$tag2, _slots$default2;
-
       // destructure the props in the render function so we use the current value
       // if their value has changed since we were created
       const {
@@ -240,33 +116,27 @@ const CustomLink = {
       const routerLink = resolveDynamicComponent('router-link');
 
       if (to && routerLink) {
-        var _props$tag;
-
-        const rtag = (_props$tag = props.tag) !== null && _props$tag !== void 0 ? _props$tag : 'a';
-        return h(routerLink, _objectSpread2(_objectSpread2({
-          custom: true
-        }, attrs), {}, {
+        const rtag = props.tag ?? 'a';
+        return h(routerLink, {
+          custom: true,
+          ...attrs,
           to
-        }), {
-          default: props => {
-            var _slots$default;
-
-            return h(rtag, _objectSpread2(_objectSpread2({}, attrs), {}, {
-              onClick: evt => {
-                evt.__itemId = attrs.itemId;
-                props.navigate(evt);
-              }
-            }), (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
-          }
+        }, {
+          default: props => h(rtag, { ...attrs,
+            onClick: evt => {
+              evt.__itemId = attrs.itemId;
+              props.navigate(evt);
+            }
+          }, slots.default?.())
         });
       }
 
-      const element = href ? 'a' : (_props$tag2 = props.tag) !== null && _props$tag2 !== void 0 ? _props$tag2 : 'a';
+      const element = href ? 'a' : props.tag ?? 'a';
       const role = href ? 'button' : element !== 'button' ? 'button' : null;
-      const children = (_slots$default2 = slots.default) === null || _slots$default2 === void 0 ? void 0 : _slots$default2.call(slots);
-      return h(element, _objectSpread2(_objectSpread2({}, attrs), {}, {
+      const children = slots.default?.();
+      return h(element, { ...attrs,
         role
-      }), {
+      }, {
         default: () => children
       });
     };
@@ -277,7 +147,7 @@ const CustomLink = {
 var index$1 = /*#__PURE__*/Object.freeze({
   __proto__: null,
   BasePlugin: BasePlugin,
-  emitCustomEvent: emitCustomEvent$1,
+  emitCustomEvent: emitCustomEvent,
   CustomLink: CustomLink
 });
 
@@ -346,7 +216,7 @@ function render$J(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$J.render = render$J;
-script$J.__file = "packages/banner/banner-content.vue";
+script$J.__file = "src/banner/banner-content.vue";
 
 var script$I = {
   name: 'mcw-banner',
@@ -398,9 +268,9 @@ var script$I = {
 
     const adapter = {
       addClass: className => {
-        uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        uiState.classes = { ...uiState.classes,
           [className]: true
-        });
+        };
         uiState.root.classList.add(className);
       },
       getContentHeight: () => {
@@ -423,14 +293,15 @@ var script$I = {
       },
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$classes = uiState.classes,
-              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.classes;
         uiState.classes = rest;
       },
-      setStyleProperty: (property, value) => uiState.styles = _objectSpread2(_objectSpread2({}, uiState.styles), {}, {
+      setStyleProperty: (property, value) => uiState.styles = { ...uiState.styles,
         [property]: value
-      })
+      }
     };
     watch(() => props.modelValue, nv => {
       onOpen(nv);
@@ -440,13 +311,11 @@ var script$I = {
       foundation.init();
     });
     onBeforeUnmount(() => {
-      var _foundation;
-
-      (_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.destroy();
+      foundation?.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       onContentClick
-    });
+    };
   }
 
 };
@@ -489,50 +358,45 @@ function render$I(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$I.render = render$I;
-script$I.__file = "packages/banner/banner.vue";
+script$I.__file = "src/banner/banner.vue";
 
 var banner = BasePlugin({
   mcwBanner: script$I
 });
 
-const _excluded$4 = ["unbounded"];
-class RippleElement$1 extends MDCRippleFoundation {
-  constructor(element, state, _ref = {}) {
-    var _element$$el;
-
-    let {
-      unbounded = false
-    } = _ref,
-        options = _objectWithoutProperties(_ref, _excluded$4);
-
-    const $el = (_element$$el = element.$el) !== null && _element$$el !== void 0 ? _element$$el : element;
-    super(_objectSpread2({
+class RippleElement extends MDCRippleFoundation {
+  constructor(element, state, {
+    unbounded = false,
+    ...options
+  } = {}) {
+    const $element = element.$el ?? element;
+    super({
       addClass: className => {
         if (state) {
-          state.classes = _objectSpread2(_objectSpread2({}, state.classes), {}, {
+          state.classes = { ...state.classes,
             [className]: true
-          });
+          };
         } else {
-          $el.classList.add(className);
+          $element.classList.add(className);
         }
       },
       browserSupportsCssVars: () => supportsCssVariables(window),
-      computeBoundingRect: () => $el.getBoundingClientRect(),
-      containsEventTarget: target => $el.contains(target),
+      computeBoundingRect: () => $element.getBoundingClientRect(),
+      containsEventTarget: target => $element.contains(target),
       deregisterDocumentInteractionHandler: (evtType, handler) => document.documentElement.removeEventListener(evtType, handler, applyPassive()),
-      deregisterInteractionHandler: (evt, handler) => $el.removeEventListener(evt, handler, applyPassive()),
+      deregisterInteractionHandler: (evt, handler) => $element.removeEventListener(evt, handler, applyPassive()),
       deregisterResizeHandler: handler => window.removeEventListener('resize', handler),
       getWindowPageOffset: () => ({
         x: window.pageXOffset,
         y: window.pageYOffset
       }),
-      isSurfaceActive: () => matches($el, ':active'),
+      isSurfaceActive: () => matches($element, ':active'),
       isSurfaceDisabled: () => false,
       // todo: consider if this is right
       isUnbounded: () => this.unbounded_,
       registerDocumentInteractionHandler: (evtType, handler) => document.documentElement.addEventListener(evtType, handler, applyPassive()),
       registerInteractionHandler: (evt, handler) => {
-        $el.addEventListener(evt, handler, applyPassive());
+        $element.addEventListener(evt, handler, applyPassive());
       },
       registerResizeHandler: handler => {
         return window.addEventListener('resize', handler);
@@ -540,24 +404,26 @@ class RippleElement$1 extends MDCRippleFoundation {
       removeClass: className => {
         if (state) {
           // eslint-disable-next-line no-unused-vars
-          const _state$classes = state.classes,
-                rest = _objectWithoutProperties(_state$classes, [className].map(_toPropertyKey));
-
+          const {
+            [className]: removed,
+            ...rest
+          } = state.classes;
           state.classes = rest;
         } else {
-          $el.classList.remove(className);
+          $element.classList.remove(className);
         }
       },
       updateCssVariable: (varName, value) => {
         if (state) {
-          state.styles = _objectSpread2(_objectSpread2({}, state.styles), {}, {
+          state.styles = { ...state.styles,
             [varName]: value
-          });
+          };
         } else {
-          $el.style.setProperty(varName, value);
+          $element.style.setProperty(varName, value);
         }
-      }
-    }, options));
+      },
+      ...options
+    });
     this.unbounded_ = unbounded;
   }
 
@@ -571,36 +437,28 @@ class RippleElement$1 extends MDCRippleFoundation {
   }
 
 }
-function useRipplePlugin$1(root, options) {
+function useRipplePlugin(root, options) {
   const ripple = ref(null);
   const state = shallowReactive({
     classes: {},
     styles: {}
   });
 
-  const activate = () => {
-    var _ripple$value;
+  const activate = () => ripple.value?.activate();
 
-    return (_ripple$value = ripple.value) === null || _ripple$value === void 0 ? void 0 : _ripple$value.activate();
-  };
-
-  const deactivate = () => {
-    var _ripple$value2;
-
-    return (_ripple$value2 = ripple.value) === null || _ripple$value2 === void 0 ? void 0 : _ripple$value2.deactivate();
-  };
+  const deactivate = () => ripple.value?.deactivate();
 
   onMounted(() => {
-    ripple.value = new RippleElement$1(root.value, state, options);
+    ripple.value = new RippleElement(root.value, state, options);
     ripple.value.init();
   });
   onBeforeUnmount(() => {
     ripple.value.destroy();
   });
-  return _objectSpread2(_objectSpread2({}, toRefs(state)), {}, {
+  return { ...toRefs(state),
     activate,
     deactivate
-  });
+  };
 }
 
 var script$H = {
@@ -623,24 +481,20 @@ var script$H = {
     const {
       classes: rippleClasses,
       styles
-    } = useRipplePlugin$1(root);
+    } = useRipplePlugin(root);
     const classes = computed(() => {
-      return _objectSpread2(_objectSpread2({}, rippleClasses.value), {}, {
+      return { ...rippleClasses.value,
         'mdc-button': true,
         'mdc-button--raised': props.raised,
         'mdc-button--unelevated': props.unelevated && !props.raised,
         'mdc-button--outlined': props.outlined
-      });
+      };
     });
     const haveIcon = computed(() => {
-      var _slots$icon;
-
-      return (_slots$icon = slots.icon) !== null && _slots$icon !== void 0 ? _slots$icon : props.icon;
+      return slots.icon ?? props.icon;
     });
     const haveTrailingIcon = computed(() => {
-      var _slots$trailingIcon;
-
-      return (_slots$trailingIcon = slots.trailingIcon) !== null && _slots$trailingIcon !== void 0 ? _slots$trailingIcon : props.trailingIcon;
+      return slots.trailingIcon ?? props.trailingIcon;
     });
     return {
       styles,
@@ -694,7 +548,7 @@ function render$H(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$H.render = render$H;
-script$H.__file = "packages/button/button.vue";
+script$H.__file = "src/button/button.vue";
 
 var button = BasePlugin({
   mcwButton: script$H
@@ -707,11 +561,9 @@ var mcwCardActionButtons = {
     slots
   }) {
     return () => {
-      var _slots$default;
-
       return h('div', {
         class: ['mdc-card__action-buttons']
-      }, [(_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots)]);
+      }, [slots.default?.()]);
     };
   }
 
@@ -724,11 +576,9 @@ var mcwCardActionIcons = {
     slots
   }) {
     return () => {
-      var _slots$default;
-
       return h('div', {
         class: ['mdc-card__action-icons']
-      }, [(_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots)]);
+      }, [slots.default?.()]);
     };
   }
 
@@ -744,14 +594,12 @@ var mcwCardActions = {
     slots
   }) {
     return () => {
-      var _slots$default;
-
       return h('section', {
         class: [{
           'mdc-card__actions': 1,
           'mdc-card__actions--full-bleed': props.fullBleed
         }]
-      }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
+      }, slots.default?.());
     };
   }
 
@@ -784,10 +632,8 @@ var mcwCardMedia = {
     slots
   }) {
     return () => {
-      var _slots$default;
-
       const nodes = [];
-      const content = (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots);
+      const content = slots.default?.();
 
       if (content) {
         nodes.push(h('div', {
@@ -802,7 +648,7 @@ var mcwCardMedia = {
           'mdc-card__media--16-9': props.wide && !props.square
         },
         style: {
-          backgroundImage: "url(".concat(props.src, ")")
+          backgroundImage: `url(${props.src})`
         }
       }, nodes);
     };
@@ -821,11 +667,11 @@ var script$G = {
     const {
       classes: rippleClasses,
       styles
-    } = useRipplePlugin$1(root);
+    } = useRipplePlugin(root);
     const classes = computed(() => {
-      return _objectSpread2(_objectSpread2({}, rippleClasses.value), {}, {
+      return { ...rippleClasses.value,
         'mdc-card__primary-action': 1
-      });
+      };
     });
     return {
       classes,
@@ -853,7 +699,7 @@ function render$G(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$G.render = render$G;
-script$G.__file = "packages/card/card-primary-action.vue";
+script$G.__file = "src/card/card-primary-action.vue";
 
 var mcwCard = {
   name: 'mcw-card',
@@ -866,17 +712,16 @@ var mcwCard = {
     slots
   }) {
     return () => {
-      var _slots$default;
-
       const {
         outlined
       } = props;
-      return h('div', _objectSpread2({
+      return h('div', {
         class: [{
           'mdc-card': 1,
           'mdc-card--outlined': outlined
-        }]
-      }, attrs), (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
+        }],
+        ...attrs
+      }, slots.default?.());
     };
   }
 
@@ -890,132 +735,6 @@ var card = BasePlugin({
   mcwCardActionButtons,
   mcwCardActionIcons
 });
-
-function emitCustomEvent(el, evtType, evtData, shouldBubble = false) {
-  if (el) {
-    evtType = evtType.toLowerCase();
-    const evt = typeof CustomEvent === 'function' ? new CustomEvent(evtType, {
-      detail: evtData,
-      bubbles: shouldBubble
-    }) : createCustomEvent(evtType, shouldBubble, evtData);
-    el.dispatchEvent(evt);
-  }
-} // ===
-// Private functions
-// ===
-
-const createCustomEvent = (evtType, shouldBubble, evtData) => {
-  const evt = document.createEvent('CustomEvent');
-  return evt.initCustomEvent(evtType, shouldBubble, false, evtData);
-};
-
-const _excluded$3 = ["unbounded"];
-class RippleElement extends MDCRippleFoundation {
-  constructor(element, state, _ref = {}) {
-    var _element$$el;
-
-    let {
-      unbounded = false
-    } = _ref,
-        options = _objectWithoutProperties(_ref, _excluded$3);
-
-    const $el = (_element$$el = element.$el) !== null && _element$$el !== void 0 ? _element$$el : element;
-    super(_objectSpread2({
-      addClass: className => {
-        if (state) {
-          state.classes = _objectSpread2(_objectSpread2({}, state.classes), {}, {
-            [className]: true
-          });
-        } else {
-          $el.classList.add(className);
-        }
-      },
-      browserSupportsCssVars: () => supportsCssVariables(window),
-      computeBoundingRect: () => $el.getBoundingClientRect(),
-      containsEventTarget: target => $el.contains(target),
-      deregisterDocumentInteractionHandler: (evtType, handler) => document.documentElement.removeEventListener(evtType, handler, applyPassive()),
-      deregisterInteractionHandler: (evt, handler) => $el.removeEventListener(evt, handler, applyPassive()),
-      deregisterResizeHandler: handler => window.removeEventListener('resize', handler),
-      getWindowPageOffset: () => ({
-        x: window.pageXOffset,
-        y: window.pageYOffset
-      }),
-      isSurfaceActive: () => matches($el, ':active'),
-      isSurfaceDisabled: () => false,
-      // todo: consider if this is right
-      isUnbounded: () => this.unbounded_,
-      registerDocumentInteractionHandler: (evtType, handler) => document.documentElement.addEventListener(evtType, handler, applyPassive()),
-      registerInteractionHandler: (evt, handler) => {
-        $el.addEventListener(evt, handler, applyPassive());
-      },
-      registerResizeHandler: handler => {
-        return window.addEventListener('resize', handler);
-      },
-      removeClass: className => {
-        if (state) {
-          // eslint-disable-next-line no-unused-vars
-          const _state$classes = state.classes,
-                rest = _objectWithoutProperties(_state$classes, [className].map(_toPropertyKey));
-
-          state.classes = rest;
-        } else {
-          $el.classList.remove(className);
-        }
-      },
-      updateCssVariable: (varName, value) => {
-        if (state) {
-          state.styles = _objectSpread2(_objectSpread2({}, state.styles), {}, {
-            [varName]: value
-          });
-        } else {
-          $el.style.setProperty(varName, value);
-        }
-      }
-    }, options));
-    this.unbounded_ = unbounded;
-  }
-
-  get unbounded() {
-    return this.unbounded_;
-  }
-
-  set unbounded(unbounded) {
-    this.unbounded_ = Boolean(unbounded);
-    this.setUnbounded(this.unbounded_);
-  }
-
-}
-function useRipplePlugin(root, options) {
-  const ripple = ref(null);
-  const state = shallowReactive({
-    classes: {},
-    styles: {}
-  });
-
-  const activate = () => {
-    var _ripple$value;
-
-    return (_ripple$value = ripple.value) === null || _ripple$value === void 0 ? void 0 : _ripple$value.activate();
-  };
-
-  const deactivate = () => {
-    var _ripple$value2;
-
-    return (_ripple$value2 = ripple.value) === null || _ripple$value2 === void 0 ? void 0 : _ripple$value2.deactivate();
-  };
-
-  onMounted(() => {
-    ripple.value = new RippleElement(root.value, state, options);
-    ripple.value.init();
-  });
-  onBeforeUnmount(() => {
-    ripple.value.destroy();
-  });
-  return _objectSpread2(_objectSpread2({}, toRefs(state)), {}, {
-    activate,
-    deactivate
-  });
-}
 
 const CB_PROTO_PROPS = ['checked', 'indeterminate'];
 let checkboxId_ = 0;
@@ -1052,7 +771,7 @@ var script$F = {
     });
     let foundation;
     let formField;
-    const checkboxId = "__mcw-checkbox-".concat(checkboxId_++);
+    const checkboxId = `__mcw-checkbox-${checkboxId_++}`;
     const {
       classes: rippleClasses,
       styles,
@@ -1063,23 +782,23 @@ var script$F = {
       isSurfaceActive: () => {
         return matches(uiState.control, ':active');
       },
-      registerInteractionHandler: (evt, handler) => {
-        uiState.control.addEventListener(evt, handler, applyPassive());
+      registerInteractionHandler: (event_, handler) => {
+        uiState.control.addEventListener(event_, handler, applyPassive());
       },
-      deregisterInteractionHandler: (evt, handler) => {
-        uiState.control.removeEventListener(evt, handler, applyPassive());
+      deregisterInteractionHandler: (event_, handler) => {
+        uiState.control.removeEventListener(event_, handler, applyPassive());
       },
       computeBoundingRect: () => {
         return uiState.root.getBoundingClientRect();
       }
     });
     const rootClasses = computed(() => {
-      return _objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes);
+      return { ...rippleClasses.value,
+        ...uiState.classes
+      };
     });
     const hasLabel = computed(() => {
-      var _props$label;
-
-      return (_props$label = props.label) !== null && _props$label !== void 0 ? _props$label : slots.default;
+      return props.label ?? slots.default;
     });
     const formFieldClasses = computed(() => {
       return {
@@ -1098,12 +817,12 @@ var script$F = {
       emit('update:indeterminate', indeterminate);
 
       if (Array.isArray(props.modelValue)) {
-        const idx = props.modelValue.indexOf(props.value);
+        const index = props.modelValue.indexOf(props.value);
 
         if (checked) {
-          idx < 0 && emit('update:modelValue', props.modelValue.concat(props.value));
+          index < 0 && emit('update:modelValue', props.modelValue.concat(props.value));
         } else {
-          idx > -1 && emit('update:modelValue', props.modelValue.slice(0, idx).concat(props.modelValue.slice(idx + 1)));
+          index > -1 && emit('update:modelValue', props.modelValue.slice(0, index).concat(props.modelValue.slice(index + 1)));
         }
       } else {
         // emit a native event so that it bubbles to parent elements
@@ -1116,9 +835,9 @@ var script$F = {
     const isChecked = () => uiState.control.checked;
 
     const adapter = {
-      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+      addClass: className => uiState.classes = { ...uiState.classes,
         [className]: true
-      }),
+      },
       forceLayout: () => uiState.root.offsetWidth,
       hasNativeControl: () => true,
       isAttachedToDOM: () => true,
@@ -1126,16 +845,17 @@ var script$F = {
       isIndeterminate: () => uiState.control.indeterminate,
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$classes = uiState.classes,
-              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.classes;
         uiState.classes = rest;
       },
-      removeNativeControlAttr: attr => {
-        uiState.control.removeAttribute(attr);
+      removeNativeControlAttr: attribute => {
+        uiState.control.removeAttribute(attribute);
       },
-      setNativeControlAttr: (attr, value) => {
-        uiState.control.setAttribute(attr, value);
+      setNativeControlAttr: (attribute, value) => {
+        uiState.control.setAttribute(attribute, value);
       },
       setNativeControlDisabled: disabled => uiState.control.disabled = disabled
     };
@@ -1143,7 +863,7 @@ var script$F = {
     const handleAnimationEnd = () => foundation.handleAnimationEnd();
 
     const setChecked = checked => {
-      uiState.control.checked = Array.isArray(checked) ? checked.indexOf(props.value) > -1 : checked;
+      uiState.control.checked = Array.isArray(checked) ? checked.includes(props.value) : checked;
     };
 
     const setIndeterminate = indeterminate => {
@@ -1151,47 +871,47 @@ var script$F = {
     };
 
     const installPropertyChangeHooks_ = () => {
-      const nativeCb = uiState.control;
-      const cbProto = Object.getPrototypeOf(nativeCb);
-      CB_PROTO_PROPS.forEach(controlState => {
-        const desc = Object.getOwnPropertyDescriptor(cbProto, controlState); // We have to check for this descriptor, since some browsers (Safari) don't support its return.
+      const nativeCallback = uiState.control;
+      const callbackProto = Object.getPrototypeOf(nativeCallback);
+
+      for (const controlState of CB_PROTO_PROPS) {
+        const desc = Object.getOwnPropertyDescriptor(callbackProto, controlState); // We have to check for this descriptor, since some browsers (Safari) don't support its return.
         // See: https://bugs.webkit.org/show_bug.cgi?id=49739
 
         if (validDescriptor(desc)) {
-          const nativeCbDesc =
+          const nativeCallbackDesc =
           /** @type {!ObjectPropertyDescriptor} */
           {
             get: desc.get,
             set: state => {
-              desc.set.call(nativeCb, state);
+              desc.set.call(nativeCallback, state);
               foundation.handleChange();
             },
             configurable: desc.configurable,
             enumerable: desc.enumerable
           };
-          Object.defineProperty(nativeCb, controlState, nativeCbDesc);
+          Object.defineProperty(nativeCallback, controlState, nativeCallbackDesc);
         }
-      });
+      }
     };
 
     const uninstallPropertyChangeHooks_ = () => {
-      const nativeCb = uiState.control;
-      const cbProto = Object.getPrototypeOf(nativeCb);
-      CB_PROTO_PROPS.forEach(controlState => {
+      const nativeCallback = uiState.control;
+      const callbackProto = Object.getPrototypeOf(nativeCallback);
+
+      for (const controlState of CB_PROTO_PROPS) {
         const desc =
         /** @type {!ObjectPropertyDescriptor} */
-        Object.getOwnPropertyDescriptor(cbProto, controlState);
+        Object.getOwnPropertyDescriptor(callbackProto, controlState);
 
         if (validDescriptor(desc)) {
-          Object.defineProperty(nativeCb, controlState, desc);
+          Object.defineProperty(nativeCallback, controlState, desc);
         }
-      });
+      }
     };
 
     watch(() => props.disabled, (nv, ov) => {
-      var _foundation;
-
-      nv != ov && ((_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.setDisabled(nv));
+      nv != ov && foundation?.setDisabled(nv);
     });
     watch(() => props.modelValue, (nv, ov) => {
       nv != ov && setChecked(nv);
@@ -1228,14 +948,12 @@ var script$F = {
       setIndeterminate(props.indeterminate);
     });
     onBeforeUnmount(() => {
-      var _formField;
-
       uiState.root.removeEventListener(getCorrectEventName(window, 'animationend'), handleAnimationEnd);
-      (_formField = formField) === null || _formField === void 0 ? void 0 : _formField.destroy();
+      formField?.destroy();
       uninstallPropertyChangeHooks_();
       foundation.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       rootClasses,
       formFieldClasses,
       onChange,
@@ -1245,15 +963,15 @@ var script$F = {
       setIndeterminate,
       isChecked,
       checkboxId
-    });
+    };
   }
 
 }; // ===
 // Private functions
 // ===
 
-function validDescriptor(inputPropDesc) {
-  return !!inputPropDesc && typeof inputPropDesc.set === 'function';
+function validDescriptor(inputPropertyDesc) {
+  return !!inputPropertyDesc && typeof inputPropertyDesc.set === 'function';
 }
 
 const _hoisted_1$m = /*#__PURE__*/createVNode("div", { class: "mdc-checkbox__background" }, [
@@ -1338,7 +1056,7 @@ function render$F(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$F.render = render$F;
-script$F.__file = "packages/checkbox/checkbox.vue";
+script$F.__file = "src/checkbox/checkbox.vue";
 
 var checkbox = BasePlugin({
   mcwCheckbox: script$F
@@ -1382,7 +1100,7 @@ function render$E(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$E.render = render$E;
-script$E.__file = "packages/chips/chip-checkmark.vue";
+script$E.__file = "src/chips/chip-checkmark.vue";
 
 const {
   strings: strings$e
@@ -1490,7 +1208,8 @@ var script$D = {
       slotObserver.disconnect();
       foundation.destroy();
     });
-    return _objectSpread2({}, toRefs(uiState));
+    return { ...toRefs(uiState)
+    };
   }
 
 };
@@ -1506,7 +1225,7 @@ function render$D(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$D.render = render$D;
-script$D.__file = "packages/chips/chip-set.vue";
+script$D.__file = "src/chips/chip-set.vue";
 
 const {
   strings: strings$d
@@ -1559,10 +1278,14 @@ var script$C = {
     const id = chipItemId_++;
     let foundation;
     const classes = computed(() => {
-      return _objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes);
+      return { ...rippleClasses.value,
+        ...uiState.classes
+      };
     });
     const styles = computed(() => {
-      return _objectSpread2(_objectSpread2({}, rippleStyles.value), uiState.styles);
+      return { ...rippleStyles.value,
+        ...uiState.styles
+      };
     });
     let trailingAction_;
     let leadingIcon_;
@@ -1576,8 +1299,8 @@ var script$C = {
       }
 
     });
-    const isFilter = computed(() => mcwChipSet === null || mcwChipSet === void 0 ? void 0 : mcwChipSet.filter);
-    const isInput = computed(() => mcwChipSet === null || mcwChipSet === void 0 ? void 0 : mcwChipSet.input);
+    const isFilter = computed(() => mcwChipSet?.filter);
+    const isInput = computed(() => mcwChipSet?.input);
     const haveleadingIcon = computed(() => {
       const slot = slots['leading-icon'];
       return slot && slot[0] || !!props.leadingIcon;
@@ -1587,9 +1310,9 @@ var script$C = {
       return isInput.value && (slot && slot[0] || !!props.trailingIcon);
     });
     const adapter = {
-      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+      addClass: className => uiState.classes = { ...uiState.classes,
         [className]: true
-      }),
+      },
       addClassToLeadingIcon: className => {
         if (leadingIcon_) {
           leadingIcon_.classList.add(className);
@@ -1597,20 +1320,14 @@ var script$C = {
       },
       eventTargetHasClass: (target, className) => target.classList.contains(className),
       focusPrimaryAction: () => {
-        var _uiState$root$querySe;
-
-        (_uiState$root$querySe = uiState.root.querySelector(strings$d.PRIMARY_ACTION_SELECTOR)) === null || _uiState$root$querySe === void 0 ? void 0 : _uiState$root$querySe.focus();
+        uiState.root.querySelector(strings$d.PRIMARY_ACTION_SELECTOR)?.focus();
       },
       focusTrailingAction: () => {
-        var _trailingAction_;
-
-        (_trailingAction_ = trailingAction_) === null || _trailingAction_ === void 0 ? void 0 : _trailingAction_.focus();
+        trailingAction_?.focus();
       },
       getAttribute: attr => uiState.root.getAttribute(attr),
       getCheckmarkBoundingClientRect: () => {
-        var _uiState$checkmarkEl;
-
-        return (_uiState$checkmarkEl = uiState.checkmarkEl) === null || _uiState$checkmarkEl === void 0 ? void 0 : _uiState$checkmarkEl.getBoundingClientRect();
+        return uiState.checkmarkEl?.getBoundingClientRect();
       },
       getComputedStyleValue: propertyName => window.getComputedStyle(uiState.root).getPropertyValue(propertyName),
       getRootBoundingClientRect: () => uiState.root.getBoundingClientRect(),
@@ -1619,30 +1336,28 @@ var script$C = {
       isRTL: () => window.getComputedStyle(uiState.root).getPropertyValue('direction') === 'rtl',
       isTrailingActionNavigable: () => {
         if (trailingAction_) {
-          var _uiState$trailingActi;
-
-          return (_uiState$trailingActi = uiState.trailingAction) === null || _uiState$trailingActi === void 0 ? void 0 : _uiState$trailingActi.isNavigable();
+          return uiState.trailingAction?.isNavigable();
         }
 
         return false;
       },
       notifyInteraction: () => {
-        emitCustomEvent$1(uiState.root, strings$d.INTERACTION_EVENT, {
+        emitCustomEvent(uiState.root, strings$d.INTERACTION_EVENT, {
           chipId: id
         }, true);
       },
-      notifyNavigation: (key, source) => emitCustomEvent$1(uiState.root, strings$d.NAVIGATION_EVENT, {
+      notifyNavigation: (key, source) => emitCustomEvent(uiState.root, strings$d.NAVIGATION_EVENT, {
         chipId: id,
         key,
         source
       }, true),
       notifyRemoval: removedAnnouncement => {
-        emitCustomEvent$1(uiState.root, 'mdc-chip:removal', {
+        emitCustomEvent(uiState.root, 'mdc-chip:removal', {
           chipId: id,
           removedAnnouncement
         }, true);
       },
-      notifySelection: (selected, shouldIgnore) => emitCustomEvent$1(uiState.root, strings$d.SELECTION_EVENT, {
+      notifySelection: (selected, shouldIgnore) => emitCustomEvent(uiState.root, strings$d.SELECTION_EVENT, {
         chipId: id,
         selected: selected,
         shouldIgnore
@@ -1650,15 +1365,16 @@ var script$C = {
       /* shouldBubble */
       ),
       notifyTrailingIconInteraction: () => {
-        emitCustomEvent$1(uiState.root, strings$d.TRAILING_ICON_INTERACTION_EVENT, {
+        emitCustomEvent(uiState.root, strings$d.TRAILING_ICON_INTERACTION_EVENT, {
           chipId: id
         }, true);
       },
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$classes = uiState.classes,
-              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.classes;
         uiState.classes = rest;
       },
       removeClassFromLeadingIcon: className => {
@@ -1667,16 +1383,14 @@ var script$C = {
         }
       },
       removeTrailingActionFocus: () => {
-        var _uiState$trailingActi2;
-
-        (_uiState$trailingActi2 = uiState.trailingAction) === null || _uiState$trailingActi2 === void 0 ? void 0 : _uiState$trailingActi2.removeFocus();
+        uiState.trailingAction?.removeFocus();
       },
-      setPrimaryActionAttr: (attr, value) => uiState.primaryAttrs = _objectSpread2(_objectSpread2({}, uiState.primaryAttrs), {}, {
+      setPrimaryActionAttr: (attr, value) => uiState.primaryAttrs = { ...uiState.primaryAttrs,
         [attr]: value
-      }),
-      setStyleProperty: (property, value) => uiState.styles = _objectSpread2(_objectSpread2({}, uiState.styles), {}, {
+      },
+      setStyleProperty: (property, value) => uiState.styles = { ...uiState.styles,
         [property]: value
-      })
+      }
     };
 
     const setSelectedFromChipSet = (selected, shouldNotifyClients) => {
@@ -1742,7 +1456,7 @@ var script$C = {
     onBeforeUnmount(() => {
       foundation.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       classes,
       styles,
       id,
@@ -1758,7 +1472,7 @@ var script$C = {
       focusPrimaryAction,
       focusTrailingAction,
       setSelectedFromChipSet
-    });
+    };
   }
 
 };
@@ -1824,7 +1538,7 @@ function render$C(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$C.render = render$C;
-script$C.__file = "packages/chips/chip.vue";
+script$C.__file = "src/chips/chip.vue";
 
 const {
   strings: strings$c
@@ -1844,10 +1558,10 @@ var script$B = {
         root.value.focus();
       },
       getAttribute: attr => root.value.getAttribute(attr),
-      notifyInteraction: trigger => emitCustomEvent$1(root.value, strings$c.INTERACTION_EVENT, {
+      notifyInteraction: trigger => emitCustomEvent(root.value, strings$c.INTERACTION_EVENT, {
         trigger
       }, true),
-      notifyNavigation: key => emitCustomEvent$1(root.value, strings$c.NAVIGATION_EVENT, {
+      notifyNavigation: key => emitCustomEvent(root.value, strings$c.NAVIGATION_EVENT, {
         key
       }, true),
       setAttribute: (attr, value) => {
@@ -1907,7 +1621,7 @@ function render$B(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$B.render = render$B;
-script$B.__file = "packages/chips/trailing-action.vue";
+script$B.__file = "src/chips/trailing-action.vue";
 
 var chips = BasePlugin({
   mcwChip: script$C,
@@ -1916,8 +1630,7 @@ var chips = BasePlugin({
   mcwChipTrailingAction: script$B
 });
 
-const _excluded$2 = ["stroke-dasharray", "stroke-dashoffset"];
-const ProgressPropType = {
+const ProgressPropertyType = {
   type: [Number, String],
 
   validator(value) {
@@ -1934,7 +1647,7 @@ var script$A = {
     },
     indeterminate: Boolean,
     medium: Boolean,
-    progress: ProgressPropType,
+    progress: ProgressPropertyType,
     tag: {
       type: String,
       default: 'div'
@@ -1959,18 +1672,18 @@ var script$A = {
           height: '36px'
         }
       },
-      circleAttrs: getCircleAttrs(props.medium, false),
+      circleAttrs: getCircleAttributes(props.medium, false),
       trackAttrs: getTrackAttrs(props.medium),
-      indeterminateAttrs: getCircleAttrs(props.medium, true),
+      indeterminateAttrs: getCircleAttributes(props.medium, true),
       viewbox: props.medium ? '0 0 36 36' : '0 0 48 48',
       root: null
     });
     let foundation;
     const adapter = {
       addClass: className => {
-        uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        uiState.classes = { ...uiState.classes,
           [className]: true
-        });
+        };
       },
       getDeterminateCircleAttribute: attributeName => {
         return uiState.circleAttrs[attributeName];
@@ -1978,26 +1691,28 @@ var script$A = {
       hasClass: className => uiState.root.classList.contains(className),
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$classes = uiState.classes,
-              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.classes;
         uiState.classes = rest;
       },
       removeAttribute: attributeName => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$rootAttrs = uiState.rootAttrs,
-              rest = _objectWithoutProperties(_uiState$rootAttrs, [attributeName].map(_toPropertyKey));
-
+        const {
+          [attributeName]: removed,
+          ...rest
+        } = uiState.rootAttrs;
         uiState.rootAttrs = rest;
       },
       setAttribute: (attributeName, value) => {
-        uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, {
+        uiState.rootAttrs = { ...uiState.rootAttrs,
           [attributeName]: value
-        });
+        };
       },
-      setDeterminateCircleAttribute: (attributeName, value) => uiState.circleAttrs = _objectSpread2(_objectSpread2({}, uiState.circleAttrs), {}, {
+      setDeterminateCircleAttribute: (attributeName, value) => uiState.circleAttrs = { ...uiState.circleAttrs,
         [attributeName]: value
-      })
+      }
     };
     watch(() => props.open, nv => {
       if (nv) {
@@ -2025,14 +1740,15 @@ var script$A = {
       }
     });
     onBeforeUnmount(() => foundation.destroy());
-    return _objectSpread2({}, toRefs(uiState));
+    return { ...toRefs(uiState)
+    };
   }
 
 }; // ===
 // Private functions
 // ===
 
-function getCircleAttrs(medium = false, indeterminate = true) {
+function getCircleAttributes(medium = false, indeterminate = true) {
   return medium ? {
     cx: '16',
     cy: '16',
@@ -2051,9 +1767,13 @@ function getCircleAttrs(medium = false, indeterminate = true) {
 }
 
 function getTrackAttrs(medium = false) {
-  const _getCircleAttrs = getCircleAttrs(medium),
-        rest = _objectWithoutProperties(_getCircleAttrs, _excluded$2);
-
+  const {
+    // eslint-disable-next-line no-unused-vars
+    ['stroke-dasharray']: sda,
+    // eslint-disable-next-line no-unused-vars
+    ['stroke-dashoffset']: sdo,
+    ...rest
+  } = getCircleAttributes(medium);
   return rest;
 }
 
@@ -2120,7 +1840,7 @@ function render$A(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$A.render = render$A;
-script$A.__file = "packages/circular-progress/circular-progress.vue";
+script$A.__file = "src/circular-progress/circular-progress.vue";
 
 var circularProgress = BasePlugin({
   mcwCircularProgress: script$A
@@ -2152,7 +1872,6 @@ class CheckboxAdapter {
 
 }
 
-var _templateObject;
 var script$z = {
   name: 'mcw-data-table',
   props: {
@@ -2171,8 +1890,8 @@ var script$z = {
       root: null
     });
 
-    const checkboxFactory = el => {
-      return el.__vue__ ? new CheckboxAdapter(el.__vue__) : new MDCCheckbox(el);
+    const checkboxFactory = element => {
+      return element.__vue__ ? new CheckboxAdapter(element.__vue__) : new MDCCheckbox(element);
     };
 
     const {
@@ -2200,7 +1919,7 @@ var script$z = {
     };
 
     const getHeaderCells = () => {
-      return [].slice.call(uiState.root.querySelectorAll(selectors.HEADER_CELL));
+      return Array.prototype.slice.call(uiState.root.querySelectorAll(selectors.HEADER_CELL));
     };
 
     const getRowByIndex_ = index => {
@@ -2250,14 +1969,15 @@ var script$z = {
     };
 
     const adapter = {
-      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+      addClass: className => uiState.classes = { ...uiState.classes,
         [className]: true
-      }),
+      },
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$classes = uiState.classes,
-              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.classes;
         uiState.classes = rest;
       },
       getHeaderCellElements: () => getHeaderCells(),
@@ -2280,7 +2000,7 @@ var script$z = {
         }, true);
       },
       getTableContainerHeight: () => {
-        const tableContainer = uiState.root.querySelector(_templateObject || (_templateObject = _taggedTemplateLiteral([".", ""])), cssClasses.CONTAINER);
+        const tableContainer = uiState.root.querySelector`.${cssClasses.CONTAINER}`;
 
         if (!tableContainer) {
           throw new Error('MDCDataTable: Table container element not found.');
@@ -2308,10 +2028,10 @@ var script$z = {
       },
       addClassAtRowIndex: (rowIndex, className) => getRows()[rowIndex].classList.add(className),
       getRowCount: () => getRows().length,
-      getRowElements: () => [].slice.call(uiState.root.querySelectorAll(selectors.ROW)),
+      getRowElements: () => Array.prototype.slice.call(uiState.root.querySelectorAll(selectors.ROW)),
       getRowIdAtIndex: rowIndex => getRows()[rowIndex].getAttribute(dataAttributes.ROW_ID),
-      getRowIndexByChildElement: el => {
-        return getRows().indexOf(closest(el, selectors.ROW));
+      getRowIndexByChildElement: element => {
+        return getRows().indexOf(closest(element, selectors.ROW));
       },
       getSelectedRowCount: () => uiState.root.querySelectorAll(selectors.ROW_SELECTED).length,
       isCheckboxAtRowIndexChecked: rowIndex => rowCheckboxList[rowIndex].checked,
@@ -2328,29 +2048,28 @@ var script$z = {
       notifySelectedAll: () => emit('mdcdatatable:selectedall', {}),
       notifyUnselectedAll: () => emit('mdcdatatable:unselectedall', {}),
       registerHeaderRowCheckbox: () => {
-        var _headerRowCheckbox;
-
-        (_headerRowCheckbox = headerRowCheckbox) === null || _headerRowCheckbox === void 0 ? void 0 : _headerRowCheckbox.destroy();
-        const checkboxEl = uiState.root.querySelector(selectors.HEADER_ROW_CHECKBOX);
-        headerRowCheckbox = checkboxFactory(checkboxEl);
+        headerRowCheckbox?.destroy();
+        const checkboxElement = uiState.root.querySelector(selectors.HEADER_ROW_CHECKBOX);
+        headerRowCheckbox = checkboxFactory(checkboxElement);
       },
       registerRowCheckboxes: () => {
         if (rowCheckboxList) {
-          rowCheckboxList.forEach(checkbox => checkbox.destroy());
+          for (const checkbox of rowCheckboxList) checkbox.destroy();
         }
 
         rowCheckboxList = [];
-        getRows().forEach(rowEl => {
+
+        for (const rowEl of getRows()) {
           const el = rowEl.querySelector(selectors.ROW_CHECKBOX);
           const checkbox = checkboxFactory(el);
           rowCheckboxList.push(checkbox);
-        });
+        }
       },
       removeClassAtRowIndex: (rowIndex, className) => {
         getRows()[rowIndex].classList.remove(className);
       },
-      setAttributeAtRowIndex: (rowIndex, attr, value) => {
-        getRows()[rowIndex].setAttribute(attr, value);
+      setAttributeAtRowIndex: (rowIndex, attribute, value) => {
+        getRows()[rowIndex].setAttribute(attribute, value);
       },
       setHeaderRowCheckboxChecked: checked => headerRowCheckbox.checked = checked,
       setHeaderRowCheckboxIndeterminate: indeterminate => headerRowCheckbox.indeterminate = indeterminate,
@@ -2367,7 +2086,7 @@ var script$z = {
       }
     };
     onMounted(() => {
-      headerRow = uiState.root.querySelector(".".concat(cssClasses.HEADER_ROW));
+      headerRow = uiState.root.querySelector(`.${cssClasses.HEADER_ROW}`);
 
       handleHeaderRowCheckboxChange = () => foundation.handleHeaderRowCheckboxChange();
 
@@ -2378,7 +2097,7 @@ var script$z = {
       };
 
       headerRow.addEventListener('click', headerRowClickListener);
-      content = uiState.root.querySelector(".".concat(cssClasses.CONTENT));
+      content = uiState.root.querySelector(`.${cssClasses.CONTENT}`);
 
       handleRowCheckboxChange = event => foundation.handleRowCheckboxChange(event);
 
@@ -2388,23 +2107,19 @@ var script$z = {
       layout();
     });
     onBeforeUnmount(() => {
-      var _headerRowCheckbox2, _headerRowCheckbox2$d, _rowCheckboxList;
-
       headerRow.removeEventListener('mdccheckbox:change', handleHeaderRowCheckboxChange);
       headerRow.removeEventListener('click', headerRowClickListener);
       content.removeEventListener('mdccheckbox:change', handleRowCheckboxChange);
-      (_headerRowCheckbox2 = headerRowCheckbox) === null || _headerRowCheckbox2 === void 0 ? void 0 : (_headerRowCheckbox2$d = _headerRowCheckbox2.destroy) === null || _headerRowCheckbox2$d === void 0 ? void 0 : _headerRowCheckbox2$d.call(_headerRowCheckbox2);
-      (_rowCheckboxList = rowCheckboxList) === null || _rowCheckboxList === void 0 ? void 0 : _rowCheckboxList.forEach(checkbox => {
-        var _checkbox$destroy;
-
-        (_checkbox$destroy = checkbox.destroy) === null || _checkbox$destroy === void 0 ? void 0 : _checkbox$destroy.call(checkbox);
+      headerRowCheckbox?.destroy?.();
+      rowCheckboxList?.forEach(checkbox => {
+        checkbox.destroy?.();
       });
       foundation.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       getSelectedRowIds,
       layout
-    });
+    };
   }
 
 };
@@ -2423,7 +2138,7 @@ function render$z(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$z.render = render$z;
-script$z.__file = "packages/data-table/data-table.vue";
+script$z.__file = "src/data-table/data-table.vue";
 
 var dataTable = BasePlugin({
   mcwDataTable: script$z
@@ -2442,17 +2157,13 @@ var mcwDialogButton = {
     slots
   }) {
     return () => {
-      return h(resolveComponent('mcw-button'), _objectSpread2(_objectSpread2({}, attrs), {}, {
+      return h(resolveComponent('mcw-button'), { ...attrs,
         class: ['mdc-button', 'mdc-dialog__button'],
         'data-mdc-dialog-action': props.action,
         'data-mdc-dialog-button-default': props.isDefault,
         'data-mdc-dialog-initial-focus': props.isInitialFocus
-      }), {
-        default: () => {
-          var _slots$default;
-
-          return (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots);
-        }
+      }, {
+        default: () => slots.default?.()
       });
     };
   }
@@ -2476,11 +2187,9 @@ var mcwDialogContent = {
     slots
   }) {
     return () => {
-      var _slots$default;
-
       return h(props.tag, {
         class: ['mdc-dialog__content']
-      }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
+      }, slots.default?.());
     };
   }
 
@@ -2503,11 +2212,9 @@ var mcwDialogFooter = {
     slots
   }) {
     return () => {
-      var _slots$default;
-
       return h(props.tag, {
         class: ['mdc-dialog__actions']
-      }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
+      }, slots.default?.());
     };
   }
 
@@ -2530,11 +2237,9 @@ var mcwDialogTitle = {
     slots
   }) {
     return () => {
-      var _slots$default;
-
       return h(props.tag, {
         class: ['mdc-dialog__title']
-      }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
+      }, slots.default?.());
     };
   }
 
@@ -2585,7 +2290,7 @@ var script$y = {
     let focusTrap;
     let defaultButton;
 
-    const focusTrapFactory_ = (el, options) => new FocusTrap(el, options);
+    const focusTrapFactory_ = (element, options) => new FocusTrap(element, options);
 
     const handleLayout = () => {
       foundation.layout();
@@ -2595,8 +2300,8 @@ var script$y = {
       foundation.handleDocumentKeydown(e);
     };
 
-    const getInitialFocusEl_ = () => {
-      return document.querySelector("[".concat(MDCDialogFoundation.strings.INITIAL_FOCUS_ATTRIBUTE, "]"));
+    const getInitialFocusElement_ = () => {
+      return document.querySelector(`[${MDCDialogFoundation.strings.INITIAL_FOCUS_ATTRIBUTE}]`);
     };
 
     const onClick = evt => {
@@ -2610,7 +2315,7 @@ var script$y = {
     const onOpen = nv => {
       if (nv) {
         if (uiState.container) {
-          focusTrap = util.createFocusTrapInstance(uiState.root, focusTrapFactory_, getInitialFocusEl_() || void 0);
+          focusTrap = util.createFocusTrapInstance(uiState.root, focusTrapFactory_, getInitialFocusElement_() || void 0);
         }
 
         foundation.open();
@@ -2620,53 +2325,42 @@ var script$y = {
     };
 
     const adapter = {
-      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+      addClass: className => uiState.classes = { ...uiState.classes,
         [className]: true
-      }),
+      },
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$classes = uiState.classes,
-              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.classes;
         uiState.classes = rest;
       },
       hasClass: className => uiState.root.classList.contains(className),
       addBodyClass: className => document.body.classList.add(className),
       removeBodyClass: className => document.body.classList.remove(className),
-      eventTargetMatches: (target, selector) => matches$1(target, selector),
-      trapFocus: initialFocusEl => {
-        var _focusTrap;
-
-        return (_focusTrap = focusTrap) === null || _focusTrap === void 0 ? void 0 : _focusTrap.trapFocus();
-      },
-      releaseFocus: () => {
-        var _focusTrap2;
-
-        return (_focusTrap2 = focusTrap) === null || _focusTrap2 === void 0 ? void 0 : _focusTrap2.releaseFocus();
-      },
-      getInitialFocusEl: () => getInitialFocusEl_(),
+      eventTargetMatches: (target, selector) => matches(target, selector),
+      trapFocus: initialFocusEl => focusTrap?.trapFocus(),
+      releaseFocus: () => focusTrap?.releaseFocus(),
+      getInitialFocusEl: () => getInitialFocusElement_(),
       isContentScrollable: () => util.isScrollable(content_),
       areButtonsStacked: () => util.areTopsMisaligned(buttons_),
       getActionFromEvent: event => {
-        const elem = closest$1(event.target, "[".concat(strings$b.ACTION_ATTRIBUTE, "]"));
-        return elem === null || elem === void 0 ? void 0 : elem.getAttribute(strings$b.ACTION_ATTRIBUTE);
+        const element = closest(event.target, `[${strings$b.ACTION_ATTRIBUTE}]`);
+        return element?.getAttribute(strings$b.ACTION_ATTRIBUTE);
       },
       clickDefaultButton: () => {
-        var _defaultButton;
-
-        (_defaultButton = defaultButton) === null || _defaultButton === void 0 ? void 0 : _defaultButton.click();
+        defaultButton?.click();
       },
       reverseButtons: () => {
         const buttons = buttons_;
-        return buttons && buttons.reverse().forEach(button => {
-          var _button$parentElement;
-
-          return (_button$parentElement = button.parentElement) === null || _button$parentElement === void 0 ? void 0 : _button$parentElement.appendChild(button);
-        });
+        return buttons && buttons.reverse().forEach(button => button.parentElement?.appendChild(button));
       },
       notifyOpening: () => {
         emit('mdcdialog:opening', {});
-        LAYOUT_EVENTS.forEach(evt => window.addEventListener(evt, handleLayout));
+
+        for (const evt of LAYOUT_EVENTS) window.addEventListener(evt, handleLayout);
+
         document.addEventListener('keydown', handleDocumentKeyDown);
       },
       notifyOpened: () => emit('mdcdialog:opened', {}),
@@ -2675,7 +2369,9 @@ var script$y = {
         emit('mdcdialog:closing', action ? {
           action
         } : {});
-        LAYOUT_EVENTS.forEach(evt => window.removeEventListener(evt, handleLayout));
+
+        for (const evt of LAYOUT_EVENTS) window.removeEventListener(evt, handleLayout);
+
         document.removeEventListener('keydown', handleDocumentKeyDown);
       },
       notifyClosed: action => {
@@ -2694,12 +2390,12 @@ var script$y = {
         escapeKeyAction,
         scrimClickAction
       } = props;
-      buttons_ = [].slice.call(uiState.root.querySelectorAll(cssClasses$6.BUTTON));
-      defaultButton = uiState.root.querySelector("[".concat(strings$b.BUTTON_DEFAULT_ATTRIBUTE, "]"));
+      buttons_ = Array.prototype.slice.call(uiState.root.querySelectorAll(cssClasses$6.BUTTON));
+      defaultButton = uiState.root.querySelector(`[${strings$b.BUTTON_DEFAULT_ATTRIBUTE}]`);
       const container = uiState.root.querySelector(strings$b.CONTAINER_SELECTOR);
 
       if (!container) {
-        throw new Error("Dialog component requires a ".concat(strings$b.CONTAINER_SELECTOR, " container element"));
+        throw new Error(`Dialog component requires a ${strings$b.CONTAINER_SELECTOR} container element`);
       }
 
       content_ = uiState.root.querySelector(strings$b.CONTENT_SELECTOR);
@@ -2725,12 +2421,12 @@ var script$y = {
     onBeforeUnmount(() => {
       foundation.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       handleLayout,
       handleDocumentKeyDown,
       onKeydown,
       onClick
-    });
+    };
   }
 
 };
@@ -2766,7 +2462,7 @@ function render$y(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$y.render = render$y;
-script$y.__file = "packages/dialog/dialog.vue";
+script$y.__file = "src/dialog/dialog.vue";
 
 var dialog = BasePlugin({
   mcwDialog: script$y,
@@ -2800,7 +2496,7 @@ var script$x = {
       drawer: null
     });
 
-    const focusTrapFactory_ = (el, options) => new FocusTrap$1(el, options);
+    const focusTrapFactory_ = (element, options) => new FocusTrap(element, options);
 
     const show = () => foundation.open();
 
@@ -2816,9 +2512,9 @@ var script$x = {
 
     const handleScrimClick = () => foundation.handleScrimClick();
 
-    const handleKeydown = evt => foundation.handleKeydown(evt);
+    const handleKeydown = event_ => foundation.handleKeydown(event_);
 
-    const handleTransitionEnd = evt => foundation.handleTransitionEnd(evt);
+    const handleTransitionEnd = event_ => foundation.handleTransitionEnd(event_);
 
     const onChange = event => {
       emit('update:modelValue', event);
@@ -2827,14 +2523,15 @@ var script$x = {
     const onListAction = () => props.modal && close();
 
     const adapter = {
-      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+      addClass: className => uiState.classes = { ...uiState.classes,
         [className]: true
-      }),
+      },
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$classes = uiState.classes,
-              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.classes;
         uiState.classes = rest;
       },
       hasClass: className => !!uiState.classes[className],
@@ -2843,30 +2540,28 @@ var script$x = {
         previousFocus_ = document.activeElement;
       },
       restoreFocus: () => {
-        var _previousFocus_;
-
-        const previousFocus = (_previousFocus_ = previousFocus_) === null || _previousFocus_ === void 0 ? void 0 : _previousFocus_.focus;
+        const previousFocus = previousFocus_?.focus;
 
         if (previousFocus && uiState.drawer.contains(document.activeElement)) {
           previousFocus_.focus();
         }
       },
       focusActiveNavigationItem: () => {
-        const activeNavItemEl = uiState.drawer.querySelector(".".concat(MDCListFoundation.cssClasses.LIST_ITEM_ACTIVATED_CLASS));
+        const activeNavItemElement = uiState.drawer.querySelector(`.${MDCListFoundation.cssClasses.LIST_ITEM_ACTIVATED_CLASS}`);
 
-        if (activeNavItemEl) {
-          activeNavItemEl.focus();
+        if (activeNavItemElement) {
+          activeNavItemElement.focus();
         }
       },
       notifyClose: () => {
-        emitCustomEvent$1(uiState.drawer, strings$a.CLOSE_EVENT, {}, true
+        emitCustomEvent(uiState.drawer, strings$a.CLOSE_EVENT, {}, true
         /* shouldBubble */
         );
         emit('update:modelValue', false);
         emit('close');
       },
       notifyOpen: () => {
-        emitCustomEvent$1(uiState.drawer, strings$a.OPEN_EVENT, {}, true
+        emitCustomEvent(uiState.drawer, strings$a.OPEN_EVENT, {}, true
         /* shouldBubble */
         );
         emit('update:modelValue', true);
@@ -2877,13 +2572,9 @@ var script$x = {
     };
     watch(() => props.modelValue, nv => {
       if (nv) {
-        var _foundation;
-
-        (_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.open();
+        foundation?.open();
       } else {
-        var _foundation2;
-
-        (_foundation2 = foundation) === null || _foundation2 === void 0 ? void 0 : _foundation2.close();
+        foundation?.close();
       }
     });
     onMounted(() => {
@@ -2897,7 +2588,7 @@ var script$x = {
       } else if (props.modal) {
         foundation = new MDCModalDrawerFoundation(adapter);
       } else {
-        throw new Error("mcwDrawer: Failed to instantiate component. Supported variants are ".concat(DISMISSIBLE, " and ").concat(MODAL, "."));
+        throw new Error(`mcwDrawer: Failed to instantiate component. Supported variants are ${DISMISSIBLE} and ${MODAL}.`);
       }
 
       foundation.init();
@@ -2911,7 +2602,7 @@ var script$x = {
       foundation.destroy();
       foundation = null;
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       onChange,
       show,
       close,
@@ -2921,7 +2612,7 @@ var script$x = {
       handleScrimClick,
       handleKeydown,
       handleTransitionEnd
-    });
+    };
   }
 
 };
@@ -2997,7 +2688,7 @@ function render$x(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$x.render = render$x;
-script$x.__file = "packages/drawer/drawer.vue";
+script$x.__file = "src/drawer/drawer.vue";
 
 var drawer = BasePlugin({
   mcwDrawer: script$x
@@ -3032,28 +2723,30 @@ var script$w = {
       styles
     } = useRipplePlugin(root);
     const classes = computed(() => {
-      return _objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes);
+      return { ...rippleClasses.value,
+        ...uiState.classes
+      };
     });
     watch(() => props.icon, nv => {
-      uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+      uiState.classes = { ...uiState.classes,
         'material-icons': nv
-      });
+      };
     });
     watch(() => props.mini, nv => {
-      uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+      uiState.classes = { ...uiState.classes,
         'mdc-fab--mini': nv
-      });
+      };
     });
     watch(() => props.exited, nv => {
-      uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+      uiState.classes = { ...uiState.classes,
         'mdc-fab--exited': nv
-      });
+      };
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       classes,
       root,
       styles
-    });
+    };
   }
 
 };
@@ -3087,7 +2780,7 @@ function render$w(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$w.render = render$w;
-script$w.__file = "packages/fab/fab.vue";
+script$w.__file = "src/fab/fab.vue";
 
 var fab = BasePlugin({
   mcwFAB: script$w
@@ -3111,14 +2804,15 @@ var script$v = {
     });
     let foundation;
     const adapter = {
-      addClass: className => uiState.labelClasses = _objectSpread2(_objectSpread2({}, uiState.labelClasses), {}, {
+      addClass: className => uiState.labelClasses = { ...uiState.labelClasses,
         [className]: true
-      }),
+      },
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$labelClasses = uiState.labelClasses,
-              rest = _objectWithoutProperties(_uiState$labelClasses, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.labelClasses;
         uiState.labelClasses = rest;
       },
       getWidth: () => uiState.root.scrollWidth,
@@ -3153,12 +2847,12 @@ var script$v = {
     onBeforeUnmount(() => {
       foundation.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       getWidth,
       float,
       shake,
       setRequired
-    });
+    };
   }
 
 };
@@ -3173,7 +2867,7 @@ function render$v(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$v.render = render$v;
-script$v.__file = "packages/floating-label/floating-label.vue";
+script$v.__file = "src/floating-label/floating-label.vue";
 
 var floatingLabel = BasePlugin({
   mcwFloatingLabel: script$v
@@ -3212,14 +2906,15 @@ var script$u = {
     });
     let foundation;
     const adapter = {
-      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+      addClass: className => uiState.classes = { ...uiState.classes,
         [className]: true
-      }),
+      },
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$classes = uiState.classes,
-              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.classes;
         uiState.classes = rest;
       },
       hasClass: className => Boolean(uiState.classes[className]),
@@ -3231,7 +2926,9 @@ var script$u = {
       }
     };
     const classes = computed(() => {
-      return _objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes);
+      return { ...rippleClasses.value,
+        ...uiState.classes
+      };
     });
     watch(() => props.modelValue, nv => {
       foundation.toggle(nv);
@@ -3251,13 +2948,13 @@ var script$u = {
     onBeforeUnmount(() => {
       foundation.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       classes,
       styles,
       root,
       tag,
       onClick
-    });
+    };
   }
 
 };
@@ -3279,7 +2976,7 @@ function render$u(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$u.render = render$u;
-script$u.__file = "packages/icon-button/icon-button.vue";
+script$u.__file = "src/icon-button/icon-button.vue";
 
 var mcwIconToggle = {
   name: 'mcw-icon-toggle',
@@ -3291,15 +2988,13 @@ var mcwIconToggle = {
     slots
   }) {
     return () => {
-      var _slots$default;
-
       return h('i', {
         class: {
           'material-icons': 1,
           'mdc-icon-button__icon': true,
           'mdc-icon-button__icon--on': props.isOn
         }
-      }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
+      }, slots.default?.());
     };
   }
 
@@ -3337,27 +3032,27 @@ var script$t = {
       const cssClasses = [];
 
       if (props.span) {
-        cssClasses.push("mdc-layout-grid__cell--span-".concat(props.span));
+        cssClasses.push(`mdc-layout-grid__cell--span-${props.span}`);
       }
 
       if (props.order) {
-        cssClasses.push("mdc-layout-grid__cell--order-".concat(props.order));
+        cssClasses.push(`mdc-layout-grid__cell--order-${props.order}`);
       }
 
       if (props.phone) {
-        cssClasses.push("mdc-layout-grid__cell--span-".concat(props.phone, "-phone"));
+        cssClasses.push(`mdc-layout-grid__cell--span-${props.phone}-phone`);
       }
 
       if (props.tablet) {
-        cssClasses.push("mdc-layout-grid__cell--span-".concat(props.tablet, "-tablet"));
+        cssClasses.push(`mdc-layout-grid__cell--span-${props.tablet}-tablet`);
       }
 
       if (props.desktop) {
-        cssClasses.push("mdc-layout-grid__cell--span-".concat(props.desktop, "-desktop"));
+        cssClasses.push(`mdc-layout-grid__cell--span-${props.desktop}-desktop`);
       }
 
       if (props.align) {
-        cssClasses.push("mdc-layout-grid__cell--align-".concat(props.align));
+        cssClasses.push(`mdc-layout-grid__cell--align-${props.align}`);
       }
 
       return cssClasses;
@@ -3378,7 +3073,7 @@ function render$t(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$t.render = render$t;
-script$t.__file = "packages/layout-grid/layout-cell.vue";
+script$t.__file = "src/layout-grid/layout-cell.vue";
 
 var script$s = {
   name: 'mcw-layout-grid',
@@ -3415,7 +3110,7 @@ function render$s(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$s.render = render$s;
-script$s.__file = "packages/layout-grid/layout-grid.vue";
+script$s.__file = "src/layout-grid/layout-grid.vue";
 
 var script$r = {
   name: 'mcw-layout-inner-grid'
@@ -3430,7 +3125,7 @@ function render$r(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$r.render = render$r;
-script$r.__file = "packages/layout-grid/layout-inner-grid.vue";
+script$r.__file = "src/layout-grid/layout-inner-grid.vue";
 
 var layoutGrid = BasePlugin({
   mcwLayoutGrid: script$s,
@@ -3452,22 +3147,23 @@ var script$q = {
 
     let foundation_;
     const adapter = {
-      addClass: className => uiState.lineClasses = _objectSpread2(_objectSpread2({}, uiState.lineClasses), {}, {
+      addClass: className => uiState.lineClasses = { ...uiState.lineClasses,
         [className]: true
-      }),
+      },
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$lineClasses = uiState.lineClasses,
-              rest = _objectWithoutProperties(_uiState$lineClasses, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.lineClasses;
         uiState.lineClasses = rest;
       },
       hasClass: className => {
         return Boolean(uiState.lineClasses[className]);
       },
-      setStyle: (name, value) => uiState.lineStyles = _objectSpread2(_objectSpread2({}, uiState.lineStyles), {}, {
+      setStyle: (name, value) => uiState.lineStyles = { ...uiState.lineStyles,
         [name]: value
-      })
+      }
     };
 
     const setRippleCenter = xCoordinate => {
@@ -3482,7 +3178,7 @@ var script$q = {
       foundation_.deactivate();
     };
 
-    const onTransitionEnd = evt => foundation_.handleTransitionEnd(evt);
+    const onTransitionEnd = event_ => foundation_.handleTransitionEnd(event_);
 
     onMounted(() => {
       foundation_ = new MDCLineRippleFoundation(adapter);
@@ -3491,12 +3187,12 @@ var script$q = {
     onBeforeUnmount(() => {
       foundation_.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       setRippleCenter,
       activate,
       deactivate,
       onTransitionEnd
-    });
+    };
   }
 
 };
@@ -3510,13 +3206,13 @@ function render$q(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$q.render = render$q;
-script$q.__file = "packages/line-ripple/line-ripple.vue";
+script$q.__file = "src/line-ripple/line-ripple.vue";
 
 var lineRipple = BasePlugin({
   mcwLineRipple: script$q
 });
 
-const progressPropType_ = {
+const progressPropertyType_ = {
   type: [Number, String],
 
   validator(value) {
@@ -3532,8 +3228,8 @@ var script$p = {
       default: true
     },
     indeterminate: Boolean,
-    progress: progressPropType_,
-    buffer: progressPropType_,
+    progress: progressPropertyType_,
+    buffer: progressPropertyType_,
     bufferingDots: {
       type: Boolean,
       default: true
@@ -3560,38 +3256,40 @@ var script$p = {
     });
     let foundation;
     const adapter = {
-      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+      addClass: className => uiState.classes = { ...uiState.classes,
         [className]: true
-      }),
+      },
       forceLayout: () => uiState.root.offsetWidth,
-      setBufferBarStyle: (styleProperty, value) => uiState.bufferbarStyles = _objectSpread2(_objectSpread2({}, uiState.bufferbarStyles), {}, {
+      setBufferBarStyle: (styleProperty, value) => uiState.bufferbarStyles = { ...uiState.bufferbarStyles,
         [styleProperty]: value
-      }),
-      setPrimaryBarStyle: (styleProperty, value) => uiState.primaryStyles = _objectSpread2(_objectSpread2({}, uiState.primaryStyles), {}, {
+      },
+      setPrimaryBarStyle: (styleProperty, value) => uiState.primaryStyles = { ...uiState.primaryStyles,
         [styleProperty]: value
-      }),
+      },
       hasClass: className => uiState.root.classList.contains(className),
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$classes = uiState.classes,
-              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.classes;
         uiState.classes = rest;
       },
-      setAttribute: (attributeName, value) => uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, {
+      setAttribute: (attributeName, value) => uiState.rootAttrs = { ...uiState.rootAttrs,
         [attributeName]: value
-      }),
+      },
       removeAttribute: attributeName => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$rootAttrs = uiState.rootAttrs,
-              rest = _objectWithoutProperties(_uiState$rootAttrs, [attributeName].map(_toPropertyKey));
-
+        const {
+          [attributeName]: removed,
+          ...rest
+        } = uiState.rootAttrs;
         uiState.rootAttrs = rest;
       },
       setStyle: (name, value) => {
-        uiState.rootStyles = _objectSpread2(_objectSpread2({}, uiState.rootStyles), {}, {
+        uiState.rootStyles = { ...uiState.rootStyles,
           [name]: value
-        });
+        };
       },
       attachResizeObserver: callback => {
         if (window.ResizeObserver) {
@@ -3634,7 +3332,8 @@ var script$p = {
       }
     });
     onBeforeUnmount(() => foundation.destroy());
-    return _objectSpread2({}, toRefs(uiState));
+    return { ...toRefs(uiState)
+    };
   }
 
 };
@@ -3679,7 +3378,7 @@ function render$p(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$p.render = render$p;
-script$p.__file = "packages/linear-progress/linear-progress.vue";
+script$p.__file = "src/linear-progress/linear-progress.vue";
 
 var linearProgress = BasePlugin({
   mcwLinearProgress: script$p
@@ -3730,7 +3429,7 @@ var script$o = {
     const {
       classes: rippleClasses,
       styles
-    } = useRipplePlugin$1(root);
+    } = useRipplePlugin(root);
     const isTwoLine = computed(() => {
       return props.twoLine || slots['secondary-text'];
     });
@@ -3741,44 +3440,48 @@ var script$o = {
     const listIcon = computed(() => typeof props.icon === 'string' && props.icon || props.groupIcon);
 
     const focus = () => {
-      var _root$value$$el;
-
-      ((_root$value$$el = root.value.$el) !== null && _root$value$$el !== void 0 ? _root$value$$el : root.value).focus();
+      (root.value.$el ?? root.value).focus();
     };
 
     const myAttrs = computed(() => {
-      return _objectSpread2(_objectSpread2({}, attrs), {}, {
-        class: _objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes),
-        style: styles.value
-      }, uiState.attrs);
+      return { // class: uiState.classes,
+        ...attrs,
+        class: { ...rippleClasses.value,
+          ...uiState.classes
+        },
+        style: styles.value,
+        ...uiState.attrs
+      };
     });
 
     const addClass = className => {
-      uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+      uiState.classes = { ...uiState.classes,
         [className]: true
-      });
+      };
     };
 
     const removeClass = className => {
       // eslint-disable-next-line no-unused-vars
-      const _uiState$classes = uiState.classes,
-            rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
-
+      const {
+        [className]: removed,
+        ...rest
+      } = uiState.classes;
       uiState.classes = rest;
     };
 
     const removeAttribute = attr => {
       // eslint-disable-next-line no-unused-vars
-      const _uiState$attrs = uiState.attrs,
-            rest = _objectWithoutProperties(_uiState$attrs, [attr].map(_toPropertyKey));
-
+      const {
+        [attr]: removed,
+        ...rest
+      } = uiState.attrs;
       uiState.attrs = rest;
     };
 
     const setAttribute = (attr, value) => {
-      uiState.attrs = _objectSpread2(_objectSpread2({}, uiState.attrs), {}, {
+      uiState.attrs = { ...uiState.attrs,
         [attr]: value
-      });
+      };
     };
 
     const getAttribute = attr => {
@@ -3797,7 +3500,7 @@ var script$o = {
       getAttribute,
       classList
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       focus,
       root,
       isTwoLine,
@@ -3811,7 +3514,7 @@ var script$o = {
       trailingRadio,
       trailingCheckbox,
       myItemId
-    });
+    };
   }
 
 };
@@ -3988,7 +3691,7 @@ function render$o(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$o.render = render$o;
-script$o.__file = "packages/list/list-item.vue";
+script$o.__file = "src/list/list-item.vue";
 
 const {
   strings: strings$9,
@@ -4088,7 +3791,7 @@ var script$n = {
     // may be refreshed if the list items are rerendered for example
 
     const updateListElements = () => {
-      const elements = [].slice.call(uiState.listRoot.querySelectorAll(".".concat(cssClasses$5.LIST_ITEM_CLASS)));
+      const elements = Array.prototype.slice.call(uiState.listRoot.querySelectorAll(`.${cssClasses$5.LIST_ITEM_CLASS}`));
       listElements.value = elements;
     }; // find the list item by index.
     // The list elements are in DOM order, so find it by index,
@@ -4105,8 +3808,8 @@ var script$n = {
     }; // find the index of a list item from the event target
 
 
-    const getListItemIndex = evt => {
-      const myItemId = evt.target.dataset.myitemid; // if clicked on a list item then just search
+    const getListItemIndex = event_ => {
+      const myItemId = event_.target.dataset.myitemid; // if clicked on a list item then just search
 
       if (myItemId !== void 0) {
         const lei = listElements.value.findIndex(({
@@ -4119,10 +3822,10 @@ var script$n = {
       // search up the DOM
 
 
-      const eventTarget = evt.target;
-      const nearestParent = closest(eventTarget, ".".concat(cssClasses$5.LIST_ITEM_CLASS, ", .").concat(cssClasses$5.ROOT)); // Get the index of the element if it is a list item.
+      const eventTarget = event_.target;
+      const nearestParent = closest(eventTarget, `.${cssClasses$5.LIST_ITEM_CLASS}, .${cssClasses$5.ROOT}`); // Get the index of the element if it is a list item.
 
-      if (nearestParent && matches(nearestParent, ".".concat(cssClasses$5.LIST_ITEM_CLASS))) {
+      if (nearestParent && matches(nearestParent, `.${cssClasses$5.LIST_ITEM_CLASS}`)) {
         return listElements.value.indexOf(nearestParent);
       }
 
@@ -4132,11 +3835,13 @@ var script$n = {
     const layout = () => {
       foundation.setVerticalOrientation(props.ariaOrientation == 'vertical'); // List items need to have at least tabindex=-1 to be focusable.
 
-      [].slice.call(uiState.listRoot.querySelectorAll('.mdc-list-item:not([tabindex])')).forEach(ele => {
+      for (const ele of Array.prototype.slice.call(uiState.listRoot.querySelectorAll('.mdc-list-item:not([tabindex])'))) {
         ele.setAttribute('tabindex', -1);
-      }); // Child button/a elements are not tabbable until the list item is focused.
+      } // Child button/a elements are not tabbable until the list item is focused.
 
-      [].slice.call(uiState.listRoot.querySelectorAll(strings$9.FOCUSABLE_CHILD_ELEMENTS)).forEach(ele => ele.setAttribute('tabindex', -1));
+
+      for (const ele of Array.prototype.slice.call(uiState.listRoot.querySelectorAll(strings$9.FOCUSABLE_CHILD_ELEMENTS))) ele.setAttribute('tabindex', -1);
+
       foundation.layout();
     };
 
@@ -4144,22 +3849,22 @@ var script$n = {
       const checkboxListItems = uiState.listRoot.querySelectorAll(strings$9.ARIA_ROLE_CHECKBOX_SELECTOR);
       const radioSelectedListItem = uiState.listRoot.querySelector(strings$9.ARIA_CHECKED_RADIO_SELECTOR);
 
-      if (checkboxListItems.length) {
+      if (checkboxListItems.length > 0) {
         const preselectedItems = uiState.listRoot.querySelectorAll(strings$9.ARIA_CHECKED_CHECKBOX_SELECTOR);
-        setSelectedIndex([].map.call(preselectedItems, listItem => listElements.value.indexOf(listItem)));
+        setSelectedIndex(Array.prototype.map.call(preselectedItems, listItem => listElements.value.indexOf(listItem)));
       } else if (radioSelectedListItem) {
         setSelectedIndex(listElements.value.indexOf(radioSelectedListItem));
       }
     };
 
     const getPrimaryText = item => {
-      const primaryText = item.querySelector(".".concat(cssClasses$5.LIST_ITEM_PRIMARY_TEXT_CLASS));
+      const primaryText = item.querySelector(`.${cssClasses$5.LIST_ITEM_PRIMARY_TEXT_CLASS}`);
 
       if (primaryText) {
         return primaryText.textContent || '';
       }
 
-      const singleLineText = item.querySelector(".".concat(cssClasses$5.LIST_ITEM_TEXT_CLASS));
+      const singleLineText = item.querySelector(`.${cssClasses$5.LIST_ITEM_TEXT_CLASS}`);
       return singleLineText && singleLineText.textContent || '';
     };
 
@@ -4173,25 +3878,25 @@ var script$n = {
       true);
     };
 
-    const handleFocusInEvent = evt => {
-      const index = getListItemIndex(evt);
-      foundation.handleFocusIn(evt, index);
+    const handleFocusInEvent = event_ => {
+      const index = getListItemIndex(event_);
+      foundation.handleFocusIn(event_, index);
     };
 
-    const handleFocusOutEvent = evt => {
-      const index = getListItemIndex(evt);
-      foundation.handleFocusOut(evt, index);
+    const handleFocusOutEvent = event_ => {
+      const index = getListItemIndex(event_);
+      foundation.handleFocusOut(event_, index);
     };
 
-    const handleKeydownEvent = evt => {
-      const index = getListItemIndex(evt);
-      const target = evt.target;
-      foundation.handleKeydown(evt, target.classList.contains(cssClasses$5.LIST_ITEM_CLASS), index);
+    const handleKeydownEvent = event_ => {
+      const index = getListItemIndex(event_);
+      const target = event_.target;
+      foundation.handleKeydown(event_, target.classList.contains(cssClasses$5.LIST_ITEM_CLASS), index);
     };
 
-    const handleClickEvent = evt => {
-      const index = getListItemIndex(evt);
-      const target = evt.target; // Toggle the checkbox only if it's not the target of the event, or the checkbox will have 2 change events.
+    const handleClickEvent = event_ => {
+      const index = getListItemIndex(event_);
+      const target = event_.target; // Toggle the checkbox only if it's not the target of the event, or the checkbox will have 2 change events.
 
       const toggleCheckbox = !matches(target, strings$9.CHECKBOX_RADIO_SELECTOR);
       foundation.handleClick(index, toggleCheckbox);
@@ -4214,7 +3919,7 @@ var script$n = {
     const adapter = {
       addClassForElementIndex: (index, className) => {
         const listItem = getListItemByIndex(index);
-        listItem === null || listItem === void 0 ? void 0 : listItem.classList.add(className);
+        listItem?.classList.add(className);
       },
       focusItemAtIndex: index => {
         const element = listElements.value[index];
@@ -4223,9 +3928,9 @@ var script$n = {
           element.focus();
         }
       },
-      getAttributeForElementIndex: (index, attr) => {
+      getAttributeForElementIndex: (index, attribute) => {
         const listItem = getListItemByIndex(index);
-        return listItem === null || listItem === void 0 ? void 0 : listItem.getAttribute(attr);
+        return listItem?.getAttribute(attribute);
       },
       getFocusedElementIndex: () => listElements.value.indexOf(document.activeElement),
       getListItemCount: () => listElements.value.length,
@@ -4240,8 +3945,8 @@ var script$n = {
       },
       isCheckboxCheckedAtIndex: index => {
         const listItem = listElements.value[index];
-        const toggleEl = listItem.querySelector(strings$9.CHECKBOX_SELECTOR);
-        return toggleEl.checked;
+        const toggleElement = listItem.querySelector(strings$9.CHECKBOX_SELECTOR);
+        return toggleElement.checked;
       },
       isFocusInsideList: () => {
         const root = uiState.listRoot;
@@ -4250,10 +3955,10 @@ var script$n = {
       isRootFocused: () => document.activeElement === uiState.listRoot,
       listItemAtIndexHasClass: (index, className) => {
         const listItem = getListItemByIndex(index);
-        listItem === null || listItem === void 0 ? void 0 : listItem.classList.contains(className);
+        listItem?.classList.contains(className);
       },
       notifyAction: index => {
-        emitCustomEvent$1(uiState.listRoot, strings$9.ACTION_EVENT, {
+        emitCustomEvent(uiState.listRoot, strings$9.ACTION_EVENT, {
           index
         },
         /** shouldBubble */
@@ -4267,29 +3972,28 @@ var script$n = {
       },
       removeClassForElementIndex: (index, className) => {
         const listItem = getListItemByIndex(index);
-        listItem === null || listItem === void 0 ? void 0 : listItem.classList.remove(className);
+        listItem?.classList.remove(className);
       },
-      setAttributeForElementIndex: (index, attr, value) => {
+      setAttributeForElementIndex: (index, attribute, value) => {
         const listItem = getListItemByIndex(index);
-        listItem === null || listItem === void 0 ? void 0 : listItem.setAttribute(attr, value);
+        listItem?.setAttribute(attribute, value);
       },
       setCheckedCheckboxOrRadioAtIndex: (index, isChecked) => {
         const listItem = listElements.value[index];
-        const toggleEl = listItem.querySelector(strings$9.CHECKBOX_RADIO_SELECTOR);
-        toggleEl && (toggleEl.checked = isChecked);
+        const toggleElement = listItem.querySelector(strings$9.CHECKBOX_RADIO_SELECTOR);
+        toggleElement && (toggleElement.checked = isChecked);
         const event = document.createEvent('Event');
         event.initEvent('update:modelValue', true, true);
-        toggleEl === null || toggleEl === void 0 ? void 0 : toggleEl.dispatchEvent(event);
+        toggleElement?.dispatchEvent(event);
       },
       setTabIndexForListItemChildren: (listItemIndex, tabIndexValue) => {
         const element = listElements.value[listItemIndex];
-        const listItemChildren = [].slice.call(element.querySelectorAll(strings$9.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX));
-        listItemChildren.forEach(el => {
-          var _listItems$value$el$d;
+        const listItemChildren = Array.prototype.slice.call(element.querySelectorAll(strings$9.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX));
 
-          const listItem = (_listItems$value$el$d = listItems.value[el.dataset.myitemid]) !== null && _listItems$value$el$d !== void 0 ? _listItems$value$el$d : el;
+        for (const element_ of listItemChildren) {
+          const listItem = listItems.value[element_.dataset.myitemid] ?? element_;
           listItem.setAttribute('tabindex', tabIndexValue);
-        });
+        }
       }
     }; // watch(
     //   () => props.singleSelection,
@@ -4312,17 +4016,17 @@ var script$n = {
       foundation.init(); // if a single selection list need to ensure the selected item has the selected or activated class
 
       if (singleSelection.value && typeof props.modelValue === 'number' && !isNaN(props.modelValue)) {
-        const i = props.modelValue;
-        const hasSelectedClass = adapter.listItemAtIndexHasClass(i, cssClasses$5.LIST_ITEM_SELECTED_CLASS);
-        const hasActivatedClass = adapter.listItemAtIndexHasClass(i, cssClasses$5.LIST_ITEM_ACTIVATED_CLASS);
+        const index = props.modelValue;
+        const hasSelectedClass = adapter.listItemAtIndexHasClass(index, cssClasses$5.LIST_ITEM_SELECTED_CLASS);
+        const hasActivatedClass = adapter.listItemAtIndexHasClass(index, cssClasses$5.LIST_ITEM_ACTIVATED_CLASS);
 
         if (!(hasSelectedClass || hasActivatedClass)) {
           adapter.addClassForElementIndex(props.modelValue, 'mdc-list-item--selected');
         }
 
-        adapter.setAttributeForElementIndex(i, 'tabindex', 0);
+        adapter.setAttributeForElementIndex(index, 'tabindex', 0);
         foundation.setSingleSelection(true);
-        foundation.setSelectedIndex(i);
+        foundation.setSelectedIndex(index);
       }
 
       layout();
@@ -4348,7 +4052,7 @@ var script$n = {
       slotObserver.disconnect();
       foundation.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       listItems,
       listElements,
       rootListeners,
@@ -4361,7 +4065,7 @@ var script$n = {
       setSelectedIndex,
       getPrimaryText,
       setSingleSelection
-    });
+    };
   }
 
 };
@@ -4379,7 +4083,7 @@ function render$n(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$n.render = render$n;
-script$n.__file = "packages/list/list.vue";
+script$n.__file = "src/list/list.vue";
 
 var list = BasePlugin({
   mcwList: script$n,
@@ -4400,9 +4104,9 @@ var mcwMaterialIcon = {
     attrs
   }) {
     return () => {
-      return h(props.tag, _objectSpread2(_objectSpread2({}, attrs), {}, {
+      return h(props.tag, { ...attrs,
         class: 'material-icons'
-      }), props.icon);
+      }, props.icon);
     };
   }
 
@@ -4419,13 +4123,11 @@ var mcwMenuAnchor = {
     slots
   }) {
     return () => {
-      var _slots$default;
-
       return h('div', {
         class: {
           'mdc-menu-surface--anchor': 1
         }
-      }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
+      }, slots.default?.());
     };
   }
 
@@ -4441,8 +4143,6 @@ var mcwMenuItem = {
     slots
   }) {
     return () => {
-      var _slots$default;
-
       return h('li', {
         class: {
           'mdc-menu-divider': 1,
@@ -4451,7 +4151,7 @@ var mcwMenuItem = {
         tabindex: props.disabled ? '-1' : '0',
         'aria-disabled': props.disabled,
         role: 'menuitem'
-      }, (_slots$default = slots.default) === null || _slots$default === void 0 ? void 0 : _slots$default.call(slots));
+      }, slots.default?.());
     };
   }
 
@@ -4483,8 +4183,8 @@ var script$m = {
     let anchorElement;
     let previousFocus_;
 
-    const handleBodyClick = evt => {
-      foundation.handleBodyClick(evt);
+    const handleBodyClick = event_ => {
+      foundation.handleBodyClick(event_);
     };
 
     const registerBodyClickListener = () => {
@@ -4495,8 +4195,8 @@ var script$m = {
       document.body.removeEventListener('click', handleBodyClick);
     };
 
-    const handleKeydown = evt => {
-      foundation.handleKeydown(evt);
+    const handleKeydown = event_ => {
+      foundation.handleKeydown(event_);
     };
 
     const getFocusAdapterMethods = () => {
@@ -4506,10 +4206,8 @@ var script$m = {
           previousFocus_ = document.activeElement;
         },
         restoreFocus: () => {
-          if (uiState.root.contains(document.activeElement)) {
-            if (previousFocus_ && previousFocus_.focus) {
-              previousFocus_.focus();
-            }
+          if (uiState.root.contains(document.activeElement) && previousFocus_ && previousFocus_.focus) {
+            previousFocus_.focus();
           }
         }
       };
@@ -4543,10 +4241,10 @@ var script$m = {
           };
         },
         setPosition: position => {
-          uiState.root.style.left = 'left' in position ? "".concat(position.left, "px") : null;
-          uiState.root.style.right = 'right' in position ? "".concat(position.right, "px") : null;
-          uiState.root.style.top = 'top' in position ? "".concat(position.top, "px") : null;
-          uiState.root.style.bottom = 'bottom' in position ? "".concat(position.bottom, "px") : null;
+          uiState.root.style.left = 'left' in position ? `${position.left}px` : null;
+          uiState.root.style.right = 'right' in position ? `${position.right}px` : null;
+          uiState.root.style.top = 'top' in position ? `${position.top}px` : null;
+          uiState.root.style.bottom = 'bottom' in position ? `${position.bottom}px` : null;
         },
         setMaxHeight: height => {
           uiState.root.style.maxHeight = height;
@@ -4555,7 +4253,7 @@ var script$m = {
     };
 
     const rootListeners = {
-      keydown: evt => handleKeydown(evt) // 'MDCMenuSurface:opened': evt => registerBodyClickListener(evt),
+      keydown: event_ => handleKeydown(event_) // 'MDCMenuSurface:opened': evt => registerBodyClickListener(evt),
       // 'MDCMenuSurface:closed': evt => deregisterBodyClickListener(evt),
 
     };
@@ -4570,21 +4268,21 @@ var script$m = {
     };
 
     const hoistMenuToBody = () => {
-      document.body.appendChild(uiState.root.parentElement.removeChild(uiState.root));
+      document.body.append(uiState.root.parentElement.removeChild(uiState.root));
       setIsHoisted(true);
     };
 
     const setFixedPosition = isFixed => {
       if (isFixed) {
-        uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        uiState.classes = { ...uiState.classes,
           [cssClasses$4.FIXED]: true
-        });
+        };
       } else {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$classes = uiState.classes,
-              _cssClasses$FIXED = cssClasses$4.FIXED,
-              rest = _objectWithoutProperties(_uiState$classes, [_cssClasses$FIXED].map(_toPropertyKey));
-
+        const {
+          [cssClasses$4.FIXED]: removed,
+          ...rest
+        } = uiState.classes;
         uiState.classes = rest;
       }
 
@@ -4625,44 +4323,44 @@ var script$m = {
     };
 
     const adapter = {
-      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+      addClass: className => uiState.classes = { ...uiState.classes,
         [className]: true
-      }),
+      },
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$classes2 = uiState.classes,
-              rest = _objectWithoutProperties(_uiState$classes2, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.classes;
         uiState.classes = rest;
       },
       hasClass: className => uiState.root.classList.contains(className),
       hasAnchor: () => !!anchorElement,
       notifyClose: () => {
-        uiState.root && emitCustomEvent$1(uiState.root, strings$8.CLOSED_EVENT, {});
+        uiState.root && emitCustomEvent(uiState.root, strings$8.CLOSED_EVENT, {});
         deregisterBodyClickListener();
         emit('mdcmenusurface:closed');
         emit('update:modelValue', false);
       },
       notifyOpen: () => {
-        emitCustomEvent$1(uiState.root, strings$8.OPENED_EVENT, {});
+        emitCustomEvent(uiState.root, strings$8.OPENED_EVENT, {});
         registerBodyClickListener();
         emit('mdcmenusurface:opened');
         emit('update:modelValue', true);
       },
-      isElementInContainer: el => {
-        var _uiState$root;
-
-        return (_uiState$root = uiState.root) === null || _uiState$root === void 0 ? void 0 : _uiState$root.contains(el);
-      },
+      isElementInContainer: element => uiState.root?.contains(element),
       isRtl: () => getComputedStyle(uiState.root).getPropertyValue('direction') === 'rtl',
       setTransformOrigin: origin => {
-        uiState.root.style.setProperty("".concat(getCorrectPropertyName(window, 'transform'), "-origin"), origin);
+        uiState.root.style.setProperty(`${getCorrectPropertyName(window, 'transform')}-origin`, origin);
       }
     };
     watch(() => props.modelValue, nv => onOpen_(nv));
     watch(() => props.quickOpen, nv => foundation.setQuickOpen(nv));
     onMounted(() => {
-      foundation = new MDCMenuSurfaceFoundation(_objectSpread2(_objectSpread2(_objectSpread2({}, adapter), getFocusAdapterMethods()), getDimensionAdapterMethods()));
+      foundation = new MDCMenuSurfaceFoundation({ ...adapter,
+        ...getFocusAdapterMethods(),
+        ...getDimensionAdapterMethods()
+      });
       foundation.init();
 
       if (uiState.root.parentElement && uiState.root.parentElement.classList.contains(cssClasses$4.ANCHOR)) {
@@ -4673,7 +4371,7 @@ var script$m = {
       previousFocus_ = null;
       foundation.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       rootListeners,
       hoistMenuToBody,
       setFixedPosition,
@@ -4685,7 +4383,7 @@ var script$m = {
       hide,
       isOpen,
       close
-    });
+    };
   }
 
 };
@@ -4700,7 +4398,7 @@ function render$m(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$m.render = render$m;
-script$m.__file = "packages/menu/menu-surface.vue";
+script$m.__file = "src/menu/menu-surface.vue";
 
 const {
   cssClasses: cssClasses$3,
@@ -4741,17 +4439,9 @@ var script$l = {
       list: null
     });
     let foundation;
-    let rootEl;
-    const items = computed(() => {
-      var _uiState$list$listEle, _uiState$list;
-
-      return (_uiState$list$listEle = (_uiState$list = uiState.list) === null || _uiState$list === void 0 ? void 0 : _uiState$list.listElements) !== null && _uiState$list$listEle !== void 0 ? _uiState$list$listEle : [];
-    });
-    const listItems = computed(() => {
-      var _uiState$list$listIte;
-
-      return (_uiState$list$listIte = uiState.list.listItems) !== null && _uiState$list$listIte !== void 0 ? _uiState$list$listIte : [];
-    });
+    let rootElement;
+    const items = computed(() => uiState.list?.listElements ?? []);
+    const listItems = computed(() => uiState.list.listItems ?? []);
 
     const getListItemByIndex = index => {
       const element = items.value[index];
@@ -4780,17 +4470,13 @@ var script$l = {
 
     });
 
-    const layout = () => {
-      var _uiState$list2;
-
-      return (_uiState$list2 = uiState.list) === null || _uiState$list2 === void 0 ? void 0 : _uiState$list2.layout();
-    };
+    const layout = () => uiState.list?.layout();
 
     const handleAction = index => {
       foundation.handleItemAction(items.value[index]);
     };
 
-    const handleKeydown = evt => foundation.handleKeydown(evt);
+    const handleKeydown = event_ => foundation.handleKeydown(event_);
 
     const handleMenuSurfaceOpened = () => {
       foundation.handleMenuSurfaceOpened();
@@ -4822,17 +4508,9 @@ var script$l = {
       uiState.menuSurface.setMenuSurfaceAnchorElement(element);
     };
 
-    const setSelectedIndex = index => {
-      var _uiState$list3;
+    const setSelectedIndex = index => uiState.list?.setSelectedIndex(index);
 
-      return (_uiState$list3 = uiState.list) === null || _uiState$list3 === void 0 ? void 0 : _uiState$list3.setSelectedIndex(index);
-    };
-
-    const getSelectedIndex = () => {
-      var _uiState$list$getSele, _uiState$list4;
-
-      return (_uiState$list$getSele = (_uiState$list4 = uiState.list) === null || _uiState$list4 === void 0 ? void 0 : _uiState$list4.getSelectedIndex()) !== null && _uiState$list$getSele !== void 0 ? _uiState$list$getSele : -1;
-    };
+    const getSelectedIndex = () => uiState.list?.getSelectedIndex() ?? -1;
 
     const setAnchorMargin = margin => {
       uiState.menuSurface.setAnchorMargin(margin);
@@ -4874,11 +4552,7 @@ var script$l = {
       uiState.menuSurface.setAbsolutePosition(x, y);
     };
 
-    const typeaheadInProgress = () => {
-      var _uiState$list$typeAhe;
-
-      return (_uiState$list$typeAhe = uiState.list.typeAheadInProgress) !== null && _uiState$list$typeAhe !== void 0 ? _uiState$list$typeAhe : false;
-    };
+    const typeaheadInProgress = () => uiState.list.typeAheadInProgress ?? false;
 
     const typeaheadMatchItem = (nextChar, startingIndex) => {
       if (uiState.list) {
@@ -4888,11 +4562,7 @@ var script$l = {
       return -1;
     };
 
-    const setSingleSelection = singleSelection => {
-      var _uiState$list5;
-
-      return (_uiState$list5 = uiState.list) === null || _uiState$list5 === void 0 ? void 0 : _uiState$list5.setSingleSelection(singleSelection);
-    };
+    const setSingleSelection = singleSelection => uiState.list?.setSingleSelection(singleSelection);
 
     const adapter = {
       addClassToElementAtIndex: (index, className) => {
@@ -4903,13 +4573,13 @@ var script$l = {
         const listItem = getListItemByIndex(index);
         listItem.classList.remove(className);
       },
-      addAttributeToElementAtIndex: (index, attr, value) => {
+      addAttributeToElementAtIndex: (index, attribute, value) => {
         const listItem = getListItemByIndex(index);
-        listItem.setAttribute(attr, value);
+        listItem.setAttribute(attribute, value);
       },
-      removeAttributeFromElementAtIndex: (index, attr) => {
+      removeAttributeFromElementAtIndex: (index, attribute) => {
         const listItem = getListItemByIndex(index);
-        listItem.removeAttribute(attr);
+        listItem.removeAttribute(attribute);
       },
       elementContainsClass: (element, className) => element.classList.contains(className),
       closeSurface: skipRestoreFocus => {
@@ -4917,16 +4587,16 @@ var script$l = {
         emit('update:modelValue', false);
       },
       getElementIndex: element => {
-        return items.value.findIndex(el => el == element);
+        return items.value.findIndex(element_ => element_ == element);
       },
-      notifySelected: evtData => {
-        emitCustomEvent$1(rootEl, strings$7.SELECTED_EVENT, {
-          index: evtData.index,
-          item: items.value[evtData.index]
+      notifySelected: eventData => {
+        emitCustomEvent(rootElement, strings$7.SELECTED_EVENT, {
+          index: eventData.index,
+          item: items.value[eventData.index]
         });
         emit('select', {
-          index: evtData.index,
-          item: items.value[evtData.index]
+          index: eventData.index,
+          item: items.value[eventData.index]
         });
       },
       getMenuItemCount: () => items.value.length,
@@ -4934,18 +4604,18 @@ var script$l = {
       focusListRoot: () => {
         uiState.menuSurface.$el.querySelector(strings$7.LIST_SELECTOR).focus();
       },
-      isSelectableItemAtIndex: index => !!closest(items.value[index], ".".concat(cssClasses$3.MENU_SELECTION_GROUP)),
+      isSelectableItemAtIndex: index => !!closest(items.value[index], `.${cssClasses$3.MENU_SELECTION_GROUP}`),
       getSelectedSiblingOfItemAtIndex: index => {
-        const selectionGroupEl = closest(items.value[index], ".".concat(cssClasses$3.MENU_SELECTION_GROUP));
-        const selectedItemEl = selectionGroupEl.querySelector(".".concat(cssClasses$3.MENU_SELECTED_LIST_ITEM));
-        return selectedItemEl ? items.value.findIndex(el => el == selectedItemEl) : -1;
+        const selectionGroupElement = closest(items.value[index], `.${cssClasses$3.MENU_SELECTION_GROUP}`);
+        const selectedItemEl = selectionGroupElement.querySelector(`.${cssClasses$3.MENU_SELECTED_LIST_ITEM}`);
+        return selectedItemEl ? items.value.findIndex(element => element == selectedItemEl) : -1;
       }
     };
     watch(() => props.modelValue, nv => {
       uiState.menuOpen = nv;
     });
     onMounted(() => {
-      rootEl = uiState.menuSurface.$el;
+      rootElement = uiState.menuSurface.$el;
       uiState.menuOpen = props.modelValue;
       foundation = new MDCMenuFoundation(adapter);
       foundation.init();
@@ -4962,7 +4632,7 @@ var script$l = {
     onBeforeUnmount(() => {
       foundation.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       handleAction,
       handleKeydown,
       onChange,
@@ -4988,7 +4658,7 @@ var script$l = {
       typeaheadInProgress,
       typeaheadMatchItem,
       setSingleSelection
-    });
+    };
   }
 
 };
@@ -5029,7 +4699,7 @@ function render$l(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$l.render = render$l;
-script$l.__file = "packages/menu/menu.vue";
+script$l.__file = "src/menu/menu.vue";
 
 var menu = BasePlugin({
   mcwMenu: script$l,
@@ -5039,7 +4709,6 @@ var menu = BasePlugin({
   mcwList: script$n
 });
 
-const _excluded$1 = ["width"];
 const {
   cssClasses: cssClasses$2
 } = MDCNotchedOutlineFoundation;
@@ -5061,24 +4730,26 @@ var script$k = {
     });
     let foundation;
     const adapter = {
-      addClass: className => uiState.outlinedClasses = _objectSpread2(_objectSpread2({}, uiState.outlinedClasses), {}, {
+      addClass: className => uiState.outlinedClasses = { ...uiState.outlinedClasses,
         [className]: true
-      }),
+      },
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$outlinedClas = uiState.outlinedClasses,
-              rest = _objectWithoutProperties(_uiState$outlinedClas, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.outlinedClasses;
         uiState.outlinedClasses = rest;
       },
-      setNotchWidthProperty: width => uiState.notchStyles = _objectSpread2(_objectSpread2({}, uiState.notchStyles), {}, {
-        width: "".concat(width, "px")
-      }),
+      setNotchWidthProperty: width => uiState.notchStyles = { ...uiState.notchStyles,
+        width: `${width}px`
+      },
       removeNotchWidthProperty: () => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$notchStyles = uiState.notchStyles,
-              rest = _objectWithoutProperties(_uiState$notchStyles, _excluded$1);
-
+        const {
+          width: removed,
+          ...rest
+        } = uiState.notchStyles;
         uiState.notchStyles = rest;
       }
     };
@@ -5092,41 +4763,35 @@ var script$k = {
     };
 
     const float = shouldFloat => {
-      var _uiState$labelEl;
-
-      (_uiState$labelEl = uiState.labelEl) === null || _uiState$labelEl === void 0 ? void 0 : _uiState$labelEl.float(shouldFloat);
+      uiState.labelEl?.float(shouldFloat);
     };
 
     const shake = shouldShake => {
-      var _uiState$labelEl2;
-
-      (_uiState$labelEl2 = uiState.labelEl) === null || _uiState$labelEl2 === void 0 ? void 0 : _uiState$labelEl2.shake(shouldShake);
+      uiState.labelEl?.shake(shouldShake);
     };
 
     const getWidth = () => {
-      var _uiState$labelEl3;
-
-      return (_uiState$labelEl3 = uiState.labelEl) === null || _uiState$labelEl3 === void 0 ? void 0 : _uiState$labelEl3.getWidth();
+      return uiState.labelEl?.getWidth();
     };
 
     onMounted(() => {
       foundation = new MDCNotchedOutlineFoundation(adapter);
       foundation.init();
       const key = slots.default ? cssClasses$2.OUTLINE_UPGRADED : cssClasses$2.NO_LABEL;
-      uiState.outlinedClasses = _objectSpread2(_objectSpread2({}, uiState.outlinedClasses), {}, {
+      uiState.outlinedClasses = { ...uiState.outlinedClasses,
         [key]: true
-      });
+      };
     });
     onBeforeUnmount(() => {
       foundation.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       getWidth,
       shake,
       float,
       closeNotch,
       notch
-    });
+    };
   }
 
 };
@@ -5163,7 +4828,7 @@ function render$k(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$k.render = render$k;
-script$k.__file = "packages/notched-outline/notched-outline.vue";
+script$k.__file = "src/notched-outline/notched-outline.vue";
 
 var notchedOutline = BasePlugin({
   mcwNotchedOutline: script$k
@@ -5197,8 +4862,6 @@ var script$j = {
     emit,
     attrs
   }) {
-    var _props$id;
-
     const uiState = reactive({
       classes: {
         'mdc-radio': 1
@@ -5217,11 +4880,11 @@ var script$j = {
       // Radio buttons technically go "active" whenever there is *any* keyboard interaction. This is not the
       // UI we desire.
       isSurfaceActive: () => false,
-      registerInteractionHandler: (evt, handler) => {
-        uiState.controlEl.addEventListener(evt, handler, applyPassive());
+      registerInteractionHandler: (event_, handler) => {
+        uiState.controlEl.addEventListener(event_, handler, applyPassive());
       },
-      deregisterInteractionHandler: (evt, handler) => {
-        uiState.controlEl.removeEventListener(evt, handler, applyPassive());
+      deregisterInteractionHandler: (event_, handler) => {
+        uiState.controlEl.removeEventListener(event_, handler, applyPassive());
       },
       computeBoundingRect: () => {
         return uiState.root.getBoundingClientRect();
@@ -5229,9 +4892,12 @@ var script$j = {
     });
     let foundation;
     let formField;
-    const radioId = (_props$id = props.id) !== null && _props$id !== void 0 ? _props$id : "__mcw-radio-".concat(radioId_++);
+    const radioId = props.id ?? `__mcw-radio-${radioId_++}`;
     const rootClasses = computed(() => {
-      return _objectSpread2(_objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes), props.radioClasses);
+      return { ...rippleClasses.value,
+        ...uiState.classes,
+        ...props.radioClasses
+      };
     });
     const formFieldClasses = computed(() => {
       return {
@@ -5254,14 +4920,15 @@ var script$j = {
     };
 
     const adapter = {
-      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+      addClass: className => uiState.classes = { ...uiState.classes,
         [className]: true
-      }),
+      },
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$classes = uiState.classes,
-              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.classes;
         uiState.classes = rest;
       },
       setNativeControlDisabled: disabled => uiState.controlEl && uiState.controlEl.disabled == disabled
@@ -5278,16 +4945,8 @@ var script$j = {
     onMounted(() => {
       foundation = new MDCRadioFoundation(adapter);
       formField = new MDCFormFieldFoundation({
-        registerInteractionHandler: (type, handler) => {
-          var _uiState$labelEl;
-
-          return (_uiState$labelEl = uiState.labelEl) === null || _uiState$labelEl === void 0 ? void 0 : _uiState$labelEl.addEventListener(type, handler);
-        },
-        deregisterInteractionHandler: (type, handler) => {
-          var _uiState$labelEl2;
-
-          return (_uiState$labelEl2 = uiState.labelEl) === null || _uiState$labelEl2 === void 0 ? void 0 : _uiState$labelEl2.removeEventListener(type, handler);
-        },
+        registerInteractionHandler: (type, handler) => uiState.labelEl?.addEventListener(type, handler),
+        deregisterInteractionHandler: (type, handler) => uiState.labelEl?.removeEventListener(type, handler),
         activateInputRipple: () => {
           activate();
         },
@@ -5312,7 +4971,7 @@ var script$j = {
       foundation.destroy();
       formField.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       rootClasses,
       formFieldClasses,
       styles,
@@ -5320,7 +4979,7 @@ var script$j = {
       onPicked,
       setChecked,
       radioId
-    });
+    };
   }
 
 };
@@ -5356,7 +5015,7 @@ function render$j(_ctx, _cache, $props, $setup, $data, $options) {
             onChange: _cache[1] || (_cache[1] = (...args) => (_ctx.onChange && _ctx.onChange(...args)))
           }, _ctx.$attrs, {
             value: _ctx.value,
-            checked: _ctx.modelValue==_ctx.value,
+            checked: _ctx.modelValue == _ctx.value,
             disabled: _ctx.disabled
           }), null, 16 /* FULL_PROPS */, ["id", "name", "value", "checked", "disabled"]),
           _hoisted_1$8,
@@ -5386,7 +5045,7 @@ function render$j(_ctx, _cache, $props, $setup, $data, $options) {
           onChange: _cache[2] || (_cache[2] = (...args) => (_ctx.onChange && _ctx.onChange(...args)))
         }, _ctx.$attrs, {
           value: _ctx.value,
-          checked: _ctx.modelValue==_ctx.value,
+          checked: _ctx.modelValue == _ctx.value,
           disabled: _ctx.disabled
         }), null, 16 /* FULL_PROPS */, ["id", "name", "value", "checked", "disabled"]),
         _hoisted_3$6,
@@ -5395,13 +5054,200 @@ function render$j(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$j.render = render$j;
-script$j.__file = "packages/radio/radio.vue";
+script$j.__file = "src/radio/radio.vue";
 
 var radio = BasePlugin({
   mcwRadio: script$j
 });
 
 var script$i = {
+  name: 'mcw-segment',
+  props: {
+    icon: String,
+    label: String,
+    ripple: {
+      type: Boolean,
+      default: () => true
+    }
+  },
+
+  setup(props, {
+    emit,
+    attrs
+  }) {
+    const uiState = reactive({
+      classes: {},
+      attrs: {},
+      root: null
+    });
+    let foundation;
+    const getSegmentIndex = inject('getSegmentIdx');
+    const isSingleSelect = inject('isSingleSelect');
+    const isTouch = inject('isTouch');
+
+    if (isSingleSelect) {
+      uiState.attrs['role'] = 'radio';
+      uiState.attrs['aria-checked'] = attrs['aria-checked'] ?? 'false';
+    } else {
+      uiState.attrs['aria-pressed'] = attrs['aria-pressed'] ?? 'false';
+    }
+
+    const getSegmentId = () => foundation.getSegmentId();
+
+    const isSelected = () => foundation.isSelected();
+
+    const setSelected = () => foundation.setSelected();
+
+    const setUnselected = () => foundation.setUnselected();
+
+    const segmentIndex = getSegmentIndex({
+      getSegmentId,
+      isSelected,
+      setSelected,
+      setUnselected
+    });
+    const {
+      classes: rippleClasses,
+      styles
+    } = useRipplePlugin(toRef(uiState, 'root'), {
+      computeBoundingRect: () => {
+        return foundation.getDimensions();
+      }
+    });
+    const myAttributes = computed(() => {
+      return { ...uiState.attrs,
+        class: { ...rippleClasses.value,
+          ...uiState.classes
+        },
+        style: styles.value
+      };
+    });
+
+    const onClick = () => foundation.handleClick();
+
+    const adapter = {
+      isSingleSelect: () => {
+        return isSingleSelect;
+      },
+      getAttr: name => uiState.root.getAttribute(name),
+      setAttr: (attributeName, value) => {
+        uiState.attrs = { ...uiState.attrs,
+          [attributeName]: value
+        };
+      },
+      addClass: className => uiState.classes = { ...uiState.classes,
+        [className]: true
+      },
+      hasClass: className => !!uiState.classes[className],
+      removeClass: className => {
+        // eslint-disable-next-line no-unused-vars
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.classes;
+        uiState.classes = rest;
+      },
+      notifySelectedChange: selected => {
+        emitCustomEvent(uiState.root, 'selected', {
+          index: segmentIndex,
+          selected,
+          segmentId: getSegmentId()
+        }, true);
+      },
+      getRootBoundingClientRect: () => {
+        return uiState.root.getBoundingClientRect();
+      }
+    };
+    onMounted(() => {
+      foundation = new MDCSegmentedButtonSegmentFoundation(adapter);
+      foundation.init();
+    });
+    onBeforeUnmount(() => {
+      foundation?.destroy();
+    });
+    return { ...toRefs(uiState),
+      myAttrs: myAttributes,
+      onClick,
+      isTouch
+    };
+  }
+
+};
+
+const _hoisted_1$7 = {
+  key: 0,
+  class: "mdc-touch-target-wrapper"
+};
+const _hoisted_2$6 = {
+  key: 0,
+  class: "mdc-segmented-button__ripple"
+};
+const _hoisted_3$5 = {
+  key: 1,
+  class: "material-icons mdc-segmented-button__icon"
+};
+const _hoisted_4$4 = {
+  key: 2,
+  class: "mdc-segmented-button__label"
+};
+const _hoisted_5$4 = /*#__PURE__*/createVNode("div", { class: "mdc-segmented-button__touch" }, null, -1 /* HOISTED */);
+const _hoisted_6$2 = {
+  key: 0,
+  class: "mdc-segmented-button__ripple"
+};
+const _hoisted_7$2 = {
+  key: 1,
+  class: "material-icons mdc-segmented-button__icon"
+};
+const _hoisted_8$1 = {
+  key: 2,
+  class: "mdc-segmented-button__label"
+};
+
+function render$i(_ctx, _cache, $props, $setup, $data, $options) {
+  return (_ctx.isTouch)
+    ? (openBlock(), createBlock("div", _hoisted_1$7, [
+        createVNode("button", mergeProps({
+          ref: "root",
+          class: "mdc-segmented-button__segment mdc-segmented-button--touch"
+        }, _ctx.myAttrs, {
+          onClick: _cache[1] || (_cache[1] = (...args) => (_ctx.onClick && _ctx.onClick(...args)))
+        }), [
+          (_ctx.ripple)
+            ? (openBlock(), createBlock("div", _hoisted_2$6))
+            : createCommentVNode("v-if", true),
+          (_ctx.icon)
+            ? (openBlock(), createBlock("i", _hoisted_3$5, toDisplayString(_ctx.icon), 1 /* TEXT */))
+            : createCommentVNode("v-if", true),
+          (_ctx.label)
+            ? (openBlock(), createBlock("div", _hoisted_4$4, toDisplayString(_ctx.label), 1 /* TEXT */))
+            : createCommentVNode("v-if", true),
+          _hoisted_5$4
+        ], 16 /* FULL_PROPS */)
+      ]))
+    : (openBlock(), createBlock("button", mergeProps({
+        key: 1,
+        ref: "root",
+        class: "mdc-segmented-button__segment"
+      }, _ctx.myAttrs, {
+        onClick: _cache[2] || (_cache[2] = (...args) => (_ctx.onClick && _ctx.onClick(...args)))
+      }), [
+        (_ctx.ripple)
+          ? (openBlock(), createBlock("div", _hoisted_6$2))
+          : createCommentVNode("v-if", true),
+        (_ctx.icon)
+          ? (openBlock(), createBlock("i", _hoisted_7$2, toDisplayString(_ctx.icon), 1 /* TEXT */))
+          : createCommentVNode("v-if", true),
+        (_ctx.label)
+          ? (openBlock(), createBlock("div", _hoisted_8$1, toDisplayString(_ctx.label), 1 /* TEXT */))
+          : createCommentVNode("v-if", true)
+      ], 16 /* FULL_PROPS */))
+}
+
+script$i.render = render$i;
+script$i.__file = "src/segmented-button/segment.vue";
+
+var script$h = {
   name: 'mcw-segmented-button',
   props: {
     singleSelect: Boolean,
@@ -5423,14 +5269,13 @@ var script$i = {
       contentEl: null
     });
     let foundation;
-    let segmentIdx = 0;
+    let segmentIndex = 0;
     const segments_ = [];
 
     const getSegmentIdx = segment => {
-      const sg = _objectSpread2(_objectSpread2({}, segment), {}, {
-        index: segmentIdx++
-      });
-
+      const sg = { ...segment,
+        index: segmentIndex++
+      };
       segments_.push(sg);
       return sg.index;
     };
@@ -5481,12 +5326,12 @@ var script$i = {
             selected,
             index
           } = detail;
-          const idx = props.modelValue.indexOf(detail.index);
+          const index_ = props.modelValue.indexOf(detail.index);
 
           if (selected) {
-            idx < 1 && emit('update:modelValue', props.modelValue.concat(index));
+            index_ < 1 && emit('update:modelValue', props.modelValue.concat(index));
           } else {
-            idx > -1 && emit('update:modelValue', props.modelValue.slice(0, idx).concat(props.modelValue.slice(idx + 1)));
+            index_ > -1 && emit('update:modelValue', props.modelValue.slice(0, index_).concat(props.modelValue.slice(index_ + 1)));
           }
         } else {
           emit('update:modelValue', detail.index);
@@ -5510,17 +5355,18 @@ var script$i = {
             index
           }) => index); // select the new ones
 
-          nv.forEach(v => {
+          for (const v of nv) {
             if (selectedSegments.indexOf(v) < 0) {
               foundation.selectSegment(v);
             }
-          }); // unselect the ones that not there anymore
+          } // unselect the ones that not there anymore
 
-          selectedSegments.forEach(v => {
+
+          for (const v of selectedSegments) {
             if (nv.indexOf(v) < 0) {
               foundation.unselectSegment(v);
             }
-          });
+          }
         } else {
           foundation.selectSegment(nv);
           foundation.handleSelected({
@@ -5530,19 +5376,17 @@ var script$i = {
       });
     });
     onBeforeUnmount(() => {
-      var _foundation;
-
-      (_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.destroy();
+      foundation?.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       role,
       onSelected
-    });
+    };
   }
 
 };
 
-function render$i(_ctx, _cache, $props, $setup, $data, $options) {
+function render$h(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("div", {
     ref: "root",
     class: ["mdc-segmented-button", _ctx.classes],
@@ -5553,202 +5397,12 @@ function render$i(_ctx, _cache, $props, $setup, $data, $options) {
   ], 42 /* CLASS, PROPS, HYDRATE_EVENTS */, ["role"]))
 }
 
-script$i.render = render$i;
-script$i.__file = "packages/segmented-button/segmented-button.vue";
-
-var script$h = {
-  name: 'mcw-segment',
-  props: {
-    icon: String,
-    label: String,
-    ripple: {
-      type: Boolean,
-      default: () => true
-    }
-  },
-
-  setup(props, {
-    emit,
-    attrs
-  }) {
-    const uiState = reactive({
-      classes: {},
-      attrs: {},
-      root: null
-    });
-    let foundation;
-    const getSegmentIdx = inject('getSegmentIdx');
-    const isSingleSelect = inject('isSingleSelect');
-    const isTouch = inject('isTouch');
-
-    if (isSingleSelect) {
-      var _attrs$ariaChecked;
-
-      uiState.attrs['role'] = 'radio';
-      uiState.attrs['aria-checked'] = (_attrs$ariaChecked = attrs['aria-checked']) !== null && _attrs$ariaChecked !== void 0 ? _attrs$ariaChecked : 'false';
-    } else {
-      var _attrs$ariaPressed;
-
-      uiState.attrs['aria-pressed'] = (_attrs$ariaPressed = attrs['aria-pressed']) !== null && _attrs$ariaPressed !== void 0 ? _attrs$ariaPressed : 'false';
-    }
-
-    const getSegmentId = () => foundation.getSegmentId();
-
-    const isSelected = () => foundation.isSelected();
-
-    const setSelected = () => foundation.setSelected();
-
-    const setUnselected = () => foundation.setUnselected();
-
-    const segmentIdx = getSegmentIdx({
-      getSegmentId,
-      isSelected,
-      setSelected,
-      setUnselected
-    });
-    const {
-      classes: rippleClasses,
-      styles
-    } = useRipplePlugin$1(toRef(uiState, 'root'), {
-      computeBoundingRect: () => {
-        return foundation.getDimensions();
-      }
-    });
-    const myAttrs = computed(() => {
-      return _objectSpread2(_objectSpread2({}, uiState.attrs), {}, {
-        class: _objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes),
-        style: styles.value
-      });
-    });
-
-    const onClick = () => foundation.handleClick();
-
-    const adapter = {
-      isSingleSelect: () => {
-        return isSingleSelect;
-      },
-      getAttr: name => uiState.root.getAttribute(name),
-      setAttr: (attributeName, value) => {
-        uiState.attrs = _objectSpread2(_objectSpread2({}, uiState.attrs), {}, {
-          [attributeName]: value
-        });
-      },
-      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
-        [className]: true
-      }),
-      hasClass: className => !!uiState.classes[className],
-      removeClass: className => {
-        // eslint-disable-next-line no-unused-vars
-        const _uiState$classes = uiState.classes,
-              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
-
-        uiState.classes = rest;
-      },
-      notifySelectedChange: selected => {
-        emitCustomEvent$1(uiState.root, 'selected', {
-          index: segmentIdx,
-          selected,
-          segmentId: getSegmentId()
-        }, true);
-      },
-      getRootBoundingClientRect: () => {
-        return uiState.root.getBoundingClientRect();
-      }
-    };
-    onMounted(() => {
-      foundation = new MDCSegmentedButtonSegmentFoundation(adapter);
-      foundation.init();
-    });
-    onBeforeUnmount(() => {
-      var _foundation;
-
-      (_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.destroy();
-    });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
-      myAttrs,
-      onClick,
-      isTouch
-    });
-  }
-
-};
-
-const _hoisted_1$7 = {
-  key: 0,
-  class: "mdc-touch-target-wrapper"
-};
-const _hoisted_2$6 = {
-  key: 0,
-  class: "mdc-segmented-button__ripple"
-};
-const _hoisted_3$5 = {
-  key: 1,
-  class: "material-icons mdc-segmented-button__icon"
-};
-const _hoisted_4$4 = {
-  key: 2,
-  class: "mdc-segmented-button__label"
-};
-const _hoisted_5$4 = /*#__PURE__*/createVNode("div", { class: "mdc-segmented-button__touch" }, null, -1 /* HOISTED */);
-const _hoisted_6$2 = {
-  key: 0,
-  class: "mdc-segmented-button__ripple"
-};
-const _hoisted_7$2 = {
-  key: 1,
-  class: "material-icons mdc-segmented-button__icon"
-};
-const _hoisted_8$1 = {
-  key: 2,
-  class: "mdc-segmented-button__label"
-};
-
-function render$h(_ctx, _cache, $props, $setup, $data, $options) {
-  return (_ctx.isTouch)
-    ? (openBlock(), createBlock("div", _hoisted_1$7, [
-        createVNode("button", mergeProps({
-          ref: "root",
-          class: "mdc-segmented-button__segment mdc-segmented-button--touch"
-        }, _ctx.myAttrs, {
-          onClick: _cache[1] || (_cache[1] = (...args) => (_ctx.onClick && _ctx.onClick(...args)))
-        }), [
-          (_ctx.ripple)
-            ? (openBlock(), createBlock("div", _hoisted_2$6))
-            : createCommentVNode("v-if", true),
-          (_ctx.icon)
-            ? (openBlock(), createBlock("i", _hoisted_3$5, toDisplayString(_ctx.icon), 1 /* TEXT */))
-            : createCommentVNode("v-if", true),
-          (_ctx.label)
-            ? (openBlock(), createBlock("div", _hoisted_4$4, toDisplayString(_ctx.label), 1 /* TEXT */))
-            : createCommentVNode("v-if", true),
-          _hoisted_5$4
-        ], 16 /* FULL_PROPS */)
-      ]))
-    : (openBlock(), createBlock("button", mergeProps({
-        key: 1,
-        ref: "root",
-        class: "mdc-segmented-button__segment"
-      }, _ctx.myAttrs, {
-        onClick: _cache[2] || (_cache[2] = (...args) => (_ctx.onClick && _ctx.onClick(...args)))
-      }), [
-        (_ctx.ripple)
-          ? (openBlock(), createBlock("div", _hoisted_6$2))
-          : createCommentVNode("v-if", true),
-        (_ctx.icon)
-          ? (openBlock(), createBlock("i", _hoisted_7$2, toDisplayString(_ctx.icon), 1 /* TEXT */))
-          : createCommentVNode("v-if", true),
-        (_ctx.label)
-          ? (openBlock(), createBlock("div", _hoisted_8$1, toDisplayString(_ctx.label), 1 /* TEXT */))
-          : createCommentVNode("v-if", true)
-      ], 16 /* FULL_PROPS */))
-}
-
 script$h.render = render$h;
-script$h.__file = "packages/segmented-button/segment.vue";
+script$h.__file = "src/segmented-button/segmented-button.vue";
 
 var segmentedButton = BasePlugin({
-  mcwSegmentedButton: script$i,
-  mcwSegment: script$h
+  mcwSegmentedButton: script$h,
+  mcwSegment: script$i
 });
 
 var script$g = {
@@ -5773,25 +5427,27 @@ var script$g = {
       foundation: {}
     });
     const adapter = {
-      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+      addClass: className => uiState.classes = { ...uiState.classes,
         [className]: true
-      }),
+      },
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$classes = uiState.classes,
-              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.classes;
         uiState.classes = rest;
       },
       hasClass: className => Boolean(uiState.classes[className]),
-      setAttr: (attr, value) => uiState.attrs = _objectSpread2(_objectSpread2({}, uiState.attrs), {}, {
+      setAttr: (attr, value) => uiState.attrs = { ...uiState.attrs,
         [attr]: value
-      }),
+      },
       removeAttr: attr => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$attrs = uiState.attrs,
-              rest = _objectWithoutProperties(_uiState$attrs, [attr].map(_toPropertyKey));
-
+        const {
+          [attr]: removed,
+          ...rest
+        } = uiState.attrs;
         uiState.attrs = rest;
       },
       setContent: content => {
@@ -5808,7 +5464,8 @@ var script$g = {
     onBeforeUnmount(() => {
       uiState.foundation.destroy();
     });
-    return _objectSpread2({}, toRefs(uiState));
+    return { ...toRefs(uiState)
+    };
   }
 
 };
@@ -5818,7 +5475,7 @@ function render$g(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$g.render = render$g;
-script$g.__file = "packages/select/select-helper-text.vue";
+script$g.__file = "src/select/select-helper-text.vue";
 
 const {
   strings: strings$6
@@ -5845,36 +5502,40 @@ var script$f = {
       foundation: {}
     });
     const listeners = computed(() => {
-      return _objectSpread2(_objectSpread2({}, attrs), uiState.rootListeners);
+      return { ...attrs,
+        ...uiState.rootListeners
+      };
     });
     const adapter = {
       getAttr: attr => uiState.rootAttrs[attr],
-      setAttr: (attr, value) => uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, {
+      setAttr: (attr, value) => uiState.rootAttrs = { ...uiState.rootAttrs,
         [attr]: value
-      }),
+      },
       removeAttr: attr => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$rootAttrs = uiState.rootAttrs,
-              rest = _objectWithoutProperties(_uiState$rootAttrs, [attr].map(_toPropertyKey));
-
+        const {
+          [attr]: removed,
+          ...rest
+        } = uiState.rootAttrs;
         uiState.rootAttrs = rest;
       },
       setContent: content => {
         uiState.root.textContent = content;
       },
-      registerInteractionHandler: (evtType, handler) => uiState.rootListeners = _objectSpread2(_objectSpread2({}, uiState.rootListeners), {}, {
+      registerInteractionHandler: (evtType, handler) => uiState.rootListeners = { ...uiState.rootListeners,
         [evtType.toLowerCase()]: handler
-      }),
+      },
       deregisterInteractionHandler: (evtType, handler) => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$rootListener = uiState.rootListeners,
-              rest = _objectWithoutProperties(_uiState$rootListener, [evtType].map(_toPropertyKey));
-
+        const {
+          [evtType]: removed,
+          ...rest
+        } = uiState.rootListeners;
         uiState.rootListeners = rest;
       },
       notifyIconAction: () => {
         emit('click');
-        emitCustomEvent$1(uiState.root, strings$6.ICON_EVENT, {}, true
+        emitCustomEvent(uiState.root, strings$6.ICON_EVENT, {}, true
         /* shouldBubble  */
         );
       }
@@ -5886,9 +5547,9 @@ var script$f = {
     onBeforeUnmount(() => {
       uiState.foundation.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       listeners
-    });
+    };
   }
 
 };
@@ -5902,7 +5563,7 @@ function render$f(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$f.render = render$f;
-script$f.__file = "packages/select/select-icon.vue";
+script$f.__file = "src/select/select-icon.vue";
 
 const {
   strings: strings$5
@@ -5936,7 +5597,7 @@ var script$e = {
       selectedTextContent: '',
       selTextAttrs: {},
       selectAnchorAttrs: {},
-      helpId: "help-mcw-select-".concat(uid_$1++),
+      helpId: `help-mcw-select-${uid_$1++}`,
       menuClasses: {
         'mdc-menu-surface--fullwidth': props.menuFullwidth
       },
@@ -5957,11 +5618,11 @@ var script$e = {
         classes,
         styles
       } = useRipplePlugin(toRef(uiState, 'anchorEl'), {
-        registerInteractionHandler: (evtType, handler) => {
-          uiState.anchorEl.addEventListener(evtType, handler);
+        registerInteractionHandler: (eventType, handler) => {
+          uiState.anchorEl.addEventListener(eventType, handler);
         },
-        deregisterInteractionHandler: (evtType, handler) => {
-          uiState.anchorEl.removeEventListener(evtType, handler);
+        deregisterInteractionHandler: (eventType, handler) => {
+          uiState.anchorEl.removeEventListener(eventType, handler);
         }
       });
       rippleClasses = classes;
@@ -5969,36 +5630,33 @@ var script$e = {
     }
 
     const rootClasses = computed(() => {
-      return _objectSpread2({
+      return {
         'mdc-select': 1,
         'mdc-select--required': props.required,
         'mdc-select--filled': !props.outlined,
         'mdc-select--outlined': props.outlined,
         'mdc-select--with-leading-icon': props.leadingIcon,
         'mdc-select--disabled': props.disabled,
-        'mdc-select--no-label': !props.label
-      }, uiState.classes);
+        'mdc-select--no-label': !props.label,
+        ...uiState.classes
+      };
     });
-    const menuItems = computed(() => {
-      var _uiState$menu;
-
-      return (_uiState$menu = uiState.menu) === null || _uiState$menu === void 0 ? void 0 : _uiState$menu.items;
-    });
+    const menuItems = computed(() => uiState.menu?.items);
     let foundation;
 
     const handleFocus = () => foundation.handleFocus();
 
     const handleBlur = () => foundation.handleBlur();
 
-    const handleClick = evt => {
+    const handleClick = event_ => {
       uiState.anchorEl.focus();
       handleFocus();
-      foundation.handleClick(getNormalizedXCoordinate(evt));
+      foundation.handleClick(getNormalizedXCoordinate(event_));
     };
 
-    const handleKeydown = evt => foundation.handleKeydown(evt);
+    const handleKeydown = event_ => foundation.handleKeydown(event_);
 
-    const handleChange = isOpen => foundation["handleMenu".concat(isOpen ? 'Opened' : 'Closed')]();
+    const handleChange = isOpen => foundation[`handleMenu${isOpen ? 'Opened' : 'Closed'}`]();
 
     const layout = () => foundation.layout();
 
@@ -6015,8 +5673,9 @@ var script$e = {
       uiState.menu.layout();
     };
 
-    const selectedTextAttrs = computed(() => {
-      const attrs = _objectSpread2({}, uiState.selTextAttrs);
+    const selectedTextAttributes = computed(() => {
+      const attrs = { ...uiState.selTextAttrs
+      };
 
       if (props.helptext) {
         attrs['aria-controls'] = uiState.helpId;
@@ -6042,24 +5701,26 @@ var script$e = {
       },
       isSelectAnchorFocused: () => document.activeElement === uiState.anchorEl,
       getSelectAnchorAttr: attr => uiState.selectAnchorAttrs[attr],
-      setSelectAnchorAttr: (attr, value) => uiState.selectAnchorAttrs = _objectSpread2(_objectSpread2({}, uiState.selectAnchorAttrs), {}, {
+      setSelectAnchorAttr: (attr, value) => uiState.selectAnchorAttrs = { ...uiState.selectAnchorAttrs,
         [attr]: value
-      }),
+      },
       removeSelectAnchorAttr: attr => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$selectAnchor = uiState.selectAnchorAttrs,
-              rest = _objectWithoutProperties(_uiState$selectAnchor, [attr].map(_toPropertyKey));
-
+        const {
+          [attr]: removed,
+          ...rest
+        } = uiState.selectAnchorAttrs;
         uiState.selectAnchorAttrs = rest;
       },
-      addMenuClass: className => uiState.menuClasses = _objectSpread2(_objectSpread2({}, uiState.menuClasses), {}, {
+      addMenuClass: className => uiState.menuClasses = { ...uiState.menuClasses,
         [className]: true
-      }),
+      },
       removeMenuClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$menuClasses = uiState.menuClasses,
-              rest = _objectWithoutProperties(_uiState$menuClasses, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.menuClasses;
         uiState.menuClasses = rest;
       },
       openMenu: () => uiState.menu.surfaceOpen = true,
@@ -6069,9 +5730,7 @@ var script$e = {
       setMenuAnchorCorner: anchorCorner => uiState.menu.setAnchorCorner(anchorCorner),
       setMenuWrapFocus: wrapFocus => uiState.menu.wrapFocus = wrapFocus,
       getSelectedIndex: () => {
-        var _uiState$menu$getSele, _uiState$menu2;
-
-        const index = (_uiState$menu$getSele = (_uiState$menu2 = uiState.menu) === null || _uiState$menu2 === void 0 ? void 0 : _uiState$menu2.getSelectedIndex()) !== null && _uiState$menu$getSele !== void 0 ? _uiState$menu$getSele : -1;
+        const index = uiState.menu?.getSelectedIndex() ?? -1;
         return index instanceof Array ? index[0] : index;
       },
       setSelectedIndex: index => {
@@ -6084,41 +5743,26 @@ var script$e = {
         return menuItems.value[index].textContent;
       },
       isTypeaheadInProgress: () => uiState.menu.typeaheadInProgress(),
-      typeaheadMatchItem: (nextChar, startingIndex) => {
-        var _uiState$menu3;
-
-        return (_uiState$menu3 = uiState.menu) === null || _uiState$menu3 === void 0 ? void 0 : _uiState$menu3.typeaheadMatchItem(nextChar, startingIndex);
-      },
+      typeaheadMatchItem: (nextChar, startingIndex) => uiState.menu?.typeaheadMatchItem(nextChar, startingIndex),
       // common methods
-      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+      addClass: className => uiState.classes = { ...uiState.classes,
         [className]: true
-      }),
+      },
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$classes = uiState.classes,
-              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.classes;
         uiState.classes = rest;
       },
       hasClass: className => Boolean(rootClasses.value[className]),
-      setRippleCenter: normalizedX => {
-        var _uiState$lineRippleEl;
-
-        return (_uiState$lineRippleEl = uiState.lineRippleEl) === null || _uiState$lineRippleEl === void 0 ? void 0 : _uiState$lineRippleEl.setRippleCenter(normalizedX);
-      },
-      activateBottomLine: () => {
-        var _uiState$lineRippleEl2;
-
-        return (_uiState$lineRippleEl2 = uiState.lineRippleEl) === null || _uiState$lineRippleEl2 === void 0 ? void 0 : _uiState$lineRippleEl2.activate();
-      },
-      deactivateBottomLine: () => {
-        var _uiState$lineRippleEl3;
-
-        return (_uiState$lineRippleEl3 = uiState.lineRippleEl) === null || _uiState$lineRippleEl3 === void 0 ? void 0 : _uiState$lineRippleEl3.deactivate();
-      },
+      setRippleCenter: normalizedX => uiState.lineRippleEl?.setRippleCenter(normalizedX),
+      activateBottomLine: () => uiState.lineRippleEl?.activate(),
+      deactivateBottomLine: () => uiState.lineRippleEl?.deactivate(),
       notifyChange: value => {
         const index = foundation.getSelectedIndex();
-        emitCustomEvent$1(uiState.root, strings$5.CHANGE_EVENT, {
+        emitCustomEvent(uiState.root, strings$5.CHANGE_EVENT, {
           value,
           index
         }, true
@@ -6128,33 +5772,13 @@ var script$e = {
       },
       // outline methods
       hasOutline: () => props.outlined,
-      notchOutline: labelWidth => {
-        var _uiState$outlineEl;
-
-        return (_uiState$outlineEl = uiState.outlineEl) === null || _uiState$outlineEl === void 0 ? void 0 : _uiState$outlineEl.notch(labelWidth);
-      },
-      closeOutline: () => {
-        var _uiState$outlineEl2;
-
-        return (_uiState$outlineEl2 = uiState.outlineEl) === null || _uiState$outlineEl2 === void 0 ? void 0 : _uiState$outlineEl2.closeNotch();
-      },
+      notchOutline: labelWidth => uiState.outlineEl?.notch(labelWidth),
+      closeOutline: () => uiState.outlineEl?.closeNotch(),
       // label methods
       hasLabel: () => !!props.label,
-      floatLabel: shouldFloat => {
-        var _ref;
-
-        return (_ref = uiState.labelEl || uiState.outlineEl) === null || _ref === void 0 ? void 0 : _ref.float(shouldFloat);
-      },
-      getLabelWidth: () => {
-        var _uiState$labelEl;
-
-        return ((_uiState$labelEl = uiState.labelEl) === null || _uiState$labelEl === void 0 ? void 0 : _uiState$labelEl.getWidth()) || 0;
-      },
-      setLabelRequired: isRequired => {
-        var _uiState$labelEl2;
-
-        return (_uiState$labelEl2 = uiState.labelEl) === null || _uiState$labelEl2 === void 0 ? void 0 : _uiState$labelEl2.setRequired(isRequired);
-      }
+      floatLabel: shouldFloat => (uiState.labelEl || uiState.outlineEl)?.float(shouldFloat),
+      getLabelWidth: () => uiState.labelEl?.getWidth() || 0,
+      setLabelRequired: isRequired => uiState.labelEl?.setRequired(isRequired)
     };
 
     const setFixedPosition = isFixed => uiState.menu.setFixedPosition(isFixed);
@@ -6168,24 +5792,18 @@ var script$e = {
       return idx;
     };
 
-    watch(() => props.disabled, nv => {
-      var _foundation;
-
-      return (_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.updateDisabledStyle(nv);
-    });
+    watch(() => props.disabled, nv => foundation?.updateDisabledStyle(nv));
     watch(() => props.modelValue, () => {
       const idx = refreshIndex();
       foundation.setSelectedIndex(idx);
     });
     onMounted(() => {
-      var _uiState$helperTextEl, _uiState$leadingIconE;
-
       // menu setup
       uiState.menu.hasTypeahead = true;
       uiState.menu.setSingleSelection = true;
       foundation = new MDCSelectFoundation(adapter, {
-        helperText: (_uiState$helperTextEl = uiState.helperTextEl) === null || _uiState$helperTextEl === void 0 ? void 0 : _uiState$helperTextEl.foundation,
-        leadingIcon: (_uiState$leadingIconE = uiState.leadingIconEl) === null || _uiState$leadingIconE === void 0 ? void 0 : _uiState$leadingIconE.foundation
+        helperText: uiState.helperTextEl?.foundation,
+        leadingIcon: uiState.leadingIconEl?.foundation
       }); // initial sync with DOM
 
       refreshIndex();
@@ -6200,7 +5818,7 @@ var script$e = {
     onBeforeUnmount(() => {
       foundation.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       rootClasses,
       handleBlur,
       handleFocus,
@@ -6211,13 +5829,13 @@ var script$e = {
       layoutOptions,
       rippleClasses,
       rippleStyles,
-      selectedTextAttrs,
+      selectedTextAttrs: selectedTextAttributes,
       handleMenuItemAction,
       refreshIndex,
       setFixedPosition,
       handleMenuOpened,
       handleMenuClosed
-    });
+    };
   },
 
   components: {
@@ -6228,9 +5846,9 @@ var script$e = {
 // Private functions
 // ===
 
-function getNormalizedXCoordinate(evt) {
-  const targetClientRect = evt.target.getBoundingClientRect();
-  const xCoordinate = evt.clientX;
+function getNormalizedXCoordinate(event_) {
+  const targetClientRect = event_.target.getBoundingClientRect();
+  const xCoordinate = event_.clientX;
   return xCoordinate - targetClientRect.left;
 }
 
@@ -6349,7 +5967,7 @@ function render$e(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$e.render = render$e;
-script$e.__file = "packages/select/select.vue";
+script$e.__file = "src/select/select.vue";
 
 var select = BasePlugin({
   mcwSelect: script$e,
@@ -6429,7 +6047,7 @@ var script$d = {
 
     const getThumbName = (thumb, suffix) => {
       const thumbName = thumb == Thumb.END ? 'endThumb' : 'startThumb';
-      return "".concat(thumbName).concat(suffix);
+      return `${thumbName}${suffix}`;
     };
 
     const setInputRef = el => uiState.inputs.push(el);
@@ -6442,28 +6060,30 @@ var script$d = {
 
     const adapter = {
       hasClass: className => uiState.root.classList.contains(className),
-      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+      addClass: className => uiState.classes = { ...uiState.classes,
         [className]: true
-      }),
+      },
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$classes = uiState.classes,
-              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.classes;
         uiState.classes = rest;
       },
       addThumbClass: (className, thumb) => {
         const thumbName = getThumbName(thumb, 'Classes');
-        uiState[thumbName] = _objectSpread2(_objectSpread2({}, uiState[thumbName]), {}, {
+        uiState[thumbName] = { ...uiState[thumbName],
           [className]: true
-        });
+        };
       },
       removeThumbClass: (className, thumb) => {
         const thumbName = getThumbName(thumb, 'Classes'); // eslint-disable-next-line no-unused-vars
 
-        const _uiState$thumbName = uiState[thumbName],
-              rest = _objectWithoutProperties(_uiState$thumbName, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState[thumbName];
         uiState[thumbName] = rest;
       },
       getAttribute: name => uiState.root.getAttribute(name),
@@ -6494,19 +6114,15 @@ var script$d = {
       },
       setThumbAttribute: (attribute, value, thumb) => {
         const thumbName = getThumbName(thumb, 'Attrs');
-        uiState[thumbName] = _objectSpread2(_objectSpread2({}, uiState[thumbName]), {}, {
+        uiState[thumbName] = { ...uiState[thumbName],
           [attribute]: value
-        });
+        };
       },
       isThumbFocused: thumb => {
         return getThumbEl(thumb) === document.activeElement;
       },
       focusThumb: thumb => getThumbEl(thumb).focus(),
-      getThumbKnobWidth: thumb => {
-        var _getThumbEl$querySele;
-
-        return (_getThumbEl$querySele = getThumbEl(thumb).querySelector(".".concat(cssClasses$7.THUMB_KNOB))) === null || _getThumbEl$querySele === void 0 ? void 0 : _getThumbEl$querySele.getBoundingClientRect().width;
-      },
+      getThumbKnobWidth: thumb => getThumbEl(thumb).querySelector(`.${cssClasses$7.THUMB_KNOB}`)?.getBoundingClientRect().width,
       getThumbBoundingClientRect: thumb => getThumbEl(thumb).getBoundingClientRect(),
       getBoundingClientRect: () => uiState.root.getBoundingClientRect(),
       isRTL: () => getComputedStyle(uiState.root).direction === 'rtl',
@@ -6528,7 +6144,7 @@ var script$d = {
       },
       setPointerCapture: pointerId => uiState.root.setPointerCapture(pointerId),
       emitChangeEvent: (value, thumb) => {
-        emitCustomEvent$1(uiState.root, events.CHANGE, {
+        emitCustomEvent(uiState.root, events.CHANGE, {
           value,
           thumb
         });
@@ -6536,7 +6152,7 @@ var script$d = {
         emit(eventName, value);
       },
       emitInputEvent: (value, thumb) => {
-        emitCustomEvent$1(uiState.root, events.INPUT, {
+        emitCustomEvent(uiState.root, events.INPUT, {
           value,
           thumb
         });
@@ -6599,11 +6215,11 @@ var script$d = {
     onBeforeUnmount(() => {
       foundation.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       setValueToAriaValueTextFn,
       setInputRef,
       setThumbRef
-    });
+    };
   }
 
 };
@@ -6718,7 +6334,7 @@ function render$d(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$d.render = render$d;
-script$d.__file = "packages/slider/slider.vue";
+script$d.__file = "src/slider/slider.vue";
 
 var slider = BasePlugin({
   mcwSlider: script$d
@@ -6815,10 +6431,10 @@ var script$c = {
         emit('update:snack', null);
       }
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       handleSnack,
       listeners
-    });
+    };
   }
 
 };
@@ -6830,7 +6446,7 @@ function render$c(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$c.render = render$c;
-script$c.__file = "packages/snackbar/snackbar-queue.vue";
+script$c.__file = "src/snackbar/snackbar-queue.vue";
 
 const {
   strings: strings$4,
@@ -6868,20 +6484,21 @@ var script$b = {
     });
     let foundation;
     const rootClasses = computed(() => {
-      return _objectSpread2({
+      return {
         'mdc-snackbar': 1,
         'mdc-snackbar--leading': props.leading,
-        'mdc-snackbar--stacked': props.stacked
-      }, uiState.classes);
+        'mdc-snackbar--stacked': props.stacked,
+        ...uiState.classes
+      };
     });
     const showDismissAction = computed(() => {
       return typeof props.dismissAction === 'string' ? props.dismissAction != 'false' : props.dismissAction;
     });
 
-    const handleKeydownEvent = evt => foundation.handleKeyDown(evt);
+    const handleKeydownEvent = event_ => foundation.handleKeyDown(event_);
 
-    const announce = (ariaEl, labelEl = ariaEl) => {
-      const priority = ariaEl.getAttribute('aria-live');
+    const announce = (ariaElement, labelElement = ariaElement) => {
+      const priority = ariaElement.getAttribute('aria-live');
       const text = props.message;
 
       if (!text) {
@@ -6889,7 +6506,7 @@ var script$b = {
       } // Temporarily disable `aria-live` to prevent JAWS+Firefox from announcing the message twice.
 
 
-      ariaEl.setAttribute('aria-live', 'off'); // Temporarily clear `textContent` to force a DOM mutation event that will be detected by screen readers.
+      ariaElement.setAttribute('aria-live', 'off'); // Temporarily clear `textContent` to force a DOM mutation event that will be detected by screen readers.
       // `aria-live` elements are only announced when the element's `textContent` *changes*, so snackbars
       // sent to the browser in the initial HTML response won't be read unless we clear the element's
       // `textContent` first.
@@ -6923,21 +6540,21 @@ var script$b = {
       // (except in IE 11; see https://tink.uk/accessibility-support-for-css-generated-content/);
       // however, `aria-live` is turned off, so this DOM update will be ignored by screen readers.
 
-      labelEl.setAttribute(strings$4.ARIA_LIVE_LABEL_TEXT_ATTR, props.message);
+      labelElement.setAttribute(strings$4.ARIA_LIVE_LABEL_TEXT_ATTR, props.message);
       setTimeout(() => {
         // Allow screen readers to announce changes to the DOM again.
-        ariaEl.setAttribute('aria-live', priority); // Remove the message from the ::before pseudo-element.
+        ariaElement.setAttribute('aria-live', priority); // Remove the message from the ::before pseudo-element.
 
-        labelEl.removeAttribute(strings$4.ARIA_LIVE_LABEL_TEXT_ATTR); // Restore the original label text, which will be announced by screen readers.
+        labelElement.removeAttribute(strings$4.ARIA_LIVE_LABEL_TEXT_ATTR); // Restore the original label text, which will be announced by screen readers.
 
         uiState.showMessage = true;
       }, numbers.ARIA_LIVE_DELAY_MS);
     };
 
     const adapter = {
-      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+      addClass: className => uiState.classes = { ...uiState.classes,
         [className]: true
-      }),
+      },
       announce: () => announce(uiState.labelEl),
       notifyClosed: reason => {
         emit(strings$4.CLOSED_EVENT.toLowerCase(), reason ? {
@@ -6960,18 +6577,19 @@ var script$b = {
       notifyOpening: () => emit(strings$4.OPENING_EVENT, {}),
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$classes = uiState.classes,
-              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.classes;
         uiState.classes = rest;
       }
     };
 
-    const surfaceClickHandler = evt => {
-      if (isActionButton_(evt.target)) {
-        foundation.handleActionButtonClick(evt);
-      } else if (isActionIcon_(evt.target)) {
-        foundation.handleActionIconClick(evt);
+    const surfaceClickHandler = event_ => {
+      if (isActionButton_(event_.target)) {
+        foundation.handleActionButtonClick(event_);
+      } else if (isActionIcon_(event_.target)) {
+        foundation.handleActionIconClick(event_);
       }
     };
 
@@ -7003,11 +6621,11 @@ var script$b = {
       window.removeEventListener('keydown', handleKeydownEvent);
       foundation.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       rootClasses,
       showDismissAction,
       surfaceClickHandler
-    });
+    };
   }
 
 }; // ===
@@ -7077,7 +6695,7 @@ function render$b(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$b.render = render$b;
-script$b.__file = "packages/snackbar/snackbar.vue";
+script$b.__file = "src/snackbar/snackbar.vue";
 
 var snackbar = BasePlugin({
   mcwSnackbar: script$b,
@@ -7101,8 +6719,6 @@ var script$a = {
     slots,
     emit
   }) {
-    var _props$id;
-
     const uiState = reactive({
       classes: {
         'mdc-switch': 1
@@ -7117,47 +6733,44 @@ var script$a = {
       styles
     } = useRipplePlugin(toRef(uiState, 'root'));
     let foundation;
-    const switchId = (_props$id = props.id) !== null && _props$id !== void 0 ? _props$id : "__mcw-switch-".concat(switchId_++);
+    const switchId = props.id ?? `__mcw-switch-${switchId_++}`;
     const classes = computed(() => {
-      return _objectSpread2(_objectSpread2({}, rippleClasses.value), uiState.classes);
+      return { ...rippleClasses.value,
+        ...uiState.classes
+      };
     });
     const hasLabel = computed(() => {
       return props.label || slots.default;
     });
 
     const onChanged = event => {
-      var _foundation;
-
-      (_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.handleChange(event);
+      foundation?.handleChange(event);
       emit('update:modelValue', event.target.checked);
     };
 
     const adapter = {
-      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+      addClass: className => uiState.classes = { ...uiState.classes,
         [className]: true
-      }),
+      },
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$classes = uiState.classes,
-              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.classes;
         uiState.classes = rest;
       },
       setNativeControlChecked: checked => uiState.nativeControlChecked = checked,
       setNativeControlDisabled: disabled => uiState.nativeControlDisabled = disabled,
-      setNativeControlAttr: (attr, value) => {
-        uiState.nativeAttrs[attr] = value;
+      setNativeControlAttr: (attribute, value) => {
+        uiState.nativeAttrs[attribute] = value;
       }
     };
     watch(() => props.modelValue, (nv, ov) => {
-      var _foundation2;
-
-      nv != ov && ((_foundation2 = foundation) === null || _foundation2 === void 0 ? void 0 : _foundation2.setChecked(nv));
+      nv != ov && foundation?.setChecked(nv);
     });
     watch(() => props.disabled, (nv, ov) => {
-      var _foundation3;
-
-      nv != ov && ((_foundation3 = foundation) === null || _foundation3 === void 0 ? void 0 : _foundation3.setDisabled(nv));
+      nv != ov && foundation?.setDisabled(nv);
     });
     onMounted(() => {
       foundation = new MDCSwitchFoundation(adapter);
@@ -7168,13 +6781,13 @@ var script$a = {
     onBeforeUnmount(() => {
       foundation.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       classes,
       hasLabel,
       onChanged,
       styles,
       switchId
-    });
+    };
   }
 
 };
@@ -7186,9 +6799,9 @@ const _hoisted_3$1 = /*#__PURE__*/createVNode("div", { class: "mdc-switch__thumb
 function render$a(_ctx, _cache, $props, $setup, $data, $options) {
   return (openBlock(), createBlock("div", {
     class: [{
-  'mdc-form-field': _ctx.hasLabel,
-  'mdc-form-field--align-end': _ctx.hasLabel && _ctx.alignEnd,
-}, "mdc-switch-wrapper"]
+      'mdc-form-field': _ctx.hasLabel,
+      'mdc-form-field--align-end': _ctx.hasLabel && _ctx.alignEnd,
+    }, "mdc-switch-wrapper"]
   }, [
     createVNode("div", {
       ref: "root",
@@ -7227,7 +6840,7 @@ function render$a(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$a.render = render$a;
-script$a.__file = "packages/switch/switch.vue";
+script$a.__file = "src/switch/switch.vue";
 
 var switchControl = BasePlugin({
   mcwSwitch: script$a
@@ -7261,19 +6874,19 @@ var script$9 = {
     const listeners = computed(() => {
       return {
         change: attrs.onChange,
-        'mdctab:interacted': evt => {
-          foundation.handleTabInteraction(evt);
+        'mdctab:interacted': event_ => {
+          foundation.handleTabInteraction(event_);
         },
-        'mdc-tab:interacted': evt => {
-          foundation.handleTabInteraction(evt);
+        'mdc-tab:interacted': event_ => {
+          foundation.handleTabInteraction(event_);
         },
-        keydown: evt => foundation.handleKeyDown(evt)
+        keydown: event_ => foundation.handleKeyDown(event_)
       };
     });
     let foundation;
 
     const getTabElements_ = () => {
-      return [].slice.call(root.value.querySelectorAll(strings$3.TAB_SELECTOR));
+      return Array.prototype.slice.call(root.value.querySelectorAll(strings$3.TAB_SELECTOR));
     };
 
     const activateTab = index => foundation.activateTab(index);
@@ -7291,22 +6904,14 @@ var script$9 = {
       activateTabAtIndex: (index, clientRect) => {
         tabList.value[index].activate(clientRect);
       },
-      deactivateTabAtIndex: index => {
-        var _tabList$value$index;
-
-        return (_tabList$value$index = tabList.value[index]) === null || _tabList$value$index === void 0 ? void 0 : _tabList$value$index.deactivate();
-      },
+      deactivateTabAtIndex: index => tabList.value[index]?.deactivate(),
       focusTabAtIndex: index => tabList.value[index].focus(),
-      getTabIndicatorClientRectAtIndex: index => {
-        var _tabList$value$index2;
-
-        return (_tabList$value$index2 = tabList.value[index]) === null || _tabList$value$index2 === void 0 ? void 0 : _tabList$value$index2.computeIndicatorClientRect();
-      },
+      getTabIndicatorClientRectAtIndex: index => tabList.value[index]?.computeIndicatorClientRect(),
       getTabDimensionsAtIndex: index => tabList.value[index].computeDimensions(),
       getPreviousActiveTabIndex: () => {
-        for (let i = 0; i < tabList.value.length; i++) {
-          if (tabList.value[i].isActive()) {
-            return i;
+        for (let index = 0; index < tabList.value.length; index++) {
+          if (tabList.value[index].isActive()) {
+            return index;
           }
         }
 
@@ -7318,9 +6923,9 @@ var script$9 = {
         return tabElements.indexOf(activeElement);
       },
       getIndexOfTabById: id => {
-        for (let i = 0; i < tabList.value.length; i++) {
-          if (tabList.value[i].id === id) {
-            return i;
+        for (let index = 0; index < tabList.value.length; index++) {
+          if (tabList.value[index].id === id) {
+            return index;
           }
         }
 
@@ -7328,7 +6933,7 @@ var script$9 = {
       },
       getTabListLength: () => tabList.value.length,
       notifyTabActivated: index => {
-        emitCustomEvent$1(root.value, strings$3.TAB_ACTIVATED_EVENT, {
+        emitCustomEvent(root.value, strings$3.TAB_ACTIVATED_EVENT, {
           index
         }, true);
         emit('update:modelValue', Number(index));
@@ -7341,9 +6946,9 @@ var script$9 = {
       props.modelValue !== void 0;
       foundation.activateTab(Number(props.modelValue) || 0);
 
-      for (let i = 0; i < tabList.value.length; i++) {
-        if (tabList.value[i].active) {
-          foundation.scrollIntoView(i);
+      for (let index = 0; index < tabList.value.length; index++) {
+        if (tabList.value[index].active) {
+          foundation.scrollIntoView(index);
           break;
         }
       } // watch for changes in the modelValue
@@ -7384,7 +6989,7 @@ function render$9(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$9.render = render$9;
-script$9.__file = "packages/tabs/tab-bar.vue";
+script$9.__file = "src/tabs/tab-bar.vue";
 
 const {
   cssClasses: cssClasses$1
@@ -7418,20 +7023,21 @@ var script$8 = {
     });
     let foundation;
     const adapter = {
-      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+      addClass: className => uiState.classes = { ...uiState.classes,
         [className]: true
-      }),
+      },
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$classes = uiState.classes,
-              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.classes;
         uiState.classes = rest;
       },
       computeContentClientRect: () => uiState.contentEl.getBoundingClientRect(),
-      setContentStyleProperty: (prop, value) => uiState.styles = _objectSpread2(_objectSpread2({}, uiState.styles), {}, {
-        [prop]: value
-      })
+      setContentStyleProperty: (property, value) => uiState.styles = { ...uiState.styles,
+        [property]: value
+      }
     };
 
     const deactivate = () => foundation.deactivate();
@@ -7452,7 +7058,7 @@ var script$8 = {
 
       requestAnimationFrame(() => {
         adapter.addClass(cssClasses$1.NO_TRANSITION);
-        adapter.setContentStyleProperty('transform', "translateX(".concat(xPosition, "px) scaleX(").concat(widthDelta, ")"));
+        adapter.setContentStyleProperty('transform', `translateX(${xPosition}px) scaleX(${widthDelta})`);
         requestAnimationFrame(() => {
           adapter.removeClass(cssClasses$1.NO_TRANSITION);
           adapter.addClass(cssClasses$1.ACTIVE);
@@ -7468,11 +7074,11 @@ var script$8 = {
     onBeforeUnmount(() => {
       foundation.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       activate,
       deactivate,
       computeContentClientRect
-    });
+    };
   }
 
 };
@@ -7490,7 +7096,7 @@ function render$8(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$8.render = render$8;
-script$8.__file = "packages/tabs/tab-indicator.vue";
+script$8.__file = "src/tabs/tab-indicator.vue";
 
 var script$7 = {
   name: 'mcw-tab-scroller',
@@ -7518,39 +7124,40 @@ var script$7 = {
 
     const scrollTo = scrollX => foundation.scrollTo(scrollX);
 
-    const onTransitionEnd = evt => foundation.handleTransitionEnd(evt);
+    const onTransitionEnd = event_ => foundation.handleTransitionEnd(event_);
 
     const areaListeners = {
-      mousedown: evt => foundation.handleInteraction(evt),
-      wheel: evt => foundation.handleInteraction(evt),
-      pointerdown: evt => foundation.handleInteraction(evt),
-      touchstart: evt => foundation.handleInteraction(evt),
-      keydown: evt => foundation.handleInteraction(evt)
+      mousedown: event_ => foundation.handleInteraction(event_),
+      wheel: event_ => foundation.handleInteraction(event_),
+      pointerdown: event_ => foundation.handleInteraction(event_),
+      touchstart: event_ => foundation.handleInteraction(event_),
+      keydown: event_ => foundation.handleInteraction(event_)
     };
     const adapter = {
-      eventTargetMatchesSelector: (evtTarget, selector) => {
-        return matches(evtTarget, selector);
+      eventTargetMatchesSelector: (eventTarget, selector) => {
+        return matches(eventTarget, selector);
       },
-      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+      addClass: className => uiState.classes = { ...uiState.classes,
         [className]: true
-      }),
+      },
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$classes = uiState.classes,
-              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.classes;
         uiState.classes = rest;
       },
-      addScrollAreaClass: className => uiState.areaClasses = _objectSpread2(_objectSpread2({}, uiState.areaClasses), {}, {
+      addScrollAreaClass: className => uiState.areaClasses = { ...uiState.areaClasses,
         [className]: true
-      }),
-      setScrollAreaStyleProperty: (prop, value) => uiState.areaStyles = _objectSpread2(_objectSpread2({}, uiState.areaStyles), {}, {
-        [prop]: value
-      }),
-      setScrollContentStyleProperty: (prop, value) => uiState.contentStyles = _objectSpread2(_objectSpread2({}, uiState.contentStyles), {}, {
-        [prop]: value
-      }),
-      getScrollContentStyleValue: propName => window.getComputedStyle(uiState.content).getPropertyValue(propName),
+      },
+      setScrollAreaStyleProperty: (property, value) => uiState.areaStyles = { ...uiState.areaStyles,
+        [property]: value
+      },
+      setScrollContentStyleProperty: (property, value) => uiState.contentStyles = { ...uiState.contentStyles,
+        [property]: value
+      },
+      getScrollContentStyleValue: propertyName => window.getComputedStyle(uiState.content).getPropertyValue(propertyName),
       setScrollAreaScrollLeft: scrollX => uiState.area.scrollLeft = scrollX,
       getScrollAreaScrollLeft: () => uiState.area.scrollLeft,
       getScrollContentOffsetWidth: () => uiState.content.offsetWidth,
@@ -7566,14 +7173,14 @@ var script$7 = {
     onBeforeUnmount(() => {
       foundation.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       scrollTo,
       incrementScroll,
       getScrollPosition,
       getScrollContentWidth,
       areaListeners,
       onTransitionEnd
-    });
+    };
   }
 
 };
@@ -7598,8 +7205,9 @@ function render$7(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$7.render = render$7;
-script$7.__file = "packages/tabs/tab-scroller.vue";
+script$7.__file = "src/tabs/tab-scroller.vue";
 
+/* eslint-disable quote-props */
 const {
   strings: strings$2
 } = MDCTabFoundation;
@@ -7649,7 +7257,7 @@ var script$6 = {
     uiState.classes['mdc-tab--stacked'] = stacked;
     const hasIcon = computed(() => {
       if (props.icon || slots.icon) {
-        return props.icon ? extractIconProp(props.icon) : {};
+        return props.icon ? extractIconProperty(props.icon) : {};
       }
 
       return false;
@@ -7658,7 +7266,7 @@ var script$6 = {
       return !!slots.default;
     });
     let foundation;
-    const tabId = "__mcw-tab-".concat(tabId_++);
+    const tabId = `__mcw-tab-${tabId_++}`;
     let rootEl;
 
     const activate = computeIndicatorClientRect => foundation.activate(computeIndicatorClientRect);
@@ -7669,9 +7277,9 @@ var script$6 = {
 
     const setActive = isActive => {
       if (isActive) {
-        uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+        uiState.classes = { ...uiState.classes,
           'mdc-tab--active': true
-        }), uiState.tabIndicator.activate();
+        }, uiState.tabIndicator.activate();
       }
     };
 
@@ -7686,24 +7294,25 @@ var script$6 = {
     };
 
     const adapter = {
-      setAttr: (attr, value) => uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, {
+      setAttr: (attr, value) => uiState.rootAttrs = { ...uiState.rootAttrs,
         [attr]: value
-      }),
-      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+      },
+      addClass: className => uiState.classes = { ...uiState.classes,
         [className]: true
-      }),
+      },
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$classes = uiState.classes,
-              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.classes;
         uiState.classes = rest;
       },
       hasClass: className => !!uiState.classes[className],
       activateIndicator: previousIndicatorClientRect => uiState.tabIndicator.activate(previousIndicatorClientRect),
       deactivateIndicator: () => uiState.tabIndicator.deactivate(),
       notifyInteracted: () => {
-        emitCustomEvent$1(rootEl, strings$2.INTERACTED_EVENT, {
+        emitCustomEvent(rootEl, strings$2.INTERACTED_EVENT, {
           tabId
         }, true
         /* bubble */
@@ -7734,7 +7343,7 @@ var script$6 = {
     onBeforeUnmount(() => {
       foundation.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       hasIcon,
       hasText,
       onClick,
@@ -7744,33 +7353,33 @@ var script$6 = {
       spanContent,
       rippleClasses,
       rippleStyles
-    });
+    };
   }
 
 }; // ===
 // Private functions
 // ===
 
-function extractIconProp(iconProp) {
-  if (typeof iconProp === 'string') {
+function extractIconProperty(iconProperty) {
+  if (typeof iconProperty === 'string') {
     return {
       classes: {
         'material-icons': true
       },
-      content: iconProp
+      content: iconProperty
     };
-  } else if (iconProp instanceof Array) {
+  } else if (iconProperty instanceof Array) {
     return {
-      classes: iconProp.reduce((result, value) => Object.assign(result, {
+      classes: iconProperty.reduce((result, value) => Object.assign(result, {
         [value]: true
       }), {})
     };
-  } else if (typeof iconProp === 'object') {
+  } else if (typeof iconProperty === 'object') {
     return {
-      classes: iconProp.className.split(' ').reduce((result, value) => Object.assign(result, {
+      classes: iconProperty.className.split(' ').reduce((result, value) => Object.assign(result, {
         [value]: true
       }), {}),
-      content: iconProp.textContent
+      content: iconProperty.textContent
     };
   }
 }
@@ -7839,7 +7448,7 @@ function render$6(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$6.render = render$6;
-script$6.__file = "packages/tabs/tab.vue";
+script$6.__file = "src/tabs/tab.vue";
 
 var tabs = BasePlugin({
   mcwTab: script$6,
@@ -7868,7 +7477,8 @@ var script$5 = {
     onBeforeUnmount(() => {
       uiState.foundation.destroy();
     });
-    return _objectSpread2({}, toRefs(uiState));
+    return { ...toRefs(uiState)
+    };
   }
 
 };
@@ -7880,7 +7490,7 @@ function render$5(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$5.render = render$5;
-script$5.__file = "packages/textfield/character-counter.vue";
+script$5.__file = "src/textfield/character-counter.vue";
 
 var script$4 = {
   name: 'mcw-textfield-helper-text',
@@ -7904,26 +7514,28 @@ var script$4 = {
       foundation: {}
     });
     const adapter = {
-      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+      addClass: className => uiState.classes = { ...uiState.classes,
         [className]: true
-      }),
+      },
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$classes = uiState.classes,
-              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.classes;
         uiState.classes = rest;
       },
       hasClass: className => Boolean(uiState.classes[className]),
-      getAttr: attr => uiState.rootAttrs[attr],
-      setAttr: (attr, value) => uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, {
-        [attr]: value
-      }),
-      removeAttr: attr => {
+      getAttr: attribute => uiState.rootAttrs[attribute],
+      setAttr: (attribute, value) => uiState.rootAttrs = { ...uiState.rootAttrs,
+        [attribute]: value
+      },
+      removeAttr: attribute => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$rootAttrs = uiState.rootAttrs,
-              rest = _objectWithoutProperties(_uiState$rootAttrs, [attr].map(_toPropertyKey));
-
+        const {
+          [attribute]: removed,
+          ...rest
+        } = uiState.rootAttrs;
         uiState.rootAttrs = rest;
       },
       setContent: content => uiState.helpertext = content
@@ -7937,7 +7549,8 @@ var script$4 = {
     onBeforeUnmount(() => {
       uiState.foundation.destroy();
     });
-    return _objectSpread2({}, toRefs(uiState));
+    return { ...toRefs(uiState)
+    };
   }
 
 };
@@ -7947,7 +7560,7 @@ function render$4(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$4.render = render$4;
-script$4.__file = "packages/textfield/textfield-helper-text.vue";
+script$4.__file = "src/textfield/textfield-helper-text.vue";
 
 const {
   strings: strings$1
@@ -7966,7 +7579,7 @@ var script$3 = {
     const uiState = reactive({
       classes: {
         'mdc-text-field__icon': 1,
-        ["mdc-text-field__icon--".concat(props.trailing || props.trailingIcon ? 'trailing' : 'leading')]: 1
+        [`mdc-text-field__icon--${props.trailing || props.trailingIcon ? 'trailing' : 'leading'}`]: 1
       },
       rootAttrs: {
         tabindex: props.disabled ? '-1' : '0',
@@ -7978,14 +7591,15 @@ var script$3 = {
     const addIconFoundation = inject('addIconFoundation');
     const adapter = {
       getAttr: attr => uiState.rootAttrs[attr],
-      setAttr: (attr, value) => uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, {
+      setAttr: (attr, value) => uiState.rootAttrs = { ...uiState.rootAttrs,
         [attr]: value
-      }),
+      },
       removeAttr: attr => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$rootAttrs = uiState.rootAttrs,
-              rest = _objectWithoutProperties(_uiState$rootAttrs, [attr].map(_toPropertyKey));
-
+        const {
+          [attr]: removed,
+          ...rest
+        } = uiState.rootAttrs;
         uiState.rootAttrs = rest;
       },
       setContent: () =>
@@ -7997,7 +7611,7 @@ var script$3 = {
       registerInteractionHandler: (evtType, handler) => uiState.root.addEventListener(evtType, handler),
       deregisterInteractionHandler: (evtType, handler) => uiState.root.removeEventListener(evtType, handler),
       notifyIconAction: () => {
-        emitCustomEvent$1(uiState.root, strings$1.ICON_EVENT, {}, true
+        emitCustomEvent(uiState.root, strings$1.ICON_EVENT, {}, true
         /* shouldBubble  */
         );
         emit('click');
@@ -8014,7 +7628,8 @@ var script$3 = {
     onBeforeUnmount(() => {
       uiState.foundation.destroy();
     });
-    return _objectSpread2({}, toRefs(uiState));
+    return { ...toRefs(uiState)
+    };
   }
 
 };
@@ -8029,9 +7644,8 @@ function render$3(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$3.render = render$3;
-script$3.__file = "packages/textfield/textfield-icon.vue";
+script$3.__file = "src/textfield/textfield-icon.vue";
 
-const _excluded = ["class"];
 let uid_ = 0;
 var script$2 = {
   name: 'mcw-textfield',
@@ -8042,7 +7656,7 @@ var script$2 = {
       type: String,
       default: 'text',
       validator: function (value) {
-        return ['text', 'email', 'search', 'password', 'tel', 'url', 'number'].indexOf(value) !== -1;
+        return ['text', 'email', 'search', 'password', 'tel', 'url', 'number'].includes(value);
       }
     },
     label: String,
@@ -8122,8 +7736,8 @@ var script$2 = {
       lineRippleStyles: {},
       outlineClasses: {},
       notchStyles: {},
-      helpTextId: "mcw-help-".concat(uid_++),
-      labelId: "mcw-label-".concat(uid_),
+      helpTextId: `mcw-help-${uid_++}`,
+      labelId: `mcw-label-${uid_}`,
       root: null,
       wrapper: null,
       helpertext: null,
@@ -8176,7 +7790,9 @@ var script$2 = {
     const hasHelpline = computed(() => {
       return props.helptext || helperCharacterCounter.value;
     });
-    const rootClasses = computed(() => _objectSpread2(_objectSpread2({}, rippleClasses), uiState.classes));
+    const rootClasses = computed(() => ({ ...rippleClasses,
+      ...uiState.classes
+    }));
     const inputListeners = {
       // ...listeners,
       input: ({
@@ -8186,37 +7802,38 @@ var script$2 = {
       }) => emit('update:modelValue', value)
     };
 
-    const focus = () => {
-      var _uiState$input;
-
-      return (_uiState$input = uiState.input) === null || _uiState$input === void 0 ? void 0 : _uiState$input.focus();
-    };
+    const focus = () => uiState.input?.focus();
 
     const isValid = () => foundation.isValid();
 
-    const inputAttrs = computed(() => {
+    const inputAttributes = computed(() => {
       // eslint-disable-next-line no-unused-vars
-      const rest = _objectWithoutProperties(attrs, _excluded);
-
-      return _objectSpread2(_objectSpread2({}, rest), uiState.inputAttrs);
+      const {
+        class: _,
+        ...rest
+      } = attrs;
+      return { ...rest,
+        ...uiState.inputAttrs
+      };
     });
     const adapter = {
-      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+      addClass: className => uiState.classes = { ...uiState.classes,
         [className]: true
-      }),
+      },
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$classes = uiState.classes,
-              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.classes;
         uiState.classes = rest;
       },
       hasClass: className => Boolean(uiState.classes[className]),
-      registerTextFieldInteractionHandler: (evtType, handler) => {
-        uiState.root.addEventListener(evtType, handler);
+      registerTextFieldInteractionHandler: (eventType, handler) => {
+        uiState.root.addEventListener(eventType, handler);
       },
-      deregisterTextFieldInteractionHandler: (evtType, handler) => {
-        uiState.root.removeEventListener(evtType, handler);
+      deregisterTextFieldInteractionHandler: (eventType, handler) => {
+        uiState.root.removeEventListener(eventType, handler);
       },
       isFocused: () => {
         return document.activeElement === uiState.input;
@@ -8236,37 +7853,34 @@ var script$2 = {
         observer.disconnect();
       },
       // input adapter methods
-      registerInputInteractionHandler: (evtType, handler) => {
-        uiState.input.addEventListener(evtType, handler, applyPassive());
+      registerInputInteractionHandler: (eventType, handler) => {
+        uiState.input.addEventListener(eventType, handler, applyPassive());
       },
-      deregisterInputInteractionHandler: (evtType, handler) => {
-        uiState.input.removeEventListener(evtType, handler, applyPassive());
+      deregisterInputInteractionHandler: (eventType, handler) => {
+        uiState.input.removeEventListener(eventType, handler, applyPassive());
       },
       getNativeInput: () => {
         return uiState.input;
       },
-      setInputAttr: (attr, value) => {
-        uiState.inputAttrs = _objectSpread2(_objectSpread2({}, uiState.inputAttrs), {}, {
-          [attr]: value
-        });
+      setInputAttr: (attribute, value) => {
+        uiState.inputAttrs = { ...uiState.inputAttrs,
+          [attribute]: value
+        };
       },
-      removeInputAttr: attr => {
+      removeInputAttr: attribute => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$inputAttrs = uiState.inputAttrs,
-              rest = _objectWithoutProperties(_uiState$inputAttrs, [attr].map(_toPropertyKey));
-
+        const {
+          [attribute]: removed,
+          ...rest
+        } = uiState.inputAttrs;
         uiState.inputAttrs = rest;
       },
       // label adapter methods
       shakeLabel: shouldShake => {
-        var _uiState$labelEl;
-
-        (_uiState$labelEl = uiState.labelEl) === null || _uiState$labelEl === void 0 ? void 0 : _uiState$labelEl.shake(shouldShake);
+        uiState.labelEl?.shake(shouldShake);
       },
       floatLabel: shouldFloat => {
-        var _uiState$labelEl2;
-
-        (_uiState$labelEl2 = uiState.labelEl) === null || _uiState$labelEl2 === void 0 ? void 0 : _uiState$labelEl2.float(shouldFloat);
+        uiState.labelEl?.float(shouldFloat);
       },
       hasLabel: () => {
         return !!uiState.labelEl || !!uiState.notchedEl;
@@ -8275,56 +7889,35 @@ var script$2 = {
         return uiState.labelEl.getWidth();
       },
       // line ripple adapter methods
-      deactivateLineRipple: () => {
-        var _uiState$lineRippleEl;
-
-        return (_uiState$lineRippleEl = uiState.lineRippleEl) === null || _uiState$lineRippleEl === void 0 ? void 0 : _uiState$lineRippleEl.deactivate();
-      },
-      activateLineRipple: () => {
-        var _uiState$lineRippleEl2;
-
-        return (_uiState$lineRippleEl2 = uiState.lineRippleEl) === null || _uiState$lineRippleEl2 === void 0 ? void 0 : _uiState$lineRippleEl2.activate();
-      },
-      setLineRippleTransformOrigin: normalizedX => {
-        var _uiState$lineRippleEl3;
-
-        return (_uiState$lineRippleEl3 = uiState.lineRippleEl) === null || _uiState$lineRippleEl3 === void 0 ? void 0 : _uiState$lineRippleEl3.setRippleCenter(normalizedX);
-      },
+      deactivateLineRipple: () => uiState.lineRippleEl?.deactivate(),
+      activateLineRipple: () => uiState.lineRippleEl?.activate(),
+      setLineRippleTransformOrigin: normalizedX => uiState.lineRippleEl?.setRippleCenter(normalizedX),
       // outline adapter methods
       hasOutline: () => !!props.outline,
       notchOutline: (notchWidth, isRtl) => uiState.labelEl.notch(notchWidth, isRtl),
       closeOutline: () => uiState.labelEl.closeNotch()
     };
-    watch(() => props.disabled, nv => {
-      var _foundation;
-
-      return (_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.setDisabled(nv);
-    });
+    watch(() => props.disabled, nv => foundation?.setDisabled(nv));
     watch(() => props.required, nv => {
       uiState.input && (uiState.input.required = nv);
     });
     watch(() => props.valid, nv => {
       if (typeof nv !== 'undefined') {
-        var _foundation2;
-
-        (_foundation2 = foundation) === null || _foundation2 === void 0 ? void 0 : _foundation2.setValid(nv);
+        foundation?.setValid(nv);
       }
     });
     watch(() => props.modelValue, nv => {
-      if (foundation) {
-        if (nv !== foundation.getValue()) {
-          foundation.setValue(nv);
-        }
+      if (foundation && nv !== foundation.getValue()) {
+        foundation.setValue(nv);
       }
     });
     onMounted(() => {
-      var _uiState$characterCou, _uiState$helpertext, _icons$leading, _icons$trailing;
-
-      foundation = new MDCTextFieldFoundation(_objectSpread2({}, adapter), {
-        characterCounter: (_uiState$characterCou = uiState.characterCounterEl) === null || _uiState$characterCou === void 0 ? void 0 : _uiState$characterCou.foundation,
-        helperText: (_uiState$helpertext = uiState.helpertext) === null || _uiState$helpertext === void 0 ? void 0 : _uiState$helpertext.foundation,
-        leadingIcon: (_icons$leading = icons.leading) === null || _icons$leading === void 0 ? void 0 : _icons$leading.foundation,
-        trailingIcon: (_icons$trailing = icons.trailing) === null || _icons$trailing === void 0 ? void 0 : _icons$trailing.foundation
+      foundation = new MDCTextFieldFoundation({ ...adapter
+      }, {
+        characterCounter: uiState.characterCounterEl?.foundation,
+        helperText: uiState.helpertext?.foundation,
+        leadingIcon: icons.leading?.foundation,
+        trailingIcon: icons.trailing?.foundation
       });
       foundation.init();
       foundation.setValue(props.modelValue);
@@ -8338,7 +7931,7 @@ var script$2 = {
     onBeforeUnmount(() => {
       foundation.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       inputAriaControls,
       hasLabel,
       hasOutlineLabel,
@@ -8352,8 +7945,8 @@ var script$2 = {
       rootClasses,
       rippleStyles,
       isValid,
-      inputAttrs
-    });
+      inputAttrs: inputAttributes
+    };
   },
 
   components: {
@@ -8530,7 +8123,7 @@ function render$2(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$2.render = render$2;
-script$2.__file = "packages/textfield/textfield.vue";
+script$2.__file = "src/textfield/textfield.vue";
 
 var textfield = BasePlugin({
   mcwTextfield: script$2,
@@ -8574,31 +8167,32 @@ var script$1 = {
         return uiState.root.getAttribute(name);
       },
       setAttribute: (attributeName, value) => {
-        uiState.rootAttrs = _objectSpread2(_objectSpread2({}, uiState.rootAttrs), {}, {
+        uiState.rootAttrs = { ...uiState.rootAttrs,
           [attributeName]: value
-        });
+        };
       },
-      addClass: className => uiState.classes = _objectSpread2(_objectSpread2({}, uiState.classes), {}, {
+      addClass: className => uiState.classes = { ...uiState.classes,
         [className]: true
-      }),
+      },
       hasClass: className => uiState.root.classList.contains(className),
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$classes = uiState.classes,
-              rest = _objectWithoutProperties(_uiState$classes, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.classes;
         uiState.classes = rest;
       },
       getComputedStyleProperty: propertyName => {
         return window.getComputedStyle(uiState.root).getPropertyValue(propertyName);
       },
-      setStyleProperty: (property, value) => uiState.styles = _objectSpread2(_objectSpread2({}, uiState.styles), {}, {
+      setStyleProperty: (property, value) => uiState.styles = { ...uiState.styles,
         [property]: value
-      }),
+      },
       setSurfaceStyleProperty: (propertyName, value) => {
-        uiState.surfaceStyle = _objectSpread2(_objectSpread2({}, uiState.surfaceStyle), {}, {
+        uiState.surfaceStyle = { ...uiState.surfaceStyle,
           [propertyName]: value
-        });
+        };
       },
       getViewportWidth: () => window.innerWidth,
       getViewportHeight: () => window.innerHeight,
@@ -8612,23 +8206,17 @@ var script$1 = {
         return anchorElem ? anchorElem.getBoundingClientRect() : null;
       },
       getParentBoundingRect: () => {
-        var _uiState$root$parentE, _uiState$root$parentE2;
-
-        return (_uiState$root$parentE = (_uiState$root$parentE2 = uiState.root.parentElement) === null || _uiState$root$parentE2 === void 0 ? void 0 : _uiState$root$parentE2.getBoundingClientRect()) !== null && _uiState$root$parentE !== void 0 ? _uiState$root$parentE : null;
+        return uiState.root.parentElement?.getBoundingClientRect() ?? null;
       },
       getAnchorAttribute: attr => {
         return anchorElem ? anchorElem.getAttribute(attr) : null;
       },
       setAnchorAttribute: (attr, value) => {
-        var _anchorElem;
-
-        (_anchorElem = anchorElem) === null || _anchorElem === void 0 ? void 0 : _anchorElem.setAttribute(attr, value);
+        anchorElem?.setAttribute(attr, value);
       },
       isRTL: () => getComputedStyle(uiState.root).direction === 'rtl',
       anchorContainsElement: element => {
-        var _anchorElem2;
-
-        return !!((_anchorElem2 = anchorElem) !== null && _anchorElem2 !== void 0 && _anchorElem2.contains(element));
+        return !!anchorElem?.contains(element);
       },
       tooltipContainsElement: element => {
         return uiState.root.contains(element);
@@ -8714,7 +8302,7 @@ var script$1 = {
         throw new Error('MDCTooltip: Tooltip component must have an id.');
       }
 
-      anchorElem = document.querySelector("[aria-describedby=\"".concat(tooltipId, "\"]")) || document.querySelector("[data-tooltip-id=\"".concat(tooltipId, "\"]"));
+      anchorElem = document.querySelector(`[aria-describedby="${tooltipId}"]`) || document.querySelector(`[data-tooltip-id="${tooltipId}"]`);
 
       if (!anchorElem) {
         throw new Error( // eslint-disable-next-line max-len
@@ -8740,8 +8328,6 @@ var script$1 = {
       watchEffect(() => onBoundaryType(props.boundaryType));
     });
     onBeforeUnmount(() => {
-      var _foundation;
-
       if (anchorElem) {
         if (uiState.isTooltipRich && uiState.isTooltipPersistent) {
           anchorElem.removeEventListener('click', handleClick);
@@ -8754,11 +8340,11 @@ var script$1 = {
         }
       }
 
-      (_foundation = foundation) === null || _foundation === void 0 ? void 0 : _foundation.destroy();
+      foundation?.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       handleTransitionEnd
-    });
+    };
   }
 
 }; // ===
@@ -8773,9 +8359,7 @@ const XPosition_ = {
 };
 
 function toXposition(x) {
-  var _XPosition_$x;
-
-  return typeof x == 'string' ? (_XPosition_$x = XPosition_[x]) !== null && _XPosition_$x !== void 0 ? _XPosition_$x : 0 : x;
+  return typeof x == 'string' ? XPosition_[x] ?? 0 : x;
 }
 
 const YPosition_ = {
@@ -8785,9 +8369,7 @@ const YPosition_ = {
 };
 
 function toYposition(y) {
-  var _YPosition_$y;
-
-  return typeof y == 'string' ? (_YPosition_$y = YPosition_[y]) !== null && _YPosition_$y !== void 0 ? _YPosition_$y : 0 : y;
+  return typeof y == 'string' ? YPosition_[y] ?? 0 : y;
 }
 
 const AnchorBoundaryType_ = {
@@ -8796,9 +8378,7 @@ const AnchorBoundaryType_ = {
 };
 
 function toAnchorBoundaryType(type) {
-  var _AnchorBoundaryType_$;
-
-  return typeof type == 'string' ? (_AnchorBoundaryType_$ = AnchorBoundaryType_[type]) !== null && _AnchorBoundaryType_$ !== void 0 ? _AnchorBoundaryType_$ : '0' : type;
+  return typeof type == 'string' ? AnchorBoundaryType_[type] ?? '0' : type;
 }
 
 function render$1(_ctx, _cache, $props, $setup, $data, $options) {
@@ -8820,7 +8400,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script$1.render = render$1;
-script$1.__file = "packages/tooltip/tooltip.vue";
+script$1.__file = "src/tooltip/tooltip.vue";
 
 var tooltip = BasePlugin({
   mcwTooltip: script$1
@@ -8859,29 +8439,30 @@ var script = {
 
     const handleNavigationClick = event => foundation.handleNavigationClick(event);
 
-    const handleTargetScroll = evt => foundation.handleTargetScroll(evt);
+    const handleTargetScroll = event_ => foundation.handleTargetScroll(event_);
 
-    const handleWindowResize = evt => foundation.handleWindowResize(evt);
+    const handleWindowResize = event_ => foundation.handleWindowResize(event_);
 
     const adapter = {
-      addClass: className => uiState.rootClasses = _objectSpread2(_objectSpread2({}, uiState.rootClasses), {}, {
+      addClass: className => uiState.rootClasses = { ...uiState.rootClasses,
         [className]: true
-      }),
+      },
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
-        const _uiState$rootClasses = uiState.rootClasses,
-              rest = _objectWithoutProperties(_uiState$rootClasses, [className].map(_toPropertyKey));
-
+        const {
+          [className]: removed,
+          ...rest
+        } = uiState.rootClasses;
         uiState.rootClasses = rest;
       },
       hasClass: className => Boolean(uiState.rootClasses[className]),
-      setStyle: (property, value) => uiState.rootStyles = _objectSpread2(_objectSpread2({}, uiState.rootStyles), {}, {
+      setStyle: (property, value) => uiState.rootStyles = { ...uiState.rootStyles,
         [property]: value
-      }),
+      },
       getTopAppBarHeight: () => uiState.root.clientHeight,
       notifyNavigationIconClicked: () => {
         emit('nav', {});
-        emitCustomEvent$1(uiState.root, strings.NAVIGATION_EVENT, {},
+        emitCustomEvent(uiState.root, strings.NAVIGATION_EVENT, {},
         /** shouldBubble */
         true);
       },
@@ -8920,7 +8501,7 @@ var script = {
 
       navIcon = uiState.root.querySelector(strings.NAVIGATION_ICON_SELECTOR); // Get all icons in the toolbar and instantiate the ripples
 
-      const icons = [].slice.call(uiState.root.querySelectorAll(strings.ACTION_ITEM_SELECTOR));
+      const icons = Array.prototype.slice.call(uiState.root.querySelectorAll(strings.ACTION_ITEM_SELECTOR));
 
       if (navIcon) {
         navIcon.addEventListener('click', handleNavigationClick);
@@ -8928,7 +8509,7 @@ var script = {
       }
 
       iconRipples = icons.map(icon => {
-        const ripple = new RippleElement$1(icon);
+        const ripple = new RippleElement(icon);
         ripple.init();
         ripple.unbounded = true;
         return ripple;
@@ -8942,15 +8523,14 @@ var script = {
       foundation.init();
     });
     onBeforeUnmount(() => {
-      var _uiState$myScrollTarg;
-
       if (navIcon) {
         navIcon.removeEventListener('click', handleNavigationClick);
       }
 
-      iconRipples.forEach(iconRipple => iconRipple.destroy());
+      for (const iconRipple of iconRipples) iconRipple.destroy();
+
       uiState.myScrollTarget.removeEventListener('scroll', handleTargetScroll);
-      (_uiState$myScrollTarg = uiState.myScrollTarget) === null || _uiState$myScrollTarg === void 0 ? void 0 : _uiState$myScrollTarg.removeEventListener('scroll', foundation.handleTargetScroll);
+      uiState.myScrollTarget?.removeEventListener('scroll', foundation.handleTargetScroll);
       const isFixed = uiState.root.classList.contains(cssClasses.FIXED_CLASS);
       const isShort = uiState.root.classList.contains(cssClasses.SHORT_CLASS);
 
@@ -8960,9 +8540,9 @@ var script = {
 
       foundation.destroy();
     });
-    return _objectSpread2(_objectSpread2({}, toRefs(uiState)), {}, {
+    return { ...toRefs(uiState),
       setScrollTarget
-    });
+    };
   }
 
 };
@@ -8981,7 +8561,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 
 script.render = render;
-script.__file = "packages/top-app-bar/top-app-bar.vue";
+script.__file = "src/top-app-bar/top-app-bar.vue";
 
 var topAppBar = BasePlugin({
   mcwTopAppBar: script // mcwFixedAdjust,

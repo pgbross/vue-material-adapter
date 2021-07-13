@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-const path = require('path');
+import path from 'path';
 
 function tryResolve_(url, sourceFilename) {
   // Put require.resolve in a try/catch to avoid node-sass failing with cryptic libsass errors when the importer throws
@@ -56,4 +56,4 @@ function importer(url, prev) {
   return { file: url };
 }
 
-module.exports = { importer };
+export { importer };

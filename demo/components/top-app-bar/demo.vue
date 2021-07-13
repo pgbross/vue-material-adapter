@@ -8,10 +8,16 @@
       >
         <div class="mdc-top-app-bar__row">
           <section
-            class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start"
+            class="
+              mdc-top-app-bar__section mdc-top-app-bar__section--align-start
+            "
           >
             <button
-              class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button"
+              class="
+                material-icons
+                mdc-top-app-bar__navigation-icon
+                mdc-icon-button
+              "
               aria-label="Open navigation menu"
             >
               menu
@@ -24,7 +30,11 @@
             <button
               target="_blank"
               title="Help"
-              class="mdc-top-app-bar__action-item mdc-icon-button material-icons"
+              class="
+                mdc-top-app-bar__action-item
+                mdc-icon-button
+                material-icons
+              "
               aria-label="Help"
             >
               help
@@ -32,7 +42,11 @@
 
             <button
               title="About"
-              class="mdc-top-app-bar__action-item mdc-icon-button material-icons"
+              class="
+                mdc-top-app-bar__action-item
+                mdc-icon-button
+                material-icons
+              "
               aria-label="About"
             >
               info_outline

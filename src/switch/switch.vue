@@ -1,0 +1,33 @@
+<script src="./switch.js"></script>
+<template>
+  <div
+    :class="{
+      'mdc-form-field': hasLabel,
+      'mdc-form-field--align-end': hasLabel && alignEnd,
+    }"
+    class="mdc-switch-wrapper"
+  >
+    <div ref="root" :class="classes" :style="styles" class="mdc-switch">
+      <div class="mdc-switch__track"></div>
+      <div class="mdc-switch__thumb-underlay">
+        <div class="mdc-switch__thumb"></div>
+        <input
+          :name="name"
+          :id="switchId"
+          :value="value"
+          type="checkbox"
+          role="switch"
+          class="mdc-switch__native-control"
+          :checked="nativeControlChecked"
+          :disabled="nativeControlDisabled"
+          v-bind="nativeAttrs"
+          @change="onChanged"
+        />
+      </div>
+    </div>
+
+    <label v-if="hasLabel" :for="switchId" class="mdc-switch-label">
+      <slot>{{ label }}</slot>
+    </label>
+  </div>
+</template>

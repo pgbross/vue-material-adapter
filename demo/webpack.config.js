@@ -1,18 +1,26 @@
 /* eslint quote-props:0 */
-const path = require('path');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const WebpackCdnPlugin = require('webpack-cdn-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
-const { ESBuildPlugin, ESBuildMinifyPlugin } = require('esbuild-loader');
-const { VueLoaderPlugin } = require('vue-loader');
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import { ESBuildMinifyPlugin } from 'esbuild-loader';
+import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import mit from 'markdown-it';
+import mith from 'markdown-it-highlightjs';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import path from 'node:path';
+import process from 'node:process';
+import url from 'node:url';
+import sass from 'sass';
+import { VueLoaderPlugin } from 'vue-loader';
+import webpack from 'webpack';
+import WebpackCdnPlugin from 'webpack-cdn-plugin';
+
 // const TerserPlugin = require('terser-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV === `production`;
 const isDevelopment = process.env.NODE_ENV === `development`;
+
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
 const resolve = relativePath => path.resolve(__dirname, relativePath);
 
@@ -26,12 +34,20 @@ const cssLoaders = [
   },
   {
     loader: 'postcss-loader',
-    options: { postcssOptions: { config: 'postcss.config.js' } },
+    options: {
+      postcssOptions: {
+        'no-map': true,
+        plugins: {
+          'postcss-preset-env': {},
+          cssnano: {},
+        },
+      },
+    },
   },
   {
     loader: 'sass-loader',
     options: {
-      implementation: require('sass'),
+      implementation: sass,
       sassOptions: {
         includePaths: [resolve('../node_modules')],
       },
@@ -39,10 +55,10 @@ const cssLoaders = [
   },
 ];
 
-const markdown = require('markdown-it')({
+const markdown = mit({
   html: true,
   breaks: false,
-}).use(require('markdown-it-highlightjs'));
+}).use(mith);
 
 const rules = [
   {
@@ -80,20 +96,20 @@ const rules = [
     test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
     loader: 'url-loader',
     options: {
-      limit: 10000,
+      limit: 10_000,
     },
   },
   {
     test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
     loader: 'url-loader',
     options: {
-      limit: 10000,
+      limit: 10_000,
     },
   },
 ];
 
 const plugins = [
-  new ESBuildPlugin(),
+  // new ESBuildPlugin(),
   new webpack.DefinePlugin({
     __VUE_OPTIONS_API__: true,
     __VUE_PROD_DEVTOOLS__: false,
@@ -138,11 +154,9 @@ const config = {
   resolve: {
     alias: {
       vue$: 'vue/dist/vue.esm-bundler.js',
-      'vue-material-adapter': resolve(
-        '../packages/vue-material-adapter/index.js',
-      ),
+      'vue-material-adapter': resolve('../src/index.js'),
       demo: resolve('./'),
-      '~': resolve('../packages'),
+      '~': resolve('../'),
     },
   },
   externals: {},
@@ -159,16 +173,16 @@ if (isProduction) {
     usedExports: true,
     splitChunks: {
       chunks: 'all',
-      maxInitialRequests: Infinity,
+      maxInitialRequests: Number.POSITIVE_INFINITY,
       minSize: 0,
       cacheGroups: {
         vendor: {
-          test: /[\\/]node_modules[\\/]/,
+          test: /[/\\]node_modules[/\\]/,
           name(module) {
             // get the name. E.g. node_modules/packageName/not/this/part.js
             // or node_modules/packageName
             const packageName = module.context.match(
-              /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
+              /[/\\]node_modules[/\\](.*?)([/\\]|$)/,
             )[1];
 
             // npm package names are URL-safe, but some servers don't like @ symbols
@@ -254,4 +268,4 @@ if (isDevelopment) {
   process.env.PORT && (config.devServer.port = process.env.PORT);
 }
 
-module.exports = config;
+export default config;
