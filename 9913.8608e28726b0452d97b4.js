@@ -1,0 +1,31 @@
+(self.webpackChunkvue_material_adapter=self.webpackChunkvue_material_adapter||[]).push([[9913],{9913:function(W,a,t){"use strict";t.r(a),t.d(a,{default:function(){return i}});var s=t(8770);const l=(0,s.Wm)("h2",null,"Usage",-1),n=(0,s.Wm)("pre",null,[(0,s.Wm)("code",{"v-pre":"",class:"language-html"},[(0,s.Wm)("span",{class:"hljs-tag"},[(0,s.Uk)("<"),(0,s.Wm)("span",{class:"hljs-name"},"mcw-checkbox"),(0,s.Uk)(),(0,s.Wm)("span",{class:"hljs-attr"},"v-model"),(0,s.Uk)("="),(0,s.Wm)("span",{class:"hljs-string"},'"checked"'),(0,s.Uk)(),(0,s.Wm)("span",{class:"hljs-attr"},":label"),(0,s.Uk)("="),(0,s.Wm)("span",{class:"hljs-string"},`"checked ? 'Checked' : 'Unchecked'"`),(0,s.Uk)(" />")]),(0,s.Uk)(`
+`),(0,s.Wm)("span",{class:"hljs-tag"},[(0,s.Uk)("<"),(0,s.Wm)("span",{class:"hljs-name"},"mcw-checkbox"),(0,s.Uk)(`
+  `),(0,s.Wm)("span",{class:"hljs-attr"},"v-model"),(0,s.Uk)("="),(0,s.Wm)("span",{class:"hljs-string"},'"checked"'),(0,s.Uk)(`
+  `),(0,s.Wm)("span",{class:"hljs-attr"},":disabled"),(0,s.Uk)("="),(0,s.Wm)("span",{class:"hljs-string"},'"disabled"'),(0,s.Uk)(`
+  `),(0,s.Wm)("span",{class:"hljs-attr"},"v-model:indeterminate"),(0,s.Uk)("="),(0,s.Wm)("span",{class:"hljs-string"},'"indeterminate"'),(0,s.Uk)(`
+  `),(0,s.Wm)("span",{class:"hljs-attr"},":label"),(0,s.Uk)("="),(0,s.Wm)("span",{class:"hljs-string"},`"checked ? 'Checked' : 'Unchecked'"`),(0,s.Uk)(`
+/>`)]),(0,s.Uk)(`
+`)])],-1),c=(0,s.Wm)("pre",null,[(0,s.Wm)("code",{"v-pre":"",class:"language-javascript"},[(0,s.Wm)("span",{class:"hljs-keyword"},"var"),(0,s.Uk)(" vm = "),(0,s.Wm)("span",{class:"hljs-keyword"},"new"),(0,s.Uk)(` Vue({
+  `),(0,s.Wm)("span",{class:"hljs-attr"},"data"),(0,s.Uk)(`: {
+    `),(0,s.Wm)("span",{class:"hljs-attr"},"checked"),(0,s.Uk)(": "),(0,s.Wm)("span",{class:"hljs-literal"},"true"),(0,s.Uk)(`,
+  },
+});
+`)])],-1),d=(0,s.Wm)("h3",null,"Indeterminate checkbox",-1),h=(0,s.Wm)("pre",null,[(0,s.Wm)("code",{"v-pre":"",class:"language-html"},[(0,s.Wm)("span",{class:"hljs-tag"},[(0,s.Uk)("<"),(0,s.Wm)("span",{class:"hljs-name"},"mcw-checkbox"),(0,s.Uk)(`
+  `),(0,s.Wm)("span",{class:"hljs-attr"},":label"),(0,s.Uk)("="),(0,s.Wm)("span",{class:"hljs-string"},'"label"'),(0,s.Uk)(`
+  `),(0,s.Wm)("span",{class:"hljs-attr"},"v-model"),(0,s.Uk)("="),(0,s.Wm)("span",{class:"hljs-string"},'"checked"'),(0,s.Uk)(`
+  `),(0,s.Wm)("span",{class:"hljs-attr"},"v-model:indeterminate"),(0,s.Uk)("="),(0,s.Wm)("span",{class:"hljs-string"},'"indeterminate"'),(0,s.Uk)(`
+/>`)]),(0,s.Uk)(`
+`)])],-1),m=(0,s.Wm)("pre",null,[(0,s.Wm)("code",{"v-pre":"",class:"language-javascript"},[(0,s.Wm)("span",{class:"hljs-keyword"},"var"),(0,s.Uk)(" vm = "),(0,s.Wm)("span",{class:"hljs-keyword"},"new"),(0,s.Uk)(` Vue({
+  `),(0,s.Wm)("span",{class:"hljs-attr"},"data"),(0,s.Uk)(`: {
+    `),(0,s.Wm)("span",{class:"hljs-attr"},"label"),(0,s.Uk)(": "),(0,s.Wm)("span",{class:"hljs-string"},"'This is a checkbox'"),(0,s.Uk)(`,
+    `),(0,s.Wm)("span",{class:"hljs-attr"},"checked"),(0,s.Uk)(": "),(0,s.Wm)("span",{class:"hljs-literal"},"false"),(0,s.Uk)(`,
+    `),(0,s.Wm)("span",{class:"hljs-attr"},"indeterminate"),(0,s.Uk)(": "),(0,s.Wm)("span",{class:"hljs-literal"},"true"),(0,s.Uk)(`,
+  },
+});
+`)])],-1),r=(0,s.Wm)("h3",null,"Custom label markup",-1),o=(0,s.Wm)("pre",null,[(0,s.Wm)("code",{"v-pre":"",class:"language-html"},[(0,s.Wm)("span",{class:"hljs-tag"},[(0,s.Uk)("<"),(0,s.Wm)("span",{class:"hljs-name"},"mcw-checkbox"),(0,s.Uk)(),(0,s.Wm)("span",{class:"hljs-attr"},"v-model"),(0,s.Uk)("="),(0,s.Wm)("span",{class:"hljs-string"},'"agreed"'),(0,s.Uk)(">")]),(0,s.Uk)(`
+  `),(0,s.Wm)("span",{class:"hljs-tag"},[(0,s.Uk)("<"),(0,s.Wm)("span",{class:"hljs-name"},"span"),(0,s.Uk)(">")]),(0,s.Uk)("I agree with "),(0,s.Wm)("span",{class:"hljs-tag"},[(0,s.Uk)("</"),(0,s.Wm)("span",{class:"hljs-name"},"span"),(0,s.Uk)(">")]),(0,s.Uk)(`
+  `),(0,s.Wm)("span",{class:"hljs-tag"},[(0,s.Uk)("<"),(0,s.Wm)("span",{class:"hljs-name"},"a"),(0,s.Uk)(),(0,s.Wm)("span",{class:"hljs-attr"},"@click.stop"),(0,s.Uk)(),(0,s.Wm)("span",{class:"hljs-attr"},"href"),(0,s.Uk)("="),(0,s.Wm)("span",{class:"hljs-string"},'"..."'),(0,s.Uk)(">")]),(0,s.Uk)("Terms of Serivce"),(0,s.Wm)("span",{class:"hljs-tag"},[(0,s.Uk)("</"),(0,s.Wm)("span",{class:"hljs-name"},"a"),(0,s.Uk)(">")]),(0,s.Uk)(`
+`),(0,s.Wm)("span",{class:"hljs-tag"},[(0,s.Uk)("</"),(0,s.Wm)("span",{class:"hljs-name"},"mcw-checkbox"),(0,s.Uk)(">")]),(0,s.Uk)(`
+`)])],-1),k=(0,s.uE)('<h3>props</h3><table><thead><tr><th>props</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td><code>indeterminate</code></td><td>Boolean</td><td></td><td>checkbox&#39;s indeterminate state (v-model:indeterminate)</td></tr><tr><td><code>disabled</code></td><td>Boolean</td><td></td><td>whether the checkbox is disabled</td></tr><tr><td><code>label</code></td><td>String</td><td></td><td>checkbox label (or use default slot)</td></tr><tr><td><code>align-end</code></td><td>Boolean</td><td></td><td>whether to align the checkbox after the label</td></tr><tr><td><code>value</code></td><td>String</td><td><code>&#39;on&#39;</code></td><td>checkbox value</td></tr><tr><td><code>name</code></td><td>String</td><td></td><td>input name</td></tr></tbody></table><h3>events</h3><table><thead><tr><th>event</th><th>args</th><th>Description</th></tr></thead><tbody><tr><td><code>mdc-checkbox:change</code></td><td>event</td><td>native change event</td></tr><tr><td><code>@change</code></td><td>boolean</td><td>checked state</td></tr><tr><td><code>@focus</code></td><td>-</td><td>emitted on focus gained</td></tr><tr><td><code>@blur</code></td><td>-</td><td>emitted on focus lost</td></tr></tbody></table><h3>Reference</h3><ul><li><a href="https://github.com/material-components/material-components-web/tree/master/packages/mdc-checkbox">https://github.com/material-components/material-components-web/tree/master/packages/mdc-checkbox</a></li></ul>',6);function p(U,j){return(0,s.wg)(),(0,s.j4)("article",null,[l,n,c,d,h,m,r,o,k])}const e={};e.render=p;var i=e}}]);
+
+//# sourceMappingURL=9913.8608e28726b0452d97b4.js.map
