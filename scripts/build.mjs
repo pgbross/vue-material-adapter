@@ -1,5 +1,3 @@
-import pb from '@rollup/plugin-babel';
-import codeFrame from 'babel-code-frame';
 import chalk from 'chalk';
 import cpy from 'cpy';
 import mkdirp from 'mkdirp';
@@ -9,11 +7,9 @@ import process from 'node:process';
 import { promisify } from 'node:util';
 import rimraf from 'rimraf';
 import { rollup } from 'rollup';
-import { terser } from 'rollup-plugin-terser';
+import esbuild from 'rollup-plugin-esbuild';
 import VuePlugin from 'rollup-plugin-vue';
 import package_ from '../package.json';
-
-const { babel } = pb;
 
 const asyncRimraf = promisify(rimraf);
 
@@ -124,10 +120,10 @@ function handleRollupError(error) {
     const rawLines = fs.readFileSync(file, 'utf-8');
     // column + 1 is required due to rollup counting column start position from 0
     // whereas babel-code-frame counts from 1
-    const frame = codeFrame(rawLines, line, column + 1, {
-      highlightCode: true,
-    });
-    console.error(frame);
+    // const frame = codeFrame(rawLines, line, column + 1, {
+    //   highlightCode: true,
+    // });
+    // console.error(frame);
   } else {
     // This looks like an error from a plugin (e.g. Babel).
     // In this case we'll resort to displaying the provided code frame
@@ -159,16 +155,9 @@ function getBundleOutputPaths(bundleType, filename, minimize) {
 
 function getPlugins(bundleType, minimize) {
   const plugins = [
-    // alias({
-    //   entries: [{ find: 'src', replacement: 'src' }],
-    // }),
     VuePlugin({ css: false }),
-    babel({ babelHelpers: 'bundled' }),
+    esbuild({ minify: minimize, target: 'es2019' }),
   ];
-
-  if (minimize) {
-    plugins.push(terser());
-  }
 
   return plugins;
 }

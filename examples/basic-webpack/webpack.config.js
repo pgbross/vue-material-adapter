@@ -1,18 +1,65 @@
-const path = require('path');
-const pkg = require('./package.json');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const HtmlWebpackTagsPlugin = require('html-webpack-tags-plugin');
-const webpack = require('webpack');
+import { ESBuildMinifyPlugin } from 'esbuild-loader';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import HtmlWebpackTagsPlugin from 'html-webpack-tags-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import path, { resolve as _resolve } from 'node:path';
+import process from 'node:process';
+import url from 'node:url';
+import RemovePlugin from 'remove-files-webpack-plugin';
+import sass from 'sass';
+import { VueLoaderPlugin } from 'vue-loader';
+import webpack from 'webpack';
 
-// eslint-disable-next-line
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin;
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const isDev = process.env.NODE_ENV !== 'production';
-const resolve = relativePath => path.resolve(__dirname, relativePath);
+const { loader: _loader } = MiniCssExtractPlugin;
+const { DefinePlugin } = webpack;
 
-module.exports = [
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+
+const resolve = relativePath => _resolve(__dirname, relativePath);
+
+const esbuildTargets = {
+  evergreen: 'es2020',
+  fallback: 'es2018',
+};
+
+const extraPath =
+  process.env.TARGET_ENV === 'fallback' ? 'fallback' : 'evergreen';
+const esbuildTarget = esbuildTargets[extraPath];
+
+const isDevelopment = process.env.NODE_ENV !== 'production';
+
+const cssLoaders = [
+  {
+    loader: 'css-loader',
+    options: {
+      sourceMap: false,
+      import: false,
+    },
+  },
+  {
+    loader: 'postcss-loader',
+    options: {
+      postcssOptions: {
+        'no-map': true,
+        plugins: {
+          'postcss-preset-env': {},
+          cssnano: {},
+        },
+      },
+    },
+  },
+  {
+    loader: 'sass-loader',
+    options: {
+      implementation: sass,
+      sassOptions: {
+        includePaths: [resolve('../node_modules')],
+      },
+    },
+  },
+];
+
+export default [
   {
     target: 'web',
     devtool: 'source-map',
@@ -30,6 +77,13 @@ module.exports = [
     module: {
       rules: [
         {
+          test: /\.vue$/,
+          loader: 'vue-loader',
+          options: {
+            loaders: ['vue-style-loader'].concat(cssLoaders),
+          },
+        },
+        {
           test: /\.html$/,
           exclude: [/index\.html/],
           type: 'asset/source',
@@ -37,52 +91,45 @@ module.exports = [
 
         {
           test: /\.js$/,
-          loader: 'babel-loader',
-          exclude: [/node_modules/, /common/],
+          loader: 'esbuild-loader',
           options: {
-            presets: [
-              [
-                '@babel/preset-env',
-                {
-                  modules: false,
-                  useBuiltIns: 'entry',
-                  corejs: 3,
-                  targets: {
-                    browsers: pkg.browserslist,
-                  },
-                },
-              ],
-            ],
+            target: esbuildTarget,
           },
         },
-
         {
           test: /\.scss$/,
           exclude: /\.module.(s(a|c)ss)$/,
-          type: 'asset/resource',
-          generator: {
-            filename: 'css/[name].min.css',
-          },
+          // type: 'asset/resource',
+          // generator: {
+          //   filename: 'css/[name].min.css',
+          // },
           use: [
-            {
-              loader: 'extract-loader',
-            },
+            _loader,
             {
               loader: 'css-loader?-url',
+              options: { sourceMap: isDevelopment },
             },
             {
               loader: 'postcss-loader',
               options: {
-                postcssOptions: { config: __dirname + '/postcss.config.js' },
+                sourceMap: isDevelopment,
+                postcssOptions: {
+                  'no-map': true,
+                  plugins: {
+                    'postcss-100vh-fix': {},
+                    'postcss-preset-env': {},
+                    cssnano: {},
+                  },
+                },
               },
             },
             {
               loader: 'sass-loader',
               options: {
-                implementation: require('dart-sass'),
+                implementation: sass,
                 sassOptions: {
                   includePaths: ['node_modules'],
-                  sourceMap: isDev,
+                  sourceMap: isDevelopment,
                 },
               },
             },
@@ -91,14 +138,35 @@ module.exports = [
       ],
     },
     plugins: [
-      new webpack.DefinePlugin({
+      new VueLoaderPlugin(),
+      new MiniCssExtractPlugin({
+        filename: 'css/[name].[contenthash:8].css',
+        chunkFilename: 'css/[name].[contenthash:8].css',
+      }),
+      new DefinePlugin({
         __VUE_OPTIONS_API__: true,
         __VUE_PROD_DEVTOOLS__: false,
+        __VUE_I18N_LEGACY_API__: false,
+        __VUE_I18N_FULL_INSTALL__: true,
+        __INTLIFY_PROD_DEVTOOLS__: false,
       }),
-      new CleanWebpackPlugin({
-        verbose: true,
+      new RemovePlugin({
+        before: {
+          root: './build',
+        },
+        watch: {
+          beforeForFirstBuild: true,
+          // parameters for "before watch compilation" stage.
+          // root: './build',
+          // include: ['admin'],
+          // emulate: true,
+        },
+        after: {
+          // parameters for "after normal and watch compilation" stage.
+        },
       }),
       new HtmlWebpackPlugin({
+        cache: false,
         template: 'index.html',
         filename: 'index.html',
         chunksSortMode: 'none',
@@ -108,9 +176,6 @@ module.exports = [
         publicPath: '/',
         append: false,
       }),
-      new MiniCssExtractPlugin({
-        filename: '[hash]-[name].css',
-      }),
 
       // Only update what has changed on hot reload
       new webpack.HotModuleReplacementPlugin(),
@@ -118,46 +183,47 @@ module.exports = [
       // new BundleAnalyzerPlugin({}), // uncomment to analyze the bundles
     ],
     output: {
-      filename: '[name].js',
+      filename: 'js/[name].[contenthash:8].js',
+      chunkFilename: 'js/[name].[contenthash:8].js',
       path: resolve('build'),
       publicPath: '/',
     },
+    performance: {
+      hints: false,
+    },
     optimization: {
-      runtimeChunk: 'single',
+      usedExports: true,
       splitChunks: {
         chunks: 'all',
-        maxInitialRequests: Infinity,
+        maxInitialRequests: Number.POSITIVE_INFINITY,
         minSize: 0,
         cacheGroups: {
           vendor: {
-            test: /[\\/]node_modules[\\/]/,
+            test: /[/\\]node_modules[/\\]/,
             name(module) {
               // get the name. E.g. node_modules/packageName/not/this/part.js
               // or node_modules/packageName
               const packageName = module.context.match(
-                /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
+                /[/\\]node_modules[/\\](.*?)([/\\]|$)/,
               )[1];
 
               // npm package names are URL-safe, but some servers don't like @ symbols
-              return `npm.${packageName.replace('@', '')}`;
+              return `npm/npm.${packageName.replace('@', '')}`;
             },
-          },
-          styles: {
-            name: 'style',
-            test: /\.css$/,
-            chunks: 'all',
-            enforce: true,
           },
         },
       },
+
+      minimizer: [
+        new ESBuildMinifyPlugin({
+          target: esbuildTarget,
+        }),
+      ],
     },
     resolve: {
-      /**
-       * The compiler-included build of vue which allows to use vue templates
-       * without pre-compiling them
-       */
       alias: {
         vue$: 'vue/dist/vue.esm-bundler.js',
+        // '~': 'vue-material-adapter/packages',
       },
       extensions: ['*', '.vue', '.js', '.json'],
     },
