@@ -44,9 +44,9 @@ export default {
       primaryAttrs: {},
       trailingAttrs: {},
       myListeners: {},
-      root: null,
-      checkmarkEl: null,
-      trailingAction: null,
+      root: undefined,
+      checkmarkEl: undefined,
+      trailingAction: undefined,
     });
 
     const mcwChipSet = inject('mcwChipSet');
@@ -112,7 +112,7 @@ export default {
       focusTrailingAction: () => {
         trailingAction_?.focus();
       },
-      getAttribute: attr => uiState.root.getAttribute(attr),
+      getAttribute: attribute => uiState.root.getAttribute(attribute),
       getCheckmarkBoundingClientRect: () => {
         return uiState.checkmarkEl?.getBoundingClientRect();
       },
@@ -190,8 +190,11 @@ export default {
       removeTrailingActionFocus: () => {
         uiState.trailingAction?.removeFocus();
       },
-      setPrimaryActionAttr: (attr, value) =>
-        (uiState.primaryAttrs = { ...uiState.primaryAttrs, [attr]: value }),
+      setPrimaryActionAttr: (attribute, value) =>
+        (uiState.primaryAttrs = {
+          ...uiState.primaryAttrs,
+          [attribute]: value,
+        }),
 
       setStyleProperty: (property, value) =>
         (uiState.styles = { ...uiState.styles, [property]: value }),
@@ -213,8 +216,8 @@ export default {
 
     const remove = () => {
       const parent = uiState.root.parentNode;
-      if (parent != null) {
-        parent.removeChild(uiState.root);
+      if (parent != undefined) {
+        uiState.root.remove();
       }
     };
 
@@ -244,23 +247,23 @@ export default {
       foundation = new MDCChipFoundation(adapter);
 
       uiState.myListeners = {
-        click: evt => {
-          foundation.handleClick(evt);
+        click: event_ => {
+          foundation.handleClick(event_);
         },
-        keydown: evt => foundation.handleKeydown(evt),
-        transitionend: evt => foundation.handleTransitionEnd(evt),
-        focusin: evt => foundation.handleFocusIn(evt),
-        focusout: evt => foundation.handleFocusOut(evt),
+        keydown: event_ => foundation.handleKeydown(event_),
+        transitionend: event_ => foundation.handleTransitionEnd(event_),
+        focusin: event_ => foundation.handleFocusIn(event_),
+        focusout: event_ => foundation.handleFocusOut(event_),
       };
 
       if (trailingAction_) {
         uiState.myListeners[
           trailingActionStrings.INTERACTION_EVENT.toLowerCase()
-        ] = evt => foundation.handleTrailingActionInteraction(evt);
+        ] = event_ => foundation.handleTrailingActionInteraction(event_);
 
         uiState.myListeners[
           trailingActionStrings.NAVIGATION_EVENT.toLowerCase()
-        ] = evt => foundation.handleTrailingActionNavigation(evt);
+        ] = event_ => foundation.handleTrailingActionNavigation(event_);
       }
 
       foundation.init();

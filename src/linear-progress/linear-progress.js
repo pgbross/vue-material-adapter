@@ -28,7 +28,7 @@ export default {
       primaryStyles: {},
       rootAttrs: { 'aria-valuemin': 0, 'aria-valuemax': 1 },
       rootStyles: {},
-      root: null,
+      root: undefined,
     });
 
     let foundation;
@@ -79,7 +79,7 @@ export default {
           return ro;
         }
 
-        return null;
+        return;
       },
       getWidth: () => uiState.root.offsetWidth,
     };

@@ -13,13 +13,7 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return { progressValue: 0.8 };
-  },
-};
-</script>
+<script src="./circular-progress.js"></script>
 
 <style>
 .circular-progress-demo {

@@ -29,10 +29,10 @@ export default {
         ? { style: { width: '48px', height: '48px' } }
         : { style: { width: '36px', height: '36px' } },
       circleAttrs: getCircleAttributes(props.medium, false),
-      trackAttrs: getTrackAttrs(props.medium, false),
+      trackAttrs: getTrackAttributes(props.medium, false),
       indeterminateAttrs: getCircleAttributes(props.medium, true),
       viewbox: props.medium ? '0 0 36 36' : '0 0 48 48',
-      root: null,
+      root: undefined,
     });
 
     let foundation;
@@ -139,7 +139,7 @@ function getCircleAttributes(medium = false, indeterminate = true) {
       };
 }
 
-function getTrackAttrs(medium = false) {
+function getTrackAttributes(medium = false) {
   const {
     // eslint-disable-next-line no-unused-vars
     ['stroke-dasharray']: sda,

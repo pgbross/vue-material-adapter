@@ -24,12 +24,4 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      picked: 'dog',
-    };
-  },
-};
-</script>
+<script src="./radio.js"></script>

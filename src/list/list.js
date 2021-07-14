@@ -14,6 +14,20 @@ import { emitCustomEvent } from '../base/index.js';
 
 const { strings, cssClasses } = MDCListFoundation;
 
+const getPrimaryText = item => {
+  const primaryText = item.querySelector(
+    `.${cssClasses.LIST_ITEM_PRIMARY_TEXT_CLASS}`,
+  );
+  if (primaryText) {
+    return primaryText.textContent || '';
+  }
+
+  const singleLineText = item.querySelector(
+    `.${cssClasses.LIST_ITEM_TEXT_CLASS}`,
+  );
+  return (singleLineText && singleLineText.textContent) || '';
+};
+
 export default {
   name: 'mcw-list',
 
@@ -49,7 +63,7 @@ export default {
       },
       rootAttrs: { 'aria-orientation': props.ariaOrientation },
       listn: 0,
-      listRoot: null,
+      listRoot: undefined,
     });
 
     const singleSelection = ref(props.singleSelection);
@@ -192,20 +206,6 @@ export default {
       } else if (radioSelectedListItem) {
         setSelectedIndex(listElements.value.indexOf(radioSelectedListItem));
       }
-    };
-
-    const getPrimaryText = item => {
-      const primaryText = item.querySelector(
-        `.${cssClasses.LIST_ITEM_PRIMARY_TEXT_CLASS}`,
-      );
-      if (primaryText) {
-        return primaryText.textContent || '';
-      }
-
-      const singleLineText = item.querySelector(
-        `.${cssClasses.LIST_ITEM_TEXT_CLASS}`,
-      );
-      return (singleLineText && singleLineText.textContent) || '';
     };
 
     const setEnabled = (itemIndex, isEnabled) => {
@@ -411,7 +411,7 @@ export default {
       if (
         singleSelection.value &&
         typeof props.modelValue === 'number' &&
-        !isNaN(props.modelValue)
+        !Number.isNaN(props.modelValue)
       ) {
         const index = props.modelValue;
         const hasSelectedClass = adapter.listItemAtIndexHasClass(
@@ -445,7 +445,7 @@ export default {
 
       // the list content could change outside of this component
       // so use a mutation observer to trigger an update
-      slotObserver = new MutationObserver((mutationList, observer) => {
+      slotObserver = new MutationObserver(() => {
         updateListElements();
       });
       slotObserver.observe(uiState.listRoot, {

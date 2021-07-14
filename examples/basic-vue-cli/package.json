@@ -13,16 +13,18 @@
     "vue-material-adapter": "^2.0.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.5.11",
-    "@vue/cli-plugin-eslint": "^4.5.11",
-    "@vue/cli-service": "^5.0.0-alpha.5",
+    "@babel/core": "^7.14.6",
+    "@babel/eslint-parser": "^7",
+    "@vue/cli-plugin-babel": "~5.0.0-beta.2",
+    "@vue/cli-plugin-eslint": "~5.0.0-beta.2",
+    "@vue/cli-service": "~5.0.0-beta.2",
     "@vue/compiler-sfc": "^3.1.1",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^7.20.0",
+    "eslint": "^7",
+    "eslint-plugin-unicorn": "^34.0.1",
     "eslint-plugin-vue": "^7.6.0",
     "postcss-preset-env": "^6.7.0",
     "sass": "^1.32.8",
-    "sass-loader": "^11.0.1",
+    "sass-loader": "^10.2.0",
     "vue-template-compiler": "^2.6.12"
   },
   "eslintConfig": {
@@ -31,11 +33,12 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended"
+      "eslint:recommended",
+      "plugin:vue/vue3-essential",
+      "plugin:unicorn/recommended"
     ],
     "parserOptions": {
-      "parser": "babel-eslint"
+      "parser": "@babel/eslint-parser"
     },
     "rules": {}
   },

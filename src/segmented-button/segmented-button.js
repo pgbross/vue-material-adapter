@@ -22,21 +22,21 @@ export default {
         'mdc-segmented-button--single-select': props.singleSelect,
       },
       styles: {},
-      root: null,
-      contentEl: null,
+      root: undefined,
+      contentEl: undefined,
     });
     let foundation;
     let segmentIndex = 0;
 
     const segments_ = [];
 
-    const getSegmentIdx = segment => {
+    const getSegmentIndex = segment => {
       const sg = { ...segment, index: segmentIndex++ };
       segments_.push(sg);
       return sg.index;
     };
 
-    provide('getSegmentIdx', getSegmentIdx);
+    provide('getSegmentIdx', getSegmentIndex);
     provide('isSingleSelect', props.singleSelect);
 
     provide('isTouch', props.touch);
@@ -82,18 +82,16 @@ export default {
         emit('change', detail);
         if (Array.isArray(props.modelValue)) {
           const { selected, index } = detail;
-          const index_ = props.modelValue.indexOf(detail.index);
+          const index_ = props.modelValue.indexOf(index);
           if (selected) {
             index_ < 1 &&
-              emit('update:modelValue', props.modelValue.concat(index));
+              emit('update:modelValue', [...props.modelValue, index]);
           } else {
             index_ > -1 &&
-              emit(
-                'update:modelValue',
-                props.modelValue
-                  .slice(0, index_)
-                  .concat(props.modelValue.slice(index_ + 1)),
-              );
+              emit('update:modelValue', [
+                ...props.modelValue.slice(0, index_),
+                ...props.modelValue.slice(index_ + 1),
+              ]);
           }
         } else {
           emit('update:modelValue', detail.index);
@@ -121,14 +119,14 @@ export default {
 
             // select the new ones
             for (const v of nv) {
-              if (selectedSegments.indexOf(v) < 0) {
+              if (!selectedSegments.includes(v)) {
                 foundation.selectSegment(v);
               }
             }
 
             // unselect the ones that not there anymore
             for (const v of selectedSegments) {
-              if (nv.indexOf(v) < 0) {
+              if (!nv.includes(v)) {
                 foundation.unselectSegment(v);
               }
             }

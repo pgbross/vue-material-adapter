@@ -20,13 +20,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import path from 'path';
+import path from 'node:path';
 
 function tryResolve_(url, sourceFilename) {
   // Put require.resolve in a try/catch to avoid node-sass failing with cryptic libsass errors when the importer throws
   try {
     return require.resolve(url, { paths: [path.dirname(sourceFilename)] });
-  } catch (e) {
+  } catch {
     return '';
   }
 }
@@ -45,12 +45,12 @@ function tryResolveScss(url, sourceFilename) {
   );
 }
 
-function importer(url, prev) {
+function importer(url, previous) {
   if (url.startsWith('@mcwv')) {
     const normalizedUrl = path.extname(url) == '.scss' ? url.slice(-5) : url;
     const packageName = normalizedUrl.slice(6);
     url = `../mcwv-${packageName}/index.scss`;
-    const resolved = tryResolveScss(url, prev);
+    const resolved = tryResolveScss(url, previous);
     return { file: resolved || url };
   }
   return { file: url };

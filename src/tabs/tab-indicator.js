@@ -18,7 +18,7 @@ export default {
       },
       contentAttrs: { 'aria-hidden': !!props.icon },
       styles: {},
-      contentEl: null,
+      contentEl: undefined,
     });
 
     let foundation;

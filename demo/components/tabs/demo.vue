@@ -49,39 +49,7 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    const items = [
-      'item one',
-      'item two',
-      'item three',
-      'item four',
-      'item five',
-      'item six',
-      'item seven',
-    ];
-    return {
-      selectedItem: items[0],
-      items,
-      activeTabIndex: 1,
-    };
-  },
-  computed: {
-    filteredItems() {
-      return this.items.slice(0, 3);
-    },
-  },
-  mounted() {
-    this.$refs.firstExample.activateTab(1);
-  },
-  methods: {
-    onSelected(idx) {
-      this.selectedItem = this.items[idx];
-    },
-  },
-};
-</script>
+<script src="./tabs.js"></script>
 
 <style>
 .demo-tabs-selected {

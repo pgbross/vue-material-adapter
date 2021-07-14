@@ -31,7 +31,7 @@ export default {
       nativeControlChecked: props.modelValue,
       nativeControlDisabled: props.disabled,
       nativeAttrs: {},
-      root: null,
+      root: undefined,
     });
 
     const { classes: rippleClasses, styles } = useRipplePlugin(

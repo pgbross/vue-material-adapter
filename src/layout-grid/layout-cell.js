@@ -2,10 +2,10 @@ import { computed } from 'vue';
 
 const spanOptions_ = {
   type: [String, Number],
-  default: null,
+  default: undefined,
   validator: value => {
-    const num = Number(value);
-    return isFinite(num) && num <= 12 && num > 0;
+    const number = Number(value);
+    return Number.isFinite(number) && number <= 12 && number > 0;
   },
 };
 
@@ -19,7 +19,7 @@ export default {
     desktop: spanOptions_,
     align: {
       type: String,
-      validator: value => ['top', 'bottom', 'middle'].indexOf(value) !== -1,
+      validator: value => ['top', 'bottom', 'middle'].includes(value),
     },
   },
   setup(props) {

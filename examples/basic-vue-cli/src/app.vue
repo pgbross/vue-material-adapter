@@ -23,10 +23,10 @@
 
 <script>
 export default {
-  name: 'App',
+  name: "App",
   data() {
     return {
-      open: false,
+      open: false
     };
   },
   methods: {
@@ -35,12 +35,12 @@ export default {
     },
     onClosed() {
       this.$refs.snackbar.handleSnack({
-        message: 'Dialog closed',
+        message: "Dialog closed",
         dismissAction: true,
-        actionText: 'close',
+        actionText: "close"
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -10,11 +10,11 @@ export const CustomLink = {
     return () => {
       // destructure the props in the render function so we use the current value
       // if their value has changed since we were created
-      const { to, href } = props;
+      const { to, href, tag } = props;
 
       const routerLink = resolveDynamicComponent('router-link');
       if (to && routerLink) {
-        const rtag = props.tag ?? 'a';
+        const rtag = tag ?? 'a';
 
         return h(
           routerLink,
@@ -29,9 +29,9 @@ export const CustomLink = {
                 rtag,
                 {
                   ...attrs,
-                  onClick: evt => {
-                    evt.__itemId = attrs.itemId;
-                    props.navigate(evt);
+                  onClick: event_ => {
+                    event_.__itemId = attrs.itemId;
+                    props.navigate(event_);
                   },
                 },
                 slots.default?.(),
@@ -40,8 +40,12 @@ export const CustomLink = {
         );
       }
 
-      const element = href ? 'a' : props.tag ?? 'a';
-      const role = href ? 'button' : element !== 'button' ? 'button' : null;
+      const element = href ? 'a' : tag ?? 'a';
+      const role = href
+        ? 'button'
+        : element !== 'button'
+        ? 'button'
+        : undefined;
 
       const children = slots.default?.();
       return h(element, { ...attrs, role }, { default: () => children });

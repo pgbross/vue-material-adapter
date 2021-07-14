@@ -30,7 +30,7 @@ export default {
       },
       listn: 0,
       myListeners: {},
-      root: null,
+      root: undefined,
     });
 
     let foundation;
@@ -105,7 +105,7 @@ export default {
         // so use a mutation observer to trigger an update by
         // incrementing the dependency variable "listn" referenced
         // in the computed that selects the chip elements
-        (slotObserver = new MutationObserver((mutationList, observer) => {
+        (slotObserver = new MutationObserver(() => {
           uiState.listn++;
         }));
       slotObserver.observe(uiState.root, {

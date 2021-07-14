@@ -8,6 +8,12 @@ import { mcwButton } from '../button/index.js';
 const { cssClasses, strings } = MDCDialogFoundation;
 const LAYOUT_EVENTS = ['resize', 'orientationchange'];
 
+const getInitialFocusElement_ = () => {
+  return document.querySelector(`[${strings.INITIAL_FOCUS_ATTRIBUTE}]`);
+};
+
+const focusTrapFactory_ = (element, options) => new FocusTrap(element, options);
+
 export default {
   name: 'mcw-dialog',
   components: {
@@ -30,8 +36,8 @@ export default {
     const uiState = reactive({
       classes: { 'mdc-dialog': 1 },
       styles: {},
-      container: null,
-      root: null,
+      container: undefined,
+      root: undefined,
     });
 
     let foundation;
@@ -40,29 +46,20 @@ export default {
     let focusTrap;
     let defaultButton;
 
-    const focusTrapFactory_ = (element, options) =>
-      new FocusTrap(element, options);
-
     const handleLayout = () => {
       foundation.layout();
     };
 
-    const handleDocumentKeyDown = e => {
-      foundation.handleDocumentKeydown(e);
+    const handleDocumentKeyDown = event_ => {
+      foundation.handleDocumentKeydown(event_);
     };
 
-    const getInitialFocusElement_ = () => {
-      return document.querySelector(
-        `[${MDCDialogFoundation.strings.INITIAL_FOCUS_ATTRIBUTE}]`,
-      );
+    const onClick = event_ => {
+      foundation.handleClick(event_);
     };
 
-    const onClick = evt => {
-      foundation.handleClick(evt);
-    };
-
-    const onKeydown = evt => {
-      foundation.handleKeydown(evt);
+    const onKeydown = event_ => {
+      foundation.handleKeydown(event_);
     };
 
     const onOpen = nv => {
@@ -92,7 +89,7 @@ export default {
       addBodyClass: className => document.body.classList.add(className),
       removeBodyClass: className => document.body.classList.remove(className),
       eventTargetMatches: (target, selector) => matches(target, selector),
-      trapFocus: initialFocusEl => focusTrap?.trapFocus(),
+      trapFocus: () => focusTrap?.trapFocus(),
       releaseFocus: () => focusTrap?.releaseFocus(),
       getInitialFocusEl: () => getInitialFocusElement_(),
       isContentScrollable: () => util.isScrollable(content_),
@@ -111,13 +108,14 @@ export default {
           buttons &&
           buttons
             .reverse()
+            // eslint-disable-next-line unicorn/no-array-for-each
             .forEach(button => button.parentElement?.appendChild(button))
         );
       },
       notifyOpening: () => {
         emit('mdcdialog:opening', {});
-        for (const evt of LAYOUT_EVENTS)
-          window.addEventListener(evt, handleLayout);
+        for (const event_ of LAYOUT_EVENTS)
+          window.addEventListener(event_, handleLayout);
         document.addEventListener('keydown', handleDocumentKeyDown);
       },
       notifyOpened: () => emit('mdcdialog:opened', {}),
@@ -125,8 +123,8 @@ export default {
         emit('update:modelValue', false);
         emit('mdcdialog:closing', action ? { action } : {});
 
-        for (const evt of LAYOUT_EVENTS)
-          window.removeEventListener(evt, handleLayout);
+        for (const event_ of LAYOUT_EVENTS)
+          window.removeEventListener(event_, handleLayout);
         document.removeEventListener('keydown', handleDocumentKeyDown);
       },
       notifyClosed: action => {

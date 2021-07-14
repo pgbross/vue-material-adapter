@@ -37,11 +37,11 @@ export default {
       },
       styles: {},
 
-      content: null,
-      iconEl: null,
-      tabIndicator: null,
-      root: null,
-      rippleSurface: null,
+      content: undefined,
+      iconEl: undefined,
+      tabIndicator: undefined,
+      root: undefined,
+      rippleSurface: undefined,
     });
 
     const { classes: rippleClasses, styles: rippleStyles } = useRipplePlugin(
@@ -65,7 +65,7 @@ export default {
     let foundation;
     const tabId = `__mcw-tab-${tabId_++}`;
 
-    let rootEl;
+    let rootElement;
 
     const activate = computeIndicatorClientRect =>
       foundation.activate(computeIndicatorClientRect);
@@ -85,15 +85,15 @@ export default {
 
     const computeDimensions = () => foundation.computeDimensions();
 
-    const focus = () => rootEl.focus();
+    const focus = () => rootElement.focus();
 
-    const onClick = evt => {
-      foundation.handleClick(evt);
+    const onClick = event_ => {
+      foundation.handleClick(event_);
     };
 
     const adapter = {
-      setAttr: (attr, value) =>
-        (uiState.rootAttrs = { ...uiState.rootAttrs, [attr]: value }),
+      setAttr: (attribute, value) =>
+        (uiState.rootAttrs = { ...uiState.rootAttrs, [attribute]: value }),
       addClass: className =>
         (uiState.classes = { ...uiState.classes, [className]: true }),
       removeClass: className => {
@@ -107,23 +107,23 @@ export default {
       deactivateIndicator: () => uiState.tabIndicator.deactivate(),
       notifyInteracted: () => {
         emitCustomEvent(
-          rootEl,
+          rootElement,
           strings.INTERACTED_EVENT,
           { tabId },
           true /* bubble */,
         );
       },
-      getOffsetLeft: () => rootEl.offsetLeft,
-      getOffsetWidth: () => rootEl.offsetWidth,
+      getOffsetLeft: () => rootElement.offsetLeft,
+      getOffsetWidth: () => rootElement.offsetWidth,
       getContentOffsetLeft: () => uiState.content.offsetLeft,
       getContentOffsetWidth: () => uiState.content.offsetWidth,
-      focus: () => rootEl.focus(),
+      focus: () => rootElement.focus(),
     };
 
     onMounted(() => {
       // Quick fix to https://github.com/pgbross/vue-material-adapter/issues/178
       // uiState.root gets set to the wrong element when "to" is set
-      rootEl =
+      rootElement =
         uiState.root.$el.nodeType === 3
           ? uiState.root.$el.nextSibling
           : uiState.root.$el;
@@ -170,7 +170,7 @@ function extractIconProperty(iconProperty) {
       classes: { 'material-icons': true },
       content: iconProperty,
     };
-  } else if (iconProperty instanceof Array) {
+  } else if (Array.isArray(iconProperty)) {
     return {
       classes: iconProperty.reduce(
         (result, value) => Object.assign(result, { [value]: true }),

@@ -15,8 +15,8 @@ export default {
   },
 
   setup(props, { emit, attrs }) {
-    const scroller = ref(null);
-    const root = ref(null);
+    const scroller = ref();
+    const root = ref();
 
     const tabList = ref([]);
 

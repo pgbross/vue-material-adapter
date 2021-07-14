@@ -17,15 +17,7 @@
   </div>
 </template>
 
-<script>
-export default {
-  methods: {
-    onClick() {
-      console.log('fab onClick');
-    },
-  },
-};
-</script>
+<script src="./fab.js"></script>
 
 <style scoped>
 @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');

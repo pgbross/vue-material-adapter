@@ -12,7 +12,7 @@ export default {
     const uiState = reactive({
       outlinedClasses: { 'mdc-notched-outline': true },
       notchStyles: {},
-      labelEl: null,
+      labelEl: undefined,
     });
 
     let foundation;

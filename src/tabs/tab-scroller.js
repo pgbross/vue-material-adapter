@@ -12,8 +12,8 @@ export default {
       areaClasses: { 'mdc-tab-scroller__scroll-area': 1 },
       areaStyles: {},
       contentStyles: {},
-      content: null,
-      area: null,
+      content: undefined,
+      area: undefined,
     });
     let foundation;
 

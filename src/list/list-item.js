@@ -17,7 +17,7 @@ export default {
   },
   components: { CustomLink },
   setup(props, { slots, attrs }) {
-    const root = ref(null);
+    const root = ref();
 
     const myItemId = itemId++;
     const uiState = reactive({
@@ -72,7 +72,7 @@ export default {
       (root.value.$el ?? root.value).focus();
     };
 
-    const myAttrs = computed(() => {
+    const myAttributes = computed(() => {
       return {
         // class: uiState.classes,
         ...attrs,
@@ -92,18 +92,18 @@ export default {
       uiState.classes = rest;
     };
 
-    const removeAttribute = attr => {
+    const removeAttribute = attribute => {
       // eslint-disable-next-line no-unused-vars
-      const { [attr]: removed, ...rest } = uiState.attrs;
+      const { [attribute]: removed, ...rest } = uiState.attrs;
       uiState.attrs = rest;
     };
 
-    const setAttribute = (attr, value) => {
-      uiState.attrs = { ...uiState.attrs, [attr]: value };
+    const setAttribute = (attribute, value) => {
+      uiState.attrs = { ...uiState.attrs, [attribute]: value };
     };
 
-    const getAttribute = attr => {
-      return myAttrs.value[attr];
+    const getAttribute = attribute => {
+      return myAttributes.value[attribute];
     };
 
     const classList = {
@@ -131,7 +131,7 @@ export default {
       checkbox,
       radio,
       radioChecked,
-      myAttrs,
+      myAttrs: myAttributes,
       trailingRadio,
       trailingCheckbox,
       myItemId,

@@ -43,14 +43,14 @@ export default {
       selectAnchorAttrs: {},
       helpId: `help-mcw-select-${uid_++}`,
       menuClasses: { 'mdc-menu-surface--fullwidth': props.menuFullwidth },
-      root: null,
-      helperTextEl: null,
-      leadingIconEl: null,
-      lineRippleEl: null,
-      outlineEl: null,
-      labelEl: null,
-      menu: null,
-      anchorEl: null,
+      root: undefined,
+      helperTextEl: undefined,
+      leadingIconEl: undefined,
+      lineRippleEl: undefined,
+      outlineEl: undefined,
+      labelEl: undefined,
+      menu: undefined,
+      anchorEl: undefined,
     });
 
     let rippleClasses;
@@ -113,12 +113,12 @@ export default {
     };
 
     const selectedTextAttributes = computed(() => {
-      const attrs = { ...uiState.selTextAttrs };
+      const attributes = { ...uiState.selTextAttrs };
       if (props.helptext) {
-        attrs['aria-controls'] = uiState.helpId;
-        attrs['aria-describedBy'] = uiState.helpId;
+        attributes['aria-controls'] = uiState.helpId;
+        attributes['aria-describedBy'] = uiState.helpId;
       }
-      return attrs;
+      return attributes;
     });
 
     const adapter = {
@@ -133,21 +133,22 @@ export default {
       //   return x;
       // },
 
-      getMenuItemAttr: (menuItem, attr) => menuItem.getAttribute(attr),
+      getMenuItemAttr: (menuItem, attribute) =>
+        menuItem.getAttribute(attribute),
 
       setSelectedText: text => {
         uiState.selectedTextContent = text;
       },
       isSelectAnchorFocused: () => document.activeElement === uiState.anchorEl,
-      getSelectAnchorAttr: attr => uiState.selectAnchorAttrs[attr],
-      setSelectAnchorAttr: (attr, value) =>
+      getSelectAnchorAttr: attribute => uiState.selectAnchorAttrs[attribute],
+      setSelectAnchorAttr: (attribute, value) =>
         (uiState.selectAnchorAttrs = {
           ...uiState.selectAnchorAttrs,
-          [attr]: value,
+          [attribute]: value,
         }),
-      removeSelectAnchorAttr: attr => {
+      removeSelectAnchorAttr: attribute => {
         // eslint-disable-next-line no-unused-vars
-        const { [attr]: removed, ...rest } = uiState.selectAnchorAttrs;
+        const { [attribute]: removed, ...rest } = uiState.selectAnchorAttrs;
         uiState.selectAnchorAttrs = rest;
       },
       addMenuClass: className =>
@@ -161,13 +162,14 @@ export default {
       openMenu: () => (uiState.menu.surfaceOpen = true),
       closeMenu: () => (uiState.menu.surfaceOpen = false),
       getAnchorElement: () => uiState.anchorEl,
-      setMenuAnchorElement: anchorEl => uiState.menu.setAnchorElement(anchorEl),
+      setMenuAnchorElement: anchorElement =>
+        uiState.menu.setAnchorElement(anchorElement),
       setMenuAnchorCorner: anchorCorner =>
         uiState.menu.setAnchorCorner(anchorCorner),
       setMenuWrapFocus: wrapFocus => (uiState.menu.wrapFocus = wrapFocus),
       getSelectedIndex: () => {
         const index = uiState.menu?.getSelectedIndex() ?? -1;
-        return index instanceof Array ? index[0] : index;
+        return Array.isArray(index) ? index[0] : index;
       },
       setSelectedIndex: index => {
         uiState.menu.setSelectedIndex(index);
@@ -175,7 +177,9 @@ export default {
       focusMenuItemAtIndex: index => menuItems.value[index].focus(),
       getMenuItemCount: () => menuItems.value.length,
       getMenuItemValues: () =>
-        menuItems.value.map(el => el.getAttribute(strings.VALUE_ATTR) || ''),
+        menuItems.value.map(
+          element => element.getAttribute(strings.VALUE_ATTR) || '',
+        ),
       getMenuItemTextAtIndex: index => {
         return menuItems.value[index].textContent;
       },
@@ -225,15 +229,13 @@ export default {
 
     const refreshIndex = () => {
       const items = menuItems.value.map(
-        el => el.getAttribute(strings.VALUE_ATTR) || '',
+        element => element.getAttribute(strings.VALUE_ATTR) || '',
       );
 
-      const idx = items.findIndex(value => {
-        return props.modelValue === value;
-      });
-      uiState.menu.setSelectedIndex(idx);
+      const index = items.indexOf(props.modelValue);
+      uiState.menu.setSelectedIndex(index);
 
-      return idx;
+      return index;
     };
 
     watch(
@@ -244,8 +246,8 @@ export default {
     watch(
       () => props.modelValue,
       () => {
-        const idx = refreshIndex();
-        foundation.setSelectedIndex(idx);
+        const index = refreshIndex();
+        foundation.setSelectedIndex(index);
       },
     );
 

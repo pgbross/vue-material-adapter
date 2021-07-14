@@ -11,7 +11,10 @@
 
         <mcw-icon-button v-model="isOn" :disabled="disabled">
           <i
-            class="material-icons mdc-icon-button__icon mdc-icon-button__icon--on"
+            class="
+              material-icons
+              mdc-icon-button__icon mdc-icon-button__icon--on
+            "
             >link_off</i
           >
           <i class="material-icons mdc-icon-button__icon">link</i>
@@ -28,10 +31,4 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return { isOn: false, disabled: false };
-  },
-};
-</script>
+<script src="./icon-button.js"></script>

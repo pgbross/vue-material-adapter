@@ -36,7 +36,6 @@ export default [
       filename: 'vue-material-adapter.esm.js',
       // library: 'vma',
       libraryTarget: 'module',
-      // module: true,
     },
     devtool: 'source-map',
     module: {
@@ -45,21 +44,10 @@ export default [
           test: /\.vue$/,
           loader: 'vue-loader',
         },
-        // {
-        //   test: /\.js$/,
-        //   loader: 'esbuild-loader',
-        //   options: {
-        //     target: esbuildTarget,
-        //   },
-        // },
 
         {
           test: /\.scss$/,
           exclude: /\.module.(s(a|c)ss)$/,
-          // type: 'asset/resource',
-          // generator: {
-          //   filename: 'css/[name].min.css',
-          // },
           use: [
             _loader,
             {
@@ -95,7 +83,6 @@ export default [
       ],
     },
     plugins: [
-      // new ESBuildPlugin(),
       new VueLoaderPlugin(),
       new webpack.DefinePlugin({
         __VUE_OPTIONS_API__: true,

@@ -13,7 +13,7 @@ export default {
   },
   components: { CustomLink },
   setup(props, { slots }) {
-    const root = ref(null);
+    const root = ref();
 
     const { classes: rippleClasses, styles } = useRipplePlugin(root);
 

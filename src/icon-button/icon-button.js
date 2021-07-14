@@ -29,7 +29,7 @@ export default {
       },
     });
 
-    const root = ref(null);
+    const root = ref();
     const { CHANGE_EVENT } = MDCIconButtonToggleFoundation.strings;
 
     const { classes: rippleClasses, styles } = useRipplePlugin(root, {
@@ -47,12 +47,12 @@ export default {
         uiState.classes = rest;
       },
       hasClass: className => Boolean(uiState.classes[className]),
-      setAttr: (attrName, attrValue) =>
-        root.value.setAttribute(attrName, attrValue),
-      getAttr: attrName => root.value.getAttribute(attrName),
-      notifyChange: evtData => {
-        emit(CHANGE_EVENT, evtData);
-        emit('update:modelValue', evtData.isOn);
+      setAttr: (attributeName, attributeValue) =>
+        root.value.setAttribute(attributeName, attributeValue),
+      getAttr: attributeName => root.value.getAttribute(attributeName),
+      notifyChange: eventData => {
+        emit(CHANGE_EVENT, eventData);
+        emit('update:modelValue', eventData.isOn);
       },
     };
 
@@ -75,7 +75,7 @@ export default {
       return isLink ? 'a' : 'button';
     });
 
-    const onClick = evt => foundation.handleClick(evt);
+    const onClick = event_ => foundation.handleClick(event_);
 
     onMounted(() => {
       foundation = new MDCIconButtonToggleFoundation(adapter);

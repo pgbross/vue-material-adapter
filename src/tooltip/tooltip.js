@@ -13,12 +13,12 @@ export default {
       styles: {},
       surfaceStyle: {},
       rootAttrs: { 'aria-hidden': true },
-      root: null,
+      root: undefined,
       isTooltipPersistent: false,
       isTooltipRich: false,
     });
     let foundation;
-    let anchorElem;
+    let anchorElement;
 
     const adapter = {
       getAttribute: name => {
@@ -58,45 +58,49 @@ export default {
       },
 
       getAnchorBoundingRect: () => {
-        return anchorElem ? anchorElem.getBoundingClientRect() : null;
+        return anchorElement
+          ? anchorElement.getBoundingClientRect()
+          : undefined;
       },
       getParentBoundingRect: () => {
-        return uiState.root.parentElement?.getBoundingClientRect() ?? null;
+        return uiState.root.parentElement?.getBoundingClientRect() ?? undefined;
       },
-      getAnchorAttribute: attr => {
-        return anchorElem ? anchorElem.getAttribute(attr) : null;
+      getAnchorAttribute: attribute => {
+        return anchorElement
+          ? anchorElement.getAttribute(attribute)
+          : undefined;
       },
 
-      setAnchorAttribute: (attr, value) => {
-        anchorElem?.setAttribute(attr, value);
+      setAnchorAttribute: (attribute, value) => {
+        anchorElement?.setAttribute(attribute, value);
       },
 
       isRTL: () => getComputedStyle(uiState.root).direction === 'rtl',
 
       anchorContainsElement: element => {
-        return !!anchorElem?.contains(element);
+        return !!anchorElement?.contains(element);
       },
       tooltipContainsElement: element => {
         return uiState.root.contains(element);
       },
 
-      registerEventHandler: (evt, handler) => {
-        uiState.root.addEventListener(evt, handler);
+      registerEventHandler: (event_, handler) => {
+        uiState.root.addEventListener(event_, handler);
       },
-      deregisterEventHandler: (evt, handler) => {
-        uiState.root.removeEventListener(evt, handler);
+      deregisterEventHandler: (event_, handler) => {
+        uiState.root.removeEventListener(event_, handler);
       },
-      registerDocumentEventHandler: (evt, handler) => {
-        document.body.addEventListener(evt, handler);
+      registerDocumentEventHandler: (event_, handler) => {
+        document.body.addEventListener(event_, handler);
       },
-      deregisterDocumentEventHandler: (evt, handler) => {
-        document.body.removeEventListener(evt, handler);
+      deregisterDocumentEventHandler: (event_, handler) => {
+        document.body.removeEventListener(event_, handler);
       },
-      registerWindowEventHandler: (evt, handler) => {
-        window.addEventListener(evt, handler);
+      registerWindowEventHandler: (event_, handler) => {
+        window.addEventListener(event_, handler);
       },
-      deregisterWindowEventHandler: (evt, handler) => {
-        window.removeEventListener(evt, handler);
+      deregisterWindowEventHandler: (event_, handler) => {
+        window.removeEventListener(event_, handler);
       },
 
       notifyHidden: () => {
@@ -108,16 +112,16 @@ export default {
       foundation.handleAnchorMouseEnter();
     };
 
-    const handleFocus = evt => {
-      foundation.handleAnchorFocus(evt);
+    const handleFocus = event_ => {
+      foundation.handleAnchorFocus(event_);
     };
 
     const handleMouseLeave = () => {
       foundation.handleAnchorMouseLeave();
     };
 
-    const handleBlur = evt => {
-      foundation.handleAnchorBlur(evt);
+    const handleBlur = event_ => {
+      foundation.handleAnchorBlur(event_);
     };
 
     const handleTransitionEnd = () => {
@@ -158,10 +162,10 @@ export default {
         throw new Error('MDCTooltip: Tooltip component must have an id.');
       }
 
-      anchorElem =
+      anchorElement =
         document.querySelector(`[aria-describedby="${tooltipId}"]`) ||
         document.querySelector(`[data-tooltip-id="${tooltipId}"]`);
-      if (!anchorElem) {
+      if (!anchorElement) {
         throw new Error(
           // eslint-disable-next-line max-len
           'MDCTooltip: Tooltip component requires an anchor element annotated with [aria-describedby] or [data-tooltip-id] anchor element.',
@@ -175,30 +179,30 @@ export default {
       uiState.isTooltipPersistent = foundation.isPersistent();
 
       if (uiState.isTooltipRich && uiState.isTooltipPersistent) {
-        anchorElem.addEventListener('click', handleClick);
+        anchorElement.addEventListener('click', handleClick);
       } else {
-        anchorElem.addEventListener('mouseenter', handleMouseEnter);
+        anchorElement.addEventListener('mouseenter', handleMouseEnter);
         // TODO(b/157075286): Listening for a 'focus' event is too broad.
-        anchorElem.addEventListener('focus', handleFocus);
-        anchorElem.addEventListener('mouseleave', handleMouseLeave);
+        anchorElement.addEventListener('focus', handleFocus);
+        anchorElement.addEventListener('mouseleave', handleMouseLeave);
       }
 
-      anchorElem.addEventListener('blur', handleBlur);
+      anchorElement.addEventListener('blur', handleBlur);
 
       watchEffect(() => onPosition(props.position));
       watchEffect(() => onBoundaryType(props.boundaryType));
     });
 
     onBeforeUnmount(() => {
-      if (anchorElem) {
+      if (anchorElement) {
         if (uiState.isTooltipRich && uiState.isTooltipPersistent) {
-          anchorElem.removeEventListener('click', handleClick);
+          anchorElement.removeEventListener('click', handleClick);
         } else {
-          anchorElem.removeEventListener('mouseenter', handleMouseEnter);
+          anchorElement.removeEventListener('mouseenter', handleMouseEnter);
           // TODO(b/157075286): Listening for a 'focus' event is too broad.
-          anchorElem.removeEventListener('focus', handleFocus);
-          anchorElem.removeEventListener('mouseleave', handleMouseLeave);
-          anchorElem.removeEventListener('blur', handleBlur);
+          anchorElement.removeEventListener('focus', handleFocus);
+          anchorElement.removeEventListener('mouseleave', handleMouseLeave);
+          anchorElement.removeEventListener('blur', handleBlur);
         }
       }
 

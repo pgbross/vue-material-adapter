@@ -16,12 +16,4 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      checked: false,
-    };
-  },
-};
-</script>
+<script src="./switch.js"></script>

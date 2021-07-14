@@ -9,7 +9,11 @@
         class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start"
       >
         <button
-          class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button"
+          class="
+            material-icons
+            mdc-top-app-bar__navigation-icon
+            mdc-icon-button
+          "
           aria-label="Open navigation menu"
         >
           menu

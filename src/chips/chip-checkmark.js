@@ -5,7 +5,7 @@ export default {
 
   setup() {
     const width = ref(0);
-    const root = ref(null);
+    const root = ref();
 
     onMounted(() => (width.value = root.value.getBoundingClientRect().height));
     return { width, root };

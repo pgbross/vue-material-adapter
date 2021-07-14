@@ -19,14 +19,14 @@ export class RippleElement extends MDCRippleFoundation {
       browserSupportsCssVars: () => supportsCssVariables(window),
       computeBoundingRect: () => $element.getBoundingClientRect(),
       containsEventTarget: target => $element.contains(target),
-      deregisterDocumentInteractionHandler: (evtType, handler) =>
+      deregisterDocumentInteractionHandler: (eventType, handler) =>
         document.documentElement.removeEventListener(
-          evtType,
+          eventType,
           handler,
           applyPassive(),
         ),
-      deregisterInteractionHandler: (evt, handler) =>
-        $element.removeEventListener(evt, handler, applyPassive()),
+      deregisterInteractionHandler: (event_, handler) =>
+        $element.removeEventListener(event_, handler, applyPassive()),
       deregisterResizeHandler: handler =>
         window.removeEventListener('resize', handler),
       getWindowPageOffset: () => ({
@@ -36,14 +36,14 @@ export class RippleElement extends MDCRippleFoundation {
       isSurfaceActive: () => matches($element, ':active'),
       isSurfaceDisabled: () => false, // todo: consider if this is right
       isUnbounded: () => this.unbounded_,
-      registerDocumentInteractionHandler: (evtType, handler) =>
+      registerDocumentInteractionHandler: (eventType, handler) =>
         document.documentElement.addEventListener(
-          evtType,
+          eventType,
           handler,
           applyPassive(),
         ),
-      registerInteractionHandler: (evt, handler) => {
-        $element.addEventListener(evt, handler, applyPassive());
+      registerInteractionHandler: (event_, handler) => {
+        $element.addEventListener(event_, handler, applyPassive());
       },
       registerResizeHandler: handler => {
         return window.addEventListener('resize', handler);
@@ -57,11 +57,11 @@ export class RippleElement extends MDCRippleFoundation {
           $element.classList.remove(className);
         }
       },
-      updateCssVariable: (varName, value) => {
+      updateCssVariable: (variableName, value) => {
         if (state) {
-          state.styles = { ...state.styles, [varName]: value };
+          state.styles = { ...state.styles, [variableName]: value };
         } else {
-          $element.style.setProperty(varName, value);
+          $element.style.setProperty(variableName, value);
         }
       },
       ...options,
@@ -80,7 +80,7 @@ export class RippleElement extends MDCRippleFoundation {
 }
 
 export function useRipplePlugin(root, options) {
-  const ripple = ref(null);
+  const ripple = ref();
   const state = shallowReactive({ classes: {}, styles: {} });
 
   const activate = () => ripple.value?.activate();

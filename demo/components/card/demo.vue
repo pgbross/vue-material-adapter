@@ -25,22 +25,7 @@
   </div>
 </template>
 
-<script>
-import card from 'demo/assets/card-16-9.jpg';
-
-export default {
-  data() {
-    return {
-      card,
-    };
-  },
-  methods: {
-    onPrimaryAction() {
-      console.log('on primary action');
-    },
-  },
-};
-</script>
+<script src="./card.js"></script>
 
 <style>
 .mcw-demo .mdc-card {

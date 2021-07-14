@@ -32,12 +32,12 @@ export default {
     checked: Boolean,
   },
 
-  setup(props, { emit, attrs }) {
+  setup(props, { emit }) {
     const uiState = reactive({
       classes: { 'mdc-radio': 1 },
-      controlEl: null,
-      labelEl: null,
-      root: null,
+      controlEl: undefined,
+      labelEl: undefined,
+      root: undefined,
     });
 
     const {

@@ -27,22 +27,7 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      open: false,
-      openGroup: false,
-    };
-  },
-
-  methods: {
-    onSelect(data) {
-      console.dir(data);
-    },
-  },
-};
-</script>
+<script src="./menu.js"></script>
 
 <style>
 .demo-article .mcw-layout-grid {

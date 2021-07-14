@@ -18,7 +18,7 @@ export default {
       classes: {
         'mdc-menu-surface': 1,
       },
-      root: null,
+      root: undefined,
     });
 
     let foundation;
@@ -64,7 +64,7 @@ export default {
           };
         },
         getAnchorDimensions: () =>
-          anchorElement ? anchorElement.getBoundingClientRect() : null,
+          anchorElement ? anchorElement.getBoundingClientRect() : undefined,
         getWindowDimensions: () => {
           return { width: window.innerWidth, height: window.innerHeight };
         },
@@ -79,13 +79,13 @@ export default {
         },
         setPosition: position => {
           uiState.root.style.left =
-            'left' in position ? `${position.left}px` : null;
+            'left' in position ? `${position.left}px` : undefined;
           uiState.root.style.right =
-            'right' in position ? `${position.right}px` : null;
+            'right' in position ? `${position.right}px` : undefined;
           uiState.root.style.top =
-            'top' in position ? `${position.top}px` : null;
+            'top' in position ? `${position.top}px` : undefined;
           uiState.root.style.bottom =
-            'bottom' in position ? `${position.bottom}px` : null;
+            'bottom' in position ? `${position.bottom}px` : undefined;
         },
         setMaxHeight: height => {
           uiState.root.style.maxHeight = height;
@@ -109,9 +109,7 @@ export default {
     };
 
     const hoistMenuToBody = () => {
-      document.body.append(
-        uiState.root.parentElement.removeChild(uiState.root),
-      );
+      document.body.append(uiState.root.remove());
       setIsHoisted(true);
     };
 
@@ -219,7 +217,7 @@ export default {
     });
 
     onBeforeUnmount(() => {
-      previousFocus_ = null;
+      previousFocus_ = undefined;
       foundation.destroy();
     });
     return {

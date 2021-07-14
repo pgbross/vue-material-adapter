@@ -23,19 +23,19 @@ export default {
         tabindex: props.disabled ? '-1' : '0',
         role: props.disabled ? void 0 : 'button',
       },
-      root: null,
+      root: undefined,
       foundation: {},
     });
 
     const addIconFoundation = inject('addIconFoundation');
 
     const adapter = {
-      getAttr: attr => uiState.rootAttrs[attr],
-      setAttr: (attr, value) =>
-        (uiState.rootAttrs = { ...uiState.rootAttrs, [attr]: value }),
-      removeAttr: attr => {
+      getAttr: attribute => uiState.rootAttrs[attribute],
+      setAttr: (attribute, value) =>
+        (uiState.rootAttrs = { ...uiState.rootAttrs, [attribute]: value }),
+      removeAttr: attribute => {
         // eslint-disable-next-line no-unused-vars
-        const { [attr]: removed, ...rest } = uiState.rootAttrs;
+        const { [attribute]: removed, ...rest } = uiState.rootAttrs;
         uiState.rootAttrs = rest;
       },
       setContent: (/* content */) => {
@@ -43,10 +43,10 @@ export default {
         // so we dont expose a method to set content
         // thus this is a no-op
       },
-      registerInteractionHandler: (evtType, handler) =>
-        uiState.root.addEventListener(evtType, handler),
-      deregisterInteractionHandler: (evtType, handler) =>
-        uiState.root.removeEventListener(evtType, handler),
+      registerInteractionHandler: (eventType, handler) =>
+        uiState.root.addEventListener(eventType, handler),
+      deregisterInteractionHandler: (eventType, handler) =>
+        uiState.root.removeEventListener(eventType, handler),
       notifyIconAction: () => {
         emitCustomEvent(
           uiState.root,

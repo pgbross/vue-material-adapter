@@ -6,7 +6,7 @@ export default {
   name: 'mcw-card-primary-action',
   components: { CustomLink },
   setup() {
-    const root = ref(null);
+    const root = ref();
 
     const { classes: rippleClasses, styles } = useRipplePlugin(root);
     const classes = computed(() => {

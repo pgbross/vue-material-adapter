@@ -14,14 +14,20 @@
                 Dessert
               </th>
               <th
-                class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric"
+                class="
+                  mdc-data-table__header-cell
+                  mdc-data-table__header-cell--numeric
+                "
                 role="columnheader"
                 scope="col"
               >
                 Carbs (g)
               </th>
               <th
-                class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric"
+                class="
+                  mdc-data-table__header-cell
+                  mdc-data-table__header-cell--numeric
+                "
                 role="columnheader"
                 scope="col"
               >
@@ -83,7 +89,10 @@
           <thead>
             <tr class="mdc-data-table__header-row">
               <th
-                class="mdc-data-table__header-cell mdc-data-table__header-cell--checkbox"
+                class="
+                  mdc-data-table__header-cell
+                  mdc-data-table__header-cell--checkbox
+                "
                 role="columnheader"
                 scope="col"
               >
@@ -121,7 +130,10 @@
                 Stage
               </th>
               <th
-                class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric"
+                class="
+                  mdc-data-table__header-cell
+                  mdc-data-table__header-cell--numeric
+                "
                 role="columnheader"
                 scope="col"
               >
@@ -234,7 +246,10 @@
           <thead>
             <tr class="mdc-data-table__header-row">
               <th
-                class="mdc-data-table__header-cell mdc-data-table__header-cell--with-sort"
+                class="
+                  mdc-data-table__header-cell
+                  mdc-data-table__header-cell--with-sort
+                "
                 role="columnheader"
                 scope="col"
                 aria-sort="none"
@@ -243,7 +258,11 @@
                 <div class="mdc-data-table__header-cell-wrapper">
                   <div class="mdc-data-table__header-cell-label">Dessert</div>
                   <button
-                    class="mdc-icon-button material-icons mdc-data-table__sort-icon-button"
+                    class="
+                      mdc-icon-button
+                      material-icons
+                      mdc-data-table__sort-icon-button
+                    "
                     aria-label="Sort by dessert"
                     aria-describedby="dessert-status-label"
                   >
@@ -257,7 +276,11 @@
                 </div>
               </th>
               <th
-                class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric mdc-data-table__header-cell--with-sort"
+                class="
+                  mdc-data-table__header-cell
+                  mdc-data-table__header-cell--numeric
+                  mdc-data-table__header-cell--with-sort
+                "
                 role="columnheader"
                 scope="col"
                 aria-sort="ascending"
@@ -265,7 +288,11 @@
               >
                 <div class="mdc-data-table__header-cell-wrapper">
                   <button
-                    class="mdc-icon-button material-icons mdc-data-table__sort-icon-button"
+                    class="
+                      mdc-icon-button
+                      material-icons
+                      mdc-data-table__sort-icon-button
+                    "
                     aria-label="Sort by carbs"
                     aria-describedby="carbs-status-label"
                   >
@@ -280,7 +307,11 @@
                 </div>
               </th>
               <th
-                class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric mdc-data-table__header-cell--with-sort"
+                class="
+                  mdc-data-table__header-cell
+                  mdc-data-table__header-cell--numeric
+                  mdc-data-table__header-cell--with-sort
+                "
                 role="columnheader"
                 scope="col"
                 aria-sort="none"
@@ -288,7 +319,11 @@
               >
                 <div class="mdc-data-table__header-cell-wrapper">
                   <button
-                    class="mdc-icon-button material-icons mdc-data-table__sort-icon-button"
+                    class="
+                      mdc-icon-button
+                      material-icons
+                      mdc-data-table__sort-icon-button
+                    "
                     aria-label="Sort by protein"
                     aria-describedby="protein-status-label"
                   >
@@ -336,92 +371,7 @@
   </div>
 </template>
 
-<script>
-const desserts_ = [
-  {
-    dessert: 'Frozen yogurt',
-    carbs: '24',
-    protein: '4.0',
-    comments: 'Super tasty',
-  },
-  {
-    dessert: 'Baked alaska',
-    carbs: '34',
-    protein: '1.0',
-    comments: 'Hot and cold',
-  },
-  {
-    dessert: 'Ice cream',
-    carbs: '10',
-    protein: '5',
-    comments: 'Cold',
-  },
-];
-export default {
-  data() {
-    return { desserts: [], sortBy: '', sortValue: '' };
-  },
-  computed: {
-    filteredData() {
-      const { sortBy, sortValue, desserts: data } = this;
-      return this.sorter({ sortBy, sortValue, data });
-    },
-  },
-  mounted() {
-    this.desserts = desserts_.slice();
-  },
-
-  methods: {
-    onRowSelection(data) {
-      console.dir(data);
-    },
-    onSelectAll() {
-      console.log('select all');
-    },
-    onUnselectAll() {
-      console.log('unselect all');
-    },
-    onSorted({ data }) {
-      this.sortBy = data.columnId;
-      this.sortValue = data.sortValue;
-    },
-
-    sorter({ sortBy, sortValue, data }) {
-      if (!sortBy) {
-        return data.slice();
-      }
-      const order = sortValue === 'ascending' ? 1 : -1;
-
-      data = data.slice().sort(function (a, b) {
-        a = getProperty(a, sortBy);
-        b = getProperty(b, sortBy);
-        if (sortBy.indexOf('created') !== -1) {
-          a = new Date(a);
-          b = new Date(b);
-        }
-        return (a === b ? 0 : a > b ? 1 : -1) * order;
-      });
-      return data;
-    },
-  },
-};
-
-function getProperty(o, s) {
-  // copied from http://stackoverflow.com/questions/6491463/accessing-nested-javascript-objects-with-string-key
-  s = s.replace(/\[(\w+)]/g, '.$1'); // convert indexes to properties
-  s = s.replace(/^\./, ''); // strip a leading dot
-  const a = s.split('.');
-  while (a.length) {
-    const n = a.shift();
-    if (n in o) {
-      o = o[n];
-    } else {
-      return;
-    }
-  }
-  return o;
-}
-</script>
+<script src="./data-table.js"></script>
 
 <style>
 .data-table-demo {

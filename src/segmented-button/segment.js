@@ -18,11 +18,11 @@ export default {
     label: String,
     ripple: { type: Boolean, default: () => true },
   },
-  setup(props, { emit, attrs }) {
+  setup(props, { attrs }) {
     const uiState = reactive({
       classes: {},
       attrs: {},
-      root: null,
+      root: undefined,
     });
     let foundation;
 

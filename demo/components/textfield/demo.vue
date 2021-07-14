@@ -80,23 +80,7 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      textField: '',
-      enabled: true,
-      password: '',
-    };
-  },
-
-  methods: {
-    ondelete() {
-      console.log('ondelete');
-    },
-  },
-};
-</script>
+<script src="./textfield.js"></script>
 
 <style lang="scss">
 @use '@material/textfield/mixins' as textfield;

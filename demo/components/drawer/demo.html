@@ -36,20 +36,20 @@
       // Vue.use(vma.default);
       var app = new Vue({
         el: '#layout-app-demo',
-        data: function() {
+        data: function () {
           return {
             open: false,
             drawerType: 'temporary',
           };
         },
         watch: {
-          drawerType: function() {
+          drawerType: function () {
             this.$refs.drawer.show();
           },
         },
-        mounted: function() {
+        mounted: function () {
           var vm = this;
-          vm.$nextTick(function() {
+          vm.$nextTick(function () {
             // this.open = true;
             // console.dir(vm.$refs.drawer);
             // vm.$refs.drawer.show();

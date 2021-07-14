@@ -5,6 +5,7 @@ import cpy from 'cpy';
 import mkdirp from 'mkdirp';
 import fs from 'node:fs';
 import path from 'node:path';
+import process from 'node:process';
 import { promisify } from 'node:util';
 import rimraf from 'rimraf';
 import { rollup } from 'rollup';
@@ -42,7 +43,9 @@ async function createBundle(bundleType, { minimize } = {}) {
     external(id) {
       const containsThisModule = package__ =>
         id === package__ || id.startsWith(package__ + '/');
-      const isProvidedByDependency = externals.some(containsThisModule);
+      const isProvidedByDependency = externals.some(external =>
+        containsThisModule(external),
+      );
 
       return isProvidedByDependency;
     },

@@ -16,6 +16,10 @@ import { mcwNotchedOutline } from '../notched-outline/index.js';
 import { useRipplePlugin } from '../ripple/ripple-plugin.js';
 
 let uid_ = 0;
+
+const getAttributesList = mutationsList =>
+  mutationsList.map(mutation => mutation.attributeName);
+
 export default {
   name: 'mcw-textfield',
   inheritAttrs: false,
@@ -92,14 +96,14 @@ export default {
       notchStyles: {},
       helpTextId: `mcw-help-${uid_++}`,
       labelId: `mcw-label-${uid_}`,
-      root: null,
-      wrapper: null,
-      helpertext: null,
-      input: null,
-      labelEl: null,
-      lineRippleEl: null,
-      characterCounterEl: null,
-      helpertextEl: null,
+      root: undefined,
+      wrapper: undefined,
+      helpertext: undefined,
+      input: undefined,
+      labelEl: undefined,
+      lineRippleEl: undefined,
+      characterCounterEl: undefined,
+      helpertextEl: undefined,
     });
 
     let foundation;
@@ -197,8 +201,6 @@ export default {
       },
 
       registerValidationAttributeChangeHandler: handler => {
-        const getAttributesList = mutationsList =>
-          mutationsList.map(mutation => mutation.attributeName);
         const observer = new MutationObserver(mutationsList =>
           handler(getAttributesList(mutationsList)),
         );

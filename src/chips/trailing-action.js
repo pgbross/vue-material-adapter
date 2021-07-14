@@ -8,7 +8,7 @@ const { strings } = MDCChipTrailingActionFoundation;
 export default {
   name: 'mcw-chip-trailing-action',
   setup() {
-    const root = ref(null);
+    const root = ref();
     let foundation;
 
     const { classes, styles } = useRipplePlugin(root);
@@ -17,7 +17,7 @@ export default {
       focus: () => {
         root.value.focus();
       },
-      getAttribute: attr => root.value.getAttribute(attr),
+      getAttribute: attribute => root.value.getAttribute(attribute),
       notifyInteraction: trigger =>
         emitCustomEvent(
           root.value,
@@ -36,13 +36,13 @@ export default {
           },
           true,
         ),
-      setAttribute: (attr, value) => {
-        root.value.setAttribute(attr, value);
+      setAttribute: (attribute, value) => {
+        root.value.setAttribute(attribute, value);
       },
     };
 
-    const onClick = evt => foundation.handleClick(evt);
-    const onKeydown = evt => foundation.handleKeydown(evt);
+    const onClick = event_ => foundation.handleClick(event_);
+    const onKeydown = event_ => foundation.handleKeydown(event_);
     const isNavigable = () => foundation.isNavigable();
     const focus = () => foundation.focus();
     const removeFocus = () => foundation.removeFocus();

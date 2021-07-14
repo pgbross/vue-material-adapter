@@ -39,8 +39,8 @@ export default {
       styles: {},
       menuOpen: false,
       myWrapFocus: true,
-      menuSurface: null,
-      list: null,
+      menuSurface: undefined,
+      list: undefined,
     });
 
     let foundation;
@@ -120,7 +120,7 @@ export default {
       if (index < itms.length) {
         return itms[index];
       }
-      return null;
+      return;
     };
 
     const getPrimaryTextAtIndex = index => {
@@ -215,11 +215,11 @@ export default {
           items.value[index],
           `.${cssClasses.MENU_SELECTION_GROUP}`,
         );
-        const selectedItemEl = selectionGroupElement.querySelector(
+        const selectedItemElement = selectionGroupElement.querySelector(
           `.${cssClasses.MENU_SELECTED_LIST_ITEM}`,
         );
-        return selectedItemEl
-          ? items.value.findIndex(element => element == selectedItemEl)
+        return selectedItemElement
+          ? items.value.findIndex(element => element == selectedItemElement)
           : -1;
       },
     };

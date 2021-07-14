@@ -5,7 +5,9 @@ import * as util from '@material/drawer/util.js';
 import { MDCListFoundation } from '@material/list/foundation.js';
 import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
 import { emitCustomEvent } from '../base/index.js';
-const { strings } = MDCDismissibleDrawerFoundation;
+const { strings, cssClasses } = MDCDismissibleDrawerFoundation;
+
+const focusTrapFactory_ = (element, options) => new FocusTrap(element, options);
 
 export default {
   name: 'mcw-drawer',
@@ -24,11 +26,8 @@ export default {
         'mdc-drawer--modal': props.modal,
         'mdc-drawer--dismissible': props.dismissible && !props.modal,
       },
-      drawer: null,
+      drawer: undefined,
     });
-
-    const focusTrapFactory_ = (element, options) =>
-      new FocusTrap(element, options);
 
     const show = () => foundation.open();
     const close = () => foundation.close();
@@ -116,7 +115,7 @@ export default {
     );
 
     onMounted(() => {
-      const { DISMISSIBLE, MODAL } = MDCDismissibleDrawerFoundation.cssClasses;
+      const { DISMISSIBLE, MODAL } = cssClasses;
       if (props.dismissible) {
         foundation = new MDCDismissibleDrawerFoundation(adapter);
       } else if (props.modal) {
@@ -140,7 +139,7 @@ export default {
       foundation.close();
       foundation.destroy();
 
-      foundation = null;
+      foundation = undefined;
     });
 
     return {

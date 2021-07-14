@@ -18,24 +18,7 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return { showBanner: false, reason: '' };
-  },
-  computed: {},
-
-  mounted() {},
-  methods: {
-    onShow() {
-      this.showBanner = true;
-    },
-    onClosing({ reason }) {
-      this.reason = reason;
-    },
-  },
-};
-</script>
+<script src="./banner.js"></script>
 
 <style lang="scss">
 .demo-controls {

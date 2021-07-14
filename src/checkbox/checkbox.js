@@ -37,9 +37,9 @@ export default {
   setup(props, { emit, slots }) {
     const uiState = reactive({
       classes: { 'mdc-checkbox': 1 },
-      control: null,
-      labelEl: null,
-      root: null,
+      control: undefined,
+      labelEl: undefined,
+      root: undefined,
     });
 
     let foundation;
@@ -89,15 +89,13 @@ export default {
         const index = props.modelValue.indexOf(props.value);
         if (checked) {
           index < 0 &&
-            emit('update:modelValue', props.modelValue.concat(props.value));
+            emit('update:modelValue', [...props.modelValue, props.value]);
         } else {
           index > -1 &&
-            emit(
-              'update:modelValue',
-              props.modelValue
-                .slice(0, index)
-                .concat(props.modelValue.slice(index + 1)),
-            );
+            emit('update:modelValue', [
+              ...props.modelValue.slice(0, index),
+              ...props.modelValue.slice(index + 1),
+            ]);
         }
       } else {
         // emit a native event so that it bubbles to parent elements

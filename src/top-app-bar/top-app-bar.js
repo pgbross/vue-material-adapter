@@ -16,14 +16,14 @@ export default {
 
   emits: ['nav'],
 
-  setup(props, { emit, attrs }) {
+  setup(props, { emit }) {
     const uiState = reactive({
       rootStyles: {},
       rootClasses: {
         'mdc-top-app-bar': true,
       },
       myScrollTarget: props.scrollTarget || window,
-      root: null,
+      root: undefined,
     });
 
     let foundation;

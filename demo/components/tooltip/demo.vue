@@ -53,17 +53,7 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {};
-  },
-  computed: {},
-
-  mounted() {},
-  methods: {},
-};
-</script>
+<script src="./tooltip.js"></script>
 
 <style lang="scss">
 .tooltip-demo {

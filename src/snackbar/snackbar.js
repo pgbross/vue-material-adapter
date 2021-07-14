@@ -31,7 +31,7 @@ export default {
       hidden: false,
       actionHidden: false,
       showMessage: true,
-      labelEl: null,
+      labelEl: undefined,
     });
 
     let foundation;

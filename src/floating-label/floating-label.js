@@ -11,7 +11,7 @@ export default {
         'mdc-floating-label': true,
         'mdc-floating-label--required': props.required,
       },
-      root: null,
+      root: undefined,
     });
 
     let foundation;
@@ -30,11 +30,11 @@ export default {
       },
 
       getWidth: () => uiState.root.scrollWidth,
-      registerInteractionHandler: (evtType, handler) => {
-        uiState.root.addEventListener(evtType, handler);
+      registerInteractionHandler: (eventType, handler) => {
+        uiState.root.addEventListener(eventType, handler);
       },
-      deregisterInteractionHandler: (evtType, handler) => {
-        uiState.root.removeEventListener(evtType, handler);
+      deregisterInteractionHandler: (eventType, handler) => {
+        uiState.root.removeEventListener(eventType, handler);
       },
     };
 

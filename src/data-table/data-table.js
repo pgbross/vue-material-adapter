@@ -5,20 +5,20 @@ import { closest } from '@material/dom/ponyfill.js';
 import { onBeforeUnmount, onMounted, reactive, toRefs } from 'vue';
 import { CheckboxAdapter } from './checkbox-adapter.js';
 
+const checkboxFactory = element => {
+  return element.__vue__
+    ? new CheckboxAdapter(element.__vue__)
+    : new MDCCheckbox(element);
+};
+
 export default {
   name: 'mcw-data-table',
   props: { sticky: { type: Boolean } },
   setup(props, { emit }) {
     const uiState = reactive({
       classes: { 'mdc-data-table--sticky-header': props.sticky },
-      root: null,
+      root: undefined,
     });
-
-    const checkboxFactory = element => {
-      return element.__vue__
-        ? new CheckboxAdapter(element.__vue__)
-        : new MDCCheckbox(element);
-    };
 
     const { cssClasses, selectors, dataAttributes, SortValue, messages } = test;
 
@@ -193,9 +193,9 @@ export default {
         }
 
         rowCheckboxList = [];
-        for (const rowEl of getRows()) {
-          const el = rowEl.querySelector(selectors.ROW_CHECKBOX);
-          const checkbox = checkboxFactory(el);
+        for (const rowElement of getRows()) {
+          const element = rowElement.querySelector(selectors.ROW_CHECKBOX);
+          const checkbox = checkboxFactory(element);
 
           rowCheckboxList.push(checkbox);
         }
@@ -270,9 +270,12 @@ export default {
       );
 
       headerRowCheckbox?.destroy?.();
-      rowCheckboxList?.forEach(checkbox => {
-        checkbox.destroy?.();
-      });
+      if (rowCheckboxList) {
+        for (const checkbox of rowCheckboxList) {
+          checkbox.destroy?.();
+        }
+      }
+
       foundation.destroy();
     });
 

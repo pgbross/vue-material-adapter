@@ -7,6 +7,17 @@ import {
 import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
 import { emitCustomEvent } from '../base/index.js';
 
+const getThumbName = (thumb, suffix) => {
+  const thumbName = thumb == Thumb.END ? 'endThumb' : 'startThumb';
+  return `${thumbName}${suffix}`;
+};
+
+let valueToAriaValueTextFunction = () => {};
+
+const setValueToAriaValueTextFunction = mapFunction => {
+  valueToAriaValueTextFunction = mapFunction;
+};
+
 export default {
   name: 'mcw-slider',
   props: {
@@ -23,7 +34,7 @@ export default {
   setup(props, { emit }) {
     const uiState = reactive({
       skipInitialUIUpdate: false,
-      dir: null,
+      dir: undefined,
       marks: [],
       classes: {
         'mdc-slider': 1,
@@ -45,33 +56,23 @@ export default {
 
       inputs: [],
       thumbs: [],
-      root: null,
-      startThumb: null,
-      endThumb: null,
-      trackActive: null,
+      root: undefined,
+      startThumb: undefined,
+      endThumb: undefined,
+      trackActive: undefined,
     });
 
     let foundation;
-    let valueToAriaValueTextFn = () => null;
 
-    const setValueToAriaValueTextFn = mapFn => {
-      valueToAriaValueTextFn = mapFn;
-    };
-
-    const getThumbEl = thumb => {
+    const getThumbElement = thumb => {
       return thumb === Thumb.END
         ? uiState.thumbs[uiState.thumbs.length - 1]
         : uiState.thumbs[0];
     };
 
-    const getThumbName = (thumb, suffix) => {
-      const thumbName = thumb == Thumb.END ? 'endThumb' : 'startThumb';
-      return `${thumbName}${suffix}`;
-    };
+    const setInputReference = element => uiState.inputs.push(element);
 
-    const setInputRef = el => uiState.inputs.push(el);
-
-    const setThumbRef = el => uiState.thumbs.push(el);
+    const setThumbReference = element => uiState.thumbs.push(element);
 
     const getInput = thumb => {
       return thumb === Thumb.END
@@ -138,28 +139,28 @@ export default {
       },
 
       isThumbFocused: thumb => {
-        return getThumbEl(thumb) === document.activeElement;
+        return getThumbElement(thumb) === document.activeElement;
       },
-      focusThumb: thumb => getThumbEl(thumb).focus(),
+      focusThumb: thumb => getThumbElement(thumb).focus(),
 
       getThumbKnobWidth: thumb =>
-        getThumbEl(thumb)
+        getThumbElement(thumb)
           .querySelector(`.${cssClasses.THUMB_KNOB}`)
           ?.getBoundingClientRect().width,
 
       getThumbBoundingClientRect: thumb =>
-        getThumbEl(thumb).getBoundingClientRect(),
+        getThumbElement(thumb).getBoundingClientRect(),
 
       getBoundingClientRect: () => uiState.root.getBoundingClientRect(),
 
       isRTL: () => getComputedStyle(uiState.root).direction === 'rtl',
 
       setThumbStyleProperty: (propertyName, value, thumb) => {
-        getThumbEl(thumb).style.setProperty(propertyName, value);
+        getThumbElement(thumb).style.setProperty(propertyName, value);
       },
 
       removeThumbStyleProperty: (propertyName, thumb) =>
-        getThumbEl(thumb).style.removeProperty(propertyName),
+        getThumbElement(thumb).style.removeProperty(propertyName),
 
       setTrackActiveStyleProperty: (propertyName, value) =>
         uiState.trackActive.style.setProperty(propertyName, value),
@@ -174,7 +175,7 @@ export default {
         uiState[thumbName] = String(value);
       },
 
-      getValueToAriaValueTextFn: () => valueToAriaValueTextFn,
+      getValueToAriaValueTextFn: () => valueToAriaValueTextFunction,
 
       updateTickMarks: tickMarks => {
         uiState.marks = tickMarks.map(mark =>
@@ -207,34 +208,34 @@ export default {
         // https://github.com/material-components/material-components-web/issues/6448
       },
 
-      registerEventHandler: (evtType, handler) =>
-        uiState.root.addEventListener(evtType, handler),
+      registerEventHandler: (eventType, handler) =>
+        uiState.root.addEventListener(eventType, handler),
 
-      deregisterEventHandler: (evtType, handler) =>
-        uiState.root.removeEventListener(evtType, handler),
+      deregisterEventHandler: (eventType, handler) =>
+        uiState.root.removeEventListener(eventType, handler),
 
-      registerThumbEventHandler: (thumb, evtType, handler) =>
-        getThumbEl(thumb).addEventListener(evtType, handler),
+      registerThumbEventHandler: (thumb, eventType, handler) =>
+        getThumbElement(thumb).addEventListener(eventType, handler),
 
-      deregisterThumbEventHandler: (thumb, evtType, handler) =>
-        getThumbEl(thumb).removeEventListener(evtType, handler),
-      registerInputEventHandler: (thumb, evtType, handler) => {
-        getInput(thumb).addEventListener(evtType, handler);
+      deregisterThumbEventHandler: (thumb, eventType, handler) =>
+        getThumbElement(thumb).removeEventListener(eventType, handler),
+      registerInputEventHandler: (thumb, eventType, handler) => {
+        getInput(thumb).addEventListener(eventType, handler);
       },
-      deregisterInputEventHandler: (thumb, evtType, handler) => {
-        getInput(thumb).removeEventListener(evtType, handler);
+      deregisterInputEventHandler: (thumb, eventType, handler) => {
+        getInput(thumb).removeEventListener(eventType, handler);
       },
-      registerBodyEventHandler: (evtType, handler) =>
-        document.body.addEventListener(evtType, handler),
+      registerBodyEventHandler: (eventType, handler) =>
+        document.body.addEventListener(eventType, handler),
 
-      deregisterBodyEventHandler: (evtType, handler) =>
-        document.body.removeEventListener(evtType, handler),
+      deregisterBodyEventHandler: (eventType, handler) =>
+        document.body.removeEventListener(eventType, handler),
 
-      registerWindowEventHandler: (evtType, handler) =>
-        window.addEventListener(evtType, handler),
+      registerWindowEventHandler: (eventType, handler) =>
+        window.addEventListener(eventType, handler),
 
-      deregisterWindowEventHandler: (evtType, handler) =>
-        window.removeEventListener(evtType, handler),
+      deregisterWindowEventHandler: (eventType, handler) =>
+        window.removeEventListener(eventType, handler),
     };
 
     watch(
@@ -292,9 +293,9 @@ export default {
 
     return {
       ...toRefs(uiState),
-      setValueToAriaValueTextFn,
-      setInputRef,
-      setThumbRef,
+      setValueToAriaValueTextFn: setValueToAriaValueTextFunction,
+      setInputRef: setInputReference,
+      setThumbRef: setThumbReference,
     };
   },
 };

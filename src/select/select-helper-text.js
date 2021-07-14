@@ -30,12 +30,12 @@ export default {
 
       hasClass: className => Boolean(uiState.classes[className]),
 
-      setAttr: (attr, value) =>
-        (uiState.attrs = { ...uiState.attrs, [attr]: value }),
+      setAttr: (attribute, value) =>
+        (uiState.attrs = { ...uiState.attrs, [attribute]: value }),
 
-      removeAttr: attr => {
+      removeAttr: attribute => {
         // eslint-disable-next-line no-unused-vars
-        const { [attr]: removed, ...rest } = uiState.attrs;
+        const { [attribute]: removed, ...rest } = uiState.attrs;
         uiState.attrs = rest;
       },
 

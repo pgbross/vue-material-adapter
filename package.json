@@ -219,6 +219,7 @@
       "browser": true
     },
     "rules": {
+      "vue/no-v-model-argument": "off",
       "no-unused-vars": "error",
       "no-else-return": 1,
       "prefer-const": "error",

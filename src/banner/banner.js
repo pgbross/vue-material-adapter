@@ -22,8 +22,8 @@ export default {
         'mdc-banner--mobile-stacked': props.mobile,
       },
       styles: {},
-      root: null,
-      contentEl: null,
+      root: undefined,
+      contentEl: undefined,
     });
     let foundation;
 

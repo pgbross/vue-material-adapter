@@ -1,4 +1,4 @@
-import { computed, reactive, toRefs, nextTick, watch } from 'vue';
+import { computed, nextTick, reactive, toRefs, watch } from 'vue';
 
 const noop = () => {};
 
@@ -74,10 +74,10 @@ export default {
 
     watch(
       () => props.snack,
-      (nv, ov) => {
+      nv => {
         if (nv) {
           handleSnack(nv);
-          emit('update:snack', null);
+          emit('update:snack');
         }
       },
     );
