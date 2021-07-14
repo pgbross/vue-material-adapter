@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "vue-material-adapter": "^2.0.3"
+    "vue-material-adapter": "^3.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.3.1",

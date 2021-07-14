@@ -1,6 +1,6 @@
 {
   "name": "vue-material-adapter",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Vue 3 wrapper arround Material Components for the Web",
   "keywords": [
     "vue",
@@ -16,7 +16,7 @@
   "license": "ISC",
   "type": "module",
   "main": "dist/vue-material-adapter.amd.min.js",
-  "module": "src/index.js",
+  "module": "dist/vue-material-adapter.esm.js",
   "files": [
     "dist",
     "static",
