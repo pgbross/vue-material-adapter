@@ -28,37 +28,6 @@ const esbuildTarget = esbuildTargets[extraPath];
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
-const cssLoaders = [
-  {
-    loader: 'css-loader',
-    options: {
-      sourceMap: false,
-      import: false,
-    },
-  },
-  {
-    loader: 'postcss-loader',
-    options: {
-      postcssOptions: {
-        'no-map': true,
-        plugins: {
-          'postcss-preset-env': {},
-          cssnano: {},
-        },
-      },
-    },
-  },
-  {
-    loader: 'sass-loader',
-    options: {
-      implementation: sass,
-      sassOptions: {
-        includePaths: [resolve('../node_modules')],
-      },
-    },
-  },
-];
-
 export default [
   {
     target: 'web',
@@ -79,9 +48,6 @@ export default [
         {
           test: /\.vue$/,
           loader: 'vue-loader',
-          options: {
-            loaders: ['vue-style-loader'].concat(cssLoaders),
-          },
         },
         {
           test: /\.html$/,
@@ -99,10 +65,6 @@ export default [
         {
           test: /\.scss$/,
           exclude: /\.module.(s(a|c)ss)$/,
-          // type: 'asset/resource',
-          // generator: {
-          //   filename: 'css/[name].min.css',
-          // },
           use: [
             _loader,
             {
@@ -223,7 +185,6 @@ export default [
     resolve: {
       alias: {
         vue$: 'vue/dist/vue.esm-bundler.js',
-        // '~': 'vue-material-adapter/packages',
       },
       extensions: ['*', '.vue', '.js', '.json'],
     },

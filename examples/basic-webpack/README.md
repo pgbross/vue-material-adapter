@@ -1,6 +1,15 @@
 # basic-webpack
 
-> Basic example using `webpack` and `vue-material-adapter` with both development and production builds.
+Basic example using `webpack` and `vue-material-adapter` with both development and production builds.
+
+This demonstrates Vue 3 composition API, and is also written to show using plain `js` and `html` sources. This uses the `vue.esm-bundler.js` version defined in `webpack.config.js`.
+
+To use as an SFC, create an `app.vue` file and put the html and js in the template and script sections as normal, then in `main.js` change the app import:
+
+```javascript
+// import App from 'app.js';
+import App from 'app.vue';
+```
 
 ## Usage
 
