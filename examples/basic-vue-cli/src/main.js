@@ -1,12 +1,11 @@
-import { createApp, h } from "vue";
-import VueMaterialAdapter from "vue-material-adapter";
-import App from "./app.vue";
+import { createApp, h } from 'vue';
+import VueMaterialAdapter from 'vue-material-adapter';
+import App from './app.vue';
 
-// mount app
 const app = createApp({
-  render: () => h(App)
+  render: () => h(App),
 });
 
 app.use(VueMaterialAdapter);
 
-app.mount("#app");
+app.mount('#app');

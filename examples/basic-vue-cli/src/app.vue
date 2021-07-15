@@ -22,25 +22,24 @@
 </template>
 
 <script>
+import { reactive, toRefs } from 'vue';
+
 export default {
-  name: "App",
-  data() {
-    return {
-      open: false
-    };
-  },
-  methods: {
-    toggleOpen() {
-      this.open = !this.open;
-    },
-    onClosed() {
-      this.$refs.snackbar.handleSnack({
-        message: "Dialog closed",
+  name: 'App',
+  setup() {
+    const uiState = reactive({ open: false, snackbar: undefined });
+
+    const toggleOpen = () => (uiState.open = !uiState.open);
+
+    const onClosed = () => {
+      uiState.snackbar.handleSnack({
+        message: 'Dialog closed',
         dismissAction: true,
-        actionText: "close"
+        actionText: 'close',
       });
-    }
-  }
+    };
+    return { ...toRefs(uiState), onClosed, toggleOpen };
+  },
 };
 </script>
 

@@ -1,13 +1,15 @@
-const path = require("path");
+import path from 'node:path';
+import url from 'node:url';
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
-module.exports = {
+export default {
   css: {
     loaderOptions: {
       sass: {
         sassOptions: {
-          includePaths: [path.resolve(__dirname,'node_modules')]
-        }
-      }
-    }
-  }
+          includePaths: [path.resolve(__dirname, 'node_modules')],
+        },
+      },
+    },
+  },
 };
