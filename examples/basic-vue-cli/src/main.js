@@ -1,11 +1,13 @@
 import { createApp, h } from 'vue';
-import VueMaterialAdapter from 'vue-material-adapter';
+import { button, dialog, snackbar } from 'vue-material-adapter';
 import App from './app.vue';
 
 const app = createApp({
   render: () => h(App),
 });
 
-app.use(VueMaterialAdapter);
+app.use(button);
+app.use(snackbar);
+app.use(dialog);
 
 app.mount('#app');
