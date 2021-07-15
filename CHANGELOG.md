@@ -1,3 +1,31 @@
+## [3.0.3](https://github.com/pgbross/vue-material-adapter/compare/v2.0.0...v3.0.3) (2021-07-15)
+
+
+### Bug Fixes
+
+* ensures mcw-tab-bar uses the corrent rootEl ([01b2bca](https://github.com/pgbross/vue-material-adapter/commit/01b2bcad2e1c2ae21e49929981ced5d9e30af36c)), closes [#178](https://github.com/pgbross/vue-material-adapter/issues/178)
+* ensures mcw-tab-bar uses the corrent rootEl ([c8e8224](https://github.com/pgbross/vue-material-adapter/commit/c8e8224d9c93e484f60aac51e3219e16b1d2b44d)), closes [#178](https://github.com/pgbross/vue-material-adapter/issues/178)
+* focus trap in drawer and dialog ([2056332](https://github.com/pgbross/vue-material-adapter/commit/205633280706ee17e6898bd51ed70daba0d33ffd))
+* fonts are missing in vue-cli example ([fd4e884](https://github.com/pgbross/vue-material-adapter/commit/fd4e8841af2b4b3072c7dcbaa9cafcafad1bbd8b))
+* include missing cross-env on build ([047f0ac](https://github.com/pgbross/vue-material-adapter/commit/047f0ac0238190fd827b13ed7ee1ac71997d24d0)), closes [#176](https://github.com/pgbross/vue-material-adapter/issues/176)
+* include src ([dc12dbc](https://github.com/pgbross/vue-material-adapter/commit/dc12dbc4fe039f5f80b88a7ce8cd9f6a158d0085))
+* point module at src/index.js ([27ca528](https://github.com/pgbross/vue-material-adapter/commit/27ca528f0b76b09a4bdf3312101588229497d3e9))
+* required dependencies are missing in vue-cli example ([b472804](https://github.com/pgbross/vue-material-adapter/commit/b4728044818f13e417659dc67a8566f0eed7851b))
+* update config for demo ([298e0ed](https://github.com/pgbross/vue-material-adapter/commit/298e0ed25de7430c66ade24dc4147955b0de5169))
+* update module in package.json ([258d6d3](https://github.com/pgbross/vue-material-adapter/commit/258d6d397f7d48878a09631db99797f9f2e3ba47))
+
+
+### Features
+
+* eslint demo ([ac00423](https://github.com/pgbross/vue-material-adapter/commit/ac00423e387d5ca70b918d8167afb3acb6be585e))
+* improve basic-webpack and readme ([b066e0f](https://github.com/pgbross/vue-material-adapter/commit/b066e0f49665bb9a2c8bfd5d73cb97faf80d252e))
+* tree shakable friendly ([42a5d40](https://github.com/pgbross/vue-material-adapter/commit/42a5d40dd54d46e2d3710bb92c8cec44e6648b7d))
+* update basic-vue example ([5f87445](https://github.com/pgbross/vue-material-adapter/commit/5f87445b032968d77629040c7373a17724a362a3))
+* update basic-vue readme ([e6ee287](https://github.com/pgbross/vue-material-adapter/commit/e6ee2870eb5402805bd384b6e0906298afe61ce2))
+* use esbuild ([41184a2](https://github.com/pgbross/vue-material-adapter/commit/41184a277faef08054898a341c4fa5c548ca11d7))
+
+
+
 ## [2.0.0](https://github.com/pgbross/vue-material-adapter/compare/v2.0.0-beta.3...v2.0.0) (2021-03-12)
 
 ### Bug Fixes
