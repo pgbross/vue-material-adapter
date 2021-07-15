@@ -1,10 +1,56 @@
-### `v2.0.0` - This release targets `material-components-web v10.0.0`.
+### [v3.0.3](#) - This release targets `material-components-web v10.0.0`
+
+- Restructure sources to be more friendly for Tree Shaking in consumers of the library.
+- Use `esbuild` instead of `babel`.
+- Update examples.
+
+## BREAKING CHANGES:
+
+### ES modules:
+
+When using ES modules, the default is now to reference `src/index.js`. This will require consumers to be able to handle SFC `.vue` files.
+
+For example:
+
+```javascript
+{
+  module: {
+    rules: [
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+      },
+      // more rules...
+    ];
+  }
+}
+```
+
+to use the esm bundle (the previous default) update your build process.
+
+For example using `webpack` add a resolve option:
+
+```javascript
+{
+  resolve: {
+    alias: {
+      'vue-material-adapter$': 'vue-material-adapter/dist/vue-material-adapter.esm.js'
+    }
+  }
+}
+```
+
+### Source references:
+
+Source path has changed from `package` to `src`. Update any explicit imports of sub-components.
+
+### [v2.0.0](#) - This release targets `material-components-web v10.0.0`.
 
 Adds support for:
 
 - Segmented Button multi-select
 
-### `v2.0.0-beta.2` - This release targets `material-components-web v10.0.0`.
+### [v2.0.0-beta.2](#) - This release targets `material-components-web v10.0.0`.
 
 Adds support for:
 
