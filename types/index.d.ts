@@ -1,0 +1,36 @@
+declare namespace _default {
+    function install(vm: any): void;
+    function install(vm: any): void;
+}
+export default _default;
+import * as base from "./base/index.js";
+import banner from "./banner/index.js";
+import button from "./button/index.js";
+import card from "./card/index.js";
+import circularProgress from "./circular-progress/index.js";
+import checkbox from "./checkbox/index.js";
+import chips from "./chips/index.js";
+import dataTable from "./data-table/index.js";
+import dialog from "./dialog/index.js";
+import drawer from "./drawer/index.js";
+import fab from "./fab/index.js";
+import floatingLabel from "./floating-label/index.js";
+import iconButton from "./icon-button/index.js";
+import layoutGrid from "./layout-grid/index.js";
+import lineRipple from "./line-ripple/index.js";
+import linearProgress from "./linear-progress/index.js";
+import list from "./list/index.js";
+import materialIcon from "./material-icon/index.js";
+import menu from "./menu/index.js";
+import notchedOutline from "./notched-outline/index.js";
+import radio from "./radio/index.js";
+import segmentedButton from "./segmented-button/index.js";
+import select from "./select/index.js";
+import slider from "./slider/index.js";
+import snackbar from "./snackbar/index.js";
+import switchControl from "./switch/index.js";
+import tabs from "./tabs/index.js";
+import textfield from "./textfield/index.js";
+import tooltip from "./tooltip/index.js";
+import topAppBar from "./top-app-bar/index.js";
+export { base, banner, button, card, circularProgress, checkbox, chips, dataTable, dialog, drawer, fab, floatingLabel, iconButton, layoutGrid, lineRipple, linearProgress, list, materialIcon, menu, notchedOutline, radio, segmentedButton, select, slider, snackbar, switchControl, tabs, textfield, tooltip, topAppBar };

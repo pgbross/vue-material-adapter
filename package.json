@@ -1,6 +1,6 @@
 {
   "name": "vue-material-adapter",
-  "version": "3.0.3",
+  "version": "3.1.0",
   "description": "Vue 3 wrapper arround Material Components for the Web",
   "keywords": [
     "vue",
@@ -18,12 +18,14 @@
   "sideEffects": false,
   "main": "dist/vue-material-adapter.amd.min.js",
   "module": "src/index.js",
+  "types": "./types/index.d.ts",
   "files": [
     "dist",
     "static",
     "src",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "types"
   ],
   "repository": {
     "type": "git",
@@ -42,6 +44,7 @@
     "build:develop": "webpack --progress --colors --mode development",
     "build:demo": "cross-env NODE_ENV=production BROWSERLISTS_ENV=evergreen webpack --config=demo/webpack.config.js --progress",
     "build:demoX": "cross-env NODE_ENV=development BROWSERLISTS_ENV=evergreen webpack --config=demo/webpack.config.js --progress",
+    "build:types": "tsc",
     "ci": "run-s ci:*",
     "ci:test": "NODE_ENV=test; jest --ci --runInBand",
     "ci:build": "run-s build",
@@ -95,6 +98,7 @@
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-node-resolve": "^11.2.1",
     "@rollup/plugin-replace": "^2.4.2",
+    "@types/node": "^16.3.3",
     "@vue/compiler-sfc": "^3.1.1",
     "@vue/test-utils": "^1.2.1",
     "autoprefixer": "^10.2.6",
@@ -155,6 +159,7 @@
     "style-loader": "^2.0.0",
     "terser-webpack-plugin": "^5.1.3",
     "to-slug-case": "^1.0.0",
+    "typescript": "^4.3.5",
     "url-loader": "^4.1.1",
     "vue": "^3.1.1",
     "vue-analytics": "^5.22.1",
