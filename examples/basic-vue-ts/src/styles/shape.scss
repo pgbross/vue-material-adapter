@@ -1,0 +1,4 @@
+@use '@material/shape' with (
+  $small-component-radius: 8px,
+  $medium-component-radius: 16px,
+);
