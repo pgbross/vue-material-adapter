@@ -1,0 +1,10 @@
+<div>
+  <div class="mdc-typography--headline4">{{title}}</div>
+  <mcw-button @click="onShowSnack" raised>Show snack</mcw-button>
+
+  <div class="mdc-typography--body1" style="margin-top: 16px" v-for="item in links" :key="item.id">
+    {{item.desc}} <a :href="item.url" target="_blank">{{humanizeURL(item.url)}}</a>
+  </div>
+
+  <mcw-snackbar-queue ref="snackbar"></mcw-snackbar-queue>
+</div>

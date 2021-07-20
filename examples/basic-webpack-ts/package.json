@@ -11,9 +11,6 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "vue-material-adapter": "^3.0.3"
-  },
   "devDependencies": {
     "autoprefixer": "^10.3.1",
     "cross-env": "^7.0.3",
@@ -46,6 +43,7 @@
     "style-loader": "^3.1.0",
     "vue": "^3.1.4",
     "vue-loader": "^16.3.0",
+    "vue-material-adapter": "^3.2.0",
     "webpack": "^5.44.0",
     "webpack-bundle-analyzer": "^4.4.2",
     "webpack-cli": "^4.7.2",

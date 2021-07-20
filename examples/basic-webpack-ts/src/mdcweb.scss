@@ -1,0 +1,37 @@
+$dark-mode-primary: #67360b;
+$dark-mode-on-primary: white;
+
+@use '@material/theme'  with (
+    $primary: #be6c35,
+    $on-primary: #222,
+);
+
+@use '@material/shape' with (
+  $small-component-radius: 8px,
+  $medium-component-radius: 16px,
+);
+
+// @use '@material/button' with (
+//   $height: 48px
+// );
+
+@use '@material/button/styles';
+
+@use '@material/icon-button';
+@use '@material/snackbar';
+@use '@material/typography/mdc-typography';
+@use '@material/theme/mdc-theme';
+
+:root {
+    @media screen and (prefers-color-scheme: dark) {
+        --mdc-theme-primary: #{$dark-mode-primary};
+        --mdc-theme-on-primary: #{$dark-mode-on-primary};
+
+        background: #291202;
+    }
+}
+
+@include icon-button.core-styles;
+
+@include snackbar.core-styles;
+@include snackbar.fill-color(#542d11);
