@@ -1,8 +1,8 @@
-import { computed, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import { CustomLink } from '../base/index.js';
 import { useRipplePlugin } from '../ripple/index.js';
 
-export default {
+export default defineComponent({
   name: 'mcw-button',
   props: {
     raised: Boolean,
@@ -43,4 +43,4 @@ export default {
       haveTrailingIcon,
     };
   },
-};
+});
