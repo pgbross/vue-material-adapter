@@ -3,7 +3,7 @@ import * as base from './base/index.js';
 import button from './button/index.js';
 import card from './card/index.js';
 import checkbox from './checkbox/index.js';
-import chips from './chips/index.js';
+// import chips from './chips/index.js';
 import circularProgress from './circular-progress/index.js';
 import dataTable from './data-table/index.js';
 import dialog from './dialog/index.js';
@@ -36,7 +36,7 @@ export default {
     vm.use(card);
     vm.use(circularProgress);
     vm.use(checkbox);
-    vm.use(chips);
+    // vm.use(chips);
     vm.use(dataTable);
     vm.use(dialog);
     vm.use(drawer);
@@ -70,7 +70,7 @@ export {
   card,
   circularProgress,
   checkbox,
-  chips,
+  // chips,
   dataTable,
   dialog,
   drawer,

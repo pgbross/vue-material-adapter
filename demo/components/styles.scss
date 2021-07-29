@@ -8,7 +8,7 @@
 @use "@material/card/mdc-card";
 @use "@material/circular-progress/mdc-circular-progress";
 @use "@material/checkbox/mdc-checkbox";
-@use "@material/chips/mdc-chips";
+// @use "@material/chips/styles" as chips;
 @use "@material/data-table/mdc-data-table";
 @use "@material/dialog/mdc-dialog";
 @use "@material/drawer/mdc-drawer";
@@ -31,7 +31,7 @@
 @use "@material/segmented-button/styles" as segmentedButton;
 @use "@material/slider/styles" as slider;
 @use "@material/snackbar/mdc-snackbar";
-@use "@material/switch/mdc-switch";
+// @use "@material/switch/styles" as switch;
 @use "@material/tab/mdc-tab";
 @use "@material/tab-bar/mdc-tab-bar";
 @use "@material/tab-indicator/mdc-tab-indicator";

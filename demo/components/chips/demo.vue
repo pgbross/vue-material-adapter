@@ -77,16 +77,16 @@
 
 <style lang="scss" scoped>
 // @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
-@use '@material/chips/mixins' as chips;
+// @use '@material/chips/mixins' as chips;
 
-.custom-chip-primary {
-  @include chips.fill-color(#6200ee);
-  @include chips.ink-color(white);
-}
+// .custom-chip-primary {
+//   @include chips.fill-color(#6200ee);
+//   @include chips.ink-color(white);
+// }
 
-.custom-chip-secondary {
-  @include chips.fill-color(white);
-  @include chips.ink-color(#018786);
-  @include chips.outline(2px, solid, #018786);
-}
+// .custom-chip-secondary {
+//   @include chips.fill-color(white);
+//   @include chips.ink-color(#018786);
+//   @include chips.outline(2px, solid, #018786);
+// }
 </style>
