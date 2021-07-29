@@ -6,6 +6,8 @@ export default {
   props: {
     position: { type: [Object, String] },
     boundaryType: { type: [String, Number] },
+    showDelay: { type: Number },
+    hideDelay: { type: Number },
   },
   setup(props, { emit }) {
     const uiState = reactive({
@@ -42,7 +44,7 @@ export default {
       },
       setStyleProperty: (property, value) =>
         (uiState.styles = { ...uiState.styles, [property]: value }),
-      setSurfaceStyleProperty: (propertyName, value) => {
+      setSurfaceAnimationStyleProperty: (propertyName, value) => {
         uiState.surfaceStyle = {
           ...uiState.surfaceStyle,
           [propertyName]: value,
@@ -89,6 +91,13 @@ export default {
       },
       deregisterEventHandler: (event_, handler) => {
         uiState.root.removeEventListener(event_, handler);
+      },
+
+      registerAnchorEventHandler: (event_, handler) => {
+        anchorElement?.addEventListener(event_, handler);
+      },
+      deregisterAnchorEventHandler: (event_, handler) => {
+        anchorElement?.removeEventListener(event_, handler);
       },
       registerDocumentEventHandler: (event_, handler) => {
         document.body.addEventListener(event_, handler);
@@ -188,6 +197,14 @@ export default {
       }
 
       anchorElement.addEventListener('blur', handleBlur);
+
+      if (props.showDelay !== undefined) {
+        foundation.setShowDelay(props.showDelay);
+      }
+
+      if (props.hideDelay !== undefined) {
+        foundation.setHideDelay(props.hideDelay);
+      }
 
       watchEffect(() => onPosition(props.position));
       watchEffect(() => onBoundaryType(props.boundaryType));

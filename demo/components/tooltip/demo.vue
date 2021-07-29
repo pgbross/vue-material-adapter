@@ -16,13 +16,11 @@
         >Rich Button</mcw-button
       >
       <mcw-tooltip id="tooltip-id3" class="mdc-tooltip--rich">
-        <div class="mdc-tooltip__surface">
-          <p class="mdc-tooltip__content">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
-            pretium vitae est et dapibus. Aenean sit amet felis eu lorem
-            fermentum aliquam sit amet sit amet eros.
-          </p>
-        </div>
+        <p class="mdc-tooltip__content">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
+          pretium vitae est et dapibus. Aenean sit amet felis eu lorem fermentum
+          aliquam sit amet sit amet eros.
+        </p>
       </mcw-tooltip>
     </div>
 
