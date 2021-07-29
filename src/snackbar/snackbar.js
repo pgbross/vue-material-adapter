@@ -38,7 +38,6 @@ export default {
 
     const rootClasses = computed(() => {
       return {
-        'mdc-snackbar': 1,
         'mdc-snackbar--leading': props.leading,
         'mdc-snackbar--stacked': props.stacked,
         ...uiState.classes,

@@ -1,19 +1,19 @@
 <script src="./snackbar.js"></script>
 <template>
-  <div :class="rootClasses">
-    <div class="mdc-snackbar__surface" @click="surfaceClickHandler">
-      <div
-        ref="labelEl"
-        class="mdc-snackbar__label"
-        role="status"
-        aria-live="polite"
-      >
+  <aside class="mdc-snackbar" :class="rootClasses">
+    <div
+      class="mdc-snackbar__surface"
+      role="status"
+      aria-relevant="additions"
+      @click="surfaceClickHandler"
+    >
+      <div ref="labelEl" class="mdc-snackbar__label" aria-atomic="false">
         <template v-if="showMessage">{{ message }}</template>
         <span style="display: inline-block; width: 0; height: '1px'" v-else
           >&nbsp;</span
         >
       </div>
-      <div class="mdc-snackbar__actions">
+      <div class="mdc-snackbar__actions" aria-atomic="true">
         <button
           ref="actionEl"
           type="button"
@@ -34,5 +34,5 @@
         </button>
       </div>
     </div>
-  </div>
+  </aside>
 </template>
