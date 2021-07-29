@@ -8,6 +8,8 @@ export default {
     boundaryType: { type: [String, Number] },
     showDelay: { type: Number },
     hideDelay: { type: Number },
+    addEventListenerHandlerFn: { type: Function },
+    removeEventListenerHandlerFn: { type: Function },
   },
   setup(props, { emit }) {
     const uiState = reactive({
@@ -204,6 +206,14 @@ export default {
 
       if (props.hideDelay !== undefined) {
         foundation.setHideDelay(props.hideDelay);
+      }
+
+      if (props.addEventListenerHandlerFn) {
+        foundation.attachScrollHandler(props.addEventListenerHandlerFn);
+      }
+
+      if (props.removeEventListenerHandlerFn) {
+        foundation.removeScrollHandler(props.removeEventListenerHandlerFn);
       }
 
       watchEffect(() => onPosition(props.position));

@@ -1,6 +1,11 @@
 <template>
   <div class="tooltip-demo">
-    <mcw-tooltip id="tooltip-id">My tooltip 1</mcw-tooltip>
+    <mcw-tooltip
+      id="tooltip-id"
+      :addEventListenerHandlerFn="addEventListenerHandlerFn"
+      :removeEventListenerHandlerFn="removeEventListenerHandlerFn"
+      >My tooltip 1</mcw-tooltip
+    >
     <mcw-tooltip id="tooltip-id2" position="end,above"
       >Another tooltip 2</mcw-tooltip
     >
