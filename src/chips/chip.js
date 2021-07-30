@@ -1,5 +1,5 @@
 import { MDCChipFoundation } from '@material/chips/chip/foundation.js';
-import { MDCChipTrailingActionFoundation } from '@material/chips/trailingaction/foundation.js';
+// import { MDCChipTrailingActionFoundation } from '@material/chips/trailingaction/foundation.js';
 import {
   computed,
   inject,
@@ -14,7 +14,7 @@ import { emitCustomEvent } from '../base/index.js';
 import { useRipplePlugin } from '../ripple/ripple-plugin.js';
 
 const { strings } = MDCChipFoundation;
-const { strings: trailingActionStrings } = MDCChipTrailingActionFoundation;
+// const { strings: trailingActionStrings } = MDCChipTrailingActionFoundation;
 
 let chipItemId_ = 0;
 
@@ -256,15 +256,15 @@ export default {
         focusout: event_ => foundation.handleFocusOut(event_),
       };
 
-      if (trailingAction_) {
-        uiState.myListeners[
-          trailingActionStrings.INTERACTION_EVENT.toLowerCase()
-        ] = event_ => foundation.handleTrailingActionInteraction(event_);
+      // if (trailingAction_) {
+      //   uiState.myListeners[
+      //     trailingActionStrings.INTERACTION_EVENT.toLowerCase()
+      //   ] = event_ => foundation.handleTrailingActionInteraction(event_);
 
-        uiState.myListeners[
-          trailingActionStrings.NAVIGATION_EVENT.toLowerCase()
-        ] = event_ => foundation.handleTrailingActionNavigation(event_);
-      }
+      //   uiState.myListeners[
+      //     trailingActionStrings.NAVIGATION_EVENT.toLowerCase()
+      //   ] = event_ => foundation.handleTrailingActionNavigation(event_);
+      // }
 
       foundation.init();
 
