@@ -100,7 +100,9 @@ export default {
         return element?.getAttribute(strings.ACTION_ATTRIBUTE);
       },
       clickDefaultButton: () => {
-        defaultButton?.click();
+        if (defaultButton && !defaultButton.disabled) {
+          defaultButton.click();
+        }
       },
       reverseButtons: () => {
         const buttons = buttons_;
