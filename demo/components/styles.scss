@@ -21,7 +21,6 @@
 @use "@material/layout-grid/mdc-layout-grid";
 @use "@material/line-ripple/mdc-line-ripple";
 @use "@material/linear-progress/mdc-linear-progress";
-@use "@material/list/mdc-list";
 @use "@material/menu/mdc-menu";
 @use "@material/menu-surface/mdc-menu-surface";
 @use "@material/notched-outline/mdc-notched-outline";
@@ -40,3 +39,6 @@
 @use "@material/tooltip/styles" as tooltip;
 @use "@material/top-app-bar/mdc-top-app-bar";
 @use "@material/typography/mdc-typography";
+
+@use "@material/list/evolution-mixins"as list-evolution-mixins;
+@include list-evolution-mixins.core-styles();

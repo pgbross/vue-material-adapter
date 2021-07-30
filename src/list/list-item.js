@@ -20,10 +20,17 @@ export default {
     const root = ref();
 
     const myItemId = itemId++;
+
+    const isTwoLine = computed(() => {
+      return props.twoLine || slots['secondary-text'];
+    });
+
     const uiState = reactive({
       classes: {
         'mdc-list-item': 1,
         'mdc-list-item--disabled': props.disabled,
+        'mdc-list-item--with-one-line': !isTwoLine.value,
+        'mdc-list-item--with-two-lines': isTwoLine.value,
       },
       attrs: {},
     });
@@ -52,10 +59,6 @@ export default {
     );
 
     const { classes: rippleClasses, styles } = useRipplePlugin(root);
-
-    const isTwoLine = computed(() => {
-      return props.twoLine || slots['secondary-text'];
-    });
 
     const groupClasses = computed(() => ({
       'mdc-menu__selection-group-icon': props.groupIcon,
