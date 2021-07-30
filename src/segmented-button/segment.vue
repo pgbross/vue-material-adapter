@@ -11,8 +11,8 @@
       <i class="material-icons mdc-segmented-button__icon" v-if="icon">{{
         icon
       }}</i>
-      <div class="mdc-segmented-button__label" v-if="label">{{ label }}</div>
       <div class="mdc-segmented-button__touch"></div>
+      <div class="mdc-segmented-button__label" v-if="label">{{ label }}</div>
     </button>
   </div>
   <button

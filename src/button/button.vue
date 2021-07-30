@@ -7,6 +7,7 @@
         icon
       }}</i>
     </slot>
+    <span class="mdc-button__touch" v-if="isTouch"></span>
     <span class="mdc-button__label">
       <slot></slot>
     </span>
