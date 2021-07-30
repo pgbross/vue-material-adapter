@@ -12,13 +12,11 @@ import { useRipplePlugin } from '../ripple/ripple-plugin.js';
 
 export default {
   name: 'mcw-icon-button',
-  // model: {
-  //   prop: 'isOn',
-  //   event: 'change',
-  // },
+
   props: {
     modelValue: Boolean,
     disabled: Boolean,
+    isTouch: Boolean,
   },
 
   setup(props, { emit, attrs }) {
