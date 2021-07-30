@@ -1,7 +1,9 @@
+import { reactive, toRefs } from 'vue';
+
 export default {
-  data() {
-    return {
-      checked: false,
-    };
+  setup() {
+    const uiState = reactive({ checked: false });
+
+    return { ...toRefs(uiState) };
   },
 };
