@@ -2,19 +2,17 @@ import { MDCChipFoundation } from '@material/chips/chip/foundation.js';
 // import { MDCChipTrailingActionFoundation } from '@material/chips/trailingaction/foundation.js';
 import {
   computed,
+  getCurrentInstance,
   inject,
   onBeforeUnmount,
   onMounted,
+  provide,
   reactive,
   toRef,
   toRefs,
-  watch,
 } from 'vue';
 import { emitCustomEvent } from '../base/index.js';
 import { useRipplePlugin } from '../ripple/ripple-plugin.js';
-
-const { strings } = MDCChipFoundation;
-// const { strings: trailingActionStrings } = MDCChipTrailingActionFoundation;
 
 let chipItemId_ = 0;
 
@@ -30,7 +28,7 @@ export default {
       },
     },
   },
-  setup(props, { slots }) {
+  setup() {
     const uiState = reactive({
       classes: {
         'mdc-chip': true,
@@ -49,8 +47,7 @@ export default {
       trailingAction: undefined,
     });
 
-    const mcwChipSet = inject('mcwChipSet');
-    const addChipElement = inject('addChipElement');
+    const registerChip = inject('registerChip');
 
     const { classes: rippleClasses, styles: rippleStyles } = useRipplePlugin(
       toRef(uiState, 'root'),
@@ -68,193 +65,175 @@ export default {
       return { ...rippleStyles.value, ...uiState.styles };
     });
 
-    let trailingAction_;
-    let leadingIcon_;
+    const actions = new Map();
 
-    const selected = computed({
-      get() {
-        return foundation.isSelected();
-      },
-      set(nv) {
-        foundation.setSelected(nv);
-      },
-    });
+    const registerAction = action => {
+      actions.set(action.actionType(), action);
+    };
 
-    const isFilter = computed(() => mcwChipSet?.filter);
-
-    const isInput = computed(() => mcwChipSet?.input);
-
-    const haveleadingIcon = computed(() => {
-      const slot = slots['leading-icon'];
-      return (slot && slot[0]) || !!props.leadingIcon;
-    });
-
-    const havetrailingIcon = computed(() => {
-      const slot = slots['trailing-icon'];
-
-      return isInput.value && ((slot && slot[0]) || !!props.trailingIcon);
-    });
+    provide('registerAction', registerAction);
 
     const adapter = {
       addClass: className =>
         (uiState.classes = { ...uiState.classes, [className]: true }),
 
-      addClassToLeadingIcon: className => {
-        if (leadingIcon_) {
-          leadingIcon_.classList.add(className);
+      emitEvent: (eventName, eventDetail) => {
+        emitCustomEvent(
+          uiState.root,
+          eventName,
+          eventDetail,
+          true /* shouldBubble */,
+        );
+      },
+
+      getActions: () => {
+        const actionKeys = [];
+        for (const [key] of actions) {
+          actionKeys.push(key);
         }
+        return actionKeys;
       },
-      eventTargetHasClass: (target, className) =>
-        target.classList.contains(className),
-      focusPrimaryAction: () => {
-        uiState.root.querySelector(strings.PRIMARY_ACTION_SELECTOR)?.focus();
+
+      getAttribute: attributeName => uiState.root.getAttribute(attributeName),
+      getElementID: () => uiState.root.id,
+      getOffsetWidth: () => {
+        return uiState.root.offsetWidth;
       },
-      focusTrailingAction: () => {
-        trailingAction_?.focus();
-      },
-      getAttribute: attribute => uiState.root.getAttribute(attribute),
-      getCheckmarkBoundingClientRect: () => {
-        return uiState.checkmarkEl?.getBoundingClientRect();
-      },
-      getComputedStyleValue: propertyName =>
-        window.getComputedStyle(uiState.root).getPropertyValue(propertyName),
-      getRootBoundingClientRect: () => uiState.root.getBoundingClientRect(),
+
       hasClass: className => uiState.root.classList.contains(className),
-      hasLeadingIcon: () => !!haveleadingIcon.value,
-      isRTL: () =>
-        window.getComputedStyle(uiState.root).getPropertyValue('direction') ===
-        'rtl',
-      isTrailingActionNavigable: () => {
-        if (trailingAction_) {
-          return uiState.trailingAction?.isNavigable();
+
+      isActionSelectable: actionType => {
+        const action = actions.get(actionType);
+        if (action) {
+          return action.isSelectable();
         }
         return false;
       },
 
-      notifyInteraction: () => {
-        emitCustomEvent(
-          uiState.root,
-          strings.INTERACTION_EVENT,
-          {
-            chipId: id,
-          },
-          true,
-        );
+      isActionSelected: actionType => {
+        const action = actions.get(actionType);
+        if (action) {
+          return action.isSelected();
+        }
+        return false;
       },
-      notifyNavigation: (key, source) =>
-        emitCustomEvent(
-          uiState.root,
-          strings.NAVIGATION_EVENT,
-          {
-            chipId: id,
-            key,
-            source,
-          },
-          true,
-        ),
-      notifyRemoval: removedAnnouncement => {
-        emitCustomEvent(
-          uiState.root,
-          'mdc-chip:removal',
-          { chipId: id, removedAnnouncement },
-          true,
-        );
+
+      isActionFocusable: actionType => {
+        const action = actions.get(actionType);
+        if (action) {
+          return action.isFocusable();
+        }
+        return false;
       },
-      notifySelection: (selected, shouldIgnore) =>
-        emitCustomEvent(
-          uiState.root,
-          strings.SELECTION_EVENT,
-          { chipId: id, selected: selected, shouldIgnore },
-          true /* shouldBubble */,
-        ),
-      notifyTrailingIconInteraction: () => {
-        emitCustomEvent(
-          uiState.root,
-          strings.TRAILING_ICON_INTERACTION_EVENT,
-          {
-            chipId: id,
-          },
-          true,
-        );
+      isActionDisabled: actionType => {
+        const action = actions.get(actionType);
+        if (action) {
+          return action.isDisabled();
+        }
+        return false;
       },
+
+      isRTL: () =>
+        window.getComputedStyle(uiState.root).getPropertyValue('direction') ===
+        'rtl',
+
       removeClass: className => {
         // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
-      removeClassFromLeadingIcon: className => {
-        if (leadingIcon_) {
-          leadingIcon_.classList.remove(className);
+
+      setActionDisabled: (actionType, isDisabled) => {
+        const action = actions.get(actionType);
+        if (action) {
+          action.setDisabled(isDisabled);
         }
       },
-      removeTrailingActionFocus: () => {
-        uiState.trailingAction?.removeFocus();
+      setActionFocus: (actionType, behavior) => {
+        const action = actions.get(actionType);
+        if (action) {
+          action.setFocus(behavior);
+        }
       },
-      setPrimaryActionAttr: (attribute, value) =>
-        (uiState.primaryAttrs = {
-          ...uiState.primaryAttrs,
-          [attribute]: value,
-        }),
+      setActionSelected: (actionType, isSelected) => {
+        const action = actions.get(actionType);
+        if (action) {
+          action.setSelected(isSelected);
+        }
+      },
 
       setStyleProperty: (property, value) =>
         (uiState.styles = { ...uiState.styles, [property]: value }),
     };
 
-    const setSelectedFromChipSet = (selected, shouldNotifyClients) => {
-      foundation.setSelectedFromChipSet(selected, shouldNotifyClients);
-    };
-
-    const focusPrimaryAction = () => foundation.focusPrimaryAction();
-
-    const focusTrailingAction = () => foundation.focusTrailingAction();
-
-    const removeFocus = () => foundation.removeFocus();
-
-    const toggleSelected = () => foundation.toggleSelected();
-
-    const isSelected = () => foundation.isSelected();
-
+    /** Exposed to be called by the parent chip set. */
     const remove = () => {
       const parent = uiState.root.parentNode;
-      if (parent != undefined) {
+      if (parent !== null) {
         uiState.root.remove();
       }
     };
 
-    watch(
-      () => props.shouldRemoveOnTrailingIconClick,
-      nv => {
-        foundation.setShouldRemoveOnTrailingIconClick(nv);
-      },
-    );
+    /** Returns the ActionTypes for the encapsulated actions. */
+    const getActions = () => {
+      return foundation.getActions();
+    };
 
-    addChipElement({
-      id,
-      removeFocus,
-      focusPrimaryAction,
-      focusTrailingAction,
-      setSelectedFromChipSet,
-      remove,
-    });
+    /** Returns the ID of the root element. */
+    const getElementID = () => {
+      return foundation.getElementID();
+    };
 
+    const isDisabled = () => {
+      return foundation.isDisabled();
+    };
+
+    const setDisabled = isDisabled => {
+      foundation.setDisabled(isDisabled);
+    };
+
+    /** Returns the focusability of the action. */
+    const isActionFocusable = action => {
+      return foundation.isActionFocusable(action);
+    };
+
+    /** Returns the selectability of the action. */
+    const isActionSelectable = action => {
+      return foundation.isActionSelectable(action);
+    };
+
+    /** Returns the selected state of the action. */
+    const isActionSelected = action => {
+      return foundation.isActionSelected(action);
+    };
+
+    /** Sets the focus behavior of the action. */
+    const setActionFocus = (action, focus) => {
+      foundation.setActionFocus(action, focus);
+    };
+
+    /** Sets the selected state of the action. */
+    const setActionSelected = (action, isSelected) => {
+      foundation.setActionSelected(action, isSelected);
+    };
+
+    /** Starts the animation on the chip. */
+    const startAnimation = animation => {
+      foundation.startAnimation(animation);
+    };
+    registerChip(getCurrentInstance().ctx);
     onMounted(() => {
-      leadingIcon_ = uiState.root.querySelector(strings.LEADING_ICON_SELECTOR);
-
-      trailingAction_ = uiState.root.querySelector(
-        strings.TRAILING_ACTION_SELECTOR,
-      );
-
       foundation = new MDCChipFoundation(adapter);
 
-      uiState.myListeners = {
-        click: event_ => {
-          foundation.handleClick(event_);
-        },
-        keydown: event_ => foundation.handleKeydown(event_),
-        transitionend: event_ => foundation.handleTransitionEnd(event_),
-        focusin: event_ => foundation.handleFocusIn(event_),
-        focusout: event_ => foundation.handleFocusOut(event_),
-      };
+      // uiState.myListeners = {
+      //   click: event_ => {
+      //     foundation.handleClick(event_);
+      //   },
+      //   keydown: event_ => foundation.handleKeydown(event_),
+      //   transitionend: event_ => foundation.handleTransitionEnd(event_),
+      //   focusin: event_ => foundation.handleFocusIn(event_),
+      //   focusout: event_ => foundation.handleFocusOut(event_),
+      // };
 
       // if (trailingAction_) {
       //   uiState.myListeners[
@@ -268,39 +247,54 @@ export default {
 
       foundation.init();
 
-      uiState.primaryAttrs.tabindex = isFilter.value ? 0 : -1;
+      // uiState.primaryAttrs.tabindex = isFilter.value ? 0 : -1;
 
-      if (
-        props.shouldRemoveOnTrailingIconClick !==
-        foundation.getShouldRemoveOnTrailingIconClick()
-      ) {
-        foundation.setShouldRemoveOnTrailingIconClick(
-          props.shouldRemoveOnTrailingIconClick,
-        );
-      }
+      // if (
+      //   props.shouldRemoveOnTrailingIconClick !==
+      //   foundation.getShouldRemoveOnTrailingIconClick()
+      // ) {
+      //   foundation.setShouldRemoveOnTrailingIconClick(
+      //     props.shouldRemoveOnTrailingIconClick,
+      //   );
+      // }
     });
 
     onBeforeUnmount(() => {
       foundation.destroy();
     });
 
+    // return () => {
+    //   return h('div', {}, ['test']);
+    // };
+
     return {
       ...toRefs(uiState),
       classes,
       styles,
       id,
-      isInput,
-      isFilter,
-      selected,
-      haveleadingIcon,
-      havetrailingIcon,
       remove,
-      isSelected,
-      toggleSelected,
-      removeFocus,
-      focusPrimaryAction,
-      focusTrailingAction,
-      setSelectedFromChipSet,
+      getActions,
+      getElementID,
+      isDisabled,
+      setDisabled,
+      isActionFocusable,
+      isActionSelectable,
+      isActionSelected,
+      setActionFocus,
+      setActionSelected,
+      startAnimation,
+      // isInput,
+      // isFilter,
+      // selected,
+      // haveleadingIcon,
+      // havetrailingIcon,
+      // remove,
+      // isSelected,
+      // toggleSelected,
+      // removeFocus,
+      // focusPrimaryAction,
+      // focusTrailingAction,
+      // setSelectedFromChipSet,
     };
   },
 };

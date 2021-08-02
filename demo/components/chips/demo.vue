@@ -2,11 +2,16 @@
   <div class>
     <section class="mcw-demo">
       <mcw-chip-set>
-        <mcw-chip>Chip One</mcw-chip>
-        <mcw-chip>Chip Two</mcw-chip>
+        <mcw-chip id="c1"
+          ><mcw-chip-action primary>Chip One</mcw-chip-action>
+        </mcw-chip>
+        <mcw-chip id="c2"
+          ><mcw-chip-action primary>Chip Two</mcw-chip-action>
+          <mcw-chip-action trailing-action>close</mcw-chip-action>
+        </mcw-chip>
       </mcw-chip-set>
     </section>
-
+    <!--
     <section class="mcw-demo">
       <div class="mdc-typography--headline6">Input Chips</div>
       <mcw-chip-set input>
@@ -71,11 +76,14 @@
         <mcw-chip class="custom-chip-secondary">Set Alarm</mcw-chip>
         <mcw-chip class="custom-chip-secondary">Get Directions</mcw-chip>
       </mcw-chip-set>
-    </section>
+    </section> -->
   </div>
 </template>
 
 <style lang="scss" scoped>
+.mcw-demo {
+  padding: 10px;
+}
 // @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 // @use '@material/chips/mixins' as chips;
 
