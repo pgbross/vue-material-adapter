@@ -18,6 +18,8 @@ export default {
   props: {
     primary: { type: Boolean },
     trailingAction: { type: Boolean },
+    icon: { type: String },
+    presentational: { type: Boolean },
   },
   setup(props) {
     const uiState = reactive({ rippleEl: undefined, root: undefined });
@@ -30,22 +32,20 @@ export default {
       },
     );
 
+    const registerAction = inject('registerAction');
+    const mcwChipSet = inject('mcwChipSet');
+
     const classes = computed(() => {
       return {
         ...rippleClasses.value,
         ...uiState.classes,
-        'mdc-evolution-chip__action--trailing': !props.primary,
-        'mdc-evolution-chip__action--primary': props.primary,
+        'mdc-evolution-chip__action--presentational': props.presentational,
       };
     });
 
-    const rippleClass = `mdc-evolution-chip__ripple--${
-      props.primary ? 'primary' : 'trailing'
-    }`;
-
-    const registerAction = inject('registerAction');
-
     let foundation;
+
+    const isFilter = mcwChipSet.role === 'listbox';
 
     const adapter = {
       emitEvent: (eventName, eventDetail) => {
@@ -60,7 +60,9 @@ export default {
         uiState.root.focus();
       },
       getAttribute: attributeName => uiState.root.getAttribute(attributeName),
-      getElementID: () => uiState.root.id,
+      getElementID: () => {
+        return uiState.root.id;
+      },
       removeAttribute: name => {
         uiState.root.removeAttribute(name);
       },
@@ -101,10 +103,16 @@ export default {
       return foundation.actionType();
     };
 
+    const handleClick = () => {
+      foundation.handleClick();
+    };
+
+    const handleKeydown = event => foundation.handleKeydown(event);
+
     onMounted(() => {
       foundation = props.primary
         ? new MDCChipPrimaryActionFoundation(adapter)
-        : new MDCChipTrailingActionFoundation();
+        : new MDCChipTrailingActionFoundation(adapter);
 
       foundation.init();
 
@@ -123,7 +131,9 @@ export default {
       isSelected,
       isSelectable,
       actionType,
-      rippleClass,
+      isFilter,
+      handleClick,
+      handleKeydown,
     };
   },
 };

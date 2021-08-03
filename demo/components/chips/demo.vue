@@ -2,26 +2,27 @@
   <div class>
     <section class="mcw-demo">
       <mcw-chip-set>
-        <mcw-chip id="c1"
-          ><mcw-chip-action primary>Chip One</mcw-chip-action>
+        <mcw-chip id="c1" leading-icon="favorite" presentational
+          >Chip One
         </mcw-chip>
-        <mcw-chip id="c2"
-          ><mcw-chip-action primary>Chip Two</mcw-chip-action>
-          <mcw-chip-action trailing-action>close</mcw-chip-action>
+        <mcw-chip id="c2" trailing-icon="clear_all">Chip Two </mcw-chip>
+
+        <mcw-chip id="c3" disabled trailing-icon="clear_all"
+          >Chip Two
         </mcw-chip>
-      </mcw-chip-set>
-    </section>
-    <!--
-    <section class="mcw-demo">
-      <div class="mdc-typography--headline6">Input Chips</div>
-      <mcw-chip-set input>
-        <mcw-chip id="jane-chip" leading-icon="face" trailing-icon="clear"
-          >Jane Smith</mcw-chip
-        >
-        <mcw-chip leading-icon="face" trailing-icon="clear">John Doe</mcw-chip>
       </mcw-chip-set>
     </section>
 
+    <section class="mcw-demo">
+      <div class="mdc-typography--headline6">Filter Chips</div>
+      <mcw-chip-set role="listbox" ref="filters">
+        <mcw-chip id="jane-chip" leading-icon="face" trailing-icon="clear"
+          >Jane Smith</mcw-chip
+        >
+        <mcw-chip id="john-chip" trailing-icon="clear">John Doe</mcw-chip>
+      </mcw-chip-set>
+    </section>
+    <!--
     <section class="mcw-demo">
       <div class="mdc-typography--headline6">Choice Chips</div>
       <mcw-chip-set choice>

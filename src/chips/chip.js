@@ -8,11 +8,9 @@ import {
   onMounted,
   provide,
   reactive,
-  toRef,
   toRefs,
 } from 'vue';
 import { emitCustomEvent } from '../base/index.js';
-import { useRipplePlugin } from '../ripple/ripple-plugin.js';
 
 let chipItemId_ = 0;
 
@@ -21,17 +19,22 @@ export default {
   props: {
     leadingIcon: [String],
     trailingIcon: [String],
+    avatar: { type: Boolean },
     shouldRemoveOnTrailingIconClick: {
       type: Boolean,
       default() {
         return true;
       },
     },
+    presentational: { type: Boolean },
+    disabled: { type: Boolean },
+    selected: { type: Boolean },
   },
-  setup() {
+  setup(props, { slots }) {
     const uiState = reactive({
       classes: {
-        'mdc-chip': true,
+        'mdc-evolution-chip--disabled': props.disabled,
+        'mdc-evolution-chip--selected': props.selected,
       },
       leadingClasses: {
         'mdc-chip__icon': 1,
@@ -39,8 +42,6 @@ export default {
         'material-icons': 1,
       },
       styles: {},
-      primaryAttrs: {},
-      trailingAttrs: {},
       myListeners: {},
       root: undefined,
       checkmarkEl: undefined,
@@ -49,21 +50,11 @@ export default {
 
     const registerChip = inject('registerChip');
 
-    const { classes: rippleClasses, styles: rippleStyles } = useRipplePlugin(
-      toRef(uiState, 'root'),
-    );
+    const mcwChipSet = inject('mcwChipSet');
 
     const id = chipItemId_++;
 
     let foundation;
-
-    const classes = computed(() => {
-      return { ...rippleClasses.value, ...uiState.classes };
-    });
-
-    const styles = computed(() => {
-      return { ...rippleStyles.value, ...uiState.styles };
-    });
 
     const actions = new Map();
 
@@ -166,6 +157,30 @@ export default {
         (uiState.styles = { ...uiState.styles, [property]: value }),
     };
 
+    const hasleadingIcon = computed(() => {
+      const slot = slots['leading-icon'];
+      return (slot && slot[0]) || !!props.leadingIcon;
+    });
+
+    const hasTrailingAction = computed(() => {
+      const slot = slots['trailing-icon'];
+
+      return (slot && slot[0]) || !!props.trailingIcon;
+    });
+
+    const classes = computed(() => {
+      return {
+        ...uiState.classes,
+        'mdc-evolution-chip--with-trailing-action': hasTrailingAction.value,
+        'mdc-evolution-chip--with-primary-graphic':
+          hasleadingIcon.value || mcwChipSet.role === 'listbox',
+        'mdc-evolution-chip--with-primary-icon': hasleadingIcon.value,
+        'mdc-evolution-chip--selectable': mcwChipSet.role === 'listbox',
+        'mdc-evolution-chip--filter': mcwChipSet.role === 'listbox',
+        'mdc-evolution-chip--with-avatar': props.avatar,
+      };
+    });
+
     /** Exposed to be called by the parent chip set. */
     const remove = () => {
       const parent = uiState.root.parentNode;
@@ -222,55 +237,31 @@ export default {
       foundation.startAnimation(animation);
     };
     registerChip(getCurrentInstance().ctx);
+
+    const handleActionInteraction = event => {
+      foundation.handleActionInteraction(event);
+    };
+    const handleActionNavigation = event => {
+      foundation.handleActionNavigation(event);
+    };
+
+    const handleAnimationEnd = event => {
+      foundation.handleAnimationEnd(event);
+    };
+
     onMounted(() => {
       foundation = new MDCChipFoundation(adapter);
 
-      // uiState.myListeners = {
-      //   click: event_ => {
-      //     foundation.handleClick(event_);
-      //   },
-      //   keydown: event_ => foundation.handleKeydown(event_),
-      //   transitionend: event_ => foundation.handleTransitionEnd(event_),
-      //   focusin: event_ => foundation.handleFocusIn(event_),
-      //   focusout: event_ => foundation.handleFocusOut(event_),
-      // };
-
-      // if (trailingAction_) {
-      //   uiState.myListeners[
-      //     trailingActionStrings.INTERACTION_EVENT.toLowerCase()
-      //   ] = event_ => foundation.handleTrailingActionInteraction(event_);
-
-      //   uiState.myListeners[
-      //     trailingActionStrings.NAVIGATION_EVENT.toLowerCase()
-      //   ] = event_ => foundation.handleTrailingActionNavigation(event_);
-      // }
-
       foundation.init();
-
-      // uiState.primaryAttrs.tabindex = isFilter.value ? 0 : -1;
-
-      // if (
-      //   props.shouldRemoveOnTrailingIconClick !==
-      //   foundation.getShouldRemoveOnTrailingIconClick()
-      // ) {
-      //   foundation.setShouldRemoveOnTrailingIconClick(
-      //     props.shouldRemoveOnTrailingIconClick,
-      //   );
-      // }
     });
 
     onBeforeUnmount(() => {
       foundation.destroy();
     });
 
-    // return () => {
-    //   return h('div', {}, ['test']);
-    // };
-
     return {
       ...toRefs(uiState),
       classes,
-      styles,
       id,
       remove,
       getActions,
@@ -283,18 +274,11 @@ export default {
       setActionFocus,
       setActionSelected,
       startAnimation,
-      // isInput,
-      // isFilter,
-      // selected,
-      // haveleadingIcon,
-      // havetrailingIcon,
-      // remove,
-      // isSelected,
-      // toggleSelected,
-      // removeFocus,
-      // focusPrimaryAction,
-      // focusTrailingAction,
-      // setSelectedFromChipSet,
+      hasleadingIcon,
+      hasTrailingAction,
+      handleAnimationEnd,
+      handleActionInteraction,
+      handleActionNavigation,
     };
   },
 };

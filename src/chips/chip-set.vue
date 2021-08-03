@@ -4,8 +4,10 @@
     ref="root"
     class="mdc-evolution-chip-set"
     :class="classes"
-    role="grid"
-    v-on="myListeners"
+    :role="role"
+    @mdcchip:animation="handleChipAnimation"
+    @mdcchip:interaction="handleChipInteraction"
+    @mdcchip:navigation="handleChipNavigation"
     v-bind="attrs"
   >
     <span class="mdc-evolution-chip-set__chips" role="presentation">

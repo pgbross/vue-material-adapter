@@ -6,9 +6,10 @@ import { emitCustomEvent } from '../base/index.js';
 export default {
   name: 'mcw-chip-set',
   props: {
-    layout: { type: String, default: () => 'grid' },
     singleSelection: { type: Boolean },
+    orientation: { type: String, default: () => 'horizontal' },
     overflow: { type: Boolean },
+    role: { type: String, default: () => 'grid' },
   },
 
   setup(props) {
@@ -25,10 +26,8 @@ export default {
 
     const chips = [];
 
-    const role = props.layout;
-
-    if (role == 'listbox') {
-      uiState.attrs['aria-orientation'] = 'horizontal';
+    if (props.role == 'listbox') {
+      uiState.attrs['aria-orientation'] = props.orientation;
       uiState.attrs['aria-multiselectable'] = props.singleSelection
         ? 'false'
         : 'true';
@@ -61,7 +60,7 @@ export default {
 
       getChipActionsAtIndex: index => {
         if (!isIndexValid(index)) return [];
-        return chips.value[index].getActions();
+        return chips[index].getActions();
       },
 
       getChipCount: () => {
@@ -72,7 +71,7 @@ export default {
         if (!isIndexValid(index)) {
           return '';
         }
-        return chips.value[index].getElementID();
+        return chips[index].getElementID();
       },
 
       getChipIndexById: id =>
@@ -82,14 +81,14 @@ export default {
         if (!isIndexValid(index)) {
           return false;
         }
-        return chips.value[index].isActionFocusable(action);
+        return chips[index].isActionFocusable(action);
       },
 
       isChipSelectableAtIndex: (index, action) => {
         if (!isIndexValid(index)) {
           return false;
         }
-        return chips.value[index].isActionSelectable(action);
+        return chips[index].isActionSelectable(action);
       },
       isChipSelectedAtIndex: (index, action) => {
         if (!isIndexValid(index)) return false;
@@ -100,66 +99,69 @@ export default {
           return;
         }
         // chips.value[index].destroy();
-        chips.value[index].remove();
+        chips[index].remove();
         chips.splice(index, 1);
       },
       setChipFocusAtIndex: (index, action, focus) => {
         if (!isIndexValid(index)) {
           return;
         }
-        chips.value[index].setActionFocus(action, focus);
+        chips[index].setActionFocus(action, focus);
       },
       setChipSelectedAtIndex: (index, action, selected) => {
         if (!isIndexValid(index)) {
           return;
         }
-        chips.value[index].setActionSelected(action, selected);
+        chips[index].setActionSelected(action, selected);
       },
       startChipAnimationAtIndex: (index, animation) => {
         if (!isIndexValid(index)) {
           return;
         }
-        chips.value[index].startAnimation(animation);
+        chips[index].startAnimation(animation);
       },
     };
 
     provide('mcwChipSet', {
-      layout: props.layout,
+      role: props.role,
       singleSelection: props.singleSelection,
     });
+
+    const handleChipAnimation = event => {
+      foundation.handleChipAnimation(event);
+    };
+    const handleChipInteraction = event => {
+      foundation.handleChipInteraction(event);
+    };
+    const handleChipNavigation = event =>
+      foundation.handleChipNavigation(event);
+
+    /** Removes the chip at the given index. */
+    const removeChip = index => {
+      if (!isIndexValid(index)) {
+        return;
+      }
+      // chips.value[index].destroy();
+      chips[index].remove();
+      chips.splice(index, 1);
+    };
 
     onMounted(() => {
       foundation = new MDCChipSetFoundation(adapter);
       foundation.init();
-
-      // uiState.myListeners = {
-      //   [strings.INTERACTION_EVENT.toLowerCase()]: ({ detail }) =>
-      //     foundation.handleChipInteraction(detail),
-      //   [strings.SELECTION_EVENT.toLowerCase()]: ({ detail }) =>
-      //     foundation.handleChipSelection(detail),
-      //   [strings.REMOVAL_EVENT.toLowerCase()]: ({ detail }) =>
-      //     foundation.handleChipRemoval(detail),
-      //   [strings.NAVIGATION_EVENT.toLowerCase()]: ({ detail }) =>
-      //     foundation.handleChipNavigation(detail),
-      // };
-
-      // // the chips could change outside of this component
-      // // so use a mutation observer to trigger an update by
-      // // incrementing the dependency variable "listn" referenced
-      // // in the computed that selects the chip elements
-      // slotObserver = new MutationObserver(() => {
-      //   uiState.listn++;
-      // });
-      // slotObserver.observe(uiState.root, {
-      //   childList: true,
-      //   // subtree: true,
-      // });
     });
 
     onBeforeUnmount(() => {
       // slotObserver.disconnect();
       foundation.destroy();
     });
-    return { ...toRefs(uiState), role };
+    return {
+      ...toRefs(uiState),
+      handleChipAnimation,
+      handleChipInteraction,
+      handleChipNavigation,
+
+      removeChip,
+    };
   },
 };
