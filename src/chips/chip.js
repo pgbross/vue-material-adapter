@@ -249,6 +249,10 @@ export default {
       foundation.handleAnimationEnd(event);
     };
 
+    const handleTransitionEnd = event => {
+      foundation.handleTransitionEnd(event);
+    };
+
     onMounted(() => {
       foundation = new MDCChipFoundation(adapter);
 
@@ -279,6 +283,7 @@ export default {
       handleAnimationEnd,
       handleActionInteraction,
       handleActionNavigation,
+      handleTransitionEnd,
     };
   },
 };

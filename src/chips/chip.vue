@@ -8,6 +8,7 @@
     @mdcchipaction:interaction="handleActionInteraction"
     @mdcchipaction:navigation="handleActionNavigation"
     @animationend="handleAnimationEnd"
+    @transitionend="handleTransitionEnd"
   >
     <span
       class="mdc-evolotion-chip__cell mdc-evolution-chip__cell--primary"
