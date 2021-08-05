@@ -26,6 +26,7 @@ import { MDCFloatingLabelFoundation } from '@material/floating-label/foundation.
 import { MDCIconButtonToggleFoundation } from '@material/icon-button/foundation.js';
 import { MDCLineRippleFoundation } from '@material/line-ripple/foundation.js';
 import { MDCLinearProgressFoundation } from '@material/linear-progress/foundation.js';
+import { MDCListFoundation as MDCListFoundation$1, cssClasses as cssClasses$7, strings as strings$b } from '@material/list/index.js';
 import { getCorrectPropertyName } from '@material/animation/util.js';
 import { MDCMenuSurfaceFoundation } from '@material/menu-surface/foundation.js';
 import { MDCMenuFoundation } from '@material/menu/foundation.js';
@@ -164,10 +165,10 @@ const _hoisted_3$g = /* @__PURE__ */ createVNode("div", {
 ], -1);
 const _hoisted_4$e = {class: "mdc-banner__text"};
 const _hoisted_5$b = {class: "mdc-banner__actions"};
-const _hoisted_6$7 = /* @__PURE__ */ createVNode("div", {class: "mdc-button__ripple"}, null, -1);
-const _hoisted_7$5 = {class: "mdc-button__label"};
-const _hoisted_8$4 = /* @__PURE__ */ createVNode("div", {class: "mdc-button__ripple"}, null, -1);
-const _hoisted_9$3 = {class: "mdc-button__label"};
+const _hoisted_6$6 = /* @__PURE__ */ createVNode("div", {class: "mdc-button__ripple"}, null, -1);
+const _hoisted_7$4 = {class: "mdc-button__label"};
+const _hoisted_8$3 = /* @__PURE__ */ createVNode("div", {class: "mdc-button__ripple"}, null, -1);
+const _hoisted_9$2 = {class: "mdc-button__label"};
 function render$J(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock("div", _hoisted_1$r, [
     createVNode("div", _hoisted_2$l, [
@@ -181,16 +182,16 @@ function render$J(_ctx, _cache, $props, $setup, $data, $options) {
         class: "mdc-button mdc-banner__secondary-action",
         onClick: _cache[1] || (_cache[1] = withModifiers((...args) => $setup.onSecondary && $setup.onSecondary(...args), ["stop"]))
       }, [
-        _hoisted_6$7,
-        createVNode("div", _hoisted_7$5, toDisplayString($props.secondaryAction), 1)
+        _hoisted_6$6,
+        createVNode("div", _hoisted_7$4, toDisplayString($props.secondaryAction), 1)
       ])) : createCommentVNode("v-if", true),
       createVNode("button", {
         type: "button",
         class: "mdc-button mdc-banner__primary-action",
         onClick: _cache[2] || (_cache[2] = withModifiers((...args) => $setup.onPrimary && $setup.onPrimary(...args), ["stop"]))
       }, [
-        _hoisted_8$4,
-        createVNode("div", _hoisted_9$3, toDisplayString($props.primaryAction), 1)
+        _hoisted_8$3,
+        createVNode("div", _hoisted_9$2, toDisplayString($props.primaryAction), 1)
       ])
     ])
   ]);
@@ -1030,21 +1031,21 @@ const _hoisted_4$b = /* @__PURE__ */ createVNode("span", {class: "mdc-evolution-
   ])
 ], -1);
 const _hoisted_5$9 = /* @__PURE__ */ createVNode("span", {class: "mdc-evolution-chip__text-label"}, "Chip label", -1);
-const _hoisted_6$6 = {
+const _hoisted_6$5 = {
   ref: "rippleEl",
   class: "mdc-evolution-chip__ripple mdc-evolution-chip__ripple--primary"
 };
-const _hoisted_7$4 = {
+const _hoisted_7$3 = {
   key: 0,
   class: "mdc-evolution-chip__graphic"
 };
-const _hoisted_8$3 = {class: "\n            mdc-evolution-chip__icon mdc-evolution-chip__icon--primary\n            material-icons\n          "};
-const _hoisted_9$2 = {class: "mdc-evolution-chip__text-label"};
-const _hoisted_10$2 = {
+const _hoisted_8$2 = {class: "\n            mdc-evolution-chip__icon mdc-evolution-chip__icon--primary\n            material-icons\n          "};
+const _hoisted_9$1 = {class: "mdc-evolution-chip__text-label"};
+const _hoisted_10$1 = {
   ref: "rippleEl",
   class: "mdc-evolution-chip__ripple mdc-evolution-chip__ripple--trailing"
 };
-const _hoisted_11$2 = {class: "\n          mdc-evolution-chip__icon mdc-evolution-chip__icon--trailing\n          material-icons\n        "};
+const _hoisted_11$1 = {class: "\n          mdc-evolution-chip__icon mdc-evolution-chip__icon--trailing\n          material-icons\n        "};
 function render$E(_ctx, _cache, $props, $setup, $data, $options) {
   return _ctx.primary ? (openBlock(), createBlock(Fragment, {key: 0}, [
     _ctx.isFilter ? (openBlock(), createBlock("span", {
@@ -1072,11 +1073,11 @@ function render$E(_ctx, _cache, $props, $setup, $data, $options) {
       type: "button",
       tabindex: "0"
     }, [
-      createVNode("span", _hoisted_6$6, null, 512),
-      _ctx.icon ? (openBlock(), createBlock("span", _hoisted_7$4, [
-        createVNode("span", _hoisted_8$3, toDisplayString(_ctx.icon), 1)
+      createVNode("span", _hoisted_6$5, null, 512),
+      _ctx.icon ? (openBlock(), createBlock("span", _hoisted_7$3, [
+        createVNode("span", _hoisted_8$2, toDisplayString(_ctx.icon), 1)
       ])) : createCommentVNode("v-if", true),
-      createVNode("span", _hoisted_9$2, [
+      createVNode("span", _hoisted_9$1, [
         renderSlot(_ctx.$slots, "default")
       ])
     ], 6))
@@ -1090,8 +1091,8 @@ function render$E(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[3] || (_cache[3] = (...args) => _ctx.handleClick && _ctx.handleClick(...args)),
     onKeydown: _cache[4] || (_cache[4] = (...args) => _ctx.handleKeydown && _ctx.handleKeydown(...args))
   }, [
-    createVNode("span", _hoisted_10$2, null, 512),
-    createVNode("span", _hoisted_11$2, [
+    createVNode("span", _hoisted_10$1, null, 512),
+    createVNode("span", _hoisted_11$1, [
       renderSlot(_ctx.$slots, "default")
     ])
   ], 544));
@@ -1464,6 +1465,9 @@ var script$B = {
     const handleAnimationEnd = (event) => {
       foundation.handleAnimationEnd(event);
     };
+    const handleTransitionEnd = (event) => {
+      foundation.handleTransitionEnd(event);
+    };
     onMounted(() => {
       foundation = new MDCChipFoundation(adapter);
       foundation.init();
@@ -1490,7 +1494,8 @@ var script$B = {
       hasTrailingAction,
       handleAnimationEnd,
       handleActionInteraction,
-      handleActionNavigation
+      handleActionNavigation,
+      handleTransitionEnd
     };
   }
 };
@@ -1512,7 +1517,8 @@ function render$B(_ctx, _cache, $props, $setup, $data, $options) {
     role: "row",
     "onMdcchipaction:interaction": _cache[1] || (_cache[1] = (...args) => _ctx.handleActionInteraction && _ctx.handleActionInteraction(...args)),
     "onMdcchipaction:navigation": _cache[2] || (_cache[2] = (...args) => _ctx.handleActionNavigation && _ctx.handleActionNavigation(...args)),
-    onAnimationend: _cache[3] || (_cache[3] = (...args) => _ctx.handleAnimationEnd && _ctx.handleAnimationEnd(...args))
+    onAnimationend: _cache[3] || (_cache[3] = (...args) => _ctx.handleAnimationEnd && _ctx.handleAnimationEnd(...args)),
+    onTransitionend: _cache[4] || (_cache[4] = (...args) => _ctx.handleTransitionEnd && _ctx.handleTransitionEnd(...args))
   }, [
     createVNode("span", _hoisted_1$k, [
       createVNode(_component_mcw_chip_action, {
@@ -1660,7 +1666,7 @@ const _hoisted_2$f = {class: "mdc-circular-progress__indeterminate-container"};
 const _hoisted_3$c = {class: "mdc-circular-progress__spinner-layer"};
 const _hoisted_4$a = {class: "mdc-circular-progress__circle-clipper mdc-circular-progress__circle-left"};
 const _hoisted_5$8 = {class: "mdc-circular-progress__gap-patch"};
-const _hoisted_6$5 = {class: "mdc-circular-progress__circle-clipper mdc-circular-progress__circle-right"};
+const _hoisted_6$4 = {class: "mdc-circular-progress__circle-clipper mdc-circular-progress__circle-right"};
 function render$A(_ctx, _cache, $props, $setup, $data, $options) {
   return openBlock(), createBlock(Fragment, null, [
     createCommentVNode("must be no space between divs"),
@@ -1701,7 +1707,7 @@ function render$A(_ctx, _cache, $props, $setup, $data, $options) {
               createVNode("circle", _ctx.indeterminateAttrs, null, 16)
             ], 8, ["viewBox"]))
           ]),
-          createVNode("div", _hoisted_6$5, [
+          createVNode("div", _hoisted_6$4, [
             (openBlock(), createBlock("svg", {
               class: "mdc-circular-progress__indeterminate-circle-graphic",
               viewBox: _ctx.viewbox,
@@ -2039,10 +2045,10 @@ var mcwDialogTitle = {
   }
 };
 
-const {cssClasses: cssClasses$7, strings: strings$b} = MDCDialogFoundation;
+const {cssClasses: cssClasses$6, strings: strings$a} = MDCDialogFoundation;
 const LAYOUT_EVENTS = ["resize", "orientationchange"];
 const getInitialFocusElement_ = () => {
-  return document.querySelector(`[${strings$b.INITIAL_FOCUS_ATTRIBUTE}]`);
+  return document.querySelector(`[${strings$a.INITIAL_FOCUS_ATTRIBUTE}]`);
 };
 const focusTrapFactory_$1 = (element, options) => new FocusTrap(element, options);
 var script$y = {
@@ -2111,8 +2117,8 @@ var script$y = {
       isContentScrollable: () => util.isScrollable(content_),
       areButtonsStacked: () => util.areTopsMisaligned(buttons_),
       getActionFromEvent: (event) => {
-        const element = closest(event.target, `[${strings$b.ACTION_ATTRIBUTE}]`);
-        return element == null ? void 0 : element.getAttribute(strings$b.ACTION_ATTRIBUTE);
+        const element = closest(event.target, `[${strings$a.ACTION_ATTRIBUTE}]`);
+        return element == null ? void 0 : element.getAttribute(strings$a.ACTION_ATTRIBUTE);
       },
       clickDefaultButton: () => {
         if (defaultButton && !defaultButton.disabled) {
@@ -2154,13 +2160,13 @@ var script$y = {
         escapeKeyAction,
         scrimClickAction
       } = props;
-      buttons_ = Array.prototype.slice.call(uiState.root.querySelectorAll(cssClasses$7.BUTTON));
-      defaultButton = uiState.root.querySelector(`[${strings$b.BUTTON_DEFAULT_ATTRIBUTE}]`);
-      const container = uiState.root.querySelector(strings$b.CONTAINER_SELECTOR);
+      buttons_ = Array.prototype.slice.call(uiState.root.querySelectorAll(cssClasses$6.BUTTON));
+      defaultButton = uiState.root.querySelector(`[${strings$a.BUTTON_DEFAULT_ATTRIBUTE}]`);
+      const container = uiState.root.querySelector(strings$a.CONTAINER_SELECTOR);
       if (!container) {
-        throw new Error(`Dialog component requires a ${strings$b.CONTAINER_SELECTOR} container element`);
+        throw new Error(`Dialog component requires a ${strings$a.CONTAINER_SELECTOR} container element`);
       }
-      content_ = uiState.root.querySelector(strings$b.CONTENT_SELECTOR);
+      content_ = uiState.root.querySelector(strings$a.CONTENT_SELECTOR);
       foundation = new MDCDialogFoundation(adapter);
       foundation.init();
       if (!autoStackButtons) {
@@ -2227,7 +2233,7 @@ var dialog = BasePlugin({
   mcwDialogContent
 });
 
-const {strings: strings$a, cssClasses: cssClasses$6} = MDCDismissibleDrawerFoundation;
+const {strings: strings$9, cssClasses: cssClasses$5} = MDCDismissibleDrawerFoundation;
 const focusTrapFactory_ = (element, options) => new FocusTrap(element, options);
 var script$x = {
   name: "mcw-drawer",
@@ -2284,12 +2290,12 @@ var script$x = {
         }
       },
       notifyClose: () => {
-        emitCustomEvent(uiState.drawer, strings$a.CLOSE_EVENT, {}, true);
+        emitCustomEvent(uiState.drawer, strings$9.CLOSE_EVENT, {}, true);
         emit("update:modelValue", false);
         emit("close");
       },
       notifyOpen: () => {
-        emitCustomEvent(uiState.drawer, strings$a.OPEN_EVENT, {}, true);
+        emitCustomEvent(uiState.drawer, strings$9.OPEN_EVENT, {}, true);
         emit("update:modelValue", true);
         emit("open");
       },
@@ -2304,7 +2310,7 @@ var script$x = {
       }
     });
     onMounted(() => {
-      const {DISMISSIBLE, MODAL} = cssClasses$6;
+      const {DISMISSIBLE, MODAL} = cssClasses$5;
       if (props.dismissible) {
         foundation = new MDCDismissibleDrawerFoundation(adapter);
       } else if (props.modal) {
@@ -3010,30 +3016,54 @@ var linearProgress = BasePlugin({
 });
 
 let itemId = 0;
+const slotNames = {
+  LEADING_ICON: "leading-icon",
+  LEADING_IMAGE: "leading-image",
+  TRAILING_ICON: "trailing-icon",
+  TRAILING_META: "trailing-meta",
+  TRAILING_RADIO: "trailing-radio",
+  TRAILING_CHECKBOX: "trailing-checkbox",
+  SECONDARY_TEXT: "secondary-text"
+};
 var script$o = {
   name: "mcw-list-item",
   inheritAttrs: false,
   props: {
-    twoLine: String,
     disabled: Boolean,
-    icon: [String, Boolean],
-    groupIcon: String,
     name: String,
-    trailing: Boolean
+    id: String
   },
   components: {CustomLink},
   setup(props, {slots, attrs}) {
     const root = ref();
     const myItemId = itemId++;
+    const hasSlot = (name) => !!slots[name];
     const isTwoLine = computed(() => {
-      return props.twoLine || slots["secondary-text"];
+      return props.twoLine || hasSlot(slotNames.SECONDARY_TEXT);
     });
+    const hasLeadingIcon = hasSlot(slotNames.LEADING_ICON);
+    const hasLeadingImage = hasSlot(slotNames.LEADING_IMAGE);
+    const hasTrailingIcon = hasSlot(slotNames.TRAILING_ICON);
+    const hasTrailingMeta = hasSlot(slotNames.TRAILING_META);
+    const hasTrailingRadio = hasSlot(slotNames.TRAILING_RADIO);
+    const hasTrailingCheckbox = hasSlot(slotNames.TRAILING_CHECKBOX);
+    const hasSecondaryText = hasSlot(slotNames.SECONDARY_TEXT);
+    const hasStart = hasLeadingIcon || hasLeadingImage;
+    const hasEnd = hasTrailingIcon || hasTrailingMeta || hasTrailingRadio || hasTrailingCheckbox;
+    const {isInteractive} = inject("mcwList");
     const uiState = reactive({
       classes: {
         "mdc-list-item": 1,
         "mdc-list-item--disabled": props.disabled,
         "mdc-list-item--with-one-line": !isTwoLine.value,
-        "mdc-list-item--with-two-lines": isTwoLine.value
+        "mdc-list-item--with-two-lines": isTwoLine.value,
+        "mdc-list-item--with-leading-icon": hasLeadingIcon,
+        "mdc-list-item--with-leading-image": hasLeadingImage,
+        "mdc-list-item--non-iteractive": !isInteractive,
+        "mdc-list-item--with-trailing-icon": hasTrailingIcon,
+        "mdc-list-item--with-trailing-meta": hasTrailingMeta,
+        "mdc-list-item--with-trailing-radio": hasTrailingRadio,
+        "mdc-list-item--with-trailing-checkbox": hasTrailingCheckbox
       },
       attrs: {}
     });
@@ -3041,19 +3071,7 @@ var script$o = {
       uiState.classes[attrs.class] = 1;
     }
     const registerListItem = inject("registerListItem");
-    const radioChecked = computed(() => {
-      return attrs["aria-checked"] == "true";
-    });
-    const checkbox = computed(() => !props.trailing && attrs.role == "checkbox");
-    const radio = computed(() => !props.trailing && attrs.role == "radio");
-    const trailingRadio = computed(() => props.trailing && attrs.role == "radio");
-    const trailingCheckbox = computed(() => props.trailing && attrs.role == "checkbox");
     const {classes: rippleClasses, styles} = useRipplePlugin(root);
-    const groupClasses = computed(() => ({
-      "mdc-menu__selection-group-icon": props.groupIcon
-    }));
-    const needGraphic = computed(() => typeof props.icon == "string" || !!props.groupIcon);
-    const listIcon = computed(() => typeof props.icon === "string" && props.icon || props.groupIcon);
     const focus = () => {
       var _a;
       ((_a = root.value.$el) != null ? _a : root.value).focus();
@@ -3100,102 +3118,32 @@ var script$o = {
       focus,
       root,
       isTwoLine,
-      needGraphic,
-      listIcon,
-      groupClasses,
-      checkbox,
-      radio,
-      radioChecked,
       myAttrs: myAttributes,
-      trailingRadio,
-      trailingCheckbox,
-      myItemId
+      myItemId,
+      hasStart,
+      hasEnd,
+      isInteractive,
+      hasSecondaryText
     };
   }
 };
 
-const _hoisted_1$a = /* @__PURE__ */ createVNode("span", {class: "mdc-list-item__ripple"}, null, -1);
-const _hoisted_2$9 = {
+const _hoisted_1$a = {
   key: 0,
-  class: "material-icons"
+  class: "mdc-list-item__ripple"
 };
-const _hoisted_3$7 = {
+const _hoisted_2$9 = {
   key: 1,
-  class: "mdc-list-item__graphic"
+  class: "mdc-list-item__start"
 };
-const _hoisted_4$7 = /* @__PURE__ */ createVNode("div", {class: "mdc-checkbox"}, [
-  /* @__PURE__ */ createVNode("input", {
-    type: "checkbox",
-    class: "mdc-checkbox__native-control"
-  }),
-  /* @__PURE__ */ createVNode("div", {class: "mdc-checkbox__background"}, [
-    /* @__PURE__ */ createVNode("svg", {
-      class: "mdc-checkbox__checkmark",
-      viewBox: "0 0 24 24"
-    }, [
-      /* @__PURE__ */ createVNode("path", {
-        class: "mdc-checkbox__checkmark-path",
-        fill: "none",
-        d: "M1.73,12.91 8.1,19.28 22.79,4.59"
-      })
-    ]),
-    /* @__PURE__ */ createVNode("div", {class: "mdc-checkbox__mixedmark"})
-  ])
-], -1);
+const _hoisted_3$7 = {class: "mdc-list-item__primary-text"};
+const _hoisted_4$7 = {
+  key: 0,
+  class: "mdc-list-item__secondary-text"
+};
 const _hoisted_5$6 = {
   key: 2,
-  class: "mdc-list-item__graphic"
-};
-const _hoisted_6$4 = {class: "mdc-radio"};
-const _hoisted_7$3 = /* @__PURE__ */ createVNode("div", {class: "mdc-radio__background"}, [
-  /* @__PURE__ */ createVNode("div", {class: "mdc-radio__outer-circle"}),
-  /* @__PURE__ */ createVNode("div", {class: "mdc-radio__inner-circle"})
-], -1);
-const _hoisted_8$2 = {
-  key: 3,
-  class: "mdc-list-item__text"
-};
-const _hoisted_9$1 = {class: "mdc-list-item__primary-text"};
-const _hoisted_10$1 = {class: "mdc-list-item__secondary-text"};
-const _hoisted_11$1 = {
-  key: 4,
-  class: "mdc-list-item__text"
-};
-const _hoisted_12$1 = {
-  key: 5,
-  class: "mdc-list-item__meta"
-};
-const _hoisted_13 = {class: "mdc-radio"};
-const _hoisted_14 = /* @__PURE__ */ createVNode("div", {class: "mdc-radio__background"}, [
-  /* @__PURE__ */ createVNode("div", {class: "mdc-radio__outer-circle"}),
-  /* @__PURE__ */ createVNode("div", {class: "mdc-radio__inner-circle"})
-], -1);
-const _hoisted_15 = {
-  key: 6,
-  class: "mdc-list-item__meta"
-};
-const _hoisted_16 = /* @__PURE__ */ createVNode("div", {class: "mdc-checkbox"}, [
-  /* @__PURE__ */ createVNode("input", {
-    type: "checkbox",
-    class: "mdc-checkbox__native-control"
-  }),
-  /* @__PURE__ */ createVNode("div", {class: "mdc-checkbox__background"}, [
-    /* @__PURE__ */ createVNode("svg", {
-      class: "mdc-checkbox__checkmark",
-      viewBox: "0 0 24 24"
-    }, [
-      /* @__PURE__ */ createVNode("path", {
-        class: "mdc-checkbox__checkmark-path",
-        fill: "none",
-        d: "M1.73,12.91 8.1,19.28 22.79,4.59"
-      })
-    ]),
-    /* @__PURE__ */ createVNode("div", {class: "mdc-checkbox__mixedmark"})
-  ])
-], -1);
-const _hoisted_17 = {
-  key: 7,
-  class: "mdc-list-item__meta"
+  class: "mdc-list-item__end"
 };
 function render$o(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_custom_link = resolveComponent("custom-link");
@@ -3204,63 +3152,27 @@ function render$o(_ctx, _cache, $props, $setup, $data, $options) {
     "data-myItemId": _ctx.myItemId
   }), {
     default: withCtx(() => [
-      _hoisted_1$a,
-      _ctx.needGraphic ? (openBlock(), createBlock("span", {
-        key: 0,
-        class: ["mdc-list-item__graphic", _ctx.groupClasses]
-      }, [
-        renderSlot(_ctx.$slots, "graphic", {}, () => [
-          _ctx.listIcon ? (openBlock(), createBlock("i", _hoisted_2$9, toDisplayString(_ctx.listIcon), 1)) : createCommentVNode("v-if", true)
-        ])
-      ], 2)) : _ctx.checkbox ? (openBlock(), createBlock("span", _hoisted_3$7, [
-        renderSlot(_ctx.$slots, "graphic", {}, () => [
-          _hoisted_4$7
-        ])
-      ])) : _ctx.radio ? (openBlock(), createBlock("span", _hoisted_5$6, [
-        renderSlot(_ctx.$slots, "graphic", {}, () => [
-          createVNode("div", _hoisted_6$4, [
-            createVNode("input", {
-              class: "mdc-radio__native-control",
-              type: "radio",
-              value: "1",
-              name: _ctx.name,
-              checked: _ctx.radioChecked
-            }, null, 8, ["name", "checked"]),
-            _hoisted_7$3
-          ])
-        ])
+      _ctx.isInteractive ? (openBlock(), createBlock("span", _hoisted_1$a)) : createCommentVNode("v-if", true),
+      _ctx.hasStart ? (openBlock(), createBlock("span", _hoisted_2$9, [
+        renderSlot(_ctx.$slots, "leading-icon"),
+        renderSlot(_ctx.$slots, "leading-image")
       ])) : createCommentVNode("v-if", true),
-      _ctx.isTwoLine ? (openBlock(), createBlock("span", _hoisted_8$2, [
-        createVNode("span", _hoisted_9$1, [
+      createVNode("span", {
+        class: "mdc-list-item__content",
+        id: _ctx.id
+      }, [
+        createVNode("span", _hoisted_3$7, [
           renderSlot(_ctx.$slots, "default")
         ]),
-        createVNode("span", _hoisted_10$1, [
-          renderSlot(_ctx.$slots, "secondary-text", {}, () => [
-            createTextVNode(toDisplayString(_ctx.twoLine), 1)
-          ])
-        ])
-      ])) : (openBlock(), createBlock("span", _hoisted_11$1, [
-        renderSlot(_ctx.$slots, "default")
-      ])),
-      _ctx.trailingRadio ? (openBlock(), createBlock("span", _hoisted_12$1, [
-        renderSlot(_ctx.$slots, "meta", {}, () => [
-          createVNode("div", _hoisted_13, [
-            createVNode("input", {
-              class: "mdc-radio__native-control",
-              type: "radio",
-              value: "1",
-              name: _ctx.name,
-              checked: _ctx.radioChecked
-            }, null, 8, ["name", "checked"]),
-            _hoisted_14
-          ])
-        ])
-      ])) : _ctx.trailingCheckbox ? (openBlock(), createBlock("span", _hoisted_15, [
-        renderSlot(_ctx.$slots, "meta", {}, () => [
-          _hoisted_16
-        ])
-      ])) : _ctx.$slots.meta ? (openBlock(), createBlock("span", _hoisted_17, [
-        renderSlot(_ctx.$slots, "meta")
+        _ctx.hasSecondaryText ? (openBlock(), createBlock("span", _hoisted_4$7, [
+          renderSlot(_ctx.$slots, "secondary-text")
+        ])) : createCommentVNode("v-if", true)
+      ], 8, ["id"]),
+      _ctx.hasEnd ? (openBlock(), createBlock("span", _hoisted_5$6, [
+        renderSlot(_ctx.$slots, "trailing-icon"),
+        renderSlot(_ctx.$slots, "trailing-meta"),
+        renderSlot(_ctx.$slots, "trailing-radio"),
+        renderSlot(_ctx.$slots, "trailing-checkbox")
       ])) : createCommentVNode("v-if", true)
     ]),
     _: 3
@@ -3270,72 +3182,51 @@ function render$o(_ctx, _cache, $props, $setup, $data, $options) {
 script$o.render = render$o;
 script$o.__file = "src/list/list-item.vue";
 
-const {strings: strings$9, cssClasses: cssClasses$5} = MDCListFoundation;
 const getPrimaryText = (item) => {
-  const primaryText = item.querySelector(`.${cssClasses$5.LIST_ITEM_PRIMARY_TEXT_CLASS}`);
-  if (primaryText) {
-    return primaryText.textContent || "";
-  }
-  const singleLineText = item.querySelector(`.${cssClasses$5.LIST_ITEM_TEXT_CLASS}`);
-  return singleLineText && singleLineText.textContent || "";
+  var _a;
+  const primaryText = item.querySelector(`.${cssClasses$7.LIST_ITEM_PRIMARY_TEXT_CLASS}`);
+  return (_a = primaryText == null ? void 0 : primaryText.textContent) != null ? _a : "";
 };
 var script$n = {
   name: "mcw-list",
   props: {
-    nonInteractive: {type: Boolean, default: false},
-    dense: Boolean,
-    avatarList: Boolean,
-    twoLine: Boolean,
-    singleSelection: Boolean,
+    multiSelectable: Boolean,
     wrapFocus: Boolean,
     textualList: Boolean,
     modelValue: {type: [String, Number, Array]},
-    tag: {type: String, default: "ul"},
-    ariaOrientation: {type: String, default: "vertical"},
-    thumbnailList: Boolean,
-    iconList: Boolean,
-    videoList: Boolean,
-    typeAhead: Boolean
+    typeAhead: Boolean,
+    vertical: {typee: Boolean, default: () => true},
+    role: {type: String}
   },
   setup(props, {emit}) {
     const uiState = reactive({
-      classes: {
-        "mdc-list": 1,
-        "mdc-list--dense": props.dense,
-        "mdc-list--avatar-list": props.avatarList,
-        "mdc-list--two-line": props.twoLine,
-        "mdc-list--non-interactive": props.nonInteractive,
-        "mdc-list--textual-list": props.textualList,
-        "mdc-list--icon-list": props.iconList,
-        "mdc-list--thumbnail-list": props.thumbnailList,
-        "mdc-list--video-list": props.videoList
-      },
-      rootAttrs: {"aria-orientation": props.ariaOrientation},
+      classes: {},
       listn: 0,
-      listRoot: void 0
+      listRoot: void 0,
+      rootAttrs: {
+        "aria-orientation": props.vertical ? "vertical" : "horizontal"
+      }
     });
-    const singleSelection = ref(props.singleSelection);
+    if (props.multiSelectable) {
+      uiState.rootAttrs["aria-multiselectable"] = "true";
+    }
     let foundation;
     let slotObserver;
-    if (singleSelection.value) {
-      uiState.rootAttrs.role = "listbox";
-    }
+    const isInteractive = props.role == "listbox" || props.role == "menu";
     const listItems = ref({});
     const registerListItem = (item) => {
       listItems.value[item.itemId] = item;
     };
     provide("registerListItem", registerListItem);
-    const setSingleSelection = (isSingleSelectionList) => {
-      singleSelection.value = isSingleSelectionList;
-      foundation.setSingleSelection(isSingleSelectionList);
-    };
+    provide("mcwList", {isInteractive});
+    const setSingleSelection = (isSingleSelectionList) => foundation.setSingleSelection(isSingleSelectionList);
     const setSelectedIndex = (index) => {
       foundation.setSelectedIndex(index);
     };
     const getSelectedIndex = () => foundation.getSelectedIndex();
     const listElements = ref([]);
     const updateListElements = () => {
-      const elements = Array.prototype.slice.call(uiState.listRoot.querySelectorAll(`.${cssClasses$5.LIST_ITEM_CLASS}`));
+      const elements = Array.prototype.slice.call(uiState.listRoot.querySelectorAll(`.${cssClasses$7.LIST_ITEM_CLASS}`));
       listElements.value = elements;
     };
     const getListItemByIndex = (index) => {
@@ -3345,41 +3236,55 @@ var script$n = {
         return listItems.value[myItemId];
       }
     };
-    const getListItemIndex = (event_) => {
-      const myItemId = event_.target.dataset.myitemid;
-      if (myItemId !== void 0) {
-        const lei = listElements.value.findIndex(({dataset: {myitemid}}) => myitemid === myItemId);
-        return lei;
+    const getListItemIndex = (eventOrElement) => {
+      const {target} = eventOrElement;
+      if (target) {
+        const myItemId = target.dataset.myitemid;
+        if (myItemId !== void 0) {
+          const listElementIndex = listElements.value.findIndex(({dataset: {myitemid}}) => myitemid === myItemId);
+          return listElementIndex;
+        }
       }
-      const eventTarget = event_.target;
-      const nearestParent = closest(eventTarget, `.${cssClasses$5.LIST_ITEM_CLASS}, .${cssClasses$5.ROOT}`);
-      if (nearestParent && matches(nearestParent, `.${cssClasses$5.LIST_ITEM_CLASS}`)) {
+      const element = target != null ? target : eventOrElement;
+      const nearestParent = closest(element, `.${cssClasses$7.LIST_ITEM_CLASS}, .${cssClasses$7.ROOT}`);
+      if (nearestParent && matches(nearestParent, `.${cssClasses$7.LIST_ITEM_CLASS}`)) {
         return listElements.value.indexOf(nearestParent);
       }
       return -1;
     };
     const layout = () => {
-      foundation.setVerticalOrientation(props.ariaOrientation == "vertical");
-      for (const ele of Array.prototype.slice.call(uiState.listRoot.querySelectorAll(".mdc-list-item:not([tabindex])"))) {
-        ele.setAttribute("tabindex", -1);
+      foundation.setVerticalOrientation(props.vertical);
+      for (const itemElements of Array.prototype.slice.call(uiState.listRoot.querySelectorAll(".mdc-list-item:not([tabindex])"))) {
+        itemElements.setAttribute("tabindex", -1);
       }
-      for (const ele of Array.prototype.slice.call(uiState.listRoot.querySelectorAll(strings$9.FOCUSABLE_CHILD_ELEMENTS)))
-        ele.setAttribute("tabindex", -1);
+      for (const focusableChildElements of Array.prototype.slice.call(uiState.listRoot.querySelectorAll(strings$b.FOCUSABLE_CHILD_ELEMENTS))) {
+        focusableChildElements.setAttribute("tabindex", -1);
+      }
+      foundation.setUseSelectedAttribute(true);
       foundation.layout();
     };
     const initializeListType = () => {
-      const checkboxListItems = uiState.listRoot.querySelectorAll(strings$9.ARIA_ROLE_CHECKBOX_SELECTOR);
-      const radioSelectedListItem = uiState.listRoot.querySelector(strings$9.ARIA_CHECKED_RADIO_SELECTOR);
+      if (isInteractive) {
+        const selection = [
+          ...uiState.listRoot.querySelectorAll(strings$b.SELECTED_ITEM_SELECTOR)
+        ].map((listItem) => listElements.indexOf(listItem));
+        if (matches(uiState.listRoot, strings$b.ARIA_MULTI_SELECTABLE_SELECTOR)) {
+          foundation.setSelectedIndex(selection);
+        } else if (selection.length > 0) {
+          foundation.setSelectedIndex(selection[0]);
+        }
+        return;
+      }
+      const checkboxListItems = uiState.listRoot.querySelectorAll(strings$b.ARIA_ROLE_CHECKBOX_SELECTOR);
+      const radioSelectedListItem = uiState.listRoot.querySelector(strings$b.ARIA_CHECKED_RADIO_SELECTOR);
       if (checkboxListItems.length > 0) {
-        const preselectedItems = uiState.listRoot.querySelectorAll(strings$9.ARIA_CHECKED_CHECKBOX_SELECTOR);
-        setSelectedIndex(Array.prototype.map.call(preselectedItems, (listItem) => listElements.value.indexOf(listItem)));
+        const preselectedItems = uiState.listRoot.querySelectorAll(strings$b.ARIA_CHECKED_CHECKBOX_SELECTOR);
+        foundation.setSelectedIndex(Array.prototype.map.call(preselectedItems, (listItem) => listElements.value.indexOf(listItem)));
       } else if (radioSelectedListItem) {
-        setSelectedIndex(listElements.value.indexOf(radioSelectedListItem));
+        foundation.setSelectedIndex(listElements.value.indexOf(radioSelectedListItem));
       }
     };
-    const setEnabled = (itemIndex, isEnabled) => {
-      foundation.setEnabled(itemIndex, isEnabled);
-    };
+    const setEnabled = (itemIndex, isEnabled) => foundation.setEnabled(itemIndex, isEnabled);
     const typeaheadMatchItem = (nextChar, startingIndex) => {
       return foundation.typeaheadMatchItem(nextChar, startingIndex, true);
     };
@@ -3394,23 +3299,13 @@ var script$n = {
     const handleKeydownEvent = (event_) => {
       const index = getListItemIndex(event_);
       const target = event_.target;
-      foundation.handleKeydown(event_, target.classList.contains(cssClasses$5.LIST_ITEM_CLASS), index);
+      foundation.handleKeydown(event_, target.classList.contains(cssClasses$7.LIST_ITEM_CLASS), index);
     };
     const handleClickEvent = (event_) => {
       const index = getListItemIndex(event_);
       const target = event_.target;
-      const toggleCheckbox = !matches(target, strings$9.CHECKBOX_RADIO_SELECTOR);
+      const toggleCheckbox = !matches(target, strings$b.CHECKBOX_RADIO_SELECTOR);
       foundation.handleClick(index, toggleCheckbox);
-    };
-    const rootListeners = {
-      click: (event) => handleClickEvent(event),
-      focusin: (event) => {
-        handleFocusInEvent(event);
-      },
-      focusout: (event) => {
-        handleFocusOutEvent(event);
-      },
-      keydown: (event) => handleKeydownEvent(event)
     };
     const typeaheadInProgress = () => foundation.isTypeaheadInProgress();
     const adapter = {
@@ -3433,16 +3328,16 @@ var script$n = {
       getPrimaryTextAtIndex: (index) => getPrimaryText(listElements.value[index]),
       hasCheckboxAtIndex: (index) => {
         const listItem = listElements.value[index];
-        return listItem && !!listItem.querySelector(strings$9.CHECKBOX_SELECTOR);
+        return listItem && !!listItem.querySelector(strings$b.CHECKBOX_SELECTOR);
       },
       hasRadioAtIndex: (index) => {
         const listItem = listElements.value[index];
-        return listItem && !!listItem.querySelector(strings$9.RADIO_SELECTOR);
+        return listItem && !!listItem.querySelector(strings$b.RADIO_SELECTOR);
       },
       isCheckboxCheckedAtIndex: (index) => {
         const listItem = listElements.value[index];
-        const toggleElement = listItem.querySelector(strings$9.CHECKBOX_SELECTOR);
-        return toggleElement.checked;
+        const toggleElement = listItem.querySelector(strings$b.CHECKBOX_SELECTOR);
+        return toggleElement == null ? void 0 : toggleElement.checked;
       },
       isFocusInsideList: () => {
         const root = uiState.listRoot;
@@ -3454,7 +3349,7 @@ var script$n = {
         listItem == null ? void 0 : listItem.classList.contains(className);
       },
       notifyAction: (index) => {
-        emitCustomEvent(uiState.listRoot, strings$9.ACTION_EVENT, {index}, true);
+        emitCustomEvent(uiState.listRoot, strings$b.ACTION_EVENT, {index}, true);
         if (Array.isArray(props.modelValue)) {
           emit("update:modelValue", foundation.getSelectedIndex());
         } else {
@@ -3471,7 +3366,7 @@ var script$n = {
       },
       setCheckedCheckboxOrRadioAtIndex: (index, isChecked) => {
         const listItem = listElements.value[index];
-        const toggleElement = listItem.querySelector(strings$9.CHECKBOX_RADIO_SELECTOR);
+        const toggleElement = listItem.querySelector(strings$b.CHECKBOX_RADIO_SELECTOR);
         toggleElement && (toggleElement.checked = isChecked);
         const event = document.createEvent("Event");
         event.initEvent("update:modelValue", true, true);
@@ -3480,7 +3375,7 @@ var script$n = {
       setTabIndexForListItemChildren: (listItemIndex, tabIndexValue) => {
         var _a;
         const element = listElements.value[listItemIndex];
-        const listItemChildren = Array.prototype.slice.call(element.querySelectorAll(strings$9.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX));
+        const listItemChildren = Array.prototype.slice.call(element.querySelectorAll(strings$b.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX));
         for (const element_ of listItemChildren) {
           const listItem = (_a = listItems.value[element_.dataset.myitemid]) != null ? _a : element_;
           listItem.setAttribute("tabindex", tabIndexValue);
@@ -3488,25 +3383,46 @@ var script$n = {
       }
     };
     watch(() => props.modelValue, (nv) => {
-      if (Array.isArray(nv)) {
-        foundation.setSelectedIndex(nv);
-      } else if (props.modelValue != nv) {
+      if (Array.isArray(nv) || props.modelValue != nv) {
         foundation.setSelectedIndex(nv);
       }
     });
     watch(() => props.wrapFocus, (nv) => foundation.setWrapFocus(nv));
-    watch(() => props.ariaOrientation, (nv) => foundation.setVerticalOrientation(nv === "vertical"));
+    watch(() => props.vertical, (nv) => foundation.setVerticalOrientation(nv));
     watch(() => props.typeAhead, (nv) => foundation.setHasTypeahead(nv));
+    const initialFocusIndex = () => {
+      const selectedIndex = foundation.getSelectedIndex();
+      if (Array.isArray(selectedIndex) && selectedIndex.length > 0) {
+        return selectedIndex[0];
+      }
+      if (typeof selectedIndex === "number" && selectedIndex !== -1) {
+        return selectedIndex;
+      }
+      const element = uiState.listRoot.querySelector(`.mdc-list-item:not(.mdc-list-item--disabled)`);
+      if (element === null) {
+        return -1;
+      }
+      return getListItemIndex(element);
+    };
+    const ensureFocusable = () => {
+      if (isInteractive && !uiState.listRoot.querySelector(`.mdc-list-item[tabindex="0"]`)) {
+        const index = initialFocusIndex();
+        if (index !== -1) {
+          listElements.value[index].tabIndex = 0;
+        }
+      }
+    };
     onMounted(() => {
       updateListElements();
-      foundation = new MDCListFoundation(adapter);
+      foundation = new MDCListFoundation$1(adapter);
       foundation.init();
-      if (singleSelection.value && typeof props.modelValue === "number" && !Number.isNaN(props.modelValue)) {
-        const index = props.modelValue;
-        const hasSelectedClass = adapter.listItemAtIndexHasClass(index, cssClasses$5.LIST_ITEM_SELECTED_CLASS);
-        const hasActivatedClass = adapter.listItemAtIndexHasClass(index, cssClasses$5.LIST_ITEM_ACTIVATED_CLASS);
+      const {modelValue, wrapFocus, typeAhead, vertical, multiSelectable} = props;
+      if (multiSelectable != true && typeof modelValue === "number" && !Number.isNaN(modelValue)) {
+        const index = modelValue;
+        const hasSelectedClass = adapter.listItemAtIndexHasClass(index, cssClasses$7.LIST_ITEM_SELECTED_CLASS);
+        const hasActivatedClass = adapter.listItemAtIndexHasClass(index, cssClasses$7.LIST_ITEM_ACTIVATED_CLASS);
         if (!(hasSelectedClass || hasActivatedClass)) {
-          adapter.addClassForElementIndex(props.modelValue, "mdc-list-item--selected");
+          adapter.addClassForElementIndex(modelValue, "mdc-list-item--selected");
         }
         adapter.setAttributeForElementIndex(index, "tabindex", 0);
         foundation.setSingleSelection(true);
@@ -3514,10 +3430,11 @@ var script$n = {
       }
       layout();
       initializeListType();
-      foundation.setWrapFocus(props.wrapFocus);
-      foundation.setVerticalOrientation(props.ariaOrientation === "vertical");
-      if (props.typeAhead) {
-        foundation.setHasTypeahead(props.typeAhead);
+      ensureFocusable();
+      foundation.setWrapFocus(wrapFocus);
+      foundation.setVerticalOrientation(vertical);
+      if (typeAhead) {
+        foundation.setHasTypeahead(typeAhead);
       }
       slotObserver = new MutationObserver(() => {
         updateListElements();
@@ -3534,7 +3451,6 @@ var script$n = {
       ...toRefs(uiState),
       listItems,
       listElements,
-      rootListeners,
       layout,
       setEnabled,
       typeaheadMatchItem,
@@ -3542,21 +3458,27 @@ var script$n = {
       getSelectedIndex,
       setSelectedIndex,
       getPrimaryText,
-      setSingleSelection
+      setSingleSelection,
+      handleClickEvent,
+      handleFocusInEvent,
+      handleFocusOutEvent,
+      handleKeydownEvent
     };
   }
 };
 
 function render$n(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createBlock(resolveDynamicComponent(_ctx.tag), mergeProps({
+  return openBlock(), createBlock("ul", mergeProps({
     ref: "listRoot",
-    class: _ctx.classes
-  }, toHandlers(_ctx.rootListeners), _ctx.rootAttrs), {
-    default: withCtx(() => [
-      renderSlot(_ctx.$slots, "default")
-    ]),
-    _: 3
-  }, 16, ["class"]);
+    class: ["mdc-list", _ctx.classes]
+  }, _ctx.rootAttrs, {
+    onClick: _cache[1] || (_cache[1] = (...args) => _ctx.handleClickEvent && _ctx.handleClickEvent(...args)),
+    onKeydown: _cache[2] || (_cache[2] = (...args) => _ctx.handleKeydown && _ctx.handleKeydown(...args)),
+    onFocusin: _cache[3] || (_cache[3] = (...args) => _ctx.handleFocusInEvent && _ctx.handleFocusInEvent(...args)),
+    onFocusout: _cache[4] || (_cache[4] = (...args) => _ctx.handleFocusOutEvent && _ctx.handleFocusOutEvent(...args))
+  }), [
+    renderSlot(_ctx.$slots, "default")
+  ], 16);
 }
 
 script$n.render = render$n;
