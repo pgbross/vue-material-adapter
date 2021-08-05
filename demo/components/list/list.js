@@ -3,7 +3,7 @@ export default {
     return {
       selected: 1,
       listSelected: [],
-      radioSelected: undefined,
+      radioSelected: 'cat',
       picked: '1',
       test_: true,
     };

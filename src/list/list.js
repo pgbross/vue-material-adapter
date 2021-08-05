@@ -34,6 +34,7 @@ export default {
     modelValue: { type: [String, Number, Array] },
     typeAhead: Boolean,
     vertical: { typee: Boolean, default: () => true },
+    role: { type: String },
   },
 
   setup(props, { emit }) {
@@ -52,7 +53,7 @@ export default {
 
     let foundation;
     let slotObserver;
-    let isInteractive;
+    const isInteractive = props.role == 'listbox' || props.role == 'menu';
 
     const listItems = ref({});
 
@@ -63,6 +64,7 @@ export default {
     };
 
     provide('registerListItem', registerListItem);
+    provide('mcwList', { isInteractive });
 
     const setSingleSelection = isSingleSelectionList =>
       foundation.setSingleSelection(isSingleSelectionList);
@@ -158,11 +160,6 @@ export default {
     };
 
     const initializeListType = () => {
-      isInteractive = matches(
-        uiState.listRoot,
-        strings.ARIA_INTERACTIVE_ROLES_SELECTOR,
-      );
-
       if (isInteractive) {
         const selection = [
           ...uiState.listRoot.querySelectorAll(strings.SELECTED_ITEM_SELECTOR),

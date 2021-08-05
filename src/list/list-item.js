@@ -4,16 +4,23 @@ import { useRipplePlugin } from '../ripple/index.js';
 
 let itemId = 0;
 
+const slotNames = {
+  LEADING_ICON: 'leading-icon',
+  LEADING_IMAGE: 'leading-image',
+  TRAILING_ICON: 'trailing-icon',
+  TRAILING_META: 'trailing-meta',
+  TRAILING_RADIO: 'trailing-radio',
+  TRAILING_CHECKBOX: 'trailing-checkbox',
+  SECONDARY_TEXT: 'secondary-text',
+};
+
 export default {
   name: 'mcw-list-item',
   inheritAttrs: false,
   props: {
-    twoLine: String,
     disabled: Boolean,
-    icon: [String, Boolean],
-    groupIcon: String,
     name: String,
-    trailing: Boolean,
+    id: String,
   },
   components: { CustomLink },
   setup(props, { slots, attrs }) {
@@ -21,13 +28,29 @@ export default {
 
     const myItemId = itemId++;
 
+    const hasSlot = name => !!slots[name];
+
     const isTwoLine = computed(() => {
-      return props.twoLine || slots['secondary-text'];
+      return props.twoLine || hasSlot(slotNames.SECONDARY_TEXT);
     });
 
-    const needGraphic = computed(
-      () => typeof props.icon == 'string' || !!props.groupIcon,
-    );
+    const hasLeadingIcon = hasSlot(slotNames.LEADING_ICON);
+    const hasLeadingImage = hasSlot(slotNames.LEADING_IMAGE);
+    const hasTrailingIcon = hasSlot(slotNames.TRAILING_ICON);
+    const hasTrailingMeta = hasSlot(slotNames.TRAILING_META);
+    const hasTrailingRadio = hasSlot(slotNames.TRAILING_RADIO);
+    const hasTrailingCheckbox = hasSlot(slotNames.TRAILING_CHECKBOX);
+
+    const hasSecondaryText = hasSlot(slotNames.SECONDARY_TEXT);
+
+    const hasStart = hasLeadingIcon || hasLeadingImage;
+    const hasEnd =
+      hasTrailingIcon ||
+      hasTrailingMeta ||
+      hasTrailingRadio ||
+      hasTrailingCheckbox;
+
+    const { isInteractive } = inject('mcwList');
 
     const uiState = reactive({
       classes: {
@@ -35,7 +58,13 @@ export default {
         'mdc-list-item--disabled': props.disabled,
         'mdc-list-item--with-one-line': !isTwoLine.value,
         'mdc-list-item--with-two-lines': isTwoLine.value,
-        'mdc-list-item--with-leading-icon': needGraphic.value,
+        'mdc-list-item--with-leading-icon': hasLeadingIcon,
+        'mdc-list-item--with-leading-image': hasLeadingImage,
+        'mdc-list-item--non-iteractive': !isInteractive,
+        'mdc-list-item--with-trailing-icon': hasTrailingIcon,
+        'mdc-list-item--with-trailing-meta': hasTrailingMeta,
+        'mdc-list-item--with-trailing-radio': hasTrailingRadio,
+        'mdc-list-item--with-trailing-checkbox': hasTrailingCheckbox,
       },
       attrs: {},
     });
@@ -46,32 +75,7 @@ export default {
 
     const registerListItem = inject('registerListItem');
 
-    const radioChecked = computed(() => {
-      return attrs['aria-checked'] == 'true';
-    });
-
-    const checkbox = computed(
-      () => !props.trailing && attrs.role == 'checkbox',
-    );
-
-    const radio = computed(() => !props.trailing && attrs.role == 'radio');
-    const trailingRadio = computed(
-      () => props.trailing && attrs.role == 'radio',
-    );
-
-    const trailingCheckbox = computed(
-      () => props.trailing && attrs.role == 'checkbox',
-    );
-
     const { classes: rippleClasses, styles } = useRipplePlugin(root);
-
-    const groupClasses = computed(() => ({
-      'mdc-menu__selection-group-icon': props.groupIcon,
-    }));
-
-    const listIcon = computed(
-      () => (typeof props.icon === 'string' && props.icon) || props.groupIcon,
-    );
 
     const focus = () => {
       (root.value.$el ?? root.value).focus();
@@ -130,16 +134,12 @@ export default {
       focus,
       root,
       isTwoLine,
-      needGraphic,
-      listIcon,
-      groupClasses,
-      checkbox,
-      radio,
-      radioChecked,
       myAttrs: myAttributes,
-      trailingRadio,
-      trailingCheckbox,
       myItemId,
+      hasStart,
+      hasEnd,
+      isInteractive,
+      hasSecondaryText,
     };
   },
 };
