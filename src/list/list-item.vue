@@ -3,11 +3,7 @@
   <custom-link ref="root" v-bind="myAttrs" tag="a" :data-myItemId="myItemId">
     <span class="mdc-list-item__ripple"></span>
 
-    <span
-      class="mdc-list-item__graphic"
-      :class="groupClasses"
-      v-if="needGraphic"
-    >
+    <span class="mdc-list-item__start" :class="groupClasses" v-if="needGraphic">
       <slot name="graphic"
         ><i class="material-icons" v-if="listIcon">{{ listIcon }}</i></slot
       >
@@ -53,7 +49,9 @@
       >
     </span>
 
-    <span class="mdc-list-item__text" v-else><slot></slot></span>
+    <span class="mdc-list-item__content" v-else>
+      <span class="mdc-list-item__primary-text"><slot></slot></span>
+    </span>
 
     <span class="mdc-list-item__meta" v-if="trailingRadio">
       <slot name="meta"

@@ -1,11 +1,15 @@
 <script src="./list.js"></script>
 <template>
-  <component
-    :is="tag"
+  <ul
     ref="listRoot"
+    class="mdc-list"
     :class="classes"
-    v-on="rootListeners"
     v-bind="rootAttrs"
-    ><slot></slot
-  ></component>
+    @click="handleClickEvent"
+    @keydown="handleKeydown"
+    @focusin="handleFocusInEvent"
+    @focusout="handleFocusOutEvent"
+  >
+    <slot></slot>
+  </ul>
 </template>

@@ -1,5 +1,9 @@
 import { closest, matches } from '@material/dom/ponyfill.js';
-import { MDCListFoundation } from '@material/list/foundation.js';
+import {
+  cssClasses,
+  MDCListFoundation,
+  strings,
+} from '@material/list/index.js';
 import {
   // computed,
   onBeforeUnmount,
@@ -12,69 +16,44 @@ import {
 } from 'vue';
 import { emitCustomEvent } from '../base/index.js';
 
-const { strings, cssClasses } = MDCListFoundation;
-
 const getPrimaryText = item => {
   const primaryText = item.querySelector(
     `.${cssClasses.LIST_ITEM_PRIMARY_TEXT_CLASS}`,
   );
-  if (primaryText) {
-    return primaryText.textContent || '';
-  }
 
-  const singleLineText = item.querySelector(
-    `.${cssClasses.LIST_ITEM_TEXT_CLASS}`,
-  );
-  return (singleLineText && singleLineText.textContent) || '';
+  return primaryText?.textContent ?? '';
 };
 
 export default {
   name: 'mcw-list',
 
   props: {
-    nonInteractive: { type: Boolean, default: false },
-    dense: Boolean,
-    avatarList: Boolean,
-    twoLine: Boolean,
-    singleSelection: Boolean,
+    multiSelectable: Boolean,
     wrapFocus: Boolean,
     textualList: Boolean,
     modelValue: { type: [String, Number, Array] },
-    tag: { type: String, default: 'ul' },
-    ariaOrientation: { type: String, default: 'vertical' },
-    thumbnailList: Boolean,
-    iconList: Boolean,
-    videoList: Boolean,
     typeAhead: Boolean,
+    vertical: { typee: Boolean, default: () => true },
   },
 
   setup(props, { emit }) {
     const uiState = reactive({
-      classes: {
-        'mdc-list': 1,
-        'mdc-list--dense': props.dense,
-        'mdc-list--avatar-list': props.avatarList,
-        'mdc-list--two-line': props.twoLine,
-        'mdc-list--non-interactive': props.nonInteractive,
-        'mdc-list--textual-list': props.textualList,
-        'mdc-list--icon-list': props.iconList,
-        'mdc-list--thumbnail-list': props.thumbnailList,
-        'mdc-list--video-list': props.videoList,
-      },
-      rootAttrs: { 'aria-orientation': props.ariaOrientation },
+      classes: {},
       listn: 0,
       listRoot: undefined,
+      rootAttrs: {
+        'aria-orientation': props.vertical ? 'vertical' : 'horizontal',
+      },
     });
 
-    const singleSelection = ref(props.singleSelection);
-    // const selectedIndex = ref(props.modelValue);
+    if (props.multiSelectable) {
+      uiState.rootAttrs['aria-multiselectable'] = 'true';
+    }
 
     let foundation;
     let slotObserver;
+    let isInteractive;
 
-    if (singleSelection.value) {
-      uiState.rootAttrs.role = 'listbox';
-    }
     const listItems = ref({});
 
     // keep a hash of child list items
@@ -85,20 +64,8 @@ export default {
 
     provide('registerListItem', registerListItem);
 
-    // const selIndex = computed({
-    //   get() {
-    //     return selectedIndex.value;
-    //   },
-    //   set(nv) {
-    //     selectedIndex.value = nv;
-    //     emit('update:modelValue', nv);
-    //   },
-    // });
-
-    const setSingleSelection = isSingleSelectionList => {
-      singleSelection.value = isSingleSelectionList;
+    const setSingleSelection = isSingleSelectionList =>
       foundation.setSingleSelection(isSingleSelectionList);
-    };
 
     const setSelectedIndex = index => {
       foundation.setSelectedIndex(index);
@@ -133,24 +100,28 @@ export default {
     };
 
     // find the index of a list item from the event target
-    const getListItemIndex = event_ => {
-      const myItemId = event_.target.dataset.myitemid;
+    const getListItemIndex = eventOrElement => {
+      const { target } = eventOrElement;
 
-      // if clicked on a list item then just search
-      if (myItemId !== void 0) {
-        const lei = listElements.value.findIndex(
-          ({ dataset: { myitemid } }) => myitemid === myItemId,
-        );
+      if (target) {
+        const myItemId = target.dataset.myitemid;
 
-        return lei;
+        // if clicked on a list item then just search
+        if (myItemId !== undefined) {
+          const listElementIndex = listElements.value.findIndex(
+            ({ dataset: { myitemid } }) => myitemid === myItemId,
+          );
+
+          return listElementIndex;
+        }
       }
 
       // if the click wasnt on a list item
       // search up the DOM
 
-      const eventTarget = event_.target;
+      const element = target ?? eventOrElement;
       const nearestParent = closest(
-        eventTarget,
+        element,
         `.${cssClasses.LIST_ITEM_CLASS}, .${cssClasses.ROOT}`,
       );
 
@@ -166,25 +137,45 @@ export default {
     };
 
     const layout = () => {
-      foundation.setVerticalOrientation(props.ariaOrientation == 'vertical');
+      foundation.setVerticalOrientation(props.vertical);
 
       // List items need to have at least tabindex=-1 to be focusable.
-      for (const ele of Array.prototype.slice.call(
+      for (const itemElements of Array.prototype.slice.call(
         uiState.listRoot.querySelectorAll('.mdc-list-item:not([tabindex])'),
       )) {
-        ele.setAttribute('tabindex', -1);
+        itemElements.setAttribute('tabindex', -1);
       }
 
       // Child button/a elements are not tabbable until the list item is focused.
-      for (const ele of Array.prototype.slice.call(
+      for (const focusableChildElements of Array.prototype.slice.call(
         uiState.listRoot.querySelectorAll(strings.FOCUSABLE_CHILD_ELEMENTS),
-      ))
-        ele.setAttribute('tabindex', -1);
+      )) {
+        focusableChildElements.setAttribute('tabindex', -1);
+      }
 
+      foundation.setUseSelectedAttribute(true);
       foundation.layout();
     };
 
     const initializeListType = () => {
+      isInteractive = matches(
+        uiState.listRoot,
+        strings.ARIA_INTERACTIVE_ROLES_SELECTOR,
+      );
+
+      if (isInteractive) {
+        const selection = [
+          ...uiState.listRoot.querySelectorAll(strings.SELECTED_ITEM_SELECTOR),
+        ].map(listItem => listElements.indexOf(listItem));
+
+        if (matches(uiState.listRoot, strings.ARIA_MULTI_SELECTABLE_SELECTOR)) {
+          foundation.setSelectedIndex(selection);
+        } else if (selection.length > 0) {
+          foundation.setSelectedIndex(selection[0]);
+        }
+        return;
+      }
+
       const checkboxListItems = uiState.listRoot.querySelectorAll(
         strings.ARIA_ROLE_CHECKBOX_SELECTOR,
       );
@@ -198,19 +189,20 @@ export default {
           strings.ARIA_CHECKED_CHECKBOX_SELECTOR,
         );
 
-        setSelectedIndex(
+        foundation.setSelectedIndex(
           Array.prototype.map.call(preselectedItems, listItem =>
             listElements.value.indexOf(listItem),
           ),
         );
       } else if (radioSelectedListItem) {
-        setSelectedIndex(listElements.value.indexOf(radioSelectedListItem));
+        foundation.setSelectedIndex(
+          listElements.value.indexOf(radioSelectedListItem),
+        );
       }
     };
 
-    const setEnabled = (itemIndex, isEnabled) => {
+    const setEnabled = (itemIndex, isEnabled) =>
       foundation.setEnabled(itemIndex, isEnabled);
-    };
 
     const typeaheadMatchItem = (nextChar, startingIndex) => {
       return foundation.typeaheadMatchItem(
@@ -247,18 +239,6 @@ export default {
       // Toggle the checkbox only if it's not the target of the event, or the checkbox will have 2 change events.
       const toggleCheckbox = !matches(target, strings.CHECKBOX_RADIO_SELECTOR);
       foundation.handleClick(index, toggleCheckbox);
-    };
-
-    // set up the listeners and bind in the template with v-on
-    const rootListeners = {
-      click: event => handleClickEvent(event),
-      focusin: event => {
-        handleFocusInEvent(event);
-      },
-      focusout: event => {
-        handleFocusOutEvent(event);
-      },
-      keydown: event => handleKeydownEvent(event),
     };
 
     const typeaheadInProgress = () => foundation.isTypeaheadInProgress();
@@ -300,7 +280,7 @@ export default {
       isCheckboxCheckedAtIndex: index => {
         const listItem = listElements.value[index];
         const toggleElement = listItem.querySelector(strings.CHECKBOX_SELECTOR);
-        return toggleElement.checked;
+        return toggleElement?.checked;
       },
 
       isFocusInsideList: () => {
@@ -371,17 +351,10 @@ export default {
       },
     };
 
-    // watch(
-    //   () => props.singleSelection,
-    //   nv => foundation.setSingleSelection(nv),
-    // );
-
     watch(
       () => props.modelValue,
       nv => {
-        if (Array.isArray(nv)) {
-          foundation.setSelectedIndex(nv);
-        } else if (props.modelValue != nv) {
+        if (Array.isArray(nv) || props.modelValue != nv) {
           foundation.setSelectedIndex(nv);
         }
       },
@@ -393,8 +366,8 @@ export default {
     );
 
     watch(
-      () => props.ariaOrientation,
-      nv => foundation.setVerticalOrientation(nv === 'vertical'),
+      () => props.vertical,
+      nv => foundation.setVerticalOrientation(nv),
     );
 
     watch(
@@ -402,18 +375,50 @@ export default {
       nv => foundation.setHasTypeahead(nv),
     );
 
+    const initialFocusIndex = () => {
+      const selectedIndex = foundation.getSelectedIndex();
+
+      if (Array.isArray(selectedIndex) && selectedIndex.length > 0) {
+        return selectedIndex[0];
+      }
+      if (typeof selectedIndex === 'number' && selectedIndex !== -1) {
+        return selectedIndex;
+      }
+      const element = uiState.listRoot.querySelector(
+        `.mdc-list-item:not(.mdc-list-item--disabled)`,
+      );
+      if (element === null) {
+        return -1;
+      }
+      return getListItemIndex(element);
+    };
+
+    const ensureFocusable = () => {
+      if (
+        isInteractive &&
+        !uiState.listRoot.querySelector(`.mdc-list-item[tabindex="0"]`)
+      ) {
+        const index = initialFocusIndex();
+        if (index !== -1) {
+          listElements.value[index].tabIndex = 0;
+        }
+      }
+    };
+
     onMounted(() => {
       updateListElements();
       foundation = new MDCListFoundation(adapter);
       foundation.init();
 
+      const { modelValue, wrapFocus, typeAhead, vertical, multiSelectable } =
+        props;
       // if a single selection list need to ensure the selected item has the selected or activated class
       if (
-        singleSelection.value &&
-        typeof props.modelValue === 'number' &&
-        !Number.isNaN(props.modelValue)
+        multiSelectable != true &&
+        typeof modelValue === 'number' &&
+        !Number.isNaN(modelValue)
       ) {
-        const index = props.modelValue;
+        const index = modelValue;
         const hasSelectedClass = adapter.listItemAtIndexHasClass(
           index,
           cssClasses.LIST_ITEM_SELECTED_CLASS,
@@ -424,7 +429,7 @@ export default {
         );
         if (!(hasSelectedClass || hasActivatedClass)) {
           adapter.addClassForElementIndex(
-            props.modelValue,
+            modelValue,
             'mdc-list-item--selected',
           );
         }
@@ -436,11 +441,12 @@ export default {
       layout();
       initializeListType();
 
-      foundation.setWrapFocus(props.wrapFocus);
-      foundation.setVerticalOrientation(props.ariaOrientation === 'vertical');
+      ensureFocusable();
+      foundation.setWrapFocus(wrapFocus);
+      foundation.setVerticalOrientation(vertical);
 
-      if (props.typeAhead) {
-        foundation.setHasTypeahead(props.typeAhead);
+      if (typeAhead) {
+        foundation.setHasTypeahead(typeAhead);
       }
 
       // the list content could change outside of this component
@@ -463,16 +469,18 @@ export default {
       ...toRefs(uiState),
       listItems,
       listElements,
-      rootListeners,
       layout,
       setEnabled,
       typeaheadMatchItem,
       typeaheadInProgress,
-      // selIndex,
       getSelectedIndex,
       setSelectedIndex,
       getPrimaryText,
       setSingleSelection,
+      handleClickEvent,
+      handleFocusInEvent,
+      handleFocusOutEvent,
+      handleKeydownEvent,
     };
   },
 };

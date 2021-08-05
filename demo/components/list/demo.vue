@@ -2,8 +2,13 @@
   <div class="demo-list-wrapper">
     <div class="demo-list-example">
       <h3 class="mdc-typography--subtitle1">Single-Line</h3>
-      <mcw-list v-model="selected" class="demo-list" @mdclist:action="onAction">
-        <mcw-list-item tabindex="0" name="wiffle"
+      <mcw-list
+        v-model="selected"
+        class="demo-list"
+        @mdclist:action="onAction"
+        role="listbox"
+      >
+        <mcw-list-item tabindex="0" name="wiffle" icon="home"
           >One Single-line item 1
         </mcw-list-item>
         <mcw-list-item>Two Single-line item 2 </mcw-list-item>
@@ -14,7 +19,7 @@
     <div class="demo-list-example">
       <h3 class="mdc-typography--subtitle1">Two Line</h3>
 
-      <mcw-list v-model="selected" two-line class="demo-list">
+      <mcw-list v-model="selected" two-line class="demo-list" role="listbox">
         <mcw-list-item
           >Two-line item
           <template #secondary-text> <span>Secondary text</span></template>
@@ -35,13 +40,13 @@
       <h3 class="mdc-typography--subtitle1">List group</h3>
       <div class="mdc-list-group">
         <h3 class="mdc-list-group__subheader">List 1</h3>
-        <mcw-list v-model="selected" class="demo-list">
+        <mcw-list v-model="selected" class="demo-list" role="listbox">
           <mcw-list-item tabindex="0">line item</mcw-list-item>
           <mcw-list-item>line item</mcw-list-item>
           <mcw-list-item>line item</mcw-list-item>
         </mcw-list>
         <h3 class="mdc-list-group__subheader">List 2</h3>
-        <mcw-list v-model="selected" class="demo-list">
+        <mcw-list v-model="selected" class="demo-list" role="listbox">
           <mcw-list-item tabindex="0">line item</mcw-list-item>
           <mcw-list-item>line item</mcw-list-item>
           <mcw-list-item>line item</mcw-list-item>
@@ -51,7 +56,7 @@
 
     <div class="demo-list-example">
       <h3 class="mdc-typography--subtitle1">List dividers</h3>
-      <mcw-list v-model="selected" class="demo-list">
+      <mcw-list v-model="selected" class="demo-list" role="listbox">
         <mcw-list-item tabindex="0">Item 1 - Division 1</mcw-list-item>
         <mcw-list-item>Item 2 - Division 1</mcw-list-item>
 
@@ -69,6 +74,7 @@
         single-selection
         wrap-focus
         class="demo-list"
+        role="listbox"
       >
         <mcw-list-item tabindex="0">Single-line item</mcw-list-item>
         <mcw-list-item>Single-line item</mcw-list-item>
@@ -80,7 +86,7 @@
       <h3 class="mdc-typography--subtitle1">List with checkbox items</h3>
       <mcw-list
         v-model="listSelected"
-        role="group"
+        role="listbox"
         aria-label="List with checkbox items"
         class="demo-list"
       >
@@ -106,7 +112,7 @@
       <h3 class="mdc-typography--subtitle1">List with trailing checkbox</h3>
       <mcw-list
         v-model="listSelected"
-        role="group"
+        role="listbox"
         aria-label="List with checkbox items"
         class="demo-list"
       >
@@ -130,7 +136,7 @@
 
     <div class="demo-list-example">
       <h3 class="mdc-typography--subtitle1">List with radio group</h3>
-      <mcw-list v-model="radioSelected" role="radiogroup" class="demo-list">
+      <mcw-list v-model="radioSelected" role="listbox" class="demo-list">
         <mcw-list-item role="radio" name="demo-group">
           <label class="mdc-list-item__text" for="demo-list-radio-item-1"
             >Option 1</label
@@ -152,7 +158,7 @@
 
     <div class="demo-list-example">
       <h3 class="mdc-typography--subtitle1">Single-Line trailing radio</h3>
-      <mcw-list v-model="radioSelected" class="demo-list">
+      <mcw-list v-model="radioSelected" class="demo-list" role="listbox">
         <mcw-list-item
           tabindex="0"
           role="radio"

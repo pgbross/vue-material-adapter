@@ -25,12 +25,17 @@ export default {
       return props.twoLine || slots['secondary-text'];
     });
 
+    const needGraphic = computed(
+      () => typeof props.icon == 'string' || !!props.groupIcon,
+    );
+
     const uiState = reactive({
       classes: {
         'mdc-list-item': 1,
         'mdc-list-item--disabled': props.disabled,
         'mdc-list-item--with-one-line': !isTwoLine.value,
         'mdc-list-item--with-two-lines': isTwoLine.value,
+        'mdc-list-item--with-leading-icon': needGraphic.value,
       },
       attrs: {},
     });
@@ -64,9 +69,6 @@ export default {
       'mdc-menu__selection-group-icon': props.groupIcon,
     }));
 
-    const needGraphic = computed(
-      () => typeof props.icon == 'string' || !!props.groupIcon,
-    );
     const listIcon = computed(
       () => (typeof props.icon === 'string' && props.icon) || props.groupIcon,
     );
