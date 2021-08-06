@@ -9,6 +9,7 @@
     @keydown="handleKeydown"
     @focusin="handleFocusInEvent"
     @focusout="handleFocusOutEvent"
+    :role="role"
   >
     <slot></slot>
   </ul>
