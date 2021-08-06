@@ -2366,8 +2366,9 @@ function render$x(_ctx, _cache, $props, $setup, $data, $options) {
           "wrap-focus": true,
           tag: "nav",
           "onMdclist:action": _ctx.onListAction,
-          "single-selection": "",
-          "selected-index": 0
+          "multi-selectable": false,
+          "selected-index": 0,
+          role: "menu"
         }, {
           default: withCtx(() => [
             renderSlot(_ctx.$slots, "default")
@@ -2387,8 +2388,9 @@ function render$x(_ctx, _cache, $props, $setup, $data, $options) {
           createVNode(_component_mcw_list, {
             "wrap-focus": true,
             tag: "nav",
-            "single-selection": "",
+            "multi-selectable": false,
             "selected-index": 0,
+            role: "menu",
             "onMdclist:action": _ctx.onListAction
           }, {
             default: withCtx(() => [
@@ -3475,10 +3477,11 @@ function render$n(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[1] || (_cache[1] = (...args) => _ctx.handleClickEvent && _ctx.handleClickEvent(...args)),
     onKeydown: _cache[2] || (_cache[2] = (...args) => _ctx.handleKeydown && _ctx.handleKeydown(...args)),
     onFocusin: _cache[3] || (_cache[3] = (...args) => _ctx.handleFocusInEvent && _ctx.handleFocusInEvent(...args)),
-    onFocusout: _cache[4] || (_cache[4] = (...args) => _ctx.handleFocusOutEvent && _ctx.handleFocusOutEvent(...args))
+    onFocusout: _cache[4] || (_cache[4] = (...args) => _ctx.handleFocusOutEvent && _ctx.handleFocusOutEvent(...args)),
+    role: _ctx.role
   }), [
     renderSlot(_ctx.$slots, "default")
-  ], 16);
+  ], 16, ["role"]);
 }
 
 script$n.render = render$n;
@@ -4000,13 +4003,13 @@ function render$l(_ctx, _cache, $props, $setup, $data, $options) {
         "onUpdate:modelValue": _ctx.handleAction,
         tabindex: "-1",
         "type-ahead": _ctx.typeAhead,
-        "single-selection": _ctx.singleSelection
+        "multi-selectable": !_ctx.singleSelection
       }, {
         default: withCtx(() => [
           renderSlot(_ctx.$slots, "default")
         ]),
         _: 3
-      }, 8, ["wrap-focus", "onUpdate:modelValue", "type-ahead", "single-selection"])
+      }, 8, ["wrap-focus", "onUpdate:modelValue", "type-ahead", "multi-selectable"])
     ]),
     _: 1
   }, 8, ["quick-open", "modelValue", "onKeydown", "onUpdate:modelValue", "onMdcmenusurface:opened", "onMdcmenusurface:closed"]);
