@@ -33,8 +33,9 @@
         <mcw-list
           :wrap-focus="true"
           tag="nav"
-          single-selection
+          :multi-selectable="false"
           :selected-index="0"
+          role="menu"
           @mdclist:action="onListAction"
         >
           <slot></slot>
