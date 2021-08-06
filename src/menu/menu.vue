@@ -18,7 +18,7 @@
       @update:modelValue="handleAction"
       tabindex="-1"
       :type-ahead="typeAhead"
-      :single-selection="singleSelection"
+      :multi-selectable="!singleSelection"
       ><slot></slot
     ></mcw-list>
   </mcw-menu-surface>
