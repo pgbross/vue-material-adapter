@@ -29,7 +29,7 @@ export default {
     fixed: Boolean,
     absolutePosition: Array,
     typeAhead: Boolean,
-    singleSelection: Boolean,
+    singleSelection: { type: Boolean, default: () => true },
     defaultFocusState: { type: String, default: () => 'LIST_ROOT' },
   },
 
