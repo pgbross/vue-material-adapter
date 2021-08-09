@@ -4,8 +4,7 @@
     <span class="mdc-list-item__ripple" v-if="isInteractive"></span>
 
     <span class="mdc-list-item__start" v-if="hasStart">
-      <slot name="leading-icon"></slot>
-      <slot name="leading-image"></slot>
+      <slot name="start"></slot>
     </span>
 
     <span class="mdc-list-item__content" :id="id">
@@ -16,10 +15,7 @@
     </span>
 
     <span class="mdc-list-item__end" v-if="hasEnd">
-      <slot name="trailing-icon"></slot>
-      <slot name="trailing-meta"></slot>
-      <slot name="trailing-radio"></slot>
-      <slot name="trailing-checkbox"></slot>
+      <slot name="end"></slot>
     </span>
   </custom-link>
 </template>

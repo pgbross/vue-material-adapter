@@ -5,14 +5,23 @@ import { useRipplePlugin } from '../ripple/index.js';
 let itemId = 0;
 
 const slotNames = {
-  LEADING_ICON: 'leading-icon',
-  LEADING_IMAGE: 'leading-image',
-  TRAILING_ICON: 'trailing-icon',
-  TRAILING_META: 'trailing-meta',
-  TRAILING_RADIO: 'trailing-radio',
-  TRAILING_CHECKBOX: 'trailing-checkbox',
+  START: 'start',
+  END: 'end',
   SECONDARY_TEXT: 'secondary-text',
 };
+
+const startNames_ = new Set([
+  'avatar',
+  'icon',
+  'thumbnail',
+  'checkbox',
+  'radio',
+  'switch',
+  'image',
+  'video',
+]);
+
+const endNames_ = new Set(['icon', 'meta', 'checkbox', 'radio', 'switch']);
 
 export default {
   name: 'mcw-list-item',
@@ -21,6 +30,8 @@ export default {
     disabled: Boolean,
     name: String,
     id: String,
+    start: { type: String, validator: value => startNames_.has(value) },
+    end: { type: String, validator: value => endNames_.has(value) },
   },
   components: { CustomLink },
   setup(props, { slots, attrs }) {
@@ -34,21 +45,9 @@ export default {
       return props.twoLine || hasSlot(slotNames.SECONDARY_TEXT);
     });
 
-    const hasLeadingIcon = hasSlot(slotNames.LEADING_ICON);
-    const hasLeadingImage = hasSlot(slotNames.LEADING_IMAGE);
-    const hasTrailingIcon = hasSlot(slotNames.TRAILING_ICON);
-    const hasTrailingMeta = hasSlot(slotNames.TRAILING_META);
-    const hasTrailingRadio = hasSlot(slotNames.TRAILING_RADIO);
-    const hasTrailingCheckbox = hasSlot(slotNames.TRAILING_CHECKBOX);
-
     const hasSecondaryText = hasSlot(slotNames.SECONDARY_TEXT);
-
-    const hasStart = hasLeadingIcon || hasLeadingImage;
-    const hasEnd =
-      hasTrailingIcon ||
-      hasTrailingMeta ||
-      hasTrailingRadio ||
-      hasTrailingCheckbox;
+    const hasStart = hasSlot(slotNames.START) && !!props.start;
+    const hasEnd = hasSlot(slotNames.END) && !!props.end;
 
     const { isInteractive } = inject('mcwList');
 
@@ -58,13 +57,9 @@ export default {
         'mdc-list-item--disabled': props.disabled,
         'mdc-list-item--with-one-line': !isTwoLine.value,
         'mdc-list-item--with-two-lines': isTwoLine.value,
-        'mdc-list-item--with-leading-icon': hasLeadingIcon,
-        'mdc-list-item--with-leading-image': hasLeadingImage,
+        [`mdc-list-item--with-leading-${props.start}`]: hasStart,
+        [`mdc-list-item--with-trailing-${props.end}`]: hasEnd,
         'mdc-list-item--non-iteractive': !isInteractive,
-        'mdc-list-item--with-trailing-icon': hasTrailingIcon,
-        'mdc-list-item--with-trailing-meta': hasTrailingMeta,
-        'mdc-list-item--with-trailing-radio': hasTrailingRadio,
-        'mdc-list-item--with-trailing-checkbox': hasTrailingCheckbox,
       },
       attrs: {},
     });

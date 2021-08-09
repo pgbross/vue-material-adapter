@@ -8,22 +8,25 @@
         @mdclist:action="onAction"
         role="listbox"
       >
-        <mcw-list-item tabindex="0" name="wiffle" id="id1">
-          <template #leading-icon>
+        <mcw-list-item tabindex="0" name="wiffle" id="id1" start="icon">
+          <template #start>
             <i class="material-icons">home</i>
           </template>
           One Single-line item 1
         </mcw-list-item>
-        <mcw-list-item
+
+        <li role="separator" class="mdc-list-divider"></li>
+
+        <mcw-list-item end="icon"
           >Two Single-line item 2
 
-          <template #trailing-icon>
+          <template #tend>
             <i class="material-icons">home</i>
           </template>
         </mcw-list-item>
-        <mcw-list-item
+        <mcw-list-item end="meta"
           >Three Single-line item 3
-          <template #trailing-meta> meta text </template></mcw-list-item
+          <template #end> meta text </template></mcw-list-item
         >
 
         <mcw-list-item
@@ -37,9 +40,9 @@
       <h3 class="mdc-typography--subtitle1">Single selection</h3>
 
       <mcw-list v-model="selected" class="demo-list" role="listbox">
-        <mcw-list-item
+        <mcw-list-item end="radio"
           >Dog
-          <template #trailing-radio>
+          <template #end>
             <mcw-radio
               v-model="radioSelected"
               id="dog"
@@ -50,9 +53,9 @@
           </template>
         </mcw-list-item>
 
-        <mcw-list-item
+        <mcw-list-item end="radio"
           >Cat
-          <template #trailing-radio>
+          <template #end>
             <mcw-radio
               v-model="radioSelected"
               id="cat"
@@ -98,13 +101,7 @@
 
     <div class="demo-list-example">
       <h3 class="mdc-typography--subtitle1">Single selection list</h3>
-      <mcw-list
-        v-model="selected"
-        single-selection
-        wrap-focus
-        class="demo-list"
-        role="listbox"
-      >
+      <mcw-list v-model="selected" wrap-focus class="demo-list" role="listbox">
         <mcw-list-item tabindex="0">Single-line item</mcw-list-item>
         <mcw-list-item>Single-line item</mcw-list-item>
         <mcw-list-item>Single-line item</mcw-list-item>
