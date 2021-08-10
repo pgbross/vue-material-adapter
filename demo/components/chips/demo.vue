@@ -8,7 +8,7 @@
         <mcw-chip id="c2" trailing-icon="clear_all">Chip Two </mcw-chip>
 
         <mcw-chip id="c3" disabled trailing-icon="clear_all"
-          >Chip Two
+          >Chip Three
         </mcw-chip>
       </mcw-chip-set>
     </section>

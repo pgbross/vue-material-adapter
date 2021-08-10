@@ -6,7 +6,7 @@ import { emitCustomEvent } from '../base/index.js';
 export default {
   name: 'mcw-chip-set',
   props: {
-    singleSelection: { type: Boolean },
+    multiSelectable: { type: Boolean },
     orientation: { type: String, default: () => 'horizontal' },
     overflow: { type: Boolean },
     role: { type: String, default: () => 'grid' },
@@ -28,9 +28,10 @@ export default {
 
     if (props.role == 'listbox') {
       uiState.attrs['aria-orientation'] = props.orientation;
-      uiState.attrs['aria-multiselectable'] = props.singleSelection
-        ? 'false'
-        : 'true';
+
+      if (props.multiSelectable) {
+        uiState.attrs['aria-multiselectable'] = 'true';
+      }
     }
 
     const registerChip = chip => {
@@ -124,7 +125,7 @@ export default {
 
     provide('mcwChipSet', {
       role: props.role,
-      singleSelection: props.singleSelection,
+      singleSelection: !props.multiSelectable,
     });
 
     const handleChipAnimation = event => {

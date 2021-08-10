@@ -26,7 +26,6 @@ export default {
         return true;
       },
     },
-    presentational: { type: Boolean },
     disabled: { type: Boolean },
     selected: { type: Boolean },
   },
