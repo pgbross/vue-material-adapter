@@ -68,7 +68,7 @@
       </mcw-list>
     </div>
 
-    <div class="demo-list-example">
+    <!-- <div class="demo-list-example">
       <h3 class="mdc-typography--subtitle1">List group</h3>
       <div class="mdc-list-group">
         <h3 class="mdc-list-group__subheader">List 1</h3>
@@ -84,7 +84,7 @@
           <mcw-list-item>line item</mcw-list-item>
         </mcw-list>
       </div>
-    </div>
+    </div> -->
 
     <div class="demo-list-example">
       <h3 class="mdc-typography--subtitle1">List dividers</h3>
@@ -98,7 +98,7 @@
         <mcw-list-item>Item 2 - Division 2</mcw-list-item>
       </mcw-list>
     </div>
-
+    <!--
     <div class="demo-list-example">
       <h3 class="mdc-typography--subtitle1">Single selection list</h3>
       <mcw-list v-model="selected" wrap-focus class="demo-list" role="listbox">
@@ -106,8 +106,8 @@
         <mcw-list-item>Single-line item</mcw-list-item>
         <mcw-list-item>Single-line item</mcw-list-item>
       </mcw-list>
-    </div>
-
+    </div> -->
+    <!--
     <div class="demo-list-example">
       <h3 class="mdc-typography--subtitle1">List with checkbox items</h3>
       <mcw-list
@@ -132,34 +132,38 @@
           >
         </mcw-list-item>
       </mcw-list>
-    </div>
+    </div> -->
 
     <div class="demo-list-example">
       <h3 class="mdc-typography--subtitle1">List with trailing checkbox</h3>
       <mcw-list
         v-model="listSelected"
         role="listbox"
-        aria-label="List with checkbox items"
+        aria-multiselectable="true"
         class="demo-list"
       >
-        <mcw-list-item role="checkbox" aria-checked="true" trailing>
+        <mcw-list-item role="checkbox" end="checkbox">
           <label class="mdc-list-item__text" for="demo-list-checkbox-item-1"
-            >Option 1</label
+            >Cat</label
           >
+
+          <template #end>
+            <mcw-checkbox id="cat"></mcw-checkbox>
+          </template>
         </mcw-list-item>
-        <mcw-list-item role="checkbox" tabindex="0" trailing>
-          <label class="mdc-list-item__text" for="demo-list-checkbox-item-2"
-            >Option 2</label
+
+        <mcw-list-item role="checkbox" end="checkbox">
+          <label class="mdc-list-item__text" for="demo-list-checkbox-item-1"
+            >Dog</label
           >
-        </mcw-list-item>
-        <mcw-list-item role="checkbox" trailing>
-          <label class="mdc-list-item__text" for="demo-list-checkbox-item-3"
-            >Option 3</label
-          >
+
+          <template #end>
+            <mcw-checkbox id="dog"></mcw-checkbox>
+          </template>
         </mcw-list-item>
       </mcw-list>
     </div>
-
+    <!--
     <div class="demo-list-example">
       <h3 class="mdc-typography--subtitle1">List with radio group</h3>
       <mcw-list v-model="radioSelected" role="listbox" class="demo-list">
@@ -180,8 +184,8 @@
           >
         </mcw-list-item>
       </mcw-list>
-    </div>
-
+    </div> -->
+    <!--
     <div class="demo-list-example">
       <h3 class="mdc-typography--subtitle1">Single-Line trailing radio</h3>
       <mcw-list v-model="radioSelected" class="demo-list" role="listbox">
@@ -200,7 +204,7 @@
           >Three Single-line item 3
         </mcw-list-item>
       </mcw-list>
-    </div>
+    </div> -->
 
     <div class="mdc-typography--caption">
       selected:

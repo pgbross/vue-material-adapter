@@ -231,10 +231,11 @@ export default {
 
     const handleClickEvent = event_ => {
       const index = getListItemIndex(event_);
-      const target = event_.target;
+      // const target = event_.target;
+      // // Toggle the checkbox only if it's not the target of the event, or the checkbox will have 2 change events.
+      // const toggleCheckbox = !matches(target, strings.CHECKBOX_RADIO_SELECTOR);
 
-      // Toggle the checkbox only if it's not the target of the event, or the checkbox will have 2 change events.
-      const toggleCheckbox = !matches(target, strings.CHECKBOX_RADIO_SELECTOR);
+      const toggleCheckbox = true;
       foundation.handleClick(index, toggleCheckbox);
     };
 

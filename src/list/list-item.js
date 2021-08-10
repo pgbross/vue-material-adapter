@@ -28,7 +28,6 @@ export default {
   inheritAttrs: false,
   props: {
     disabled: Boolean,
-    name: String,
     id: String,
     start: { type: String, validator: value => startNames_.has(value) },
     end: { type: String, validator: value => endNames_.has(value) },
