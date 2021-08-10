@@ -2,7 +2,6 @@
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import { ESBuildMinifyPlugin } from 'esbuild-loader';
-import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import mit from 'markdown-it';
 import mith from 'markdown-it-highlightjs';
@@ -65,7 +64,7 @@ const rules = [
     test: /\.vue$/,
     loader: 'vue-loader',
     options: {
-      loaders: ['vue-style-loader'].concat(cssLoaders),
+      loaders: ['vue-style-loader', ...cssLoaders],
     },
   },
 
@@ -209,7 +208,8 @@ if (isProduction) {
         loader: MiniCssExtractPlugin.loader,
         options: {},
       },
-    ].concat(cssLoaders),
+      ...cssLoaders,
+    ],
   });
 
   // // load css rule
@@ -247,13 +247,12 @@ if (isDevelopment) {
   // load css rule
   config.module.rules.push({
     test: /\.(css|scss)$/,
-    use: ['style-loader'].concat(cssLoaders),
+    use: ['style-loader', ...cssLoaders],
   });
 
   config.plugins.push(
     // HMR
     new webpack.HotModuleReplacementPlugin(),
-    new FriendlyErrorsWebpackPlugin(),
   );
 
   config.devServer = {
