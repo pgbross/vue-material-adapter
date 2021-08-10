@@ -65,9 +65,9 @@ export default {
       addClass: className => {
         uiState.classes = { ...uiState.classes, [className]: true };
         if (className.endsWith('unselected')) {
-          emit('update:modelValue', false);
+          props.modelValue && emit('update:modelValue', false);
         } else if (className.endsWith('selected')) {
-          emit('update:modelValue', true);
+          !props.modelValue && emit('update:modelValue', true);
         }
       },
       hasClass: className => uiState.root.classList.contains(className),
