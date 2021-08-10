@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@vue/cli": "^5.0.0-beta.2",
-    "vue": "^3.0.0"
+    "vue": "^3.2.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-typescript": "~5.0.0-beta.2",
@@ -20,7 +20,7 @@
     "sass-loader": "^12.1.0",
     "ts-loader": "^9.2.3",
     "typescript": "~4.1.5",
-    "vue-material-adapter": "^3.1.0",
+    "vue-material-adapter": "^4.0.0-beta.3",
     "webpack-dev-server": "^4.0.0-rc.0"
   },
   "eslintConfig": {

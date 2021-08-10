@@ -5,7 +5,7 @@ This is an example of using `vue-material-adapter` with a project generated with
 ## Quick start
 
 ```bash
-npm install
+npm install --legacy-peer-deps
 npm run serve
 ```
 

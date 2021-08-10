@@ -17,7 +17,7 @@ This is an example project using webpack.
 
 ```bash
 $ cd examples/basic-webpack
-$ npm install
+$ npm install --legacy-peer-deps
 $ npm run dev
 ```
 
