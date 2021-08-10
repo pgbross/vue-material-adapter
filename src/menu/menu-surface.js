@@ -46,7 +46,7 @@ export default {
         },
         restoreFocus: () => {
           if (
-            uiState.root.contains(document.activeElement) &&
+            uiState.root?.contains(document.activeElement) &&
             previousFocus_ &&
             previousFocus_.focus
           ) {
