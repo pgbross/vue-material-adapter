@@ -3614,7 +3614,8 @@ var script$m = {
       foundation.setIsHoisted(isHoisted);
     };
     const hoistMenuToBody = () => {
-      document.body.append(uiState.root.remove());
+      uiState.root.remove();
+      document.body.append(uiState.root);
       setIsHoisted(true);
     };
     const setFixedPosition = (isFixed) => {
