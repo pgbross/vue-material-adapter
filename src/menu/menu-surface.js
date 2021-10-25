@@ -79,13 +79,13 @@ export default {
         },
         setPosition: position => {
           uiState.root.style.left =
-            'left' in position ? `${position.left}px` : undefined;
+            'left' in position ? `${position.left}px` : '';
           uiState.root.style.right =
-            'right' in position ? `${position.right}px` : undefined;
+            'right' in position ? `${position.right}px` : '';
           uiState.root.style.top =
-            'top' in position ? `${position.top}px` : undefined;
+            'top' in position ? `${position.top}px` : '';
           uiState.root.style.bottom =
-            'bottom' in position ? `${position.bottom}px` : undefined;
+            'bottom' in position ? `${position.bottom}px` : '';
         },
         setMaxHeight: height => {
           uiState.root.style.maxHeight = height;
