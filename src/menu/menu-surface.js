@@ -109,7 +109,8 @@ export default {
     };
 
     const hoistMenuToBody = () => {
-      document.body.append(uiState.root.remove());
+      uiState.root.remove();
+      document.body.append(uiState.root);
       setIsHoisted(true);
     };
 
