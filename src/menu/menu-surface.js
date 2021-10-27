@@ -82,8 +82,7 @@ export default {
             'left' in position ? `${position.left}px` : '';
           uiState.root.style.right =
             'right' in position ? `${position.right}px` : '';
-          uiState.root.style.top =
-            'top' in position ? `${position.top}px` : '';
+          uiState.root.style.top = 'top' in position ? `${position.top}px` : '';
           uiState.root.style.bottom =
             'bottom' in position ? `${position.bottom}px` : '';
         },
@@ -109,7 +108,8 @@ export default {
     };
 
     const hoistMenuToBody = () => {
-      document.body.append(uiState.root.remove());
+      uiState.root.remove();
+      document.body.append(uiState.root);
       setIsHoisted(true);
     };
 
