@@ -1,3 +1,9 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [3.2.3](https://github.com/pgbross/vue-material-adapter/compare/v3.2.2...v3.2.3) (2021-10-27)
+
 ## [3.0.3](https://github.com/pgbross/vue-material-adapter/compare/v2.0.0...v3.0.3) (2021-07-15)
 
 
