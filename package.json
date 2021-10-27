@@ -15,7 +15,7 @@
   "author": "Philip Ross <philip@satchel.scot>",
   "license": "ISC",
   "type": "module",
-  "sideEffects": false,
+  "sideEffects": true,
   "main": "dist/vue-material-adapter.amd.min.js",
   "module": "src/index.js",
   "types": "./types/index.d.ts",
