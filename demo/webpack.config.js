@@ -256,10 +256,7 @@ if (isDevelopment) {
   );
 
   config.devServer = {
-    contentBase: path.resolve(__dirname, 'static'),
-    disableHostCheck: true,
     hot: true,
-    quiet: true,
   };
 
   // cloud9 support
