@@ -51,7 +51,7 @@ import { MDCTextFieldCharacterCounterFoundation } from '@material/textfield/char
 import { MDCTextFieldHelperTextFoundation } from '@material/textfield/helper-text/foundation.js';
 import { MDCTextFieldIconFoundation } from '@material/textfield/icon/foundation.js';
 import { MDCTextFieldFoundation } from '@material/textfield/foundation.js';
-import { MDCTooltipFoundation, events as events$1 } from '@material/tooltip';
+import { MDCTooltipFoundation, events as events$1, CssClasses as CssClasses$1 } from '@material/tooltip';
 import { MDCFixedTopAppBarFoundation } from '@material/top-app-bar/fixed/foundation.js';
 import { MDCShortTopAppBarFoundation } from '@material/top-app-bar/short/foundation.js';
 import { MDCTopAppBarFoundation } from '@material/top-app-bar/standard/foundation.js';
@@ -990,7 +990,7 @@ const _hoisted_1$p = {
 const _hoisted_2$j = { class: "mdc-evolution-chip__graphic" };
 const _hoisted_3$f = {
   key: 0,
-  class: "\n            mdc-evolution-chip__icon mdc-evolution-chip__icon--primary\n            material-icons\n          "
+  class: "mdc-evolution-chip__icon mdc-evolution-chip__icon--primary material-icons"
 };
 const _hoisted_4$b = /* @__PURE__ */ createElementVNode("span", { class: "mdc-evolution-chip__checkmark" }, [
   /* @__PURE__ */ createElementVNode("svg", {
@@ -1014,13 +1014,13 @@ const _hoisted_7$8 = {
   key: 0,
   class: "mdc-evolution-chip__graphic"
 };
-const _hoisted_8$5 = { class: "\n            mdc-evolution-chip__icon mdc-evolution-chip__icon--primary\n            material-icons\n          " };
+const _hoisted_8$5 = { class: "mdc-evolution-chip__icon mdc-evolution-chip__icon--primary material-icons" };
 const _hoisted_9$2 = { class: "mdc-evolution-chip__text-label" };
 const _hoisted_10$2 = {
   ref: "rippleEl",
   class: "mdc-evolution-chip__ripple mdc-evolution-chip__ripple--trailing"
 };
-const _hoisted_11$1 = { class: "\n          mdc-evolution-chip__icon mdc-evolution-chip__icon--trailing\n          material-icons\n        " };
+const _hoisted_11$1 = { class: "mdc-evolution-chip__icon mdc-evolution-chip__icon--trailing material-icons" };
 function render$E(_ctx, _cache, $props, $setup, $data, $options) {
   return _ctx.primary ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
     _ctx.isFilter ? (openBlock(), createElementBlock("span", {
@@ -1279,7 +1279,8 @@ var script$B = {
       }
     },
     disabled: { type: Boolean },
-    selected: { type: Boolean }
+    selected: { type: Boolean },
+    presentational: { type: Boolean }
   },
   setup(props, { slots }) {
     const uiState = reactive({
@@ -3885,6 +3886,10 @@ var script$l = {
       removeAttributeFromElementAtIndex: (index, attribute) => {
         const listItem = getListItemByIndex(index);
         listItem.removeAttribute(attribute);
+      },
+      getAttributeFromElementAtIndex: (index, attribute) => {
+        const listItem = getListItemByIndex(index);
+        return listItem.getAttribute(attribute);
       },
       elementContainsClass: (element, className) => element.classList.contains(className),
       closeSurface: (skipRestoreFocus) => {
@@ -6844,6 +6849,10 @@ var script$1 = {
       setAttribute: (attributeName, value) => {
         uiState.rootAttrs = { ...uiState.rootAttrs, [attributeName]: value };
       },
+      removeAttribute: (attribute) => {
+        const { [attribute]: removed, ...rest } = uiState.rootAttrs;
+        uiState.rootAttrs = rest;
+      },
       addClass: (className) => uiState.classes = { ...uiState.classes, [className]: true },
       hasClass: (className) => uiState.root.classList.contains(className),
       removeClass: (className) => {
@@ -6888,6 +6897,9 @@ var script$1 = {
       tooltipContainsElement: (element) => {
         return uiState.root.contains(element);
       },
+      focusAnchorElement: () => {
+        anchorElement == null ? void 0 : anchorElement.focus();
+      },
       registerEventHandler: (event_, handler) => {
         uiState.root.addEventListener(event_, handler);
       },
@@ -6914,6 +6926,34 @@ var script$1 = {
       },
       notifyHidden: () => {
         emit(events$1.HIDDEN.toLowerCase(), {});
+      },
+      getTooltipCaretBoundingRect: () => {
+        const caret = uiState.root.querySelector < HTMLElement > `.${CssClasses$1.TOOLTIP_CARET_TOP}`;
+        if (!caret) {
+          return;
+        }
+        return caret.getBoundingClientRect();
+      },
+      setTooltipCaretStyle: (propertyName, value) => {
+        const topCaret = uiState.root.querySelector < HTMLElement > `.${CssClasses$1.TOOLTIP_CARET_TOP}`;
+        const bottomCaret = uiState.root.querySelector < HTMLElement > `.${CssClasses$1.TOOLTIP_CARET_BOTTOM}`;
+        if (!topCaret || !bottomCaret) {
+          return;
+        }
+        topCaret.style.setProperty(propertyName, value);
+        bottomCaret.style.setProperty(propertyName, value);
+      },
+      clearTooltipCaretStyles: () => {
+        const topCaret = uiState.root.querySelector < HTMLElement > `.${CssClasses$1.TOOLTIP_CARET_TOP}`;
+        const bottomCaret = uiState.root.querySelector < HTMLElement > `.${CssClasses$1.TOOLTIP_CARET_BOTTOM}`;
+        if (!topCaret || !bottomCaret) {
+          return;
+        }
+        topCaret.removeAttribute("style");
+        bottomCaret.removeAttribute("style");
+      },
+      getActiveElement: () => {
+        return document.activeElement;
       }
     };
     const handleMouseEnter = () => {
