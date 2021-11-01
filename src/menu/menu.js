@@ -176,6 +176,13 @@ export default {
         const listItem = getListItemByIndex(index);
         listItem.removeAttribute(attribute);
       },
+
+      getAttributeFromElementAtIndex: (index, attribute) => {
+        const listItem = getListItemByIndex(index);
+
+        return listItem.getAttribute(attribute);
+      },
+
       elementContainsClass: (element, className) =>
         element.classList.contains(className),
 

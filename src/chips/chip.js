@@ -28,6 +28,7 @@ export default {
     },
     disabled: { type: Boolean },
     selected: { type: Boolean },
+    presentational: { type: Boolean },
   },
   setup(props, { slots }) {
     const uiState = reactive({

@@ -1,4 +1,4 @@
-import { events, MDCTooltipFoundation } from '@material/tooltip';
+import { CssClasses, events, MDCTooltipFoundation } from '@material/tooltip';
 import { onBeforeUnmount, onMounted, reactive, toRefs, watchEffect } from 'vue';
 
 export default {
@@ -30,6 +30,11 @@ export default {
       },
       setAttribute: (attributeName, value) => {
         uiState.rootAttrs = { ...uiState.rootAttrs, [attributeName]: value };
+      },
+      removeAttribute: attribute => {
+        // eslint-disable-next-line no-unused-vars
+        const { [attribute]: removed, ...rest } = uiState.rootAttrs;
+        uiState.rootAttrs = rest;
       },
       addClass: className =>
         (uiState.classes = { ...uiState.classes, [className]: true }),
@@ -87,7 +92,9 @@ export default {
       tooltipContainsElement: element => {
         return uiState.root.contains(element);
       },
-
+      focusAnchorElement: () => {
+        anchorElement?.focus();
+      },
       registerEventHandler: (event_, handler) => {
         uiState.root.addEventListener(event_, handler);
       },
@@ -116,6 +123,53 @@ export default {
 
       notifyHidden: () => {
         emit(events.HIDDEN.toLowerCase(), {});
+      },
+
+      getTooltipCaretBoundingRect: () => {
+        const caret =
+          uiState.root.querySelector <
+          HTMLElement >
+          `.${CssClasses.TOOLTIP_CARET_TOP}`;
+        if (!caret) {
+          return;
+        }
+        return caret.getBoundingClientRect();
+      },
+      setTooltipCaretStyle: (propertyName, value) => {
+        const topCaret =
+          uiState.root.querySelector <
+          HTMLElement >
+          `.${CssClasses.TOOLTIP_CARET_TOP}`;
+        const bottomCaret =
+          uiState.root.querySelector <
+          HTMLElement >
+          `.${CssClasses.TOOLTIP_CARET_BOTTOM}`;
+
+        if (!topCaret || !bottomCaret) {
+          return;
+        }
+
+        topCaret.style.setProperty(propertyName, value);
+        bottomCaret.style.setProperty(propertyName, value);
+      },
+      clearTooltipCaretStyles: () => {
+        const topCaret =
+          uiState.root.querySelector <
+          HTMLElement >
+          `.${CssClasses.TOOLTIP_CARET_TOP}`;
+        const bottomCaret =
+          uiState.root.querySelector <
+          HTMLElement >
+          `.${CssClasses.TOOLTIP_CARET_BOTTOM}`;
+
+        if (!topCaret || !bottomCaret) {
+          return;
+        }
+        topCaret.removeAttribute('style');
+        bottomCaret.removeAttribute('style');
+      },
+      getActiveElement: () => {
+        return document.activeElement;
       },
     };
 
