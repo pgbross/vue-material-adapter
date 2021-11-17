@@ -137,6 +137,7 @@ export default {
       uiState.control.checked = Array.isArray(checked)
         ? checked.includes(props.value)
         : checked;
+      emitCustomEvent(uiState.root, 'mdccheckbox:change', {}, true);
     };
 
     const setIndeterminate = indeterminate => {
@@ -191,6 +192,7 @@ export default {
       () => props.disabled,
       (nv, ov) => {
         nv != ov && foundation?.setDisabled(nv);
+        emitCustomEvent(uiState.root, 'mdccheckbox:change', {}, true);
       },
     );
 
@@ -198,6 +200,7 @@ export default {
       () => props.modelValue,
       (nv, ov) => {
         nv != ov && setChecked(nv);
+        emitCustomEvent(uiState.root, 'mdccheckbox:change', {}, true);
       },
     );
 
@@ -205,6 +208,7 @@ export default {
       () => props.indeterminate,
       (nv, ov) => {
         nv != ov && setIndeterminate(nv);
+        emitCustomEvent(uiState.root, 'mdccheckbox:change', {}, true);
       },
     );
 
