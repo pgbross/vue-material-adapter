@@ -728,6 +728,7 @@ var script$F = {
     const handleAnimationEnd = () => foundation.handleAnimationEnd();
     const setChecked = (checked) => {
       uiState.control.checked = Array.isArray(checked) ? checked.includes(props.value) : checked;
+      emitCustomEvent(uiState.root, "mdccheckbox:change", {}, true);
     };
     const setIndeterminate = (indeterminate) => {
       uiState.control && (uiState.control.indeterminate = indeterminate);
@@ -763,12 +764,15 @@ var script$F = {
     };
     watch(() => props.disabled, (nv, ov) => {
       nv != ov && (foundation == null ? void 0 : foundation.setDisabled(nv));
+      emitCustomEvent(uiState.root, "mdccheckbox:change", {}, true);
     });
     watch(() => props.modelValue, (nv, ov) => {
       nv != ov && setChecked(nv);
+      emitCustomEvent(uiState.root, "mdccheckbox:change", {}, true);
     });
     watch(() => props.indeterminate, (nv, ov) => {
       nv != ov && setIndeterminate(nv);
+      emitCustomEvent(uiState.root, "mdccheckbox:change", {}, true);
     });
     onMounted(() => {
       foundation = new MDCCheckboxFoundation(adapter);
