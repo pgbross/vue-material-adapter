@@ -165,7 +165,7 @@ export default {
       getSelectedRowCount: () =>
         uiState.root.querySelectorAll(selectors.ROW_SELECTED).length,
       isCheckboxAtRowIndexChecked: rowIndex =>
-        rowCheckboxList[rowIndex].checked,
+        rowCheckboxList[rowIndex]?.checked,
       isHeaderRowCheckboxChecked: () => headerRowCheckbox.checked,
       isRowsSelectable: () =>
         !!uiState.root.querySelector(selectors.ROW_CHECKBOX),
