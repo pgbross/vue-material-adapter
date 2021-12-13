@@ -2,7 +2,7 @@ import { MDCCheckbox } from '@material/checkbox/index.js';
 import { MDCDataTableFoundation } from '@material/data-table/foundation.js';
 import * as test from '@material/data-table/index.js';
 import { closest } from '@material/dom/ponyfill.js';
-import { onBeforeUnmount, onMounted, reactive, toRefs } from 'vue';
+import { onBeforeUnmount, onMounted, onUpdated, reactive, toRefs } from 'vue';
 import { CheckboxAdapter } from './checkbox-adapter.js';
 
 const checkboxFactory = element => {
@@ -250,6 +250,55 @@ export default {
         foundation.handleRowCheckboxChange(event);
 
       content.addEventListener('mdccheckbox:change', handleRowCheckboxChange);
+
+      foundation = new MDCDataTableFoundation(adapter);
+      foundation.init();
+
+      layout();
+    });
+
+    onUpdated(() => {
+      headerRow?.removeEventListener(
+          'mdccheckbox:change',
+          handleHeaderRowCheckboxChange,
+      );
+      headerRow?.removeEventListener('click', headerRowClickListener);
+
+      content?.removeEventListener(
+          'mdccheckbox:change',
+          handleRowCheckboxChange,
+      );
+
+      headerRowCheckbox?.destroy?.();
+      if (rowCheckboxList) {
+        for (const checkbox of rowCheckboxList) {
+          checkbox.destroy?.();
+        }
+      }
+
+      // foundation.destroy();
+      headerRow = uiState.root.querySelector(`.${cssClasses.HEADER_ROW}`);
+
+      handleHeaderRowCheckboxChange = () =>
+          foundation.handleHeaderRowCheckboxChange();
+
+      headerRow.addEventListener(
+          'mdccheckbox:change',
+          handleHeaderRowCheckboxChange,
+      );
+
+      headerRowClickListener = event => {
+        handleHeaderRowClick(event);
+      };
+
+      headerRow.addEventListener('click', headerRowClickListener);
+
+      content = uiState.root.querySelector(`.${cssClasses.CONTENT}`);
+
+      handleRowCheckboxChange = event =>
+          foundation.handleRowCheckboxChange(event);
+
+      content?.addEventListener('mdccheckbox:change', handleRowCheckboxChange);
 
       foundation = new MDCDataTableFoundation(adapter);
       foundation.init();
