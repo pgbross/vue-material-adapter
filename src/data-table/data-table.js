@@ -57,6 +57,10 @@ export default {
       return foundation.getSelectedRowIds();
     };
 
+    const setSelectedRowIds = (rowIds) => {
+      return foundation.setSelectedRowIds(rowIds);
+    };
+
     const getSortStatusMessageBySortValue = sortValue => {
       switch (sortValue) {
         case SortValue.ASCENDING:
@@ -328,6 +332,6 @@ export default {
       foundation.destroy();
     });
 
-    return { ...toRefs(uiState), getSelectedRowIds, layout };
+    return { ...toRefs(uiState), getSelectedRowIds, setSelectedRowIds, layout };
   },
 };
