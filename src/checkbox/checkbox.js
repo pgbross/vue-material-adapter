@@ -63,7 +63,12 @@ export default {
         uiState.control.removeEventListener(event_, handler, applyPassive());
       },
       computeBoundingRect: () => {
-        return uiState.root.getBoundingClientRect();
+        return uiState.root?.getBoundingClientRect() || {
+          height: 0,
+          width: 0,
+          x: 0,
+          y: 0,
+        };
       },
     });
 
