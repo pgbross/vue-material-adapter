@@ -1,6 +1,6 @@
 {
   "name": "vue-material-adapter",
-  "version": "5.0.1",
+  "version": "6.0.0-alpha.1",
   "description": "Vue 3 wrapper arround Material Components for the Web",
   "keywords": [
     "vue",
@@ -85,7 +85,7 @@
     }
   },
   "dependencies": {
-    "material-components-web": "^13.0.0"
+    "material-components-web": "^14.0.0-canary.a657abb61.0"
   },
   "peerDependencies": {
     "vue": "^3.0.0"
