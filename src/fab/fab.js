@@ -1,7 +1,6 @@
 import { computed, reactive, ref, toRefs, watch } from 'vue';
-import { CustomLink } from '../base/index.js';
+import { CustomLink, touchWrapper } from '../base/index.js';
 import { useRipplePlugin } from '../ripple/ripple-plugin.js';
-import fabContent from './fab-content.js';
 
 export default {
   name: 'mcw-fab',
@@ -13,7 +12,7 @@ export default {
     isTouch: Boolean,
   },
   inheritAttrs: false,
-  components: { CustomLink, fabContent },
+  components: { CustomLink, touchWrapper },
   setup(props, { slots }) {
     const root = ref();
     const uiState = reactive({

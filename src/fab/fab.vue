@@ -1,6 +1,6 @@
 <script src="./fab.js"></script>
 <template>
-  <fab-content :isTouch="isTouch">
+  <touch-wrapper :isTouch="isTouch">
     <custom-link
       ref="root"
       :class="classes"
@@ -17,5 +17,5 @@
         ><slot>{{ label }}</slot></span
       >
     </custom-link>
-  </fab-content>
+  </touch-wrapper>
 </template>
