@@ -1,12 +1,21 @@
 <script src="./fab.js"></script>
 <template>
-  <custom-link ref="root" :class="classes" :style="styles" tag="button">
-    <div class="mdc-fab__ripple"></div>
-    <slot name="icon"
-      ><span class="mdc-fab__icon material-icons">{{ icon }}</span></slot
+  <fab-content :isTouch="isTouch">
+    <custom-link
+      ref="root"
+      :class="classes"
+      :style="styles"
+      tag="button"
+      v-bind="$attrs"
     >
-    <span class="mdc-fab__label"
-      ><slot>{{ label }}</slot></span
-    >
-  </custom-link>
+      <div class="mdc-fab__ripple"></div>
+      <div class="mdc-fab__focus-ring"></div>
+      <slot name="icon"
+        ><span class="mdc-fab__icon material-icons">{{ icon }}</span></slot
+      >
+      <span class="mdc-fab__label"
+        ><slot>{{ label }}</slot></span
+      >
+    </custom-link>
+  </fab-content>
 </template>
