@@ -2,7 +2,6 @@ import { getCorrectEventName } from '@material/animation/index.js';
 import { MDCCheckboxFoundation } from '@material/checkbox/foundation.js';
 import { applyPassive } from '@material/dom/events.js';
 import { matches } from '@material/dom/ponyfill.js';
-import { MDCFormFieldFoundation } from '@material/form-field/foundation.js';
 import {
   computed,
   onBeforeUnmount,
@@ -14,6 +13,7 @@ import {
 } from 'vue';
 import { emitCustomEvent } from '../base/custom-event.js';
 import { useRipplePlugin } from '../ripple/ripple-plugin.js';
+import checkboxContent from './checkbox-content.js';
 
 const CB_PROTO_PROPS = ['checked', 'indeterminate'];
 let checkboxId_ = 0;
@@ -43,7 +43,6 @@ export default {
     });
 
     let foundation;
-    let formField;
     const checkboxId = `__mcw-checkbox-${checkboxId_++}`;
 
     const {
@@ -71,16 +70,8 @@ export default {
       return { ...rippleClasses.value, ...uiState.classes };
     });
 
-    const hasLabel = computed(() => {
-      return props.label ?? slots.default;
-    });
+    const hasLabel = computed(() => !!(props.label || slots.default));
 
-    const formFieldClasses = computed(() => {
-      return {
-        'mdc-form-field': hasLabel.value,
-        'mdc-form-field--align-end': hasLabel.value && props.alignEnd,
-      };
-    });
     const onChange = ({ target: { indeterminate, checked } }) => {
       // note indeterminate will not currently work with the array model
       emit('update:indeterminate', indeterminate);
@@ -116,7 +107,6 @@ export default {
       isChecked: () => uiState.control.checked,
       isIndeterminate: () => uiState.control.indeterminate,
       removeClass: className => {
-        // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
@@ -217,23 +207,6 @@ export default {
       );
 
       installPropertyChangeHooks_();
-      if (hasLabel.value) {
-        formField = new MDCFormFieldFoundation({
-          registerInteractionHandler: (type, handler) => {
-            uiState.labelEl.addEventListener(type, handler);
-          },
-          deregisterInteractionHandler: (type, handler) => {
-            uiState.labelEl.removeEventListener(type, handler);
-          },
-          activateInputRipple: () => {
-            activate();
-          },
-          deactivateInputRipple: () => {
-            deactivate();
-          },
-        });
-        formField.init();
-      }
 
       foundation.init();
 
@@ -248,8 +221,6 @@ export default {
         handleAnimationEnd,
       );
 
-      formField?.destroy();
-
       uninstallPropertyChangeHooks_();
       foundation.destroy();
     });
@@ -257,7 +228,6 @@ export default {
     return {
       ...toRefs(uiState),
       rootClasses,
-      formFieldClasses,
       onChange,
       styles,
       hasLabel,
@@ -265,8 +235,12 @@ export default {
       setIndeterminate,
       isChecked,
       checkboxId,
+      activate,
+      deactivate,
     };
   },
+
+  components: { checkboxContent },
 };
 
 // ===

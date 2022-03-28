@@ -141,6 +141,7 @@
     "postcss-loader": "^6.2.1",
     "postcss-preset-env": "^7.4.3",
     "prettier": "^2.6.1",
+    "prettier-plugin-organize-imports": "^2.3.4",
     "regenerator-runtime": "^0.13.9",
     "rollup": "^2.70.1",
     "rollup-plugin-cleaner": "^1.0.0",
@@ -199,15 +200,16 @@
       "browser": true
     },
     "rules": {
-      "vue/no-v-model-argument": "off",
-      "no-unused-vars": "error",
       "no-else-return": 1,
       "prefer-const": "error",
       "no-var": "error",
-      "no-nested-ternary": "off",
-      "unicorn/no-array-reduce": [
-        "off"
+      "no-unused-vars": [
+        "error",
+        {
+          "ignoreRestSiblings": true
+        }
       ],
+      "no-nested-ternary": "off",
       "unicorn/no-nested-ternary": [
         "off"
       ],

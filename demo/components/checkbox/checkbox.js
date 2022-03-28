@@ -4,7 +4,7 @@ export default {
       checked: false,
       indeterminate_: false,
       disabled: false,
-
+      checkedSolo: false,
       ids: [],
     };
   },
