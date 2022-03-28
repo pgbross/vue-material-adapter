@@ -25,6 +25,8 @@ var vm = new Vue({
 | `medium`        | Boolean | false     | When set to `true`, renders the medium variant             |
 | `progress`      | Number  | undefined | Decimal value between 0 and 1, sets the progress bar width |
 | `tag`           | String  | div       | The html root element type                                 |
+| `label`         | String  |           | Optional aria-label                                        |
+| `fourColor`     | Boolean | false     | Use four color rendering                                   |
 
 - Determinate
 

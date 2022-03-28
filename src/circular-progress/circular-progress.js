@@ -1,5 +1,12 @@
 import { MDCCircularProgressFoundation } from '@material/circular-progress/foundation.js';
-import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
+import {
+  computed,
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  toRefs,
+  watch,
+} from 'vue';
 
 const ProgressPropertyType = {
   type: [Number, String],
@@ -16,6 +23,8 @@ export default {
     medium: Boolean,
     progress: ProgressPropertyType,
     tag: { type: String, default: 'div' },
+    label: { type: String },
+    fourColor: Boolean,
   },
 
   setup(props) {
@@ -48,13 +57,11 @@ export default {
 
       hasClass: className => uiState.root.classList.contains(className),
       removeClass: className => {
-        // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
 
       removeAttribute: attributeName => {
-        // eslint-disable-next-line no-unused-vars
         const { [attributeName]: removed, ...rest } = uiState.rootAttrs;
         uiState.rootAttrs = rest;
       },
@@ -70,6 +77,15 @@ export default {
         }),
     };
 
+    const rootAttributes = computed(() => {
+      return {
+        role: 'progressbar',
+        'aria-valuemin': '0',
+        'aria-valuemax': '1',
+        'aria-label': props.label,
+        ...uiState.rootAttrs,
+      };
+    });
     watch(
       () => props.open,
       nv => {
@@ -95,6 +111,16 @@ export default {
       },
     );
 
+    const colorClass = index => {
+      return props.fourColor
+        ? `mdc-circular-progress__color-${index}`
+        : undefined;
+    };
+    const colors = Array.from(
+      { length: props.fourColor ? 4 : 1 },
+      (_, index) => index + 1,
+    );
+
     onMounted(() => {
       foundation = new MDCCircularProgressFoundation(adapter);
       foundation.init();
@@ -111,7 +137,7 @@ export default {
 
     onBeforeUnmount(() => foundation.destroy());
 
-    return { ...toRefs(uiState) };
+    return { ...toRefs(uiState), rootAttributes, colors, colorClass };
   },
 };
 
@@ -141,9 +167,7 @@ function getCircleAttributes(medium = false, indeterminate = true) {
 
 function getTrackAttributes(medium = false) {
   const {
-    // eslint-disable-next-line no-unused-vars
     ['stroke-dasharray']: sda,
-    // eslint-disable-next-line no-unused-vars
     ['stroke-dashoffset']: sdo,
     ...rest
   } = getCircleAttributes(medium);
