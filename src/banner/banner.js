@@ -78,7 +78,7 @@ export default {
       },
 
       notifyClosing: reason => {
-        emit('update:modelValue', false); // todo: maybe need to handle auto close
+        emit('update:modelValue', false);
         emit('mdcbanner:closing', { reason });
       },
 
