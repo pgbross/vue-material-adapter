@@ -1,6 +1,16 @@
 import { MDCBannerFoundation } from '@material/banner/index.js';
-import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
+import {
+  computed,
+  onBeforeUnmount,
+  onMounted,
+  reactive,
+  toRefs,
+  watch,
+} from 'vue';
 import bannerContent from './banner-content.vue';
+import { FocusTrap } from '@material/dom/focus-trap.js';
+
+const focusTrapFactory_ = (element, options) => new FocusTrap(element, options);
 
 export default {
   name: 'mcw-banner',
@@ -12,7 +22,8 @@ export default {
     secondaryAction: String,
     mobile: Boolean,
     fixed: Boolean,
-    icon: String,
+    disableAutoClose: Boolean,
+    icon: { type: String, default: () => '' },
   },
   components: { bannerContent },
   setup(props, { emit }) {
@@ -24,45 +35,65 @@ export default {
       styles: {},
       root: undefined,
       contentEl: undefined,
+      primaryActionEl: undefined,
     });
     let foundation;
+    let focusTrap;
 
     const onOpen = nv => {
       if (nv) {
         foundation.open();
       } else {
-        foundation.close();
+        foundation.close(nv);
       }
     };
 
-    const onContentClick = ({ target }) => {
+    const close = reason => {
+      foundation.close(reason);
+    };
+
+    const onContentClick = target => {
       if (target == 1) {
-        foundation.handleSecondaryActionClick();
+        foundation.handleSecondaryActionClick(props.disableAutoClose);
       } else {
-        foundation.handlePrimaryActionClick();
+        foundation.handlePrimaryActionClick(props.disableAutoClose);
       }
     };
 
     const adapter = {
       addClass: className => {
         uiState.classes = { ...uiState.classes, [className]: true };
+
+        // add class immediately otherwise vue rendering makes it happen in the wrong order, but also
+        // need it on classes so vue rendering/repaints keep the value.
         uiState.root.classList.add(className);
       },
 
       getContentHeight: () => {
-        return uiState.contentEl.$el.offsetHeight;
+        return uiState.contentEl.offsetHeight;
       },
+
+      notifyClosed: reason => {
+        emit('mdcbanner:closed', { reason });
+      },
+
+      notifyClosing: reason => {
+        emit('update:modelValue', false); // todo: maybe need to handle auto close
+        emit('mdcbanner:closing', { reason });
+      },
+
+      notifyOpened: () => emit('mdcbanner:opened', {}),
 
       notifyOpening: () => {
         emit('mdcbanner:opening', {});
       },
-      notifyOpened: () => emit('mdcbanner:opened', {}),
-      notifyClosing: reason => {
-        emit('update:modelValue', false);
-        emit('mdcbanner:closing', { reason });
+
+      notifyActionClicked: action => {
+        emit('mdcbanner:actionclicked', { action });
       },
-      notifyClosed: reason => {
-        emit('mdcbanner:closed', { reason });
+
+      releaseFocus: () => {
+        focusTrap.releaseFocus();
       },
 
       removeClass: className => {
@@ -73,8 +104,12 @@ export default {
 
       setStyleProperty: (property, value) =>
         (uiState.styles = { ...uiState.styles, [property]: value }),
+      trapFocus: () => {
+        focusTrap.trapFocus();
+      },
     };
 
+    const haveIcon = computed(() => !!props.icon);
     watch(
       () => props.modelValue,
       nv => {
@@ -83,6 +118,10 @@ export default {
     );
 
     onMounted(() => {
+      focusTrap = focusTrapFactory_(uiState.root, {
+        initialFocusEl: uiState.primaryActionEl,
+      });
+
       foundation = new MDCBannerFoundation(adapter);
       foundation.init();
     });
@@ -91,6 +130,6 @@ export default {
       foundation?.destroy();
     });
 
-    return { ...toRefs(uiState), onContentClick };
+    return { ...toRefs(uiState), onContentClick, haveIcon, close };
   },
 };

@@ -1,16 +1,15 @@
-export default {
-  data() {
-    return { showBanner: false, reason: '' };
-  },
-  computed: {},
+import { reactive, toRefs } from 'vue';
 
-  mounted() {},
-  methods: {
-    onShow() {
-      this.showBanner = true;
-    },
-    onClosing({ reason }) {
-      this.reason = reason;
-    },
+export default {
+  setup() {
+    const uiState = reactive({
+      showBanner: false,
+      reason: '',
+      action: '',
+    });
+
+    const onClosing = ({ reason }) => (uiState.reason = reason);
+    const onAction = ({ action }) => (uiState.action = action);
+    return { ...toRefs(uiState), onClosing, onAction };
   },
 };
