@@ -1,44 +1,33 @@
+import { computed, onMounted, reactive, toRefs } from 'vue';
+
 export default {
-  data() {
-    return {
+  setup() {
+    const uiState = reactive({
       type: '',
       disabled: false,
       icon: 'favorite',
       svg: false,
-    };
-  },
-  computed: {
-    raised() {
-      return this.type == 'raised';
-    },
-    unelevated() {
-      return this.type == 'unelevated';
-    },
-    outlined() {
-      return this.type == 'outlined';
-    },
-    buttonProps() {
-      return {
-        disabled: this.disabled,
-        raised: this.raised,
-        outlined: this.outlined,
-        unelevated: this.unelevated,
-      };
-    },
-  },
+    });
 
-  mounted() {
-    setTimeout(() => {
-      this.icon = 'flight_takeoff';
-    }, 2000);
+    const buttonProps = computed(() => ({
+      disabled: uiState.disabled,
+      raised: uiState.type === 'raised',
+      outlined: uiState.type === 'outlined',
+      unelevated: uiState.type === 'unelevated',
+    }));
 
-    setTimeout(() => {
-      this.svg = true;
-    }, 1000);
-  },
-  methods: {
-    onClick() {
-      console.log('on-click');
-    },
+    onMounted(() => {
+      setTimeout(() => {
+        uiState.icon = 'flight_takeoff';
+      }, 2000);
+
+      setTimeout(() => {
+        uiState.svg = true;
+      }, 1000);
+    });
+
+    return { ...toRefs(uiState), buttonProps, onClick };
   },
 };
+
+const onClick = () => console.log('on-click');
