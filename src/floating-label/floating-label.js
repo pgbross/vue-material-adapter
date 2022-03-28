@@ -24,7 +24,6 @@ export default {
         }),
 
       removeClass: className => {
-        // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.labelClasses;
         uiState.labelClasses = rest;
       },
