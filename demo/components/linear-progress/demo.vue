@@ -10,7 +10,7 @@
       </div>
 
       <br />
-      <mcw-linear-progress indeterminate></mcw-linear-progress>
+      <mcw-linear-progress indeterminate :open="isOpen"> </mcw-linear-progress>
       <div class="mdc-typography--caption" linear-progress-demo--example>
         Indeterminate
       </div>
@@ -27,6 +27,10 @@
     </div>
   </div>
 </template>
+
+<script src="./linear-progress.js"></script>
+
+<script></script>
 
 <style>
 .linear-progress-demo {
