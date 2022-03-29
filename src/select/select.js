@@ -86,7 +86,7 @@ export default {
     const menuItems = computed(() => uiState.menu?.items);
 
     let foundation;
-
+    let labelElement;
     const handleFocus = () => foundation.handleFocus();
     const handleBlur = () => foundation.handleBlur();
     const handleClick = event_ => {
@@ -221,7 +221,9 @@ export default {
       hasLabel: () => !!props.label,
       floatLabel: shouldFloat =>
         (uiState.labelEl || uiState.outlineEl)?.float(shouldFloat),
-      getLabelWidth: () => uiState.labelEl?.getWidth() || 0,
+      getLabelWidth: () => {
+        return uiState.labelEl?.getWidth() ?? labelElement?.scrollWidth ?? 0;
+      },
       setLabelRequired: isRequired => uiState.labelEl?.setRequired(isRequired),
     };
 
@@ -267,6 +269,7 @@ export default {
       foundation = new MDCSelectFoundation(adapter);
       foundation.init();
 
+      labelElement = uiState.root.querySelector('.mdc-floating-label');
       // do we need a slotObserver here?
       // this.slotObserver = new MutationObserver(() => this.refreshIndex());
       // this.slotObserver.observe(this.$refs.native_control, {
