@@ -85,7 +85,7 @@
     }
   },
   "dependencies": {
-    "material-components-web": "^14.0.0-canary.443f63f50.0"
+    "material-components-web": "^14.0.0-canary.344d52823.0"
   },
   "peerDependencies": {
     "vue": "^3.0.0"
