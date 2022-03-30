@@ -15,7 +15,6 @@
       </div>
       <div class="mdc-snackbar__actions" aria-atomic="true">
         <button
-          ref="actionEl"
           type="button"
           class="mdc-button mdc-snackbar__action"
           v-if="actionText"

@@ -1,26 +1,20 @@
-import { computed, nextTick, reactive, toRefs, watch } from 'vue';
+import { h, nextTick, reactive, watch } from 'vue';
+import { mcwSnackbar } from './index.js';
 
 const noop = () => {};
 
 export default {
   name: 'mcw-snackbar-queue',
   props: { snack: Object },
-  setup(props, { emit, attrs }) {
+  setup(props, { emit, attrs, expose }) {
     const uiState = reactive({
       open: false,
-      queue: [],
-      snack: {
-        timeoutMs: 5000,
-        closeOnEscape: false,
-        message: '',
-        actionText: '',
-        dismissAction: true,
-        leading: false,
-        stacked: false,
-      },
     });
 
     let actionHandler_;
+    const queue = [];
+
+    let snack;
 
     const handleSnack = ({
       timeoutMs = 5000,
@@ -32,8 +26,8 @@ export default {
       leading,
       actionHandler = noop,
     }) => {
-      uiState.queue.push(() => {
-        uiState.snack = {
+      queue.push(() => {
+        snack = {
           timeoutMs,
           closeOnEscape,
           message,
@@ -46,31 +40,19 @@ export default {
         actionHandler_ = actionHandler;
         uiState.open = true;
       });
-      if (uiState.queue.length === 1) {
-        uiState.queue[0]();
+      if (queue.length === 1) {
+        queue[0]();
       }
     };
 
     const handleClosed = () => {
       uiState.open = false;
-      uiState.queue.shift();
-      if (uiState.queue.length > 0) {
-        nextTick(() => uiState.queue[0]());
+      queue.shift();
+
+      if (queue.length > 0) {
+        nextTick(() => queue[0]());
       }
     };
-
-    const listeners = computed(() => {
-      return {
-        'update:reason': attrs['update:reason'],
-        'mdcsnackbar:closed': ({ reason }) => {
-          if (actionHandler_ && reason === 'action') {
-            actionHandler_({ reason });
-          }
-          handleClosed();
-          emit('closed', { reason });
-        },
-      };
-    });
 
     watch(
       () => props.snack,
@@ -82,6 +64,23 @@ export default {
       },
     );
 
-    return { ...toRefs(uiState), handleSnack, listeners };
+    expose({ handleSnack });
+
+    return () => {
+      return h(mcwSnackbar, {
+        modelValue: uiState.open,
+        ...snack,
+        'onUpdate:reason': event => {
+          attrs['update:reason']?.(event);
+        },
+        'onMdcsnackbar:closed': ({ reason }) => {
+          if (actionHandler_ && reason === 'action') {
+            actionHandler_({ reason });
+          }
+          handleClosed();
+          emit('closed', { reason });
+        },
+      });
+    };
   },
 };
