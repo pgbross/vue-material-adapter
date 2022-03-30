@@ -9,7 +9,7 @@ export default {
     forId: String,
   },
   inheritAttrs: false,
-  setup(props, { slots }) {
+  setup(props, { slots, attrs }) {
     const labelElement = ref();
 
     let formField;
@@ -48,18 +48,35 @@ export default {
     });
 
     return () => {
+      const cl = {};
+
+      if (attrs.class) {
+        for (const c of attrs.class.split(' ')) {
+          cl[c] = 1;
+        }
+      }
+
       if (hasLabel) {
-        return h('div', { class: { ...formFieldClasses.value } }, [
-          slots.default?.(),
-          h(
-            'label',
-            {
-              for: props.forId,
-              ref: labelElement,
+        return h(
+          'div',
+          {
+            class: {
+              ...formFieldClasses.value,
+              ...cl,
             },
-            [slots.label?.()],
-          ),
-        ]);
+          },
+          [
+            slots.default?.(),
+            h(
+              'label',
+              {
+                for: props.forId,
+                ref: labelElement,
+              },
+              [slots.label?.()],
+            ),
+          ],
+        );
       }
 
       return slots.default();

@@ -1,11 +1,9 @@
 <script src="./switch.js"></script>
 <template>
-  <div
-    :class="{
-      'mdc-form-field': hasLabel,
-      'mdc-form-field--align-end': hasLabel && alignEnd,
-    }"
+  <form-field-wrapper
     class="mdc-switch-wrapper"
+    :alignEnd="alignEnd"
+    :forId="switchId"
   >
     <button
       ref="root"
@@ -45,8 +43,8 @@
       </div>
     </button>
 
-    <label v-if="hasLabel" :for="switchId" class="mdc-switch-label">
+    <template #label v-if="label">
       <slot>{{ label }}</slot>
-    </label>
-  </div>
+    </template>
+  </form-field-wrapper>
 </template>

@@ -11,6 +11,7 @@ import {
   toRefs,
   watch,
 } from 'vue';
+import { formFieldWrapper } from '../base/index.js';
 import { useRipplePlugin } from '../ripple/ripple-plugin.js';
 
 let switchId_ = 0;
@@ -58,7 +59,7 @@ export default {
     });
 
     const hasLabel = computed(() => {
-      return props.label || slots.default;
+      return !!props.label || slots.default;
     });
 
     const adapter = {
@@ -73,7 +74,6 @@ export default {
       hasClass: className => uiState.root.classList.contains(className),
       isDisabled: () => uiState.root.disabled,
       removeClass: className => {
-        // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
@@ -128,4 +128,5 @@ export default {
       handleClick,
     };
   },
+  components: { formFieldWrapper },
 };

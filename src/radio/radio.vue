@@ -4,6 +4,7 @@
     class="mdc-radio-wrapper"
     :activate="activate"
     :deactivate="deactivate"
+    :alignEnd="alignEnd"
     :forId="radioId"
   >
     <div ref="root" :class="rootClasses" :style="styles">
