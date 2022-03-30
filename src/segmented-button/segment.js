@@ -8,7 +8,7 @@ import {
   toRef,
   toRefs,
 } from 'vue';
-import { emitCustomEvent } from '../base/index.js';
+import { emitCustomEvent, touchWrapper } from '../base/index.js';
 import { useRipplePlugin } from '../ripple/index.js';
 
 export default {
@@ -26,23 +26,23 @@ export default {
     });
     let foundation;
 
-    const getSegmentIndex = inject('getSegmentIdx');
-    const isSingleSelect = inject('isSingleSelect');
-    const isTouch = inject('isTouch');
+    const { getNextSegmentIndex, isSingleSelect, isTouch } =
+      inject('segmented-button');
 
-    if (isSingleSelect) {
-      uiState.attrs['role'] = 'radio';
-      uiState.attrs['aria-checked'] = attrs['aria-checked'] ?? 'false';
-    } else {
-      uiState.attrs['aria-pressed'] = attrs['aria-pressed'] ?? 'false';
+    if (isTouch) {
+      uiState.classes['mdc-segmented-button--touch'] = true;
     }
+
+    uiState.attrs = isSingleSelect
+      ? { role: 'radio', 'aria-checked': attrs['aria-checked'] ?? 'false' }
+      : { 'aria-pressed': attrs['aria-pressed'] ?? 'false' };
 
     const getSegmentId = () => foundation.getSegmentId();
     const isSelected = () => foundation.isSelected();
     const setSelected = () => foundation.setSelected();
     const setUnselected = () => foundation.setUnselected();
 
-    const segmentIndex = getSegmentIndex({
+    const segmentIndex = getNextSegmentIndex({
       getSegmentId,
       isSelected,
       setSelected,
@@ -62,7 +62,7 @@ export default {
       return {
         ...uiState.attrs,
         class: { ...rippleClasses.value, ...uiState.classes },
-        style: styles.value,
+        styles: styles.value,
       };
     });
 
@@ -114,4 +114,6 @@ export default {
 
     return { ...toRefs(uiState), myAttrs: myAttributes, onClick, isTouch };
   },
+
+  components: { touchWrapper },
 };
