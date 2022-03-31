@@ -80,30 +80,41 @@ export default {
     const adapter = {
       addClass: className =>
         (uiState.classes = { ...uiState.classes, [className]: true }),
+
       removeClass: className => {
-        // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
+
       hasClass: className => uiState.root.classList.contains(className),
+
       addBodyClass: className => document.body.classList.add(className),
+
       removeBodyClass: className => document.body.classList.remove(className),
+
       eventTargetMatches: (target, selector) => matches(target, selector),
+
       trapFocus: () => focusTrap?.trapFocus(),
+
       releaseFocus: () => focusTrap?.releaseFocus(),
+
       getInitialFocusEl: () => getInitialFocusElement_(),
+
       isContentScrollable: () => util.isScrollable(content_),
+
       areButtonsStacked: () => util.areTopsMisaligned(buttons_),
 
       getActionFromEvent: event => {
         const element = closest(event.target, `[${strings.ACTION_ATTRIBUTE}]`);
         return element?.getAttribute(strings.ACTION_ATTRIBUTE);
       },
+
       clickDefaultButton: () => {
         if (defaultButton && !defaultButton.disabled) {
           defaultButton.click();
         }
       },
+
       reverseButtons: () => {
         const buttons = buttons_;
         return (
@@ -120,7 +131,9 @@ export default {
           window.addEventListener(event_, handleLayout);
         document.addEventListener('keydown', handleDocumentKeyDown);
       },
+
       notifyOpened: () => emit('mdcdialog:opened', {}),
+
       notifyClosing: action => {
         emit('update:modelValue', false);
         emit('mdcdialog:closing', action ? { action } : {});
@@ -129,6 +142,7 @@ export default {
           window.removeEventListener(event_, handleLayout);
         document.removeEventListener('keydown', handleDocumentKeyDown);
       },
+
       notifyClosed: action => {
         emit('mdcdialog:closed', action ? { action } : {});
       },
