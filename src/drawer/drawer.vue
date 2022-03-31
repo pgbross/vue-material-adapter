@@ -1,6 +1,5 @@
 <script src="./drawer.js"></script>
 <template>
-  <!-- <div ref="root"> -->
   <aside
     ref="drawer"
     :class="classes"
