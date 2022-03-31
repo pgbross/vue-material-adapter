@@ -1,9 +1,11 @@
 import { BasePlugin } from '../base/index.js';
-import mcwLayoutCell from './layout-cell.vue';
-import mcwLayoutGrid from './layout-grid.vue';
-import mcwLayoutInnerGrid from './layout-inner-grid.vue';
+import mcwLayoutCell from './layout-cell.js';
+import mcwLayoutGrid from './layout-grid.js';
+import mcwLayoutInnerGrid from './layout-inner-grid.js';
 
-export { mcwLayoutGrid, mcwLayoutCell, mcwLayoutInnerGrid };
+export { default as mcwLayoutCell } from './layout-cell.js';
+export { default as mcwLayoutGrid } from './layout-grid.js';
+export { default as mcwLayoutInnerGrid } from './layout-inner-grid.js';
 
 export default BasePlugin({
   mcwLayoutGrid,

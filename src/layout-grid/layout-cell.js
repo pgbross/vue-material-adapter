@@ -1,4 +1,4 @@
-import { computed } from 'vue';
+import { computed, h } from 'vue';
 
 const spanOptions_ = {
   type: [String, Number],
@@ -22,36 +22,51 @@ export default {
       validator: value => ['top', 'bottom', 'middle'].includes(value),
     },
   },
-  setup(props) {
+  setup(props, { slots }) {
     const classes = computed(() => {
-      const cssClasses = [];
+      const cssClasses = {};
 
       if (props.span) {
-        cssClasses.push(`mdc-layout-grid__cell--span-${props.span}`);
+        cssClasses[`mdc-layout-grid__cell--span-${props.span}`] = true;
       }
 
       if (props.order) {
-        cssClasses.push(`mdc-layout-grid__cell--order-${props.order}`);
+        cssClasses[`mdc-layout-grid__cell--order-${props.order}`] = true;
       }
 
       if (props.phone) {
-        cssClasses.push(`mdc-layout-grid__cell--span-${props.phone}-phone`);
+        cssClasses[`mdc-layout-grid__cell--span-${props.phone}-phone`] = true;
       }
 
       if (props.tablet) {
-        cssClasses.push(`mdc-layout-grid__cell--span-${props.tablet}-tablet`);
+        cssClasses[`mdc-layout-grid__cell--span-${props.tablet}-tablet`] = true;
       }
 
       if (props.desktop) {
-        cssClasses.push(`mdc-layout-grid__cell--span-${props.desktop}-desktop`);
+        cssClasses[
+          `mdc-layout-grid__cell--span-${props.desktop}-desktop`
+        ] = true;
       }
 
       if (props.align) {
-        cssClasses.push(`mdc-layout-grid__cell--align-${props.align}`);
+        cssClasses[`mdc-layout-grid__cell--align-${props.align}`] = true;
       }
 
       return cssClasses;
     });
-    return { classes };
+
+    return () => {
+      return h(
+        'div',
+        {
+          class: {
+            'mdc-layout-cell': true,
+            'mdc-layout-grid__cell': true,
+            ...classes.value,
+          },
+        },
+        [slots.default?.()],
+      );
+    };
   },
 };

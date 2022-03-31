@@ -1,4 +1,4 @@
-import { computed } from 'vue';
+import { computed, h } from 'vue';
 
 export default {
   name: 'mcw-layout-grid',
@@ -7,7 +7,7 @@ export default {
     alignLeft: Boolean,
     alignRight: Boolean,
   },
-  setup(props) {
+  setup(props, { slots }) {
     const classes = computed(() => {
       return {
         'mdc-layout-grid': true,
@@ -17,6 +17,14 @@ export default {
       };
     });
 
-    return { classes };
+    return () => {
+      return h(
+        'div',
+        {
+          class: classes.value,
+        },
+        [h('div', { class: 'mdc-layout-grid__inner' }, [slots.default?.()])],
+      );
+    };
   },
 };
