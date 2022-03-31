@@ -4,6 +4,7 @@ export default {
       selected: 1,
       listSelected: [],
       radioSelected: 'cat',
+      checkboxSelected: [false, false],
       picked: '1',
       test_: true,
     };

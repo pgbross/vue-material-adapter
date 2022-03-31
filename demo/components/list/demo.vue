@@ -8,8 +8,8 @@
         @mdclist:action="onAction"
         role="listbox"
       >
-        <mcw-list-item tabindex="0" name="wiffle" id="id1" start="icon">
-          <template #start>
+        <mcw-list-item tabindex="0" name="wiffle" id="id1" graphic="icon">
+          <template #graphic>
             <i class="material-icons">home</i>
           </template>
           One Single-line item 1
@@ -17,16 +17,16 @@
 
         <li role="separator" class="mdc-list-divider"></li>
 
-        <mcw-list-item end="icon"
+        <mcw-list-item
           >Two Single-line item 2
 
-          <template #tend>
+          <template #meta>
             <i class="material-icons">home</i>
           </template>
         </mcw-list-item>
-        <mcw-list-item end="meta"
+        <mcw-list-item
           >Three Single-line item 3
-          <template #end> meta text </template></mcw-list-item
+          <template #meta> meta text </template></mcw-list-item
         >
 
         <mcw-list-item
@@ -148,7 +148,7 @@
           >
 
           <template #end>
-            <mcw-checkbox id="cat"></mcw-checkbox>
+            <mcw-checkbox v-model="checkboxSelected" id="cat"></mcw-checkbox>
           </template>
         </mcw-list-item>
 
@@ -158,7 +158,7 @@
           >
 
           <template #end>
-            <mcw-checkbox id="dog"></mcw-checkbox>
+            <mcw-checkbox v-model="checkboxSelected" id="dog"></mcw-checkbox>
           </template>
         </mcw-list-item>
       </mcw-list>

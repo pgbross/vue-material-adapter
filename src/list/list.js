@@ -5,13 +5,12 @@ import {
   strings,
 } from '@material/list/index.js';
 import {
-  // computed,
+  h,
   onBeforeUnmount,
   onMounted,
   provide,
   reactive,
   ref,
-  toRefs,
   watch,
 } from 'vue';
 import { emitCustomEvent } from '../base/index.js';
@@ -37,15 +36,17 @@ export default {
     role: { type: String },
   },
 
-  setup(props, { emit }) {
+  setup(props, { emit, slots, expose }) {
     const uiState = reactive({
-      classes: {},
+      classes: { 'mdc-list': true },
       listn: 0,
-      listRoot: undefined,
+
       rootAttrs: {
         'aria-orientation': props.vertical ? 'vertical' : 'horizontal',
       },
     });
+
+    const listRoot = ref();
 
     if (props.multiSelectable) {
       uiState.rootAttrs['aria-multiselectable'] = 'true';
@@ -53,15 +54,13 @@ export default {
 
     let foundation;
     let slotObserver;
-    const isInteractive = props.role == 'listbox' || props.role == 'menu';
+    const isInteractive = props.role === 'listbox' || props.role === 'menu';
 
     const listItems = ref({});
 
     // keep a hash of child list items
     // so we can set classes and attributes
-    const registerListItem = item => {
-      listItems.value[item.itemId] = item;
-    };
+    const registerListItem = item => (listItems.value[item.itemId] = item);
 
     provide('registerListItem', registerListItem);
     provide('mcwList', { isInteractive });
@@ -83,9 +82,9 @@ export default {
     // all the child list elements
     // may be refreshed if the list items are rerendered for example
     const updateListElements = () => {
-      const elements = Array.prototype.slice.call(
-        uiState.listRoot.querySelectorAll(`.${cssClasses.LIST_ITEM_CLASS}`),
-      );
+      const elements = [
+        ...listRoot.value.querySelectorAll(`.${cssClasses.LIST_ITEM_CLASS}`),
+      ];
 
       listElements.value = elements;
     };
@@ -142,15 +141,15 @@ export default {
       foundation.setVerticalOrientation(props.vertical);
 
       // List items need to have at least tabindex=-1 to be focusable.
-      for (const itemElements of Array.prototype.slice.call(
-        uiState.listRoot.querySelectorAll('.mdc-list-item:not([tabindex])'),
+      for (const itemElements of listRoot.value.querySelectorAll(
+        '.mdc-list-item:not([tabindex])',
       )) {
         itemElements.setAttribute('tabindex', -1);
       }
 
       // Child button/a elements are not tabbable until the list item is focused.
-      for (const focusableChildElements of Array.prototype.slice.call(
-        uiState.listRoot.querySelectorAll(strings.FOCUSABLE_CHILD_ELEMENTS),
+      for (const focusableChildElements of listRoot.value.querySelectorAll(
+        strings.FOCUSABLE_CHILD_ELEMENTS,
       )) {
         focusableChildElements.setAttribute('tabindex', -1);
       }
@@ -162,10 +161,10 @@ export default {
     const initializeListType = () => {
       if (isInteractive) {
         const selection = [
-          ...uiState.listRoot.querySelectorAll(strings.SELECTED_ITEM_SELECTOR),
+          ...listRoot.value.querySelectorAll(strings.SELECTED_ITEM_SELECTOR),
         ].map(listItem => listElements.indexOf(listItem));
 
-        if (matches(uiState.listRoot, strings.ARIA_MULTI_SELECTABLE_SELECTOR)) {
+        if (matches(listRoot.value, strings.ARIA_MULTI_SELECTABLE_SELECTOR)) {
           foundation.setSelectedIndex(selection);
         } else if (selection.length > 0) {
           foundation.setSelectedIndex(selection[0]);
@@ -173,16 +172,16 @@ export default {
         return;
       }
 
-      const checkboxListItems = uiState.listRoot.querySelectorAll(
+      const checkboxListItems = listRoot.value.querySelectorAll(
         strings.ARIA_ROLE_CHECKBOX_SELECTOR,
       );
 
-      const radioSelectedListItem = uiState.listRoot.querySelector(
+      const radioSelectedListItem = listRoot.value.querySelector(
         strings.ARIA_CHECKED_RADIO_SELECTOR,
       );
 
       if (checkboxListItems.length > 0) {
-        const preselectedItems = uiState.listRoot.querySelectorAll(
+        const preselectedItems = listRoot.value.querySelectorAll(
           strings.ARIA_CHECKED_CHECKBOX_SELECTOR,
         );
 
@@ -231,11 +230,11 @@ export default {
 
     const handleClickEvent = event_ => {
       const index = getListItemIndex(event_);
-      // const target = event_.target;
-      // // Toggle the checkbox only if it's not the target of the event, or the checkbox will have 2 change events.
-      // const toggleCheckbox = !matches(target, strings.CHECKBOX_RADIO_SELECTOR);
 
-      const toggleCheckbox = true;
+      const toggleCheckbox = !matches(
+        event_.target,
+        strings.CHECKBOX_RADIO_SELECTOR,
+      );
       foundation.handleClick(index, toggleCheckbox);
     };
 
@@ -246,12 +245,14 @@ export default {
         const listItem = getListItemByIndex(index);
         listItem?.classList.add(className);
       },
+
       focusItemAtIndex: index => {
         const element = listElements.value[index];
         if (element) {
           element.focus();
         }
       },
+
       getAttributeForElementIndex: (index, attribute) => {
         const listItem = getListItemByIndex(index);
 
@@ -282,7 +283,7 @@ export default {
       },
 
       isFocusInsideList: () => {
-        const root = uiState.listRoot;
+        const root = listRoot.value;
         return (
           root &&
           root !== document.activeElement &&
@@ -290,7 +291,7 @@ export default {
         );
       },
 
-      isRootFocused: () => document.activeElement === uiState.listRoot,
+      isRootFocused: () => document.activeElement === listRoot.value,
 
       listItemAtIndexHasClass: (index, className) => {
         const listItem = getListItemByIndex(index);
@@ -300,7 +301,7 @@ export default {
 
       notifyAction: index => {
         emitCustomEvent(
-          uiState.listRoot,
+          listRoot.value,
           strings.ACTION_EVENT,
           { index },
           /** shouldBubble */ true,
@@ -311,6 +312,14 @@ export default {
         } else {
           emit('update:modelValue', index);
         }
+      },
+
+      notifySelectionChange: changedIndices => {
+        emit(
+          strings.SELECTION_CHANGE_EVENT.toLowerCase(),
+          { changedIndices },
+          /** shouldBubble */ true,
+        );
       },
 
       removeClassForElementIndex: (index, className) => {
@@ -330,8 +339,7 @@ export default {
         );
         toggleElement && (toggleElement.checked = isChecked);
 
-        const event = document.createEvent('Event');
-        event.initEvent('update:modelValue', true, true);
+        const event = new CustomEvent('update:modelValue', [true, false]);
         toggleElement?.dispatchEvent(event);
       },
 
@@ -382,7 +390,7 @@ export default {
       if (typeof selectedIndex === 'number' && selectedIndex !== -1) {
         return selectedIndex;
       }
-      const element = uiState.listRoot.querySelector(
+      const element = listRoot.value.querySelector(
         `.mdc-list-item:not(.mdc-list-item--disabled)`,
       );
       if (element === null) {
@@ -394,7 +402,7 @@ export default {
     const ensureFocusable = () => {
       if (
         isInteractive &&
-        !uiState.listRoot.querySelector(`.mdc-list-item[tabindex="0"]`)
+        !listRoot.value.querySelector(`.mdc-list-item[tabindex="0"]`)
       ) {
         const index = initialFocusIndex();
         if (index !== -1) {
@@ -438,8 +446,8 @@ export default {
 
       layout();
       initializeListType();
-
       ensureFocusable();
+
       foundation.setWrapFocus(wrapFocus);
       foundation.setVerticalOrientation(vertical);
 
@@ -452,7 +460,7 @@ export default {
       slotObserver = new MutationObserver(() => {
         updateListElements();
       });
-      slotObserver.observe(uiState.listRoot, {
+      slotObserver.observe(listRoot.value, {
         childList: true,
         // subtree: true,
       });
@@ -463,22 +471,30 @@ export default {
       foundation.destroy();
     });
 
-    return {
-      ...toRefs(uiState),
-      listItems,
-      listElements,
-      layout,
+    expose({
+      setSingleSelection,
+      setSelectedIndex,
+      getSelectedIndex,
       setEnabled,
       typeaheadMatchItem,
       typeaheadInProgress,
-      getSelectedIndex,
-      setSelectedIndex,
-      getPrimaryText,
-      setSingleSelection,
-      handleClickEvent,
-      handleFocusInEvent,
-      handleFocusOutEvent,
-      handleKeydownEvent,
+    });
+
+    return () => {
+      return h(
+        'ul',
+        {
+          ref: listRoot,
+          class: uiState.classes,
+          onClick: handleClickEvent,
+          onKeydown: handleKeydownEvent,
+          onFocusin: handleFocusInEvent,
+          onFocusout: handleFocusOutEvent,
+          role: 'role',
+          ...uiState.rootAttrs,
+        },
+        slots.default(),
+      );
     };
   },
 };
