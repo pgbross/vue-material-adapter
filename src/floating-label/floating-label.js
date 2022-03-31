@@ -1,20 +1,20 @@
 import { MDCFloatingLabelFoundation } from '@material/floating-label/foundation.js';
-import { onBeforeUnmount, onMounted, reactive, toRefs } from 'vue';
+import { h, onBeforeUnmount, onMounted, reactive, ref } from 'vue';
 
 export default {
   name: 'mcw-floating-label',
 
   props: { required: { type: Boolean } },
-  setup(props) {
+  setup(props, { slots, expose }) {
     const uiState = reactive({
       labelClasses: {
         'mdc-floating-label': true,
         'mdc-floating-label--required': props.required,
       },
-      root: undefined,
     });
 
     let foundation;
+    const root = ref();
 
     const adapter = {
       addClass: className =>
@@ -28,12 +28,14 @@ export default {
         uiState.labelClasses = rest;
       },
 
-      getWidth: () => uiState.root.scrollWidth,
+      getWidth: () => root.value.scrollWidth,
+
       registerInteractionHandler: (eventType, handler) => {
-        uiState.root.addEventListener(eventType, handler);
+        root.value.addEventListener(eventType, handler);
       },
+
       deregisterInteractionHandler: (eventType, handler) => {
-        uiState.root.removeEventListener(eventType, handler);
+        root.value.removeEventListener(eventType, handler);
       },
     };
 
@@ -61,12 +63,12 @@ export default {
     onBeforeUnmount(() => {
       foundation.destroy();
     });
-    return {
-      ...toRefs(uiState),
-      getWidth,
-      float,
-      shake,
-      setRequired,
+
+    expose({ getWidth, float, shake, setRequired });
+    return () => {
+      return h('span', { ref: root, class: uiState.labelClasses }, [
+        slots.default(),
+      ]);
     };
   },
 };
