@@ -10,10 +10,11 @@ export default {
     hideDelay: { type: Number },
     addEventListenerHandlerFn: { type: Function },
     removeEventListenerHandlerFn: { type: Function },
+    rich: Boolean,
   },
   setup(props, { emit }) {
     const uiState = reactive({
-      classes: {},
+      classes: { 'mdc-tooltip--rich': props.rich },
       styles: {},
       surfaceStyle: {},
       rootAttrs: { 'aria-hidden': true },
@@ -28,37 +29,45 @@ export default {
       getAttribute: name => {
         return uiState.root.getAttribute(name);
       },
+
       setAttribute: (attributeName, value) => {
         uiState.rootAttrs = { ...uiState.rootAttrs, [attributeName]: value };
       },
       removeAttribute: attribute => {
-        // eslint-disable-next-line no-unused-vars
         const { [attribute]: removed, ...rest } = uiState.rootAttrs;
         uiState.rootAttrs = rest;
       },
+
       addClass: className =>
         (uiState.classes = { ...uiState.classes, [className]: true }),
+
       hasClass: className => uiState.root.classList.contains(className),
+
       removeClass: className => {
-        // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
+
       getComputedStyleProperty: propertyName => {
         return window
           .getComputedStyle(uiState.root)
           .getPropertyValue(propertyName);
       },
+
       setStyleProperty: (property, value) =>
         (uiState.styles = { ...uiState.styles, [property]: value }),
+
       setSurfaceAnimationStyleProperty: (propertyName, value) => {
         uiState.surfaceStyle = {
           ...uiState.surfaceStyle,
           [propertyName]: value,
         };
       },
+
       getViewportWidth: () => window.innerWidth,
+
       getViewportHeight: () => window.innerHeight,
+
       getTooltipSize: () => {
         return {
           width: uiState.root.offsetWidth,
@@ -71,9 +80,11 @@ export default {
           ? anchorElement.getBoundingClientRect()
           : undefined;
       },
+
       getParentBoundingRect: () => {
         return uiState.root.parentElement?.getBoundingClientRect() ?? undefined;
       },
+
       getAnchorAttribute: attribute => {
         return anchorElement
           ? anchorElement.getAttribute(attribute)
@@ -89,15 +100,19 @@ export default {
       anchorContainsElement: element => {
         return !!anchorElement?.contains(element);
       },
+
       tooltipContainsElement: element => {
         return uiState.root.contains(element);
       },
+
       focusAnchorElement: () => {
         anchorElement?.focus();
       },
+
       registerEventHandler: (event_, handler) => {
         uiState.root.addEventListener(event_, handler);
       },
+
       deregisterEventHandler: (event_, handler) => {
         uiState.root.removeEventListener(event_, handler);
       },
@@ -105,18 +120,23 @@ export default {
       registerAnchorEventHandler: (event_, handler) => {
         anchorElement?.addEventListener(event_, handler);
       },
+
       deregisterAnchorEventHandler: (event_, handler) => {
         anchorElement?.removeEventListener(event_, handler);
       },
+
       registerDocumentEventHandler: (event_, handler) => {
         document.body.addEventListener(event_, handler);
       },
+
       deregisterDocumentEventHandler: (event_, handler) => {
         document.body.removeEventListener(event_, handler);
       },
+
       registerWindowEventHandler: (event_, handler) => {
         window.addEventListener(event_, handler);
       },
+
       deregisterWindowEventHandler: (event_, handler) => {
         window.removeEventListener(event_, handler);
       },
@@ -135,6 +155,7 @@ export default {
         }
         return caret.getBoundingClientRect();
       },
+
       setTooltipCaretStyle: (propertyName, value) => {
         const topCaret =
           uiState.root.querySelector <
@@ -152,6 +173,7 @@ export default {
         topCaret.style.setProperty(propertyName, value);
         bottomCaret.style.setProperty(propertyName, value);
       },
+
       clearTooltipCaretStyles: () => {
         const topCaret =
           uiState.root.querySelector <
@@ -168,6 +190,7 @@ export default {
         topCaret.removeAttribute('style');
         bottomCaret.removeAttribute('style');
       },
+
       getActiveElement: () => {
         return document.activeElement;
       },
@@ -183,6 +206,14 @@ export default {
 
     const handleMouseLeave = () => {
       foundation.handleAnchorMouseLeave();
+    };
+
+    const handleTouchstart = () => {
+      foundation.handleAnchorTouchstart();
+    };
+
+    const handleTouchend = () => {
+      foundation.handleAnchorTouchend();
     };
 
     const handleBlur = event_ => {
@@ -216,7 +247,7 @@ export default {
     };
 
     const onBoundaryType = type => {
-      if (type != void 0) {
+      if (type != undefined) {
         foundation.setAnchorBoundaryType(toAnchorBoundaryType(type));
       }
     };
@@ -250,6 +281,9 @@ export default {
         // TODO(b/157075286): Listening for a 'focus' event is too broad.
         anchorElement.addEventListener('focus', handleFocus);
         anchorElement.addEventListener('mouseleave', handleMouseLeave);
+
+        anchorElement.addEventListener('touchstart', handleTouchstart);
+        anchorElement.addEventListener('touchend', handleTouchend);
       }
 
       anchorElement.addEventListener('blur', handleBlur);
@@ -283,6 +317,9 @@ export default {
           // TODO(b/157075286): Listening for a 'focus' event is too broad.
           anchorElement.removeEventListener('focus', handleFocus);
           anchorElement.removeEventListener('mouseleave', handleMouseLeave);
+          anchorElement.removeEventListener('touchstart', handleTouchstart);
+          anchorElement.removeEventListener('touchend', handleTouchend);
+
           anchorElement.removeEventListener('blur', handleBlur);
         }
       }

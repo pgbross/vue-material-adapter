@@ -35,7 +35,7 @@
       >
       <mcw-tooltip
         id="tooltip-id4"
-        class="mdc-tooltip--rich"
+        rich
         tabindex="-1"
         data-mdc-tooltip-persistent="true"
       >
