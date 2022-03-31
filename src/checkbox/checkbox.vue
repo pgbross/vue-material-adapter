@@ -5,7 +5,7 @@
     :deactivate="deactivate"
     :checkboxId="checkboxId"
   >
-    <div ref="root" :class="rootClasses" :style="styles">
+    <div ref="root" :class="rootClasses" :style="styles" v-bind="$attrs">
       <input
         :id="checkboxId"
         ref="control"

@@ -21,8 +21,8 @@ let checkboxId_ = 0;
 export default {
   name: 'mcw-checkbox',
   props: {
-    modelValue: [Boolean, Array],
-    indeterminate: Boolean,
+    modelValue: { type: [Boolean, Array], default: () => false },
+    indeterminate: { type: Boolean, default: () => false },
     disabled: Boolean,
     label: String,
     alignEnd: Boolean,
@@ -34,6 +34,7 @@ export default {
     },
     name: String,
   },
+  inheritAttrs: false,
   setup(props, { emit, slots }) {
     const uiState = reactive({
       classes: { 'mdc-checkbox': 1 },
@@ -198,6 +199,12 @@ export default {
       },
     );
 
+    const checkboxHelpers = {
+      setIndeterminate,
+      isChecked,
+      setChecked,
+      isIndeterminate: () => uiState.control.indeterminate,
+    };
     onMounted(() => {
       foundation = new MDCCheckboxFoundation(adapter);
 
@@ -206,6 +213,7 @@ export default {
         handleAnimationEnd,
       );
 
+      uiState.root.__checkboxHelpers = checkboxHelpers;
       installPropertyChangeHooks_();
 
       foundation.init();

@@ -14,20 +14,14 @@
                 Dessert
               </th>
               <th
-                class="
-                  mdc-data-table__header-cell
-                  mdc-data-table__header-cell--numeric
-                "
+                class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric"
                 role="columnheader"
                 scope="col"
               >
                 Carbs (g)
               </th>
               <th
-                class="
-                  mdc-data-table__header-cell
-                  mdc-data-table__header-cell--numeric
-                "
+                class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric"
                 role="columnheader"
                 scope="col"
               >
@@ -89,10 +83,7 @@
           <thead>
             <tr class="mdc-data-table__header-row">
               <th
-                class="
-                  mdc-data-table__header-cell
-                  mdc-data-table__header-cell--checkbox
-                "
+                class="mdc-data-table__header-cell mdc-data-table__header-cell--checkbox"
                 role="columnheader"
                 scope="col"
               >
@@ -130,10 +121,7 @@
                 Stage
               </th>
               <th
-                class="
-                  mdc-data-table__header-cell
-                  mdc-data-table__header-cell--numeric
-                "
+                class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric"
                 role="columnheader"
                 scope="col"
               >
@@ -157,7 +145,7 @@
                 <mcw-checkbox
                   ref="rowCheckbox"
                   class="mdc-data-table__row-checkbox"
-                  :checked="true"
+                  :modelValue="true"
                 ></mcw-checkbox>
               </td>
               <th id="u0" class="mdc-data-table__cell" scope="row">
@@ -246,10 +234,7 @@
           <thead>
             <tr class="mdc-data-table__header-row">
               <th
-                class="
-                  mdc-data-table__header-cell
-                  mdc-data-table__header-cell--with-sort
-                "
+                class="mdc-data-table__header-cell mdc-data-table__header-cell--with-sort"
                 role="columnheader"
                 scope="col"
                 aria-sort="none"
@@ -258,11 +243,7 @@
                 <div class="mdc-data-table__header-cell-wrapper">
                   <div class="mdc-data-table__header-cell-label">Dessert</div>
                   <button
-                    class="
-                      mdc-icon-button
-                      material-icons
-                      mdc-data-table__sort-icon-button
-                    "
+                    class="mdc-icon-button material-icons mdc-data-table__sort-icon-button"
                     aria-label="Sort by dessert"
                     aria-describedby="dessert-status-label"
                   >
@@ -276,11 +257,7 @@
                 </div>
               </th>
               <th
-                class="
-                  mdc-data-table__header-cell
-                  mdc-data-table__header-cell--numeric
-                  mdc-data-table__header-cell--with-sort
-                "
+                class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric mdc-data-table__header-cell--with-sort"
                 role="columnheader"
                 scope="col"
                 aria-sort="ascending"
@@ -288,11 +265,7 @@
               >
                 <div class="mdc-data-table__header-cell-wrapper">
                   <button
-                    class="
-                      mdc-icon-button
-                      material-icons
-                      mdc-data-table__sort-icon-button
-                    "
+                    class="mdc-icon-button material-icons mdc-data-table__sort-icon-button"
                     aria-label="Sort by carbs"
                     aria-describedby="carbs-status-label"
                   >
@@ -307,11 +280,7 @@
                 </div>
               </th>
               <th
-                class="
-                  mdc-data-table__header-cell
-                  mdc-data-table__header-cell--numeric
-                  mdc-data-table__header-cell--with-sort
-                "
+                class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric mdc-data-table__header-cell--with-sort"
                 role="columnheader"
                 scope="col"
                 aria-sort="none"
@@ -319,11 +288,7 @@
               >
                 <div class="mdc-data-table__header-cell-wrapper">
                   <button
-                    class="
-                      mdc-icon-button
-                      material-icons
-                      mdc-data-table__sort-icon-button
-                    "
+                    class="mdc-icon-button material-icons mdc-data-table__sort-icon-button"
                     aria-label="Sort by protein"
                     aria-describedby="protein-status-label"
                   >
