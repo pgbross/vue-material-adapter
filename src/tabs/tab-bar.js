@@ -1,6 +1,7 @@
 import { MDCTabBarFoundation } from '@material/tab-bar/foundation.js';
-import { computed, onBeforeUnmount, onMounted, provide, ref, watch } from 'vue';
+import { h, onBeforeUnmount, onMounted, provide, ref, watch } from 'vue';
 import { emitCustomEvent } from '../base/index.js';
+import { mcwTabScroller } from './index.js';
 
 const { strings } = MDCTabBarFoundation;
 
@@ -12,32 +13,21 @@ export default {
     stacked: Boolean,
     spanContent: Boolean,
     modelValue: Number,
+    focusOnActivate: { type: Boolean, default: () => true },
+    useAutomaticActivation: { type: Boolean, default: () => true },
   },
 
-  setup(props, { emit, attrs }) {
+  setup(props, { emit, attrs, slots, expose }) {
     const scroller = ref();
     const root = ref();
 
-    const tabList = ref([]);
+    const tabList = [];
 
     provide('mcwTabList', {
       fade: props.fade,
       stacked: props.stacked,
       spanContent: props.spanContent,
       tabList,
-    });
-
-    const listeners = computed(() => {
-      return {
-        change: attrs.onChange,
-        'mdctab:interacted': event_ => {
-          foundation.handleTabInteraction(event_);
-        },
-        'mdc-tab:interacted': event_ => {
-          foundation.handleTabInteraction(event_);
-        },
-        keydown: event_ => foundation.handleKeyDown(event_),
-      };
     });
 
     let foundation;
@@ -52,30 +42,40 @@ export default {
 
     const adapter = {
       scrollTo: scrollX => scroller.value.scrollTo(scrollX),
+
       incrementScroll: scrollXIncrement =>
         scroller.value.incrementScroll(scrollXIncrement),
+
       getScrollPosition: () => scroller.value.getScrollPosition(),
+
       getScrollContentWidth: () => scroller.value.getScrollContentWidth(),
+
       getOffsetWidth: () => root.value.offsetWidth,
+
       isRTL: () =>
         window.getComputedStyle(root.value).getPropertyValue('direction') ===
         'rtl',
+
       setActiveTab: index => {
         foundation.activateTab(index);
       },
-      activateTabAtIndex: (index, clientRect) => {
-        tabList.value[index].activate(clientRect);
-      },
-      deactivateTabAtIndex: index => tabList.value[index]?.deactivate(),
 
-      focusTabAtIndex: index => tabList.value[index].focus(),
+      activateTabAtIndex: (index, clientRect) => {
+        tabList[index].activate(clientRect);
+      },
+
+      deactivateTabAtIndex: index => tabList[index]?.deactivate(),
+
+      focusTabAtIndex: index => tabList[index].focus(),
+
       getTabIndicatorClientRectAtIndex: index =>
-        tabList.value[index]?.computeIndicatorClientRect(),
-      getTabDimensionsAtIndex: index =>
-        tabList.value[index].computeDimensions(),
+        tabList[index]?.computeIndicatorClientRect(),
+
+      getTabDimensionsAtIndex: index => tabList[index].computeDimensions(),
+
       getPreviousActiveTabIndex: () => {
-        for (let index = 0; index < tabList.value.length; index++) {
-          if (tabList.value[index].isActive()) {
+        for (const [index, element] of tabList.entries()) {
+          if (element.isActive()) {
             return index;
           }
         }
@@ -86,15 +86,18 @@ export default {
         const activeElement = document.activeElement;
         return tabElements.indexOf(activeElement);
       },
+
       getIndexOfTabById: id => {
-        for (let index = 0; index < tabList.value.length; index++) {
-          if (tabList.value[index].id === id) {
+        for (const [index, element] of tabList.entries()) {
+          if (element.id === id) {
             return index;
           }
         }
         return -1;
       },
-      getTabListLength: () => tabList.value.length,
+
+      getTabListLength: () => tabList.length,
+
       notifyTabActivated: index => {
         emitCustomEvent(
           root.value,
@@ -115,11 +118,17 @@ export default {
       props.modelValue !== void 0;
       foundation.activateTab(Number(props.modelValue) || 0);
 
-      for (let index = 0; index < tabList.value.length; index++) {
-        if (tabList.value[index].active) {
+      for (const [index, element] of tabList.entries()) {
+        if (element.active) {
           foundation.scrollIntoView(index);
           break;
         }
+      }
+
+      foundation.setUseAutomaticActivation(props.useAutomaticActivation);
+
+      for (const tab of tabList) {
+        tab.focusOnActivate(props.focusOnActivate);
       }
 
       // watch for changes in the modelValue
@@ -136,6 +145,27 @@ export default {
       foundation.destroy();
     });
 
-    return { root, scroller, listeners, activateTab };
+    expose({ activateTab });
+
+    return () => {
+      return h(
+        'div',
+        {
+          ref: root,
+          role: 'tablist',
+          class: 'mdc-tab-bar',
+
+          onChange: attrs.onChange,
+          'onMdctab:interacted': event_ => {
+            foundation.handleTabInteraction(event_);
+          },
+          'onMdc-tab:interacted': event_ => {
+            foundation.handleTabInteraction(event_);
+          },
+          keydown: event_ => foundation.handleKeyDown(event_),
+        },
+        [h(mcwTabScroller, { ref: scroller }, () => [slots.default()])],
+      );
+    };
   },
 };

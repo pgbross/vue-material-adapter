@@ -1,4 +1,3 @@
-/* eslint-disable quote-props */
 import MDCTabFoundation from '@material/tab/foundation.js';
 import {
   computed,
@@ -73,13 +72,6 @@ export default {
     const deactivate = () => foundation.deactivate();
     const isActive = () => foundation.isActive();
 
-    const setActive = isActive => {
-      if (isActive) {
-        (uiState.classes = { ...uiState.classes, 'mdc-tab--active': true }),
-          uiState.tabIndicator.activate();
-      }
-    };
-
     const computeIndicatorClientRect = () =>
       uiState.tabIndicator.computeContentClientRect();
 
@@ -94,17 +86,22 @@ export default {
     const adapter = {
       setAttr: (attribute, value) =>
         (uiState.rootAttrs = { ...uiState.rootAttrs, [attribute]: value }),
+
       addClass: className =>
         (uiState.classes = { ...uiState.classes, [className]: true }),
+
       removeClass: className => {
-        // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
+
       hasClass: className => !!uiState.classes[className],
+
       activateIndicator: previousIndicatorClientRect =>
         uiState.tabIndicator.activate(previousIndicatorClientRect),
+
       deactivateIndicator: () => uiState.tabIndicator.deactivate(),
+
       notifyInteracted: () => {
         emitCustomEvent(
           rootElement,
@@ -113,11 +110,20 @@ export default {
           true /* bubble */,
         );
       },
+
       getOffsetLeft: () => rootElement.offsetLeft,
+
       getOffsetWidth: () => rootElement.offsetWidth,
+
       getContentOffsetLeft: () => uiState.content.offsetLeft,
+
       getContentOffsetWidth: () => uiState.content.offsetWidth,
+
       focus: () => rootElement.focus(),
+    };
+
+    const focusOnActivate = focusOnActivate => {
+      foundation.setFocusOnActivate(focusOnActivate);
     };
 
     onMounted(() => {
@@ -130,7 +136,7 @@ export default {
       foundation = new MDCTabFoundation(adapter);
       foundation.init();
 
-      tabList.value.push({
+      tabList.push({
         id: tabId,
         activate,
         deactivate,
@@ -138,6 +144,7 @@ export default {
         computeIndicatorClientRect,
         computeDimensions,
         isActive,
+        focusOnActivate,
       });
     });
 
@@ -150,7 +157,7 @@ export default {
       hasIcon,
       hasText,
       onClick,
-      setActive,
+
       tabId,
       fade,
       spanContent,
@@ -172,19 +179,13 @@ function extractIconProperty(iconProperty) {
     };
   } else if (Array.isArray(iconProperty)) {
     return {
-      classes: iconProperty.reduce(
-        (result, value) => Object.assign(result, { [value]: true }),
-        {},
-      ),
+      classes: Object.fromEntries(iconProperty.map(value => [value, true])),
     };
   } else if (typeof iconProperty === 'object') {
     return {
-      classes: iconProperty.className
-        .split(' ')
-        .reduce(
-          (result, value) => Object.assign(result, { [value]: true }),
-          {},
-        ),
+      classes: Object.fromEntries(
+        iconProperty.className.split(' ').map(value => [value, true]),
+      ),
       content: iconProperty.textContent,
     };
   }
