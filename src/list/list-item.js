@@ -1,3 +1,4 @@
+import { cssClasses } from '@material/list/index.js';
 import { computed, inject, reactive, ref, toRefs } from 'vue';
 import { CustomLink } from '../base/index.js';
 import { useRipplePlugin } from '../ripple/index.js';
@@ -51,7 +52,7 @@ export default {
     const hasStart = hasSlot(slotNames.START) && !!props.start;
     const hasEnd = hasSlot(slotNames.END) && !!props.end;
 
-    const { isInteractive } = inject('mcwList');
+    const { isInteractive, registerListItem } = inject('mcwList');
 
     const uiState = reactive({
       classes: {
@@ -70,60 +71,38 @@ export default {
       uiState.classes[attrs.class] = 1;
     }
 
-    const registerListItem = inject('registerListItem');
-
     const { classes: rippleClasses, styles } = useRipplePlugin(root);
 
-    const focus = () => {
-      (root.value.$el ?? root.value).focus();
-    };
+    const focus = () => (root.value.$el ?? root.value).focus();
 
-    const myAttributes = computed(() => {
-      return {
-        // class: uiState.classes,
-        ...attrs,
-        class: { ...rippleClasses.value, ...uiState.classes },
-        style: styles.value,
-        ...uiState.attrs,
-      };
-    });
+    const myAttributes = computed(() => ({
+      ...attrs,
+      class: { ...rippleClasses.value, ...uiState.classes },
+      style: styles.value,
+      ...uiState.attrs,
+    }));
 
-    const addClass = className => {
-      uiState.classes = { ...uiState.classes, [className]: true };
-    };
+    const getPrimaryText = () => {
+      const primaryText = (root.value.$el ?? root.value).querySelector(
+        `.${cssClasses.LIST_ITEM_PRIMARY_TEXT_CLASS}`,
+      );
 
-    const removeClass = className => {
-      // eslint-disable-next-line no-unused-vars
-      const { [className]: removed, ...rest } = uiState.classes;
-      uiState.classes = rest;
-    };
-
-    const removeAttribute = attribute => {
-      // eslint-disable-next-line no-unused-vars
-      const { [attribute]: removed, ...rest } = uiState.attrs;
-      uiState.attrs = rest;
-    };
-
-    const setAttribute = (attribute, value) => {
-      uiState.attrs = { ...uiState.attrs, [attribute]: value };
-    };
-
-    const getAttribute = attribute => {
-      return myAttributes.value[attribute];
-    };
-
-    const classList = {
-      add: addClass,
-      remove: removeClass,
-      contains: className => !!uiState.classes[className],
+      return primaryText?.textContent ?? '';
     };
 
     registerListItem({
       itemId: myItemId,
-      removeAttribute,
-      setAttribute,
-      getAttribute,
-      classList,
+      setAttribute: (attribute, value) =>
+        (uiState.attrs = { ...uiState.attrs, [attribute]: value }),
+      getAttribute: attribute => myAttributes.value[attribute],
+      addClass: className =>
+        (uiState.classes = { ...uiState.classes, [className]: true }),
+      removeClass: className => {
+        const { [className]: removed, ...rest } = uiState.classes;
+        uiState.classes = rest;
+      },
+      hasClass: className => !!uiState.classes[className],
+      getPrimaryText,
     });
 
     return {

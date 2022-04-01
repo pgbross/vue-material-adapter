@@ -24,6 +24,14 @@
             <i class="material-icons">home</i>
           </template>
         </mcw-list-item>
+
+        <mcw-list-item end="icon" v-if="show2a"
+          >Two(a) Single-line item 2
+
+          <template #tend>
+            <i class="material-icons">home</i>
+          </template>
+        </mcw-list-item>
         <mcw-list-item end="meta"
           >Three Single-line item 3
           <template #end> meta text </template></mcw-list-item
