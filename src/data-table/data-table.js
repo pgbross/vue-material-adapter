@@ -57,7 +57,7 @@ export default {
       return foundation.getSelectedRowIds();
     };
 
-    const setSelectedRowIds = (rowIds) => {
+    const setSelectedRowIds = rowIds => {
       return foundation.setSelectedRowIds(rowIds);
     };
 
@@ -234,8 +234,40 @@ export default {
     onMounted(() => {
       headerRow = uiState.root.querySelector(`.${cssClasses.HEADER_ROW}`);
 
-      handleHeaderRowCheckboxChange = () =>
-        foundation.handleHeaderRowCheckboxChange();
+      handleHeaderRowCheckboxChange = () => {
+        var isHeaderChecked = foundation.adapter.isHeaderRowCheckboxChecked();
+        var selectedRowCount = foundation.adapter.getSelectedRowCount();
+
+        if (isHeaderChecked && selectedRowCount === 0) {
+          for (
+            var rowIndex = 0;
+            rowIndex < foundation.adapter.getRowCount();
+            rowIndex++
+          ) {
+            foundation.adapter.setRowCheckboxCheckedAtIndex(
+              rowIndex,
+              isHeaderChecked,
+            );
+            foundation.selectRowAtIndex(rowIndex, isHeaderChecked);
+          }
+          foundation.adapter.notifySelectedAll();
+        } else {
+          if (!isHeaderChecked) {
+            for (
+              var rowIndex = 0;
+              rowIndex < foundation.adapter.getRowCount();
+              rowIndex++
+            ) {
+              foundation.adapter.setRowCheckboxCheckedAtIndex(
+                rowIndex,
+                isHeaderChecked,
+              );
+              foundation.selectRowAtIndex(rowIndex, isHeaderChecked);
+            }
+          }
+          foundation.adapter.notifyUnselectedAll();
+        }
+      };
 
       headerRow.addEventListener(
         'mdccheckbox:change',
@@ -263,14 +295,14 @@ export default {
 
     onUpdated(() => {
       headerRow?.removeEventListener(
-          'mdccheckbox:change',
-          handleHeaderRowCheckboxChange,
+        'mdccheckbox:change',
+        handleHeaderRowCheckboxChange,
       );
       headerRow?.removeEventListener('click', headerRowClickListener);
 
       content?.removeEventListener(
-          'mdccheckbox:change',
-          handleRowCheckboxChange,
+        'mdccheckbox:change',
+        handleRowCheckboxChange,
       );
 
       headerRowCheckbox?.destroy?.();
@@ -283,12 +315,44 @@ export default {
       // foundation.destroy();
       headerRow = uiState.root.querySelector(`.${cssClasses.HEADER_ROW}`);
 
-      handleHeaderRowCheckboxChange = () =>
-          foundation.handleHeaderRowCheckboxChange();
+      handleHeaderRowCheckboxChange = () => {
+        var isHeaderChecked = foundation.adapter.isHeaderRowCheckboxChecked();
+        var selectedRowCount = foundation.adapter.getSelectedRowCount();
+
+        if (isHeaderChecked && selectedRowCount === 0) {
+          for (
+            var rowIndex = 0;
+            rowIndex < foundation.adapter.getRowCount();
+            rowIndex++
+          ) {
+            foundation.adapter.setRowCheckboxCheckedAtIndex(
+              rowIndex,
+              isHeaderChecked,
+            );
+            foundation.selectRowAtIndex(rowIndex, isHeaderChecked);
+          }
+          foundation.adapter.notifySelectedAll();
+        } else {
+          if (!isHeaderChecked) {
+            for (
+              var rowIndex = 0;
+              rowIndex < foundation.adapter.getRowCount();
+              rowIndex++
+            ) {
+              foundation.adapter.setRowCheckboxCheckedAtIndex(
+                rowIndex,
+                isHeaderChecked,
+              );
+              foundation.selectRowAtIndex(rowIndex, isHeaderChecked);
+            }
+          }
+          foundation.adapter.notifyUnselectedAll();
+        }
+      };
 
       headerRow.addEventListener(
-          'mdccheckbox:change',
-          handleHeaderRowCheckboxChange,
+        'mdccheckbox:change',
+        handleHeaderRowCheckboxChange,
       );
 
       headerRowClickListener = event => {
@@ -300,7 +364,7 @@ export default {
       content = uiState.root.querySelector(`.${cssClasses.CONTENT}`);
 
       handleRowCheckboxChange = event =>
-          foundation.handleRowCheckboxChange(event);
+        foundation.handleRowCheckboxChange(event);
 
       content?.addEventListener('mdccheckbox:change', handleRowCheckboxChange);
 
