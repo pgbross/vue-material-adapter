@@ -231,11 +231,11 @@ export default {
     const handleClickEvent = event_ => {
       const index = getListItemIndex(event_);
 
-      const toggleCheckbox = !matches(
+      const isCheckboxAlreadyUpdatedInAdapter = matches(
         event_.target,
         strings.CHECKBOX_RADIO_SELECTOR,
       );
-      foundation.handleClick(index, toggleCheckbox);
+      foundation.handleClick(index, isCheckboxAlreadyUpdatedInAdapter, event_);
     };
 
     const typeaheadInProgress = () => foundation.isTypeaheadInProgress();

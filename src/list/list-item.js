@@ -23,16 +23,6 @@ const startNames_ = new Set([
   'video',
 ]);
 
-const graphicNames_ = new Set([
-  'avatar',
-  'icon',
-  'medium',
-  'large',
-  'radio',
-  'control',
-  'null',
-]);
-
 const endNames_ = new Set(['icon', 'meta', 'checkbox', 'radio', 'switch']);
 
 export default {
@@ -41,12 +31,7 @@ export default {
   props: {
     disabled: Boolean,
     id: String,
-    graphic: { type: String, validator: value => graphicNames_.has(value) },
-    group: { type: String },
-    tabIndex: { type: Number, default: () => -1 },
-    // twoLine: { type: Boolean },
-    multipleGraphics: { type: Boolean },
-    noninteractive: { type: Boolean },
+
     start: { type: String, validator: value => startNames_.has(value) },
     end: { type: String, validator: value => endNames_.has(value) },
   },
@@ -65,8 +50,6 @@ export default {
     const hasSecondaryText = hasSlot(slotNames.SECONDARY_TEXT);
     const hasStart = hasSlot(slotNames.START) && !!props.start;
     const hasEnd = hasSlot(slotNames.END) && !!props.end;
-    const hasGraphic = !!props.graphic && hasSlot(slotNames.GRAPHIC);
-    const hasMeta = hasSlot(slotNames.META);
 
     const { isInteractive } = inject('mcwList');
 
@@ -152,8 +135,6 @@ export default {
       myItemId,
       hasStart,
       hasEnd,
-      hasGraphic,
-      hasMeta,
       isInteractive,
       hasSecondaryText,
     };

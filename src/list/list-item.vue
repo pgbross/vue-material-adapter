@@ -3,8 +3,8 @@
   <custom-link ref="root" v-bind="myAttrs" tag="a" :data-myItemId="myItemId">
     <span class="mdc-list-item__ripple" v-if="isInteractive"></span>
 
-    <span class="mdc-list-item__start" v-if="hasGraphic">
-      <slot name="graphic"></slot>
+    <span class="mdc-list-item__start" v-if="hasStart">
+      <slot name="start"></slot>
     </span>
 
     <span class="mdc-list-item__content" :id="id">
@@ -14,8 +14,8 @@
       ></span>
     </span>
 
-    <span class="mdc-list-item__end" v-if="hasMeta">
-      <slot name="meta"></slot>
+    <span class="mdc-list-item__end" v-if="hasEnd">
+      <slot name="end"></slot>
     </span>
   </custom-link>
 </template>

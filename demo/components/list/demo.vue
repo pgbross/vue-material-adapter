@@ -8,8 +8,8 @@
         @mdclist:action="onAction"
         role="listbox"
       >
-        <mcw-list-item tabindex="0" name="wiffle" id="id1" graphic="icon">
-          <template #graphic>
+        <mcw-list-item tabindex="0" name="wiffle" id="id1" start="icon">
+          <template #start>
             <i class="material-icons">home</i>
           </template>
           One Single-line item 1
@@ -17,18 +17,17 @@
 
         <li role="separator" class="mdc-list-divider"></li>
 
-        <mcw-list-item
+        <mcw-list-item end="icon"
           >Two Single-line item 2
 
-          <template #meta>
+          <template #tend>
             <i class="material-icons">home</i>
           </template>
         </mcw-list-item>
-        <mcw-list-item
+        <mcw-list-item end="meta"
           >Three Single-line item 3
-          <template #meta> meta text </template></mcw-list-item
+          <template #end> meta text </template></mcw-list-item
         >
-
         <mcw-list-item
           >Two-line item
           <template #secondary-text> Other secondary text </template>
