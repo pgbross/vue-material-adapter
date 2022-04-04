@@ -196,7 +196,10 @@ export default {
 
       hasCheckboxAtIndex: index => {
         const listItem = listElements.value[index];
-        return listItem && !!listItem.querySelector(strings.CHECKBOX_SELECTOR);
+        const returnValue =
+          listItem && !!listItem.querySelector(strings.CHECKBOX_SELECTOR);
+
+        return returnValue;
       },
 
       hasRadioAtIndex: index => {
@@ -214,7 +217,7 @@ export default {
         const root = listRoot.value;
         return (
           root !== document.activeElement &&
-          root.contains(document.activeElement)
+          root?.contains(document.activeElement)
         );
       },
 
@@ -324,9 +327,9 @@ export default {
       setSelectedIfSingleSelectionList(props, foundation, adapter);
 
       const { wrapFocus, typeAhead, vertical } = props;
-
       layout();
       initializeListType();
+
       ensureFocusable();
 
       foundation.setWrapFocus(wrapFocus);

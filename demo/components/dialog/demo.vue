@@ -64,7 +64,7 @@
     >
       <mcw-dialog-title>Select user</mcw-dialog-title>
       <mcw-dialog-content>
-        <mcw-list avatar-list>
+        <mcw-list>
           <mcw-list-item data-mdc-dialog-action="test" tabindex="0">
             test
           </mcw-list-item>
@@ -104,15 +104,19 @@
     >
       <mcw-dialog-title>Chose a Phone Ringtone</mcw-dialog-title>
       <mcw-dialog-content>
-        <mcw-list v-model="picked">
+        <mcw-list v-model="picked" end="checkbox" aria-multiselectable="true">
           <mcw-list-item
             v-for="(choice, i) in choices"
             :key="i"
             role="checkbox"
             name="ringtone"
             aria-checked="false"
+            end="checkbox"
           >
-            <span :for="clean(choice)">{{ choice }}</span>
+            <label :for="clean(choice)">{{ choice }}</label>
+            <template #end>
+              <mcw-checkbox id="cat"></mcw-checkbox>
+            </template>
           </mcw-list-item>
         </mcw-list>
       </mcw-dialog-content>

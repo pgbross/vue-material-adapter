@@ -105,7 +105,7 @@
         <mcw-list-item>Item 2 - Division 2</mcw-list-item>
       </mcw-list>
     </div>
-    <!--
+
     <div class="demo-list-example">
       <h3 class="mdc-typography--subtitle1">Single selection list</h3>
       <mcw-list v-model="selected" wrap-focus class="demo-list" role="listbox">
@@ -113,9 +113,9 @@
         <mcw-list-item>Single-line item</mcw-list-item>
         <mcw-list-item>Single-line item</mcw-list-item>
       </mcw-list>
-    </div> -->
-    <!--
-    <div class="demo-list-example">
+    </div>
+
+    <!-- <div class="demo-list-example">
       <h3 class="mdc-typography--subtitle1">List with checkbox items</h3>
       <mcw-list
         v-model="listSelected"
