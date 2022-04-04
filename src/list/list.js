@@ -53,11 +53,11 @@ export default {
 
     // list of child elements that will have their item id in a data attribute
     // used to find the listItem from events or by index. Importantly these are in DOM order.
-    let listElements = [];
+    const listElements = ref([]);
 
     // called initially, and when the DOM tree changes
     const updateListElements = rootElement => {
-      listElements = [
+      listElements.value = [
         ...rootElement.querySelectorAll(`.${cssClasses.LIST_ITEM_CLASS}`),
       ];
     };
@@ -72,7 +72,7 @@ export default {
     // The list elements are in DOM order, so find it by index,
     // then use its item id to lookup in the list item hash
     const getListItemByIndex = index => {
-      const element = listElements[index];
+      const element = listElements.value[index];
       if (element) {
         const myItemId = element.dataset.myitemid;
         return listItems[myItemId];
@@ -106,7 +106,7 @@ export default {
       if (isInteractive) {
         const selection = [
           ...listRoot.value.querySelectorAll(strings.SELECTED_ITEM_SELECTOR),
-        ].map(listItem => listElements.indexOf(listItem));
+        ].map(listItem => listElements.value.indexOf(listItem));
 
         if (matches(listRoot.value, strings.ARIA_MULTI_SELECTABLE_SELECTOR)) {
           foundation.setSelectedIndex(selection);
@@ -131,28 +131,28 @@ export default {
 
         foundation.setSelectedIndex(
           Array.prototype.map.call(preselectedItems, listItem =>
-            listElements.indexOf(listItem),
+            listElements.value.indexOf(listItem),
           ),
         );
       } else if (radioSelectedListItem) {
         foundation.setSelectedIndex(
-          listElements.indexOf(radioSelectedListItem),
+          listElements.value.indexOf(radioSelectedListItem),
         );
       }
     };
 
     const handleFocusInEvent = event_ => {
-      const index = getListItemIndex(event_, listElements);
+      const index = getListItemIndex(event_, listElements.value);
       foundation.handleFocusIn(event_, index);
     };
 
     const handleFocusOutEvent = event_ => {
-      const index = getListItemIndex(event_, listElements);
+      const index = getListItemIndex(event_, listElements.value);
       foundation.handleFocusOut(event_, index);
     };
 
     const handleKeydownEvent = event_ => {
-      const index = getListItemIndex(event_, listElements);
+      const index = getListItemIndex(event_, listElements.value);
       const target = event_.target;
 
       foundation.handleKeydown(
@@ -163,7 +163,7 @@ export default {
     };
 
     const handleClickEvent = event_ => {
-      const index = getListItemIndex(event_, listElements);
+      const index = getListItemIndex(event_, listElements.value);
 
       const isCheckboxAlreadyUpdatedInAdapter = matches(
         event_.target,
@@ -177,7 +177,7 @@ export default {
         getListItemByIndex(index)?.addClass(className),
 
       focusItemAtIndex: index => {
-        const element = listElements[index];
+        const element = listElements.value[index];
         if (element) {
           element.focus();
         }
@@ -187,25 +187,25 @@ export default {
         getListItemByIndex(index)?.getAttribute(attribute),
 
       getFocusedElementIndex: () =>
-        listElements.indexOf(document.activeElement),
+        listElements.value.indexOf(document.activeElement),
 
-      getListItemCount: () => listElements.length,
+      getListItemCount: () => listElements.value.length,
 
       getPrimaryTextAtIndex: index =>
         getListItemByIndex(index)?.getPrimaryText(),
 
       hasCheckboxAtIndex: index => {
-        const listItem = listElements[index];
+        const listItem = listElements.value[index];
         return listItem && !!listItem.querySelector(strings.CHECKBOX_SELECTOR);
       },
 
       hasRadioAtIndex: index => {
-        const listItem = listElements[index];
+        const listItem = listElements.value[index];
         return listItem && !!listItem.querySelector(strings.RADIO_SELECTOR);
       },
 
       isCheckboxCheckedAtIndex: index => {
-        const listItem = listElements[index];
+        const listItem = listElements.value[index];
         const toggleElement = listItem.querySelector(strings.CHECKBOX_SELECTOR);
         return toggleElement?.checked;
       },
@@ -253,7 +253,7 @@ export default {
         getListItemByIndex(index)?.setAttribute(attribute, value),
 
       setCheckedCheckboxOrRadioAtIndex: (index, isChecked) => {
-        const listItem = listElements[index];
+        const listItem = listElements.value[index];
         const toggleElement = listItem.querySelector(
           strings.CHECKBOX_RADIO_SELECTOR,
         );
@@ -264,7 +264,7 @@ export default {
       },
 
       setTabIndexForListItemChildren: (listItemIndex, tabIndexValue) => {
-        const element = listElements[listItemIndex];
+        const element = listElements.value[listItemIndex];
         const listItemChildren = Array.prototype.slice.call(
           element.querySelectorAll(strings.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX),
         );
@@ -308,10 +308,10 @@ export default {
         const index = getInitialFocusIndex(
           foundation,
           listRoot.value,
-          listElements,
+          listElements.value,
         );
         if (index !== -1) {
-          listElements[index].tabIndex = 0;
+          listElements.value[index].tabIndex = 0;
         }
       }
     };
@@ -366,6 +366,16 @@ export default {
           /** skipFocus */ true,
         ),
       typeaheadInProgress: () => foundation.isTypeaheadInProgress(),
+      listElements,
+      getListItemByIndex,
+      getListElementByIndex: index => listElements.value[index],
+      getListElementIndex: element => {
+        return listElements.value.findIndex(element_ => element_ == element);
+      },
+      getListItemCount: () => listElements.value.length,
+      focus: () => {
+        listRoot.value.focus();
+      },
     });
 
     return () => {
@@ -422,7 +432,7 @@ const getListItemIndex = (eventOrElement, listElements) => {
     nearestParent &&
     matches(nearestParent, `.${cssClasses.LIST_ITEM_CLASS}`)
   ) {
-    return listElements.indexOf(nearestParent);
+    return listElements.value.indexOf(nearestParent);
   }
 
   return -1;

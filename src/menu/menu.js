@@ -46,14 +46,12 @@ export default {
     let foundation;
     let rootElement;
 
-    const items = computed(() => uiState.list?.listElements ?? []);
-    const listItems = computed(() => uiState.list.listItems ?? []);
-
     const getListItemByIndex = index => {
-      const element = items.value[index];
-      const myItemId = element.dataset.myitemid;
-      return listItems.value[myItemId];
+      return uiState.list?.getListItemByIndex(index);
     };
+
+    const getListElementByIndex = index =>
+      uiState.list?.getListElementByIndex(index);
 
     const surfaceOpen = computed({
       get() {
@@ -76,7 +74,7 @@ export default {
     const layout = () => uiState.list?.layout();
 
     const handleAction = index => {
-      foundation.handleItemAction(items.value[index]);
+      foundation.handleItemAction(getListElementByIndex(index));
     };
 
     const handleKeydown = event_ => foundation.handleKeydown(event_);
@@ -115,12 +113,7 @@ export default {
       uiState.menuSurface.setAnchorMargin(margin);
     };
     const getOptionByIndex = index => {
-      const itms = items.value;
-
-      if (index < itms.length) {
-        return itms[index];
-      }
-      return;
+      return getListElementByIndex(index);
     };
 
     const getPrimaryTextAtIndex = index => {
@@ -159,14 +152,17 @@ export default {
     const setSingleSelection = singleSelection =>
       uiState.list?.setSingleSelection(singleSelection);
 
+    const focusItemAtIndex = index => getListItemByIndex(index).focus();
+    const getMenuItemCount = () => uiState.list.getListItemCount();
+
     const adapter = {
       addClassToElementAtIndex: (index, className) => {
         const listItem = getListItemByIndex(index);
-        listItem.classList.add(className);
+        listItem.addClass(className);
       },
       removeClassFromElementAtIndex: (index, className) => {
         const listItem = getListItemByIndex(index);
-        listItem.classList.remove(className);
+        listItem.removeClass(className);
       },
       addAttributeToElementAtIndex: (index, attribute, value) => {
         const listItem = getListItemByIndex(index);
@@ -192,41 +188,47 @@ export default {
       },
 
       getElementIndex: element => {
-        return items.value.findIndex(element_ => element_ == element);
+        return uiState.list?.getListElementIndex(element);
       },
 
       notifySelected: eventData => {
+        const item = getListElementByIndex(eventData.index);
         emitCustomEvent(rootElement, strings.SELECTED_EVENT, {
           index: eventData.index,
-          item: items.value[eventData.index],
+          item,
         });
 
         emit('select', {
           index: eventData.index,
-          item: items.value[eventData.index],
+          item,
         });
       },
 
-      getMenuItemCount: () => items.value.length,
+      getMenuItemCount,
 
-      focusItemAtIndex: index => items.value[index].focus(),
+      focusItemAtIndex,
       focusListRoot: () => {
-        uiState.menuSurface.$el.querySelector(strings.LIST_SELECTOR).focus();
+        uiState.list.focus();
       },
 
-      isSelectableItemAtIndex: index =>
-        !!closest(items.value[index], `.${cssClasses.MENU_SELECTION_GROUP}`),
+      isSelectableItemAtIndex: index => {
+        const item = getListElementByIndex(index);
+
+        return !!closest(item, `.${cssClasses.MENU_SELECTION_GROUP}`);
+      },
 
       getSelectedSiblingOfItemAtIndex: index => {
+        const item = getListElementByIndex(index);
         const selectionGroupElement = closest(
-          items.value[index],
+          item,
           `.${cssClasses.MENU_SELECTION_GROUP}`,
         );
         const selectedItemElement = selectionGroupElement.querySelector(
           `.${cssClasses.MENU_SELECTED_LIST_ITEM}`,
         );
+
         return selectedItemElement
-          ? items.value.findIndex(element => element == selectedItemElement)
+          ? uiState.list.getListElementIndex(selectedItemElement)
           : -1;
       },
     };
@@ -258,6 +260,10 @@ export default {
       foundation.destroy();
     });
 
+    const items = computed(() => {
+      return uiState.list?.listElements;
+    });
+
     return {
       ...toRefs(uiState),
       handleAction,
@@ -285,6 +291,8 @@ export default {
       typeaheadInProgress,
       typeaheadMatchItem,
       setSingleSelection,
+      focusItemAtIndex,
+      getMenuItemCount,
     };
   },
 };

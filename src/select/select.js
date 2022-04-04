@@ -83,8 +83,6 @@ export default {
       };
     });
 
-    const menuItems = computed(() => uiState.menu?.items);
-
     let foundation;
     let labelElement;
     const handleFocus = () => foundation.handleFocus();
@@ -122,17 +120,6 @@ export default {
     });
 
     const adapter = {
-      // select methods
-      // getSelectedMenuItem: () => {
-      //   const x = menuItems.value.find(item => {
-      //     const myItemId = item.dataset.myitemid;
-      //     return menuListItems.value[myItemId].classList.contains(
-      //       cssClasses.SELECTED_ITEM_CLASS,
-      //     );
-      //   });
-      //   return x;
-      // },
-
       getMenuItemAttr: (menuItem, attribute) =>
         menuItem.getAttribute(attribute),
 
@@ -147,7 +134,6 @@ export default {
           [attribute]: value,
         }),
       removeSelectAnchorAttr: attribute => {
-        // eslint-disable-next-line no-unused-vars
         const { [attribute]: removed, ...rest } = uiState.selectAnchorAttrs;
         uiState.selectAnchorAttrs = rest;
       },
@@ -155,7 +141,6 @@ export default {
         (uiState.menuClasses = { ...uiState.menuClasses, [className]: true }),
 
       removeMenuClass: className => {
-        // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.menuClasses;
         uiState.menuClasses = rest;
       },
@@ -174,14 +159,17 @@ export default {
       setSelectedIndex: index => {
         uiState.menu.setSelectedIndex(index);
       },
-      focusMenuItemAtIndex: index => menuItems.value[index].focus(),
-      getMenuItemCount: () => menuItems.value.length,
-      getMenuItemValues: () =>
-        menuItems.value.map(
+      focusMenuItemAtIndex: index => uiState.menu.focusItemAtIndex(index),
+      getMenuItemCount: () => uiState.menu.getMenuItemCount(),
+      getMenuItemValues: () => {
+        const menuItems = uiState.menu?.items.map(
           element => element.getAttribute(strings.VALUE_ATTR) || '',
-        ),
+        );
+        return menuItems;
+      },
       getMenuItemTextAtIndex: index => {
-        return menuItems.value[index].textContent;
+        const item = uiState.menu?.items[index];
+        return item?.textContent;
       },
       isTypeaheadInProgress: () => uiState.menu.typeaheadInProgress(),
       typeaheadMatchItem: (nextChar, startingIndex) =>
@@ -191,7 +179,6 @@ export default {
       addClass: className =>
         (uiState.classes = { ...uiState.classes, [className]: true }),
       removeClass: className => {
-        // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
@@ -230,11 +217,11 @@ export default {
     const setFixedPosition = isFixed => uiState.menu.setFixedPosition(isFixed);
 
     const refreshIndex = () => {
-      const items = menuItems.value.map(
+      const menuItems = uiState.menu?.items.map(
         element => element.getAttribute(strings.VALUE_ATTR) || '',
       );
 
-      const index = items.indexOf(props.modelValue);
+      const index = menuItems.indexOf(props.modelValue);
       uiState.menu.setSelectedIndex(index);
 
       return index;

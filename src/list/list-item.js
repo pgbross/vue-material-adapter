@@ -95,6 +95,12 @@ export default {
       setAttribute: (attribute, value) =>
         (uiState.attrs = { ...uiState.attrs, [attribute]: value }),
       getAttribute: attribute => myAttributes.value[attribute],
+
+      removeAttribute: attribute => {
+        const { [attribute]: removed, ...rest } = myAttributes.value;
+        myAttributes.value = rest;
+      },
+
       addClass: className =>
         (uiState.classes = { ...uiState.classes, [className]: true }),
       removeClass: className => {
@@ -103,6 +109,7 @@ export default {
       },
       hasClass: className => !!uiState.classes[className],
       getPrimaryText,
+      focus,
     });
 
     return {
