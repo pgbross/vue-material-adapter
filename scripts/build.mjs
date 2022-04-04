@@ -9,7 +9,7 @@ import rimraf from 'rimraf';
 import { rollup } from 'rollup';
 import esbuild from 'rollup-plugin-esbuild';
 import VuePlugin from 'rollup-plugin-vue';
-import package_ from '../package.json';
+import package_ from '../package.json' assert { type: 'json' };
 
 const asyncRimraf = promisify(rimraf);
 
