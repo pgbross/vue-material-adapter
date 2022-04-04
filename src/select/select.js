@@ -161,16 +161,11 @@ export default {
       },
       focusMenuItemAtIndex: index => uiState.menu.focusItemAtIndex(index),
       getMenuItemCount: () => uiState.menu.getMenuItemCount(),
-      getMenuItemValues: () => {
-        const menuItems = uiState.menu?.items.map(
-          element => element.getAttribute(strings.VALUE_ATTR) || '',
-        );
-        return menuItems;
-      },
-      getMenuItemTextAtIndex: index => {
-        const item = uiState.menu?.items[index];
-        return item?.textContent;
-      },
+      getMenuItemValues: () =>
+        uiState.menu?.getMenuItemValues(strings.VALUE_ATTR),
+
+      getMenuItemTextAtIndex: index =>
+        uiState.menu?.getMenuItemTextAtIndex(index),
       isTypeaheadInProgress: () => uiState.menu.typeaheadInProgress(),
       typeaheadMatchItem: (nextChar, startingIndex) =>
         uiState.menu?.typeaheadMatchItem(nextChar, startingIndex),
@@ -217,11 +212,11 @@ export default {
     const setFixedPosition = isFixed => uiState.menu.setFixedPosition(isFixed);
 
     const refreshIndex = () => {
-      const menuItems = uiState.menu?.items.map(
-        element => element.getAttribute(strings.VALUE_ATTR) || '',
+      const menuItemValues = uiState.menu?.getMenuItemValues(
+        strings.VALUE_ATTR,
       );
 
-      const index = menuItems.indexOf(props.modelValue);
+      const index = menuItemValues.indexOf(props.modelValue);
       uiState.menu.setSelectedIndex(index);
 
       return index;

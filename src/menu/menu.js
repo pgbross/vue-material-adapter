@@ -11,12 +11,6 @@ import {
 import { emitCustomEvent } from '../base/index.js';
 
 const { cssClasses, strings } = MDCMenuFoundation;
-const DefaultFocusState_ = {
-  NONE: 0,
-  LIST_ROOT: 1,
-  FIRST_ITEM: 2,
-  LAST_ITEM: 3,
-};
 
 export default {
   name: 'mcw-menu',
@@ -44,7 +38,6 @@ export default {
     });
 
     let foundation;
-    let rootElement;
 
     const getListItemByIndex = index => {
       return uiState.list?.getListItemByIndex(index);
@@ -93,12 +86,6 @@ export default {
       emit('update:modelValue', item);
     };
 
-    const setDefaultFocusState = focusState => {
-      if (typeof focusState == 'string') {
-        focusState = DefaultFocusState_[focusState];
-      }
-      foundation.setDefaultFocusState(focusState);
-    };
     const setAnchorCorner = corner => {
       uiState.menuSurface.setAnchorCorner(corner);
     };
@@ -112,12 +99,9 @@ export default {
     const setAnchorMargin = margin => {
       uiState.menuSurface.setAnchorMargin(margin);
     };
-    const getOptionByIndex = index => {
-      return getListElementByIndex(index);
-    };
 
     const getPrimaryTextAtIndex = index => {
-      const item = getOptionByIndex(index);
+      const item = getListElementByIndex(index);
       if (item && uiState.list) {
         return uiState.list.getPrimaryText(item) || '';
       }
@@ -126,10 +110,6 @@ export default {
 
     const setFixedPosition = isFixed => {
       uiState.menuSurface.setFixedPosition(isFixed);
-    };
-
-    const hoistMenuToBody = () => {
-      uiState.menuSurface.hoistMenuToBody();
     };
 
     const setIsHoisted = isHoisted => {
@@ -193,6 +173,9 @@ export default {
 
       notifySelected: eventData => {
         const item = getListElementByIndex(eventData.index);
+
+        const rootElement = uiState.menuSurface.$el;
+
         emitCustomEvent(rootElement, strings.SELECTED_EVENT, {
           index: eventData.index,
           item,
@@ -241,8 +224,8 @@ export default {
     );
 
     onMounted(() => {
-      rootElement = uiState.menuSurface.$el;
       uiState.menuOpen = props.modelValue;
+
       foundation = new MDCMenuFoundation(adapter);
       foundation.init();
 
@@ -254,15 +237,25 @@ export default {
         const [x, y] = props.absolutePosition;
         uiState.menuSurface.setAbsolutePosition(x, y);
       }
+
+      foundation.setDefaultFocusState(props.defaultFocusState);
     });
 
     onBeforeUnmount(() => {
       foundation.destroy();
     });
 
-    const items = computed(() => {
-      return uiState.list?.listElements;
-    });
+    const getMenuItemValues = attribute => {
+      const le = uiState.list?.listElements;
+      const returnValue = le.map(
+        element => element.getAttribute(attribute) || '',
+      );
+
+      return returnValue;
+    };
+
+    const getMenuItemTextAtIndex = index =>
+      uiState.list?.listElements[index]?.textContent;
 
     return {
       ...toRefs(uiState),
@@ -273,26 +266,23 @@ export default {
       handleMenuSurfaceClosed,
       setAbsolutePosition,
       setIsHoisted,
-      hoistMenuToBody,
       setFixedPosition,
-      getOptionByIndex,
       setAnchorMargin,
       setAnchorElement,
       setAnchorCorner,
       getSelectedIndex,
       setSelectedIndex,
-      setDefaultFocusState,
       wrapFocus,
       surfaceOpen,
       layout,
       getPrimaryTextAtIndex,
-      items,
-      // listItems,
       typeaheadInProgress,
       typeaheadMatchItem,
       setSingleSelection,
       focusItemAtIndex,
       getMenuItemCount,
+      getMenuItemValues,
+      getMenuItemTextAtIndex,
     };
   },
 };

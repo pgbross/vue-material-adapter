@@ -1,6 +1,6 @@
 import { getCorrectPropertyName } from '@material/animation/util.js';
 import { MDCMenuSurfaceFoundation } from '@material/menu-surface/foundation.js';
-import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
+import { h, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue';
 import { emitCustomEvent } from '../base/index.js';
 
 const { cssClasses, strings } = MDCMenuSurfaceFoundation;
@@ -13,104 +13,85 @@ export default {
     'anchor-corner': [String, Number],
     'anchor-margin': Object,
   },
-  setup(props, { emit }) {
+  setup(props, { emit, slots, expose }) {
     const uiState = reactive({
       classes: {
         'mdc-menu-surface': 1,
       },
-      root: undefined,
     });
 
+    const root = ref();
     let foundation;
     let anchorElement;
     let previousFocus_;
 
-    const handleBodyClick = event_ => {
-      foundation.handleBodyClick(event_);
-    };
+    const handleBodyClick = event_ => foundation.handleBodyClick(event_);
 
-    const registerBodyClickListener = () => {
+    const registerBodyClickListener = () =>
       document.body.addEventListener('click', handleBodyClick);
-    };
-    const deregisterBodyClickListener = () => {
+
+    const deregisterBodyClickListener = () =>
       document.body.removeEventListener('click', handleBodyClick);
-    };
-    const handleKeydown = event_ => {
-      foundation.handleKeydown(event_);
-    };
-    const getFocusAdapterMethods = () => {
-      return {
-        isFocused: () => document.activeElement === uiState.root,
-        saveFocus: () => {
-          previousFocus_ = document.activeElement;
-        },
-        restoreFocus: () => {
-          if (
-            uiState.root?.contains(document.activeElement) &&
-            previousFocus_ &&
-            previousFocus_.focus
-          ) {
-            previousFocus_.focus();
-          }
-        },
-      };
-    };
-    const getDimensionAdapterMethods = () => {
-      return {
-        getInnerDimensions: () => {
-          return {
-            width: uiState.root.offsetWidth,
-            height: uiState.root.offsetHeight,
-          };
-        },
-        getAnchorDimensions: () =>
-          anchorElement ? anchorElement.getBoundingClientRect() : undefined,
-        getWindowDimensions: () => {
-          return { width: window.innerWidth, height: window.innerHeight };
-        },
-        getBodyDimensions: () => {
-          return {
-            width: document.body.clientWidth,
-            height: document.body.clientHeight,
-          };
-        },
-        getWindowScroll: () => {
-          return { x: window.pageXOffset, y: window.pageYOffset };
-        },
-        setPosition: position => {
-          uiState.root.style.left =
-            'left' in position ? `${position.left}px` : undefined;
-          uiState.root.style.right =
-            'right' in position ? `${position.right}px` : undefined;
-          uiState.root.style.top =
-            'top' in position ? `${position.top}px` : undefined;
-          uiState.root.style.bottom =
-            'bottom' in position ? `${position.bottom}px` : undefined;
-        },
-        setMaxHeight: height => {
-          uiState.root.style.maxHeight = height;
-        },
-      };
-    };
 
-    const rootListeners = {
-      keydown: event_ => handleKeydown(event_),
-      // 'MDCMenuSurface:opened': evt => registerBodyClickListener(evt),
-      // 'MDCMenuSurface:closed': evt => deregisterBodyClickListener(evt),
-    };
+    const handleKeydown = event_ => foundation.handleKeydown(event_);
 
-    const onOpen_ = value => {
-      const method = value ? 'open' : 'close';
-      foundation[method]();
-    };
+    const getFocusAdapterMethods = () => ({
+      isFocused: () => document.activeElement === root.value,
+      saveFocus: () => {
+        previousFocus_ = document.activeElement;
+      },
+      restoreFocus: () => {
+        if (
+          root.value?.contains(document.activeElement) &&
+          previousFocus_ &&
+          previousFocus_.focus
+        ) {
+          previousFocus_.focus();
+        }
+      },
+    });
 
-    const setIsHoisted = isHoisted => {
-      foundation.setIsHoisted(isHoisted);
-    };
+    const getDimensionAdapterMethods = () => ({
+      getInnerDimensions: () => ({
+        width: root.value.offsetWidth,
+        height: root.value.offsetHeight,
+      }),
+
+      getAnchorDimensions: () => anchorElement?.getBoundingClientRect(),
+
+      getWindowDimensions: () => ({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      }),
+
+      getBodyDimensions: () => ({
+        width: document.body.clientWidth,
+        height: document.body.clientHeight,
+      }),
+
+      getWindowScroll: () => ({ x: window.pageXOffset, y: window.pageYOffset }),
+
+      setPosition: position => {
+        root.value.style.left =
+          'left' in position ? `${position.left}px` : undefined;
+        root.value.style.right =
+          'right' in position ? `${position.right}px` : undefined;
+        root.value.style.top =
+          'top' in position ? `${position.top}px` : undefined;
+        root.value.style.bottom =
+          'bottom' in position ? `${position.bottom}px` : undefined;
+      },
+
+      setMaxHeight: height => (root.value.style.maxHeight = height),
+    });
+
+    const onOpen_ = value => foundation[value ? 'open' : 'close']();
+
+    const setIsHoisted = isHoisted => foundation.setIsHoisted(isHoisted);
 
     const hoistMenuToBody = () => {
-      uiState.root.remove();
-      document.body.append(uiState.root);
+      root.value.remove();
+      document.body.append(root.value);
       setIsHoisted(true);
     };
 
@@ -118,72 +99,70 @@ export default {
       if (isFixed) {
         uiState.classes = { ...uiState.classes, [cssClasses.FIXED]: true };
       } else {
-        // eslint-disable-next-line no-unused-vars
         const { [cssClasses.FIXED]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       }
 
       foundation.setFixedPosition(isFixed);
     };
+
     const setAbsolutePosition = (x, y) => {
       foundation.setAbsolutePosition(x, y);
       setIsHoisted(true);
     };
-    const setAnchorCorner = corner => {
-      foundation.setAnchorCorner(corner);
-    };
-    const setAnchorMargin = margin => {
-      foundation.setAnchorMargin(margin);
-    };
-    const setMenuSurfaceAnchorElement = element => {
-      anchorElement = element;
-    };
-    const show = options => {
-      foundation.open(options);
-    };
 
-    const close = (skipRestoreFocus = false) => {
+    const setAnchorCorner = corner => foundation.setAnchorCorner(corner);
+
+    const setAnchorMargin = margin => foundation.setAnchorMargin(margin);
+
+    const setMenuSurfaceAnchorElement = element => (anchorElement = element);
+
+    const show = options => foundation.open(options);
+
+    const close = (skipRestoreFocus = false) =>
       foundation.close(skipRestoreFocus);
-    };
 
-    const hide = () => {
-      close();
-    };
+    const hide = () => close();
 
-    const isOpen = () => {
-      return foundation ? foundation.isOpen() : false;
-    };
+    const isOpen = () => foundation?.isOpen() ?? false;
 
     const adapter = {
       addClass: className =>
         (uiState.classes = { ...uiState.classes, [className]: true }),
+
       removeClass: className => {
-        // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
-      hasClass: className => uiState.root.classList.contains(className),
+
+      hasClass: className => root.value.classList.contains(className),
+
       hasAnchor: () => !!anchorElement,
+
       notifyClose: () => {
-        uiState.root && emitCustomEvent(uiState.root, strings.CLOSED_EVENT, {});
+        root.value && emitCustomEvent(root.value, strings.CLOSED_EVENT, {});
 
         deregisterBodyClickListener();
 
         emit('mdcmenusurface:closed');
         emit('update:modelValue', false);
       },
+
       notifyOpen: () => {
-        emitCustomEvent(uiState.root, strings.OPENED_EVENT, {});
+        emitCustomEvent(root.value, strings.OPENED_EVENT, {});
 
         registerBodyClickListener();
         emit('mdcmenusurface:opened');
         emit('update:modelValue', true);
       },
-      isElementInContainer: element => uiState.root?.contains(element),
+
+      isElementInContainer: element => root.value?.contains(element),
+
       isRtl: () =>
-        getComputedStyle(uiState.root).getPropertyValue('direction') === 'rtl',
+        getComputedStyle(root.value).getPropertyValue('direction') === 'rtl',
+
       setTransformOrigin: origin => {
-        uiState.root.style.setProperty(
+        root.value.style.setProperty(
           `${getCorrectPropertyName(window, 'transform')}-origin`,
           origin,
         );
@@ -209,11 +188,8 @@ export default {
 
       foundation.init();
 
-      if (
-        uiState.root.parentElement &&
-        uiState.root.parentElement.classList.contains(cssClasses.ANCHOR)
-      ) {
-        anchorElement = uiState.root.parentElement;
+      if (root.value.parentElement?.classList.contains(cssClasses.ANCHOR)) {
+        anchorElement = root.value.parentElement;
       }
     });
 
@@ -221,9 +197,8 @@ export default {
       previousFocus_ = undefined;
       foundation.destroy();
     });
-    return {
-      ...toRefs(uiState),
-      rootListeners,
+
+    expose({
       hoistMenuToBody,
       setFixedPosition,
       setAbsolutePosition,
@@ -234,6 +209,18 @@ export default {
       hide,
       isOpen,
       close,
+    });
+
+    return () => {
+      return h(
+        'div',
+        {
+          ref: root,
+          class: uiState.classes,
+          onKeydown: event_ => handleKeydown(event_),
+        },
+        slots.default?.(),
+      );
     };
   },
 };
