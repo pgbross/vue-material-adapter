@@ -1,5 +1,6 @@
 import { MDCSelectHelperTextFoundation } from '@material/select/helper-text/foundation.js';
-import { onBeforeUnmount, onMounted, reactive, toRefs, watch } from 'vue';
+import { h, onBeforeUnmount, onMounted, reactive, watch } from 'vue';
+
 export default {
   name: 'select-helper-text',
   props: {
@@ -68,6 +69,8 @@ export default {
       uiState.foundation.destroy();
     });
 
-    return { ...toRefs(uiState) };
+    return () => {
+      return h('p', { class: uiState.classes }, [uiState.myHelptext]);
+    };
   },
 };
