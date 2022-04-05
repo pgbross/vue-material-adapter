@@ -1,5 +1,5 @@
 import { MDCSelectHelperTextFoundation } from '@material/select/helper-text/foundation.js';
-import { h, onBeforeUnmount, onMounted, reactive, watch } from 'vue';
+import { h, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue';
 
 export default {
   name: 'select-helper-text',
@@ -8,34 +8,37 @@ export default {
     helptextValidation: Boolean,
     helptext: String,
   },
-  setup(props) {
+  setup(props, { expose, attrs }) {
     const uiState = reactive({
       classes: {
         'mdc-select-helper-text': true,
-        'mdc-select-helper-text--persistent': props.helptextPersistent,
+        'mdc-select-helper-text--validation-msg-persistent':
+          props.helptextPersistent,
         'mdc-select-helper-text--validation-msg': props.helptextValidation,
       },
-      attrs: { 'aria-hidden': 'true' },
+      attrs: {},
       myHelptext: props.helptext,
-      foundation: {},
     });
+
+    const foundation = ref();
 
     const adapter = {
       addClass: className =>
         (uiState.classes = { ...uiState.classes, [className]: true }),
+
       removeClass: className => {
-        // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
 
       hasClass: className => Boolean(uiState.classes[className]),
 
+      getAttr: attribute => uiState.attrs[attribute] ?? attrs[attribute],
+
       setAttr: (attribute, value) =>
         (uiState.attrs = { ...uiState.attrs, [attribute]: value }),
 
       removeAttr: attribute => {
-        // eslint-disable-next-line no-unused-vars
         const { [attribute]: removed, ...rest } = uiState.attrs;
         uiState.attrs = rest;
       },
@@ -47,12 +50,12 @@ export default {
 
     watch(
       () => props.helptextPersistent,
-      nv => uiState.foundation.setPersistent(nv),
+      nv => foundation.value.setPersistent(nv),
     );
 
     watch(
       () => props.helptextValidation,
-      nv => uiState.foundation.setValidation(nv),
+      nv => foundation.value.setValidation(nv),
     );
 
     watch(
@@ -61,16 +64,20 @@ export default {
     );
 
     onMounted(() => {
-      uiState.foundation = new MDCSelectHelperTextFoundation(adapter);
-      uiState.foundation.init();
+      foundation.value = new MDCSelectHelperTextFoundation(adapter);
+      foundation.value.init();
     });
 
     onBeforeUnmount(() => {
-      uiState.foundation.destroy();
+      foundation.value.destroy();
     });
 
+    expose({ foundation });
+
     return () => {
-      return h('p', { class: uiState.classes }, [uiState.myHelptext]);
+      return h('p', { class: uiState.classes, ...uiState.attrs }, [
+        uiState.myHelptext,
+      ]);
     };
   },
 };

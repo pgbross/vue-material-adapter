@@ -114,14 +114,19 @@ export default {
       uiState.menu.layout();
     };
 
-    const selectedTextAttributes = computed(() => {
-      const attributes = { ...uiState.selTextAttrs };
-      if (props.helptext) {
-        attributes['aria-controls'] = uiState.helpId;
-        attributes['aria-describedBy'] = uiState.helpId;
-      }
-      return attributes;
-    });
+    // const selectedTextAttributes = computed(() => {
+    //   const attributes = { ...uiState.selTextAttrs };
+    //   if (props.helptext) {
+    //     attributes['aria-controls'] = uiState.helpId;
+    //     attributes['aria-describedBy'] = uiState.helpId;
+    //   }
+    //   return attributes;
+    // });
+
+    if (props.helptext) {
+      uiState.selectAnchorAttrs['aria-controls'] = uiState.helpId;
+      uiState.selectAnchorAttrs['aria-describedBy'] = uiState.helpId;
+    }
 
     const adapter = {
       getMenuItemAttr: (menuItem, attribute) =>
@@ -275,7 +280,6 @@ export default {
       // initial sync with DOM
       refreshIndex();
 
-      foundation = new MDCSelectFoundation(adapter);
       foundation.init();
 
       labelElement = uiState.root.querySelector('.mdc-floating-label');
@@ -297,7 +301,6 @@ export default {
       layoutOptions,
       rippleClasses,
       rippleStyles,
-      selectedTextAttrs: selectedTextAttributes,
       handleMenuItemAction,
       refreshIndex,
       setFixedPosition,

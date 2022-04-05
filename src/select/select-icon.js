@@ -9,7 +9,7 @@ export default {
   props: {
     icon: String,
   },
-  setup(props, { emit }) {
+  setup(props, { emit, expose }) {
     const uiState = reactive({
       classes: {
         'material-icons': true,
@@ -18,10 +18,10 @@ export default {
       styles: {},
       rootAttrs: {},
       rootListeners: {},
-      foundation: {},
     });
 
     const root = ref();
+    const foundation = ref();
 
     const adapter = {
       getAttr: attribute => uiState.rootAttrs[attribute],
@@ -64,13 +64,15 @@ export default {
     };
 
     onMounted(() => {
-      uiState.foundation = new MDCSelectIconFoundation(adapter);
-      uiState.foundation.init();
+      foundation.value = new MDCSelectIconFoundation(adapter);
+      foundation.value.init();
     });
 
     onBeforeUnmount(() => {
-      uiState.foundation.destroy();
+      foundation.value.destroy();
     });
+
+    expose({ foundation });
 
     return () => {
       return h(
