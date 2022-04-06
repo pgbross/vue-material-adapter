@@ -9,6 +9,7 @@
       @click="onClick"
       aria-pressed="false"
       :disabled="disabled"
+      v-bind="$attrs"
     >
       <div class="mdc-icon-button__ripple" ref="rippleEl"></div>
       <slot></slot>

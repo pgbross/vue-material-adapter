@@ -2,7 +2,9 @@
   <div class>
     <section class="mcw-demo">
       <div class="mcw-demo mcw-demo--container">
-        <mcw-icon-button href=""> menu </mcw-icon-button>
+        <mcw-icon-button href="" aria-describedby="bar-id">
+          menu
+        </mcw-icon-button>
 
         <mcw-icon-button v-model="isOn" :disabled="disabled">
           <mcw-icon-toggle is-on> favorite </mcw-icon-toggle>
@@ -11,10 +13,7 @@
 
         <mcw-icon-button v-model="isOn" :disabled="disabled">
           <i
-            class="
-              material-icons
-              mdc-icon-button__icon mdc-icon-button__icon--on
-            "
+            class="material-icons mdc-icon-button__icon mdc-icon-button__icon--on"
             >link_off</i
           >
           <i class="material-icons mdc-icon-button__icon">link</i>

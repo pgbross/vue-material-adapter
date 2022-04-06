@@ -13,7 +13,7 @@ import { useRipplePlugin } from '../ripple/ripple-plugin.js';
 
 export default {
   name: 'mcw-icon-button',
-
+  inheritAttrs: false,
   props: {
     modelValue: Boolean,
     disabled: Boolean,
