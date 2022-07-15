@@ -182,10 +182,12 @@ if (isProduction) {
             // or node_modules/packageName
             const packageName = module.context.match(
               /[/\\]node_modules[/\\](.*?)([/\\]|$)/,
-            )[1];
-
+            )?.[1];
+            // console.log(packageName);
             // npm package names are URL-safe, but some servers don't like @ symbols
-            return `npm/npm.${packageName.replace('@', '')}`;
+            return packageName
+              ? `npm/npm.${packageName.replace('@', '')}`
+              : undefined;
           },
         },
       },

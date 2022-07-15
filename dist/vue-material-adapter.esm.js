@@ -35,7 +35,7 @@ import { MDCSegmentedButtonFoundation } from '@material/segmented-button/index.j
 import { MDCSelectFoundation } from '@material/select/foundation.js';
 import { MDCSelectHelperTextFoundation } from '@material/select/helper-text/foundation.js';
 import { MDCSelectIconFoundation } from '@material/select/icon/foundation.js';
-import { MDCSliderFoundation, Thumb, cssClasses as cssClasses$9, events } from '@material/slider';
+import { MDCSliderFoundation, cssClasses as cssClasses$9, Thumb, events } from '@material/slider';
 import { MDCSnackbarFoundation } from '@material/snackbar/foundation.js';
 import { CssClasses, MDCSwitchRenderFoundation } from '@material/switch/index.js';
 import { MDCTabBarFoundation } from '@material/tab-bar/foundation.js';
@@ -1170,7 +1170,7 @@ function render$n(_ctx, _cache, $props, $setup, $data, $options) {
         renderSlot(_ctx.$slots, "default")
       ])
     ], 6))
-  ], 2112)) : (openBlock(), createElementBlock("button", {
+  ], 64)) : (openBlock(), createElementBlock("button", {
     key: 1,
     ref: "root",
     class: "mdc-evolution-chip__action mdc-evolution-chip__action--trailing",
@@ -2614,6 +2614,7 @@ var floatingLabel = BasePlugin({
 
 var script$f = {
   name: "mcw-icon-button",
+  inheritAttrs: false,
   props: {
     modelValue: Boolean,
     disabled: Boolean,
@@ -2682,21 +2683,21 @@ function render$f(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_touch_wrapper = resolveComponent("touch-wrapper");
   return openBlock(), createBlock(_component_touch_wrapper, { isTouch: _ctx.isTouch }, {
     default: withCtx(() => [
-      (openBlock(), createBlock(resolveDynamicComponent(_ctx.tag), {
-        class: normalizeClass(_ctx.classes),
-        style: normalizeStyle(_ctx.styles),
+      (openBlock(), createBlock(resolveDynamicComponent(_ctx.tag), mergeProps({
+        class: _ctx.classes,
+        style: _ctx.styles,
         ref: "root",
         onClick: _ctx.onClick,
         "aria-pressed": "false",
         disabled: _ctx.disabled
-      }, {
+      }, _ctx.$attrs), {
         default: withCtx(() => [
           createElementVNode("div", _hoisted_1$b, null, 512),
           renderSlot(_ctx.$slots, "default"),
           _ctx.isTouch ? (openBlock(), createElementBlock("div", _hoisted_2$a)) : createCommentVNode("v-if", true)
         ]),
         _: 3
-      }, 8, ["class", "style", "onClick", "disabled"]))
+      }, 16, ["class", "style", "onClick", "disabled"]))
     ]),
     _: 3
   }, 8, ["isTouch"]);
@@ -4427,17 +4428,17 @@ var SelectHelperText = {
     helptextValidation: Boolean,
     helptext: String
   },
-  setup(props) {
+  setup(props, { expose, attrs }) {
     const uiState = reactive({
       classes: {
         "mdc-select-helper-text": true,
-        "mdc-select-helper-text--persistent": props.helptextPersistent,
+        "mdc-select-helper-text--validation-msg-persistent": props.helptextPersistent,
         "mdc-select-helper-text--validation-msg": props.helptextValidation
       },
-      attrs: { "aria-hidden": "true" },
-      myHelptext: props.helptext,
-      foundation: {}
+      attrs: {},
+      myHelptext: props.helptext
     });
+    const foundation = ref();
     const adapter = {
       addClass: (className) => uiState.classes = { ...uiState.classes, [className]: true },
       removeClass: (className) => {
@@ -4445,6 +4446,10 @@ var SelectHelperText = {
         uiState.classes = rest;
       },
       hasClass: (className) => Boolean(uiState.classes[className]),
+      getAttr: (attribute) => {
+        var _a;
+        return (_a = uiState.attrs[attribute]) != null ? _a : attrs[attribute];
+      },
       setAttr: (attribute, value) => uiState.attrs = { ...uiState.attrs, [attribute]: value },
       removeAttr: (attribute) => {
         const { [attribute]: removed, ...rest } = uiState.attrs;
@@ -4454,18 +4459,21 @@ var SelectHelperText = {
         uiState.myHelptext = content;
       }
     };
-    watch(() => props.helptextPersistent, (nv) => uiState.foundation.setPersistent(nv));
-    watch(() => props.helptextValidation, (nv) => uiState.foundation.setValidation(nv));
+    watch(() => props.helptextPersistent, (nv) => foundation.value.setPersistent(nv));
+    watch(() => props.helptextValidation, (nv) => foundation.value.setValidation(nv));
     watch(() => props.helptext, (nv) => uiState.myHelptext = nv);
     onMounted(() => {
-      uiState.foundation = new MDCSelectHelperTextFoundation(adapter);
-      uiState.foundation.init();
+      foundation.value = new MDCSelectHelperTextFoundation(adapter);
+      foundation.value.init();
     });
     onBeforeUnmount(() => {
-      uiState.foundation.destroy();
+      foundation.value.destroy();
     });
+    expose({ foundation });
     return () => {
-      return h("p", { class: uiState.classes }, [uiState.myHelptext]);
+      return h("p", { class: uiState.classes, ...uiState.attrs }, [
+        uiState.myHelptext
+      ]);
     };
   }
 };
@@ -4476,7 +4484,7 @@ var SelectIcon = {
   props: {
     icon: String
   },
-  setup(props, { emit }) {
+  setup(props, { emit, expose }) {
     const uiState = reactive({
       classes: {
         "material-icons": true,
@@ -4484,10 +4492,10 @@ var SelectIcon = {
       },
       styles: {},
       rootAttrs: {},
-      rootListeners: {},
-      foundation: {}
+      rootListeners: {}
     });
     const root = ref();
+    const foundation = ref();
     const adapter = {
       getAttr: (attribute) => uiState.rootAttrs[attribute],
       setAttr: (attribute, value) => uiState.rootAttrs = { ...uiState.rootAttrs, [attribute]: value },
@@ -4519,12 +4527,13 @@ var SelectIcon = {
       }
     };
     onMounted(() => {
-      uiState.foundation = new MDCSelectIconFoundation(adapter);
-      uiState.foundation.init();
+      foundation.value = new MDCSelectIconFoundation(adapter);
+      foundation.value.init();
     });
     onBeforeUnmount(() => {
-      uiState.foundation.destroy();
+      foundation.value.destroy();
     });
+    expose({ foundation });
     return () => {
       return h("i", {
         ref: root,
@@ -4617,14 +4626,10 @@ var script$9 = {
       foundation.layoutOptions();
       uiState.menu.layout();
     };
-    const selectedTextAttributes = computed(() => {
-      const attributes = { ...uiState.selTextAttrs };
-      if (props.helptext) {
-        attributes["aria-controls"] = uiState.helpId;
-        attributes["aria-describedBy"] = uiState.helpId;
-      }
-      return attributes;
-    });
+    if (props.helptext) {
+      uiState.selectAnchorAttrs["aria-controls"] = uiState.helpId;
+      uiState.selectAnchorAttrs["aria-describedBy"] = uiState.helpId;
+    }
     const adapter = {
       getMenuItemAttr: (menuItem, attribute) => menuItem.getAttribute(attribute),
       setSelectedText: (text) => uiState.selectedTextContent = text,
@@ -4738,7 +4743,6 @@ var script$9 = {
         leadingIcon: (_b = uiState.leadingIconEl) == null ? void 0 : _b.foundation
       });
       refreshIndex();
-      foundation = new MDCSelectFoundation(adapter);
       foundation.init();
       labelElement = uiState.root.querySelector(".mdc-floating-label");
     });
@@ -4757,7 +4761,6 @@ var script$9 = {
       layoutOptions,
       rippleClasses,
       rippleStyles,
-      selectedTextAttrs: selectedTextAttributes,
       handleMenuItemAction,
       refreshIndex,
       setFixedPosition,
@@ -5428,7 +5431,7 @@ function render$7(_ctx, _cache, $props, $setup, $data, $options) {
       createElementVNode("div", _hoisted_1$4, [
         _ctx.showMessage ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
           createTextVNode(toDisplayString(_ctx.message), 1)
-        ], 2112)) : (openBlock(), createElementBlock("span", _hoisted_2$3, "\xA0"))
+        ], 64)) : (openBlock(), createElementBlock("span", _hoisted_2$3, "\xA0"))
       ], 512),
       createElementVNode("div", _hoisted_3$3, [
         _ctx.actionText ? (openBlock(), createElementBlock("button", _hoisted_4$2, [
