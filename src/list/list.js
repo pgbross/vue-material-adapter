@@ -1,125 +1,72 @@
 import { closest, matches } from '@material/dom/ponyfill.js';
-import { MDCListFoundation } from '@material/list/foundation.js';
 import {
-  // computed,
+  cssClasses,
+  MDCListFoundation,
+  strings,
+} from '@material/list/index.js';
+import {
+  h,
   onBeforeUnmount,
   onMounted,
   provide,
   reactive,
   ref,
-  toRefs,
   watch,
 } from 'vue';
 import { emitCustomEvent } from '../base/index.js';
-
-const { strings, cssClasses } = MDCListFoundation;
-
-const getPrimaryText = item => {
-  const primaryText = item.querySelector(
-    `.${cssClasses.LIST_ITEM_PRIMARY_TEXT_CLASS}`,
-  );
-  if (primaryText) {
-    return primaryText.textContent || '';
-  }
-
-  const singleLineText = item.querySelector(
-    `.${cssClasses.LIST_ITEM_TEXT_CLASS}`,
-  );
-  return (singleLineText && singleLineText.textContent) || '';
-};
 
 export default {
   name: 'mcw-list',
 
   props: {
-    nonInteractive: { type: Boolean, default: false },
-    dense: Boolean,
-    avatarList: Boolean,
-    twoLine: Boolean,
-    singleSelection: Boolean,
+    multiSelectable: Boolean,
     wrapFocus: Boolean,
     textualList: Boolean,
     modelValue: { type: [String, Number, Array] },
-    tag: { type: String, default: 'ul' },
-    ariaOrientation: { type: String, default: 'vertical' },
-    thumbnailList: Boolean,
-    iconList: Boolean,
-    videoList: Boolean,
     typeAhead: Boolean,
+    vertical: { typee: Boolean, default: () => true },
+    role: { type: String },
   },
 
-  setup(props, { emit }) {
+  setup(props, { emit, slots, expose }) {
     const uiState = reactive({
-      classes: {
-        'mdc-list': 1,
-        'mdc-list--dense': props.dense,
-        'mdc-list--avatar-list': props.avatarList,
-        'mdc-list--two-line': props.twoLine,
-        'mdc-list--non-interactive': props.nonInteractive,
-        'mdc-list--textual-list': props.textualList,
-        'mdc-list--icon-list': props.iconList,
-        'mdc-list--thumbnail-list': props.thumbnailList,
-        'mdc-list--video-list': props.videoList,
-      },
-      rootAttrs: { 'aria-orientation': props.ariaOrientation },
+      classes: { 'mdc-list': true },
       listn: 0,
-      listRoot: undefined,
+
+      rootAttrs: {
+        'aria-orientation': props.vertical ? 'vertical' : 'horizontal',
+      },
     });
 
-    const singleSelection = ref(props.singleSelection);
-    // const selectedIndex = ref(props.modelValue);
+    const listRoot = ref();
+
+    if (props.multiSelectable) {
+      uiState.rootAttrs['aria-multiselectable'] = 'true';
+    }
 
     let foundation;
     let slotObserver;
+    const isInteractive = props.role === 'listbox' || props.role === 'menu';
 
-    if (singleSelection.value) {
-      uiState.rootAttrs.role = 'listbox';
-    }
-    const listItems = ref({});
+    // hash of child list items so we can set classes and attributes
+    const listItems = {};
 
-    // keep a hash of child list items
-    // so we can set classes and attributes
-    const registerListItem = item => {
-      listItems.value[item.itemId] = item;
-    };
-
-    provide('registerListItem', registerListItem);
-
-    // const selIndex = computed({
-    //   get() {
-    //     return selectedIndex.value;
-    //   },
-    //   set(nv) {
-    //     selectedIndex.value = nv;
-    //     emit('update:modelValue', nv);
-    //   },
-    // });
-
-    const setSingleSelection = isSingleSelectionList => {
-      singleSelection.value = isSingleSelectionList;
-      foundation.setSingleSelection(isSingleSelectionList);
-    };
-
-    const setSelectedIndex = index => {
-      foundation.setSelectedIndex(index);
-    };
-
-    const getSelectedIndex = () => foundation.getSelectedIndex();
-
-    // keep list of child elements that will have their item id in a data attribute
-    // so we can find the listItem from events or by index.
-
+    // list of child elements that will have their item id in a data attribute
+    // used to find the listItem from events or by index. Importantly these are in DOM order.
     const listElements = ref([]);
 
-    // all the child list elements
-    // may be refreshed if the list items are rerendered for example
-    const updateListElements = () => {
-      const elements = Array.prototype.slice.call(
-        uiState.listRoot.querySelectorAll(`.${cssClasses.LIST_ITEM_CLASS}`),
-      );
-
-      listElements.value = elements;
+    // called initially, and when the DOM tree changes
+    const updateListElements = rootElement => {
+      listElements.value = [
+        ...rootElement.querySelectorAll(`.${cssClasses.LIST_ITEM_CLASS}`),
+      ];
     };
+
+    // expose data and methods to children (list items)
+    provide('mcwList', {
+      isInteractive,
+      registerListItem: item => (listItems[item.itemId] = item),
+    });
 
     // find the list item by index.
     // The list elements are in DOM order, so find it by index,
@@ -128,111 +75,86 @@ export default {
       const element = listElements.value[index];
       if (element) {
         const myItemId = element.dataset.myitemid;
-        return listItems.value[myItemId];
+        return listItems[myItemId];
       }
-    };
-
-    // find the index of a list item from the event target
-    const getListItemIndex = event_ => {
-      const myItemId = event_.target.dataset.myitemid;
-
-      // if clicked on a list item then just search
-      if (myItemId !== void 0) {
-        const lei = listElements.value.findIndex(
-          ({ dataset: { myitemid } }) => myitemid === myItemId,
-        );
-
-        return lei;
-      }
-
-      // if the click wasnt on a list item
-      // search up the DOM
-
-      const eventTarget = event_.target;
-      const nearestParent = closest(
-        eventTarget,
-        `.${cssClasses.LIST_ITEM_CLASS}, .${cssClasses.ROOT}`,
-      );
-
-      // Get the index of the element if it is a list item.
-      if (
-        nearestParent &&
-        matches(nearestParent, `.${cssClasses.LIST_ITEM_CLASS}`)
-      ) {
-        return listElements.value.indexOf(nearestParent);
-      }
-
-      return -1;
     };
 
     const layout = () => {
-      foundation.setVerticalOrientation(props.ariaOrientation == 'vertical');
+      foundation.setVerticalOrientation(props.vertical);
 
       // List items need to have at least tabindex=-1 to be focusable.
-      for (const ele of Array.prototype.slice.call(
-        uiState.listRoot.querySelectorAll('.mdc-list-item:not([tabindex])'),
+      for (const itemElement of listRoot.value.querySelectorAll(
+        '.mdc-list-item:not([tabindex])',
       )) {
-        ele.setAttribute('tabindex', -1);
+        const id = itemElement.dataset.myitemid;
+        const item = listItems[id];
+        item.setAttribute('tabindex', -1);
       }
 
       // Child button/a elements are not tabbable until the list item is focused.
-      for (const ele of Array.prototype.slice.call(
-        uiState.listRoot.querySelectorAll(strings.FOCUSABLE_CHILD_ELEMENTS),
-      ))
-        ele.setAttribute('tabindex', -1);
+      for (const focusableChildElements of listRoot.value.querySelectorAll(
+        strings.FOCUSABLE_CHILD_ELEMENTS,
+      )) {
+        focusableChildElements.setAttribute('tabindex', -1);
+      }
 
+      foundation.setUseSelectedAttribute(true);
       foundation.layout();
     };
 
     const initializeListType = () => {
-      const checkboxListItems = uiState.listRoot.querySelectorAll(
+      if (isInteractive) {
+        const selection = [
+          ...listRoot.value.querySelectorAll(strings.SELECTED_ITEM_SELECTOR),
+        ].map(listItem => listElements.value.indexOf(listItem));
+
+        if (matches(listRoot.value, strings.ARIA_MULTI_SELECTABLE_SELECTOR)) {
+          foundation.setSelectedIndex(selection);
+        } else if (selection.length > 0) {
+          foundation.setSelectedIndex(selection[0]);
+        }
+        return;
+      }
+
+      const checkboxListItems = listRoot.value.querySelectorAll(
         strings.ARIA_ROLE_CHECKBOX_SELECTOR,
       );
 
-      const radioSelectedListItem = uiState.listRoot.querySelector(
+      const radioSelectedListItem = listRoot.value.querySelector(
         strings.ARIA_CHECKED_RADIO_SELECTOR,
       );
 
       if (checkboxListItems.length > 0) {
-        const preselectedItems = uiState.listRoot.querySelectorAll(
+        const preselectedItems = listRoot.value.querySelectorAll(
           strings.ARIA_CHECKED_CHECKBOX_SELECTOR,
         );
 
-        setSelectedIndex(
+        foundation.setSelectedIndex(
           Array.prototype.map.call(preselectedItems, listItem =>
             listElements.value.indexOf(listItem),
           ),
         );
       } else if (radioSelectedListItem) {
-        setSelectedIndex(listElements.value.indexOf(radioSelectedListItem));
+        foundation.setSelectedIndex(
+          listElements.value.indexOf(radioSelectedListItem),
+        );
       }
     };
 
-    const setEnabled = (itemIndex, isEnabled) => {
-      foundation.setEnabled(itemIndex, isEnabled);
-    };
-
-    const typeaheadMatchItem = (nextChar, startingIndex) => {
-      return foundation.typeaheadMatchItem(
-        nextChar,
-        startingIndex,
-        /** skipFocus */ true,
-      );
-    };
-
     const handleFocusInEvent = event_ => {
-      const index = getListItemIndex(event_);
+      const index = getListItemIndex(event_, listElements.value);
       foundation.handleFocusIn(event_, index);
     };
 
     const handleFocusOutEvent = event_ => {
-      const index = getListItemIndex(event_);
+      const index = getListItemIndex(event_, listElements.value);
       foundation.handleFocusOut(event_, index);
     };
 
     const handleKeydownEvent = event_ => {
-      const index = getListItemIndex(event_);
+      const index = getListItemIndex(event_, listElements.value);
       const target = event_.target;
+
       foundation.handleKeydown(
         event_,
         target.classList.contains(cssClasses.LIST_ITEM_CLASS),
@@ -241,55 +163,43 @@ export default {
     };
 
     const handleClickEvent = event_ => {
-      const index = getListItemIndex(event_);
-      const target = event_.target;
+      const index = getListItemIndex(event_, listElements.value);
 
-      // Toggle the checkbox only if it's not the target of the event, or the checkbox will have 2 change events.
-      const toggleCheckbox = !matches(target, strings.CHECKBOX_RADIO_SELECTOR);
-      foundation.handleClick(index, toggleCheckbox);
+      const isCheckboxAlreadyUpdatedInAdapter = matches(
+        event_.target,
+        strings.CHECKBOX_RADIO_SELECTOR,
+      );
+      foundation.handleClick(index, isCheckboxAlreadyUpdatedInAdapter, event_);
     };
-
-    // set up the listeners and bind in the template with v-on
-    const rootListeners = {
-      click: event => handleClickEvent(event),
-      focusin: event => {
-        handleFocusInEvent(event);
-      },
-      focusout: event => {
-        handleFocusOutEvent(event);
-      },
-      keydown: event => handleKeydownEvent(event),
-    };
-
-    const typeaheadInProgress = () => foundation.isTypeaheadInProgress();
 
     const adapter = {
-      addClassForElementIndex: (index, className) => {
-        const listItem = getListItemByIndex(index);
-        listItem?.classList.add(className);
-      },
+      addClassForElementIndex: (index, className) =>
+        getListItemByIndex(index)?.addClass(className),
+
       focusItemAtIndex: index => {
         const element = listElements.value[index];
         if (element) {
           element.focus();
         }
       },
-      getAttributeForElementIndex: (index, attribute) => {
-        const listItem = getListItemByIndex(index);
 
-        return listItem?.getAttribute(attribute);
-      },
+      getAttributeForElementIndex: (index, attribute) =>
+        getListItemByIndex(index)?.getAttribute(attribute),
 
       getFocusedElementIndex: () =>
         listElements.value.indexOf(document.activeElement),
 
       getListItemCount: () => listElements.value.length,
 
-      getPrimaryTextAtIndex: index => getPrimaryText(listElements.value[index]),
+      getPrimaryTextAtIndex: index =>
+        getListItemByIndex(index)?.getPrimaryText(),
 
       hasCheckboxAtIndex: index => {
         const listItem = listElements.value[index];
-        return listItem && !!listItem.querySelector(strings.CHECKBOX_SELECTOR);
+        const returnValue =
+          listItem && !!listItem.querySelector(strings.CHECKBOX_SELECTOR);
+
+        return returnValue;
       },
 
       hasRadioAtIndex: index => {
@@ -300,29 +210,25 @@ export default {
       isCheckboxCheckedAtIndex: index => {
         const listItem = listElements.value[index];
         const toggleElement = listItem.querySelector(strings.CHECKBOX_SELECTOR);
-        return toggleElement.checked;
+        return toggleElement?.checked;
       },
 
       isFocusInsideList: () => {
-        const root = uiState.listRoot;
+        const root = listRoot.value;
         return (
-          root &&
           root !== document.activeElement &&
-          root.contains(document.activeElement)
+          root?.contains(document.activeElement)
         );
       },
 
-      isRootFocused: () => document.activeElement === uiState.listRoot,
+      isRootFocused: () => document.activeElement === listRoot.value,
 
-      listItemAtIndexHasClass: (index, className) => {
-        const listItem = getListItemByIndex(index);
-
-        listItem?.classList.contains(className);
-      },
+      listItemAtIndexHasClass: (index, className) =>
+        getListItemByIndex(index)?.hasClass(className),
 
       notifyAction: index => {
         emitCustomEvent(
-          uiState.listRoot,
+          listRoot.value,
           strings.ACTION_EVENT,
           { index },
           /** shouldBubble */ true,
@@ -335,15 +241,19 @@ export default {
         }
       },
 
-      removeClassForElementIndex: (index, className) => {
-        const listItem = getListItemByIndex(index);
-        listItem?.classList.remove(className);
+      notifySelectionChange: changedIndices => {
+        emit(
+          strings.SELECTION_CHANGE_EVENT.toLowerCase(),
+          { changedIndices },
+          /** shouldBubble */ true,
+        );
       },
 
-      setAttributeForElementIndex: (index, attribute, value) => {
-        const listItem = getListItemByIndex(index);
-        listItem?.setAttribute(attribute, value);
-      },
+      removeClassForElementIndex: (index, className) =>
+        getListItemByIndex(index)?.removeClass(className),
+
+      setAttributeForElementIndex: (index, attribute, value) =>
+        getListItemByIndex(index)?.setAttribute(attribute, value),
 
       setCheckedCheckboxOrRadioAtIndex: (index, isChecked) => {
         const listItem = listElements.value[index];
@@ -352,8 +262,7 @@ export default {
         );
         toggleElement && (toggleElement.checked = isChecked);
 
-        const event = document.createEvent('Event');
-        event.initEvent('update:modelValue', true, true);
+        const event = new CustomEvent('update:modelValue', [true, false]);
         toggleElement?.dispatchEvent(event);
       },
 
@@ -363,25 +272,17 @@ export default {
           element.querySelectorAll(strings.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX),
         );
         for (const element_ of listItemChildren) {
-          const listItem =
-            listItems.value[element_.dataset.myitemid] ?? element_;
+          const listItem = listItems[element_.dataset.myitemid] ?? element_;
 
           listItem.setAttribute('tabindex', tabIndexValue);
         }
       },
     };
 
-    // watch(
-    //   () => props.singleSelection,
-    //   nv => foundation.setSingleSelection(nv),
-    // );
-
     watch(
       () => props.modelValue,
       nv => {
-        if (Array.isArray(nv)) {
-          foundation.setSelectedIndex(nv);
-        } else if (props.modelValue != nv) {
+        if (Array.isArray(nv) || props.modelValue != nv) {
           foundation.setSelectedIndex(nv);
         }
       },
@@ -393,8 +294,8 @@ export default {
     );
 
     watch(
-      () => props.ariaOrientation,
-      nv => foundation.setVerticalOrientation(nv === 'vertical'),
+      () => props.vertical,
+      nv => foundation.setVerticalOrientation(nv),
     );
 
     watch(
@@ -402,53 +303,48 @@ export default {
       nv => foundation.setHasTypeahead(nv),
     );
 
+    const ensureFocusable = () => {
+      if (
+        isInteractive &&
+        !listRoot.value.querySelector(`.mdc-list-item[tabindex="0"]`)
+      ) {
+        const index = getInitialFocusIndex(
+          foundation,
+          listRoot.value,
+          listElements.value,
+        );
+        if (index !== -1) {
+          listElements.value[index].tabIndex = 0;
+        }
+      }
+    };
+
     onMounted(() => {
-      updateListElements();
+      updateListElements(listRoot.value);
       foundation = new MDCListFoundation(adapter);
       foundation.init();
 
-      // if a single selection list need to ensure the selected item has the selected or activated class
-      if (
-        singleSelection.value &&
-        typeof props.modelValue === 'number' &&
-        !Number.isNaN(props.modelValue)
-      ) {
-        const index = props.modelValue;
-        const hasSelectedClass = adapter.listItemAtIndexHasClass(
-          index,
-          cssClasses.LIST_ITEM_SELECTED_CLASS,
-        );
-        const hasActivatedClass = adapter.listItemAtIndexHasClass(
-          index,
-          cssClasses.LIST_ITEM_ACTIVATED_CLASS,
-        );
-        if (!(hasSelectedClass || hasActivatedClass)) {
-          adapter.addClassForElementIndex(
-            props.modelValue,
-            'mdc-list-item--selected',
-          );
-        }
-        adapter.setAttributeForElementIndex(index, 'tabindex', 0);
-        foundation.setSingleSelection(true);
-        foundation.setSelectedIndex(index);
-      }
+      setSelectedIfSingleSelectionList(props, foundation, adapter);
 
+      const { wrapFocus, typeAhead, vertical } = props;
       layout();
       initializeListType();
 
-      foundation.setWrapFocus(props.wrapFocus);
-      foundation.setVerticalOrientation(props.ariaOrientation === 'vertical');
+      ensureFocusable();
 
-      if (props.typeAhead) {
-        foundation.setHasTypeahead(props.typeAhead);
+      foundation.setWrapFocus(wrapFocus);
+      foundation.setVerticalOrientation(vertical);
+
+      if (typeAhead) {
+        foundation.setHasTypeahead(typeAhead);
       }
 
       // the list content could change outside of this component
       // so use a mutation observer to trigger an update
       slotObserver = new MutationObserver(() => {
-        updateListElements();
+        updateListElements(listRoot.value);
       });
-      slotObserver.observe(uiState.listRoot, {
+      slotObserver.observe(listRoot.value, {
         childList: true,
         // subtree: true,
       });
@@ -459,20 +355,133 @@ export default {
       foundation.destroy();
     });
 
-    return {
-      ...toRefs(uiState),
-      listItems,
+    expose({
+      setSingleSelection: isSingleSelectionList =>
+        foundation.setSingleSelection(isSingleSelectionList),
+      setSelectedIndex: index => foundation.setSelectedIndex(index),
+      getSelectedIndex: () => foundation.getSelectedIndex(),
+      setEnabled: (itemIndex, isEnabled) =>
+        foundation.setEnabled(itemIndex, isEnabled),
+      typeaheadMatchItem: (nextChar, startingIndex) =>
+        foundation.typeaheadMatchItem(
+          nextChar,
+          startingIndex,
+          /** skipFocus */ true,
+        ),
+      typeaheadInProgress: () => foundation.isTypeaheadInProgress(),
       listElements,
-      rootListeners,
-      layout,
-      setEnabled,
-      typeaheadMatchItem,
-      typeaheadInProgress,
-      // selIndex,
-      getSelectedIndex,
-      setSelectedIndex,
-      getPrimaryText,
-      setSingleSelection,
+      getListItemByIndex,
+      getListElementByIndex: index => listElements.value[index],
+      getListElementIndex: element => {
+        return listElements.value.findIndex(element_ => element_ == element);
+      },
+      getListItemCount: () => listElements.value.length,
+      focus: () => {
+        listRoot.value.focus();
+      },
+    });
+
+    return () => {
+      return h(
+        'ul',
+        {
+          ref: listRoot,
+          class: uiState.classes,
+          onClick: handleClickEvent,
+          onKeydown: handleKeydownEvent,
+          onFocusin: handleFocusInEvent,
+          onFocusout: handleFocusOutEvent,
+          role: 'role',
+          ...uiState.rootAttrs,
+        },
+        slots.default(),
+      );
     };
   },
 };
+
+// ===
+// Private functions
+// ===
+
+// find the index of a list item from the event target
+const getListItemIndex = (eventOrElement, listElements) => {
+  const { target } = eventOrElement;
+
+  if (target) {
+    const myItemId = target.dataset.myitemid;
+
+    // if clicked on a list item then just search
+    if (myItemId !== undefined) {
+      const listElementIndex = listElements.findIndex(
+        ({ dataset: { myitemid } }) => myitemid === myItemId,
+      );
+
+      return listElementIndex;
+    }
+  }
+
+  // if the click wasnt on a list item
+  // or we were given an element then search up the DOM
+
+  const element = target ?? eventOrElement;
+  const nearestParent = closest(
+    element,
+    `.${cssClasses.LIST_ITEM_CLASS}, .${cssClasses.ROOT}`,
+  );
+
+  // Get the index of the element if it is a list item.
+  if (
+    nearestParent &&
+    matches(nearestParent, `.${cssClasses.LIST_ITEM_CLASS}`)
+  ) {
+    return listElements.value.indexOf(nearestParent);
+  }
+
+  return -1;
+};
+
+const getInitialFocusIndex = (foundation, rootElement, listElements) => {
+  const selectedIndex = foundation.getSelectedIndex();
+
+  if (Array.isArray(selectedIndex) && selectedIndex.length > 0) {
+    return selectedIndex[0];
+  }
+  if (typeof selectedIndex === 'number' && selectedIndex !== -1) {
+    return selectedIndex;
+  }
+
+  const element = rootElement.querySelector(
+    `.mdc-list-item:not(.mdc-list-item--disabled)`,
+  );
+  if (element === null) {
+    return -1;
+  }
+  return getListItemIndex(element, listElements);
+};
+
+function setSelectedIfSingleSelectionList(props, foundation, adapter) {
+  const { modelValue, multiSelectable } = props;
+  // if a single selection list need to ensure the selected item has the selected or activated class
+  if (
+    multiSelectable != true &&
+    typeof modelValue === 'number' &&
+    !Number.isNaN(modelValue)
+  ) {
+    const index = modelValue;
+    const hasSelectedClass = adapter.listItemAtIndexHasClass(
+      index,
+      cssClasses.LIST_ITEM_SELECTED_CLASS,
+    );
+    const hasActivatedClass = adapter.listItemAtIndexHasClass(
+      index,
+      cssClasses.LIST_ITEM_ACTIVATED_CLASS,
+    );
+    if (!(hasSelectedClass || hasActivatedClass)) {
+      adapter.addClassForElementIndex(modelValue, 'mdc-list-item--selected');
+    }
+    adapter.setAttributeForElementIndex(index, 'tabindex', 0);
+    foundation.setSingleSelection(true);
+    foundation.setSelectedIndex(index);
+  }
+}

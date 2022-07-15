@@ -5,5 +5,17 @@ export default {
   computed: {},
 
   mounted() {},
-  methods: {},
+  methods: {
+    addEventListenerHandlerFn(event, handler) {
+      const section = document.querySelector('.mdc-drawer-app-content');
+
+      section?.addEventListener(event, handler);
+    },
+
+    removeEventListenerHandlerFn(event, handler) {
+      const section = document.querySelector('.mdc-drawer-app-content');
+
+      section?.removeEventListener(event, handler);
+    },
+  },
 };

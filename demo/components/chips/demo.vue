@@ -2,21 +2,27 @@
   <div class>
     <section class="mcw-demo">
       <mcw-chip-set>
-        <mcw-chip>Chip One</mcw-chip>
-        <mcw-chip>Chip Two</mcw-chip>
+        <mcw-chip id="c1" leading-icon="favorite" presentational
+          >Chip One
+        </mcw-chip>
+        <mcw-chip id="c2" trailing-icon="clear_all">Chip Two </mcw-chip>
+
+        <mcw-chip id="c3" disabled trailing-icon="clear_all"
+          >Chip Three
+        </mcw-chip>
       </mcw-chip-set>
     </section>
 
     <section class="mcw-demo">
-      <div class="mdc-typography--headline6">Input Chips</div>
-      <mcw-chip-set input>
+      <div class="mdc-typography--headline6">Filter Chips</div>
+      <mcw-chip-set role="listbox" ref="filters">
         <mcw-chip id="jane-chip" leading-icon="face" trailing-icon="clear"
           >Jane Smith</mcw-chip
         >
-        <mcw-chip leading-icon="face" trailing-icon="clear">John Doe</mcw-chip>
+        <mcw-chip id="john-chip" trailing-icon="clear">John Doe</mcw-chip>
       </mcw-chip-set>
     </section>
-
+    <!--
     <section class="mcw-demo">
       <div class="mdc-typography--headline6">Choice Chips</div>
       <mcw-chip-set choice>
@@ -71,22 +77,25 @@
         <mcw-chip class="custom-chip-secondary">Set Alarm</mcw-chip>
         <mcw-chip class="custom-chip-secondary">Get Directions</mcw-chip>
       </mcw-chip-set>
-    </section>
+    </section> -->
   </div>
 </template>
 
 <style lang="scss" scoped>
+.mcw-demo {
+  padding: 10px;
+}
 // @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
-@use '@material/chips/mixins' as chips;
+// @use '@material/chips/mixins' as chips;
 
-.custom-chip-primary {
-  @include chips.fill-color(#6200ee);
-  @include chips.ink-color(white);
-}
+// .custom-chip-primary {
+//   @include chips.fill-color(#6200ee);
+//   @include chips.ink-color(white);
+// }
 
-.custom-chip-secondary {
-  @include chips.fill-color(white);
-  @include chips.ink-color(#018786);
-  @include chips.outline(2px, solid, #018786);
-}
+// .custom-chip-secondary {
+//   @include chips.fill-color(white);
+//   @include chips.ink-color(#018786);
+//   @include chips.outline(2px, solid, #018786);
+// }
 </style>

@@ -1,6 +1,11 @@
 <template>
   <div class="tooltip-demo">
-    <mcw-tooltip id="tooltip-id">My tooltip 1</mcw-tooltip>
+    <mcw-tooltip
+      id="tooltip-id"
+      :addEventListenerHandlerFn="addEventListenerHandlerFn"
+      :removeEventListenerHandlerFn="removeEventListenerHandlerFn"
+      >My tooltip 1</mcw-tooltip
+    >
     <mcw-tooltip id="tooltip-id2" position="end,above"
       >Another tooltip 2</mcw-tooltip
     >
@@ -16,13 +21,11 @@
         >Rich Button</mcw-button
       >
       <mcw-tooltip id="tooltip-id3" class="mdc-tooltip--rich">
-        <div class="mdc-tooltip__surface">
-          <p class="mdc-tooltip__content">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
-            pretium vitae est et dapibus. Aenean sit amet felis eu lorem
-            fermentum aliquam sit amet sit amet eros.
-          </p>
-        </div>
+        <p class="mdc-tooltip__content">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
+          pretium vitae est et dapibus. Aenean sit amet felis eu lorem fermentum
+          aliquam sit amet sit amet eros.
+        </p>
       </mcw-tooltip>
     </div>
 
@@ -32,7 +35,7 @@
       >
       <mcw-tooltip
         id="tooltip-id4"
-        class="mdc-tooltip--rich"
+        rich
         tabindex="-1"
         data-mdc-tooltip-persistent="true"
       >

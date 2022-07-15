@@ -1,8 +1,8 @@
 <template>
   <div class="mcw-demo mcw-demo--container fab-demo">
     <div>
-      <mcw-fab icon="favorite" @click="onClick" />
-      <mcw-fab mini icon="favorite" />
+      <mcw-fab icon="favorite" @click="onClick" aria-label="my favorite" />
+      <mcw-fab mini icon="favorite" isTouch aria-label="another favorite" />
       <mcw-fab icon="favorite" label="wiffle" />
       <mcw-fab>
         <template #icon>

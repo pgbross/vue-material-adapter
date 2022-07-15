@@ -5,15 +5,19 @@
       text="This is a banner component"
       primary-action="Fix me"
       secondary-action="Learn more"
-      icon="error_outline"
+      icon="help"
       @mdcbanner:closing="onClosing"
+      @mdcbanner:actionclicked="onAction"
     ></mcw-banner>
 
     <br />
     <fieldset class="demo-controls">
       <label>Demo controls</label> <br />
-      <mcw-button outlined @click="onShow">Show Banner</mcw-button>
-      <div>Reason: {{ reason }}</div>
+      <mcw-button outlined @click="showBanner = !showBanner"
+        >Show Banner</mcw-button
+      >
+      <div>Close reason: {{ reason }}</div>
+      <div>Action: {{ action }}</div>
     </fieldset>
   </div>
 </template>

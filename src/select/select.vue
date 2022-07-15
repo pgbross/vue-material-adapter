@@ -63,6 +63,7 @@
         @mdc-menu-surface:opened="handleMenuOpened"
         @mdc-menu-surface:closed="handleMenuClosed"
         role="listbox"
+        type-ahead
       >
         <slot></slot>
       </mcw-menu>

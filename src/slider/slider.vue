@@ -35,7 +35,11 @@
       </div>
 
       <div class="mdc-slider__tick-marks" v-if="tickMarks">
-        <div v-for="mark in marks" :class="mark"></div>
+        <div
+          v-for="(mark, index) in marks"
+          :class="mark"
+          :key="mark + index"
+        ></div>
       </div>
     </div>
     <div

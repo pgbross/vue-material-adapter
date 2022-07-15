@@ -10,8 +10,8 @@ import {
 } from 'vue';
 import { emitCustomEvent } from '../base/index.js';
 import { useRipplePlugin } from '../ripple/ripple-plugin.js';
-import SelectHelperText from './select-helper-text.vue';
-import SelectIcon from './select-icon.vue';
+import SelectHelperText from './select-helper-text.js';
+import SelectIcon from './select-icon.js';
 
 const { strings } = MDCSelectFoundation;
 
@@ -83,17 +83,18 @@ export default {
       };
     });
 
-    const menuItems = computed(() => uiState.menu?.items);
-
     let foundation;
+    let labelElement;
 
     const handleFocus = () => foundation.handleFocus();
     const handleBlur = () => foundation.handleBlur();
+
     const handleClick = event_ => {
       uiState.anchorEl.focus();
       handleFocus();
       foundation.handleClick(getNormalizedXCoordinate(event_));
     };
+
     const handleKeydown = event_ => foundation.handleKeydown(event_);
 
     const handleChange = isOpen =>
@@ -102,6 +103,7 @@ export default {
     const layout = () => foundation.layout();
 
     const handleMenuOpened = () => foundation.handleMenuOpened();
+
     const handleMenuClosed = () => foundation.handleMenuClosed();
 
     const handleMenuItemAction = ({ index }) =>
@@ -112,93 +114,100 @@ export default {
       uiState.menu.layout();
     };
 
-    const selectedTextAttributes = computed(() => {
-      const attributes = { ...uiState.selTextAttrs };
-      if (props.helptext) {
-        attributes['aria-controls'] = uiState.helpId;
-        attributes['aria-describedBy'] = uiState.helpId;
-      }
-      return attributes;
-    });
+    // const selectedTextAttributes = computed(() => {
+    //   const attributes = { ...uiState.selTextAttrs };
+    //   if (props.helptext) {
+    //     attributes['aria-controls'] = uiState.helpId;
+    //     attributes['aria-describedBy'] = uiState.helpId;
+    //   }
+    //   return attributes;
+    // });
+
+    if (props.helptext) {
+      uiState.selectAnchorAttrs['aria-controls'] = uiState.helpId;
+      uiState.selectAnchorAttrs['aria-describedBy'] = uiState.helpId;
+    }
 
     const adapter = {
-      // select methods
-      // getSelectedMenuItem: () => {
-      //   const x = menuItems.value.find(item => {
-      //     const myItemId = item.dataset.myitemid;
-      //     return menuListItems.value[myItemId].classList.contains(
-      //       cssClasses.SELECTED_ITEM_CLASS,
-      //     );
-      //   });
-      //   return x;
-      // },
-
       getMenuItemAttr: (menuItem, attribute) =>
         menuItem.getAttribute(attribute),
 
-      setSelectedText: text => {
-        uiState.selectedTextContent = text;
-      },
+      setSelectedText: text => (uiState.selectedTextContent = text),
+
       isSelectAnchorFocused: () => document.activeElement === uiState.anchorEl,
+
       getSelectAnchorAttr: attribute => uiState.selectAnchorAttrs[attribute],
+
       setSelectAnchorAttr: (attribute, value) =>
         (uiState.selectAnchorAttrs = {
           ...uiState.selectAnchorAttrs,
           [attribute]: value,
         }),
+
       removeSelectAnchorAttr: attribute => {
-        // eslint-disable-next-line no-unused-vars
         const { [attribute]: removed, ...rest } = uiState.selectAnchorAttrs;
         uiState.selectAnchorAttrs = rest;
       },
+
       addMenuClass: className =>
         (uiState.menuClasses = { ...uiState.menuClasses, [className]: true }),
 
       removeMenuClass: className => {
-        // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.menuClasses;
         uiState.menuClasses = rest;
       },
+
       openMenu: () => (uiState.menu.surfaceOpen = true),
+
       closeMenu: () => (uiState.menu.surfaceOpen = false),
+
       getAnchorElement: () => uiState.anchorEl,
+
       setMenuAnchorElement: anchorElement =>
         uiState.menu.setAnchorElement(anchorElement),
+
       setMenuAnchorCorner: anchorCorner =>
         uiState.menu.setAnchorCorner(anchorCorner),
       setMenuWrapFocus: wrapFocus => (uiState.menu.wrapFocus = wrapFocus),
+
       getSelectedIndex: () => {
         const index = uiState.menu?.getSelectedIndex() ?? -1;
         return Array.isArray(index) ? index[0] : index;
       },
-      setSelectedIndex: index => {
-        uiState.menu.setSelectedIndex(index);
-      },
-      focusMenuItemAtIndex: index => menuItems.value[index].focus(),
-      getMenuItemCount: () => menuItems.value.length,
+
+      setSelectedIndex: index => uiState.menu.setSelectedIndex(index),
+
+      focusMenuItemAtIndex: index => uiState.menu.focusItemAtIndex(index),
+
+      getMenuItemCount: () => uiState.menu.getMenuItemCount(),
+
       getMenuItemValues: () =>
-        menuItems.value.map(
-          element => element.getAttribute(strings.VALUE_ATTR) || '',
-        ),
-      getMenuItemTextAtIndex: index => {
-        return menuItems.value[index].textContent;
-      },
+        uiState.menu?.getMenuItemValues(strings.VALUE_ATTR),
+
+      getMenuItemTextAtIndex: index =>
+        uiState.menu?.getMenuItemTextAtIndex(index),
+
       isTypeaheadInProgress: () => uiState.menu.typeaheadInProgress(),
+
       typeaheadMatchItem: (nextChar, startingIndex) =>
         uiState.menu?.typeaheadMatchItem(nextChar, startingIndex),
 
       // common methods
       addClass: className =>
         (uiState.classes = { ...uiState.classes, [className]: true }),
+
       removeClass: className => {
-        // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
+
       hasClass: className => Boolean(rootClasses.value[className]),
+
       setRippleCenter: normalizedX =>
         uiState.lineRippleEl?.setRippleCenter(normalizedX),
+
       activateBottomLine: () => uiState.lineRippleEl?.activate(),
+
       deactivateBottomLine: () => uiState.lineRippleEl?.deactivate(),
 
       notifyChange: value => {
@@ -214,25 +223,32 @@ export default {
 
       // outline methods
       hasOutline: () => props.outlined,
+
       notchOutline: labelWidth => uiState.outlineEl?.notch(labelWidth),
+
       closeOutline: () => uiState.outlineEl?.closeNotch(),
 
       // label methods
       hasLabel: () => !!props.label,
+
       floatLabel: shouldFloat =>
         (uiState.labelEl || uiState.outlineEl)?.float(shouldFloat),
-      getLabelWidth: () => uiState.labelEl?.getWidth() || 0,
+
+      getLabelWidth: () => {
+        return uiState.labelEl?.getWidth() ?? labelElement?.scrollWidth ?? 0;
+      },
+
       setLabelRequired: isRequired => uiState.labelEl?.setRequired(isRequired),
     };
 
     const setFixedPosition = isFixed => uiState.menu.setFixedPosition(isFixed);
 
     const refreshIndex = () => {
-      const items = menuItems.value.map(
-        element => element.getAttribute(strings.VALUE_ATTR) || '',
+      const menuItemValues = uiState.menu?.getMenuItemValues(
+        strings.VALUE_ATTR,
       );
 
-      const index = items.indexOf(props.modelValue);
+      const index = menuItemValues.indexOf(props.modelValue);
       uiState.menu.setSelectedIndex(index);
 
       return index;
@@ -264,15 +280,9 @@ export default {
       // initial sync with DOM
       refreshIndex();
 
-      foundation = new MDCSelectFoundation(adapter);
       foundation.init();
 
-      // do we need a slotObserver here?
-      // this.slotObserver = new MutationObserver(() => this.refreshIndex());
-      // this.slotObserver.observe(this.$refs.native_control, {
-      //   childList: true,
-      //   subtree: true,
-      // });
+      labelElement = uiState.root.querySelector('.mdc-floating-label');
     });
 
     onBeforeUnmount(() => {
@@ -291,7 +301,6 @@ export default {
       layoutOptions,
       rippleClasses,
       rippleStyles,
-      selectedTextAttrs: selectedTextAttributes,
       handleMenuItemAction,
       refreshIndex,
       setFixedPosition,

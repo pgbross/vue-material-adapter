@@ -2,7 +2,7 @@
 <template>
   <!--must be no space between divs-->
   <!-- prettier-ignore -->
-  <div ref="root" :class="classes" role="progressbar" v-bind="rootAttrs">
+  <div ref="root" :class="classes" role="progressbar" v-bind="rootAttributes">
   <div class="mdc-circular-progress__determinate-container">
     <svg
       class="mdc-circular-progress__determinate-circle-graphic"
@@ -14,7 +14,7 @@
     </svg>
   </div>
   <div class="mdc-circular-progress__indeterminate-container">
-    <div class="mdc-circular-progress__spinner-layer">
+    <div class="mdc-circular-progress__spinner-layer" :class="colorClass(index)" v-for="index in colors" :key="index">
 
       <div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-left">
         <svg

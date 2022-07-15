@@ -4,21 +4,20 @@ import {
   onBeforeUnmount,
   onMounted,
   reactive,
-  ref,
+  toRef,
   toRefs,
   watch,
 } from 'vue';
+import { touchWrapper } from '../base/index.js';
 import { useRipplePlugin } from '../ripple/ripple-plugin.js';
 
 export default {
   name: 'mcw-icon-button',
-  // model: {
-  //   prop: 'isOn',
-  //   event: 'change',
-  // },
+  inheritAttrs: false,
   props: {
     modelValue: Boolean,
     disabled: Boolean,
+    isTouch: Boolean,
   },
 
   setup(props, { emit, attrs }) {
@@ -27,29 +26,36 @@ export default {
         'mdc-icon-button': 1,
         'material-icons': 1,
       },
+      root: undefined,
     });
 
-    const root = ref();
     const { CHANGE_EVENT } = MDCIconButtonToggleFoundation.strings;
 
-    const { classes: rippleClasses, styles } = useRipplePlugin(root, {
-      isUnbounded: () => true,
-    });
+    const { classes: rippleClasses, styles } = useRipplePlugin(
+      toRef(uiState, 'root'),
+      {
+        isUnbounded: () => true,
+      },
+    );
 
     let foundation;
 
     const adapter = {
       addClass: className =>
         (uiState.classes = { ...uiState.classes, [className]: true }),
+
       removeClass: className => {
-        // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
+
       hasClass: className => Boolean(uiState.classes[className]),
+
       setAttr: (attributeName, attributeValue) =>
-        root.value.setAttribute(attributeName, attributeValue),
-      getAttr: attributeName => root.value.getAttribute(attributeName),
+        uiState.root.setAttribute(attributeName, attributeValue),
+
+      getAttr: attributeName => uiState.root.getAttribute(attributeName),
+
       notifyChange: eventData => {
         emit(CHANGE_EVENT, eventData);
         emit('update:modelValue', eventData.isOn);
@@ -70,10 +76,7 @@ export default {
       },
     );
 
-    const tag = computed(() => {
-      const isLink = Boolean(attrs.href);
-      return isLink ? 'a' : 'button';
-    });
+    const tag = computed(() => (attrs.href ? 'a' : 'button'));
 
     const onClick = event_ => foundation.handleClick(event_);
 
@@ -88,6 +91,8 @@ export default {
       foundation.destroy();
     });
 
-    return { ...toRefs(uiState), classes, styles, root, tag, onClick };
+    return { ...toRefs(uiState), classes, styles, tag, onClick };
   },
+
+  components: { touchWrapper },
 };

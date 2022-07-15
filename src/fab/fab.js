@@ -1,5 +1,5 @@
 import { computed, reactive, ref, toRefs, watch } from 'vue';
-import { CustomLink } from '../base/index.js';
+import { CustomLink, touchWrapper } from '../base/index.js';
 import { useRipplePlugin } from '../ripple/ripple-plugin.js';
 
 export default {
@@ -9,8 +9,10 @@ export default {
     mini: Boolean,
     exited: Boolean,
     label: String,
+    isTouch: Boolean,
   },
-  components: { CustomLink },
+  inheritAttrs: false,
+  components: { CustomLink, touchWrapper },
   setup(props, { slots }) {
     const root = ref();
     const uiState = reactive({

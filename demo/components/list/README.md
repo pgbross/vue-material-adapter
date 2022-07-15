@@ -5,10 +5,37 @@
 ```html
 <div class="demo-list-example">
   <h3 class="mdc-typography--subtitle1">Single-Line</h3>
-  <mcw-list @update:modelValue="onAction" class="demo-list">
-    <mcw-list-item tabindex="0">Single-line item 1</mcw-list-item>
-    <mcw-list-item>Single-line item 2</mcw-list-item>
-    <mcw-list-item>Single-line item 3</mcw-list-item>
+  <mcw-list
+    v-model="selected"
+    class="demo-list"
+    @mdclist:action="onAction"
+    role="listbox"
+  >
+    <mcw-list-item tabindex="0" name="wiffle" id="id1" start="icon">
+      <template #start>
+        <i class="material-icons">home</i>
+      </template>
+      One Single-line item 1
+    </mcw-list-item>
+
+    <li role="separator" class="mdc-list-divider"></li>
+
+    <mcw-list-item end="icon"
+      >Two Single-line item 2
+
+      <template #tend>
+        <i class="material-icons">home</i>
+      </template>
+    </mcw-list-item>
+    <mcw-list-item end="meta"
+      >Three Single-line item 3
+      <template #end> meta text </template></mcw-list-item
+    >
+
+    <mcw-list-item
+      >Two-line item
+      <template #secondary-text> Other secondary text </template>
+    </mcw-list-item>
   </mcw-list>
 </div>
 ```
@@ -27,61 +54,15 @@ export default {
 
 #### mcw-list
 
-| prop               | Type    | Default  | Description                                                       |
-| ------------------ | ------- | -------- | ----------------------------------------------------------------- |
-| `dense`            | Boolean | false    | dense style                                                       |
-| `two-line`         | Boolean | false    | two-line style                                                    |
-| `avatar-list`      | Boolean | false    | set avatar style list                                             |
-| `non-interactive`  | Boolean | false    | set non-interactive style for hover, focus, and press states      |
-| `single-selection` | Boolean | false    | set single-selection list                                         |
-| `wrap-focus`       | Boolean | false    | wrap to top of list on next element                               |
-| `textualList`      | Boolean | false    | configures lists that start with text                             |
-| `selected-index`   |         |          | the v-model property                                              |
-| `tag`              | String  | ul       | The tag the list is rendered with                                 |
-| `aria-orientation` | String  | VERTICAL | Orientation VERTICAL or HORIZONTAL                                |
-| `thumbnail-list`   | Boolean | false    | configures the leading tile of each row to display smaller images |
-| `icon-list`        | Boolean | false    | configures the leading tile of each row to display icons          |
-| `video-list`       | Boolean | false    | configures the leading tile of each row to display videos         |
-| `type-ahead`       | Boolean | false    | configures the list to use typeahead                              |
-
-### Two-line lists
-
-Add attribute `two-line`
-
-```html
-<mcw-list v-model="selected" two-line class="demo-list">
-  <mcw-list-item
-    >Two-line item
-    <template #secondary-text> <span>Secondary text</span></template>
-  </mcw-list-item>
-
-  <mcw-list-item two-line="Other secondary text">Two-line item </mcw-list-item>
-
-  <mcw-list-item
-    >Two-line item
-    <template #secondary-text> <span>More secondary text</span></template>
-  </mcw-list-item>
-</mcw-list>
-```
-
-### List group
-
-```html
-<div class="mdc-list-group">
-  <h3 class="mdc-list-group__subheader">List 1</h3>
-  <mcw-list v-model="selected" class="demo-list">
-    <mcw-list-item tabindex="0">line item</mcw-list-item>
-    <mcw-list-item>line item</mcw-list-item>
-    <mcw-list-item>line item</mcw-list-item>
-  </mcw-list>
-  <h3 class="mdc-list-group__subheader">List 2</h3>
-  <mcw-list v-model="selected" class="demo-list">
-    <mcw-list-item tabindex="0">line item</mcw-list-item>
-    <mcw-list-item>line item</mcw-list-item>
-    <mcw-list-item>line item</mcw-list-item>
-  </mcw-list>
-</div>
-```
+| prop               | Type    | Default | Description                                                          |
+| ------------------ | ------- | ------- | -------------------------------------------------------------------- |
+| `multi-selectable` | Boolean | false   | support multi selection                                              |
+| `wrap-focus`       | Boolean | false   | wrap to top of list on next element                                  |
+| `textualList`      | Boolean | false   | configures lists that start with text                                |
+| `modelValue`       |         |         | the v-model property                                                 |
+| `vertical`         | String  | true    | VERTICAL if true, else HORIZONTAL                                    |
+| `type-ahead`       | Boolean | false   | configures the list to use typeahead                                 |
+| `role`             | String  |         | `listbox` or `menu` for interactive, else not-set for non-iteractive |
 
 ### List Dividers
 
@@ -97,54 +78,46 @@ Add attribute `two-line`
 </mcw-list>
 ```
 
-or
+### mcw-list-item
+
+| prop       | Type    | Default | Description                        |
+| ---------- | ------- | ------- | ---------------------------------- |
+| `disabled` | Boolean | false   | Set to true to disable item        |
+| `id`       | String  |         | Css id to apply to content element |
+| `start`    | String  |         | Define start slot type             |
+| `end`      | String  |         | Define end slot type               |
+
+> Start types: 'avatar \| icon \| thumbnail \| checkbox \| radio \| switch \| image \| video'  
+> End types: 'icon \| meta \| checkbox \| radio \| switch'
 
 ### Radio buttons
 
 ```html
-<mcw-list v-model="radioSelected" role="radiogroup" class="demo-list">
-  <mcw-list-item role="radio" name="demo-group">
-    <label class="mdc-list-item__text" for="demo-list-radio-item-1"
-      >Option 1</label
-    ></mcw-list-item
-  >
+<mcw-list v-model="selected" class="demo-list" role="listbox">
+  <mcw-list-item end="radio"
+    >Dog
+    <template #end>
+      <mcw-radio
+        v-model="radioSelected"
+        id="dog"
+        radio-classes="my-radio"
+        name="pets"
+        value="dog"
+      ></mcw-radio>
+    </template>
+  </mcw-list-item>
 
-  <mcw-list-item role="radio" aria-checked="true" name="demo-group">
-    <label class="mdc-list-item__text" for="demo-list-radio-item-2"
-      >Option 2</label
-    >
-  </mcw-list-item>
-  <mcw-list-item role="radio" name="demo-group">
-    <label class="mdc-list-item__text" for="demo-list-radio-item-3"
-      >Option 3</label
-    >
-  </mcw-list-item>
-</mcw-list>
-```
-
-### Checkboxes (trailing example)
-
-```html
-<mcw-list
-  v-model="listSelected"
-  role="group"
-  aria-label="List with checkbox items"
-  class="demo-list"
->
-  <mcw-list-item role="checkbox" aria-checked="true" trailing>
-    <label class="mdc-list-item__text" for="demo-list-checkbox-item-1"
-      >Option 1</label
-    >
-  </mcw-list-item>
-  <mcw-list-item role="checkbox" tabindex="0" trailing>
-    <label class="mdc-list-item__text" for="demo-list-checkbox-item-2"
-      >Option 2</label
-    >
-  </mcw-list-item>
-  <mcw-list-item role="checkbox" trailing>
-    <label class="mdc-list-item__text" for="demo-list-checkbox-item-3"
-      >Option 3</label
-    >
+  <mcw-list-item end="radio"
+    >Cat
+    <template #end>
+      <mcw-radio
+        v-model="radioSelected"
+        id="cat"
+        radio-classes="my-radio"
+        name="pets"
+        value="cat"
+      ></mcw-radio>
+    </template>
   </mcw-list-item>
 </mcw-list>
 ```

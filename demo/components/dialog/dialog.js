@@ -18,6 +18,7 @@ export default {
       choices: ['Never gonna give you up', 'Host cross buns', 'None'],
       picked: '',
       hasBeenOpened: false,
+      checkboxSelected: [false, false, true],
     };
   },
 
@@ -34,6 +35,8 @@ export default {
         action !== 'dismiss'
           ? ('Accepted, thanks!', console.log(action))
           : 'Declined... Maybe next time?';
+
+      console.dir(this.checkboxSelected);
     },
     checkValidationAndClose() {
       if (this.valid) {

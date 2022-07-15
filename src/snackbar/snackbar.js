@@ -38,7 +38,6 @@ export default {
 
     const rootClasses = computed(() => {
       return {
-        'mdc-snackbar': 1,
         'mdc-snackbar--leading': props.leading,
         'mdc-snackbar--stacked': props.stacked,
         ...uiState.classes,
@@ -118,16 +117,20 @@ export default {
     const adapter = {
       addClass: className =>
         (uiState.classes = { ...uiState.classes, [className]: true }),
+
       announce: () => announce(uiState.labelEl),
+
       notifyClosed: reason => {
         emit(strings.CLOSED_EVENT.toLowerCase(), reason ? { reason } : {});
         emit('update:modelValue', false);
         emit('hide');
       },
+
       notifyClosing: reason => {
         emit(strings.CLOSING_EVENT, reason ? { reason } : {});
         emit('update:reason', reason);
       },
+
       notifyOpened: () => {
         emit(strings.OPENED_EVENT.toLowerCase(), {});
         emit('update:modelValue', true);
@@ -137,7 +140,6 @@ export default {
       notifyOpening: () => emit(strings.OPENING_EVENT, {}),
 
       removeClass: className => {
-        // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
@@ -161,6 +163,7 @@ export default {
         }
       },
     );
+
     watch(
       () => props.timeoutMs,
       nv => {
@@ -169,6 +172,7 @@ export default {
         }
       },
     );
+
     watch(
       () => props.closeOnEscape,
       nv => foundation.setCloseOnEscape(nv),

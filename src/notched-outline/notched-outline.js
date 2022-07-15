@@ -1,5 +1,5 @@
 import { MDCNotchedOutlineFoundation } from '@material/notched-outline/foundation.js';
-import { onBeforeUnmount, onMounted, reactive, toRefs } from 'vue';
+import { h, onBeforeUnmount, onMounted, reactive, toRef } from 'vue';
 import { mcwFloatingLabel } from '../floating-label/index.js';
 
 const { cssClasses } = MDCNotchedOutlineFoundation;
@@ -8,7 +8,7 @@ export default {
   name: 'mcw-notched-outline',
   components: { mcwFloatingLabel },
 
-  setup(props, { slots }) {
+  setup(props, { slots, expose }) {
     const uiState = reactive({
       outlinedClasses: { 'mdc-notched-outline': true },
       notchStyles: {},
@@ -25,7 +25,6 @@ export default {
         }),
 
       removeClass: className => {
-        // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.outlinedClasses;
         uiState.outlinedClasses = rest;
       },
@@ -34,7 +33,6 @@ export default {
         (uiState.notchStyles = { ...uiState.notchStyles, width: `${width}px` }),
 
       removeNotchWidthProperty: () => {
-        // eslint-disable-next-line no-unused-vars
         const { width: removed, ...rest } = uiState.notchStyles;
         uiState.notchStyles = rest;
       },
@@ -60,6 +58,7 @@ export default {
       return uiState.labelEl?.getWidth();
     };
 
+    expose({ getWidth, shake, float, closeNotch, notch });
     onMounted(() => {
       foundation = new MDCNotchedOutlineFoundation(adapter);
       foundation.init();
@@ -75,13 +74,22 @@ export default {
       foundation.destroy();
     });
 
-    return {
-      ...toRefs(uiState),
-      getWidth,
-      shake,
-      float,
-      closeNotch,
-      notch,
+    const labelReference = toRef(uiState, 'labelEl');
+
+    return () => {
+      const floatingLabel =
+        slots.default &&
+        h(mcwFloatingLabel, { ref: labelReference }, () => [slots.default()]);
+
+      return h('span', { class: uiState.outlinedClasses }, [
+        h('span', { class: 'mdc-notched-outline__leading' }),
+        h(
+          'span',
+          { class: 'mdc-notched-outline__notch', style: uiState.notchStyles },
+          [floatingLabel],
+        ),
+        h('span', { class: 'mdc-notched-outline__trailing' }),
+      ]);
     };
   },
 };

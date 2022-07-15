@@ -8,7 +8,7 @@
 @use "@material/card/mdc-card";
 @use "@material/circular-progress/mdc-circular-progress";
 @use "@material/checkbox/mdc-checkbox";
-@use "@material/chips/mdc-chips";
+@use "@material/chips/styles" as chips;
 @use "@material/data-table/mdc-data-table";
 @use "@material/dialog/mdc-dialog";
 @use "@material/drawer/mdc-drawer";
@@ -21,7 +21,6 @@
 @use "@material/layout-grid/mdc-layout-grid";
 @use "@material/line-ripple/mdc-line-ripple";
 @use "@material/linear-progress/mdc-linear-progress";
-@use "@material/list/mdc-list";
 @use "@material/menu/mdc-menu";
 @use "@material/menu-surface/mdc-menu-surface";
 @use "@material/notched-outline/mdc-notched-outline";
@@ -31,7 +30,7 @@
 @use "@material/segmented-button/styles" as segmentedButton;
 @use "@material/slider/styles" as slider;
 @use "@material/snackbar/mdc-snackbar";
-@use "@material/switch/mdc-switch";
+@use "@material/switch/styles" as switch;
 @use "@material/tab/mdc-tab";
 @use "@material/tab-bar/mdc-tab-bar";
 @use "@material/tab-indicator/mdc-tab-indicator";
@@ -40,3 +39,6 @@
 @use "@material/tooltip/styles" as tooltip;
 @use "@material/top-app-bar/mdc-top-app-bar";
 @use "@material/typography/mdc-typography";
+
+@use "@material/list/evolution-mixins"as list-evolution-mixins;
+@include list-evolution-mixins.core-styles();

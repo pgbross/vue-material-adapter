@@ -1,96 +1,21 @@
 <script src="./list-item.js"></script>
 <template>
   <custom-link ref="root" v-bind="myAttrs" tag="a" :data-myItemId="myItemId">
-    <span class="mdc-list-item__ripple"></span>
+    <span class="mdc-list-item__ripple" v-if="isInteractive"></span>
 
-    <span
-      class="mdc-list-item__graphic"
-      :class="groupClasses"
-      v-if="needGraphic"
-    >
-      <slot name="graphic"
-        ><i class="material-icons" v-if="listIcon">{{ listIcon }}</i></slot
-      >
+    <span class="mdc-list-item__start" v-if="hasStart">
+      <slot name="start"></slot>
     </span>
 
-    <span class="mdc-list-item__graphic" v-else-if="checkbox">
-      <slot name="graphic">
-        <div class="mdc-checkbox">
-          <input type="checkbox" class="mdc-checkbox__native-control" />
-          <div class="mdc-checkbox__background">
-            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-              <path
-                class="mdc-checkbox__checkmark-path"
-                fill="none"
-                d="M1.73,12.91 8.1,19.28 22.79,4.59"
-              />
-            </svg>
-            <div class="mdc-checkbox__mixedmark"></div>
-          </div></div></slot
-    ></span>
-
-    <span class="mdc-list-item__graphic" v-else-if="radio">
-      <slot name="graphic">
-        <div class="mdc-radio">
-          <input
-            class="mdc-radio__native-control"
-            type="radio"
-            value="1"
-            :name="name"
-            :checked="radioChecked"
-          />
-          <div class="mdc-radio__background">
-            <div class="mdc-radio__outer-circle"></div>
-            <div class="mdc-radio__inner-circle"></div>
-          </div></div
-      ></slot>
-    </span>
-
-    <span class="mdc-list-item__text" v-if="isTwoLine">
+    <span class="mdc-list-item__content" :id="id">
       <span class="mdc-list-item__primary-text"><slot></slot></span>
-      <span class="mdc-list-item__secondary-text"
-        ><slot name="secondary-text">{{ twoLine }}</slot></span
-      >
+      <span class="mdc-list-item__secondary-text" v-if="hasSecondaryText"
+        ><slot name="secondary-text"></slot
+      ></span>
     </span>
 
-    <span class="mdc-list-item__text" v-else><slot></slot></span>
-
-    <span class="mdc-list-item__meta" v-if="trailingRadio">
-      <slot name="meta"
-        ><div class="mdc-radio">
-          <input
-            class="mdc-radio__native-control"
-            type="radio"
-            value="1"
-            :name="name"
-            :checked="radioChecked"
-          />
-          <div class="mdc-radio__background">
-            <div class="mdc-radio__outer-circle"></div>
-            <div class="mdc-radio__inner-circle"></div>
-          </div></div
-      ></slot>
-    </span>
-
-    <span class="mdc-list-item__meta" v-else-if="trailingCheckbox">
-      <slot name="meta">
-        <div class="mdc-checkbox">
-          <input type="checkbox" class="mdc-checkbox__native-control" />
-          <div class="mdc-checkbox__background">
-            <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
-              <path
-                class="mdc-checkbox__checkmark-path"
-                fill="none"
-                d="M1.73,12.91 8.1,19.28 22.79,4.59"
-              />
-            </svg>
-            <div class="mdc-checkbox__mixedmark"></div>
-          </div></div
-      ></slot>
-    </span>
-
-    <span class="mdc-list-item__meta" v-else-if="$slots.meta">
-      <slot name="meta"></slot>
+    <span class="mdc-list-item__end" v-if="hasEnd">
+      <slot name="end"></slot>
     </span>
   </custom-link>
 </template>

@@ -7,12 +7,10 @@ import mcwTextfieldHelperText from './textfield-helper-text.vue';
 import mcwTextfieldIcon from './textfield-icon.vue';
 import mcwTextfield from './textfield.vue';
 
-export {
-  mcwTextfield,
-  mcwTextfieldIcon,
-  mcwCharacterCounter,
-  mcwTextfieldHelperText,
-};
+export { default as mcwCharacterCounter } from './character-counter.vue';
+export { default as mcwTextfieldHelperText } from './textfield-helper-text.vue';
+export { default as mcwTextfieldIcon } from './textfield-icon.vue';
+export { default as mcwTextfield } from './textfield.vue';
 
 export default BasePlugin({
   mcwTextfield,

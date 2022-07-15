@@ -36,12 +36,15 @@ export default {
     const adapter = {
       addClass: className =>
         (uiState.classes = { ...uiState.classes, [className]: true }),
+
       forceLayout: () => uiState.root.offsetWidth,
+
       setBufferBarStyle: (styleProperty, value) =>
         (uiState.bufferbarStyles = {
           ...uiState.bufferbarStyles,
           [styleProperty]: value,
         }),
+
       setPrimaryBarStyle: (styleProperty, value) =>
         (uiState.primaryStyles = {
           ...uiState.primaryStyles,
@@ -49,11 +52,12 @@ export default {
         }),
 
       hasClass: className => uiState.root.classList.contains(className),
+
       removeClass: className => {
-        // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
+
       setAttribute: (attributeName, value) =>
         (uiState.rootAttrs = {
           ...uiState.rootAttrs,
@@ -61,10 +65,10 @@ export default {
         }),
 
       removeAttribute: attributeName => {
-        // eslint-disable-next-line no-unused-vars
         const { [attributeName]: removed, ...rest } = uiState.rootAttrs;
         uiState.rootAttrs = rest;
       },
+
       setStyle: (name, value) => {
         uiState.rootStyles = {
           ...uiState.rootStyles,
@@ -81,17 +85,16 @@ export default {
 
         return;
       },
+
       getWidth: () => uiState.root.offsetWidth,
     };
+
+    const openOrClose = nv => foundation[nv ? 'open' : 'close']();
 
     watch(
       () => props.open,
       nv => {
-        if (nv) {
-          foundation.open();
-        } else {
-          foundation.close();
-        }
+        openOrClose(nv);
       },
     );
 
@@ -114,22 +117,23 @@ export default {
       },
     );
 
+    const onTransitionEnd = event => {
+      foundation.handleTransitionEnd(event);
+    };
+
     onMounted(() => {
       foundation = new MDCLinearProgressFoundation(adapter);
       foundation.init();
+
       foundation.setProgress(Number(props.progress));
       foundation.setBuffer(Number(props.buffer));
       foundation.setDeterminate(!props.indeterminate);
 
-      if (props.open) {
-        foundation.open();
-      } else {
-        foundation.close();
-      }
+      openOrClose(props.open);
     });
 
     onBeforeUnmount(() => foundation.destroy());
 
-    return { ...toRefs(uiState) };
+    return { ...toRefs(uiState), onTransitionEnd };
   },
 };

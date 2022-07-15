@@ -1,11 +1,12 @@
 import { MDCSegmentedButtonFoundation } from '@material/segmented-button/index.js';
 import {
   computed,
+  h,
   onBeforeUnmount,
   onMounted,
   provide,
   reactive,
-  toRefs,
+  ref,
   watch,
 } from 'vue';
 
@@ -16,30 +17,32 @@ export default {
     touch: Boolean,
     modelValue: { type: [Number, Array] },
   },
-  setup(props, { emit }) {
+  setup(props, { emit, slots }) {
     const uiState = reactive({
       classes: {
         'mdc-segmented-button--single-select': props.singleSelect,
       },
       styles: {},
-      root: undefined,
       contentEl: undefined,
     });
+
+    const rootElement = ref();
     let foundation;
     let segmentIndex = 0;
 
     const segments_ = [];
 
-    const getSegmentIndex = segment => {
+    const getNextSegmentIndex = segment => {
       const sg = { ...segment, index: segmentIndex++ };
       segments_.push(sg);
       return sg.index;
     };
 
-    provide('getSegmentIdx', getSegmentIndex);
-    provide('isSingleSelect', props.singleSelect);
-
-    provide('isTouch', props.touch);
+    provide('segmented-button', {
+      getNextSegmentIndex,
+      isSingleSelect: props.singleSelect,
+      isTouch: props.touch,
+    });
 
     const mappedSegments = computed(() =>
       segments_.map(({ index, isSelected, getSegmentId }) => ({
@@ -53,11 +56,12 @@ export default {
       foundation.handleSelected(detail);
     };
     const adapter = {
-      hasClass: className => uiState.root.classList.contains(className),
+      hasClass: className => rootElement.value.classList.contains(className),
 
       getSegments: () => {
         return mappedSegments.value;
       },
+
       selectSegment: indexOrSegmentId => {
         const segmentDetail = mappedSegments.value.find(
           _segmentDetail =>
@@ -68,6 +72,7 @@ export default {
           segments_[segmentDetail.index].setSelected();
         }
       },
+
       unselectSegment: indexOrSegmentId => {
         const segmentDetail = mappedSegments.value.find(
           _segmentDetail =>
@@ -78,6 +83,7 @@ export default {
           segments_[segmentDetail.index].setUnselected();
         }
       },
+
       notifySelectedChange: detail => {
         emit('change', detail);
         if (Array.isArray(props.modelValue)) {
@@ -105,7 +111,7 @@ export default {
       foundation = new MDCSegmentedButtonFoundation(adapter);
       foundation.init();
 
-      if (props.singleSelect && props.modelValue !== void 0) {
+      if (props.singleSelect && props.modelValue !== undefined) {
         foundation.selectSegment(props.modelValue);
       }
 
@@ -142,6 +148,20 @@ export default {
       foundation?.destroy();
     });
 
-    return { ...toRefs(uiState), role, onSelected };
+    return () => {
+      return h(
+        'div',
+        {
+          ref: rootElement,
+          class: {
+            'mdc-segmented-button': 1,
+            ...uiState.classes,
+          },
+          role: role.value,
+          onSelected,
+        },
+        [slots.default()],
+      );
+    };
   },
 };

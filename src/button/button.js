@@ -10,12 +10,21 @@ export default defineComponent({
     outlined: Boolean,
     icon: String,
     trailingIcon: String,
+    isTouch: Boolean,
   },
   components: { CustomLink },
   setup(props, { slots }) {
     const root = ref();
 
     const { classes: rippleClasses, styles } = useRipplePlugin(root);
+
+    const haveIcon = computed(() => {
+      return slots.icon ?? props.icon;
+    });
+
+    const haveTrailingIcon = computed(() => {
+      return slots.trailingIcon ?? props.trailingIcon;
+    });
 
     const classes = computed(() => {
       return {
@@ -24,15 +33,9 @@ export default defineComponent({
         'mdc-button--raised': props.raised,
         'mdc-button--unelevated': props.unelevated && !props.raised,
         'mdc-button--outlined': props.outlined,
+        'mdc-button--icon-leading': haveIcon.value,
+        'mdc-button--icon-trailing': haveTrailingIcon.value,
       };
-    });
-
-    const haveIcon = computed(() => {
-      return slots.icon ?? props.icon;
-    });
-
-    const haveTrailingIcon = computed(() => {
-      return slots.trailingIcon ?? props.trailingIcon;
     });
 
     return {

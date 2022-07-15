@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section id="component-section">
     <div :style="'background-image: url(' + icon + ')'" class="demo-icon" />
 
     <div v-if="title" ref="title" class="mdc-typography--headline4">

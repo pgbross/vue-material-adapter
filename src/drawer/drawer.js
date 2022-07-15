@@ -45,32 +45,34 @@ export default {
     const handleTransitionEnd = event_ =>
       foundation.handleTransitionEnd(event_);
 
-    const onChange = event => {
-      emit('update:modelValue', event);
-    };
-
+    const onChange = event => emit('update:modelValue', event);
     const onListAction = () => props.modal && close();
 
     const adapter = {
       addClass: className =>
         (uiState.classes = { ...uiState.classes, [className]: true }),
+
       removeClass: className => {
-        // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
+
       hasClass: className => !!uiState.classes[className],
+
       elementHasClass: (element, className) =>
         element.classList.contains(className),
+
       saveFocus: () => {
         previousFocus_ = document.activeElement;
       },
+
       restoreFocus: () => {
         const previousFocus = previousFocus_?.focus;
         if (previousFocus && uiState.drawer.contains(document.activeElement)) {
           previousFocus_.focus();
         }
       },
+
       focusActiveNavigationItem: () => {
         const activeNavItemElement = uiState.drawer.querySelector(
           `.${MDCListFoundation.cssClasses.LIST_ITEM_ACTIVATED_CLASS}`,
@@ -79,6 +81,7 @@ export default {
           activeNavItemElement.focus();
         }
       },
+
       notifyClose: () => {
         emitCustomEvent(
           uiState.drawer,
@@ -89,6 +92,7 @@ export default {
         emit('update:modelValue', false);
         emit('close');
       },
+
       notifyOpen: () => {
         emitCustomEvent(
           uiState.drawer,
@@ -99,6 +103,7 @@ export default {
         emit('update:modelValue', true);
         emit('open');
       },
+
       trapFocus: () => focusTrap_.trapFocus(),
       releaseFocus: () => focusTrap_.releaseFocus(),
     };
@@ -116,6 +121,7 @@ export default {
 
     onMounted(() => {
       const { DISMISSIBLE, MODAL } = cssClasses;
+
       if (props.dismissible) {
         foundation = new MDCDismissibleDrawerFoundation(adapter);
       } else if (props.modal) {
@@ -125,6 +131,7 @@ export default {
           `mcwDrawer: Failed to instantiate component. Supported variants are ${DISMISSIBLE} and ${MODAL}.`,
         );
       }
+
       foundation.init();
 
       if (props.modal) {

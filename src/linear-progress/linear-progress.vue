@@ -6,8 +6,9 @@
     :style="rootStyles"
     role="progressbar"
     v-bind="rootAttrs"
+    @transitionend="onTransitionEnd"
   >
-    <div ref="buffer" class="mdc-linear-progress__buffer">
+    <div class="mdc-linear-progress__buffer">
       <div
         class="mdc-linear-progress__buffer-bar"
         :style="bufferbarStyles"
@@ -15,16 +16,12 @@
       <div class="mdc-linear-progress__buffer-dots"></div>
     </div>
     <div
-      ref="primary"
       class="mdc-linear-progress__bar mdc-linear-progress__primary-bar"
       :style="primaryStyles"
     >
       <span class="mdc-linear-progress__bar-inner"></span>
     </div>
-    <div
-      ref="secondary"
-      class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar"
-    >
+    <div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
       <span class="mdc-linear-progress__bar-inner"></span>
     </div>
   </div>

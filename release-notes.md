@@ -1,3 +1,7 @@
+### [v5.0.1](#) - This release targets `material-components-web v13.0.0`
+
+- Update adapters for menu, chip, and tooltip
+
 ### [v3.0.3](#) - This release targets `material-components-web v10.0.0`
 
 - Restructure sources to be more friendly for Tree Shaking in consumers of the library.

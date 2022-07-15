@@ -1,123 +1,168 @@
-import { MDCChipSetFoundation } from '@material/chips/chip-set/foundation.js';
-import { MDCChipFoundation } from '@material/chips/chip/foundation.js';
+import { MDCChipSetFoundation } from '@material/chips/chip-set/index.js';
 import { announce } from '@material/dom/announce.js';
-import {
-  onBeforeUnmount,
-  onMounted,
-  provide,
-  reactive,
-  ref,
-  toRefs,
-} from 'vue';
-
-const { strings } = MDCChipFoundation;
+import { onBeforeUnmount, onMounted, provide, reactive, toRefs } from 'vue';
+import { emitCustomEvent } from '../base/index.js';
 
 export default {
   name: 'mcw-chip-set',
   props: {
-    choice: [Boolean],
-    filter: [Boolean],
-    input: [Boolean],
+    multiSelectable: { type: Boolean },
+    orientation: { type: String, default: () => 'horizontal' },
+    overflow: { type: Boolean },
+    role: { type: String, default: () => 'grid' },
   },
 
   setup(props) {
     const uiState = reactive({
-      classes: {
-        'mdc-chip-set': true,
-        'mdc-chip-set--choice': props.choice,
-        'mdc-chip-set--filter': props.filter,
-        'mdc-chip-set--input': props.input,
-      },
-      listn: 0,
+      classes: { 'mdc-evolution-chip-set--overflow': props.overflow },
+      // listn: 0,
       myListeners: {},
+      attrs: {},
       root: undefined,
     });
 
     let foundation;
-    let slotObserver;
+    // let slotObserver;
 
-    const ce = ref([]);
+    const chips = [];
 
-    const addChipElement = item => {
-      ce.value.push(item);
+    if (props.role == 'listbox') {
+      uiState.attrs['aria-orientation'] = props.orientation;
+
+      if (props.multiSelectable) {
+        uiState.attrs['aria-multiselectable'] = 'true';
+      }
+    }
+
+    const registerChip = chip => {
+      chips.push(chip);
     };
-    provide('addChipElement', addChipElement);
+    provide('registerChip', registerChip);
+
+    const isIndexValid = index => {
+      return index > -1 && index < chips.length;
+    };
 
     const adapter = {
       announceMessage: message => {
         announce(message);
       },
-      focusChipPrimaryActionAtIndex: index => {
-        const chip = ce.value[index];
 
-        chip && chip.focusPrimaryAction();
+      emitEvent: (eventName, eventDetail) => {
+        emitCustomEvent(
+          uiState.root,
+          eventName,
+          eventDetail,
+          true /* shouldBubble */,
+        );
       },
-      focusChipTrailingActionAtIndex: index => {
-        const chip = ce.value[index];
-        chip && chip.focusTrailingAction();
+
+      getAttribute: attributeName => uiState.root.getAttribute(attributeName),
+
+      getChipActionsAtIndex: index => {
+        if (!isIndexValid(index)) return [];
+        return chips[index].getActions();
       },
-      getChipListCount: () => {
-        return ce.value.length;
+
+      getChipCount: () => {
+        return chips.length;
       },
-      getIndexOfChipById: chipId => {
-        return ce.value.findIndex(({ id }) => id == chipId);
+
+      getChipIdAtIndex: index => {
+        if (!isIndexValid(index)) {
+          return '';
+        }
+        return chips[index].getElementID();
       },
-      hasClass: className => uiState.root.classList.contains(className),
-      isRTL: () =>
-        window.getComputedStyle(uiState.root).getPropertyValue('direction') ===
-        'rtl',
+
+      getChipIndexById: id =>
+        chips.findIndex(chip => chip.getElementID() === id),
+
+      isChipFocusableAtIndex: (index, action) => {
+        if (!isIndexValid(index)) {
+          return false;
+        }
+        return chips[index].isActionFocusable(action);
+      },
+
+      isChipSelectableAtIndex: (index, action) => {
+        if (!isIndexValid(index)) {
+          return false;
+        }
+        return chips[index].isActionSelectable(action);
+      },
+      isChipSelectedAtIndex: (index, action) => {
+        if (!isIndexValid(index)) return false;
+        return chips.value[index].isActionSelected(action);
+      },
       removeChipAtIndex: index => {
-        if (index >= 0 && index < ce.value.length) {
-          // tell chip to remove itself from the DOM
-          ce.value[index].remove();
-          ce.value.splice(index, 1);
+        if (!isIndexValid(index)) {
+          return;
         }
+        // chips.value[index].destroy();
+        chips[index].remove();
+        chips.splice(index, 1);
       },
-
-      removeFocusFromChipAtIndex: index => {
-        ce.value[index].removeFocus();
-      },
-
-      selectChipAtIndex: (index, selected, shouldNotifyClients) => {
-        if (index >= 0 && index < ce.value.length) {
-          ce.value[index].setSelectedFromChipSet(selected, shouldNotifyClients);
+      setChipFocusAtIndex: (index, action, focus) => {
+        if (!isIndexValid(index)) {
+          return;
         }
+        chips[index].setActionFocus(action, focus);
+      },
+      setChipSelectedAtIndex: (index, action, selected) => {
+        if (!isIndexValid(index)) {
+          return;
+        }
+        chips[index].setActionSelected(action, selected);
+      },
+      startChipAnimationAtIndex: (index, animation) => {
+        if (!isIndexValid(index)) {
+          return;
+        }
+        chips[index].startAnimation(animation);
       },
     };
 
-    provide('mcwChipSet', { filter: props.filter, input: props.input });
+    provide('mcwChipSet', {
+      role: props.role,
+      singleSelection: !props.multiSelectable,
+    });
+
+    const handleChipAnimation = event => {
+      foundation.handleChipAnimation(event);
+    };
+    const handleChipInteraction = event => {
+      foundation.handleChipInteraction(event);
+    };
+    const handleChipNavigation = event =>
+      foundation.handleChipNavigation(event);
+
+    /** Removes the chip at the given index. */
+    const removeChip = index => {
+      if (!isIndexValid(index)) {
+        return;
+      }
+      // chips.value[index].destroy();
+      chips[index].remove();
+      chips.splice(index, 1);
+    };
 
     onMounted(() => {
       foundation = new MDCChipSetFoundation(adapter);
       foundation.init();
-
-      (uiState.myListeners = {
-        [strings.INTERACTION_EVENT.toLowerCase()]: ({ detail }) =>
-          foundation.handleChipInteraction(detail),
-        [strings.SELECTION_EVENT.toLowerCase()]: ({ detail }) =>
-          foundation.handleChipSelection(detail),
-        [strings.REMOVAL_EVENT.toLowerCase()]: ({ detail }) =>
-          foundation.handleChipRemoval(detail),
-        [strings.NAVIGATION_EVENT.toLowerCase()]: ({ detail }) =>
-          foundation.handleChipNavigation(detail),
-      }),
-        // the chips could change outside of this component
-        // so use a mutation observer to trigger an update by
-        // incrementing the dependency variable "listn" referenced
-        // in the computed that selects the chip elements
-        (slotObserver = new MutationObserver(() => {
-          uiState.listn++;
-        }));
-      slotObserver.observe(uiState.root, {
-        childList: true,
-        // subtree: true,
-      });
     });
 
     onBeforeUnmount(() => {
-      slotObserver.disconnect();
+      // slotObserver.disconnect();
       foundation.destroy();
     });
-    return { ...toRefs(uiState) };
+    return {
+      ...toRefs(uiState),
+      handleChipAnimation,
+      handleChipInteraction,
+      handleChipNavigation,
+
+      removeChip,
+    };
   },
 };

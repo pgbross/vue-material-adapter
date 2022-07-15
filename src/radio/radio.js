@@ -1,5 +1,4 @@
 import { applyPassive } from '@material/dom/events.js';
-import { MDCFormFieldFoundation } from '@material/form-field/foundation.js';
 import { MDCRadioFoundation } from '@material/radio/foundation.js';
 import {
   computed,
@@ -10,16 +9,14 @@ import {
   toRefs,
   watch,
 } from 'vue';
+import { formFieldWrapper } from '../base/index.js';
 import { useRipplePlugin } from '../ripple/ripple-plugin.js';
 
 let radioId_ = 0;
 
 export default {
   name: 'mcw-radio',
-  // model: {
-  //   prop: 'picked',
-  //   event: 'change',
-  // },
+
   props: {
     label: String,
     alignEnd: Boolean,
@@ -36,7 +33,6 @@ export default {
     const uiState = reactive({
       classes: { 'mdc-radio': 1 },
       controlEl: undefined,
-      labelEl: undefined,
       root: undefined,
     });
 
@@ -63,7 +59,6 @@ export default {
     });
 
     let foundation;
-    let formField;
     const radioId = props.id ?? `__mcw-radio-${radioId_++}`;
 
     const rootClasses = computed(() => {
@@ -71,13 +66,6 @@ export default {
         ...rippleClasses.value,
         ...uiState.classes,
         ...props.radioClasses,
-      };
-    });
-
-    const formFieldClasses = computed(() => {
-      return {
-        'mdc-form-field': 1,
-        'mdc-form-field--align-end': props.alignEnd,
       };
     });
 
@@ -99,7 +87,6 @@ export default {
       addClass: className =>
         (uiState.classes = { ...uiState.classes, [className]: true }),
       removeClass: className => {
-        // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
@@ -132,21 +119,7 @@ export default {
     onMounted(() => {
       foundation = new MDCRadioFoundation(adapter);
 
-      formField = new MDCFormFieldFoundation({
-        registerInteractionHandler: (type, handler) =>
-          uiState.labelEl?.addEventListener(type, handler),
-        deregisterInteractionHandler: (type, handler) =>
-          uiState.labelEl?.removeEventListener(type, handler),
-        activateInputRipple: () => {
-          activate();
-        },
-        deactivateInputRipple: () => {
-          deactivate();
-        },
-      });
-
       foundation.init();
-      formField.init();
 
       const { checked, disabled, modelValue, value } = props;
 
@@ -159,18 +132,20 @@ export default {
 
     onBeforeUnmount(() => {
       foundation.destroy();
-      formField.destroy();
     });
 
     return {
       ...toRefs(uiState),
       rootClasses,
-      formFieldClasses,
       styles,
       onChange,
       onPicked,
       setChecked,
       radioId,
+      activate,
+      deactivate,
     };
   },
+
+  components: { formFieldWrapper },
 };

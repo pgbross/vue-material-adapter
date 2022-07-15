@@ -1,9 +1,9 @@
 import { MDCLineRippleFoundation } from '@material/line-ripple/foundation.js';
-import { onBeforeUnmount, onMounted, reactive, toRefs } from 'vue';
+import { h, onBeforeUnmount, onMounted, reactive } from 'vue';
 
 export default {
   name: 'mcw-line-ripple',
-  setup() {
+  setup(props, { expose }) {
     const uiState = reactive({
       lineClasses: { 'mdc-line-ripple': 1 },
       lineStyles: {},
@@ -21,7 +21,6 @@ export default {
         }),
 
       removeClass: className => {
-        // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.lineClasses;
         uiState.lineClasses = rest;
       },
@@ -36,19 +35,11 @@ export default {
         }),
     };
 
-    const setRippleCenter = xCoordinate => {
-      foundation_.setRippleCenter(xCoordinate);
-    };
-
-    const activate = () => {
-      foundation_.activate();
-    };
-
-    const deactivate = () => {
-      foundation_.deactivate();
-    };
-
-    const onTransitionEnd = event_ => foundation_.handleTransitionEnd(event_);
+    expose({
+      activate: () => foundation_.activate(),
+      deactivate: () => foundation_.deactivate(),
+      setRippleCenter: xCoordinate => foundation_.setRippleCenter(xCoordinate),
+    });
 
     onMounted(() => {
       foundation_ = new MDCLineRippleFoundation(adapter);
@@ -59,12 +50,12 @@ export default {
       foundation_.destroy();
     });
 
-    return {
-      ...toRefs(uiState),
-      setRippleCenter,
-      activate,
-      deactivate,
-      onTransitionEnd,
+    return () => {
+      return h('span', {
+        class: uiState.lineClasses,
+        style: uiState.lineStyles,
+        ontransitionend: event_ => foundation_.handleTransitionEnd(event_),
+      });
     };
   },
 };

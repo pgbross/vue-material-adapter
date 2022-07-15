@@ -5,6 +5,7 @@
       v-model="singleIndex"
       single-select
       @change="onChange"
+      touch
     >
       <mcw-segment icon="favorite" label="Some text"></mcw-segment>
       <mcw-segment label="Some text"></mcw-segment>

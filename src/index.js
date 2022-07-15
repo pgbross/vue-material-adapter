@@ -1,5 +1,4 @@
 import banner from './banner/index.js';
-import * as base from './base/index.js';
 import button from './button/index.js';
 import card from './card/index.js';
 import checkbox from './checkbox/index.js';
@@ -63,35 +62,33 @@ export default {
   },
 };
 
-export {
-  base,
-  banner,
-  button,
-  card,
-  circularProgress,
-  checkbox,
-  chips,
-  dataTable,
-  dialog,
-  drawer,
-  fab,
-  floatingLabel,
-  iconButton,
-  layoutGrid,
-  lineRipple,
-  linearProgress,
-  list,
-  materialIcon,
-  menu,
-  notchedOutline,
-  radio,
-  segmentedButton,
-  select,
-  slider,
-  snackbar,
-  switchControl,
-  tabs,
-  textfield,
-  tooltip,
-  topAppBar,
-};
+export { default as banner } from './banner/index.js';
+export * as base from './base/index.js';
+export { default as button } from './button/index.js';
+export { default as card } from './card/index.js';
+export { default as checkbox } from './checkbox/index.js';
+export { default as chips } from './chips/index.js';
+export { default as circularProgress } from './circular-progress/index.js';
+export { default as dataTable } from './data-table/index.js';
+export { default as dialog } from './dialog/index.js';
+export { default as drawer } from './drawer/index.js';
+export { default as fab } from './fab/index.js';
+export { default as floatingLabel } from './floating-label/index.js';
+export { default as iconButton } from './icon-button/index.js';
+export { default as layoutGrid } from './layout-grid/index.js';
+export { default as lineRipple } from './line-ripple/index.js';
+export { default as linearProgress } from './linear-progress/index.js';
+export { default as list } from './list/index.js';
+export { default as materialIcon } from './material-icon/index.js';
+export { default as menu } from './menu/index.js';
+export { default as notchedOutline } from './notched-outline/index.js';
+export { default as radio } from './radio/index.js';
+export { default as segmentedButton } from './segmented-button/index.js';
+export { default as select } from './select/index.js';
+export { default as slider } from './slider/index.js';
+export { default as snackbar } from './snackbar/index.js';
+export { default as switchControl } from './switch/index.js';
+export { default as tabs } from './tabs/index.js';
+export { default as textfield } from './textfield/index.js';
+export { default as tooltip } from './tooltip/index.js';
+export { default as topAppBar } from './top-app-bar/index.js';

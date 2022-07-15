@@ -50,7 +50,6 @@ export class RippleElement extends MDCRippleFoundation {
       },
       removeClass: className => {
         if (state) {
-          // eslint-disable-next-line no-unused-vars
           const { [className]: removed, ...rest } = state.classes;
           state.classes = rest;
         } else {

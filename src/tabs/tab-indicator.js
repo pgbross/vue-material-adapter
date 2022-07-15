@@ -1,37 +1,34 @@
 import { MDCFadingTabIndicatorFoundation } from '@material/tab-indicator/fading-foundation.js';
 import { MDCTabIndicatorFoundation } from '@material/tab-indicator/foundation.js';
 import { MDCSlidingTabIndicatorFoundation } from '@material/tab-indicator/sliding-foundation.js';
-import { onBeforeUnmount, onMounted, reactive, toRefs } from 'vue';
+import { h, onBeforeUnmount, onMounted, reactive, ref } from 'vue';
 
 const { cssClasses } = MDCTabIndicatorFoundation;
 
 export default {
   name: 'mcw-tab-indicator',
   props: { fade: { type: Boolean }, icon: { type: String } },
-  setup(props) {
+  setup(props, { expose }) {
     const uiState = reactive({
       classes: { 'mdc-tab-indicator--fade': props.fade },
-      contentClasses: {
-        'mdc-tab-indicator__content--underline': !props.icon,
-        'mdc-tab-indicator__content--icon': !!props.icon,
-        'material-icons': !!props.icon,
-      },
-      contentAttrs: { 'aria-hidden': !!props.icon },
       styles: {},
-      contentEl: undefined,
     });
 
     let foundation;
+    const contentElement = ref();
 
     const adapter = {
       addClass: className =>
         (uiState.classes = { ...uiState.classes, [className]: true }),
+
       removeClass: className => {
-        // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
-      computeContentClientRect: () => uiState.contentEl.getBoundingClientRect(),
+
+      computeContentClientRect: () =>
+        contentElement.value.getBoundingClientRect(),
+
       setContentStyleProperty: (property, value) =>
         (uiState.styles = { ...uiState.styles, [property]: value }),
     };
@@ -42,6 +39,13 @@ export default {
       foundation.computeContentClientRect();
 
     const activate = previousIndicatorClientRect => {
+      if (props.fade) {
+        foundation.activate(previousIndicatorClientRect);
+        return;
+      }
+
+      // duplicate the sliding foundation logic so vue can use renderanimation frame
+
       // Early exit if no indicator is present to handle cases where an indicator
       // may be activated without a prior indicator state
       if (!previousIndicatorClientRect) {
@@ -83,11 +87,30 @@ export default {
       foundation.destroy();
     });
 
-    return {
-      ...toRefs(uiState),
-      activate,
-      deactivate,
-      computeContentClientRect,
+    expose({ activate, deactivate, computeContentClientRect });
+
+    return () => {
+      return h(
+        'span',
+        { class: { 'mdc-tab-indicator': true, ...uiState.classes } },
+        [
+          h(
+            'span',
+            {
+              ref: contentElement,
+              class: {
+                'mdc-tab-indicator__content': true,
+                'mdc-tab-indicator__content--underline': !props.icon,
+                'mdc-tab-indicator__content--icon': !!props.icon,
+                'material-icons': !!props.icon,
+              },
+              style: uiState.styles,
+              'aria-hidden': !!props.icon,
+            },
+            [props.icon],
+          ),
+        ],
+      );
     };
   },
 };

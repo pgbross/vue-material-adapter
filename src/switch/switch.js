@@ -1,4 +1,7 @@
-import { MDCSwitchFoundation } from '@material/switch/foundation.js';
+import {
+  CssClasses,
+  MDCSwitchRenderFoundation,
+} from '@material/switch/index.js';
 import {
   computed,
   onBeforeUnmount,
@@ -8,6 +11,7 @@ import {
   toRefs,
   watch,
 } from 'vue';
+import { formFieldWrapper } from '../base/index.js';
 import { useRipplePlugin } from '../ripple/ripple-plugin.js';
 
 let switchId_ = 0;
@@ -27,15 +31,24 @@ export default {
 
   setup(props, { slots, emit }) {
     const uiState = reactive({
-      classes: { 'mdc-switch': 1 },
-      nativeControlChecked: props.modelValue,
-      nativeControlDisabled: props.disabled,
-      nativeAttrs: {},
+      classes: { [CssClasses.SELECTED]: props.modelValue },
+      attrs: {},
       root: undefined,
+      rippleEl: undefined,
     });
+
+    const state = {
+      disabled: props.disabled,
+      processing: false,
+      selected: props.modelValue,
+    };
 
     const { classes: rippleClasses, styles } = useRipplePlugin(
       toRef(uiState, 'root'),
+      {
+        unbounded: true,
+        computeBoundingRect: () => uiState.rippleEl.getBoundingClientRect(),
+      },
     );
 
     let foundation;
@@ -46,52 +59,60 @@ export default {
     });
 
     const hasLabel = computed(() => {
-      return props.label || slots.default;
+      return !!props.label || slots.default;
     });
 
-    const onChanged = event => {
-      foundation?.handleChange(event);
-      emit('update:modelValue', event.target.checked);
-    };
-
     const adapter = {
-      addClass: className =>
-        (uiState.classes = { ...uiState.classes, [className]: true }),
+      addClass: className => {
+        uiState.classes = { ...uiState.classes, [className]: true };
+        if (className.endsWith('unselected')) {
+          props.modelValue && emit('update:modelValue', false);
+        } else if (className.endsWith('selected')) {
+          !props.modelValue && emit('update:modelValue', true);
+        }
+      },
+      hasClass: className => uiState.root.classList.contains(className),
+      isDisabled: () => uiState.root.disabled,
       removeClass: className => {
-        // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
-      setNativeControlChecked: checked =>
-        (uiState.nativeControlChecked = checked),
-      setNativeControlDisabled: disabled =>
-        (uiState.nativeControlDisabled = disabled),
-
-      setNativeControlAttr: (attribute, value) => {
-        uiState.nativeAttrs[attribute] = value;
+      setAriaChecked: ariaChecked =>
+        (uiState.attrs['aria-checked'] = ariaChecked),
+      setDisabled: disabled => {
+        uiState.root.disabled = disabled;
       },
+      state,
     };
 
     watch(
       () => props.modelValue,
-      (nv, ov) => {
-        nv != ov && foundation?.setChecked(nv);
+      nv => {
+        state.selected = nv;
       },
     );
 
     watch(
       () => props.disabled,
-      (nv, ov) => {
-        nv != ov && foundation?.setDisabled(nv);
+      nv => {
+        state.disabled = nv;
       },
     );
 
+    const handleClick = event => {
+      foundation.handleClick(event);
+    };
+
     onMounted(() => {
-      foundation = new MDCSwitchFoundation(adapter);
+      if (props.disabled) {
+        uiState.root.disabled = true;
+      }
+
+      foundation = new MDCSwitchRenderFoundation(adapter);
 
       foundation.init();
-      foundation.setChecked(props.modelValue);
-      foundation.setDisabled(props.disabled);
+
+      foundation.initFromDOM();
     });
 
     onBeforeUnmount(() => {
@@ -102,9 +123,10 @@ export default {
       ...toRefs(uiState),
       classes,
       hasLabel,
-      onChanged,
       styles,
       switchId,
+      handleClick,
     };
   },
+  components: { formFieldWrapper },
 };

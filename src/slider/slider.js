@@ -86,7 +86,6 @@ export default {
       addClass: className =>
         (uiState.classes = { ...uiState.classes, [className]: true }),
       removeClass: className => {
-        // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState.classes;
         uiState.classes = rest;
       },
@@ -100,7 +99,6 @@ export default {
       removeThumbClass: (className, thumb) => {
         const thumbName = getThumbName(thumb, 'Classes');
 
-        // eslint-disable-next-line no-unused-vars
         const { [className]: removed, ...rest } = uiState[thumbName];
         uiState[thumbName] = rest;
       },
@@ -128,20 +126,7 @@ export default {
         getInput(thumb).focus();
       },
       isInputFocused: thumb => getInput(thumb) === document.activeElement,
-
-      getThumbAttribute: (attribute, thumb) => {
-        const thumbName = getThumbName(thumb, 'Attrs');
-        return uiState[thumbName][attribute];
-      },
-      setThumbAttribute: (attribute, value, thumb) => {
-        const thumbName = getThumbName(thumb, 'Attrs');
-        uiState[thumbName] = { ...uiState[thumbName], [attribute]: value };
-      },
-
-      isThumbFocused: thumb => {
-        return getThumbElement(thumb) === document.activeElement;
-      },
-      focusThumb: thumb => getThumbElement(thumb).focus(),
+      shouldHideFocusStylesForPointerEvents: () => false,
 
       getThumbKnobWidth: thumb =>
         getThumbElement(thumb)
@@ -153,6 +138,11 @@ export default {
 
       getBoundingClientRect: () => uiState.root.getBoundingClientRect(),
 
+      getValueIndicatorContainerWidth: thumb => {
+        return getThumbElement(thumb)
+          .querySelector(`.${cssClasses.VALUE_INDICATOR_CONTAINER}`)
+          ?.getBoundingClientRect().width;
+      },
       isRTL: () => getComputedStyle(uiState.root).direction === 'rtl',
 
       setThumbStyleProperty: (propertyName, value, thumb) => {

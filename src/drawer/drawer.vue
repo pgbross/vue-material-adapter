@@ -1,6 +1,5 @@
 <script src="./drawer.js"></script>
 <template>
-  <!-- <div ref="root"> -->
   <aside
     ref="drawer"
     :class="classes"
@@ -14,8 +13,9 @@
         :wrap-focus="true"
         tag="nav"
         @mdclist:action="onListAction"
-        single-selection
+        :multi-selectable="false"
         :selected-index="0"
+        role="menu"
       >
         <slot></slot>
       </mcw-list>
@@ -33,8 +33,9 @@
         <mcw-list
           :wrap-focus="true"
           tag="nav"
-          single-selection
+          :multi-selectable="false"
           :selected-index="0"
+          role="menu"
           @mdclist:action="onListAction"
         >
           <slot></slot>

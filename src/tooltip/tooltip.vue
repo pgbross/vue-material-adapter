@@ -9,6 +9,11 @@
     role="tooltip"
     @transitionend="handleTransitionEnd"
   >
-    <div :style="surfaceStyle" class="mdc-tooltip__surface"><slot></slot></div>
+    <div
+      :style="surfaceStyle"
+      class="mdc-tooltip__surface mdc-tooltip__surface-animation"
+    >
+      <slot></slot>
+    </div>
   </div>
 </template>
