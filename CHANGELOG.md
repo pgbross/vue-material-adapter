@@ -1,3 +1,72 @@
+# [6.0.0](https://github.com/pgbross/vue-material-adapter/compare/v5.0.1...v6.0.0) (2022-07-15)
+
+
+### Bug Fixes
+
+* bind attributes to icon button ([c33f6dd](https://github.com/pgbross/vue-material-adapter/commit/c33f6dd726ce39dd9e77f19d3831bf65fd636e15))
+* dialog confirmation example ([5479999](https://github.com/pgbross/vue-material-adapter/commit/5479999bc98526fe17c48912d3ad72d46e6488c8))
+* expose select icon and helper text foundations ([8b11475](https://github.com/pgbross/vue-material-adapter/commit/8b114752ea2576632bf0f8aa3c9ce979e644f049))
+* list checkbox click logic ([0b94269](https://github.com/pgbross/vue-material-adapter/commit/0b9426906b9f6afdcf24dcdfd36333fdfddb04e0))
+
+
+### Features
+
+* banner demo docs ([05f7f69](https://github.com/pgbross/vue-material-adapter/commit/05f7f699f6f0b04b44210bf37aade3929bef4fdc))
+* **card:**  use render function ([71cd5a4](https://github.com/pgbross/vue-material-adapter/commit/71cd5a4865f681900974fbeff3d55c5019c1ab38))
+* **circular-progress:** support four color rendering ([f595a11](https://github.com/pgbross/vue-material-adapter/commit/f595a1109e80234c1d372fd9d6f6860fe9d091ad))
+* **data-table:** pass checkbox helpers ([717b364](https://github.com/pgbross/vue-material-adapter/commit/717b3645dee73e96ffa0b5f8f1ad7fc4368fcad7))
+* **drawer:** remove eslint comments ([5b2e428](https://github.com/pgbross/vue-material-adapter/commit/5b2e4283238eb973e1404123a4fb88de23923b7d))
+* **fab:** support isTouch and pass inherited attrs to root ([3232233](https://github.com/pgbross/vue-material-adapter/commit/3232233a1ef35b02b1242441b65ff1649223d870))
+* **floating-label:** use render function ([e3edd47](https://github.com/pgbross/vue-material-adapter/commit/e3edd4781e4618bfda9311907ad66d87c38f0e4c))
+* implement line ripple render function ([eea5c81](https://github.com/pgbross/vue-material-adapter/commit/eea5c81b0644a0c05c49867634e6eb4ac127b339))
+* improve button demo logic ([bb0574e](https://github.com/pgbross/vue-material-adapter/commit/bb0574eef35b9ab471b5baa1d4083ee58bca6fe7))
+* **layout-grid:** use render functions ([9d53632](https://github.com/pgbross/vue-material-adapter/commit/9d5363287ab5afe21ca2bc51a6889d7d3b531fab))
+* list update in progress ([4b00bff](https://github.com/pgbross/vue-material-adapter/commit/4b00bffbf95b6cae199cfdac8c83b0b983392aaf))
+* menu and select ([4116195](https://github.com/pgbross/vue-material-adapter/commit/4116195f33e21c0ed2dcb479893a0e49f4abcd6c))
+* **notched-outline:** refactor to use render function ([7fc333b](https://github.com/pgbross/vue-material-adapter/commit/7fc333b532fde6b5b57f129955f5f89478af4728))
+* **radio:** refactor ([93338cb](https://github.com/pgbross/vue-material-adapter/commit/93338cbaedefb22c939d93f9872ac2c8387e6fc5))
+* refactor icon button ([aa62a53](https://github.com/pgbross/vue-material-adapter/commit/aa62a534e493dcd8454c771d5c38469887963567))
+* refactor linear-progress ([13f5235](https://github.com/pgbross/vue-material-adapter/commit/13f5235c0c2d1da242813cadd6c84a3af26b7d56))
+* refactor list and list-item ([18db22d](https://github.com/pgbross/vue-material-adapter/commit/18db22d5ff636617128020208d19f975970abfd4))
+* **ripple:** removed unneeded eslint comments ([ddead0a](https://github.com/pgbross/vue-material-adapter/commit/ddead0a85ff7017933744e7778cbfa25a015e371))
+* **sdwitch:** use form field wrapper ([00523f6](https://github.com/pgbross/vue-material-adapter/commit/00523f686fbef48a5e63983dee9b9d53759495c4))
+* **segmented-button:** use render function and touch-wrapper element ([b4828ba](https://github.com/pgbross/vue-material-adapter/commit/b4828bacd10988e4d4912bf58a92393648a052bf))
+* **slider:** add key for discrete marks ([077d8e0](https://github.com/pgbross/vue-material-adapter/commit/077d8e084f9148a2a7cfe53d9e52c628e6166c4b))
+* **snackbar:** use snackbar queue render function ([b653da0](https://github.com/pgbross/vue-material-adapter/commit/b653da09bf9cdf4f0dc7d0344d68811713fab05d))
+* **tabs:** use render function in tab scroller, indicator, and tab-bar ([73db9df](https://github.com/pgbross/vue-material-adapter/commit/73db9df612b7bf6aaed1f0c662e53a147d3234ec))
+* **tooltip:** support rich property ([0431162](https://github.com/pgbross/vue-material-adapter/commit/043116242a49fa0531138803cc2dc0e1847b60c5))
+* **top-app-bar:** use render function ([fa656d1](https://github.com/pgbross/vue-material-adapter/commit/fa656d1c81829b0bbbd0a1181fc4563f0aa82e3f))
+* update banner to support disableAutoClose ([b11e998](https://github.com/pgbross/vue-material-adapter/commit/b11e998426b9c352c5234f5f9ae001b84284f06f))
+* update checkbox ([db7f461](https://github.com/pgbross/vue-material-adapter/commit/db7f4612da15369a360ca4dd307abbf80fc05de6))
+* wotking on lists ([e8391ef](https://github.com/pgbross/vue-material-adapter/commit/e8391ef3ffdc4f48593ebcbed903db797724d32d))
+* wotking on lists ([353de2f](https://github.com/pgbross/vue-material-adapter/commit/353de2fbe64c8796d79190f3f975ad944bbd49d2))
+
+
+
+## [3.2.3](https://github.com/pgbross/vue-material-adapter/compare/v3.2.2...v3.2.3) (2021-10-27)
+
+
+
+## [3.2.2](https://github.com/pgbross/vue-material-adapter/compare/v3.2.1...v3.2.2) (2021-10-27)
+
+
+### Bug Fixes
+
+* side effects true ([a04b04a](https://github.com/pgbross/vue-material-adapter/commit/a04b04a5881ab2e10c89e8d568868ecd9d779804))
+
+
+
+## [3.2.1](https://github.com/pgbross/vue-material-adapter/compare/v4.0.2...v3.2.1) (2021-10-27)
+
+
+### Bug Fixes
+
+* main is on branch 3.x ([21eddb4](https://github.com/pgbross/vue-material-adapter/commit/21eddb4eb3a9eed5b4828d22ee7951c4ad530c18))
+* menu hoisting ([f4e82d0](https://github.com/pgbross/vue-material-adapter/commit/f4e82d082ec3cd323e7c8a0c0220661a7720a311))
+* setting menu-surface position ([1fa2a89](https://github.com/pgbross/vue-material-adapter/commit/1fa2a89f58c4ef7bad46956ff52bd937241bee2f))
+
+
+
 # Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
