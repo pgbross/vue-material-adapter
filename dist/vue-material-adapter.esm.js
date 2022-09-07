@@ -6113,7 +6113,6 @@ var script$3 = {
         "mdc-text-field-helper-text--validation-msg": props.validation
       },
       rootAttrs: { "aria-hidden": true },
-      helpertext: props.helptext,
       foundation: {}
     });
     const adapter = {
@@ -6145,7 +6144,7 @@ var script$3 = {
 };
 
 function render$3(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", mergeProps({ class: _ctx.classes }, _ctx.rootAttrs), toDisplayString(_ctx.helpertext), 17);
+  return openBlock(), createElementBlock("div", mergeProps({ class: _ctx.classes }, _ctx.rootAttrs), toDisplayString(_ctx.helptext), 17);
 }
 
 script$3.render = render$3;
