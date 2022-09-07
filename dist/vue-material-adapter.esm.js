@@ -6256,7 +6256,8 @@ var script$1 = {
     prefix: String,
     suffix: String,
     characterCounter: Boolean,
-    characterCounterInternal: Boolean
+    characterCounterInternal: Boolean,
+    useNativeValidation: { type: Boolean, default: () => true }
   },
   setup(props, { emit, slots, attrs }) {
     const uiState = reactive({
@@ -6428,6 +6429,11 @@ var script$1 = {
     watch(() => props.valid, (nv) => {
       if (typeof nv !== "undefined") {
         foundation == null ? void 0 : foundation.setValid(nv);
+      }
+    });
+    watch(() => props.useNativeValidation, (nv) => {
+      if (typeof nv !== "undefined") {
+        foundation == null ? void 0 : foundation.setUseNativeValidation(nv);
       }
     });
     watch(() => props.modelValue, (nv) => {
