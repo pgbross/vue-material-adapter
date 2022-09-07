@@ -16,7 +16,6 @@ export default {
         'mdc-text-field-helper-text--validation-msg': props.validation,
       },
       rootAttrs: { 'aria-hidden': true },
-      helpertext: props.helptext,
       foundation: {},
     });
 
