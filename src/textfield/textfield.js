@@ -60,6 +60,7 @@ export default {
     suffix: String,
     characterCounter: Boolean,
     characterCounterInternal: Boolean,
+    useNativeValidation: { type: Boolean, default: () => true },
   },
   setup(props, { emit, slots, attrs }) {
     const uiState = reactive({
@@ -278,6 +279,15 @@ export default {
       nv => {
         if (typeof nv !== 'undefined') {
           foundation?.setValid(nv);
+        }
+      },
+    );
+
+    watch(
+      () => props.useNativeValidation,
+      nv => {
+        if (typeof nv !== 'undefined') {
+          foundation?.setUseNativeValidation(nv);
         }
       },
     );
