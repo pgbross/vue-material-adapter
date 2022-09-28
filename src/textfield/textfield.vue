@@ -61,6 +61,14 @@
       <mcw-notched-outline ref="labelEl" v-if="outline">{{
         label
       }}</mcw-notched-outline>
+
+      <mcw-floating-label
+        ref="labelEl"
+        v-if="hasLabel && !outline"
+        :id="labelId"
+        :required="required"
+        >{{ label }}</mcw-floating-label
+      >
       <span class="mdc-text-field__resizer" v-if="resizer">
         <textarea
           ref="input"
