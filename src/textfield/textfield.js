@@ -323,7 +323,7 @@ export default {
     });
 
     onBeforeUnmount(() => {
-      foundation.destroy();
+      foundation?.destroy();
     });
 
     return {
