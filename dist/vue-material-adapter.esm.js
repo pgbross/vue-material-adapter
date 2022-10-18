@@ -6458,7 +6458,7 @@ var script$1 = {
       }
     });
     onBeforeUnmount(() => {
-      foundation.destroy();
+      foundation == null ? void 0 : foundation.destroy();
     });
     return {
       ...toRefs(uiState),
@@ -6495,7 +6495,7 @@ const _hoisted_4 = {
   class: "mdc-text-field__affix mdc-text-field__affix--suffix"
 };
 const _hoisted_5 = {
-  key: 1,
+  key: 2,
   class: "mdc-text-field__resizer"
 };
 const _hoisted_6 = ["minlength", "maxlength", "aria-label", "aria-controls", "cols", "rows"];
@@ -6577,6 +6577,17 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
         ]),
         _: 1
       }, 512)) : createCommentVNode("v-if", true),
+      _ctx.hasLabel && !_ctx.outline ? (openBlock(), createBlock(_component_mcw_floating_label, {
+        key: 1,
+        ref: "labelEl",
+        id: _ctx.labelId,
+        required: _ctx.required
+      }, {
+        default: withCtx(() => [
+          createTextVNode(toDisplayString(_ctx.label), 1)
+        ]),
+        _: 1
+      }, 8, ["id", "required"])) : createCommentVNode("v-if", true),
       _ctx.resizer ? (openBlock(), createElementBlock("span", _hoisted_5, [
         createElementVNode("textarea", mergeProps({
           ref: "input",
@@ -6590,7 +6601,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
           rows: _ctx.rows
         }, toHandlers(_ctx.inputListeners)), null, 16, _hoisted_6)
       ])) : (openBlock(), createElementBlock("textarea", mergeProps({
-        key: 2,
+        key: 3,
         ref: "input",
         class: _ctx.inputClasses
       }, _ctx.inputAttrs, {
@@ -6602,7 +6613,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
         rows: _ctx.rows
       }, toHandlers(_ctx.inputListeners)), null, 16, _hoisted_7)),
       _ctx.internalCharacterCounter ? (openBlock(), createBlock(_component_mcw_character_counter, {
-        key: 3,
+        key: 4,
         ref: "characterCounterEl"
       }, null, 512)) : createCommentVNode("v-if", true)
     ], 2)),
