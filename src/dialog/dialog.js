@@ -9,8 +9,15 @@ const { cssClasses, strings } = MDCDialogFoundation;
 const LAYOUT_EVENTS = ['resize', 'orientationchange'];
 
 const getInitialFocusElement_ = () => {
-  return document.querySelector(`[${strings.INITIAL_FOCUS_ATTRIBUTE}]`);
+  return document.querySelector(elementToFocus_());
 };
+
+const elementToFocus_ = () => {
+  if (document.querySelector(`[${strings.INITIAL_FOCUS_ATTRIBUTE}="true"]`)) {
+    return `[${strings.INITIAL_FOCUS_ATTRIBUTE}="true"]`;
+  }
+  return `[${strings.INITIAL_FOCUS_ATTRIBUTE}]`;
+}
 
 const focusTrapFactory_ = (element, options) => new FocusTrap(element, options);
 
