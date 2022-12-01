@@ -8,16 +8,17 @@ import { mcwButton } from '../button/index.js';
 const { cssClasses, strings } = MDCDialogFoundation;
 const LAYOUT_EVENTS = ['resize', 'orientationchange'];
 
-const getInitialFocusElement_ = () => {
-  return document.querySelector(elementToFocus_());
-};
-
-const elementToFocus_ = () => {
-  if (document.querySelector(`[${strings.INITIAL_FOCUS_ATTRIBUTE}="true"]`)) {
-    return `[${strings.INITIAL_FOCUS_ATTRIBUTE}="true"]`;
+const getInitialFocusElement_ = (element) => {
+  if (!element) {
+    return null;
   }
-  return `[${strings.INITIAL_FOCUS_ATTRIBUTE}]`;
-}
+  const focusTrue = element.querySelector(`[${strings.INITIAL_FOCUS_ATTRIBUTE}="true"]`);
+
+  if (focusTrue) {
+    return focusTrue;
+  }
+  return element.querySelector(`[${strings.INITIAL_FOCUS_ATTRIBUTE}]`);
+};
 
 const focusTrapFactory_ = (element, options) => new FocusTrap(element, options);
 
@@ -75,7 +76,7 @@ export default {
           focusTrap = util.createFocusTrapInstance(
             uiState.root,
             focusTrapFactory_,
-            getInitialFocusElement_() || void 0,
+            getInitialFocusElement_(uiState.root) || void 0,
           );
         }
         foundation.open();
@@ -105,7 +106,7 @@ export default {
 
       releaseFocus: () => focusTrap?.releaseFocus(),
 
-      getInitialFocusEl: () => getInitialFocusElement_(),
+      getInitialFocusEl: () => getInitialFocusElement_(uiState.root),
 
       isContentScrollable: () => util.isScrollable(content_),
 
