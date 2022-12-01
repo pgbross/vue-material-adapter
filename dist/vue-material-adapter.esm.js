@@ -2107,8 +2107,15 @@ var mcwDialogTitle = {
 
 const { cssClasses: cssClasses$6, strings: strings$a } = MDCDialogFoundation;
 const LAYOUT_EVENTS = ["resize", "orientationchange"];
-const getInitialFocusElement_ = () => {
-  return document.querySelector(`[${strings$a.INITIAL_FOCUS_ATTRIBUTE}]`);
+const getInitialFocusElement_ = (element) => {
+  if (!element) {
+    return null;
+  }
+  const focusTrue = element.querySelector(`[${strings$a.INITIAL_FOCUS_ATTRIBUTE}="true"]`);
+  if (focusTrue) {
+    return focusTrue;
+  }
+  return element.querySelector(`[${strings$a.INITIAL_FOCUS_ATTRIBUTE}]`);
 };
 const focusTrapFactory_$1 = (element, options) => new FocusTrap(element, options);
 var script$i = {
@@ -2154,7 +2161,7 @@ var script$i = {
     const onOpen = (nv) => {
       if (nv) {
         if (uiState.container) {
-          focusTrap = util.createFocusTrapInstance(uiState.root, focusTrapFactory_$1, getInitialFocusElement_() || void 0);
+          focusTrap = util.createFocusTrapInstance(uiState.root, focusTrapFactory_$1, getInitialFocusElement_(uiState.root) || void 0);
         }
         foundation.open();
       } else {
@@ -2173,7 +2180,7 @@ var script$i = {
       eventTargetMatches: (target, selector) => matches(target, selector),
       trapFocus: () => focusTrap == null ? void 0 : focusTrap.trapFocus(),
       releaseFocus: () => focusTrap == null ? void 0 : focusTrap.releaseFocus(),
-      getInitialFocusEl: () => getInitialFocusElement_(),
+      getInitialFocusEl: () => getInitialFocusElement_(uiState.root),
       isContentScrollable: () => util.isScrollable(content_),
       areButtonsStacked: () => util.areTopsMisaligned(buttons_),
       getActionFromEvent: (event) => {
