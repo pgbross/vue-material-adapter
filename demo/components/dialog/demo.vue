@@ -210,7 +210,7 @@
       </mcw-dialog-content>
       <mcw-dialog-footer>
         <mcw-dialog-button action="dismiss">Cancel</mcw-dialog-button>
-        <mcw-dialog-button action="confirm" is-default>Ok</mcw-dialog-button>
+        <mcw-dialog-button action="confirm" is-default is-initial-focus>Ok</mcw-dialog-button>
       </mcw-dialog-footer>
     </mcw-dialog>
 

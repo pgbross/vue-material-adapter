@@ -140,7 +140,7 @@ function getRollupOutputOptions(outputPath, format, globals, globalName) {
       // dir: 'dist',
       format,
       globals,
-      interop: false,
+      interop: 'auto',
       sourcemap: false,
       name: globalName,
       exports: 'named',

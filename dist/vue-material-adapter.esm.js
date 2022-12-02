@@ -102,22 +102,30 @@ const CustomLink = {
       const routerLink = resolveDynamicComponent("router-link");
       if (to && routerLink) {
         const rtag = tag != null ? tag : "a";
-        return h(routerLink, {
-          custom: true,
-          ...attrs,
-          to
-        }, {
-          default: (props2) => {
-            var _a2;
-            return h(rtag, {
-              ...attrs,
-              onClick: (event_) => {
-                event_.__itemId = attrs.itemId;
-                props2.navigate(event_);
-              }
-            }, (_a2 = slots.default) == null ? void 0 : _a2.call(slots));
+        return h(
+          routerLink,
+          {
+            custom: true,
+            ...attrs,
+            to
+          },
+          {
+            default: (props2) => {
+              var _a2;
+              return h(
+                rtag,
+                {
+                  ...attrs,
+                  onClick: (event_) => {
+                    event_.__itemId = attrs.itemId;
+                    props2.navigate(event_);
+                  }
+                },
+                (_a2 = slots.default) == null ? void 0 : _a2.call(slots)
+              );
+            }
           }
-        });
+        );
       }
       const element = href ? "a" : tag != null ? tag : "a";
       const role = href ? "button" : element !== "button" ? "button" : void 0;
@@ -176,18 +184,26 @@ var formFieldWrapper = {
         }
       }
       if (hasLabel) {
-        return h("div", {
-          class: {
-            ...formFieldClasses.value,
-            ...cl
-          }
-        }, [
-          (_a = slots.default) == null ? void 0 : _a.call(slots),
-          h("label", {
-            for: props.forId,
-            ref: labelElement
-          }, [(_b = slots.label) == null ? void 0 : _b.call(slots)])
-        ]);
+        return h(
+          "div",
+          {
+            class: {
+              ...formFieldClasses.value,
+              ...cl
+            }
+          },
+          [
+            (_a = slots.default) == null ? void 0 : _a.call(slots),
+            h(
+              "label",
+              {
+                for: props.forId,
+                ref: labelElement
+              },
+              [(_b = slots.label) == null ? void 0 : _b.call(slots)]
+            )
+          ]
+        );
       }
       return slots.default();
     };
@@ -321,9 +337,12 @@ var script$q = {
       }
     };
     const haveIcon = computed(() => !!props.icon);
-    watch(() => props.modelValue, (nv) => {
-      onOpen(nv);
-    });
+    watch(
+      () => props.modelValue,
+      (nv) => {
+        onOpen(nv);
+      }
+    );
     onMounted(() => {
       focusTrap = focusTrapFactory_$2(uiState.root, {
         initialFocusEl: uiState.primaryActionEl
@@ -424,7 +443,11 @@ class RippleElement extends MDCRippleFoundation {
       browserSupportsCssVars: () => supportsCssVariables(window),
       computeBoundingRect: () => $element.getBoundingClientRect(),
       containsEventTarget: (target) => $element.contains(target),
-      deregisterDocumentInteractionHandler: (eventType, handler) => document.documentElement.removeEventListener(eventType, handler, applyPassive()),
+      deregisterDocumentInteractionHandler: (eventType, handler) => document.documentElement.removeEventListener(
+        eventType,
+        handler,
+        applyPassive()
+      ),
       deregisterInteractionHandler: (event_, handler) => $element.removeEventListener(event_, handler, applyPassive()),
       deregisterResizeHandler: (handler) => window.removeEventListener("resize", handler),
       getWindowPageOffset: () => ({
@@ -434,7 +457,11 @@ class RippleElement extends MDCRippleFoundation {
       isSurfaceActive: () => matches($element, ":active"),
       isSurfaceDisabled: () => false,
       isUnbounded: () => this.unbounded_,
-      registerDocumentInteractionHandler: (eventType, handler) => document.documentElement.addEventListener(eventType, handler, applyPassive()),
+      registerDocumentInteractionHandler: (eventType, handler) => document.documentElement.addEventListener(
+        eventType,
+        handler,
+        applyPassive()
+      ),
       registerInteractionHandler: (event_, handler) => {
         $element.addEventListener(event_, handler, applyPassive());
       },
@@ -585,9 +612,13 @@ var mcwCardActionButtons = {
   setup(props, { slots }) {
     return () => {
       var _a;
-      return h("div", {
-        class: ["mdc-card__action-buttons"]
-      }, [(_a = slots.default) == null ? void 0 : _a.call(slots)]);
+      return h(
+        "div",
+        {
+          class: ["mdc-card__action-buttons"]
+        },
+        [(_a = slots.default) == null ? void 0 : _a.call(slots)]
+      );
     };
   }
 };
@@ -597,9 +628,13 @@ var mcwCardActionIcons = {
   setup(props, { slots }) {
     return () => {
       var _a;
-      return h("div", {
-        class: ["mdc-card__action-icons"]
-      }, [(_a = slots.default) == null ? void 0 : _a.call(slots)]);
+      return h(
+        "div",
+        {
+          class: ["mdc-card__action-icons"]
+        },
+        [(_a = slots.default) == null ? void 0 : _a.call(slots)]
+      );
     };
   }
 };
@@ -612,14 +647,18 @@ var mcwCardActions = {
   setup(props, { slots }) {
     return () => {
       var _a;
-      return h("section", {
-        class: [
-          {
-            "mdc-card__actions": 1,
-            "mdc-card__actions--full-bleed": props.fullBleed
-          }
-        ]
-      }, (_a = slots.default) == null ? void 0 : _a.call(slots));
+      return h(
+        "section",
+        {
+          class: [
+            {
+              "mdc-card__actions": 1,
+              "mdc-card__actions--full-bleed": props.fullBleed
+            }
+          ]
+        },
+        (_a = slots.default) == null ? void 0 : _a.call(slots)
+      );
     };
   }
 };
@@ -648,18 +687,28 @@ var mcwCardMedia = {
       const nodes = [];
       const content = (_a = slots.default) == null ? void 0 : _a.call(slots);
       if (content) {
-        nodes.push(h("div", { class: ["mdc-card__media-content", props.contentClass] }, content));
+        nodes.push(
+          h(
+            "div",
+            { class: ["mdc-card__media-content", props.contentClass] },
+            content
+          )
+        );
       }
-      return h("section", {
-        class: {
-          "mdc-card__media": 1,
-          "mdc-card__media--square": props.square,
-          "mdc-card__media--16-9": props.wide && !props.square
+      return h(
+        "section",
+        {
+          class: {
+            "mdc-card__media": 1,
+            "mdc-card__media--square": props.square,
+            "mdc-card__media--16-9": props.wide && !props.square
+          },
+          style: {
+            backgroundImage: `url(${props.src})`
+          }
         },
-        style: {
-          backgroundImage: `url(${props.src})`
-        }
-      }, nodes);
+        nodes
+      );
     };
   }
 };
@@ -673,7 +722,11 @@ var mcwCardPrimaryAction = {
       return { ...rippleClasses.value, "mdc-card__primary-action": 1 };
     });
     return () => {
-      return h(CustomLink, { ref: root, class: classes.value, style: styles, tabindex: "0" }, () => [slots.default(), h("div", { class: "mdc-card__ripple" })]);
+      return h(
+        CustomLink,
+        { ref: root, class: classes.value, style: styles, tabindex: "0" },
+        () => [slots.default(), h("div", { class: "mdc-card__ripple" })]
+      );
     };
   }
 };
@@ -687,15 +740,19 @@ var mcwCard = {
     return () => {
       var _a;
       const { outlined } = props;
-      return h("div", {
-        class: [
-          {
-            "mdc-card": 1,
-            "mdc-card--outlined": outlined
-          }
-        ],
-        ...attrs
-      }, (_a = slots.default) == null ? void 0 : _a.call(slots));
+      return h(
+        "div",
+        {
+          class: [
+            {
+              "mdc-card": 1,
+              "mdc-card--outlined": outlined
+            }
+          ],
+          ...attrs
+        },
+        (_a = slots.default) == null ? void 0 : _a.call(slots)
+      );
     };
   }
 };
@@ -752,13 +809,21 @@ var checkboxContent = {
     return () => {
       var _a, _b;
       if (hasLabel) {
-        return h("div", { class: { "mdc-checkbox-wrapper": 1, ...formFieldClasses.value } }, [
-          (_a = slots.default) == null ? void 0 : _a.call(slots),
-          h("label", {
-            for: props.checkboxId,
-            ref: labelElement
-          }, [(_b = slots.label) == null ? void 0 : _b.call(slots)])
-        ]);
+        return h(
+          "div",
+          { class: { "mdc-checkbox-wrapper": 1, ...formFieldClasses.value } },
+          [
+            (_a = slots.default) == null ? void 0 : _a.call(slots),
+            h(
+              "label",
+              {
+                for: props.checkboxId,
+                ref: labelElement
+              },
+              [(_b = slots.label) == null ? void 0 : _b.call(slots)]
+            )
+          ]
+        );
       }
       return slots.default();
     };
@@ -865,7 +930,10 @@ var script$o = {
       const nativeCallback = uiState.control;
       const callbackProto = Object.getPrototypeOf(nativeCallback);
       for (const controlState of CB_PROTO_PROPS) {
-        const desc = Object.getOwnPropertyDescriptor(callbackProto, controlState);
+        const desc = Object.getOwnPropertyDescriptor(
+          callbackProto,
+          controlState
+        );
         if (validDescriptor(desc)) {
           const nativeCallbackDesc = {
             get: desc.get,
@@ -876,7 +944,11 @@ var script$o = {
             configurable: desc.configurable,
             enumerable: desc.enumerable
           };
-          Object.defineProperty(nativeCallback, controlState, nativeCallbackDesc);
+          Object.defineProperty(
+            nativeCallback,
+            controlState,
+            nativeCallbackDesc
+          );
         }
       }
     };
@@ -890,15 +962,24 @@ var script$o = {
         }
       }
     };
-    watch(() => props.disabled, (nv, ov) => {
-      nv != ov && (foundation == null ? void 0 : foundation.setDisabled(nv));
-    });
-    watch(() => props.modelValue, (nv, ov) => {
-      nv != ov && setChecked(nv);
-    });
-    watch(() => props.indeterminate, (nv, ov) => {
-      nv != ov && setIndeterminate(nv);
-    });
+    watch(
+      () => props.disabled,
+      (nv, ov) => {
+        nv != ov && (foundation == null ? void 0 : foundation.setDisabled(nv));
+      }
+    );
+    watch(
+      () => props.modelValue,
+      (nv, ov) => {
+        nv != ov && setChecked(nv);
+      }
+    );
+    watch(
+      () => props.indeterminate,
+      (nv, ov) => {
+        nv != ov && setIndeterminate(nv);
+      }
+    );
     const checkboxHelpers = {
       setIndeterminate,
       isChecked,
@@ -907,7 +988,10 @@ var script$o = {
     };
     onMounted(() => {
       foundation = new MDCCheckboxFoundation(adapter);
-      uiState.root.addEventListener(getCorrectEventName(window, "animationend"), handleAnimationEnd);
+      uiState.root.addEventListener(
+        getCorrectEventName(window, "animationend"),
+        handleAnimationEnd
+      );
       uiState.root.__checkboxHelpers = checkboxHelpers;
       installPropertyChangeHooks_();
       foundation.init();
@@ -916,7 +1000,10 @@ var script$o = {
       setIndeterminate(props.indeterminate);
     });
     onBeforeUnmount(() => {
-      uiState.root.removeEventListener(getCorrectEventName(window, "animationend"), handleAnimationEnd);
+      uiState.root.removeEventListener(
+        getCorrectEventName(window, "animationend"),
+        handleAnimationEnd
+      );
       uninstallPropertyChangeHooks_();
       foundation.destroy();
     });
@@ -991,7 +1078,8 @@ function render$o(_ctx, _cache, $props, $setup, $data, $options) {
         renderSlot(_ctx.$slots, "default", {}, () => [
           createTextVNode(toDisplayString(_ctx.label), 1)
         ])
-      ])
+      ]),
+      key: "0"
     } : void 0
   ]), 1032, ["activate", "deactivate", "checkboxId"]);
 }
@@ -1012,10 +1100,13 @@ var script$n = {
   },
   setup(props) {
     const uiState = reactive({ rippleEl: void 0, root: void 0 });
-    const { classes: rippleClasses, styles } = useRipplePlugin(toRef(uiState, "root"), {
-      unbounded: true,
-      computeBoundingRect: () => uiState.rippleEl.getBoundingClientRect()
-    });
+    const { classes: rippleClasses, styles } = useRipplePlugin(
+      toRef(uiState, "root"),
+      {
+        unbounded: true,
+        computeBoundingRect: () => uiState.rippleEl.getBoundingClientRect()
+      }
+    );
     const registerAction = inject("registerAction");
     const mcwChipSet = inject("mcwChipSet");
     const classes = computed(() => {
@@ -1029,7 +1120,12 @@ var script$n = {
     const isFilter = mcwChipSet.role === "listbox";
     const adapter = {
       emitEvent: (eventName, eventDetail) => {
-        emitCustomEvent(uiState.root, eventName, eventDetail, true);
+        emitCustomEvent(
+          uiState.root,
+          eventName,
+          eventDetail,
+          true
+        );
       },
       focus: () => {
         uiState.root.focus();
@@ -1260,7 +1356,12 @@ var script$l = {
         announce(message);
       },
       emitEvent: (eventName, eventDetail) => {
-        emitCustomEvent(uiState.root, eventName, eventDetail, true);
+        emitCustomEvent(
+          uiState.root,
+          eventName,
+          eventDetail,
+          true
+        );
       },
       getAttribute: (attributeName) => uiState.root.getAttribute(attributeName),
       getChipActionsAtIndex: (index) => {
@@ -1425,7 +1526,12 @@ var script$k = {
     const adapter = {
       addClass: (className) => uiState.classes = { ...uiState.classes, [className]: true },
       emitEvent: (eventName, eventDetail) => {
-        emitCustomEvent(uiState.root, eventName, eventDetail, true);
+        emitCustomEvent(
+          uiState.root,
+          eventName,
+          eventDetail,
+          true
+        );
       },
       getActions: () => {
         const actionKeys = [];
@@ -1711,23 +1817,35 @@ var script$j = {
         ...uiState.rootAttrs
       };
     });
-    watch(() => props.open, (nv) => {
-      if (nv) {
-        foundation.open();
-      } else {
-        foundation.close();
+    watch(
+      () => props.open,
+      (nv) => {
+        if (nv) {
+          foundation.open();
+        } else {
+          foundation.close();
+        }
       }
-    });
-    watch(() => props.progress, (nv) => {
-      foundation.setProgress(Number(nv));
-    });
-    watch(() => props.indeterminate, (nv) => {
-      foundation.setDeterminate(!nv);
-    });
+    );
+    watch(
+      () => props.progress,
+      (nv) => {
+        foundation.setProgress(Number(nv));
+      }
+    );
+    watch(
+      () => props.indeterminate,
+      (nv) => {
+        foundation.setDeterminate(!nv);
+      }
+    );
     const colorClass = (index) => {
       return props.fourColor ? `mdc-circular-progress__color-${index}` : void 0;
     };
-    const colors = Array.from({ length: props.fourColor ? 4 : 1 }, (_, index) => index + 1);
+    const colors = Array.from(
+      { length: props.fourColor ? 4 : 1 },
+      (_, index) => index + 1
+    );
     onMounted(() => {
       foundation = new MDCCircularProgressFoundation(adapter);
       foundation.init();
@@ -1892,9 +2010,13 @@ var mcwDataTable = {
       setClassNameByHeaderCellIndex: (index, className) => getHeaderCells()[index].classList.add(className),
       removeClassNameByHeaderCellIndex: (index, className) => getHeaderCells()[index].classList.remove(className),
       notifySortAction: (data) => {
-        emit("mdc-data-table:sorted", {
-          data
-        }, true);
+        emit(
+          "mdc-data-table:sorted",
+          {
+            data
+          },
+          true
+        );
       },
       getTableContainerHeight: () => {
         const tableContainer = root.value.querySelector`.${cssClasses$7.CONTAINER}`;
@@ -1911,9 +2033,13 @@ var mcwDataTable = {
         return tableHeader.getBoundingClientRect().height;
       },
       setProgressIndicatorStyles: (styles) => {
-        const progressIndicator = root.value.querySelector(selectors.PROGRESS_INDICATOR);
+        const progressIndicator = root.value.querySelector(
+          selectors.PROGRESS_INDICATOR
+        );
         if (!progressIndicator) {
-          throw new Error("MDCDataTable: Progress indicator element not found.");
+          throw new Error(
+            "MDCDataTable: Progress indicator element not found."
+          );
         }
         Object.assign(progressIndicator.style, styles);
       },
@@ -1937,7 +2063,9 @@ var mcwDataTable = {
       notifySelectedAll: () => emit("mdcdatatable:selectedall", {}),
       notifyUnselectedAll: () => emit("mdcdatatable:unselectedall", {}),
       registerHeaderRowCheckbox: () => {
-        const checkboxElement = root.value.querySelector(selectors.HEADER_ROW_CHECKBOX);
+        const checkboxElement = root.value.querySelector(
+          selectors.HEADER_ROW_CHECKBOX
+        );
         headerRowCheckbox = checkboxElement.__checkboxHelpers;
       },
       registerRowCheckboxes: () => {
@@ -1955,7 +2083,9 @@ var mcwDataTable = {
       setRowCheckboxCheckedAtIndex: (rowIndex, checked) => rowCheckboxList[rowIndex].setChecked(checked),
       setSortStatusLabelByHeaderCellIndex: (columnIndex, sortValue) => {
         const headerCell = getHeaderCells()[columnIndex];
-        const sortStatusLabel = headerCell.querySelector(selectors.SORT_STATUS_LABEL);
+        const sortStatusLabel = headerCell.querySelector(
+          selectors.SORT_STATUS_LABEL
+        );
         if (!sortStatusLabel) {
           return;
         }
@@ -1988,7 +2118,10 @@ var mcwDataTable = {
     };
     onMounted(() => {
       headerRow = root.value.querySelector(`.${cssClasses$7.HEADER_ROW}`);
-      headerRow.addEventListener("mdccheckbox:change", handleHeaderRowCheckboxChange);
+      headerRow.addEventListener(
+        "mdccheckbox:change",
+        handleHeaderRowCheckboxChange
+      );
       headerRow.addEventListener("click", handleHeaderRowClick);
       content = root.value.querySelector(`.${cssClasses$7.CONTENT}`);
       content.addEventListener("click", handleContentClick);
@@ -1998,9 +2131,15 @@ var mcwDataTable = {
       layout();
     });
     onBeforeUnmount(() => {
-      headerRow.removeEventListener("mdccheckbox:change", handleHeaderRowCheckboxChange);
+      headerRow.removeEventListener(
+        "mdccheckbox:change",
+        handleHeaderRowCheckboxChange
+      );
       headerRow.removeEventListener("click", handleHeaderRowClick);
-      content.removeEventListener("mdccheckbox:change", handleRowCheckboxChange);
+      content.removeEventListener(
+        "mdccheckbox:change",
+        handleRowCheckboxChange
+      );
       content.removeEventListener("click", handleContentClick);
       foundation.destroy();
     });
@@ -2031,16 +2170,20 @@ var mcwDialogButton = {
   },
   setup(props, { attrs, slots }) {
     return () => {
-      return h(resolveComponent("mcw-button"), {
-        ...attrs,
-        class: ["mdc-button", "mdc-dialog__button"],
-        "data-mdc-dialog-action": props.action,
-        "data-mdc-dialog-button-default": props.isDefault,
-        "data-mdc-dialog-initial-focus": props.isInitialFocus
-      }, { default: () => {
-        var _a;
-        return (_a = slots.default) == null ? void 0 : _a.call(slots);
-      } });
+      return h(
+        resolveComponent("mcw-button"),
+        {
+          ...attrs,
+          class: ["mdc-button", "mdc-dialog__button"],
+          "data-mdc-dialog-action": props.action,
+          "data-mdc-dialog-button-default": props.isDefault,
+          "data-mdc-dialog-initial-focus": props.isInitialFocus
+        },
+        { default: () => {
+          var _a;
+          return (_a = slots.default) == null ? void 0 : _a.call(slots);
+        } }
+      );
     };
   }
 };
@@ -2058,9 +2201,13 @@ var mcwDialogContent = {
   setup(props, { slots }) {
     return () => {
       var _a;
-      return h(props.tag, {
-        class: ["mdc-dialog__content"]
-      }, (_a = slots.default) == null ? void 0 : _a.call(slots));
+      return h(
+        props.tag,
+        {
+          class: ["mdc-dialog__content"]
+        },
+        (_a = slots.default) == null ? void 0 : _a.call(slots)
+      );
     };
   }
 };
@@ -2078,9 +2225,13 @@ var mcwDialogFooter = {
   setup(props, { slots }) {
     return () => {
       var _a;
-      return h(props.tag, {
-        class: ["mdc-dialog__actions"]
-      }, (_a = slots.default) == null ? void 0 : _a.call(slots));
+      return h(
+        props.tag,
+        {
+          class: ["mdc-dialog__actions"]
+        },
+        (_a = slots.default) == null ? void 0 : _a.call(slots)
+      );
     };
   }
 };
@@ -2098,9 +2249,13 @@ var mcwDialogTitle = {
   setup(props, { slots }) {
     return () => {
       var _a;
-      return h(props.tag, {
-        class: ["mdc-dialog__title"]
-      }, (_a = slots.default) == null ? void 0 : _a.call(slots));
+      return h(
+        props.tag,
+        {
+          class: ["mdc-dialog__title"]
+        },
+        (_a = slots.default) == null ? void 0 : _a.call(slots)
+      );
     };
   }
 };
@@ -2109,9 +2264,11 @@ const { cssClasses: cssClasses$6, strings: strings$a } = MDCDialogFoundation;
 const LAYOUT_EVENTS = ["resize", "orientationchange"];
 const getInitialFocusElement_ = (element) => {
   if (!element) {
-    return null;
+    return;
   }
-  const focusTrue = element.querySelector(`[${strings$a.INITIAL_FOCUS_ATTRIBUTE}="true"]`);
+  const focusTrue = element.querySelector(
+    `[${strings$a.INITIAL_FOCUS_ATTRIBUTE}="true"]`
+  );
   if (focusTrue) {
     return focusTrue;
   }
@@ -2161,7 +2318,11 @@ var script$i = {
     const onOpen = (nv) => {
       if (nv) {
         if (uiState.container) {
-          focusTrap = util.createFocusTrapInstance(uiState.root, focusTrapFactory_$1, getInitialFocusElement_(uiState.root) || void 0);
+          focusTrap = util.createFocusTrapInstance(
+            uiState.root,
+            focusTrapFactory_$1,
+            getInitialFocusElement_(uiState.root) || void 0
+          );
         }
         foundation.open();
       } else {
@@ -2217,9 +2378,12 @@ var script$i = {
         emit("mdcdialog:closed", action ? { action } : {});
       }
     };
-    watch(() => props.modelValue, (nv) => {
-      onOpen(nv);
-    });
+    watch(
+      () => props.modelValue,
+      (nv) => {
+        onOpen(nv);
+      }
+    );
     onMounted(() => {
       const {
         modelValue,
@@ -2227,11 +2391,17 @@ var script$i = {
         escapeKeyAction,
         scrimClickAction
       } = props;
-      buttons_ = Array.prototype.slice.call(uiState.root.querySelectorAll(cssClasses$6.BUTTON));
-      defaultButton = uiState.root.querySelector(`[${strings$a.BUTTON_DEFAULT_ATTRIBUTE}]`);
+      buttons_ = Array.prototype.slice.call(
+        uiState.root.querySelectorAll(cssClasses$6.BUTTON)
+      );
+      defaultButton = uiState.root.querySelector(
+        `[${strings$a.BUTTON_DEFAULT_ATTRIBUTE}]`
+      );
       const container = uiState.root.querySelector(strings$a.CONTAINER_SELECTOR);
       if (!container) {
-        throw new Error(`Dialog component requires a ${strings$a.CONTAINER_SELECTOR} container element`);
+        throw new Error(
+          `Dialog component requires a ${strings$a.CONTAINER_SELECTOR} container element`
+        );
       }
       content_ = uiState.root.querySelector(strings$a.CONTENT_SELECTOR);
       foundation = new MDCDialogFoundation(adapter);
@@ -2350,31 +2520,46 @@ var script$h = {
         }
       },
       focusActiveNavigationItem: () => {
-        const activeNavItemElement = uiState.drawer.querySelector(`.${MDCListFoundation.cssClasses.LIST_ITEM_ACTIVATED_CLASS}`);
+        const activeNavItemElement = uiState.drawer.querySelector(
+          `.${MDCListFoundation.cssClasses.LIST_ITEM_ACTIVATED_CLASS}`
+        );
         if (activeNavItemElement) {
           activeNavItemElement.focus();
         }
       },
       notifyClose: () => {
-        emitCustomEvent(uiState.drawer, strings$9.CLOSE_EVENT, {}, true);
+        emitCustomEvent(
+          uiState.drawer,
+          strings$9.CLOSE_EVENT,
+          {},
+          true
+        );
         emit("update:modelValue", false);
         emit("close");
       },
       notifyOpen: () => {
-        emitCustomEvent(uiState.drawer, strings$9.OPEN_EVENT, {}, true);
+        emitCustomEvent(
+          uiState.drawer,
+          strings$9.OPEN_EVENT,
+          {},
+          true
+        );
         emit("update:modelValue", true);
         emit("open");
       },
       trapFocus: () => focusTrap_.trapFocus(),
       releaseFocus: () => focusTrap_.releaseFocus()
     };
-    watch(() => props.modelValue, (nv) => {
-      if (nv) {
-        foundation == null ? void 0 : foundation.open();
-      } else {
-        foundation == null ? void 0 : foundation.close();
+    watch(
+      () => props.modelValue,
+      (nv) => {
+        if (nv) {
+          foundation == null ? void 0 : foundation.open();
+        } else {
+          foundation == null ? void 0 : foundation.close();
+        }
       }
-    });
+    );
     onMounted(() => {
       const { DISMISSIBLE, MODAL } = cssClasses$5;
       if (props.dismissible) {
@@ -2382,11 +2567,16 @@ var script$h = {
       } else if (props.modal) {
         foundation = new MDCModalDrawerFoundation(adapter);
       } else {
-        throw new Error(`mcwDrawer: Failed to instantiate component. Supported variants are ${DISMISSIBLE} and ${MODAL}.`);
+        throw new Error(
+          `mcwDrawer: Failed to instantiate component. Supported variants are ${DISMISSIBLE} and ${MODAL}.`
+        );
       }
       foundation.init();
       if (props.modal) {
-        focusTrap_ = util$1.createFocusTrapInstance(uiState.drawer, focusTrapFactory_);
+        focusTrap_ = util$1.createFocusTrapInstance(
+          uiState.drawer,
+          focusTrapFactory_
+        );
       }
     });
     onBeforeUnmount(() => {
@@ -2504,15 +2694,24 @@ var script$g = {
     const classes = computed(() => {
       return { ...rippleClasses.value, ...uiState.classes };
     });
-    watch(() => props.icon, (nv) => {
-      uiState.classes = { ...uiState.classes, "material-icons": nv };
-    });
-    watch(() => props.mini, (nv) => {
-      uiState.classes = { ...uiState.classes, "mdc-fab--mini": nv };
-    });
-    watch(() => props.exited, (nv) => {
-      uiState.classes = { ...uiState.classes, "mdc-fab--exited": nv };
-    });
+    watch(
+      () => props.icon,
+      (nv) => {
+        uiState.classes = { ...uiState.classes, "material-icons": nv };
+      }
+    );
+    watch(
+      () => props.mini,
+      (nv) => {
+        uiState.classes = { ...uiState.classes, "mdc-fab--mini": nv };
+      }
+    );
+    watch(
+      () => props.exited,
+      (nv) => {
+        uiState.classes = { ...uiState.classes, "mdc-fab--exited": nv };
+      }
+    );
     return { ...toRefs(uiState), classes, root, styles };
   }
 };
@@ -2636,9 +2835,12 @@ var script$f = {
       root: void 0
     });
     const { CHANGE_EVENT } = MDCIconButtonToggleFoundation.strings;
-    const { classes: rippleClasses, styles } = useRipplePlugin(toRef(uiState, "root"), {
-      isUnbounded: () => true
-    });
+    const { classes: rippleClasses, styles } = useRipplePlugin(
+      toRef(uiState, "root"),
+      {
+        isUnbounded: () => true
+      }
+    );
     let foundation;
     const adapter = {
       addClass: (className) => uiState.classes = { ...uiState.classes, [className]: true },
@@ -2660,9 +2862,12 @@ var script$f = {
         ...uiState.classes
       };
     });
-    watch(() => props.modelValue, (nv) => {
-      foundation.toggle(nv);
-    });
+    watch(
+      () => props.modelValue,
+      (nv) => {
+        foundation.toggle(nv);
+      }
+    );
     const tag = computed(() => attrs.href ? "a" : "button");
     const onClick = (event_) => foundation.handleClick(event_);
     onMounted(() => {
@@ -2721,13 +2926,17 @@ var mcwIconToggle = {
   setup(props, { slots }) {
     return () => {
       var _a;
-      return h("i", {
-        class: {
-          "material-icons": 1,
-          "mdc-icon-button__icon": true,
-          "mdc-icon-button__icon--on": props.isOn
-        }
-      }, (_a = slots.default) == null ? void 0 : _a.call(slots));
+      return h(
+        "i",
+        {
+          class: {
+            "material-icons": 1,
+            "mdc-icon-button__icon": true,
+            "mdc-icon-button__icon--on": props.isOn
+          }
+        },
+        (_a = slots.default) == null ? void 0 : _a.call(slots)
+      );
     };
   }
 };
@@ -2783,13 +2992,17 @@ var mcwLayoutCell = {
     });
     return () => {
       var _a;
-      return h("div", {
-        class: {
-          "mdc-layout-cell": true,
-          "mdc-layout-grid__cell": true,
-          ...classes.value
-        }
-      }, [(_a = slots.default) == null ? void 0 : _a.call(slots)]);
+      return h(
+        "div",
+        {
+          class: {
+            "mdc-layout-cell": true,
+            "mdc-layout-grid__cell": true,
+            ...classes.value
+          }
+        },
+        [(_a = slots.default) == null ? void 0 : _a.call(slots)]
+      );
     };
   }
 };
@@ -2812,9 +3025,13 @@ var mcwLayoutGrid = {
     });
     return () => {
       var _a;
-      return h("div", {
-        class: classes.value
-      }, [h("div", { class: "mdc-layout-grid__inner" }, [(_a = slots.default) == null ? void 0 : _a.call(slots)])]);
+      return h(
+        "div",
+        {
+          class: classes.value
+        },
+        [h("div", { class: "mdc-layout-grid__inner" }, [(_a = slots.default) == null ? void 0 : _a.call(slots)])]
+      );
     };
   }
 };
@@ -2823,7 +3040,11 @@ var mcwLayoutInnerGrid = {
   name: "mcw-layout-inner-grid",
   setup(props, { slots }) {
     return () => {
-      return h("div", { class: "mdc-layout-inner-grid mdc-layout-grid__inner" }, [slots.default()]);
+      return h(
+        "div",
+        { class: "mdc-layout-inner-grid mdc-layout-grid__inner" },
+        [slots.default()]
+      );
     };
   }
 };
@@ -2954,18 +3175,30 @@ var script$e = {
       getWidth: () => uiState.root.offsetWidth
     };
     const openOrClose = (nv) => foundation[nv ? "open" : "close"]();
-    watch(() => props.open, (nv) => {
-      openOrClose(nv);
-    });
-    watch(() => props.progress, (nv) => {
-      foundation.setProgress(Number(nv));
-    });
-    watch(() => props.buffer, (nv) => {
-      foundation.setBuffer(Number(nv));
-    });
-    watch(() => props.indeterminate, (nv) => {
-      foundation.setDeterminate(!nv);
-    });
+    watch(
+      () => props.open,
+      (nv) => {
+        openOrClose(nv);
+      }
+    );
+    watch(
+      () => props.progress,
+      (nv) => {
+        foundation.setProgress(Number(nv));
+      }
+    );
+    watch(
+      () => props.buffer,
+      (nv) => {
+        foundation.setBuffer(Number(nv));
+      }
+    );
+    watch(
+      () => props.indeterminate,
+      (nv) => {
+        foundation.setDeterminate(!nv);
+      }
+    );
     const onTransitionEnd = (event) => {
       foundation.handleTransitionEnd(event);
     };
@@ -3090,7 +3323,9 @@ var script$d = {
     }));
     const getPrimaryText = () => {
       var _a, _b;
-      const primaryText = ((_a = root.value.$el) != null ? _a : root.value).querySelector(`.${cssClasses$8.LIST_ITEM_PRIMARY_TEXT_CLASS}`);
+      const primaryText = ((_a = root.value.$el) != null ? _a : root.value).querySelector(
+        `.${cssClasses$8.LIST_ITEM_PRIMARY_TEXT_CLASS}`
+      );
       return (_b = primaryText == null ? void 0 : primaryText.textContent) != null ? _b : "";
     };
     registerListItem({
@@ -3222,12 +3457,16 @@ var mcwList = {
     };
     const layout = () => {
       foundation.setVerticalOrientation(props.vertical);
-      for (const itemElement of listRoot.value.querySelectorAll(".mdc-list-item:not([tabindex])")) {
+      for (const itemElement of listRoot.value.querySelectorAll(
+        ".mdc-list-item:not([tabindex])"
+      )) {
         const id = itemElement.dataset.myitemid;
         const item = listItems[id];
         item.setAttribute("tabindex", -1);
       }
-      for (const focusableChildElements of listRoot.value.querySelectorAll(strings$b.FOCUSABLE_CHILD_ELEMENTS)) {
+      for (const focusableChildElements of listRoot.value.querySelectorAll(
+        strings$b.FOCUSABLE_CHILD_ELEMENTS
+      )) {
         focusableChildElements.setAttribute("tabindex", -1);
       }
       foundation.setUseSelectedAttribute(true);
@@ -3245,13 +3484,26 @@ var mcwList = {
         }
         return;
       }
-      const checkboxListItems = listRoot.value.querySelectorAll(strings$b.ARIA_ROLE_CHECKBOX_SELECTOR);
-      const radioSelectedListItem = listRoot.value.querySelector(strings$b.ARIA_CHECKED_RADIO_SELECTOR);
+      const checkboxListItems = listRoot.value.querySelectorAll(
+        strings$b.ARIA_ROLE_CHECKBOX_SELECTOR
+      );
+      const radioSelectedListItem = listRoot.value.querySelector(
+        strings$b.ARIA_CHECKED_RADIO_SELECTOR
+      );
       if (checkboxListItems.length > 0) {
-        const preselectedItems = listRoot.value.querySelectorAll(strings$b.ARIA_CHECKED_CHECKBOX_SELECTOR);
-        foundation.setSelectedIndex(Array.prototype.map.call(preselectedItems, (listItem) => listElements.value.indexOf(listItem)));
+        const preselectedItems = listRoot.value.querySelectorAll(
+          strings$b.ARIA_CHECKED_CHECKBOX_SELECTOR
+        );
+        foundation.setSelectedIndex(
+          Array.prototype.map.call(
+            preselectedItems,
+            (listItem) => listElements.value.indexOf(listItem)
+          )
+        );
       } else if (radioSelectedListItem) {
-        foundation.setSelectedIndex(listElements.value.indexOf(radioSelectedListItem));
+        foundation.setSelectedIndex(
+          listElements.value.indexOf(radioSelectedListItem)
+        );
       }
     };
     const handleFocusInEvent = (event_) => {
@@ -3265,11 +3517,18 @@ var mcwList = {
     const handleKeydownEvent = (event_) => {
       const index = getListItemIndex(event_, listElements.value);
       const target = event_.target;
-      foundation.handleKeydown(event_, target.classList.contains(cssClasses$8.LIST_ITEM_CLASS), index);
+      foundation.handleKeydown(
+        event_,
+        target.classList.contains(cssClasses$8.LIST_ITEM_CLASS),
+        index
+      );
     };
     const handleClickEvent = (event_) => {
       const index = getListItemIndex(event_, listElements.value);
-      const isCheckboxAlreadyUpdatedInAdapter = matches(event_.target, strings$b.CHECKBOX_RADIO_SELECTOR);
+      const isCheckboxAlreadyUpdatedInAdapter = matches(
+        event_.target,
+        strings$b.CHECKBOX_RADIO_SELECTOR
+      );
       foundation.handleClick(index, isCheckboxAlreadyUpdatedInAdapter, event_);
     };
     const adapter = {
@@ -3317,7 +3576,12 @@ var mcwList = {
         return (_a = getListItemByIndex(index)) == null ? void 0 : _a.hasClass(className);
       },
       notifyAction: (index) => {
-        emitCustomEvent(listRoot.value, strings$b.ACTION_EVENT, { index }, true);
+        emitCustomEvent(
+          listRoot.value,
+          strings$b.ACTION_EVENT,
+          { index },
+          true
+        );
         if (Array.isArray(props.modelValue)) {
           emit("update:modelValue", foundation.getSelectedIndex());
         } else {
@@ -3325,7 +3589,11 @@ var mcwList = {
         }
       },
       notifySelectionChange: (changedIndices) => {
-        emit(strings$b.SELECTION_CHANGE_EVENT.toLowerCase(), { changedIndices }, true);
+        emit(
+          strings$b.SELECTION_CHANGE_EVENT.toLowerCase(),
+          { changedIndices },
+          true
+        );
       },
       removeClassForElementIndex: (index, className) => {
         var _a;
@@ -3337,7 +3605,9 @@ var mcwList = {
       },
       setCheckedCheckboxOrRadioAtIndex: (index, isChecked) => {
         const listItem = listElements.value[index];
-        const toggleElement = listItem.querySelector(strings$b.CHECKBOX_RADIO_SELECTOR);
+        const toggleElement = listItem.querySelector(
+          strings$b.CHECKBOX_RADIO_SELECTOR
+        );
         toggleElement && (toggleElement.checked = isChecked);
         const event = new CustomEvent("update:modelValue", [true, false]);
         toggleElement == null ? void 0 : toggleElement.dispatchEvent(event);
@@ -3345,24 +3615,42 @@ var mcwList = {
       setTabIndexForListItemChildren: (listItemIndex, tabIndexValue) => {
         var _a;
         const element = listElements.value[listItemIndex];
-        const listItemChildren = Array.prototype.slice.call(element.querySelectorAll(strings$b.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX));
+        const listItemChildren = Array.prototype.slice.call(
+          element.querySelectorAll(strings$b.CHILD_ELEMENTS_TO_TOGGLE_TABINDEX)
+        );
         for (const element_ of listItemChildren) {
           const listItem = (_a = listItems[element_.dataset.myitemid]) != null ? _a : element_;
           listItem.setAttribute("tabindex", tabIndexValue);
         }
       }
     };
-    watch(() => props.modelValue, (nv) => {
-      if (Array.isArray(nv) || props.modelValue != nv) {
-        foundation.setSelectedIndex(nv);
+    watch(
+      () => props.modelValue,
+      (nv) => {
+        if (Array.isArray(nv) || props.modelValue != nv) {
+          foundation.setSelectedIndex(nv);
+        }
       }
-    });
-    watch(() => props.wrapFocus, (nv) => foundation.setWrapFocus(nv));
-    watch(() => props.vertical, (nv) => foundation.setVerticalOrientation(nv));
-    watch(() => props.typeAhead, (nv) => foundation.setHasTypeahead(nv));
+    );
+    watch(
+      () => props.wrapFocus,
+      (nv) => foundation.setWrapFocus(nv)
+    );
+    watch(
+      () => props.vertical,
+      (nv) => foundation.setVerticalOrientation(nv)
+    );
+    watch(
+      () => props.typeAhead,
+      (nv) => foundation.setHasTypeahead(nv)
+    );
     const ensureFocusable = () => {
       if (isInteractive && !listRoot.value.querySelector(`.mdc-list-item[tabindex="0"]`)) {
-        const index = getInitialFocusIndex(foundation, listRoot.value, listElements.value);
+        const index = getInitialFocusIndex(
+          foundation,
+          listRoot.value,
+          listElements.value
+        );
         if (index !== -1) {
           listElements.value[index].tabIndex = 0;
         }
@@ -3398,7 +3686,11 @@ var mcwList = {
       setSelectedIndex: (index) => foundation.setSelectedIndex(index),
       getSelectedIndex: () => foundation.getSelectedIndex(),
       setEnabled: (itemIndex, isEnabled) => foundation.setEnabled(itemIndex, isEnabled),
-      typeaheadMatchItem: (nextChar, startingIndex) => foundation.typeaheadMatchItem(nextChar, startingIndex, true),
+      typeaheadMatchItem: (nextChar, startingIndex) => foundation.typeaheadMatchItem(
+        nextChar,
+        startingIndex,
+        true
+      ),
       typeaheadInProgress: () => foundation.isTypeaheadInProgress(),
       listElements,
       getListItemByIndex,
@@ -3412,16 +3704,20 @@ var mcwList = {
       }
     });
     return () => {
-      return h("ul", {
-        ref: listRoot,
-        class: uiState.classes,
-        onClick: handleClickEvent,
-        onKeydown: handleKeydownEvent,
-        onFocusin: handleFocusInEvent,
-        onFocusout: handleFocusOutEvent,
-        role: "role",
-        ...uiState.rootAttrs
-      }, slots.default());
+      return h(
+        "ul",
+        {
+          ref: listRoot,
+          class: uiState.classes,
+          onClick: handleClickEvent,
+          onKeydown: handleKeydownEvent,
+          onFocusin: handleFocusInEvent,
+          onFocusout: handleFocusOutEvent,
+          role: "role",
+          ...uiState.rootAttrs
+        },
+        slots.default()
+      );
     };
   }
 };
@@ -3430,12 +3726,17 @@ const getListItemIndex = (eventOrElement, listElements) => {
   if (target) {
     const myItemId = target.dataset.myitemid;
     if (myItemId !== void 0) {
-      const listElementIndex = listElements.findIndex(({ dataset: { myitemid } }) => myitemid === myItemId);
+      const listElementIndex = listElements.findIndex(
+        ({ dataset: { myitemid } }) => myitemid === myItemId
+      );
       return listElementIndex;
     }
   }
   const element = target != null ? target : eventOrElement;
-  const nearestParent = closest(element, `.${cssClasses$8.LIST_ITEM_CLASS}, .${cssClasses$8.ROOT}`);
+  const nearestParent = closest(
+    element,
+    `.${cssClasses$8.LIST_ITEM_CLASS}, .${cssClasses$8.ROOT}`
+  );
   if (nearestParent && matches(nearestParent, `.${cssClasses$8.LIST_ITEM_CLASS}`)) {
     return listElements.value.indexOf(nearestParent);
   }
@@ -3449,7 +3750,9 @@ const getInitialFocusIndex = (foundation, rootElement, listElements) => {
   if (typeof selectedIndex === "number" && selectedIndex !== -1) {
     return selectedIndex;
   }
-  const element = rootElement.querySelector(`.mdc-list-item:not(.mdc-list-item--disabled)`);
+  const element = rootElement.querySelector(
+    `.mdc-list-item:not(.mdc-list-item--disabled)`
+  );
   if (element === null) {
     return -1;
   }
@@ -3459,8 +3762,14 @@ function setSelectedIfSingleSelectionList(props, foundation, adapter) {
   const { modelValue, multiSelectable } = props;
   if (multiSelectable != true && typeof modelValue === "number" && !Number.isNaN(modelValue)) {
     const index = modelValue;
-    const hasSelectedClass = adapter.listItemAtIndexHasClass(index, cssClasses$8.LIST_ITEM_SELECTED_CLASS);
-    const hasActivatedClass = adapter.listItemAtIndexHasClass(index, cssClasses$8.LIST_ITEM_ACTIVATED_CLASS);
+    const hasSelectedClass = adapter.listItemAtIndexHasClass(
+      index,
+      cssClasses$8.LIST_ITEM_SELECTED_CLASS
+    );
+    const hasActivatedClass = adapter.listItemAtIndexHasClass(
+      index,
+      cssClasses$8.LIST_ITEM_ACTIVATED_CLASS
+    );
     if (!(hasSelectedClass || hasActivatedClass)) {
       adapter.addClassForElementIndex(modelValue, "mdc-list-item--selected");
     }
@@ -3497,11 +3806,15 @@ var mcwMenuAnchor = {
   setup(props, { slots }) {
     return () => {
       var _a;
-      return h("div", {
-        class: {
-          "mdc-menu-surface--anchor": 1
-        }
-      }, (_a = slots.default) == null ? void 0 : _a.call(slots));
+      return h(
+        "div",
+        {
+          class: {
+            "mdc-menu-surface--anchor": 1
+          }
+        },
+        (_a = slots.default) == null ? void 0 : _a.call(slots)
+      );
     };
   }
 };
@@ -3514,15 +3827,19 @@ var mcwMenuItem = {
   setup(props, { slots }) {
     return () => {
       var _a;
-      return h("li", {
-        class: {
-          "mdc-menu-divider": 1,
-          "mdc-list-divider": 1
+      return h(
+        "li",
+        {
+          class: {
+            "mdc-menu-divider": 1,
+            "mdc-list-divider": 1
+          },
+          tabindex: props.disabled ? "-1" : "0",
+          "aria-disabled": props.disabled,
+          role: "menuitem"
         },
-        tabindex: props.disabled ? "-1" : "0",
-        "aria-disabled": props.disabled,
-        role: "menuitem"
-      }, (_a = slots.default) == null ? void 0 : _a.call(slots));
+        (_a = slots.default) == null ? void 0 : _a.call(slots)
+      );
     };
   }
 };
@@ -3641,11 +3958,20 @@ var mcwMenuSurface = {
       },
       isRtl: () => getComputedStyle(root.value).getPropertyValue("direction") === "rtl",
       setTransformOrigin: (origin) => {
-        root.value.style.setProperty(`${getCorrectPropertyName(window, "transform")}-origin`, origin);
+        root.value.style.setProperty(
+          `${getCorrectPropertyName(window, "transform")}-origin`,
+          origin
+        );
       }
     };
-    watch(() => props.modelValue, (nv) => onOpen_(nv));
-    watch(() => props.quickOpen, (nv) => foundation.setQuickOpen(nv));
+    watch(
+      () => props.modelValue,
+      (nv) => onOpen_(nv)
+    );
+    watch(
+      () => props.quickOpen,
+      (nv) => foundation.setQuickOpen(nv)
+    );
     onMounted(() => {
       var _a;
       foundation = new MDCMenuSurfaceFoundation({
@@ -3676,11 +4002,15 @@ var mcwMenuSurface = {
     });
     return () => {
       var _a;
-      return h("div", {
-        ref: root,
-        class: uiState.classes,
-        onKeydown: (event_) => handleKeydown(event_)
-      }, (_a = slots.default) == null ? void 0 : _a.call(slots));
+      return h(
+        "div",
+        {
+          ref: root,
+          class: uiState.classes,
+          onKeydown: (event_) => handleKeydown(event_)
+        },
+        (_a = slots.default) == null ? void 0 : _a.call(slots)
+      );
     };
   }
 };
@@ -3854,14 +4184,22 @@ var script$c = {
       },
       getSelectedSiblingOfItemAtIndex: (index) => {
         const item = getListElementByIndex(index);
-        const selectionGroupElement = closest(item, `.${cssClasses$3.MENU_SELECTION_GROUP}`);
-        const selectedItemElement = selectionGroupElement.querySelector(`.${cssClasses$3.MENU_SELECTED_LIST_ITEM}`);
+        const selectionGroupElement = closest(
+          item,
+          `.${cssClasses$3.MENU_SELECTION_GROUP}`
+        );
+        const selectedItemElement = selectionGroupElement.querySelector(
+          `.${cssClasses$3.MENU_SELECTED_LIST_ITEM}`
+        );
         return selectedItemElement ? uiState.list.getListElementIndex(selectedItemElement) : -1;
       }
     };
-    watch(() => props.modelValue, (nv) => {
-      uiState.menuOpen = nv;
-    });
+    watch(
+      () => props.modelValue,
+      (nv) => {
+        uiState.menuOpen = nv;
+      }
+    );
     onMounted(() => {
       uiState.menuOpen = props.modelValue;
       foundation = new MDCMenuFoundation(adapter);
@@ -3881,7 +4219,9 @@ var script$c = {
     const getMenuItemValues = (attribute) => {
       var _a;
       const le = (_a = uiState.list) == null ? void 0 : _a.listElements;
-      const returnValue = le.map((element) => element.getAttribute(attribute) || "");
+      const returnValue = le.map(
+        (element) => element.getAttribute(attribute) || ""
+      );
       return returnValue;
     };
     const getMenuItemTextAtIndex = (index) => {
@@ -4022,7 +4362,11 @@ var mcwNotchedOutline = {
       const floatingLabel = slots.default && h(mcwFloatingLabel, { ref: labelReference }, () => [slots.default()]);
       return h("span", { class: uiState.outlinedClasses }, [
         h("span", { class: "mdc-notched-outline__leading" }),
-        h("span", { class: "mdc-notched-outline__notch", style: uiState.notchStyles }, [floatingLabel]),
+        h(
+          "span",
+          { class: "mdc-notched-outline__notch", style: uiState.notchStyles },
+          [floatingLabel]
+        ),
         h("span", { class: "mdc-notched-outline__trailing" })
       ]);
     };
@@ -4099,15 +4443,24 @@ var script$b = {
       },
       setNativeControlDisabled: (disabled) => uiState.controlEl && uiState.controlEl.disabled == disabled
     };
-    watch(() => props.checked, (nv) => {
-      setChecked(nv);
-    });
-    watch(() => props.disabled, (nv) => {
-      foundation.setDisabled(nv);
-    });
-    watch(() => props.modelValue, (nv) => {
-      onPicked(nv);
-    });
+    watch(
+      () => props.checked,
+      (nv) => {
+        setChecked(nv);
+      }
+    );
+    watch(
+      () => props.disabled,
+      (nv) => {
+        foundation.setDisabled(nv);
+      }
+    );
+    watch(
+      () => props.modelValue,
+      (nv) => {
+        onPicked(nv);
+      }
+    );
     onMounted(() => {
       foundation = new MDCRadioFoundation(adapter);
       foundation.init();
@@ -4179,7 +4532,8 @@ function render$b(_ctx, _cache, $props, $setup, $data, $options) {
         renderSlot(_ctx.$slots, "default", {}, () => [
           createTextVNode(toDisplayString(_ctx.label), 1)
         ])
-      ])
+      ]),
+      key: "0"
     } : void 0
   ]), 1032, ["activate", "deactivate", "alignEnd", "forId"]);
 }
@@ -4219,11 +4573,14 @@ var script$a = {
       setSelected,
       setUnselected
     });
-    const { classes: rippleClasses, styles } = useRipplePlugin(toRef(uiState, "root"), {
-      computeBoundingRect: () => {
-        return foundation.getDimensions();
+    const { classes: rippleClasses, styles } = useRipplePlugin(
+      toRef(uiState, "root"),
+      {
+        computeBoundingRect: () => {
+          return foundation.getDimensions();
+        }
       }
-    });
+    );
     const myAttributes = computed(() => {
       return {
         ...uiState.attrs,
@@ -4247,11 +4604,16 @@ var script$a = {
         uiState.classes = rest;
       },
       notifySelectedChange: (selected) => {
-        emitCustomEvent(uiState.root, "selected", {
-          index: segmentIndex,
-          selected,
-          segmentId: getSegmentId()
-        }, true);
+        emitCustomEvent(
+          uiState.root,
+          "selected",
+          {
+            index: segmentIndex,
+            selected,
+            segmentId: getSegmentId()
+          },
+          true
+        );
       },
       getRootBoundingClientRect: () => {
         return uiState.root.getBoundingClientRect();
@@ -4337,11 +4699,13 @@ var mcwSegmentedButton = {
       isSingleSelect: props.singleSelect,
       isTouch: props.touch
     });
-    const mappedSegments = computed(() => segments_.map(({ index, isSelected, getSegmentId }) => ({
-      index,
-      selected: isSelected(),
-      segmentId: getSegmentId()
-    })));
+    const mappedSegments = computed(
+      () => segments_.map(({ index, isSelected, getSegmentId }) => ({
+        index,
+        selected: isSelected(),
+        segmentId: getSegmentId()
+      }))
+    );
     const onSelected = ({ detail }) => {
       foundation.handleSelected(detail);
     };
@@ -4351,13 +4715,17 @@ var mcwSegmentedButton = {
         return mappedSegments.value;
       },
       selectSegment: (indexOrSegmentId) => {
-        const segmentDetail = mappedSegments.value.find((_segmentDetail) => _segmentDetail.index === indexOrSegmentId || _segmentDetail.segmentId === indexOrSegmentId);
+        const segmentDetail = mappedSegments.value.find(
+          (_segmentDetail) => _segmentDetail.index === indexOrSegmentId || _segmentDetail.segmentId === indexOrSegmentId
+        );
         if (segmentDetail) {
           segments_[segmentDetail.index].setSelected();
         }
       },
       unselectSegment: (indexOrSegmentId) => {
-        const segmentDetail = mappedSegments.value.find((_segmentDetail) => _segmentDetail.index === indexOrSegmentId || _segmentDetail.segmentId === indexOrSegmentId);
+        const segmentDetail = mappedSegments.value.find(
+          (_segmentDetail) => _segmentDetail.index === indexOrSegmentId || _segmentDetail.segmentId === indexOrSegmentId
+        );
         if (segmentDetail) {
           segments_[segmentDetail.index].setUnselected();
         }
@@ -4387,38 +4755,45 @@ var mcwSegmentedButton = {
       if (props.singleSelect && props.modelValue !== void 0) {
         foundation.selectSegment(props.modelValue);
       }
-      watch(() => props.modelValue, (nv) => {
-        if (Array.isArray(nv)) {
-          const selectedSegments = mappedSegments.value.filter(({ selected }) => selected).map(({ index }) => index);
-          for (const v of nv) {
-            if (!selectedSegments.includes(v)) {
-              foundation.selectSegment(v);
+      watch(
+        () => props.modelValue,
+        (nv) => {
+          if (Array.isArray(nv)) {
+            const selectedSegments = mappedSegments.value.filter(({ selected }) => selected).map(({ index }) => index);
+            for (const v of nv) {
+              if (!selectedSegments.includes(v)) {
+                foundation.selectSegment(v);
+              }
             }
-          }
-          for (const v of selectedSegments) {
-            if (!nv.includes(v)) {
-              foundation.unselectSegment(v);
+            for (const v of selectedSegments) {
+              if (!nv.includes(v)) {
+                foundation.unselectSegment(v);
+              }
             }
+          } else {
+            foundation.selectSegment(nv);
+            foundation.handleSelected({ index: nv });
           }
-        } else {
-          foundation.selectSegment(nv);
-          foundation.handleSelected({ index: nv });
         }
-      });
+      );
     });
     onBeforeUnmount(() => {
       foundation == null ? void 0 : foundation.destroy();
     });
     return () => {
-      return h("div", {
-        ref: rootElement,
-        class: {
-          "mdc-segmented-button": 1,
-          ...uiState.classes
+      return h(
+        "div",
+        {
+          ref: rootElement,
+          class: {
+            "mdc-segmented-button": 1,
+            ...uiState.classes
+          },
+          role: role.value,
+          onSelected
         },
-        role: role.value,
-        onSelected
-      }, [slots.default()]);
+        [slots.default()]
+      );
     };
   }
 };
@@ -4466,9 +4841,18 @@ var SelectHelperText = {
         uiState.myHelptext = content;
       }
     };
-    watch(() => props.helptextPersistent, (nv) => foundation.value.setPersistent(nv));
-    watch(() => props.helptextValidation, (nv) => foundation.value.setValidation(nv));
-    watch(() => props.helptext, (nv) => uiState.myHelptext = nv);
+    watch(
+      () => props.helptextPersistent,
+      (nv) => foundation.value.setPersistent(nv)
+    );
+    watch(
+      () => props.helptextValidation,
+      (nv) => foundation.value.setValidation(nv)
+    );
+    watch(
+      () => props.helptext,
+      (nv) => uiState.myHelptext = nv
+    );
     onMounted(() => {
       foundation.value = new MDCSelectHelperTextFoundation(adapter);
       foundation.value.init();
@@ -4530,7 +4914,12 @@ var SelectIcon = {
       },
       notifyIconAction: () => {
         emit("click");
-        emitCustomEvent(uiState.root, strings$6.ICON_EVENT, {}, true);
+        emitCustomEvent(
+          uiState.root,
+          strings$6.ICON_EVENT,
+          {},
+          true
+        );
       }
     };
     onMounted(() => {
@@ -4542,13 +4931,17 @@ var SelectIcon = {
     });
     expose({ foundation });
     return () => {
-      return h("i", {
-        ref: root,
-        class: uiState.classes,
-        style: uiState.styles,
-        ...uiState.rootAttrs,
-        ...uiState.rootListeners
-      }, [props.icon]);
+      return h(
+        "i",
+        {
+          ref: root,
+          class: uiState.classes,
+          style: uiState.styles,
+          ...uiState.rootAttrs,
+          ...uiState.rootListeners
+        },
+        [props.icon]
+      );
     };
   }
 };
@@ -4702,7 +5095,12 @@ var script$9 = {
       },
       notifyChange: (value) => {
         const index = foundation.getSelectedIndex();
-        emitCustomEvent(uiState.root, strings$5.CHANGE_EVENT, { value, index }, true);
+        emitCustomEvent(
+          uiState.root,
+          strings$5.CHANGE_EVENT,
+          { value, index },
+          true
+        );
         value != props.modelValue && emit("update:modelValue", value);
       },
       hasOutline: () => props.outlined,
@@ -4731,16 +5129,24 @@ var script$9 = {
     const setFixedPosition = (isFixed) => uiState.menu.setFixedPosition(isFixed);
     const refreshIndex = () => {
       var _a;
-      const menuItemValues = (_a = uiState.menu) == null ? void 0 : _a.getMenuItemValues(strings$5.VALUE_ATTR);
+      const menuItemValues = (_a = uiState.menu) == null ? void 0 : _a.getMenuItemValues(
+        strings$5.VALUE_ATTR
+      );
       const index = menuItemValues.indexOf(props.modelValue);
       uiState.menu.setSelectedIndex(index);
       return index;
     };
-    watch(() => props.disabled, (nv) => foundation == null ? void 0 : foundation.updateDisabledStyle(nv));
-    watch(() => props.modelValue, () => {
-      const index = refreshIndex();
-      foundation.setSelectedIndex(index);
-    });
+    watch(
+      () => props.disabled,
+      (nv) => foundation == null ? void 0 : foundation.updateDisabledStyle(nv)
+    );
+    watch(
+      () => props.modelValue,
+      () => {
+        const index = refreshIndex();
+        foundation.setSelectedIndex(index);
+      }
+    );
     onMounted(() => {
       var _a, _b;
       uiState.menu.hasTypeahead = true;
@@ -5022,7 +5428,9 @@ var script$8 = {
       },
       getValueToAriaValueTextFn: () => valueToAriaValueTextFunction,
       updateTickMarks: (tickMarks) => {
-        uiState.marks = tickMarks.map((mark) => mark == 0 ? "mdc-slider__tick-mark--active" : "mdc-slider__tick-mark--inactive");
+        uiState.marks = tickMarks.map(
+          (mark) => mark == 0 ? "mdc-slider__tick-mark--active" : "mdc-slider__tick-mark--inactive"
+        );
       },
       setPointerCapture: (pointerId) => uiState.root.setPointerCapture(pointerId),
       emitChangeEvent: (value, thumb) => {
@@ -5052,19 +5460,28 @@ var script$8 = {
       registerWindowEventHandler: (eventType, handler) => window.addEventListener(eventType, handler),
       deregisterWindowEventHandler: (eventType, handler) => window.removeEventListener(eventType, handler)
     };
-    watch(() => props.modelValue, (nv) => {
-      if (foundation.getValue() !== Number(nv)) {
-        foundation.setValue(nv);
+    watch(
+      () => props.modelValue,
+      (nv) => {
+        if (foundation.getValue() !== Number(nv)) {
+          foundation.setValue(nv);
+        }
       }
-    });
-    watch(() => props.start, (nv) => {
-      if (foundation.getValueStart() !== Number(nv)) {
-        foundation.setValueStart(nv);
+    );
+    watch(
+      () => props.start,
+      (nv) => {
+        if (foundation.getValueStart() !== Number(nv)) {
+          foundation.setValueStart(nv);
+        }
       }
-    });
-    watch(() => props.disabled, (nv) => {
-      foundation.setDisabled(nv);
-    });
+    );
+    watch(
+      () => props.disabled,
+      (nv) => {
+        foundation.setDisabled(nv);
+      }
+    );
     onMounted(() => {
       uiState.dir = getComputedStyle(uiState.root).direction;
       if (props.range) {
@@ -5252,12 +5669,15 @@ var mcwSnackbarQueue = {
         nextTick(() => queue[0]());
       }
     };
-    watch(() => props.snack, (nv) => {
-      if (nv) {
-        handleSnack(nv);
-        emit("update:snack");
+    watch(
+      () => props.snack,
+      (nv) => {
+        if (nv) {
+          handleSnack(nv);
+          emit("update:snack");
+        }
       }
-    });
+    );
     expose({ handleSnack });
     return () => {
       return h(script$7, {
@@ -5321,7 +5741,10 @@ var script$7 = {
       }
       ariaElement.setAttribute("aria-live", "off");
       uiState.showMessage = false;
-      labelElement.setAttribute(strings$4.ARIA_LIVE_LABEL_TEXT_ATTR, props.message);
+      labelElement.setAttribute(
+        strings$4.ARIA_LIVE_LABEL_TEXT_ATTR,
+        props.message
+      );
       setTimeout(() => {
         ariaElement.setAttribute("aria-live", priority);
         labelElement.removeAttribute(strings$4.ARIA_LIVE_LABEL_TEXT_ATTR);
@@ -5358,19 +5781,28 @@ var script$7 = {
         foundation.handleActionIconClick(event_);
       }
     };
-    watch(() => props.modelValue, (nv) => {
-      if (nv) {
-        foundation.open();
-      } else {
-        foundation.close(props.reason ? props.reason : "");
+    watch(
+      () => props.modelValue,
+      (nv) => {
+        if (nv) {
+          foundation.open();
+        } else {
+          foundation.close(props.reason ? props.reason : "");
+        }
       }
-    });
-    watch(() => props.timeoutMs, (nv) => {
-      if (nv !== void 0) {
-        foundation.setTimeoutMs(nv);
+    );
+    watch(
+      () => props.timeoutMs,
+      (nv) => {
+        if (nv !== void 0) {
+          foundation.setTimeoutMs(nv);
+        }
       }
-    });
-    watch(() => props.closeOnEscape, (nv) => foundation.setCloseOnEscape(nv));
+    );
+    watch(
+      () => props.closeOnEscape,
+      (nv) => foundation.setCloseOnEscape(nv)
+    );
     onMounted(() => {
       window.addEventListener("keydown", handleKeydownEvent);
       foundation = new MDCSnackbarFoundation(adapter);
@@ -5484,10 +5916,13 @@ var script$6 = {
       processing: false,
       selected: props.modelValue
     };
-    const { classes: rippleClasses, styles } = useRipplePlugin(toRef(uiState, "root"), {
-      unbounded: true,
-      computeBoundingRect: () => uiState.rippleEl.getBoundingClientRect()
-    });
+    const { classes: rippleClasses, styles } = useRipplePlugin(
+      toRef(uiState, "root"),
+      {
+        unbounded: true,
+        computeBoundingRect: () => uiState.rippleEl.getBoundingClientRect()
+      }
+    );
     let foundation;
     const switchId = (_a = props.id) != null ? _a : `__mcw-switch-${switchId_++}`;
     const classes = computed(() => {
@@ -5517,12 +5952,18 @@ var script$6 = {
       },
       state
     };
-    watch(() => props.modelValue, (nv) => {
-      state.selected = nv;
-    });
-    watch(() => props.disabled, (nv) => {
-      state.disabled = nv;
-    });
+    watch(
+      () => props.modelValue,
+      (nv) => {
+        state.selected = nv;
+      }
+    );
+    watch(
+      () => props.disabled,
+      (nv) => {
+        state.disabled = nv;
+      }
+    );
     const handleClick = (event) => {
       foundation.handleClick(event);
     };
@@ -5610,7 +6051,8 @@ function render$6(_ctx, _cache, $props, $setup, $data, $options) {
         renderSlot(_ctx.$slots, "default", {}, () => [
           createTextVNode(toDisplayString(_ctx.label), 1)
         ])
-      ])
+      ]),
+      key: "0"
     } : void 0
   ]), 1032, ["alignEnd", "forId"]);
 }
@@ -5645,7 +6087,9 @@ var mcwTabBar = {
     });
     let foundation;
     const getTabElements_ = () => {
-      return Array.prototype.slice.call(root.value.querySelectorAll(strings$3.TAB_SELECTOR));
+      return Array.prototype.slice.call(
+        root.value.querySelectorAll(strings$3.TAB_SELECTOR)
+      );
     };
     const activateTab = (index) => foundation.activateTab(index);
     const adapter = {
@@ -5694,7 +6138,12 @@ var mcwTabBar = {
       },
       getTabListLength: () => tabList.length,
       notifyTabActivated: (index) => {
-        emitCustomEvent(root.value, strings$3.TAB_ACTIVATED_EVENT, { index }, true);
+        emitCustomEvent(
+          root.value,
+          strings$3.TAB_ACTIVATED_EVENT,
+          { index },
+          true
+        );
         emit("update:modelValue", Number(index));
       }
     };
@@ -5713,28 +6162,35 @@ var mcwTabBar = {
       for (const tab of tabList) {
         tab.focusOnActivate(props.focusOnActivate);
       }
-      watch(() => props.modelValue, (nv) => {
-        foundation.activateTab(Number(nv));
-      });
+      watch(
+        () => props.modelValue,
+        (nv) => {
+          foundation.activateTab(Number(nv));
+        }
+      );
     });
     onBeforeUnmount(() => {
       foundation.destroy();
     });
     expose({ activateTab });
     return () => {
-      return h("div", {
-        ref: root,
-        role: "tablist",
-        class: "mdc-tab-bar",
-        onChange: attrs.onChange,
-        "onMdctab:interacted": (event_) => {
-          foundation.handleTabInteraction(event_);
+      return h(
+        "div",
+        {
+          ref: root,
+          role: "tablist",
+          class: "mdc-tab-bar",
+          onChange: attrs.onChange,
+          "onMdctab:interacted": (event_) => {
+            foundation.handleTabInteraction(event_);
+          },
+          "onMdc-tab:interacted": (event_) => {
+            foundation.handleTabInteraction(event_);
+          },
+          keydown: (event_) => foundation.handleKeyDown(event_)
         },
-        "onMdc-tab:interacted": (event_) => {
-          foundation.handleTabInteraction(event_);
-        },
-        keydown: (event_) => foundation.handleKeyDown(event_)
-      }, [h(mcwTabScroller, { ref: scroller }, () => [slots.default()])]);
+        [h(mcwTabScroller, { ref: scroller }, () => [slots.default()])]
+      );
     };
   }
 };
@@ -5775,7 +6231,10 @@ var mcwTabIndicator = {
       const xPosition = previousIndicatorClientRect.left - currentClientRect.left;
       requestAnimationFrame(() => {
         adapter.addClass(cssClasses$1.NO_TRANSITION);
-        adapter.setContentStyleProperty("transform", `translateX(${xPosition}px) scaleX(${widthDelta})`);
+        adapter.setContentStyleProperty(
+          "transform",
+          `translateX(${xPosition}px) scaleX(${widthDelta})`
+        );
         requestAnimationFrame(() => {
           adapter.removeClass(cssClasses$1.NO_TRANSITION);
           adapter.addClass(cssClasses$1.ACTIVE);
@@ -5792,19 +6251,27 @@ var mcwTabIndicator = {
     });
     expose({ activate, deactivate, computeContentClientRect });
     return () => {
-      return h("span", { class: { "mdc-tab-indicator": true, ...uiState.classes } }, [
-        h("span", {
-          ref: contentElement,
-          class: {
-            "mdc-tab-indicator__content": true,
-            "mdc-tab-indicator__content--underline": !props.icon,
-            "mdc-tab-indicator__content--icon": !!props.icon,
-            "material-icons": !!props.icon
-          },
-          style: uiState.styles,
-          "aria-hidden": !!props.icon
-        }, [props.icon])
-      ]);
+      return h(
+        "span",
+        { class: { "mdc-tab-indicator": true, ...uiState.classes } },
+        [
+          h(
+            "span",
+            {
+              ref: contentElement,
+              class: {
+                "mdc-tab-indicator__content": true,
+                "mdc-tab-indicator__content--underline": !props.icon,
+                "mdc-tab-indicator__content--icon": !!props.icon,
+                "material-icons": !!props.icon
+              },
+              style: uiState.styles,
+              "aria-hidden": !!props.icon
+            },
+            [props.icon]
+          )
+        ]
+      );
     };
   }
 };
@@ -5864,25 +6331,33 @@ var mcwTabScroller = {
     });
     return () => {
       return h("div", { class: uiState.classes }, [
-        h("div", {
-          ref: area,
-          class: uiState.areaClasses,
-          onMousedown: (event_) => foundation.handleInteraction(event_),
-          onWheel: (event_) => foundation.handleInteraction(event_),
-          onPointerdown: (event_) => foundation.handleInteraction(event_),
-          onTouchstart: (event_) => foundation.handleInteraction(event_),
-          onKeydown: (event_) => foundation.handleInteraction(event_),
-          style: uiState.areaStyles
-        }, [
-          h("div", {
-            ref: content,
-            class: "mdc-tab-scroller__scroll-content",
-            style: content.valueStyles,
-            onTransitionend: (event_) => {
-              foundation.handleTransitionEnd(event_);
-            }
-          }, slots.default())
-        ])
+        h(
+          "div",
+          {
+            ref: area,
+            class: uiState.areaClasses,
+            onMousedown: (event_) => foundation.handleInteraction(event_),
+            onWheel: (event_) => foundation.handleInteraction(event_),
+            onPointerdown: (event_) => foundation.handleInteraction(event_),
+            onTouchstart: (event_) => foundation.handleInteraction(event_),
+            onKeydown: (event_) => foundation.handleInteraction(event_),
+            style: uiState.areaStyles
+          },
+          [
+            h(
+              "div",
+              {
+                ref: content,
+                class: "mdc-tab-scroller__scroll-content",
+                style: content.valueStyles,
+                onTransitionend: (event_) => {
+                  foundation.handleTransitionEnd(event_);
+                }
+              },
+              slots.default()
+            )
+          ]
+        )
       ]);
     };
   }
@@ -5917,7 +6392,9 @@ var script$5 = {
       root: void 0,
       rippleSurface: void 0
     });
-    const { classes: rippleClasses, styles: rippleStyles } = useRipplePlugin(toRef(uiState, "root"));
+    const { classes: rippleClasses, styles: rippleStyles } = useRipplePlugin(
+      toRef(uiState, "root")
+    );
     const { fade, stacked, spanContent, tabList } = inject("mcwTabList");
     uiState.classes["mdc-tab--stacked"] = stacked;
     const hasIcon = computed(() => {
@@ -5952,7 +6429,12 @@ var script$5 = {
       activateIndicator: (previousIndicatorClientRect) => uiState.tabIndicator.activate(previousIndicatorClientRect),
       deactivateIndicator: () => uiState.tabIndicator.deactivate(),
       notifyInteracted: () => {
-        emitCustomEvent(rootElement, strings$2.INTERACTED_EVENT, { tabId }, true);
+        emitCustomEvent(
+          rootElement,
+          strings$2.INTERACTED_EVENT,
+          { tabId },
+          true
+        );
       },
       getOffsetLeft: () => rootElement.offsetLeft,
       getOffsetWidth: () => rootElement.offsetWidth,
@@ -6006,7 +6488,9 @@ function extractIconProperty(iconProperty) {
     };
   } else if (typeof iconProperty === "object") {
     return {
-      classes: Object.fromEntries(iconProperty.className.split(" ").map((value) => [value, true])),
+      classes: Object.fromEntries(
+        iconProperty.className.split(" ").map((value) => [value, true])
+      ),
       content: iconProperty.textContent
     };
   }
@@ -6137,8 +6621,14 @@ var script$3 = {
       },
       setContent: (content) => uiState.helpertext = content
     };
-    watch(() => props.persistent, (nv) => uiState.foundation.setPersistent(nv));
-    watch(() => props.validation, (nv) => uiState.foundation.setValidation(nv));
+    watch(
+      () => props.persistent,
+      (nv) => uiState.foundation.setPersistent(nv)
+    );
+    watch(
+      () => props.validation,
+      (nv) => uiState.foundation.setValidation(nv)
+    );
     onMounted(() => {
       uiState.foundation = new MDCTextFieldHelperTextFoundation(adapter);
       uiState.foundation.init();
@@ -6191,7 +6681,12 @@ var script$2 = {
       registerInteractionHandler: (eventType, handler) => uiState.root.addEventListener(eventType, handler),
       deregisterInteractionHandler: (eventType, handler) => uiState.root.removeEventListener(eventType, handler),
       notifyIconAction: () => {
-        emitCustomEvent(uiState.root, strings$1.ICON_EVENT, {}, true);
+        emitCustomEvent(
+          uiState.root,
+          strings$1.ICON_EVENT,
+          {},
+          true
+        );
         emit("click");
       }
     };
@@ -6276,8 +6771,12 @@ var script$1 = {
         "mdc-text-field--disabled": props.disabled,
         "mdc-text-field--textarea": props.multiline,
         "mdc-text-field--outlined": !props.fullwidth && props.outline,
-        "mdc-text-field--with-leading-icon": Boolean(slots.leadingIcon || slots.leading),
-        "mdc-text-field--with-trailing-icon": Boolean(slots.trailingIcon || slots.trailing),
+        "mdc-text-field--with-leading-icon": Boolean(
+          slots.leadingIcon || slots.leading
+        ),
+        "mdc-text-field--with-trailing-icon": Boolean(
+          slots.trailingIcon || slots.trailing
+        ),
         "mdc-text-field--filled": Boolean(!props.outline),
         "mdc-text-field--no-label": !props.label
       },
@@ -6333,8 +6832,12 @@ var script$1 = {
     const hasHelptext = computed(() => {
       return slots.helpText || props.helptext;
     });
-    const internalCharacterCounter = computed(() => props.characterCounter && props.characterCounterInternal);
-    const helperCharacterCounter = computed(() => props.characterCounter && !(props.multiline && props.characterCounterInternal));
+    const internalCharacterCounter = computed(
+      () => props.characterCounter && props.characterCounterInternal
+    );
+    const helperCharacterCounter = computed(
+      () => props.characterCounter && !(props.multiline && props.characterCounterInternal)
+    );
     const hasHelpline = computed(() => {
       return props.helptext || helperCharacterCounter.value;
     });
@@ -6374,7 +6877,9 @@ var script$1 = {
         return document.activeElement === uiState.input;
       },
       registerValidationAttributeChangeHandler: (handler) => {
-        const observer = new MutationObserver((mutationsList) => handler(getAttributesList(mutationsList)));
+        const observer = new MutationObserver(
+          (mutationsList) => handler(getAttributesList(mutationsList))
+        );
         const targetNode = uiState.input;
         const config = { attributes: true };
         observer.observe(targetNode, config);
@@ -6429,33 +6934,51 @@ var script$1 = {
       notchOutline: (notchWidth, isRtl) => uiState.labelEl.notch(notchWidth, isRtl),
       closeOutline: () => uiState.labelEl.closeNotch()
     };
-    watch(() => props.disabled, (nv) => foundation == null ? void 0 : foundation.setDisabled(nv));
-    watch(() => props.required, (nv) => {
-      uiState.input && (uiState.input.required = nv);
-    });
-    watch(() => props.valid, (nv) => {
-      if (typeof nv !== "undefined") {
-        foundation == null ? void 0 : foundation.setValid(nv);
+    watch(
+      () => props.disabled,
+      (nv) => foundation == null ? void 0 : foundation.setDisabled(nv)
+    );
+    watch(
+      () => props.required,
+      (nv) => {
+        uiState.input && (uiState.input.required = nv);
       }
-    });
-    watch(() => props.useNativeValidation, (nv) => {
-      if (typeof nv !== "undefined") {
-        foundation == null ? void 0 : foundation.setUseNativeValidation(nv);
+    );
+    watch(
+      () => props.valid,
+      (nv) => {
+        if (typeof nv !== "undefined") {
+          foundation == null ? void 0 : foundation.setValid(nv);
+        }
       }
-    });
-    watch(() => props.modelValue, (nv) => {
-      if (foundation && nv !== foundation.getValue()) {
-        foundation.setValue(nv);
+    );
+    watch(
+      () => props.useNativeValidation,
+      (nv) => {
+        if (typeof nv !== "undefined") {
+          foundation == null ? void 0 : foundation.setUseNativeValidation(nv);
+        }
       }
-    });
+    );
+    watch(
+      () => props.modelValue,
+      (nv) => {
+        if (foundation && nv !== foundation.getValue()) {
+          foundation.setValue(nv);
+        }
+      }
+    );
     onMounted(() => {
       var _a, _b, _c, _d;
-      foundation = new MDCTextFieldFoundation({ ...adapter }, {
-        characterCounter: (_a = uiState.characterCounterEl) == null ? void 0 : _a.foundation,
-        helperText: (_b = uiState.helpertext) == null ? void 0 : _b.foundation,
-        leadingIcon: (_c = icons.leading) == null ? void 0 : _c.foundation,
-        trailingIcon: (_d = icons.trailing) == null ? void 0 : _d.foundation
-      });
+      foundation = new MDCTextFieldFoundation(
+        { ...adapter },
+        {
+          characterCounter: (_a = uiState.characterCounterEl) == null ? void 0 : _a.foundation,
+          helperText: (_b = uiState.helpertext) == null ? void 0 : _b.foundation,
+          leadingIcon: (_c = icons.leading) == null ? void 0 : _c.foundation,
+          trailingIcon: (_d = icons.trailing) == null ? void 0 : _d.foundation
+        }
+      );
       foundation.init();
       foundation.setValue(props.modelValue);
       props.disabled && foundation.setDisabled(props.disabled);
@@ -6562,7 +7085,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
         "aria-controls": _ctx.inputAriaControls,
         "aria-labelledby": _ctx.labelId,
         "aria-describedby": _ctx.inputAriaControls
-      }, toHandlers(_ctx.inputListeners)), null, 16, _hoisted_3),
+      }, toHandlers(_ctx.inputListeners, true)), null, 16, _hoisted_3),
       _ctx.suffix ? (openBlock(), createElementBlock("span", _hoisted_4, toDisplayString(_ctx.suffix), 1)) : createCommentVNode("v-if", true),
       renderSlot(_ctx.$slots, "trailingIcon"),
       renderSlot(_ctx.$slots, "trailing"),
@@ -6606,7 +7129,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
           "aria-controls": _ctx.inputAriaControls,
           cols: _ctx.cols,
           rows: _ctx.rows
-        }, toHandlers(_ctx.inputListeners)), null, 16, _hoisted_6)
+        }, toHandlers(_ctx.inputListeners, true)), null, 16, _hoisted_6)
       ])) : (openBlock(), createElementBlock("textarea", mergeProps({
         key: 3,
         ref: "input",
@@ -6618,7 +7141,7 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
         "aria-controls": _ctx.inputAriaControls,
         cols: _ctx.cols,
         rows: _ctx.rows
-      }, toHandlers(_ctx.inputListeners)), null, 16, _hoisted_7)),
+      }, toHandlers(_ctx.inputListeners, true)), null, 16, _hoisted_7)),
       _ctx.internalCharacterCounter ? (openBlock(), createBlock(_component_mcw_character_counter, {
         key: 4,
         ref: "characterCounterEl"
@@ -6842,7 +7365,9 @@ var script = {
       }
       anchorElement = document.querySelector(`[aria-describedby="${tooltipId}"]`) || document.querySelector(`[data-tooltip-id="${tooltipId}"]`);
       if (!anchorElement) {
-        throw new Error("MDCTooltip: Tooltip component requires an anchor element annotated with [aria-describedby] or [data-tooltip-id] anchor element.");
+        throw new Error(
+          "MDCTooltip: Tooltip component requires an anchor element annotated with [aria-describedby] or [data-tooltip-id] anchor element."
+        );
       }
       foundation = new MDCTooltipFoundation(adapter);
       foundation.init();
@@ -6966,7 +7491,12 @@ var mcwTopAppBar = {
       getTopAppBarHeight: () => root.value.clientHeight,
       notifyNavigationIconClicked: () => {
         emit("nav", {});
-        emitCustomEvent(root.value, strings.NAVIGATION_EVENT, {}, true);
+        emitCustomEvent(
+          root.value,
+          strings.NAVIGATION_EVENT,
+          {},
+          true
+        );
       },
       getViewportScrollY: () => {
         const st = myScrollTarget;
@@ -6974,13 +7504,16 @@ var mcwTopAppBar = {
       },
       getTotalActionItems: () => root.value.querySelectorAll(strings.ACTION_ITEM_SELECTOR).length
     };
-    watch(() => props.scrollTarget, (nv, ov) => {
-      if (nv !== ov) {
-        myScrollTarget.removeEventListener("scroll", handleTargetScroll);
-        myScrollTarget = nv;
-        myScrollTarget.addEventListener("scroll", handleTargetScroll);
+    watch(
+      () => props.scrollTarget,
+      (nv, ov) => {
+        if (nv !== ov) {
+          myScrollTarget.removeEventListener("scroll", handleTargetScroll);
+          myScrollTarget = nv;
+          myScrollTarget.addEventListener("scroll", handleTargetScroll);
+        }
       }
-    });
+    );
     const setScrollTarget = (nv) => {
       myScrollTarget.removeEventListener("scroll", handleTargetScroll);
       myScrollTarget = nv;
@@ -6997,7 +7530,9 @@ var mcwTopAppBar = {
         foundation = new MDCTopAppBarFoundation(adapter);
       }
       navIcon = root.value.querySelector(strings.NAVIGATION_ICON_SELECTOR);
-      const icons = Array.prototype.slice.call(root.value.querySelectorAll(strings.ACTION_ITEM_SELECTOR));
+      const icons = Array.prototype.slice.call(
+        root.value.querySelectorAll(strings.ACTION_ITEM_SELECTOR)
+      );
       if (navIcon) {
         navIcon.addEventListener("click", handleNavigationClick);
         icons.push(navIcon);
@@ -7031,7 +7566,11 @@ var mcwTopAppBar = {
     });
     expose({ setScrollTarget });
     return () => {
-      return h(props.tag, { ref: root, class: uiState.rootClasses, style: uiState.rootStyles }, [slots.default()]);
+      return h(
+        props.tag,
+        { ref: root, class: uiState.rootClasses, style: uiState.rootStyles },
+        [slots.default()]
+      );
     };
   }
 };

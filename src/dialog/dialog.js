@@ -8,11 +8,13 @@ import { mcwButton } from '../button/index.js';
 const { cssClasses, strings } = MDCDialogFoundation;
 const LAYOUT_EVENTS = ['resize', 'orientationchange'];
 
-const getInitialFocusElement_ = (element) => {
+const getInitialFocusElement_ = element => {
   if (!element) {
-    return null;
+    return;
   }
-  const focusTrue = element.querySelector(`[${strings.INITIAL_FOCUS_ATTRIBUTE}="true"]`);
+  const focusTrue = element.querySelector(
+    `[${strings.INITIAL_FOCUS_ATTRIBUTE}="true"]`,
+  );
 
   if (focusTrue) {
     return focusTrue;

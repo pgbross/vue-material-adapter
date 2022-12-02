@@ -23,7 +23,7 @@ export default {
       this.indeterminate = true;
     },
     onIds(nv) {
-      console.dir(nv);
+      console.log(nv);
       this.ids = nv;
     },
   },
