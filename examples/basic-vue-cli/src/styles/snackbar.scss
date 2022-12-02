@@ -1,6 +1,5 @@
 @use '@material/snackbar';
-@use '@material/icon-button';
-@include icon-button.core-styles;
+@use '@material/icon-button/styles';
 
 @include snackbar.core-styles;
 @include snackbar.fill-color(#542d11);

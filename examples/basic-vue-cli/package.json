@@ -11,7 +11,7 @@
   "dependencies": {
     "core-js": "^3.16.1",
     "vue": "^3.2.1",
-    "vue-material-adapter": "^4.0.0-beta.3"
+    "vue-material-adapter": "^6.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
@@ -19,10 +19,10 @@
     "@vue/cli-plugin-eslint": "~5.0.0-beta.2",
     "@vue/cli-service": "~5.0.0-beta.2",
     "@vue/compiler-sfc": "^3.2.1",
-    "eslint": "^7.32.0",
-    "eslint-plugin-unicorn": "^35.0.0",
-    "eslint-plugin-vue": "^7.16.0",
-    "postcss-preset-env": "^6.7.0",
+    "eslint": "^8.28.0",
+    "eslint-plugin-unicorn": "^45.0.1",
+    "eslint-plugin-vue": "^9.8.0",
+    "postcss-preset-env": "^7.8.3",
     "sass": "^1.37.5",
     "vue-template-compiler": "^2.6.14"
   },
