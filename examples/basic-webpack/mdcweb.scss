@@ -1,14 +1,14 @@
 $dark-mode-primary: #67360b;
 $dark-mode-on-primary: white;
 
-@use '@material/theme'  with (
+@use '@material/theme' with (
     $primary: #be6c35,
-    $on-primary: #222,
+    $on-primary: #222
 );
 
 @use '@material/shape' with (
-  $small-component-radius: 8px,
-  $medium-component-radius: 16px,
+    $small-component-radius: 8px,
+    $medium-component-radius: 16px
 );
 
 // @use '@material/button' with (
@@ -17,7 +17,7 @@ $dark-mode-on-primary: white;
 
 @use '@material/button/styles';
 
-@use '@material/icon-button';
+@use '@material/icon-button/styles' as icon-button;
 @use '@material/snackbar';
 @use '@material/typography/mdc-typography';
 @use '@material/theme/mdc-theme';
@@ -30,8 +30,6 @@ $dark-mode-on-primary: white;
         background: #291202;
     }
 }
-
-@include icon-button.core-styles;
 
 @include snackbar.core-styles;
 @include snackbar.fill-color(#542d11);
