@@ -128,7 +128,7 @@ const CustomLink = {
         );
       }
       const element = href ? "a" : tag != null ? tag : "a";
-      const role = href ? "button" : element !== "button" ? "button" : void 0;
+      const role = href ? "button" : element === "button" ? void 0 : "button";
       const children = (_a = slots.default) == null ? void 0 : _a.call(slots);
       return h(element, { ...attrs, role }, { default: () => children });
     };
@@ -1776,7 +1776,7 @@ var script$j = {
         "mdc-circular-progress--medium": props.medium,
         "mdc-circular-progress--large": !props.medium
       },
-      rootAttrs: !props.medium ? { style: { width: "48px", height: "48px" } } : { style: { width: "36px", height: "36px" } },
+      rootAttrs: props.medium ? { style: { width: "36px", height: "36px" } } : { style: { width: "48px", height: "48px" } },
       circleAttrs: getCircleAttributes(props.medium, false),
       trackAttrs: getTrackAttributes(props.medium),
       indeterminateAttrs: getCircleAttributes(props.medium, true),
@@ -1965,12 +1965,15 @@ var circularProgress = BasePlugin({
 
 const getSortStatusMessageBySortValue = (sortValue) => {
   switch (sortValue) {
-    case SortValue.ASCENDING:
+    case SortValue.ASCENDING: {
       return messages.SORTED_IN_ASCENDING;
-    case SortValue.DESCENDING:
+    }
+    case SortValue.DESCENDING: {
       return messages.SORTED_IN_DESCENDING;
-    default:
+    }
+    default: {
       return "";
+    }
   }
 };
 var mcwDataTable = {
@@ -5784,10 +5787,11 @@ var script$7 = {
     watch(
       () => props.modelValue,
       (nv) => {
+        var _a;
         if (nv) {
           foundation.open();
         } else {
-          foundation.close(props.reason ? props.reason : "");
+          foundation.close((_a = props.reason) != null ? _a : "");
         }
       }
     );
@@ -7500,7 +7504,7 @@ var mcwTopAppBar = {
       },
       getViewportScrollY: () => {
         const st = myScrollTarget;
-        return st.scrollY !== void 0 ? st.scrollY : st.scrollTop;
+        return st.scrollY === void 0 ? st.scrollTop : st.scrollY;
       },
       getTotalActionItems: () => root.value.querySelectorAll(strings.ACTION_ITEM_SELECTOR).length
     };
