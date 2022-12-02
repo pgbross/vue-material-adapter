@@ -1,3 +1,36 @@
+# [6.2.0](https://github.com/pgbross/vue-material-adapter/compare/v6.1.0...v6.2.0) (2022-12-02)
+
+
+### Bug Fixes
+
+* **textfield:** guard against no foundation on destory ([ec6bb47](https://github.com/pgbross/vue-material-adapter/commit/ec6bb472533ded1ba8209fa710163a8b18529b65))
+
+
+### Features
+
+* support label in textarea ([e8ad74a](https://github.com/pgbross/vue-material-adapter/commit/e8ad74a4f656a9b87d35d29799578bdaebfc1a32))
+* update basic-vue-cli ([1ee91f2](https://github.com/pgbross/vue-material-adapter/commit/1ee91f23e2ec85a41ac48e182d30f984a51caf99))
+* update basic-vue-ts ([85e9678](https://github.com/pgbross/vue-material-adapter/commit/85e9678d791a92ed09023cc937a7c882352faea7))
+* updgrade basic-webpack ([fa404e0](https://github.com/pgbross/vue-material-adapter/commit/fa404e0023a98589d774a6ba7eecf31173b2da32))
+* updgrade basic-webpack-ts ([55b61c6](https://github.com/pgbross/vue-material-adapter/commit/55b61c6d8f6b698c4ae4f5668ebbb17e71fcbafc))
+* upgrade demo to use vue3 setup function ([46637e0](https://github.com/pgbross/vue-material-adapter/commit/46637e0e4aa7b960f1c41ebafaa2fdb158827b26))
+
+
+### Reverts
+
+* Revert "check if initial focus data attribute is true" ([4ae626e](https://github.com/pgbross/vue-material-adapter/commit/4ae626e0006d2ffcbb48fd00185f5370a58c897b))
+
+
+
+# [6.1.0](https://github.com/pgbross/vue-material-adapter/compare/v6.0.1...v6.1.0) (2022-09-07)
+
+
+### Features
+
+* add support for useNativeValidation prop ([affe6b6](https://github.com/pgbross/vue-material-adapter/commit/affe6b69fe96b41eb4710d326617ecbe218d1747))
+
+
+
 # [6.0.0](https://github.com/pgbross/vue-material-adapter/compare/v5.0.1...v6.0.0) (2022-07-15)
 
 
