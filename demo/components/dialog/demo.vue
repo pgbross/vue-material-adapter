@@ -19,7 +19,7 @@
       <span class>{{ action }}</span>
     </div>
 
-    <div v-if="picked" class="mdc-typography--caption">
+    <div v-if="picked != undefined" class="mdc-typography--caption">
       Picked:
       <span class>{{ picked }}</span>
     </div>
@@ -210,7 +210,9 @@
       </mcw-dialog-content>
       <mcw-dialog-footer>
         <mcw-dialog-button action="dismiss">Cancel</mcw-dialog-button>
-        <mcw-dialog-button action="confirm" is-default is-initial-focus>Ok</mcw-dialog-button>
+        <mcw-dialog-button action="confirm" is-default is-initial-focus
+          >Ok</mcw-dialog-button
+        >
       </mcw-dialog-footer>
     </mcw-dialog>
 

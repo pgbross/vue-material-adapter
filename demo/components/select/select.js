@@ -1,6 +1,8 @@
+import { computed, reactive, toRefs } from 'vue';
+
 export default {
-  data() {
-    return {
+  setup() {
+    const uiState = reactive({
       selectedType: 'Meat',
       selectedValue: undefined,
       food: {
@@ -8,22 +10,22 @@ export default {
         Meat: ['Eggs', 'Chicken', 'Fish', 'Turkey', 'Pork', 'Beef'],
         Fruits: ['Apples', 'Oranges', 'Bananas', 'Berries', 'Lemons'],
       },
-    };
-  },
-  computed: {
-    types() {
-      return Object.keys(this.food);
-    },
-    options() {
-      return this.selectedType ? this.food[this.selectedType] : [];
-    },
-  },
+    });
 
-  methods: {
-    onTypeChanged(nv) {
+    const types = computed(() => {
+      return Object.keys(uiState.food);
+    });
+
+    const options = computed(() => {
+      return uiState.selectedType ? uiState.food[uiState.selectedType] : [];
+    });
+
+    const onTypeChanged = nv => {
       console.log(nv);
-      this.selectedType = nv;
-      this.selectedValue = undefined;
-    },
+      uiState.selectedType = nv;
+      uiState.selectedValue = undefined;
+    };
+
+    return { ...toRefs(uiState), types, options, onTypeChanged };
   },
 };

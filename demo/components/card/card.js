@@ -1,14 +1,11 @@
 import card from 'demo/assets/card-16-9.jpg';
 
+const onPrimaryAction = () => {
+  console.log('on primary action');
+};
+
 export default {
-  data() {
-    return {
-      card,
-    };
-  },
-  methods: {
-    onPrimaryAction() {
-      console.log('on primary action');
-    },
+  setup() {
+    return { card, onPrimaryAction };
   },
 };

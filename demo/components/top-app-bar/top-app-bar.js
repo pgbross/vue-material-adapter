@@ -1,20 +1,25 @@
+import { onMounted, reactive, toRefs } from 'vue';
+
 export default {
-  data() {
-    return {
+  setup() {
+    const uiState = reactive({
       buttonText: '',
       navigation: false,
       navigationCount: 0,
       scrollTarget: undefined,
+      root: undefined,
+    });
+
+    const onNav = () => {
+      uiState.navigation = true;
+      uiState.navigationCount += 1;
     };
-  },
-  mounted() {
-    const demoElement = this.$el.querySelector('.mcw-demo');
-    this.scrollTarget = demoElement;
-  },
-  methods: {
-    onNav() {
-      this.navigation = true;
-      this.navigationCount += 1;
-    },
+
+    onMounted(() => {
+      const demoElement = uiState.root.querySelector('.mcw-demo');
+      uiState.scrollTarget = demoElement;
+    });
+
+    return { ...toRefs(uiState), onNav };
   },
 };

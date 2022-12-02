@@ -1,5 +1,5 @@
 export default {
-  data() {
+  setup() {
     return { progressValue: 0.75 };
   },
 };

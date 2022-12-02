@@ -1,7 +1,11 @@
+import { reactive, toRefs } from 'vue';
+
 export default {
-  data() {
-    return {
+  setup() {
+    const uiState = reactive({
       picked: 'dog',
-    };
+    });
+
+    return { ...toRefs(uiState) };
   },
 };

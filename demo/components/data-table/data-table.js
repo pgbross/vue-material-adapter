@@ -1,3 +1,5 @@
+import { computed, onMounted, reactive, toRefs } from 'vue';
+
 const desserts_ = [
   {
     dessert: 'Frozen yogurt',
@@ -18,53 +20,66 @@ const desserts_ = [
     comments: 'Cold',
   },
 ];
+
+const onRowSelection = data => {
+  console.log(data);
+};
+const onSelectAll = () => {
+  console.log('select all');
+};
+const onUnselectAll = () => {
+  console.log('unselect all');
+};
 export default {
-  data() {
-    return { desserts: [], sortBy: '', sortValue: '' };
-  },
-  computed: {
-    filteredData() {
-      const { sortBy, sortValue, desserts: data } = this;
-      return this.sorter({ sortBy, sortValue, data });
-    },
-  },
-  mounted() {
-    this.desserts = [...desserts_];
-  },
+  setup() {
+    const uiState = reactive({ desserts: [], sortBy: '', sortValue: '' });
 
-  methods: {
-    onRowSelection(data) {
-      console.dir(data);
-    },
-    onSelectAll() {
-      console.log('select all');
-    },
-    onUnselectAll() {
-      console.log('unselect all');
-    },
-    onSorted({ data }) {
-      this.sortBy = data.columnId;
-      this.sortValue = data.sortValue;
-    },
+    const filteredData = computed(() => {
+      const { sortBy, sortValue, desserts: data } = uiState;
+      return sorter({ sortBy, sortValue, data });
+    });
 
-    sorter({ sortBy, sortValue, data }) {
-      if (!sortBy) {
-        return [...data];
-      }
-      const order = sortValue === 'ascending' ? 1 : -1;
+    const onSorted = ({ data }) => {
+      uiState.sortBy = data.columnId;
+      uiState.sortValue = data.sortValue;
+    };
 
-      data = [...data].sort(function (a, b) {
-        a = getProperty(a, sortBy);
-        b = getProperty(b, sortBy);
-        if (sortBy.includes('created')) {
-          a = new Date(a);
-          b = new Date(b);
-        }
-        return (a === b ? 0 : a > b ? 1 : -1) * order;
-      });
-      return data;
-    },
+    onMounted(() => {
+      uiState.desserts = [...desserts_];
+    });
+
+    return {
+      ...toRefs(uiState),
+      filteredData,
+      onSorted,
+      onUnselectAll,
+      onSelectAll,
+      onRowSelection,
+    };
   },
+};
+
+// ===
+// Private functions
+// ===
+
+const sorter = ({ sortBy, sortValue, data }) => {
+  if (!sortBy) {
+    return [...data];
+  }
+
+  const order = sortValue === 'ascending' ? 1 : -1;
+
+  data = [...data].sort(function (a, b) {
+    a = getProperty(a, sortBy);
+    b = getProperty(b, sortBy);
+    if (sortBy.includes('created')) {
+      a = new Date(a);
+      b = new Date(b);
+    }
+    return (a === b ? 0 : a > b ? 1 : -1) * order;
+  });
+  return data;
 };
 
 function getProperty(o, s) {

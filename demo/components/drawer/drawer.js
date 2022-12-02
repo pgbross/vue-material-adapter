@@ -1,6 +1,6 @@
 import iframe from 'file-loader!./demo.html';
 export default {
-  data() {
+  setup() {
     return {
       iframe,
     };

@@ -1,5 +1,7 @@
+import { computed, onMounted, reactive, toRefs } from 'vue';
+
 export default {
-  data() {
+  setup() {
     const items = [
       'item one',
       'item two',
@@ -9,23 +11,24 @@ export default {
       'item six',
       'item seven',
     ];
-    return {
+    const uiState = reactive({
       selectedItem: items[0],
       items,
       activeTabIndex: 1,
+      firstExample: undefined,
+    });
+
+    const filteredItems = computed(() => {
+      return uiState.items.slice(0, 3);
+    });
+
+    const onSelected = index => {
+      uiState.selectedItem = uiState.items[index];
     };
-  },
-  computed: {
-    filteredItems() {
-      return this.items.slice(0, 3);
-    },
-  },
-  mounted() {
-    this.$refs.firstExample.activateTab(1);
-  },
-  methods: {
-    onSelected(index) {
-      this.selectedItem = this.items[index];
-    },
+
+    onMounted(() => {
+      uiState.firstExample.activateTab(1);
+    });
+    return { ...toRefs(uiState), filteredItems, onSelected };
   },
 };

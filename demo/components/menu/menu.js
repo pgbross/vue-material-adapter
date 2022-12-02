@@ -1,14 +1,15 @@
+import { reactive, toRefs } from 'vue';
+
+const onSelect = data => {
+  console.log(data);
+};
 export default {
-  data() {
-    return {
+  setup() {
+    const uiState = reactive({
       open: false,
       openGroup: false,
-    };
-  },
+    });
 
-  methods: {
-    onSelect(data) {
-      console.dir(data);
-    },
+    return { ...toRefs(uiState), onSelect };
   },
 };

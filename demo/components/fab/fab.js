@@ -1,7 +1,9 @@
+const onClick = () => {
+  console.log('fab onClick');
+};
+
 export default {
-  methods: {
-    onClick() {
-      console.log('fab onClick');
-    },
+  setup() {
+    return { onClick };
   },
 };

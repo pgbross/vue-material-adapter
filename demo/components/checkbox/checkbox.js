@@ -1,30 +1,24 @@
+import { reactive, toRefs } from 'vue';
+
 export default {
-  data() {
-    return {
+  setup() {
+    const uiState = reactive({
       checked: false,
-      indeterminate_: false,
+      indeterminate: false,
       disabled: false,
       checkedSolo: false,
       ids: [],
+    });
+
+    const onIndeterminate = () => {
+      uiState.indeterminate = true;
     };
-  },
-  computed: {
-    indeterminate: {
-      get() {
-        return this.indeterminate_;
-      },
-      set(nv) {
-        this.indeterminate_ = nv;
-      },
-    },
-  },
-  methods: {
-    onIndeterminate() {
-      this.indeterminate = true;
-    },
-    onIds(nv) {
+
+    const onIds = nv => {
       console.log(nv);
-      this.ids = nv;
-    },
+      uiState.ids = nv;
+    };
+
+    return { ...toRefs(uiState), onIds, onIndeterminate };
   },
 };
