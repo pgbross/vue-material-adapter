@@ -65,7 +65,7 @@ export default {
 
       getViewportScrollY: () => {
         const st = myScrollTarget;
-        return st.scrollY !== undefined ? st.scrollY : st.scrollTop;
+        return st.scrollY === undefined ? st.scrollTop : st.scrollY;
       },
 
       getTotalActionItems: () =>

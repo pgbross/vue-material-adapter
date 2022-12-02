@@ -159,7 +159,7 @@ export default {
         if (nv) {
           foundation.open();
         } else {
-          foundation.close(props.reason ? props.reason : '');
+          foundation.close(props.reason ?? '');
         }
       },
     );

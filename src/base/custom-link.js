@@ -43,9 +43,9 @@ export const CustomLink = {
       const element = href ? 'a' : tag ?? 'a';
       const role = href
         ? 'button'
-        : element !== 'button'
-        ? 'button'
-        : undefined;
+        : element === 'button'
+        ? undefined
+        : 'button';
 
       const children = slots.default?.();
       return h(element, { ...attrs, role }, { default: () => children });

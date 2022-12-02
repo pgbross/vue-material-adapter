@@ -34,9 +34,9 @@ export default {
         'mdc-circular-progress--medium': props.medium,
         'mdc-circular-progress--large': !props.medium,
       },
-      rootAttrs: !props.medium
-        ? { style: { width: '48px', height: '48px' } }
-        : { style: { width: '36px', height: '36px' } },
+      rootAttrs: props.medium
+        ? { style: { width: '36px', height: '36px' } }
+        : { style: { width: '48px', height: '48px' } },
       circleAttrs: getCircleAttributes(props.medium, false),
       trackAttrs: getTrackAttributes(props.medium, false),
       indeterminateAttrs: getCircleAttributes(props.medium, true),

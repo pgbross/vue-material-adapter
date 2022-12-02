@@ -1,4 +1,5 @@
 import { MDCBannerFoundation } from '@material/banner/index.js';
+import { FocusTrap } from '@material/dom/focus-trap.js';
 import {
   computed,
   onBeforeUnmount,
@@ -8,7 +9,6 @@ import {
   watch,
 } from 'vue';
 import bannerContent from './banner-content.vue';
-import { FocusTrap } from '@material/dom/focus-trap.js';
 
 const focusTrapFactory_ = (element, options) => new FocusTrap(element, options);
 

@@ -32,9 +32,9 @@ export default {
     onClosed({ action }) {
       this.hasBeenOpened = true;
       this.action =
-        action !== 'dismiss'
-          ? ('Accepted, thanks!', console.log(action))
-          : 'Declined... Maybe next time?';
+        action === 'dismiss'
+          ? 'Declined... Maybe next time?'
+          : ('Accepted, thanks!', console.log(action));
 
       console.dir(this.checkboxSelected);
     },

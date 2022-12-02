@@ -18,12 +18,15 @@ import { h, onBeforeUnmount, onMounted, reactive, ref } from 'vue';
 
 const getSortStatusMessageBySortValue = sortValue => {
   switch (sortValue) {
-    case SortValue.ASCENDING:
+    case SortValue.ASCENDING: {
       return messages.SORTED_IN_ASCENDING;
-    case SortValue.DESCENDING:
+    }
+    case SortValue.DESCENDING: {
       return messages.SORTED_IN_DESCENDING;
-    default:
+    }
+    default: {
       return '';
+    }
   }
 };
 
