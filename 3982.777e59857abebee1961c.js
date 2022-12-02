@@ -1,3 +1,0 @@
-"use strict";(self.webpackChunkvue_material_adapter=self.webpackChunkvue_material_adapter||[]).push([[3982],{3982:(u,a,e)=>{e.r(a),e.d(a,{default:()=>d});var t=e(8770);const r=["src"];function s(c,p,i,f,h,v){return(0,t.wg)(),(0,t.iD)("iframe",{src:c.iframe,class:"mcw-demo mcw-elevation--z1",scrolling:"no",title:"vue-material-adapter App Layout",width:"400",height:"250",frameborder:"no",allowtransparency:"false",allowfullscreen:"false"},null,8,r)}const l=e.p+"02917c187726efc7091105a51d8d9c4d.html",n={data(){return{iframe:l}}};var o=e(3340);const d=(0,o.Z)(n,[["render",s]])}}]);
-
-//# sourceMappingURL=3982.777e59857abebee1961c.js.map

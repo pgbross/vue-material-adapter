@@ -1,0 +1,3 @@
+"use strict";(self.webpackChunkvue_material_adapter=self.webpackChunkvue_material_adapter||[]).push([[4981],{4981:function(l,n,e){e.r(n),e.d(n,{default:function(){return d}});var t=e(8770);const r=[(0,t._)("html",null,[(0,t._)("head"),(0,t._)("body")],-1)];function s(h,i){return(0,t.wg)(),(0,t.iD)("article",null,r)}var u=e(3340);const a={};var d=(0,u.Z)(a,[["render",s]])}}]);
+
+//# sourceMappingURL=4981.be5a73d8af70f05fdf0b.js.map
