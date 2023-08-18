@@ -46,8 +46,7 @@
     "format": "prettier --write \"{packages,components,demo}/**/*{js,json,css,scss,vue}\"",
     "changelog": "standard-changelog -i CHANGELOG.md -k package.json -w",
     "eslint-check": "eslint --print-config ./eslintrc.yaml | eslint-config-prettier-check",
-    "version": "wireit",
-    "postversion": "git push && git push --tags"
+    "version": "wireit"
   },
   "wireit": {
     "dev": {
@@ -67,7 +66,7 @@
       ]
     },
     "version": {
-      "command": "echo git push && echo git push --tags",
+      "command": "git push && git push --tags",
       "dependencies": [
         "build:git"
       ]
