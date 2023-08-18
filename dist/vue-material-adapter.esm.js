@@ -228,8 +228,8 @@ var touchWrapper = {
 var index$1 = /*#__PURE__*/Object.freeze({
   __proto__: null,
   BasePlugin: BasePlugin,
-  emitCustomEvent: emitCustomEvent,
   CustomLink: CustomLink,
+  emitCustomEvent: emitCustomEvent,
   formFieldWrapper: formFieldWrapper,
   touchWrapper: touchWrapper
 });
@@ -373,52 +373,107 @@ const _hoisted_3$i = {
 const _hoisted_4$d = { class: "material-icons mdc-banner__icon" };
 const _hoisted_5$a = { class: "mdc-banner__text" };
 const _hoisted_6$9 = { class: "mdc-banner__actions" };
-const _hoisted_7$6 = /* @__PURE__ */ createElementVNode("div", { class: "mdc-button__ripple" }, null, -1);
+const _hoisted_7$6 = /* @__PURE__ */ createElementVNode(
+  "div",
+  { class: "mdc-button__ripple" },
+  null,
+  -1
+  /* HOISTED */
+);
 const _hoisted_8$4 = { class: "mdc-button__label" };
-const _hoisted_9$3 = /* @__PURE__ */ createElementVNode("div", { class: "mdc-button__ripple" }, null, -1);
+const _hoisted_9$3 = /* @__PURE__ */ createElementVNode(
+  "div",
+  { class: "mdc-button__ripple" },
+  null,
+  -1
+  /* HOISTED */
+);
 const _hoisted_10$2 = { class: "mdc-button__label" };
 function render$q(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_banner_content = resolveComponent("banner-content");
-  return openBlock(), createElementBlock("div", {
-    ref: "root",
-    class: normalizeClass(["mdc-banner", _ctx.classes]),
-    role: "banner",
-    style: normalizeStyle(_ctx.styles)
-  }, [
-    createVNode(_component_banner_content, { fixed: _ctx.fixed }, {
-      default: withCtx(() => [
-        createElementVNode("div", _hoisted_1$m, [
-          createElementVNode("div", _hoisted_2$l, [
-            _ctx.haveIcon ? (openBlock(), createElementBlock("div", _hoisted_3$i, [
-              createElementVNode("i", _hoisted_4$d, toDisplayString(_ctx.icon), 1)
-            ])) : createCommentVNode("v-if", true),
-            createElementVNode("div", _hoisted_5$a, toDisplayString(_ctx.text), 1)
-          ]),
-          createElementVNode("div", _hoisted_6$9, [
-            _ctx.secondaryAction ? (openBlock(), createElementBlock("button", {
-              key: 0,
-              type: "button",
-              class: "mdc-button mdc-banner__secondary-action",
-              onClick: _cache[0] || (_cache[0] = withModifiers(($event) => _ctx.onContentClick(1), ["stop"]))
-            }, [
-              _hoisted_7$6,
-              createElementVNode("div", _hoisted_8$4, toDisplayString(_ctx.secondaryAction), 1)
-            ])) : createCommentVNode("v-if", true),
-            createElementVNode("button", {
-              type: "button",
-              class: "mdc-button mdc-banner__primary-action",
-              ref: "primaryActionEl",
-              onClick: _cache[1] || (_cache[1] = withModifiers(($event) => _ctx.onContentClick(0), ["stop"]))
-            }, [
-              _hoisted_9$3,
-              createElementVNode("div", _hoisted_10$2, toDisplayString(_ctx.primaryAction), 1)
-            ], 512)
-          ])
-        ], 512)
-      ]),
-      _: 1
-    }, 8, ["fixed"])
-  ], 6);
+  return openBlock(), createElementBlock(
+    "div",
+    {
+      ref: "root",
+      class: normalizeClass(["mdc-banner", _ctx.classes]),
+      role: "banner",
+      style: normalizeStyle(_ctx.styles)
+    },
+    [
+      createVNode(_component_banner_content, { fixed: _ctx.fixed }, {
+        default: withCtx(() => [
+          createElementVNode(
+            "div",
+            _hoisted_1$m,
+            [
+              createElementVNode("div", _hoisted_2$l, [
+                _ctx.haveIcon ? (openBlock(), createElementBlock("div", _hoisted_3$i, [
+                  createElementVNode(
+                    "i",
+                    _hoisted_4$d,
+                    toDisplayString(_ctx.icon),
+                    1
+                    /* TEXT */
+                  )
+                ])) : createCommentVNode("v-if", true),
+                createElementVNode(
+                  "div",
+                  _hoisted_5$a,
+                  toDisplayString(_ctx.text),
+                  1
+                  /* TEXT */
+                )
+              ]),
+              createElementVNode("div", _hoisted_6$9, [
+                _ctx.secondaryAction ? (openBlock(), createElementBlock("button", {
+                  key: 0,
+                  type: "button",
+                  class: "mdc-button mdc-banner__secondary-action",
+                  onClick: _cache[0] || (_cache[0] = withModifiers(($event) => _ctx.onContentClick(1), ["stop"]))
+                }, [
+                  _hoisted_7$6,
+                  createElementVNode(
+                    "div",
+                    _hoisted_8$4,
+                    toDisplayString(_ctx.secondaryAction),
+                    1
+                    /* TEXT */
+                  )
+                ])) : createCommentVNode("v-if", true),
+                createElementVNode(
+                  "button",
+                  {
+                    type: "button",
+                    class: "mdc-button mdc-banner__primary-action",
+                    ref: "primaryActionEl",
+                    onClick: _cache[1] || (_cache[1] = withModifiers(($event) => _ctx.onContentClick(0), ["stop"]))
+                  },
+                  [
+                    _hoisted_9$3,
+                    createElementVNode(
+                      "div",
+                      _hoisted_10$2,
+                      toDisplayString(_ctx.primaryAction),
+                      1
+                      /* TEXT */
+                    )
+                  ],
+                  512
+                  /* NEED_PATCH */
+                )
+              ])
+            ],
+            512
+            /* NEED_PATCH */
+          )
+        ]),
+        _: 1
+        /* STABLE */
+      }, 8, ["fixed"])
+    ],
+    6
+    /* CLASS, STYLE */
+  );
 }
 
 script$q.render = render$q;
@@ -456,6 +511,7 @@ class RippleElement extends MDCRippleFoundation {
       }),
       isSurfaceActive: () => matches($element, ":active"),
       isSurfaceDisabled: () => false,
+      // todo: consider if this is right
       isUnbounded: () => this.unbounded_,
       registerDocumentInteractionHandler: (eventType, handler) => document.documentElement.addEventListener(
         eventType,
@@ -559,12 +615,24 @@ var script$p = defineComponent({
   }
 });
 
-const _hoisted_1$l = /* @__PURE__ */ createElementVNode("div", { class: "mdc-button__ripple" }, null, -1);
+const _hoisted_1$l = /* @__PURE__ */ createElementVNode(
+  "div",
+  { class: "mdc-button__ripple" },
+  null,
+  -1
+  /* HOISTED */
+);
 const _hoisted_2$k = {
   key: 0,
   class: "mdc-button__touch"
 };
-const _hoisted_3$h = /* @__PURE__ */ createElementVNode("span", { class: "mdc-button__focus-ring" }, null, -1);
+const _hoisted_3$h = /* @__PURE__ */ createElementVNode(
+  "span",
+  { class: "mdc-button__focus-ring" },
+  null,
+  -1
+  /* HOISTED */
+);
 const _hoisted_4$c = {
   class: "material-icons mdc-button__icon",
   "aria-hidden": "true"
@@ -587,16 +655,29 @@ function render$p(_ctx, _cache, $props, $setup, $data, $options) {
       _ctx.isTouch ? (openBlock(), createElementBlock("span", _hoisted_2$k)) : createCommentVNode("v-if", true),
       _hoisted_3$h,
       _ctx.haveIcon ? renderSlot(_ctx.$slots, "icon", { key: 1 }, () => [
-        createElementVNode("i", _hoisted_4$c, toDisplayString(_ctx.icon), 1)
+        createElementVNode(
+          "i",
+          _hoisted_4$c,
+          toDisplayString(_ctx.icon),
+          1
+          /* TEXT */
+        )
       ]) : createCommentVNode("v-if", true),
       createElementVNode("span", _hoisted_5$9, [
         renderSlot(_ctx.$slots, "default")
       ]),
       _ctx.haveTrailingIcon ? renderSlot(_ctx.$slots, "trailingIcon", { key: 2 }, () => [
-        createElementVNode("i", _hoisted_6$8, toDisplayString(_ctx.trailingIcon), 1)
+        createElementVNode(
+          "i",
+          _hoisted_6$8,
+          toDisplayString(_ctx.trailingIcon),
+          1
+          /* TEXT */
+        )
       ]) : createCommentVNode("v-if", true)
     ]),
     _: 3
+    /* FORWARDED */
   }, 8, ["class", "style"]);
 }
 
@@ -935,15 +1016,18 @@ var script$o = {
           controlState
         );
         if (validDescriptor(desc)) {
-          const nativeCallbackDesc = {
-            get: desc.get,
-            set: (state) => {
-              desc.set.call(nativeCallback, state);
-              foundation.handleChange();
-            },
-            configurable: desc.configurable,
-            enumerable: desc.enumerable
-          };
+          const nativeCallbackDesc = (
+            /** @type {!ObjectPropertyDescriptor} */
+            {
+              get: desc.get,
+              set: (state) => {
+                desc.set.call(nativeCallback, state);
+                foundation.handleChange();
+              },
+              configurable: desc.configurable,
+              enumerable: desc.enumerable
+            }
+          );
           Object.defineProperty(
             nativeCallback,
             controlState,
@@ -956,7 +1040,10 @@ var script$o = {
       const nativeCallback = uiState.control;
       const callbackProto = Object.getPrototypeOf(nativeCallback);
       for (const controlState of CB_PROTO_PROPS) {
-        const desc = Object.getOwnPropertyDescriptor(callbackProto, controlState);
+        const desc = (
+          /** @type {!ObjectPropertyDescriptor} */
+          Object.getOwnPropertyDescriptor(callbackProto, controlState)
+        );
         if (validDescriptor(desc)) {
           Object.defineProperty(nativeCallback, controlState, desc);
         }
@@ -1028,21 +1115,39 @@ function validDescriptor(inputPropertyDesc) {
 }
 
 const _hoisted_1$k = ["id", "name", "value"];
-const _hoisted_2$j = /* @__PURE__ */ createElementVNode("div", { class: "mdc-checkbox__background" }, [
-  /* @__PURE__ */ createElementVNode("svg", {
-    class: "mdc-checkbox__checkmark",
-    viewBox: "0 0 24 24"
-  }, [
-    /* @__PURE__ */ createElementVNode("path", {
-      class: "mdc-checkbox__checkmark-path",
-      fill: "none",
-      d: "M1.73,12.91 8.1,19.28 22.79,4.59"
-    })
-  ]),
-  /* @__PURE__ */ createElementVNode("div", { class: "mdc-checkbox__mixedmark" })
-], -1);
-const _hoisted_3$g = /* @__PURE__ */ createElementVNode("div", { class: "mdc-checkbox__ripple" }, null, -1);
-const _hoisted_4$b = /* @__PURE__ */ createElementVNode("div", { class: "mdc-checkbox__focus-ring" }, null, -1);
+const _hoisted_2$j = /* @__PURE__ */ createElementVNode(
+  "div",
+  { class: "mdc-checkbox__background" },
+  [
+    /* @__PURE__ */ createElementVNode("svg", {
+      class: "mdc-checkbox__checkmark",
+      viewBox: "0 0 24 24"
+    }, [
+      /* @__PURE__ */ createElementVNode("path", {
+        class: "mdc-checkbox__checkmark-path",
+        fill: "none",
+        d: "M1.73,12.91 8.1,19.28 22.79,4.59"
+      })
+    ]),
+    /* @__PURE__ */ createElementVNode("div", { class: "mdc-checkbox__mixedmark" })
+  ],
+  -1
+  /* HOISTED */
+);
+const _hoisted_3$g = /* @__PURE__ */ createElementVNode(
+  "div",
+  { class: "mdc-checkbox__ripple" },
+  null,
+  -1
+  /* HOISTED */
+);
+const _hoisted_4$b = /* @__PURE__ */ createElementVNode(
+  "div",
+  { class: "mdc-checkbox__focus-ring" },
+  null,
+  -1
+  /* HOISTED */
+);
 function render$o(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_checkbox_content = resolveComponent("checkbox-content");
   return openBlock(), createBlock(_component_checkbox_content, {
@@ -1051,32 +1156,43 @@ function render$o(_ctx, _cache, $props, $setup, $data, $options) {
     checkboxId: _ctx.checkboxId
   }, createSlots({
     default: withCtx(() => [
-      createElementVNode("div", mergeProps({
-        ref: "root",
-        class: _ctx.rootClasses,
-        style: _ctx.styles
-      }, _ctx.$attrs), [
-        createElementVNode("input", {
-          id: _ctx.checkboxId,
-          ref: "control",
-          name: _ctx.name,
-          value: _ctx.value,
-          type: "checkbox",
-          class: "mdc-checkbox__native-control",
-          onChange: _cache[0] || (_cache[0] = (...args) => _ctx.onChange && _ctx.onChange(...args))
-        }, null, 40, _hoisted_1$k),
-        _hoisted_2$j,
-        _hoisted_3$g,
-        _hoisted_4$b
-      ], 16)
+      createElementVNode(
+        "div",
+        mergeProps({
+          ref: "root",
+          class: _ctx.rootClasses,
+          style: _ctx.styles
+        }, _ctx.$attrs),
+        [
+          createElementVNode("input", {
+            id: _ctx.checkboxId,
+            ref: "control",
+            name: _ctx.name,
+            value: _ctx.value,
+            type: "checkbox",
+            class: "mdc-checkbox__native-control",
+            onChange: _cache[0] || (_cache[0] = (...args) => _ctx.onChange && _ctx.onChange(...args))
+          }, null, 40, _hoisted_1$k),
+          _hoisted_2$j,
+          _hoisted_3$g,
+          _hoisted_4$b
+        ],
+        16
+        /* FULL_PROPS */
+      )
     ]),
     _: 2
+    /* DYNAMIC */
   }, [
     _ctx.hasLabel ? {
       name: "label",
       fn: withCtx(() => [
         renderSlot(_ctx.$slots, "default", {}, () => [
-          createTextVNode(toDisplayString(_ctx.label), 1)
+          createTextVNode(
+            toDisplayString(_ctx.label),
+            1
+            /* TEXT */
+          )
         ])
       ]),
       key: "0"
@@ -1202,20 +1318,32 @@ const _hoisted_3$f = {
   key: 0,
   class: "mdc-evolution-chip__icon mdc-evolution-chip__icon--primary material-icons"
 };
-const _hoisted_4$a = /* @__PURE__ */ createElementVNode("span", { class: "mdc-evolution-chip__checkmark" }, [
-  /* @__PURE__ */ createElementVNode("svg", {
-    class: "mdc-evolution-chip__checkmark-svg",
-    viewBox: "-2 -3 30 30"
-  }, [
-    /* @__PURE__ */ createElementVNode("path", {
-      class: "mdc-evolution-chip__checkmark-path",
-      fill: "none",
-      stroke: "black",
-      d: "M1.73,12.91 8.1,19.28 22.79,4.59"
-    })
-  ])
-], -1);
-const _hoisted_5$8 = /* @__PURE__ */ createElementVNode("span", { class: "mdc-evolution-chip__text-label" }, "Chip label", -1);
+const _hoisted_4$a = /* @__PURE__ */ createElementVNode(
+  "span",
+  { class: "mdc-evolution-chip__checkmark" },
+  [
+    /* @__PURE__ */ createElementVNode("svg", {
+      class: "mdc-evolution-chip__checkmark-svg",
+      viewBox: "-2 -3 30 30"
+    }, [
+      /* @__PURE__ */ createElementVNode("path", {
+        class: "mdc-evolution-chip__checkmark-path",
+        fill: "none",
+        stroke: "black",
+        d: "M1.73,12.91 8.1,19.28 22.79,4.59"
+      })
+    ])
+  ],
+  -1
+  /* HOISTED */
+);
+const _hoisted_5$8 = /* @__PURE__ */ createElementVNode(
+  "span",
+  { class: "mdc-evolution-chip__text-label" },
+  "Chip label",
+  -1
+  /* HOISTED */
+);
 const _hoisted_6$7 = {
   ref: "rippleEl",
   class: "mdc-evolution-chip__ripple mdc-evolution-chip__ripple--primary"
@@ -1232,55 +1360,109 @@ const _hoisted_10$1 = {
 };
 const _hoisted_11$1 = { class: "mdc-evolution-chip__icon mdc-evolution-chip__icon--trailing material-icons" };
 function render$n(_ctx, _cache, $props, $setup, $data, $options) {
-  return _ctx.primary ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-    _ctx.isFilter ? (openBlock(), createElementBlock("span", {
-      key: 0,
-      ref: "root",
-      class: "mdc-evolution-chip__action mdc-evolution-chip__action--primary",
-      role: "option",
-      "aria-selected": "false",
-      tabindex: "0",
-      onClick: _cache[0] || (_cache[0] = (...args) => _ctx.handleClick && _ctx.handleClick(...args)),
-      onKeydown: _cache[1] || (_cache[1] = (...args) => _ctx.handleKeydown && _ctx.handleKeydown(...args))
-    }, [
-      createElementVNode("span", _hoisted_1$j, null, 512),
-      createElementVNode("span", _hoisted_2$i, [
-        _ctx.icon ? (openBlock(), createElementBlock("span", _hoisted_3$f, toDisplayString(_ctx.icon), 1)) : createCommentVNode("v-if", true),
-        createCommentVNode(" optional "),
-        _hoisted_4$a
-      ]),
-      _hoisted_5$8
-    ], 544)) : (openBlock(), createElementBlock("button", {
+  return _ctx.primary ? (openBlock(), createElementBlock(
+    Fragment,
+    { key: 0 },
+    [
+      _ctx.isFilter ? (openBlock(), createElementBlock(
+        "span",
+        {
+          key: 0,
+          ref: "root",
+          class: "mdc-evolution-chip__action mdc-evolution-chip__action--primary",
+          role: "option",
+          "aria-selected": "false",
+          tabindex: "0",
+          onClick: _cache[0] || (_cache[0] = (...args) => _ctx.handleClick && _ctx.handleClick(...args)),
+          onKeydown: _cache[1] || (_cache[1] = (...args) => _ctx.handleKeydown && _ctx.handleKeydown(...args))
+        },
+        [
+          createElementVNode(
+            "span",
+            _hoisted_1$j,
+            null,
+            512
+            /* NEED_PATCH */
+          ),
+          createElementVNode("span", _hoisted_2$i, [
+            _ctx.icon ? (openBlock(), createElementBlock(
+              "span",
+              _hoisted_3$f,
+              toDisplayString(_ctx.icon),
+              1
+              /* TEXT */
+            )) : createCommentVNode("v-if", true),
+            createCommentVNode(" optional "),
+            _hoisted_4$a
+          ]),
+          _hoisted_5$8
+        ],
+        544
+        /* HYDRATE_EVENTS, NEED_PATCH */
+      )) : (openBlock(), createElementBlock(
+        "button",
+        {
+          key: 1,
+          ref: "root",
+          class: normalizeClass(["mdc-evolution-chip__action mdc-evolution-chip__action--primary", _ctx.classes]),
+          style: normalizeStyle(_ctx.styles),
+          type: "button",
+          tabindex: "0"
+        },
+        [
+          createElementVNode(
+            "span",
+            _hoisted_6$7,
+            null,
+            512
+            /* NEED_PATCH */
+          ),
+          _ctx.icon ? (openBlock(), createElementBlock("span", _hoisted_7$5, [
+            createElementVNode(
+              "span",
+              _hoisted_8$3,
+              toDisplayString(_ctx.icon),
+              1
+              /* TEXT */
+            )
+          ])) : createCommentVNode("v-if", true),
+          createElementVNode("span", _hoisted_9$2, [
+            renderSlot(_ctx.$slots, "default")
+          ])
+        ],
+        6
+        /* CLASS, STYLE */
+      ))
+    ],
+    64
+    /* STABLE_FRAGMENT */
+  )) : (openBlock(), createElementBlock(
+    "button",
+    {
       key: 1,
       ref: "root",
-      class: normalizeClass(["mdc-evolution-chip__action mdc-evolution-chip__action--primary", _ctx.classes]),
-      style: normalizeStyle(_ctx.styles),
+      class: "mdc-evolution-chip__action mdc-evolution-chip__action--trailing",
       type: "button",
-      tabindex: "0"
-    }, [
-      createElementVNode("span", _hoisted_6$7, null, 512),
-      _ctx.icon ? (openBlock(), createElementBlock("span", _hoisted_7$5, [
-        createElementVNode("span", _hoisted_8$3, toDisplayString(_ctx.icon), 1)
-      ])) : createCommentVNode("v-if", true),
-      createElementVNode("span", _hoisted_9$2, [
+      tabindex: "-1",
+      "data-mdc-deletable": "true",
+      onClick: _cache[2] || (_cache[2] = (...args) => _ctx.handleClick && _ctx.handleClick(...args)),
+      onKeydown: _cache[3] || (_cache[3] = (...args) => _ctx.handleKeydown && _ctx.handleKeydown(...args))
+    },
+    [
+      createElementVNode(
+        "span",
+        _hoisted_10$1,
+        null,
+        512
+        /* NEED_PATCH */
+      ),
+      createElementVNode("span", _hoisted_11$1, [
         renderSlot(_ctx.$slots, "default")
       ])
-    ], 6))
-  ], 64)) : (openBlock(), createElementBlock("button", {
-    key: 1,
-    ref: "root",
-    class: "mdc-evolution-chip__action mdc-evolution-chip__action--trailing",
-    type: "button",
-    tabindex: "-1",
-    "data-mdc-deletable": "true",
-    onClick: _cache[2] || (_cache[2] = (...args) => _ctx.handleClick && _ctx.handleClick(...args)),
-    onKeydown: _cache[3] || (_cache[3] = (...args) => _ctx.handleKeydown && _ctx.handleKeydown(...args))
-  }, [
-    createElementVNode("span", _hoisted_10$1, null, 512),
-    createElementVNode("span", _hoisted_11$1, [
-      renderSlot(_ctx.$slots, "default")
-    ])
-  ], 544));
+    ],
+    544
+    /* HYDRATE_EVENTS, NEED_PATCH */
+  ));
 }
 
 script$n.render = render$n;
@@ -1300,22 +1482,34 @@ const _hoisted_1$i = {
   ref: "root",
   class: "mdc-chip__checkmark"
 };
-const _hoisted_2$h = /* @__PURE__ */ createElementVNode("svg", {
-  class: "mdc-chip__checkmark-svg",
-  viewBox: "-2 -3 30 30"
-}, [
-  /* @__PURE__ */ createElementVNode("path", {
-    class: "mdc-chip__checkmark-path",
-    fill: "none",
-    stroke: "black",
-    d: "M1.73,12.91 8.1,19.28 22.79,4.59"
-  })
-], -1);
+const _hoisted_2$h = /* @__PURE__ */ createElementVNode(
+  "svg",
+  {
+    class: "mdc-chip__checkmark-svg",
+    viewBox: "-2 -3 30 30"
+  },
+  [
+    /* @__PURE__ */ createElementVNode("path", {
+      class: "mdc-chip__checkmark-path",
+      fill: "none",
+      stroke: "black",
+      d: "M1.73,12.91 8.1,19.28 22.79,4.59"
+    })
+  ],
+  -1
+  /* HOISTED */
+);
 const _hoisted_3$e = [
   _hoisted_2$h
 ];
 function render$m(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("span", _hoisted_1$i, _hoisted_3$e, 512);
+  return openBlock(), createElementBlock(
+    "span",
+    _hoisted_1$i,
+    _hoisted_3$e,
+    512
+    /* NEED_PATCH */
+  );
 }
 
 script$m.render = render$m;
@@ -1332,6 +1526,7 @@ var script$l = {
   setup(props) {
     const uiState = reactive({
       classes: { "mdc-evolution-chip-set--overflow": props.overflow },
+      // listn: 0,
       myListeners: {},
       attrs: {},
       root: void 0
@@ -1710,36 +1905,48 @@ const _hoisted_2$f = {
 };
 function render$k(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_mcw_chip_action = resolveComponent("mcw-chip-action");
-  return openBlock(), createElementBlock("span", {
-    ref: "root",
-    class: normalizeClass(["mdc-evolution-chip", _ctx.classes]),
-    role: "row",
-    "onMdcchipaction:interaction": _cache[0] || (_cache[0] = (...args) => _ctx.handleActionInteraction && _ctx.handleActionInteraction(...args)),
-    "onMdcchipaction:navigation": _cache[1] || (_cache[1] = (...args) => _ctx.handleActionNavigation && _ctx.handleActionNavigation(...args)),
-    onAnimationend: _cache[2] || (_cache[2] = (...args) => _ctx.handleAnimationEnd && _ctx.handleAnimationEnd(...args)),
-    onTransitionend: _cache[3] || (_cache[3] = (...args) => _ctx.handleTransitionEnd && _ctx.handleTransitionEnd(...args))
-  }, [
-    createElementVNode("span", _hoisted_1$g, [
-      createVNode(_component_mcw_chip_action, {
-        primary: "",
-        icon: _ctx.leadingIcon,
-        presentational: _ctx.presentational
-      }, {
-        default: withCtx(() => [
-          renderSlot(_ctx.$slots, "default")
-        ]),
-        _: 3
-      }, 8, ["icon", "presentational"])
-    ]),
-    _ctx.hasTrailingAction ? (openBlock(), createElementBlock("span", _hoisted_2$f, [
-      createVNode(_component_mcw_chip_action, { "trailing-action": "" }, {
-        default: withCtx(() => [
-          createTextVNode(toDisplayString(_ctx.trailingIcon), 1)
-        ]),
-        _: 1
-      })
-    ])) : createCommentVNode("v-if", true)
-  ], 34);
+  return openBlock(), createElementBlock(
+    "span",
+    {
+      ref: "root",
+      class: normalizeClass(["mdc-evolution-chip", _ctx.classes]),
+      role: "row",
+      "onMdcchipaction:interaction": _cache[0] || (_cache[0] = (...args) => _ctx.handleActionInteraction && _ctx.handleActionInteraction(...args)),
+      "onMdcchipaction:navigation": _cache[1] || (_cache[1] = (...args) => _ctx.handleActionNavigation && _ctx.handleActionNavigation(...args)),
+      onAnimationend: _cache[2] || (_cache[2] = (...args) => _ctx.handleAnimationEnd && _ctx.handleAnimationEnd(...args)),
+      onTransitionend: _cache[3] || (_cache[3] = (...args) => _ctx.handleTransitionEnd && _ctx.handleTransitionEnd(...args))
+    },
+    [
+      createElementVNode("span", _hoisted_1$g, [
+        createVNode(_component_mcw_chip_action, {
+          primary: "",
+          icon: _ctx.leadingIcon,
+          presentational: _ctx.presentational
+        }, {
+          default: withCtx(() => [
+            renderSlot(_ctx.$slots, "default")
+          ]),
+          _: 3
+          /* FORWARDED */
+        }, 8, ["icon", "presentational"])
+      ]),
+      _ctx.hasTrailingAction ? (openBlock(), createElementBlock("span", _hoisted_2$f, [
+        createVNode(_component_mcw_chip_action, { "trailing-action": "" }, {
+          default: withCtx(() => [
+            createTextVNode(
+              toDisplayString(_ctx.trailingIcon),
+              1
+              /* TEXT */
+            )
+          ]),
+          _: 1
+          /* STABLE */
+        })
+      ])) : createCommentVNode("v-if", true)
+    ],
+    34
+    /* CLASS, HYDRATE_EVENTS */
+  );
 }
 
 script$k.render = render$k;
@@ -1897,63 +2104,117 @@ const _hoisted_7$4 = ["viewBox"];
 const _hoisted_8$2 = { class: "mdc-circular-progress__circle-clipper mdc-circular-progress__circle-right" };
 const _hoisted_9$1 = ["viewBox"];
 function render$j(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock(Fragment, null, [
-    createCommentVNode("must be no space between divs"),
-    createCommentVNode(" prettier-ignore "),
-    createElementVNode("div", mergeProps({
-      ref: "root",
-      class: _ctx.classes,
-      role: "progressbar"
-    }, _ctx.rootAttributes), [
-      createElementVNode("div", _hoisted_1$f, [
-        (openBlock(), createElementBlock("svg", {
-          class: "mdc-circular-progress__determinate-circle-graphic",
-          viewBox: _ctx.viewbox,
-          xmlns: "http://www.w3.org/2000/svg"
-        }, [
-          createElementVNode("circle", mergeProps({ class: "mdc-circular-progress__determinate-track" }, _ctx.trackAttrs), null, 16),
-          createElementVNode("circle", mergeProps({ class: "mdc-circular-progress__determinate-circle" }, _ctx.circleAttrs), null, 16)
-        ], 8, _hoisted_2$e))
-      ]),
-      createElementVNode("div", _hoisted_3$d, [
-        (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.colors, (index) => {
-          return openBlock(), createElementBlock("div", {
-            class: normalizeClass(["mdc-circular-progress__spinner-layer", _ctx.colorClass(index)]),
-            key: index
-          }, [
-            createElementVNode("div", _hoisted_4$9, [
-              (openBlock(), createElementBlock("svg", {
-                class: "mdc-circular-progress__indeterminate-circle-graphic",
-                viewBox: _ctx.viewbox,
-                xmlns: "http://www.w3.org/2000/svg"
-              }, [
-                createElementVNode("circle", normalizeProps(guardReactiveProps(_ctx.indeterminateAttrs)), null, 16)
-              ], 8, _hoisted_5$7)),
-              createCommentVNode("must be no space between divs")
-            ]),
-            createElementVNode("div", _hoisted_6$6, [
-              (openBlock(), createElementBlock("svg", {
-                class: "mdc-circular-progress__indeterminate-circle-graphic",
-                viewBox: _ctx.viewbox,
-                xmlns: "http://www.w3.org/2000/svg"
-              }, [
-                createElementVNode("circle", normalizeProps(guardReactiveProps(_ctx.indeterminateAttrs)), null, 16)
-              ], 8, _hoisted_7$4))
-            ]),
-            createElementVNode("div", _hoisted_8$2, [
-              (openBlock(), createElementBlock("svg", {
-                class: "mdc-circular-progress__indeterminate-circle-graphic",
-                viewBox: _ctx.viewbox,
-                xmlns: "http://www.w3.org/2000/svg"
-              }, [
-                createElementVNode("circle", normalizeProps(guardReactiveProps(_ctx.indeterminateAttrs)), null, 16)
-              ], 8, _hoisted_9$1))
-            ])
-          ], 2);
-        }), 128))
-      ])
-    ], 16)
-  ], 2112);
+  return openBlock(), createElementBlock(
+    Fragment,
+    null,
+    [
+      createCommentVNode("must be no space between divs"),
+      createCommentVNode(" prettier-ignore "),
+      createElementVNode(
+        "div",
+        mergeProps({
+          ref: "root",
+          class: _ctx.classes,
+          role: "progressbar"
+        }, _ctx.rootAttributes),
+        [
+          createElementVNode("div", _hoisted_1$f, [
+            (openBlock(), createElementBlock("svg", {
+              class: "mdc-circular-progress__determinate-circle-graphic",
+              viewBox: _ctx.viewbox,
+              xmlns: "http://www.w3.org/2000/svg"
+            }, [
+              createElementVNode(
+                "circle",
+                mergeProps({ class: "mdc-circular-progress__determinate-track" }, _ctx.trackAttrs),
+                null,
+                16
+                /* FULL_PROPS */
+              ),
+              createElementVNode(
+                "circle",
+                mergeProps({ class: "mdc-circular-progress__determinate-circle" }, _ctx.circleAttrs),
+                null,
+                16
+                /* FULL_PROPS */
+              )
+            ], 8, _hoisted_2$e))
+          ]),
+          createElementVNode("div", _hoisted_3$d, [
+            (openBlock(true), createElementBlock(
+              Fragment,
+              null,
+              renderList(_ctx.colors, (index) => {
+                return openBlock(), createElementBlock(
+                  "div",
+                  {
+                    class: normalizeClass(["mdc-circular-progress__spinner-layer", _ctx.colorClass(index)]),
+                    key: index
+                  },
+                  [
+                    createElementVNode("div", _hoisted_4$9, [
+                      (openBlock(), createElementBlock("svg", {
+                        class: "mdc-circular-progress__indeterminate-circle-graphic",
+                        viewBox: _ctx.viewbox,
+                        xmlns: "http://www.w3.org/2000/svg"
+                      }, [
+                        createElementVNode(
+                          "circle",
+                          normalizeProps(guardReactiveProps(_ctx.indeterminateAttrs)),
+                          null,
+                          16
+                          /* FULL_PROPS */
+                        )
+                      ], 8, _hoisted_5$7)),
+                      createCommentVNode("must be no space between divs")
+                    ]),
+                    createElementVNode("div", _hoisted_6$6, [
+                      (openBlock(), createElementBlock("svg", {
+                        class: "mdc-circular-progress__indeterminate-circle-graphic",
+                        viewBox: _ctx.viewbox,
+                        xmlns: "http://www.w3.org/2000/svg"
+                      }, [
+                        createElementVNode(
+                          "circle",
+                          normalizeProps(guardReactiveProps(_ctx.indeterminateAttrs)),
+                          null,
+                          16
+                          /* FULL_PROPS */
+                        )
+                      ], 8, _hoisted_7$4))
+                    ]),
+                    createElementVNode("div", _hoisted_8$2, [
+                      (openBlock(), createElementBlock("svg", {
+                        class: "mdc-circular-progress__indeterminate-circle-graphic",
+                        viewBox: _ctx.viewbox,
+                        xmlns: "http://www.w3.org/2000/svg"
+                      }, [
+                        createElementVNode(
+                          "circle",
+                          normalizeProps(guardReactiveProps(_ctx.indeterminateAttrs)),
+                          null,
+                          16
+                          /* FULL_PROPS */
+                        )
+                      ], 8, _hoisted_9$1))
+                    ])
+                  ],
+                  2
+                  /* CLASS */
+                );
+              }),
+              128
+              /* KEYED_FRAGMENT */
+            ))
+          ])
+        ],
+        16
+        /* FULL_PROPS */
+      )
+    ],
+    2112
+    /* STABLE_FRAGMENT, DEV_ROOT_FRAGMENT */
+  );
 }
 
 script$j.render = render$j;
@@ -2438,29 +2699,47 @@ const _hoisted_1$e = {
   class: "mdc-dialog__container"
 };
 const _hoisted_2$d = ["aria-labelledby", "aria-describedby"];
-const _hoisted_3$c = /* @__PURE__ */ createElementVNode("div", { class: "mdc-dialog__scrim" }, null, -1);
+const _hoisted_3$c = /* @__PURE__ */ createElementVNode(
+  "div",
+  { class: "mdc-dialog__scrim" },
+  null,
+  -1
+  /* HOISTED */
+);
 function render$i(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", {
-    ref: "root",
-    class: normalizeClass(_ctx.classes),
-    style: normalizeStyle(_ctx.styles),
-    onClick: _cache[0] || (_cache[0] = (...args) => _ctx.onClick && _ctx.onClick(...args)),
-    onKeydown: _cache[1] || (_cache[1] = (...args) => _ctx.onKeydown && _ctx.onKeydown(...args))
-  }, [
-    createElementVNode("div", _hoisted_1$e, [
-      createElementVNode("div", {
-        ref: "surface",
-        class: "mdc-dialog__surface",
-        role: "alertdialog",
-        "aria-modal": "true",
-        "aria-labelledby": _ctx.ariaLabelledby,
-        "aria-describedby": _ctx.ariaDescribedby
-      }, [
-        renderSlot(_ctx.$slots, "default")
-      ], 8, _hoisted_2$d)
-    ], 512),
-    _hoisted_3$c
-  ], 38);
+  return openBlock(), createElementBlock(
+    "div",
+    {
+      ref: "root",
+      class: normalizeClass(_ctx.classes),
+      style: normalizeStyle(_ctx.styles),
+      onClick: _cache[0] || (_cache[0] = (...args) => _ctx.onClick && _ctx.onClick(...args)),
+      onKeydown: _cache[1] || (_cache[1] = (...args) => _ctx.onKeydown && _ctx.onKeydown(...args))
+    },
+    [
+      createElementVNode(
+        "div",
+        _hoisted_1$e,
+        [
+          createElementVNode("div", {
+            ref: "surface",
+            class: "mdc-dialog__surface",
+            role: "alertdialog",
+            "aria-modal": "true",
+            "aria-labelledby": _ctx.ariaLabelledby,
+            "aria-describedby": _ctx.ariaDescribedby
+          }, [
+            renderSlot(_ctx.$slots, "default")
+          ], 8, _hoisted_2$d)
+        ],
+        512
+        /* NEED_PATCH */
+      ),
+      _hoisted_3$c
+    ],
+    38
+    /* CLASS, STYLE, HYDRATE_EVENTS */
+  );
 }
 
 script$i.render = render$i;
@@ -2610,53 +2889,67 @@ const _hoisted_2$c = {
 const _hoisted_3$b = { class: "mdc-drawer__content" };
 function render$h(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_mcw_list = resolveComponent("mcw-list");
-  return !_ctx.modal ? (openBlock(), createElementBlock("aside", {
-    key: 0,
-    ref: "drawer",
-    class: normalizeClass(_ctx.classes),
-    onKeydown: _cache[0] || (_cache[0] = (...args) => _ctx.handleKeydown && _ctx.handleKeydown(...args)),
-    onTransitionend: _cache[1] || (_cache[1] = (...args) => _ctx.handleTransitionEnd && _ctx.handleTransitionEnd(...args))
-  }, [
-    renderSlot(_ctx.$slots, "header"),
-    createElementVNode("div", _hoisted_1$d, [
-      createVNode(_component_mcw_list, {
-        "wrap-focus": true,
-        tag: "nav",
-        "onMdclist:action": _ctx.onListAction,
-        "multi-selectable": false,
-        "selected-index": 0,
-        role: "menu"
-      }, {
-        default: withCtx(() => [
-          renderSlot(_ctx.$slots, "default")
-        ]),
-        _: 3
-      }, 8, ["onMdclist:action"])
-    ])
-  ], 34)) : (openBlock(), createElementBlock("div", _hoisted_2$c, [
-    createElementVNode("aside", {
+  return !_ctx.modal ? (openBlock(), createElementBlock(
+    "aside",
+    {
+      key: 0,
       ref: "drawer",
       class: normalizeClass(_ctx.classes),
-      onKeydown: _cache[2] || (_cache[2] = (...args) => _ctx.handleKeydown && _ctx.handleKeydown(...args)),
-      onTransitionend: _cache[3] || (_cache[3] = (...args) => _ctx.handleTransitionEnd && _ctx.handleTransitionEnd(...args))
-    }, [
+      onKeydown: _cache[0] || (_cache[0] = (...args) => _ctx.handleKeydown && _ctx.handleKeydown(...args)),
+      onTransitionend: _cache[1] || (_cache[1] = (...args) => _ctx.handleTransitionEnd && _ctx.handleTransitionEnd(...args))
+    },
+    [
       renderSlot(_ctx.$slots, "header"),
-      createElementVNode("div", _hoisted_3$b, [
+      createElementVNode("div", _hoisted_1$d, [
         createVNode(_component_mcw_list, {
           "wrap-focus": true,
           tag: "nav",
+          "onMdclist:action": _ctx.onListAction,
           "multi-selectable": false,
           "selected-index": 0,
-          role: "menu",
-          "onMdclist:action": _ctx.onListAction
+          role: "menu"
         }, {
           default: withCtx(() => [
             renderSlot(_ctx.$slots, "default")
           ]),
           _: 3
+          /* FORWARDED */
         }, 8, ["onMdclist:action"])
       ])
-    ], 34),
+    ],
+    34
+    /* CLASS, HYDRATE_EVENTS */
+  )) : (openBlock(), createElementBlock("div", _hoisted_2$c, [
+    createElementVNode(
+      "aside",
+      {
+        ref: "drawer",
+        class: normalizeClass(_ctx.classes),
+        onKeydown: _cache[2] || (_cache[2] = (...args) => _ctx.handleKeydown && _ctx.handleKeydown(...args)),
+        onTransitionend: _cache[3] || (_cache[3] = (...args) => _ctx.handleTransitionEnd && _ctx.handleTransitionEnd(...args))
+      },
+      [
+        renderSlot(_ctx.$slots, "header"),
+        createElementVNode("div", _hoisted_3$b, [
+          createVNode(_component_mcw_list, {
+            "wrap-focus": true,
+            tag: "nav",
+            "multi-selectable": false,
+            "selected-index": 0,
+            role: "menu",
+            "onMdclist:action": _ctx.onListAction
+          }, {
+            default: withCtx(() => [
+              renderSlot(_ctx.$slots, "default")
+            ]),
+            _: 3
+            /* FORWARDED */
+          }, 8, ["onMdclist:action"])
+        ])
+      ],
+      34
+      /* CLASS, HYDRATE_EVENTS */
+    ),
     _ctx.modal ? (openBlock(), createElementBlock("div", {
       key: 0,
       class: "mdc-drawer-scrim",
@@ -2719,8 +3012,20 @@ var script$g = {
   }
 };
 
-const _hoisted_1$c = /* @__PURE__ */ createElementVNode("div", { class: "mdc-fab__ripple" }, null, -1);
-const _hoisted_2$b = /* @__PURE__ */ createElementVNode("div", { class: "mdc-fab__focus-ring" }, null, -1);
+const _hoisted_1$c = /* @__PURE__ */ createElementVNode(
+  "div",
+  { class: "mdc-fab__ripple" },
+  null,
+  -1
+  /* HOISTED */
+);
+const _hoisted_2$b = /* @__PURE__ */ createElementVNode(
+  "div",
+  { class: "mdc-fab__focus-ring" },
+  null,
+  -1
+  /* HOISTED */
+);
 const _hoisted_3$a = { class: "mdc-fab__icon material-icons" };
 const _hoisted_4$8 = { class: "mdc-fab__label" };
 function render$g(_ctx, _cache, $props, $setup, $data, $options) {
@@ -2738,18 +3043,30 @@ function render$g(_ctx, _cache, $props, $setup, $data, $options) {
           _hoisted_1$c,
           _hoisted_2$b,
           renderSlot(_ctx.$slots, "icon", {}, () => [
-            createElementVNode("span", _hoisted_3$a, toDisplayString(_ctx.icon), 1)
+            createElementVNode(
+              "span",
+              _hoisted_3$a,
+              toDisplayString(_ctx.icon),
+              1
+              /* TEXT */
+            )
           ]),
           createElementVNode("span", _hoisted_4$8, [
             renderSlot(_ctx.$slots, "default", {}, () => [
-              createTextVNode(toDisplayString(_ctx.label), 1)
+              createTextVNode(
+                toDisplayString(_ctx.label),
+                1
+                /* TEXT */
+              )
             ])
           ])
         ]),
         _: 3
+        /* FORWARDED */
       }, 16, ["class", "style"])
     ]),
     _: 3
+    /* FORWARDED */
   }, 8, ["isTouch"]);
 }
 
@@ -2907,14 +3224,22 @@ function render$f(_ctx, _cache, $props, $setup, $data, $options) {
         disabled: _ctx.disabled
       }, _ctx.$attrs), {
         default: withCtx(() => [
-          createElementVNode("div", _hoisted_1$b, null, 512),
+          createElementVNode(
+            "div",
+            _hoisted_1$b,
+            null,
+            512
+            /* NEED_PATCH */
+          ),
           renderSlot(_ctx.$slots, "default"),
           _ctx.isTouch ? (openBlock(), createElementBlock("div", _hoisted_2$a)) : createCommentVNode("v-if", true)
         ]),
         _: 3
+        /* FORWARDED */
       }, 16, ["class", "style", "onClick", "disabled"]))
     ]),
     _: 3
+    /* FORWARDED */
   }, 8, ["isTouch"]);
 }
 
@@ -3219,36 +3544,72 @@ var script$e = {
 };
 
 const _hoisted_1$a = { class: "mdc-linear-progress__buffer" };
-const _hoisted_2$9 = /* @__PURE__ */ createElementVNode("div", { class: "mdc-linear-progress__buffer-dots" }, null, -1);
-const _hoisted_3$9 = /* @__PURE__ */ createElementVNode("span", { class: "mdc-linear-progress__bar-inner" }, null, -1);
+const _hoisted_2$9 = /* @__PURE__ */ createElementVNode(
+  "div",
+  { class: "mdc-linear-progress__buffer-dots" },
+  null,
+  -1
+  /* HOISTED */
+);
+const _hoisted_3$9 = /* @__PURE__ */ createElementVNode(
+  "span",
+  { class: "mdc-linear-progress__bar-inner" },
+  null,
+  -1
+  /* HOISTED */
+);
 const _hoisted_4$7 = [
   _hoisted_3$9
 ];
-const _hoisted_5$6 = /* @__PURE__ */ createElementVNode("div", { class: "mdc-linear-progress__bar mdc-linear-progress__secondary-bar" }, [
-  /* @__PURE__ */ createElementVNode("span", { class: "mdc-linear-progress__bar-inner" })
-], -1);
+const _hoisted_5$6 = /* @__PURE__ */ createElementVNode(
+  "div",
+  { class: "mdc-linear-progress__bar mdc-linear-progress__secondary-bar" },
+  [
+    /* @__PURE__ */ createElementVNode("span", { class: "mdc-linear-progress__bar-inner" })
+  ],
+  -1
+  /* HOISTED */
+);
 function render$e(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", mergeProps({
-    ref: "root",
-    class: _ctx.classes,
-    style: _ctx.rootStyles,
-    role: "progressbar"
-  }, _ctx.rootAttrs, {
-    onTransitionend: _cache[0] || (_cache[0] = (...args) => _ctx.onTransitionEnd && _ctx.onTransitionEnd(...args))
-  }), [
-    createElementVNode("div", _hoisted_1$a, [
-      createElementVNode("div", {
-        class: "mdc-linear-progress__buffer-bar",
-        style: normalizeStyle(_ctx.bufferbarStyles)
-      }, null, 4),
-      _hoisted_2$9
-    ]),
-    createElementVNode("div", {
-      class: "mdc-linear-progress__bar mdc-linear-progress__primary-bar",
-      style: normalizeStyle(_ctx.primaryStyles)
-    }, _hoisted_4$7, 4),
-    _hoisted_5$6
-  ], 16);
+  return openBlock(), createElementBlock(
+    "div",
+    mergeProps({
+      ref: "root",
+      class: _ctx.classes,
+      style: _ctx.rootStyles,
+      role: "progressbar"
+    }, _ctx.rootAttrs, {
+      onTransitionend: _cache[0] || (_cache[0] = (...args) => _ctx.onTransitionEnd && _ctx.onTransitionEnd(...args))
+    }),
+    [
+      createElementVNode("div", _hoisted_1$a, [
+        createElementVNode(
+          "div",
+          {
+            class: "mdc-linear-progress__buffer-bar",
+            style: normalizeStyle(_ctx.bufferbarStyles)
+          },
+          null,
+          4
+          /* STYLE */
+        ),
+        _hoisted_2$9
+      ]),
+      createElementVNode(
+        "div",
+        {
+          class: "mdc-linear-progress__bar mdc-linear-progress__primary-bar",
+          style: normalizeStyle(_ctx.primaryStyles)
+        },
+        _hoisted_4$7,
+        4
+        /* STYLE */
+      ),
+      _hoisted_5$6
+    ],
+    16
+    /* FULL_PROPS */
+  );
 }
 
 script$e.render = render$e;
@@ -3408,6 +3769,7 @@ function render$d(_ctx, _cache, $props, $setup, $data, $options) {
       ])) : createCommentVNode("v-if", true)
     ]),
     _: 3
+    /* FORWARDED */
   }, 16, ["data-myItemId"]);
 }
 
@@ -3583,6 +3945,7 @@ var mcwList = {
           listRoot.value,
           strings$b.ACTION_EVENT,
           { index },
+          /** shouldBubble */
           true
         );
         if (Array.isArray(props.modelValue)) {
@@ -3595,6 +3958,7 @@ var mcwList = {
         emit(
           strings$b.SELECTION_CHANGE_EVENT.toLowerCase(),
           { changedIndices },
+          /** shouldBubble */
           true
         );
       },
@@ -3678,6 +4042,7 @@ var mcwList = {
       });
       slotObserver.observe(listRoot.value, {
         childList: true
+        // subtree: true,
       });
     });
     onBeforeUnmount(() => {
@@ -3692,6 +4057,7 @@ var mcwList = {
       typeaheadMatchItem: (nextChar, startingIndex) => foundation.typeaheadMatchItem(
         nextChar,
         startingIndex,
+        /** skipFocus */
         true
       ),
       typeaheadInProgress: () => foundation.isTypeaheadInProgress(),
@@ -4289,9 +4655,11 @@ function render$c(_ctx, _cache, $props, $setup, $data, $options) {
           renderSlot(_ctx.$slots, "default")
         ]),
         _: 3
+        /* FORWARDED */
       }, 8, ["wrap-focus", "onUpdate:modelValue", "type-ahead", "multi-selectable"])
     ]),
     _: 3
+    /* FORWARDED */
   }, 8, ["quick-open", "modelValue", "onKeydown", "onUpdate:modelValue", "onMdcmenusurface:opened", "onMdcmenusurface:closed"]);
 }
 
@@ -4408,6 +4776,8 @@ var script$b = {
       deactivate
     } = useRipplePlugin(toRef(uiState, "root"), {
       isUnbounded: () => true,
+      // Radio buttons technically go "active" whenever there is *any* keyboard interaction. This is not the
+      // UI we desire.
       isSurfaceActive: () => false,
       registerInteractionHandler: (event_, handler) => {
         uiState.controlEl.addEventListener(event_, handler, applyPassive());
@@ -4491,11 +4861,23 @@ var script$b = {
 };
 
 const _hoisted_1$8 = ["id", "name", "value", "checked", "disabled"];
-const _hoisted_2$7 = /* @__PURE__ */ createElementVNode("div", { class: "mdc-radio__background" }, [
-  /* @__PURE__ */ createElementVNode("div", { class: "mdc-radio__outer-circle" }),
-  /* @__PURE__ */ createElementVNode("div", { class: "mdc-radio__inner-circle" })
-], -1);
-const _hoisted_3$7 = /* @__PURE__ */ createElementVNode("div", { class: "mdc-radio__ripple" }, null, -1);
+const _hoisted_2$7 = /* @__PURE__ */ createElementVNode(
+  "div",
+  { class: "mdc-radio__background" },
+  [
+    /* @__PURE__ */ createElementVNode("div", { class: "mdc-radio__outer-circle" }),
+    /* @__PURE__ */ createElementVNode("div", { class: "mdc-radio__inner-circle" })
+  ],
+  -1
+  /* HOISTED */
+);
+const _hoisted_3$7 = /* @__PURE__ */ createElementVNode(
+  "div",
+  { class: "mdc-radio__ripple" },
+  null,
+  -1
+  /* HOISTED */
+);
 function render$b(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_form_field_wrapper = resolveComponent("form-field-wrapper");
   return openBlock(), createBlock(_component_form_field_wrapper, {
@@ -4506,34 +4888,45 @@ function render$b(_ctx, _cache, $props, $setup, $data, $options) {
     forId: _ctx.radioId
   }, createSlots({
     default: withCtx(() => [
-      createElementVNode("div", {
-        ref: "root",
-        class: normalizeClass(_ctx.rootClasses),
-        style: normalizeStyle(_ctx.styles)
-      }, [
-        createElementVNode("input", mergeProps({
-          ref: "controlEl",
-          id: _ctx.radioId,
-          name: _ctx.name,
-          type: "radio",
-          class: "mdc-radio__native-control",
-          onChange: _cache[0] || (_cache[0] = (...args) => _ctx.onChange && _ctx.onChange(...args))
-        }, _ctx.$attrs, {
-          value: _ctx.value,
-          checked: _ctx.modelValue == _ctx.value,
-          disabled: _ctx.disabled
-        }), null, 16, _hoisted_1$8),
-        _hoisted_2$7,
-        _hoisted_3$7
-      ], 6)
+      createElementVNode(
+        "div",
+        {
+          ref: "root",
+          class: normalizeClass(_ctx.rootClasses),
+          style: normalizeStyle(_ctx.styles)
+        },
+        [
+          createElementVNode("input", mergeProps({
+            ref: "controlEl",
+            id: _ctx.radioId,
+            name: _ctx.name,
+            type: "radio",
+            class: "mdc-radio__native-control",
+            onChange: _cache[0] || (_cache[0] = (...args) => _ctx.onChange && _ctx.onChange(...args))
+          }, _ctx.$attrs, {
+            value: _ctx.value,
+            checked: _ctx.modelValue == _ctx.value,
+            disabled: _ctx.disabled
+          }), null, 16, _hoisted_1$8),
+          _hoisted_2$7,
+          _hoisted_3$7
+        ],
+        6
+        /* CLASS, STYLE */
+      )
     ]),
     _: 2
+    /* DYNAMIC */
   }, [
     _ctx.label ? {
       name: "label",
       fn: withCtx(() => [
         renderSlot(_ctx.$slots, "default", {}, () => [
-          createTextVNode(toDisplayString(_ctx.label), 1)
+          createTextVNode(
+            toDisplayString(_ctx.label),
+            1
+            /* TEXT */
+          )
         ])
       ]),
       key: "0"
@@ -4654,19 +5047,38 @@ function render$a(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_touch_wrapper = resolveComponent("touch-wrapper");
   return openBlock(), createBlock(_component_touch_wrapper, { isTouch: _ctx.isTouch }, {
     default: withCtx(() => [
-      createElementVNode("button", mergeProps({
-        ref: "root",
-        class: "mdc-segmented-button__segment"
-      }, _ctx.myAttrs, {
-        onClick: _cache[0] || (_cache[0] = (...args) => _ctx.onClick && _ctx.onClick(...args))
-      }), [
-        _ctx.ripple ? (openBlock(), createElementBlock("div", _hoisted_1$7)) : createCommentVNode("v-if", true),
-        _ctx.icon ? (openBlock(), createElementBlock("i", _hoisted_2$6, toDisplayString(_ctx.icon), 1)) : createCommentVNode("v-if", true),
-        _ctx.isTouch ? (openBlock(), createElementBlock("div", _hoisted_3$6)) : createCommentVNode("v-if", true),
-        _ctx.label ? (openBlock(), createElementBlock("div", _hoisted_4$5, toDisplayString(_ctx.label), 1)) : createCommentVNode("v-if", true)
-      ], 16)
+      createElementVNode(
+        "button",
+        mergeProps({
+          ref: "root",
+          class: "mdc-segmented-button__segment"
+        }, _ctx.myAttrs, {
+          onClick: _cache[0] || (_cache[0] = (...args) => _ctx.onClick && _ctx.onClick(...args))
+        }),
+        [
+          _ctx.ripple ? (openBlock(), createElementBlock("div", _hoisted_1$7)) : createCommentVNode("v-if", true),
+          _ctx.icon ? (openBlock(), createElementBlock(
+            "i",
+            _hoisted_2$6,
+            toDisplayString(_ctx.icon),
+            1
+            /* TEXT */
+          )) : createCommentVNode("v-if", true),
+          _ctx.isTouch ? (openBlock(), createElementBlock("div", _hoisted_3$6)) : createCommentVNode("v-if", true),
+          _ctx.label ? (openBlock(), createElementBlock(
+            "div",
+            _hoisted_4$5,
+            toDisplayString(_ctx.label),
+            1
+            /* TEXT */
+          )) : createCommentVNode("v-if", true)
+        ],
+        16
+        /* FULL_PROPS */
+      )
     ]),
     _: 1
+    /* STABLE */
   }, 8, ["isTouch"]);
 }
 
@@ -5078,6 +5490,7 @@ var script$9 = {
         var _a;
         return (_a = uiState.menu) == null ? void 0 : _a.typeaheadMatchItem(nextChar, startingIndex);
       },
+      // common methods
       addClass: (className) => uiState.classes = { ...uiState.classes, [className]: true },
       removeClass: (className) => {
         const { [className]: removed, ...rest } = uiState.classes;
@@ -5106,6 +5519,7 @@ var script$9 = {
         );
         value != props.modelValue && emit("update:modelValue", value);
       },
+      // outline methods
       hasOutline: () => props.outlined,
       notchOutline: (labelWidth) => {
         var _a;
@@ -5115,6 +5529,7 @@ var script$9 = {
         var _a;
         return (_a = uiState.outlineEl) == null ? void 0 : _a.closeNotch();
       },
+      // label methods
       hasLabel: () => !!props.label,
       floatLabel: (shouldFloat) => {
         var _a;
@@ -5200,25 +5615,31 @@ const _hoisted_3$5 = {
 };
 const _hoisted_4$4 = { class: "mdc-select__selected-text-container" };
 const _hoisted_5$4 = { class: "mdc-select__selected-text" };
-const _hoisted_6$4 = /* @__PURE__ */ createElementVNode("span", { class: "mdc-select__dropdown-icon" }, [
-  /* @__PURE__ */ createElementVNode("svg", {
-    class: "mdc-select__dropdown-icon-graphic",
-    viewBox: "7 10 10 5"
-  }, [
-    /* @__PURE__ */ createElementVNode("polygon", {
-      class: "mdc-select__dropdown-icon-inactive",
-      stroke: "none",
-      "fill-rule": "evenodd",
-      points: "7 10 12 15 17 10"
-    }),
-    /* @__PURE__ */ createElementVNode("polygon", {
-      class: "mdc-select__dropdown-icon-active",
-      stroke: "none",
-      "fill-rule": "evenodd",
-      points: "7 15 12 10 17 15"
-    })
-  ])
-], -1);
+const _hoisted_6$4 = /* @__PURE__ */ createElementVNode(
+  "span",
+  { class: "mdc-select__dropdown-icon" },
+  [
+    /* @__PURE__ */ createElementVNode("svg", {
+      class: "mdc-select__dropdown-icon-graphic",
+      viewBox: "7 10 10 5"
+    }, [
+      /* @__PURE__ */ createElementVNode("polygon", {
+        class: "mdc-select__dropdown-icon-inactive",
+        stroke: "none",
+        "fill-rule": "evenodd",
+        points: "7 10 12 15 17 10"
+      }),
+      /* @__PURE__ */ createElementVNode("polygon", {
+        class: "mdc-select__dropdown-icon-active",
+        stroke: "none",
+        "fill-rule": "evenodd",
+        points: "7 15 12 10 17 15"
+      })
+    ])
+  ],
+  -1
+  /* HOISTED */
+);
 function render$9(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_select_icon = resolveComponent("select-icon");
   const _component_mcw_notched_outline = resolveComponent("mcw-notched-outline");
@@ -5227,66 +5648,113 @@ function render$9(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_mcw_menu = resolveComponent("mcw-menu");
   const _component_select_helper_text = resolveComponent("select-helper-text");
   return openBlock(), createElementBlock("div", _hoisted_1$6, [
-    createElementVNode("div", mergeProps({ ref: "root" }, _ctx.$attrs, { class: _ctx.rootClasses }), [
-      createElementVNode("div", mergeProps({
-        ref: "anchorEl",
-        class: ["mdc-select__anchor", _ctx.rippleClasses],
-        style: _ctx.rippleStyles,
-        onClick: _cache[0] || (_cache[0] = (...args) => _ctx.handleClick && _ctx.handleClick(...args)),
-        onKeydown: _cache[1] || (_cache[1] = (...args) => _ctx.handleKeydown && _ctx.handleKeydown(...args)),
-        onFocus: _cache[2] || (_cache[2] = (...args) => _ctx.handleFocus && _ctx.handleFocus(...args)),
-        onBlur: _cache[3] || (_cache[3] = (...args) => _ctx.handleBlur && _ctx.handleBlur(...args))
-      }, _ctx.selectAnchorAttrs, {
-        role: "button",
-        "aria-haspopup": "listbox",
-        "aria-required": _ctx.required
-      }), [
-        _ctx.leadingIcon ? (openBlock(), createBlock(_component_select_icon, {
-          key: 0,
-          ref: "leadingIconEl",
-          icon: _ctx.leadingIcon,
-          tabindex: "0",
-          role: "button"
-        }, null, 8, ["icon"])) : createCommentVNode("v-if", true),
-        !_ctx.outlined ? (openBlock(), createElementBlock("span", _hoisted_3$5)) : createCommentVNode("v-if", true),
-        createElementVNode("span", _hoisted_4$4, [
-          createElementVNode("span", _hoisted_5$4, toDisplayString(_ctx.selectedTextContent), 1)
-        ]),
-        _hoisted_6$4,
-        _ctx.outlined ? (openBlock(), createBlock(_component_mcw_notched_outline, {
-          key: 2,
-          ref: "outlineEl"
+    createElementVNode(
+      "div",
+      mergeProps({ ref: "root" }, _ctx.$attrs, { class: _ctx.rootClasses }),
+      [
+        createElementVNode("div", mergeProps({
+          ref: "anchorEl",
+          class: ["mdc-select__anchor", _ctx.rippleClasses],
+          style: _ctx.rippleStyles,
+          onClick: _cache[0] || (_cache[0] = (...args) => _ctx.handleClick && _ctx.handleClick(...args)),
+          onKeydown: _cache[1] || (_cache[1] = (...args) => _ctx.handleKeydown && _ctx.handleKeydown(...args)),
+          onFocus: _cache[2] || (_cache[2] = (...args) => _ctx.handleFocus && _ctx.handleFocus(...args)),
+          onBlur: _cache[3] || (_cache[3] = (...args) => _ctx.handleBlur && _ctx.handleBlur(...args))
+        }, _ctx.selectAnchorAttrs, {
+          role: "button",
+          "aria-haspopup": "listbox",
+          "aria-required": _ctx.required
+        }), [
+          _ctx.leadingIcon ? (openBlock(), createBlock(_component_select_icon, {
+            key: 0,
+            ref: "leadingIconEl",
+            icon: _ctx.leadingIcon,
+            tabindex: "0",
+            role: "button"
+          }, null, 8, ["icon"])) : createCommentVNode("v-if", true),
+          !_ctx.outlined ? (openBlock(), createElementBlock("span", _hoisted_3$5)) : createCommentVNode("v-if", true),
+          createElementVNode("span", _hoisted_4$4, [
+            createElementVNode(
+              "span",
+              _hoisted_5$4,
+              toDisplayString(_ctx.selectedTextContent),
+              1
+              /* TEXT */
+            )
+          ]),
+          _hoisted_6$4,
+          _ctx.outlined ? (openBlock(), createBlock(
+            _component_mcw_notched_outline,
+            {
+              key: 2,
+              ref: "outlineEl"
+            },
+            {
+              default: withCtx(() => [
+                createTextVNode(
+                  toDisplayString(_ctx.label),
+                  1
+                  /* TEXT */
+                )
+              ]),
+              _: 1
+              /* STABLE */
+            },
+            512
+            /* NEED_PATCH */
+          )) : (openBlock(), createElementBlock(
+            Fragment,
+            { key: 3 },
+            [
+              createVNode(
+                _component_mcw_floating_label,
+                { ref: "labelEl" },
+                {
+                  default: withCtx(() => [
+                    createTextVNode(
+                      toDisplayString(_ctx.label),
+                      1
+                      /* TEXT */
+                    )
+                  ]),
+                  _: 1
+                  /* STABLE */
+                },
+                512
+                /* NEED_PATCH */
+              ),
+              createVNode(
+                _component_mcw_line_ripple,
+                { ref: "lineRippleEl" },
+                null,
+                512
+                /* NEED_PATCH */
+              )
+            ],
+            64
+            /* STABLE_FRAGMENT */
+          ))
+        ], 16, _hoisted_2$5),
+        createVNode(_component_mcw_menu, {
+          ref: "menu",
+          class: normalizeClass(["mdc-select__menu", _ctx.menuClasses]),
+          "onUpdate:modelValue": _ctx.handleChange,
+          onSelect: _ctx.handleMenuItemAction,
+          "onMdcMenuSurface:opened": _ctx.handleMenuOpened,
+          "onMdcMenuSurface:closed": _ctx.handleMenuClosed,
+          role: "listbox",
+          "type-ahead": ""
         }, {
           default: withCtx(() => [
-            createTextVNode(toDisplayString(_ctx.label), 1)
+            renderSlot(_ctx.$slots, "default")
           ]),
-          _: 1
-        }, 512)) : (openBlock(), createElementBlock(Fragment, { key: 3 }, [
-          createVNode(_component_mcw_floating_label, { ref: "labelEl" }, {
-            default: withCtx(() => [
-              createTextVNode(toDisplayString(_ctx.label), 1)
-            ]),
-            _: 1
-          }, 512),
-          createVNode(_component_mcw_line_ripple, { ref: "lineRippleEl" }, null, 512)
-        ], 64))
-      ], 16, _hoisted_2$5),
-      createVNode(_component_mcw_menu, {
-        ref: "menu",
-        class: normalizeClass(["mdc-select__menu", _ctx.menuClasses]),
-        "onUpdate:modelValue": _ctx.handleChange,
-        onSelect: _ctx.handleMenuItemAction,
-        "onMdcMenuSurface:opened": _ctx.handleMenuOpened,
-        "onMdcMenuSurface:closed": _ctx.handleMenuClosed,
-        role: "listbox",
-        "type-ahead": ""
-      }, {
-        default: withCtx(() => [
-          renderSlot(_ctx.$slots, "default")
-        ]),
-        _: 3
-      }, 8, ["class", "onUpdate:modelValue", "onSelect", "onMdcMenuSurface:opened", "onMdcMenuSurface:closed"])
-    ], 16),
+          _: 3
+          /* FORWARDED */
+        }, 8, ["class", "onUpdate:modelValue", "onSelect", "onMdcMenuSurface:opened", "onMdcMenuSurface:closed"])
+      ],
+      16
+      /* FULL_PROPS */
+    ),
     _ctx.helptext ? (openBlock(), createBlock(_component_select_helper_text, {
       key: 0,
       ref: "helperTextEl",
@@ -5517,7 +5985,13 @@ var script$8 = {
 const _hoisted_1$5 = ["min", "max", "step", "value"];
 const _hoisted_2$4 = ["min", "max", "step", "value"];
 const _hoisted_3$4 = { class: "mdc-slider__track" };
-const _hoisted_4$3 = /* @__PURE__ */ createElementVNode("div", { class: "mdc-slider__track--inactive" }, null, -1);
+const _hoisted_4$3 = /* @__PURE__ */ createElementVNode(
+  "div",
+  { class: "mdc-slider__track--inactive" },
+  null,
+  -1
+  /* HOISTED */
+);
 const _hoisted_5$3 = { class: "mdc-slider__track--active" };
 const _hoisted_6$3 = ["dir"];
 const _hoisted_7$3 = {
@@ -5531,7 +6005,13 @@ const _hoisted_8$1 = {
 };
 const _hoisted_9 = { class: "mdc-slider__value-indicator" };
 const _hoisted_10 = { class: "mdc-slider__value-indicator-text" };
-const _hoisted_11 = /* @__PURE__ */ createElementVNode("div", { class: "mdc-slider__thumb-knob" }, null, -1);
+const _hoisted_11 = /* @__PURE__ */ createElementVNode(
+  "div",
+  { class: "mdc-slider__thumb-knob" },
+  null,
+  -1
+  /* HOISTED */
+);
 const _hoisted_12 = {
   key: 0,
   class: "mdc-slider__value-indicator-container",
@@ -5539,83 +6019,131 @@ const _hoisted_12 = {
 };
 const _hoisted_13 = { class: "mdc-slider__value-indicator" };
 const _hoisted_14 = { class: "mdc-slider__value-indicator-text" };
-const _hoisted_15 = /* @__PURE__ */ createElementVNode("div", { class: "mdc-slider__thumb-knob" }, null, -1);
+const _hoisted_15 = /* @__PURE__ */ createElementVNode(
+  "div",
+  { class: "mdc-slider__thumb-knob" },
+  null,
+  -1
+  /* HOISTED */
+);
 function render$8(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", {
-    ref: "root",
-    class: normalizeClass(_ctx.classes)
-  }, [
-    _ctx.range ? (openBlock(), createElementBlock("input", {
-      key: 0,
-      ref: _ctx.setInputRef,
-      class: "mdc-slider__input",
-      type: "range",
-      min: _ctx.min,
-      max: _ctx.max,
-      step: _ctx.step,
-      value: _ctx.start,
-      name: "volume",
-      "aria-label": "slider"
-    }, null, 8, _hoisted_1$5)) : createCommentVNode("v-if", true),
-    createElementVNode("input", {
-      ref: _ctx.setInputRef,
-      class: "mdc-slider__input",
-      type: "range",
-      min: _ctx.min,
-      max: _ctx.max,
-      step: _ctx.step,
-      value: _ctx.modelValue,
-      name: "volume",
-      "aria-label": "slider"
-    }, null, 8, _hoisted_2$4),
-    createElementVNode("div", _hoisted_3$4, [
-      _hoisted_4$3,
-      createElementVNode("div", _hoisted_5$3, [
-        createElementVNode("div", {
-          ref: "trackActive",
-          dir: _ctx.dir,
-          class: "mdc-slider__track--active_fill"
-        }, null, 8, _hoisted_6$3)
+  return openBlock(), createElementBlock(
+    "div",
+    {
+      ref: "root",
+      class: normalizeClass(_ctx.classes)
+    },
+    [
+      _ctx.range ? (openBlock(), createElementBlock("input", {
+        key: 0,
+        ref: _ctx.setInputRef,
+        class: "mdc-slider__input",
+        type: "range",
+        min: _ctx.min,
+        max: _ctx.max,
+        step: _ctx.step,
+        value: _ctx.start,
+        name: "volume",
+        "aria-label": "slider"
+      }, null, 8, _hoisted_1$5)) : createCommentVNode("v-if", true),
+      createElementVNode("input", {
+        ref: _ctx.setInputRef,
+        class: "mdc-slider__input",
+        type: "range",
+        min: _ctx.min,
+        max: _ctx.max,
+        step: _ctx.step,
+        value: _ctx.modelValue,
+        name: "volume",
+        "aria-label": "slider"
+      }, null, 8, _hoisted_2$4),
+      createElementVNode("div", _hoisted_3$4, [
+        _hoisted_4$3,
+        createElementVNode("div", _hoisted_5$3, [
+          createElementVNode("div", {
+            ref: "trackActive",
+            dir: _ctx.dir,
+            class: "mdc-slider__track--active_fill"
+          }, null, 8, _hoisted_6$3)
+        ]),
+        _ctx.tickMarks ? (openBlock(), createElementBlock("div", _hoisted_7$3, [
+          (openBlock(true), createElementBlock(
+            Fragment,
+            null,
+            renderList(_ctx.marks, (mark, index) => {
+              return openBlock(), createElementBlock(
+                "div",
+                {
+                  class: normalizeClass(mark),
+                  key: mark + index
+                },
+                null,
+                2
+                /* CLASS */
+              );
+            }),
+            128
+            /* KEYED_FRAGMENT */
+          ))
+        ])) : createCommentVNode("v-if", true)
       ]),
-      _ctx.tickMarks ? (openBlock(), createElementBlock("div", _hoisted_7$3, [
-        (openBlock(true), createElementBlock(Fragment, null, renderList(_ctx.marks, (mark, index) => {
-          return openBlock(), createElementBlock("div", {
-            class: normalizeClass(mark),
-            key: mark + index
-          }, null, 2);
-        }), 128))
-      ])) : createCommentVNode("v-if", true)
-    ]),
-    _ctx.range ? (openBlock(), createElementBlock("div", mergeProps({
-      key: 1,
-      ref: _ctx.setThumbRef,
-      class: [_ctx.startThumbClasses, "mdc-slider__thumb"],
-      tabindex: "0",
-      role: "slider",
-      "aria-label": "slider"
-    }, _ctx.startThumbAttrs), [
-      _ctx.discrete ? (openBlock(), createElementBlock("div", _hoisted_8$1, [
-        createElementVNode("div", _hoisted_9, [
-          createElementVNode("span", _hoisted_10, toDisplayString(_ctx.startValueText), 1)
-        ])
-      ])) : createCommentVNode("v-if", true),
-      _hoisted_11
-    ], 16)) : createCommentVNode("v-if", true),
-    createElementVNode("div", mergeProps({
-      ref: _ctx.setThumbRef,
-      class: [_ctx.endThumbClasses, "mdc-slider__thumb"],
-      tabindex: "0",
-      role: "slider",
-      "aria-label": "slider"
-    }, _ctx.endThumbAttrs), [
-      _ctx.discrete ? (openBlock(), createElementBlock("div", _hoisted_12, [
-        createElementVNode("div", _hoisted_13, [
-          createElementVNode("span", _hoisted_14, toDisplayString(_ctx.endValueText), 1)
-        ])
-      ])) : createCommentVNode("v-if", true),
-      _hoisted_15
-    ], 16)
-  ], 2);
+      _ctx.range ? (openBlock(), createElementBlock(
+        "div",
+        mergeProps({
+          key: 1,
+          ref: _ctx.setThumbRef,
+          class: [_ctx.startThumbClasses, "mdc-slider__thumb"],
+          tabindex: "0",
+          role: "slider",
+          "aria-label": "slider"
+        }, _ctx.startThumbAttrs),
+        [
+          _ctx.discrete ? (openBlock(), createElementBlock("div", _hoisted_8$1, [
+            createElementVNode("div", _hoisted_9, [
+              createElementVNode(
+                "span",
+                _hoisted_10,
+                toDisplayString(_ctx.startValueText),
+                1
+                /* TEXT */
+              )
+            ])
+          ])) : createCommentVNode("v-if", true),
+          _hoisted_11
+        ],
+        16
+        /* FULL_PROPS */
+      )) : createCommentVNode("v-if", true),
+      createElementVNode(
+        "div",
+        mergeProps({
+          ref: _ctx.setThumbRef,
+          class: [_ctx.endThumbClasses, "mdc-slider__thumb"],
+          tabindex: "0",
+          role: "slider",
+          "aria-label": "slider"
+        }, _ctx.endThumbAttrs),
+        [
+          _ctx.discrete ? (openBlock(), createElementBlock("div", _hoisted_12, [
+            createElementVNode("div", _hoisted_13, [
+              createElementVNode(
+                "span",
+                _hoisted_14,
+                toDisplayString(_ctx.endValueText),
+                1
+                /* TEXT */
+              )
+            ])
+          ])) : createCommentVNode("v-if", true),
+          _hoisted_15
+        ],
+        16
+        /* FULL_PROPS */
+      )
+    ],
+    2
+    /* CLASS */
+  );
 }
 
 script$8.render = render$8;
@@ -5853,7 +6381,13 @@ const _hoisted_4$2 = {
   type: "button",
   class: "mdc-button mdc-snackbar__action"
 };
-const _hoisted_5$2 = /* @__PURE__ */ createElementVNode("div", { class: "mdc-button__ripple" }, null, -1);
+const _hoisted_5$2 = /* @__PURE__ */ createElementVNode(
+  "div",
+  { class: "mdc-button__ripple" },
+  null,
+  -1
+  /* HOISTED */
+);
 const _hoisted_6$2 = { class: "mdc-button__label" };
 const _hoisted_7$2 = {
   key: 1,
@@ -5862,29 +6396,57 @@ const _hoisted_7$2 = {
   title: "Dismiss"
 };
 function render$7(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("aside", {
-    class: normalizeClass(["mdc-snackbar", _ctx.rootClasses])
-  }, [
-    createElementVNode("div", {
-      class: "mdc-snackbar__surface",
-      role: "status",
-      "aria-relevant": "additions",
-      onClick: _cache[0] || (_cache[0] = (...args) => _ctx.surfaceClickHandler && _ctx.surfaceClickHandler(...args))
-    }, [
-      createElementVNode("div", _hoisted_1$4, [
-        _ctx.showMessage ? (openBlock(), createElementBlock(Fragment, { key: 0 }, [
-          createTextVNode(toDisplayString(_ctx.message), 1)
-        ], 64)) : (openBlock(), createElementBlock("span", _hoisted_2$3, "\xA0"))
-      ], 512),
-      createElementVNode("div", _hoisted_3$3, [
-        _ctx.actionText ? (openBlock(), createElementBlock("button", _hoisted_4$2, [
-          _hoisted_5$2,
-          createElementVNode("span", _hoisted_6$2, toDisplayString(_ctx.actionText), 1)
-        ])) : createCommentVNode("v-if", true),
-        _ctx.showDismissAction ? (openBlock(), createElementBlock("button", _hoisted_7$2, " close ")) : createCommentVNode("v-if", true)
+  return openBlock(), createElementBlock(
+    "aside",
+    {
+      class: normalizeClass(["mdc-snackbar", _ctx.rootClasses])
+    },
+    [
+      createElementVNode("div", {
+        class: "mdc-snackbar__surface",
+        role: "status",
+        "aria-relevant": "additions",
+        onClick: _cache[0] || (_cache[0] = (...args) => _ctx.surfaceClickHandler && _ctx.surfaceClickHandler(...args))
+      }, [
+        createElementVNode(
+          "div",
+          _hoisted_1$4,
+          [
+            _ctx.showMessage ? (openBlock(), createElementBlock(
+              Fragment,
+              { key: 0 },
+              [
+                createTextVNode(
+                  toDisplayString(_ctx.message),
+                  1
+                  /* TEXT */
+                )
+              ],
+              64
+              /* STABLE_FRAGMENT */
+            )) : (openBlock(), createElementBlock("span", _hoisted_2$3, "\xA0"))
+          ],
+          512
+          /* NEED_PATCH */
+        ),
+        createElementVNode("div", _hoisted_3$3, [
+          _ctx.actionText ? (openBlock(), createElementBlock("button", _hoisted_4$2, [
+            _hoisted_5$2,
+            createElementVNode(
+              "span",
+              _hoisted_6$2,
+              toDisplayString(_ctx.actionText),
+              1
+              /* TEXT */
+            )
+          ])) : createCommentVNode("v-if", true),
+          _ctx.showDismissAction ? (openBlock(), createElementBlock("button", _hoisted_7$2, " close ")) : createCommentVNode("v-if", true)
+        ])
       ])
-    ])
-  ], 2);
+    ],
+    2
+    /* CLASS */
+  );
 }
 
 script$7.render = render$7;
@@ -5995,30 +6557,48 @@ var script$6 = {
 };
 
 const _hoisted_1$3 = ["id"];
-const _hoisted_2$2 = /* @__PURE__ */ createElementVNode("div", { class: "mdc-switch__track" }, null, -1);
+const _hoisted_2$2 = /* @__PURE__ */ createElementVNode(
+  "div",
+  { class: "mdc-switch__track" },
+  null,
+  -1
+  /* HOISTED */
+);
 const _hoisted_3$2 = { class: "mdc-switch__handle-track" };
 const _hoisted_4$1 = { class: "mdc-switch__handle" };
-const _hoisted_5$1 = /* @__PURE__ */ createElementVNode("div", { class: "mdc-switch__shadow" }, [
-  /* @__PURE__ */ createElementVNode("div", { class: "mdc-elevation-overlay" })
-], -1);
+const _hoisted_5$1 = /* @__PURE__ */ createElementVNode(
+  "div",
+  { class: "mdc-switch__shadow" },
+  [
+    /* @__PURE__ */ createElementVNode("div", { class: "mdc-elevation-overlay" })
+  ],
+  -1
+  /* HOISTED */
+);
 const _hoisted_6$1 = {
   ref: "rippleEl",
   class: "mdc-switch__ripple"
 };
-const _hoisted_7$1 = /* @__PURE__ */ createElementVNode("div", { class: "mdc-switch__icons" }, [
-  /* @__PURE__ */ createElementVNode("svg", {
-    class: "mdc-switch__icon mdc-switch__icon--on",
-    viewBox: "0 0 24 24"
-  }, [
-    /* @__PURE__ */ createElementVNode("path", { d: "M19.69,5.23L8.96,15.96l-4.23-4.23L2.96,13.5l6,6L21.46,7L19.69,5.23z" })
-  ]),
-  /* @__PURE__ */ createElementVNode("svg", {
-    class: "mdc-switch__icon mdc-switch__icon--off",
-    viewBox: "0 0 24 24"
-  }, [
-    /* @__PURE__ */ createElementVNode("path", { d: "M20 13H4v-2h16v2z" })
-  ])
-], -1);
+const _hoisted_7$1 = /* @__PURE__ */ createElementVNode(
+  "div",
+  { class: "mdc-switch__icons" },
+  [
+    /* @__PURE__ */ createElementVNode("svg", {
+      class: "mdc-switch__icon mdc-switch__icon--on",
+      viewBox: "0 0 24 24"
+    }, [
+      /* @__PURE__ */ createElementVNode("path", { d: "M19.69,5.23L8.96,15.96l-4.23-4.23L2.96,13.5l6,6L21.46,7L19.69,5.23z" })
+    ]),
+    /* @__PURE__ */ createElementVNode("svg", {
+      class: "mdc-switch__icon mdc-switch__icon--off",
+      viewBox: "0 0 24 24"
+    }, [
+      /* @__PURE__ */ createElementVNode("path", { d: "M20 13H4v-2h16v2z" })
+    ])
+  ],
+  -1
+  /* HOISTED */
+);
 function render$6(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_form_field_wrapper = resolveComponent("form-field-wrapper");
   return openBlock(), createBlock(_component_form_field_wrapper, {
@@ -6041,19 +6621,30 @@ function render$6(_ctx, _cache, $props, $setup, $data, $options) {
         createElementVNode("div", _hoisted_3$2, [
           createElementVNode("div", _hoisted_4$1, [
             _hoisted_5$1,
-            createElementVNode("div", _hoisted_6$1, null, 512),
+            createElementVNode(
+              "div",
+              _hoisted_6$1,
+              null,
+              512
+              /* NEED_PATCH */
+            ),
             _hoisted_7$1
           ])
         ])
       ], 16, _hoisted_1$3)
     ]),
     _: 2
+    /* DYNAMIC */
   }, [
     _ctx.label ? {
       name: "label",
       fn: withCtx(() => [
         renderSlot(_ctx.$slots, "default", {}, () => [
-          createTextVNode(toDisplayString(_ctx.label), 1)
+          createTextVNode(
+            toDisplayString(_ctx.label),
+            1
+            /* TEXT */
+          )
         ])
       ]),
       key: "0"
@@ -6508,7 +7099,13 @@ const _hoisted_2$1 = {
   key: 1,
   class: "mdc-tab__text-label"
 };
-const _hoisted_3$1 = /* @__PURE__ */ createElementVNode("div", { class: "mdc-tab__focus-ring" }, null, -1);
+const _hoisted_3$1 = /* @__PURE__ */ createElementVNode(
+  "div",
+  { class: "mdc-tab__focus-ring" },
+  null,
+  -1
+  /* HOISTED */
+);
 function render$5(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_mcw_tab_indicator = resolveComponent("mcw-tab-indicator");
   const _component_custom_link = resolveComponent("custom-link");
@@ -6521,37 +7118,56 @@ function render$5(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _ctx.onClick
   }), {
     default: withCtx(() => [
-      createElementVNode("span", _hoisted_1$2, [
-        _ctx.hasIcon ? renderSlot(_ctx.$slots, "icon", { key: 0 }, () => [
-          createElementVNode("i", {
-            ref: "iconEl",
-            class: normalizeClass(["mdc-tab__icon", _ctx.hasIcon.classes]),
-            tabindex: "0",
-            "aria-hidden": "true"
-          }, toDisplayString(_ctx.hasIcon.content), 3)
-        ]) : createCommentVNode("v-if", true),
-        _ctx.hasText ? (openBlock(), createElementBlock("span", _hoisted_2$1, [
-          renderSlot(_ctx.$slots, "default")
-        ])) : createCommentVNode("v-if", true),
-        _ctx.spanContent ? (openBlock(), createBlock(_component_mcw_tab_indicator, {
-          key: 2,
-          ref: "tabIndicator",
-          fade: _ctx.fade
-        }, null, 8, ["fade"])) : createCommentVNode("v-if", true)
-      ], 512),
+      createElementVNode(
+        "span",
+        _hoisted_1$2,
+        [
+          _ctx.hasIcon ? renderSlot(_ctx.$slots, "icon", { key: 0 }, () => [
+            createElementVNode(
+              "i",
+              {
+                ref: "iconEl",
+                class: normalizeClass(["mdc-tab__icon", _ctx.hasIcon.classes]),
+                tabindex: "0",
+                "aria-hidden": "true"
+              },
+              toDisplayString(_ctx.hasIcon.content),
+              3
+              /* TEXT, CLASS */
+            )
+          ]) : createCommentVNode("v-if", true),
+          _ctx.hasText ? (openBlock(), createElementBlock("span", _hoisted_2$1, [
+            renderSlot(_ctx.$slots, "default")
+          ])) : createCommentVNode("v-if", true),
+          _ctx.spanContent ? (openBlock(), createBlock(_component_mcw_tab_indicator, {
+            key: 2,
+            ref: "tabIndicator",
+            fade: _ctx.fade
+          }, null, 8, ["fade"])) : createCommentVNode("v-if", true)
+        ],
+        512
+        /* NEED_PATCH */
+      ),
       !_ctx.spanContent ? (openBlock(), createBlock(_component_mcw_tab_indicator, {
         key: 0,
         ref: "tabIndicator",
         fade: _ctx.fade
       }, null, 8, ["fade"])) : createCommentVNode("v-if", true),
-      createElementVNode("span", {
-        ref: "rippleSurface",
-        class: normalizeClass(["mdc-tab__ripple", _ctx.rippleClasses]),
-        style: normalizeStyle(_ctx.styles)
-      }, null, 6),
+      createElementVNode(
+        "span",
+        {
+          ref: "rippleSurface",
+          class: normalizeClass(["mdc-tab__ripple", _ctx.rippleClasses]),
+          style: normalizeStyle(_ctx.styles)
+        },
+        null,
+        6
+        /* CLASS, STYLE */
+      ),
       _hoisted_3$1
     ]),
     _: 3
+    /* FORWARDED */
   }, 16, ["id", "class", "style", "onClick"]);
 }
 
@@ -6587,7 +7203,13 @@ var script$4 = {
 
 const _hoisted_1$1 = { class: "mdc-text-field-character-counter" };
 function render$4(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", _hoisted_1$1, toDisplayString(_ctx.textContent), 1);
+  return openBlock(), createElementBlock(
+    "div",
+    _hoisted_1$1,
+    toDisplayString(_ctx.textContent),
+    1
+    /* TEXT */
+  );
 }
 
 script$4.render = render$4;
@@ -6645,7 +7267,13 @@ var script$3 = {
 };
 
 function render$3(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", mergeProps({ class: _ctx.classes }, _ctx.rootAttrs), toDisplayString(_ctx.helptext), 17);
+  return openBlock(), createElementBlock(
+    "div",
+    mergeProps({ class: _ctx.classes }, _ctx.rootAttrs),
+    toDisplayString(_ctx.helptext),
+    17
+    /* TEXT, FULL_PROPS */
+  );
 }
 
 script$3.render = render$3;
@@ -6710,12 +7338,18 @@ var script$2 = {
 };
 
 function render$2(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("i", mergeProps({
-    ref: "root",
-    class: ["material-icons", _ctx.classes]
-  }, _ctx.rootAttrs), [
-    renderSlot(_ctx.$slots, "default")
-  ], 16);
+  return openBlock(), createElementBlock(
+    "i",
+    mergeProps({
+      ref: "root",
+      class: ["material-icons", _ctx.classes]
+    }, _ctx.rootAttrs),
+    [
+      renderSlot(_ctx.$slots, "default")
+    ],
+    16
+    /* FULL_PROPS */
+  );
 }
 
 script$2.render = render$2;
@@ -6850,6 +7484,7 @@ var script$1 = {
       ...uiState.classes
     }));
     const inputListeners = {
+      // ...listeners,
       input: ({ target: { value } }) => emit("update:modelValue", value)
     };
     const focus = () => {
@@ -6892,6 +7527,7 @@ var script$1 = {
       deregisterValidationAttributeChangeHandler: (observer) => {
         observer.disconnect();
       },
+      // input adapter methods
       registerInputInteractionHandler: (eventType, handler) => {
         uiState.input.addEventListener(eventType, handler, applyPassive());
       },
@@ -6908,6 +7544,7 @@ var script$1 = {
         const { [attribute]: removed, ...rest } = uiState.inputAttrs;
         uiState.inputAttrs = rest;
       },
+      // label adapter methods
       shakeLabel: (shouldShake) => {
         var _a;
         (_a = uiState.labelEl) == null ? void 0 : _a.shake(shouldShake);
@@ -6922,6 +7559,7 @@ var script$1 = {
       getLabelWidth: () => {
         return uiState.labelEl.getWidth();
       },
+      // line ripple adapter methods
       deactivateLineRipple: () => {
         var _a;
         return (_a = uiState.lineRippleEl) == null ? void 0 : _a.deactivate();
@@ -6934,6 +7572,7 @@ var script$1 = {
         var _a;
         return (_a = uiState.lineRippleEl) == null ? void 0 : _a.setRippleCenter(normalizedX);
       },
+      // outline adapter methods
       hasOutline: () => !!props.outline,
       notchOutline: (notchWidth, isRtl) => uiState.labelEl.notch(notchWidth, isRtl),
       closeOutline: () => uiState.labelEl.closeNotch()
@@ -7044,128 +7683,208 @@ function render$1(_ctx, _cache, $props, $setup, $data, $options) {
   const _component_mcw_line_ripple = resolveComponent("mcw-line-ripple");
   const _component_mcw_character_counter = resolveComponent("mcw-character-counter");
   const _component_mcw_textfield_helper_text = resolveComponent("mcw-textfield-helper-text");
-  return openBlock(), createElementBlock("div", {
-    ref: "wrapper",
-    class: normalizeClass(["textfield-container", _ctx.$attrs.class])
-  }, [
-    !_ctx.multiline ? (openBlock(), createElementBlock("label", {
-      key: 0,
-      ref: "root",
-      class: normalizeClass(_ctx.rootClasses),
-      style: normalizeStyle(_ctx.rippleStyles)
-    }, [
-      !_ctx.outline ? (openBlock(), createElementBlock("span", _hoisted_1)) : createCommentVNode("v-if", true),
-      renderSlot(_ctx.$slots, "leading"),
-      renderSlot(_ctx.$slots, "leadingIcon"),
-      _ctx.hasLabel ? (openBlock(), createBlock(_component_mcw_floating_label, {
-        key: 1,
-        ref: "labelEl",
-        id: _ctx.labelId,
-        required: _ctx.required
-      }, {
-        default: withCtx(() => [
-          createTextVNode(toDisplayString(_ctx.label), 1)
-        ]),
-        _: 1
-      }, 8, ["id", "required"])) : createCommentVNode("v-if", true),
-      _ctx.outline ? (openBlock(), createBlock(_component_mcw_notched_outline, {
-        key: 2,
-        ref: "labelEl"
-      }, {
-        default: withCtx(() => [
-          createTextVNode(toDisplayString(_ctx.label), 1)
-        ]),
-        _: 1
-      }, 512)) : createCommentVNode("v-if", true),
-      _ctx.prefix ? (openBlock(), createElementBlock("span", _hoisted_2, toDisplayString(_ctx.prefix), 1)) : createCommentVNode("v-if", true),
-      createElementVNode("input", mergeProps({
-        ref: "input",
-        class: _ctx.inputClasses
-      }, _ctx.inputAttrs, {
-        type: _ctx.type,
-        minlength: _ctx.minlength,
-        maxlength: _ctx.maxlength,
-        "aria-label": _ctx.label,
-        "aria-controls": _ctx.inputAriaControls,
-        "aria-labelledby": _ctx.labelId,
-        "aria-describedby": _ctx.inputAriaControls
-      }, toHandlers(_ctx.inputListeners, true)), null, 16, _hoisted_3),
-      _ctx.suffix ? (openBlock(), createElementBlock("span", _hoisted_4, toDisplayString(_ctx.suffix), 1)) : createCommentVNode("v-if", true),
-      renderSlot(_ctx.$slots, "trailingIcon"),
-      renderSlot(_ctx.$slots, "trailing"),
-      _ctx.hasLineRipple ? (openBlock(), createBlock(_component_mcw_line_ripple, {
-        key: 5,
-        ref: "lineRippleEl"
-      }, null, 512)) : createCommentVNode("v-if", true)
-    ], 6)) : (openBlock(), createElementBlock("label", {
-      key: 1,
-      ref: "root",
-      class: normalizeClass(_ctx.classes)
-    }, [
-      _ctx.outline ? (openBlock(), createBlock(_component_mcw_notched_outline, {
-        key: 0,
-        ref: "labelEl"
-      }, {
-        default: withCtx(() => [
-          createTextVNode(toDisplayString(_ctx.label), 1)
-        ]),
-        _: 1
-      }, 512)) : createCommentVNode("v-if", true),
-      _ctx.hasLabel && !_ctx.outline ? (openBlock(), createBlock(_component_mcw_floating_label, {
-        key: 1,
-        ref: "labelEl",
-        id: _ctx.labelId,
-        required: _ctx.required
-      }, {
-        default: withCtx(() => [
-          createTextVNode(toDisplayString(_ctx.label), 1)
-        ]),
-        _: 1
-      }, 8, ["id", "required"])) : createCommentVNode("v-if", true),
-      _ctx.resizer ? (openBlock(), createElementBlock("span", _hoisted_5, [
-        createElementVNode("textarea", mergeProps({
-          ref: "input",
-          class: _ctx.inputClasses
-        }, _ctx.inputAttrs, {
-          minlength: _ctx.minlength,
-          maxlength: _ctx.maxlength,
-          "aria-label": _ctx.label,
-          "aria-controls": _ctx.inputAriaControls,
-          cols: _ctx.cols,
-          rows: _ctx.rows
-        }, toHandlers(_ctx.inputListeners, true)), null, 16, _hoisted_6)
-      ])) : (openBlock(), createElementBlock("textarea", mergeProps({
-        key: 3,
-        ref: "input",
-        class: _ctx.inputClasses
-      }, _ctx.inputAttrs, {
-        minlength: _ctx.minlength,
-        maxlength: _ctx.maxlength,
-        "aria-label": _ctx.label,
-        "aria-controls": _ctx.inputAriaControls,
-        cols: _ctx.cols,
-        rows: _ctx.rows
-      }, toHandlers(_ctx.inputListeners, true)), null, 16, _hoisted_7)),
-      _ctx.internalCharacterCounter ? (openBlock(), createBlock(_component_mcw_character_counter, {
-        key: 4,
-        ref: "characterCounterEl"
-      }, null, 512)) : createCommentVNode("v-if", true)
-    ], 2)),
-    _ctx.hasHelpline ? (openBlock(), createElementBlock("div", _hoisted_8, [
-      _ctx.helptext ? (openBlock(), createBlock(_component_mcw_textfield_helper_text, {
-        key: 0,
-        ref: "helpertext",
-        id: _ctx.helpTextId,
-        helptext: _ctx.helptext,
-        persistent: _ctx.helptextPersistent,
-        validation: _ctx.helptextValidation
-      }, null, 8, ["id", "helptext", "persistent", "validation"])) : createCommentVNode("v-if", true),
-      _ctx.helperCharacterCounter ? (openBlock(), createBlock(_component_mcw_character_counter, {
-        key: 1,
-        ref: "characterCounterEl"
-      }, null, 512)) : createCommentVNode("v-if", true)
-    ])) : createCommentVNode("v-if", true)
-  ], 2);
+  return openBlock(), createElementBlock(
+    "div",
+    {
+      ref: "wrapper",
+      class: normalizeClass(["textfield-container", _ctx.$attrs.class])
+    },
+    [
+      !_ctx.multiline ? (openBlock(), createElementBlock(
+        "label",
+        {
+          key: 0,
+          ref: "root",
+          class: normalizeClass(_ctx.rootClasses),
+          style: normalizeStyle(_ctx.rippleStyles)
+        },
+        [
+          !_ctx.outline ? (openBlock(), createElementBlock("span", _hoisted_1)) : createCommentVNode("v-if", true),
+          renderSlot(_ctx.$slots, "leading"),
+          renderSlot(_ctx.$slots, "leadingIcon"),
+          _ctx.hasLabel ? (openBlock(), createBlock(_component_mcw_floating_label, {
+            key: 1,
+            ref: "labelEl",
+            id: _ctx.labelId,
+            required: _ctx.required
+          }, {
+            default: withCtx(() => [
+              createTextVNode(
+                toDisplayString(_ctx.label),
+                1
+                /* TEXT */
+              )
+            ]),
+            _: 1
+            /* STABLE */
+          }, 8, ["id", "required"])) : createCommentVNode("v-if", true),
+          _ctx.outline ? (openBlock(), createBlock(
+            _component_mcw_notched_outline,
+            {
+              key: 2,
+              ref: "labelEl"
+            },
+            {
+              default: withCtx(() => [
+                createTextVNode(
+                  toDisplayString(_ctx.label),
+                  1
+                  /* TEXT */
+                )
+              ]),
+              _: 1
+              /* STABLE */
+            },
+            512
+            /* NEED_PATCH */
+          )) : createCommentVNode("v-if", true),
+          _ctx.prefix ? (openBlock(), createElementBlock(
+            "span",
+            _hoisted_2,
+            toDisplayString(_ctx.prefix),
+            1
+            /* TEXT */
+          )) : createCommentVNode("v-if", true),
+          createElementVNode("input", mergeProps({
+            ref: "input",
+            class: _ctx.inputClasses
+          }, _ctx.inputAttrs, {
+            type: _ctx.type,
+            minlength: _ctx.minlength,
+            maxlength: _ctx.maxlength,
+            "aria-label": _ctx.label,
+            "aria-controls": _ctx.inputAriaControls,
+            "aria-labelledby": _ctx.labelId,
+            "aria-describedby": _ctx.inputAriaControls
+          }, toHandlers(_ctx.inputListeners, true)), null, 16, _hoisted_3),
+          _ctx.suffix ? (openBlock(), createElementBlock(
+            "span",
+            _hoisted_4,
+            toDisplayString(_ctx.suffix),
+            1
+            /* TEXT */
+          )) : createCommentVNode("v-if", true),
+          renderSlot(_ctx.$slots, "trailingIcon"),
+          renderSlot(_ctx.$slots, "trailing"),
+          _ctx.hasLineRipple ? (openBlock(), createBlock(
+            _component_mcw_line_ripple,
+            {
+              key: 5,
+              ref: "lineRippleEl"
+            },
+            null,
+            512
+            /* NEED_PATCH */
+          )) : createCommentVNode("v-if", true)
+        ],
+        6
+        /* CLASS, STYLE */
+      )) : (openBlock(), createElementBlock(
+        "label",
+        {
+          key: 1,
+          ref: "root",
+          class: normalizeClass(_ctx.classes)
+        },
+        [
+          _ctx.outline ? (openBlock(), createBlock(
+            _component_mcw_notched_outline,
+            {
+              key: 0,
+              ref: "labelEl"
+            },
+            {
+              default: withCtx(() => [
+                createTextVNode(
+                  toDisplayString(_ctx.label),
+                  1
+                  /* TEXT */
+                )
+              ]),
+              _: 1
+              /* STABLE */
+            },
+            512
+            /* NEED_PATCH */
+          )) : createCommentVNode("v-if", true),
+          _ctx.hasLabel && !_ctx.outline ? (openBlock(), createBlock(_component_mcw_floating_label, {
+            key: 1,
+            ref: "labelEl",
+            id: _ctx.labelId,
+            required: _ctx.required
+          }, {
+            default: withCtx(() => [
+              createTextVNode(
+                toDisplayString(_ctx.label),
+                1
+                /* TEXT */
+              )
+            ]),
+            _: 1
+            /* STABLE */
+          }, 8, ["id", "required"])) : createCommentVNode("v-if", true),
+          _ctx.resizer ? (openBlock(), createElementBlock("span", _hoisted_5, [
+            createElementVNode("textarea", mergeProps({
+              ref: "input",
+              class: _ctx.inputClasses
+            }, _ctx.inputAttrs, {
+              minlength: _ctx.minlength,
+              maxlength: _ctx.maxlength,
+              "aria-label": _ctx.label,
+              "aria-controls": _ctx.inputAriaControls,
+              cols: _ctx.cols,
+              rows: _ctx.rows
+            }, toHandlers(_ctx.inputListeners, true)), null, 16, _hoisted_6)
+          ])) : (openBlock(), createElementBlock("textarea", mergeProps({
+            key: 3,
+            ref: "input",
+            class: _ctx.inputClasses
+          }, _ctx.inputAttrs, {
+            minlength: _ctx.minlength,
+            maxlength: _ctx.maxlength,
+            "aria-label": _ctx.label,
+            "aria-controls": _ctx.inputAriaControls,
+            cols: _ctx.cols,
+            rows: _ctx.rows
+          }, toHandlers(_ctx.inputListeners, true)), null, 16, _hoisted_7)),
+          _ctx.internalCharacterCounter ? (openBlock(), createBlock(
+            _component_mcw_character_counter,
+            {
+              key: 4,
+              ref: "characterCounterEl"
+            },
+            null,
+            512
+            /* NEED_PATCH */
+          )) : createCommentVNode("v-if", true)
+        ],
+        2
+        /* CLASS */
+      )),
+      _ctx.hasHelpline ? (openBlock(), createElementBlock("div", _hoisted_8, [
+        _ctx.helptext ? (openBlock(), createBlock(_component_mcw_textfield_helper_text, {
+          key: 0,
+          ref: "helpertext",
+          id: _ctx.helpTextId,
+          helptext: _ctx.helptext,
+          persistent: _ctx.helptextPersistent,
+          validation: _ctx.helptextValidation
+        }, null, 8, ["id", "helptext", "persistent", "validation"])) : createCommentVNode("v-if", true),
+        _ctx.helperCharacterCounter ? (openBlock(), createBlock(
+          _component_mcw_character_counter,
+          {
+            key: 1,
+            ref: "characterCounterEl"
+          },
+          null,
+          512
+          /* NEED_PATCH */
+        )) : createCommentVNode("v-if", true)
+      ])) : createCommentVNode("v-if", true)
+    ],
+    2
+    /* CLASS */
+  );
 }
 
 script$1.render = render$1;
@@ -7370,6 +8089,7 @@ var script = {
       anchorElement = document.querySelector(`[aria-describedby="${tooltipId}"]`) || document.querySelector(`[data-tooltip-id="${tooltipId}"]`);
       if (!anchorElement) {
         throw new Error(
+          // eslint-disable-next-line max-len
           "MDCTooltip: Tooltip component requires an anchor element annotated with [aria-describedby] or [data-tooltip-id] anchor element."
         );
       }
@@ -7437,21 +8157,33 @@ function toAnchorBoundaryType(type) {
 }
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return openBlock(), createElementBlock("div", mergeProps({
-    ref: "root",
-    class: ["mdc-tooltip", _ctx.classes]
-  }, _ctx.rootAttrs, {
-    style: _ctx.styles,
-    role: "tooltip",
-    onTransitionend: _cache[0] || (_cache[0] = (...args) => _ctx.handleTransitionEnd && _ctx.handleTransitionEnd(...args))
-  }), [
-    createElementVNode("div", {
-      style: normalizeStyle(_ctx.surfaceStyle),
-      class: "mdc-tooltip__surface mdc-tooltip__surface-animation"
-    }, [
-      renderSlot(_ctx.$slots, "default")
-    ], 4)
-  ], 16);
+  return openBlock(), createElementBlock(
+    "div",
+    mergeProps({
+      ref: "root",
+      class: ["mdc-tooltip", _ctx.classes]
+    }, _ctx.rootAttrs, {
+      style: _ctx.styles,
+      role: "tooltip",
+      onTransitionend: _cache[0] || (_cache[0] = (...args) => _ctx.handleTransitionEnd && _ctx.handleTransitionEnd(...args))
+    }),
+    [
+      createElementVNode(
+        "div",
+        {
+          style: normalizeStyle(_ctx.surfaceStyle),
+          class: "mdc-tooltip__surface mdc-tooltip__surface-animation"
+        },
+        [
+          renderSlot(_ctx.$slots, "default")
+        ],
+        4
+        /* STYLE */
+      )
+    ],
+    16
+    /* FULL_PROPS */
+  );
 }
 
 script.render = render;
@@ -7499,6 +8231,7 @@ var mcwTopAppBar = {
           root.value,
           strings.NAVIGATION_EVENT,
           {},
+          /** shouldBubble */
           true
         );
       },

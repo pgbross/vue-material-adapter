@@ -1,0 +1,1 @@
+{"fullyTracked":false,"platform":"linux","arch":"x64","nodeVersion":"v20.3.1","command":"vite build --base=/vue-material-adapter/","extraArgs":[],"clean":true,"files":{},"output":["demo/dist/**","!.git/","!.hg/","!.svn/","!.wireit/","!.yarn/","!CVS/","!node_modules/"],"dependencies":{},"env":{}}

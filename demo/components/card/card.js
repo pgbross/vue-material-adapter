@@ -1,4 +1,4 @@
-import card from 'demo/assets/card-16-9.jpg';
+import card from '/assets/card-16-9.jpg';
 
 const onPrimaryAction = () => {
   console.log('on primary action');

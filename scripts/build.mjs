@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import cpy from 'cpy';
-import mkdirp from 'mkdirp';
+import { mkdirp } from 'mkdirp';
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
