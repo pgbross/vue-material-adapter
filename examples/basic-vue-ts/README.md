@@ -1,12 +1,12 @@
 # basic-vue-ts
 
-This is an example of using `vue-material-adapter` with a typescript project generated with `vue-cli`.
+This is an example of using `vue-material-adapter` with a typescript project generated with `create-vue`.
 
 ## Quick start
 
 ```bash
-npm install --legacy-peer-deps
-npm run serve
+npm install
+npm run dev
 ```
 
 ## Project setup
@@ -18,7 +18,7 @@ npm install
 ### Compiles and hot-reloads for development
 
 ```
-npm run serve
+npm run dev
 ```
 
 ### Compiles and minifies for production
@@ -27,8 +27,6 @@ npm run serve
 npm run build
 ```
 
-> Alternatively use `yarn` instead of `npm` if preferred
-
 ### Customize configuration
 
-See [Configuration Reference](https://cli.vuejs.org/config/).
+See [Configuration Reference](https://github.com/vuejs/create-vue).
