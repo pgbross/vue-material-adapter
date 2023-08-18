@@ -1,7 +1,8 @@
 .DS_Store
 dev/
 build
-node_modules/
+node_modules*/
+.wireit/
 public/
 npm-debug.log*
 yarn-debug.log*
