@@ -1,0 +1,16 @@
+import{d as e,o,c as a,a as c}from"./index-0afa1053.js";const l={class:"markdown-body"},n=c(`<h2>Usage</h2><pre><code class="language-html">&lt;mcw-fab icon=&quot;favorite&quot;&gt;&lt;/mcw-fab&gt;
+&lt;mcw-fab mini icon=&quot;favorite&quot;&gt;&lt;/mcw-fab&gt;
+&lt;mcw-fab icon=&quot;favorite&quot; label=&quot;wiffle&quot; /&gt;
+&lt;mcw-fab icon=&quot;home&quot; @click=&quot;scrollToTop&quot;&gt;&lt;/mcw-fab&gt;
+&lt;mcw-fab&gt;
+  &lt;mcw-material-icon icon=&quot;add&quot; slot=&quot;icon&quot;&gt;&lt;/mcw-material-icon&gt;
+&lt;/mcw-fab&gt;
+</code></pre><blockquote><p>refer to <a href="https://material.io/icons/">Material Design Icon Font</a> for the list of icons</p></blockquote><blockquote><p>add an <code class="">href</code> attribute for link</p></blockquote><h3>events</h3><table><thead><tr><th>event</th><th>args</th><th>Description</th></tr></thead><tbody><tr><td><code class="">@click</code></td><td></td><td>emitted on click</td></tr></tbody></table><h3>props</h3><table><thead><tr><th>prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td><code class="">icon</code></td><td>String</td><td></td><td>material-icon content (*)</td></tr><tr><td><code class="">mini</code></td><td>Boolean</td><td></td><td>mini style (40x40 pixels) (*)</td></tr><tr><td><code class="">label</code></td><td>String</td><td></td><td>If label, is extended FAB</td></tr><tr><td><code class="">exited</code></td><td>Boolean</td><td></td><td>If true animates the FAB out of view.</td></tr></tbody></table><blockquote><p>Supports Vue-Router props</p></blockquote><h3>Custom Icons</h3><p><strong>Font Awsome</strong></p><pre><code class="language-html">&lt;mcw-fab&gt;
+  &lt;span class=&quot;fa fa-star&quot; slot=&quot;icon&quot;&gt;&lt;/span&gt;
+&lt;/mcw-fab&gt;
+</code></pre><p><strong>SVG Icons</strong></p><pre><code class="language-html">&lt;mcw-fab&gt;
+  &lt;svg slot=&quot;icon&quot;&gt;&lt;!-- content here --&gt;&lt;/svg&gt;
+&lt;/mcw-fab&gt;
+</code></pre><h3>Link FAB</h3><h4>Simple Link</h4><p>Using the href attribute will render <code class="">&lt;a role=&quot;button&quot; href=&quot;...&quot;&gt;</code></p><pre><code class="language-html">&lt;mcw-fab icon=&quot;home&quot; href=&quot;#&quot;&gt;Home&lt;/mcw-fab&gt;
+</code></pre><h4>Router-link</h4><p>If the <code class="">to</code> property is defined, the item behaves as a <a href="https://router.vuejs.org/en/api/router-link.html">router-link</a></p><pre><code class="language-html">&lt;mcw-fab icon=&quot;home&quot; to=&quot;/home&quot;&gt;Home&lt;/mcw-fab&gt;
+</code></pre><h3>Reference</h3><ul><li><a href="https://github.com/material-components/material-components-web/tree/master/packages/mdc-fab">https://github.com/material-components/material-components-web/tree/master/packages/mdc-fab</a></li></ul>`,23),r=[n],u={},m="",p=e({__name:"README",setup(s,{expose:t}){return t({frontmatter:{},excerpt:void 0}),(d,i)=>(o(),a("div",l,r))}});export{p as default,m as excerpt,u as frontmatter};
