@@ -1,0 +1,4 @@
+import{d as e,o,c as a,a as c}from"./index-29ad663a.js";const d={class:"markdown-body"},n=c(`<h2>Usage</h2><pre><code class="language-html">&lt;mcw-material-icon icon=&quot;favorite&quot; /&gt;
+&lt;br /&gt;
+&lt;mcw-material-icon icon=&quot;aspect_ratio&quot; /&gt;
+</code></pre><h3>props</h3><table><thead><tr><th>props</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td><code class="">icon</code></td><td>String</td><td></td><td>Type of icon to be displayed</td></tr><tr><td><code class="">tag</code></td><td>String</td><td>i</td><td>Custom element type</td></tr></tbody></table><h3>Reference -</h3><p><a href="https://google.github.io/material-design-icons/#icon-font-for-the-web">Material Icons Documentation</a></p>`,6),r=[n],l={},m="",_=e({__name:"README",setup(s,{expose:t}){return t({frontmatter:{},excerpt:void 0}),(i,h)=>(o(),a("div",d,r))}});export{_ as default,m as excerpt,l as frontmatter};

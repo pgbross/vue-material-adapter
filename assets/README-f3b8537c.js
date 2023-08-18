@@ -1,0 +1,12 @@
+import{d as e,o as r,c as o,a as d}from"./index-29ad663a.js";const s={class:"markdown-body"},a=d(`<h2>Usage</h2><p>The <a href="https://github.com/material-components/material-components-web/tree/master/packages/mcw-circular-progress">MDC Circular Progress</a> component.</p><pre><code class="language-html">&lt;mcw-circular-progress progress=&quot;0.3&quot; /&gt;
+&lt;mcw-circular-progress indeterminate /&gt;
+&lt;mcw-circular-progress medium :progress=&quot;progressValue&quot; /&gt;
+</code></pre><pre><code class="language-javascript">var vm = new Vue({
+  data(){
+    return {progressValue: 0.8}
+  }
+}
+</code></pre><h3>props</h3><table><thead><tr><th>prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td><code class="">open</code></td><td>Boolean</td><td>true</td><td>When changed to <code class="">false</code>, closes the component</td></tr><tr><td><code class="">indeterminate</code></td><td>Boolean</td><td>false</td><td>When set to <code class="">true</code>, renders the indeterminate variant</td></tr><tr><td><code class="">medium</code></td><td>Boolean</td><td>false</td><td>When set to <code class="">true</code>, renders the medium variant</td></tr><tr><td><code class="">progress</code></td><td>Number</td><td>undefined</td><td>Decimal value between 0 and 1, sets the progress bar width</td></tr><tr><td><code class="">tag</code></td><td>String</td><td>div</td><td>The html root element type</td></tr><tr><td><code class="">label</code></td><td>String</td><td></td><td>Optional aria-label</td></tr><tr><td><code class="">fourColor</code></td><td>Boolean</td><td>false</td><td>Use four color rendering</td></tr></tbody></table><ul><li>Determinate</li></ul><pre><code class="language-html">&lt;mcw-circular-progress progress=&quot;0.3&quot; /&gt;
+</code></pre><ul><li>Indeterminate</li></ul><pre><code class="language-html">&lt;mcw-circular-progress indeterminate&gt;&lt;/mcw-circular-progress&gt;
+</code></pre><ul><li>Medium</li></ul><pre><code class="language-html">&lt;mcw-circular-progress medium progress=&quot;0.5&quot;&gt;&lt;/mcw-circular-progress&gt;
+</code></pre><h3>Reference</h3><ul><li><a href="https://github.com/material-components/material-components-web/tree/master/packages/mdc-circular-progress">https://github.com/material-components/material-components-web/tree/master/packages/mdc-circular-progress</a></li></ul>`,14),c=[a],m={},u="",g=e({__name:"README",setup(l,{expose:t}){return t({frontmatter:{},excerpt:void 0}),(n,i)=>(r(),o("div",s,c))}});export{g as default,u as excerpt,m as frontmatter};
